@@ -21,7 +21,7 @@ final invoice = 'lnbc1...scanned-by-user-paying-external-ln-wallet...';
 
 final fees = getBoltzFees(boltzUrl);
 
-final boltzBtcSubmarineSwap  = BtcLnSwap.newSubmarine(
+final boltzBtcLnSubmarineSwap  = BtcLnSwap.newSubmarine(
     network,
     electrumUrl,
     boltzUrl,
@@ -29,15 +29,15 @@ final boltzBtcSubmarineSwap  = BtcLnSwap.newSubmarine(
     invoice
 );
 
-final paymentDetails = boltzBtcSubarineSwap.paymentDetails();
+final paymentDetails = boltzBtcLnSubmarineSwap.paymentDetails();
 // Construct local transaction to pay lockup_address from boltz with given amount
 final txid = localWallet.send(paymentDetails.0, paymentDetails.1);
-final status = boltzBtcSubmarineSwap.status();
+final status = boltzBtcLnSubmarineSwap.status();
 
 // invoice will be paid by boltz. If not, we must refund after timeout
 final address = localWallet.getNewAddress();
 final absoluteFees = read.userInput();
-final txid = boltzBtcSubmarineSwap.refund(address, absoluteFees);
+final txid = boltzBtcLnSubmarineSwap.refund(address, absoluteFees);
 
 ```
 
@@ -51,7 +51,7 @@ final keyPair = KeyPair('bacon bacon bacon bacon bacon bacon bacon bacon bacon b
 final preImage = Preimage();
 final outValue = 100000;
 final fees = getBoltzFees(boltzUrl);
-final boltzBtcReverseSwap  = BtcLnSwap.newReverse(
+final boltzBtcLnReverseSwap  = BtcLnSwap.newReverse(
     network,
     electrumUrl,
     boltzUrl,
@@ -59,12 +59,12 @@ final boltzBtcReverseSwap  = BtcLnSwap.newReverse(
     preImage,
     outValue
 );
-final paymentDetails = boltzBtcReverseSwap.paymentDetails();
+final paymentDetails = boltzBtcLnReverseSwap.paymentDetails();
 // Pay invoice provided by boltz (user is recieving a payment from an external LN wallet)
-final status = boltzBtcReverseSwap.status();
+final status = boltzBtcLnReverseSwap.status();
 // Construct swap transaction to claim lockup_address from boltz with given amount
 // Genereate outputAddresss from local wallet
 final address = localWallet.getNewAddress();
 final absoluteFees = read.userInput();
-final txid = boltzBtcReverseSwap.claim(address, fees);
+final txid = boltzBtcLnReverseSwap.claim(address, fees);
 ```

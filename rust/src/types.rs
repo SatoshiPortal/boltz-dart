@@ -4,7 +4,7 @@
 use boltz_client::{
     swaps::boltz::SwapType,
     util::{derivation::ChildKeys, error::S5Error},
-    util::preimage::Preimage as BoltzPreImage,
+    util::preimage::Preimage as BoltzPreImage, network::electrum::BitcoinNetwork,
 };
 
 pub struct KeyPair {
@@ -79,6 +79,19 @@ impl Into<SwapType> for BoltzSwapType {
     }
 }
 
+pub enum Network {
+    Testnet,
+    LiquidTestnet,
+}
+
+impl Into<BitcoinNetwork> for Network {
+    fn into(self) -> BitcoinNetwork {
+        match self {
+            Network::Testnet => BitcoinNetwork::BitcoinTestnet,
+            Network::LiquidTestnet => BitcoinNetwork::LiquidTestnet,
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
