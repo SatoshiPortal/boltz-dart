@@ -79,6 +79,7 @@ impl Into<SwapType> for BoltzSwapType {
     }
 }
 
+
 #[cfg(test)]
 mod tests {
     use super::*;

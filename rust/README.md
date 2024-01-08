@@ -16,12 +16,12 @@ final electrumUrl = 'electrum.bullbitcoin.com:50002'
 final boltzUrl = 'api.boltz.exchange';
 
 final index = 12;
-final keyPair = KeyPair.fromMnemonic('bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon, index);
-final invoice = 'lnbc1...scanned-by-user-paying-external-ln-wallet...;
+final keyPair = KeyPair('bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon', index);
+final invoice = 'lnbc1...scanned-by-user-paying-external-ln-wallet...';
 
-final fees = BtcSwapScript.getFees(boltzUrl);
+final fees = getBoltzFees(boltzUrl);
 
-final boltzBtcSubmarineSwap  = BtcSwapScript.newSubmarine(
+final boltzBtcSubmarineSwap  = BtcLnSwap.newSubmarine(
     network,
     electrumUrl,
     boltzUrl,
@@ -47,11 +47,11 @@ m/purpose/network/42/0/*
 
 ```dart
 final index = 13;
-final keyPair = KeyPairString.fromMnemonic('bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon', index);
-final preImage = PreimageStates.new();
+final keyPair = KeyPair('bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon', index);
+final preImage = Preimage();
 final outValue = 100000;
-final fees = BtcSwapScript.getFees(boltzUrl);
-final boltzBtcReverseSwap  = BtcSwapScript.newReverse(
+final fees = getBoltzFees(boltzUrl);
+final boltzBtcReverseSwap  = BtcLnSwap.newReverse(
     network,
     electrumUrl,
     boltzUrl,
