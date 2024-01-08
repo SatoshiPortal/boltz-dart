@@ -1,10 +1,10 @@
 /* AUTO INJECTED BY flutter_rust_bridge. This line may not be accurate, and you can change it according to your needs. */
 
+use crate::preimage::PreImage;
 use crate::secrets::KeyPair;
 
 use crate::boltzswap::BoltzSwapType;
 use crate::error::BoltzError;
-
 
 // pub type BoltzError = boltz_client::util::error::S5Error;
 pub struct Api {}
@@ -19,6 +19,10 @@ impl Api {
             Ok(keypair) => Ok(keypair),
             Err(err) => Err(err.into()),
         }
+    }
+
+    pub fn preimage_random() -> PreImage{
+        PreImage::new()
     }
 }
 

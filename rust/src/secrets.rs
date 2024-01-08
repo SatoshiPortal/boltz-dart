@@ -29,6 +29,8 @@ impl KeyPair {
     }
 }
 
+// Impl into secp256k1::KeyPair
+
 mod tests {
     use super::*;
     #[test]
