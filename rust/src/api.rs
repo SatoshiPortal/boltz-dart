@@ -1,9 +1,8 @@
 /* AUTO INJECTED BY flutter_rust_bridge. This line may not be accurate, and you can change it according to your needs. */
 
 use crate::types::PreImage;
-use crate::secrets::KeyPair;
-
-use crate::boltzswap::BoltzSwapType;
+use crate::types::KeyPair;
+use crate::types::BoltzSwapType;
 use crate::error::BoltzError;
 
 // pub type BoltzError = boltz_client::util::error::S5Error;
@@ -24,6 +23,8 @@ impl Api {
     pub fn preimage_random() -> PreImage{
         PreImage::new()
     }
+
+
 }
 
 // flutter_rust_bridge_codegen --rust-input rust/src/api.rs --dart-output lib/bridge_generated.dart --dart-decl-output lib/bridge_definitions.dart

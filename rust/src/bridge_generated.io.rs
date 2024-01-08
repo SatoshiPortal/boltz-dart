@@ -11,6 +11,11 @@ pub extern "C" fn wire_keypair_from_mnemonic__static_method__Api(
     wire_keypair_from_mnemonic__static_method__Api_impl(port_, mnemonic, index, swap_type)
 }
 
+#[no_mangle]
+pub extern "C" fn wire_preimage_random__static_method__Api(port_: i64) {
+    wire_preimage_random__static_method__Api_impl(port_)
+}
+
 // Section: allocate functions
 
 #[no_mangle]
