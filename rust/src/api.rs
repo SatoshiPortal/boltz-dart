@@ -5,6 +5,7 @@ use crate::secrets::KeyPair;
 use crate::boltzswap::BoltzSwapType;
 use crate::error::BoltzError;
 
+
 // pub type BoltzError = boltz_client::util::error::S5Error;
 pub struct Api {}
 

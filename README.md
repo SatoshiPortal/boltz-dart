@@ -29,12 +29,12 @@ Once you have edited `api.rs` to incorporate your own Rust code, the bridge file
 
 ### Windows
 ```
-flutter_rust_bridge_codegen --rust-input native\src\api.rs --dart-output .\lib\bridge_generated.dart --dart-decl-output .\lib\bridge_definitions.dart
+flutter_rust_bridge_codegen --rust-input rust\src\api.rs --dart-output .\lib\bridge_generated.dart --dart-decl-output .\lib\bridge_definitions.dart
 ```
 
 ### Linux/MacOS/any other Unix
 ```
-flutter_rust_bridge_codegen --rust-input native/src/api.rs --dart-output ./lib/bridge_generated.dart --dart-decl-output ./lib/bridge_definitions.dart
+flutter_rust_bridge_codegen --rust-input rust/src/api.rs --dart-output ./lib/bridge_generated.dart --dart-decl-output ./lib/bridge_definitions.dart
 ```
 
 ## Scaffolding in existing projects

@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_test/flutter_test.dart';
-import 'package:boltz_dart/bridge_generated.dart';
-import 'package:boltz_dart/ffi.dart';
+import '../lib/bridge_generated.dart';
+import '../lib/ffi.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -10,7 +10,7 @@ void main() {
     final mnemonic =
         'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
 
-    final ffi = BoltzDartImpl(getBinary());
+    final ffi = BoltzDartImpl(api);
     const swapType = BoltzSwapType.Submarine;
     final keyPair = await ffi.keypairFromMnemonicStaticMethodApi(
       mnemonic: mnemonic,

@@ -48,6 +48,6 @@ xcuserdata
 jniLibs
 
 **Cargo.lock
-rust/target
-rust/builds
+rust/target/
+rust/builds/
 pubspec.lock
