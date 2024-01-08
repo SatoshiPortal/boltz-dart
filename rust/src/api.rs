@@ -1,6 +1,6 @@
 /* AUTO INJECTED BY flutter_rust_bridge. This line may not be accurate, and you can change it according to your needs. */
 
-use crate::preimage::PreImage;
+use crate::types::PreImage;
 use crate::secrets::KeyPair;
 
 use crate::boltzswap::BoltzSwapType;
