@@ -12,6 +12,15 @@ void main() {
   });
 
   group('BTC-LN SUBMARINE SWAP', () {
+    test('Get fee estimation', () async {
+      const boltzUrl = 'https://api.testnet.boltz.exchange';
+
+      final fees = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl);
+      print(
+          "USER MUST ACCEPT FEE TO PROCEED:\nbtc: ${fees.$1} sats/byte\nlbtc: ${fees.$2} sats/byte");
+      expect((fees.$1 > 0.0), true);
+      expect((fees.$2 > 0.0), true);
+    });
     test('Test create swap', () async {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
