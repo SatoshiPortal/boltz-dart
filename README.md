@@ -32,6 +32,24 @@ Once we have all our structs and functions in dart, we can organize them into cl
 
 You can now use the `test/boltz-test.dart` file to test whether the expected logic is being exposed correctly over ffi. 
 
+## NOTE
+Submarine swap test requires using a new invoice for every test. You can generate test invoices here:
+
+https://starblocks.acinq.co
+
+Order half a ton of coffee, since minimum swap output is 50,000 sats
+
+These invoices will work for ruidentary tests, but the entire swap flow will not complete as boltz does not have a route to pay this channel since we last checked.
+
+When we reach testing the complete flow we will have to use our own local node and ensure we are directly connected to boltz's testnet node.
+
+For Invoices < 1m sats: (recommended for testing)
+
+https://1ml.com/testnet/node/029040945df331e634fba152ce6a21e3dfca87b68d275e078caeee4753f43e9acb
+
+Invoices > 1m sats: 
+
+https://1ml.com/testnet/node/03f060953bef5b777dc77e44afa3859d022fc1a77c55138deb232ad7255e869c00
 
 ## project status
 
