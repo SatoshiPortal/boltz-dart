@@ -7,7 +7,7 @@ use boltz_client::util::error::S5Error;
 use boltz_client::util::preimage::Preimage;
 
 use crate::types::BtcLnSwap;
-use crate::error::BoltzError;
+use crate::types::BoltzError;
 use crate::types::Network;
 use crate::types::SwapType;
 use crate::types::KeyPair;
@@ -24,7 +24,7 @@ impl Api {
         network: Network,
         electrum_url: String,
         boltz_url: String,
-    ) -> Result<BtcLnSwap,BoltzError>{
+    ) -> anyhow::Result<BtcLnSwap,BoltzError>{
             let swap_type = SwapType::Submarine;
             let refund_keypair = match KeyPair::new(mnemonic, index, swap_type.clone()) {
                 Ok(keypair) => keypair,
@@ -56,7 +56,7 @@ impl Api {
                 Err(e)=>return Err(e.into())
             };
 
-            if !response.validate_invoice_preimage256(preimage.sha256){
+            if !response.validate_script_preimage160(preimage.hash160){
                 return Err(S5Error::new(ErrorKind::BoltzApi, "Preimage used in response invoice does not match! Report to support!").into());
             }
 

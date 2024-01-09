@@ -1,78 +1,67 @@
-# flutter_rust_bridge_template
+# boltz-dart
 
-This repository serves as a template for Flutter projects calling into native Rust
-libraries via `flutter_rust_bridge`.
+The top level directory of this project is a dart/flutter pub library.
 
-## Getting Started
+The `rust` folder containers the core code which uses the `boltz-rust` crate internally to expose an abstracted API to manage boltz swaps.
 
-To begin, ensure that you have a working installation of the following items:
-- [Flutter SDK](https://docs.flutter.dev/get-started/install)
-- [Rust language](https://rustup.rs/)
-- `flutter_rust_bridge_codegen` [cargo package](https://cjycode.com/flutter_rust_bridge/integrate/deps.html#build-time-dependencies)
-- Appropriate [Rust targets](https://rust-lang.github.io/rustup/cross-compilation.html) for cross-compiling to your device
-- For Android targets:
-    - Install [cargo-ndk](https://github.com/bbqsrc/cargo-ndk#installing)
-    - Install [Android NDK 22](https://github.com/android/ndk/wiki/Unsupported-Downloads#r22b), then put its path in one of the `gradle.properties`, e.g.:
+
+## Update process
+
+Add new types to `types.rs` and static functions to `api.rs`
+
+api.rs contains an `Api` struct that holds all the static functions.
+
+types.rs structures and enums are also re-exported via api.rs
+
+```bash
+# in the project root directory
+
+./compile.sh
 
 ```
-echo "ANDROID_NDK=.." >> ~/.gradle/gradle.properties
-```
 
-- For iOS targets:
-  - Install [cargo-xcode](https://gitlab.com/kornelski/cargo-xcode#installation)
-- [Web dependencies](http://cjycode.com/flutter_rust_bridge/template/setup_web.html) for the Web
+Compile will first build native binaries of the rust code and move them to the dart test folder. 
 
-Then go ahead and run `flutter run` (for web, run `dart run flutter_rust_bridge:serve` instead). When you're ready, refer to our documentation
-[here](https://fzyzcjy.github.io/flutter_rust_bridge/index.html) to learn how to write and use binding code.
+It will then run flutter_rust_bridge_codegen and generate ffi code in rust and dart. 
 
-Once you have edited `api.rs` to incorporate your own Rust code, the bridge files `bridge_definitions.dart` and `bridge_generated.dart` are generated using the following command (note: append ` --wasm` to add web support):
+## dart classes
+
+Once we have all our structs and functions in dart, we can organize them into classes to improve the UX of the library.
+
+## test
+
+You can now use the `test/boltz-test.dart` file to test whether the expected logic is being exposed correctly over ffi. 
 
 
-### Linux/MacOS/any other Unix
+## project status
 
-After writing rust structs and static functions:
+This project is in extreme alpha and undergoing active development. Any support will be greatly appreciated.
 
-#### Compile rust library (native)
+Each swap flow is abstracted into a class with similar methods:
 
-Move into the rust directory, build binaries and copy them into the test folder
-```
-cd rust 
-cargo build --release
-# macos
-cp target/release/libboltz_dart.dylib ../test/
-# linux
-cp target/release/libboltz_dart.so ../test/
-cd -
-```
+Constructors: 
 
-In the project root directory, run codegen to generate rust and flutter ffi code.
+- newSubmarine
+- newReverse
 
-#### Generate dart code
-```
-## NON DEBIAN USERS MUST RUN: export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"
-## THEN
-flutter_rust_bridge_codegen --rust-input rust/src/api.rs --dart-output lib/bridge_generated.dart --dart-decl-output lib/bridge_definitions.dart
-```
+Info: 
+- paymentDetails
+- status
 
-## Scaffolding in existing projects
+Transaction(Sweep):
+- claim
+- refund
 
-If you would like to generate boilerplate for using `flutter_rust_bridge` in your existing projects,
-check out the [`flutter_rust_bridge` brick](https://brickhub.dev/bricks/flutter_rust_bridge/)
-for more details.
 
-## Disclaimer
+The main classes are:
 
-This template is not affiliated with flutter_rust_bridge. Please file issues and PRs related to the template here,
-not flutter_rust_bridge.
+- [ ] BtcLnSwap
+- [ ] LbtcLnSwap
+- [ ] BtcLbtcSwap
 
-## License
 
-Copyright 2022 Viet Dinh.
+### Resources:
 
-This template is licensed under either of
-- [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) ([LICENSE-APACHE](LICENSE-APACHE))
-- [MIT license](https://opensource.org/licenses/MIT) ([LICENSE-MIT](LICENSE-MIT))
-
-at your option.
-
-The [SPDX](https://spdx.dev/) license identifier for this project is `MIT OR Apache-2.0`.
+- [FRB-Docs](https://cjycode.com/flutter_rust_bridge/v1/index.html)
+- [FRB-Codebase](https://github.com/fzyzcjy/flutter_rust_bridge/)
+- [Article](https://blog.logrocket.com/using-flutter-rust-bridge-cross-platform-development/)

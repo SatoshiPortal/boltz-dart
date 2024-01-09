@@ -20,7 +20,7 @@ use std::sync::Arc;
 
 // Section: imports
 
-use crate::error::BoltzError;
+use crate::types::BoltzError;
 use crate::types::BtcLnSwap;
 use crate::types::KeyPair;
 use crate::types::Network;
