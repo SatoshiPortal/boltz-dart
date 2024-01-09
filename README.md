@@ -54,6 +54,14 @@ Invoices > 1m sats:
 
 https://1ml.com/testnet/node/03f060953bef5b777dc77e44afa3859d022fc1a77c55138deb232ad7255e869c00
 
+
+### Non-debian linux users
+
+
+```bash
+export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"
+```
+
 ## project status
 
 This project is in extreme alpha and undergoing active development. Any support will be greatly appreciated.
@@ -94,8 +102,11 @@ The main classes and their methods are:
 
 ## Dependencies
 
-Currently we depend on a alpha version of `boltz-rust` which will see ongoing updates. If updates from the git repo are not reflecting, 
-remove the directory `$HOME/.cargo/git/checkouts/boltz-rust*`, run `cargo update` and then rebuild.
+To stay in sync with `boltz-rust` following updates, use: 
+
+```
+cargo update
+```
 
 ### Resources:
 

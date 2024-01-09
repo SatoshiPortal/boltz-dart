@@ -68,7 +68,7 @@ impl Into<PreImage> for BoltzPreImage {
 }
 
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq,Eq)]
 pub enum SwapType {
     Submarine,
     Reverse,

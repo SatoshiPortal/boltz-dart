@@ -49,6 +49,15 @@ pub extern "C" fn wire_new_btc_ln_reverse__static_method__Api(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_btc_ln_reverse_claim__static_method__Api(
+    port_: i64,
+    swap: *mut wire_BtcLnSwap,
+    fee: u64,
+) {
+    wire_btc_ln_reverse_claim__static_method__Api_impl(port_, swap, fee)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_swap_status__static_method__Api(
     port_: i64,
     boltz_url: *mut wire_uint_8_list,
@@ -58,6 +67,11 @@ pub extern "C" fn wire_swap_status__static_method__Api(
 }
 
 // Section: allocate functions
+
+#[no_mangle]
+pub extern "C" fn new_box_autoadd_btc_ln_swap_0() -> *mut wire_BtcLnSwap {
+    support::new_leak_box_ptr(wire_BtcLnSwap::new_with_null_ptr())
+}
 
 #[no_mangle]
 pub extern "C" fn new_uint_8_list_0(len: i32) -> *mut wire_uint_8_list {
@@ -78,6 +92,48 @@ impl Wire2Api<String> for *mut wire_uint_8_list {
         String::from_utf8_lossy(&vec).into_owned()
     }
 }
+impl Wire2Api<BtcLnSwap> for *mut wire_BtcLnSwap {
+    fn wire2api(self) -> BtcLnSwap {
+        let wrap = unsafe { support::box_from_leak_ptr(self) };
+        Wire2Api::<BtcLnSwap>::wire2api(*wrap).into()
+    }
+}
+impl Wire2Api<BtcLnSwap> for wire_BtcLnSwap {
+    fn wire2api(self) -> BtcLnSwap {
+        BtcLnSwap {
+            id: self.id.wire2api(),
+            kind: self.kind.wire2api(),
+            network: self.network.wire2api(),
+            keys: self.keys.wire2api(),
+            preimage: self.preimage.wire2api(),
+            redeem_script: self.redeem_script.wire2api(),
+            invoice: self.invoice.wire2api(),
+            out_amount: self.out_amount.wire2api(),
+            onchain_address: self.onchain_address.wire2api(),
+            electrum_url: self.electrum_url.wire2api(),
+            boltz_url: self.boltz_url.wire2api(),
+        }
+    }
+}
+
+impl Wire2Api<KeyPair> for wire_KeyPair {
+    fn wire2api(self) -> KeyPair {
+        KeyPair {
+            secret_key: self.secret_key.wire2api(),
+            public_key: self.public_key.wire2api(),
+        }
+    }
+}
+
+impl Wire2Api<PreImage> for wire_PreImage {
+    fn wire2api(self) -> PreImage {
+        PreImage {
+            value: self.value.wire2api(),
+            sha256: self.sha256.wire2api(),
+            hash160: self.hash160.wire2api(),
+        }
+    }
+}
 
 impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
     fn wire2api(self) -> Vec<u8> {
@@ -88,6 +144,37 @@ impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
     }
 }
 // Section: wire structs
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_BtcLnSwap {
+    id: *mut wire_uint_8_list,
+    kind: i32,
+    network: i32,
+    keys: wire_KeyPair,
+    preimage: wire_PreImage,
+    redeem_script: *mut wire_uint_8_list,
+    invoice: *mut wire_uint_8_list,
+    out_amount: u64,
+    onchain_address: *mut wire_uint_8_list,
+    electrum_url: *mut wire_uint_8_list,
+    boltz_url: *mut wire_uint_8_list,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_KeyPair {
+    secret_key: *mut wire_uint_8_list,
+    public_key: *mut wire_uint_8_list,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_PreImage {
+    value: *mut wire_uint_8_list,
+    sha256: *mut wire_uint_8_list,
+    hash160: *mut wire_uint_8_list,
+}
 
 #[repr(C)]
 #[derive(Clone)]
@@ -105,6 +192,61 @@ pub trait NewWithNullPtr {
 impl<T> NewWithNullPtr for *mut T {
     fn new_with_null_ptr() -> Self {
         std::ptr::null_mut()
+    }
+}
+
+impl NewWithNullPtr for wire_BtcLnSwap {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            id: core::ptr::null_mut(),
+            kind: Default::default(),
+            network: Default::default(),
+            keys: Default::default(),
+            preimage: Default::default(),
+            redeem_script: core::ptr::null_mut(),
+            invoice: core::ptr::null_mut(),
+            out_amount: Default::default(),
+            onchain_address: core::ptr::null_mut(),
+            electrum_url: core::ptr::null_mut(),
+            boltz_url: core::ptr::null_mut(),
+        }
+    }
+}
+
+impl Default for wire_BtcLnSwap {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+
+impl NewWithNullPtr for wire_KeyPair {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            secret_key: core::ptr::null_mut(),
+            public_key: core::ptr::null_mut(),
+        }
+    }
+}
+
+impl Default for wire_KeyPair {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+
+impl NewWithNullPtr for wire_PreImage {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            value: core::ptr::null_mut(),
+            sha256: core::ptr::null_mut(),
+            hash160: core::ptr::null_mut(),
+        }
+    }
+}
+
+impl Default for wire_PreImage {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
     }
 }
 

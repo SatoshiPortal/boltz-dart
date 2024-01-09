@@ -1,6 +1,8 @@
-use std::os::linux::net;
-
+use boltz_client::network::electrum::NetworkConfig;
 use boltz_client::swaps::bitcoin::BtcSwapScript;
+use boltz_client::swaps::bitcoin::BtcSwapTx;
+use boltz_client::util::preimage::Preimage as BoltzPreImage;
+use boltz_client::{KeyPair as CoreKeyPair, Secp256k1};
 // use boltz_client::network::electrum::NetworkConfig;
 // use boltz_client::swaps::boltz;
 use boltz_client::swaps::boltz::BoltzApiClient;
@@ -164,7 +166,51 @@ impl Api {
             ))
 
     }
-    
+    pub fn btc_ln_reverse_claim(swap: BtcLnSwap, fee: u64)->anyhow::Result<String, BoltzError>{
+        if swap.kind == SwapType::Submarine {
+            return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
+        }
+        else{
+            ()
+        }
+
+        let script = match BtcSwapScript::reverse_from_str(&swap.redeem_script){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        let network_config = NetworkConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true, false, None);
+        let script_balance = match script
+        .get_balance(network_config.clone()){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+
+        if script_balance.0 > 0 || script_balance.1 > 0 {
+            let mut tx = match BtcSwapTx::new_claim(script, swap.onchain_address, fee as u32, swap.network.clone().into()){
+                Ok(result)=>result,
+                Err(e)=> return Err(e.into())
+            };
+            let secp = Secp256k1::new();
+            let signed = match tx.drain(
+                CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
+                BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+                swap.out_amount, 
+                network_config.clone(),
+            ){
+                Ok(result)=>result,
+                Err(e)=> return Err(e.into())
+            };
+            let txid = match tx.broadcast(signed, network_config){
+                Ok(result)=>result,
+                Err(e)=> return Err(e.into())
+            };
+            Ok(txid)
+        }
+        else{
+            return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
+        }
+    }
+
     pub fn swap_status(boltz_url: String, id: String)->anyhow::Result<String, BoltzError>{
         let boltz_client = BoltzApiClient::new(&boltz_url);
         // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);

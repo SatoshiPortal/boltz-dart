@@ -115,6 +115,24 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
         },
     )
 }
+fn wire_btc_ln_reverse_claim__static_method__Api_impl(
+    port_: MessagePort,
+    swap: impl Wire2Api<BtcLnSwap> + UnwindSafe,
+    fee: impl Wire2Api<u64> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "btc_ln_reverse_claim__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap = swap.wire2api();
+            let api_fee = fee.wire2api();
+            move |task_callback| Api::btc_ln_reverse_claim(api_swap, api_fee)
+        },
+    )
+}
 fn wire_swap_status__static_method__Api_impl(
     port_: MessagePort,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
@@ -161,12 +179,23 @@ impl Wire2Api<i32> for i32 {
         self
     }
 }
+
 impl Wire2Api<Network> for i32 {
     fn wire2api(self) -> Network {
         match self {
             0 => Network::Testnet,
             1 => Network::LiquidTestnet,
             _ => unreachable!("Invalid variant for Network: {}", self),
+        }
+    }
+}
+
+impl Wire2Api<SwapType> for i32 {
+    fn wire2api(self) -> SwapType {
+        match self {
+            0 => SwapType::Submarine,
+            1 => SwapType::Reverse,
+            _ => unreachable!("Invalid variant for SwapType: {}", self),
         }
     }
 }

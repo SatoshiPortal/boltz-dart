@@ -125,6 +125,28 @@ class BoltzDartImpl implements BoltzDart {
         ],
       );
 
+  Future<String> btcLnReverseClaimStaticMethodApi(
+      {required BtcLnSwap swap, required int fee, dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_btc_ln_swap(swap);
+    var arg1 = _platform.api2wire_u64(fee);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_btc_ln_reverse_claim__static_method__Api(port_, arg0, arg1),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: _wire2api_boltz_error,
+      constMeta: kBtcLnReverseClaimStaticMethodApiConstMeta,
+      argValues: [swap, fee],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kBtcLnReverseClaimStaticMethodApiConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "btc_ln_reverse_claim__static_method__Api",
+            argNames: ["swap", "fee"],
+          );
+
   Future<String> swapStatusStaticMethodApi(
       {required String boltzUrl, required String id, dynamic hint}) {
     var arg0 = _platform.api2wire_String(boltzUrl);
@@ -258,6 +280,11 @@ int api2wire_network(Network raw) {
 }
 
 @protected
+int api2wire_swap_type(SwapType raw) {
+  return api2wire_i32(raw.index);
+}
+
+@protected
 int api2wire_u8(int raw) {
   return raw;
 }
@@ -275,6 +302,13 @@ class BoltzDartPlatform extends FlutterRustBridgeBase<BoltzDartWire> {
   }
 
   @protected
+  ffi.Pointer<wire_BtcLnSwap> api2wire_box_autoadd_btc_ln_swap(BtcLnSwap raw) {
+    final ptr = inner.new_box_autoadd_btc_ln_swap_0();
+    _api_fill_to_wire_btc_ln_swap(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   int api2wire_u64(int raw) {
     return raw;
   }
@@ -288,6 +322,36 @@ class BoltzDartPlatform extends FlutterRustBridgeBase<BoltzDartWire> {
 // Section: finalizer
 
 // Section: api_fill_to_wire
+
+  void _api_fill_to_wire_box_autoadd_btc_ln_swap(
+      BtcLnSwap apiObj, ffi.Pointer<wire_BtcLnSwap> wireObj) {
+    _api_fill_to_wire_btc_ln_swap(apiObj, wireObj.ref);
+  }
+
+  void _api_fill_to_wire_btc_ln_swap(BtcLnSwap apiObj, wire_BtcLnSwap wireObj) {
+    wireObj.id = api2wire_String(apiObj.id);
+    wireObj.kind = api2wire_swap_type(apiObj.kind);
+    wireObj.network = api2wire_network(apiObj.network);
+    _api_fill_to_wire_key_pair(apiObj.keys, wireObj.keys);
+    _api_fill_to_wire_pre_image(apiObj.preimage, wireObj.preimage);
+    wireObj.redeem_script = api2wire_String(apiObj.redeemScript);
+    wireObj.invoice = api2wire_String(apiObj.invoice);
+    wireObj.out_amount = api2wire_u64(apiObj.outAmount);
+    wireObj.onchain_address = api2wire_String(apiObj.onchainAddress);
+    wireObj.electrum_url = api2wire_String(apiObj.electrumUrl);
+    wireObj.boltz_url = api2wire_String(apiObj.boltzUrl);
+  }
+
+  void _api_fill_to_wire_key_pair(KeyPair apiObj, wire_KeyPair wireObj) {
+    wireObj.secret_key = api2wire_String(apiObj.secretKey);
+    wireObj.public_key = api2wire_String(apiObj.publicKey);
+  }
+
+  void _api_fill_to_wire_pre_image(PreImage apiObj, wire_PreImage wireObj) {
+    wireObj.value = api2wire_String(apiObj.value);
+    wireObj.sha256 = api2wire_String(apiObj.sha256);
+    wireObj.hash160 = api2wire_String(apiObj.hash160);
+  }
 }
 
 // ignore_for_file: camel_case_types, non_constant_identifier_names, avoid_positional_boolean_parameters, annotate_overrides, constant_identifier_names
@@ -482,6 +546,26 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
           void Function(int, ffi.Pointer<wire_uint_8_list>, int, int, int,
               ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
+  void wire_btc_ln_reverse_claim__static_method__Api(
+    int port_,
+    ffi.Pointer<wire_BtcLnSwap> swap,
+    int fee,
+  ) {
+    return _wire_btc_ln_reverse_claim__static_method__Api(
+      port_,
+      swap,
+      fee,
+    );
+  }
+
+  late final _wire_btc_ln_reverse_claim__static_method__ApiPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_BtcLnSwap>,
+              ffi.Uint64)>>('wire_btc_ln_reverse_claim__static_method__Api');
+  late final _wire_btc_ln_reverse_claim__static_method__Api =
+      _wire_btc_ln_reverse_claim__static_method__ApiPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_BtcLnSwap>, int)>();
+
   void wire_swap_status__static_method__Api(
     int port_,
     ffi.Pointer<wire_uint_8_list> boltz_url,
@@ -503,6 +587,16 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
       _wire_swap_status__static_method__ApiPtr.asFunction<
           void Function(int, ffi.Pointer<wire_uint_8_list>,
               ffi.Pointer<wire_uint_8_list>)>();
+
+  ffi.Pointer<wire_BtcLnSwap> new_box_autoadd_btc_ln_swap_0() {
+    return _new_box_autoadd_btc_ln_swap_0();
+  }
+
+  late final _new_box_autoadd_btc_ln_swap_0Ptr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_BtcLnSwap> Function()>>(
+          'new_box_autoadd_btc_ln_swap_0');
+  late final _new_box_autoadd_btc_ln_swap_0 = _new_box_autoadd_btc_ln_swap_0Ptr
+      .asFunction<ffi.Pointer<wire_BtcLnSwap> Function()>();
 
   ffi.Pointer<wire_uint_8_list> new_uint_8_list_0(
     int len,
@@ -541,6 +635,47 @@ final class wire_uint_8_list extends ffi.Struct {
 
   @ffi.Int32()
   external int len;
+}
+
+final class wire_KeyPair extends ffi.Struct {
+  external ffi.Pointer<wire_uint_8_list> secret_key;
+
+  external ffi.Pointer<wire_uint_8_list> public_key;
+}
+
+final class wire_PreImage extends ffi.Struct {
+  external ffi.Pointer<wire_uint_8_list> value;
+
+  external ffi.Pointer<wire_uint_8_list> sha256;
+
+  external ffi.Pointer<wire_uint_8_list> hash160;
+}
+
+final class wire_BtcLnSwap extends ffi.Struct {
+  external ffi.Pointer<wire_uint_8_list> id;
+
+  @ffi.Int32()
+  external int kind;
+
+  @ffi.Int32()
+  external int network;
+
+  external wire_KeyPair keys;
+
+  external wire_PreImage preimage;
+
+  external ffi.Pointer<wire_uint_8_list> redeem_script;
+
+  external ffi.Pointer<wire_uint_8_list> invoice;
+
+  @ffi.Uint64()
+  external int out_amount;
+
+  external ffi.Pointer<wire_uint_8_list> onchain_address;
+
+  external ffi.Pointer<wire_uint_8_list> electrum_url;
+
+  external ffi.Pointer<wire_uint_8_list> boltz_url;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<
