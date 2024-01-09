@@ -26,6 +26,26 @@ class BoltzDartImpl implements BoltzDart {
   factory BoltzDartImpl.wasm(FutureOr<WasmModule> module) =>
       BoltzDartImpl(module as ExternalLibrary);
   BoltzDartImpl.raw(this._platform);
+  Future<(double, double)> swapFeesStaticMethodApi(
+      {required String boltzUrl, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(boltzUrl);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_swap_fees__static_method__Api(port_, arg0),
+      parseSuccessData: _wire2api___record__f64_f64,
+      parseErrorData: _wire2api_boltz_error,
+      constMeta: kSwapFeesStaticMethodApiConstMeta,
+      argValues: [boltzUrl],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "swap_fees__static_method__Api",
+        argNames: ["boltzUrl"],
+      );
+
   Future<BtcLnSwap> newBtcLnSubmarineStaticMethodApi(
       {required String mnemonic,
       required int index,
@@ -66,6 +86,27 @@ class BoltzDartImpl implements BoltzDart {
             ],
           );
 
+  Future<String> swapStatusStaticMethodApi(
+      {required String boltzUrl, required String id, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(boltzUrl);
+    var arg1 = _platform.api2wire_String(id);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_swap_status__static_method__Api(port_, arg0, arg1),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: _wire2api_boltz_error,
+      constMeta: kSwapStatusStaticMethodApiConstMeta,
+      argValues: [boltzUrl, id],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "swap_status__static_method__Api",
+        argNames: ["boltzUrl", "id"],
+      );
+
   void dispose() {
     _platform.dispose();
   }
@@ -73,6 +114,17 @@ class BoltzDartImpl implements BoltzDart {
 
   String _wire2api_String(dynamic raw) {
     return raw as String;
+  }
+
+  (double, double) _wire2api___record__f64_f64(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      _wire2api_f64(arr[0]),
+      _wire2api_f64(arr[1]),
+    );
   }
 
   BoltzError _wire2api_boltz_error(dynamic raw) {
@@ -87,8 +139,8 @@ class BoltzDartImpl implements BoltzDart {
 
   BtcLnSwap _wire2api_btc_ln_swap(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 9)
-      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
+    if (arr.length != 11)
+      throw Exception('unexpected arr length: expect 11 but see ${arr.length}');
     return BtcLnSwap(
       id: _wire2api_String(arr[0]),
       kind: _wire2api_swap_type(arr[1]),
@@ -97,9 +149,15 @@ class BoltzDartImpl implements BoltzDart {
       preimage: _wire2api_pre_image(arr[4]),
       redeemScript: _wire2api_String(arr[5]),
       invoice: _wire2api_String(arr[6]),
-      electrumUrl: _wire2api_String(arr[7]),
-      boltzUrl: _wire2api_String(arr[8]),
+      outAmount: _wire2api_u64(arr[7]),
+      onchainAddress: _wire2api_String(arr[8]),
+      electrumUrl: _wire2api_String(arr[9]),
+      boltzUrl: _wire2api_String(arr[10]),
     );
+  }
+
+  double _wire2api_f64(dynamic raw) {
+    return raw as double;
   }
 
   int _wire2api_i32(dynamic raw) {
@@ -133,6 +191,10 @@ class BoltzDartImpl implements BoltzDart {
 
   SwapType _wire2api_swap_type(dynamic raw) {
     return SwapType.values[raw as int];
+  }
+
+  int _wire2api_u64(dynamic raw) {
+    return castInt(raw);
   }
 
   int _wire2api_u8(dynamic raw) {
@@ -285,6 +347,24 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
+  void wire_swap_fees__static_method__Api(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> boltz_url,
+  ) {
+    return _wire_swap_fees__static_method__Api(
+      port_,
+      boltz_url,
+    );
+  }
+
+  late final _wire_swap_fees__static_method__ApiPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_swap_fees__static_method__Api');
+  late final _wire_swap_fees__static_method__Api =
+      _wire_swap_fees__static_method__ApiPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
   void wire_new_btc_ln_submarine__static_method__Api(
     int port_,
     ffi.Pointer<wire_uint_8_list> mnemonic,
@@ -325,6 +405,28 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
               ffi.Pointer<wire_uint_8_list>,
               int,
               ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_swap_status__static_method__Api(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> boltz_url,
+    ffi.Pointer<wire_uint_8_list> id,
+  ) {
+    return _wire_swap_status__static_method__Api(
+      port_,
+      boltz_url,
+      id,
+    );
+  }
+
+  late final _wire_swap_status__static_method__ApiPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+                  ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_swap_status__static_method__Api');
+  late final _wire_swap_status__static_method__Api =
+      _wire_swap_status__static_method__ApiPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_uint_8_list>,
               ffi.Pointer<wire_uint_8_list>)>();
 
   ffi.Pointer<wire_uint_8_list> new_uint_8_list_0(

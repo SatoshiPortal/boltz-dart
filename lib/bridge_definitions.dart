@@ -9,6 +9,11 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class BoltzDart {
+  Future<(double, double)> swapFeesStaticMethodApi(
+      {required String boltzUrl, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta;
+
   Future<BtcLnSwap> newBtcLnSubmarineStaticMethodApi(
       {required String mnemonic,
       required int index,
@@ -19,6 +24,11 @@ abstract class BoltzDart {
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnSubmarineStaticMethodApiConstMeta;
+
+  Future<String> swapStatusStaticMethodApi(
+      {required String boltzUrl, required String id, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta;
 }
 
 class BoltzError implements FrbException {
@@ -39,6 +49,8 @@ class BtcLnSwap {
   final PreImage preimage;
   final String redeemScript;
   final String invoice;
+  final int outAmount;
+  final String onchainAddress;
   final String electrumUrl;
   final String boltzUrl;
 
@@ -50,6 +62,8 @@ class BtcLnSwap {
     required this.preimage,
     required this.redeemScript,
     required this.invoice,
+    required this.outAmount,
+    required this.onchainAddress,
     required this.electrumUrl,
     required this.boltzUrl,
   });

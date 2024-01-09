@@ -35,6 +35,8 @@ void main() {
         const expectedSecretKey =
             "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
         print("SWAP CREATED SUCCESSFULLY: ${btcLnSubmarineSwap.id}");
+        print(
+            "PAYMENT DETAILS: ${btcLnSubmarineSwap.onchainAddress}:${btcLnSubmarineSwap.outAmount} sats");
         expect(btcLnSubmarineSwap.keys.secretKey, expectedSecretKey);
       } catch (e) {
         print((e as BoltzError).kind);

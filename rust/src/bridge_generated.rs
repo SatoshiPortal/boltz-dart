@@ -29,6 +29,22 @@ use crate::types::SwapType;
 
 // Section: wire functions
 
+fn wire_swap_fees__static_method__Api_impl(
+    port_: MessagePort,
+    boltz_url: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (f64, f64), _>(
+        WrapInfo {
+            debug_name: "swap_fees__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_boltz_url = boltz_url.wire2api();
+            move |task_callback| Api::swap_fees(api_boltz_url)
+        },
+    )
+}
 fn wire_new_btc_ln_submarine__static_method__Api_impl(
     port_: MessagePort,
     mnemonic: impl Wire2Api<String> + UnwindSafe,
@@ -61,6 +77,24 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
                     api_boltz_url,
                 )
             }
+        },
+    )
+}
+fn wire_swap_status__static_method__Api_impl(
+    port_: MessagePort,
+    boltz_url: impl Wire2Api<String> + UnwindSafe,
+    id: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "swap_status__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_boltz_url = boltz_url.wire2api();
+            let api_id = id.wire2api();
+            move |task_callback| Api::swap_status(api_boltz_url, api_id)
         },
     )
 }
@@ -140,6 +174,8 @@ impl support::IntoDart for BtcLnSwap {
             self.preimage.into_into_dart().into_dart(),
             self.redeem_script.into_into_dart().into_dart(),
             self.invoice.into_into_dart().into_dart(),
+            self.out_amount.into_into_dart().into_dart(),
+            self.onchain_address.into_into_dart().into_dart(),
             self.electrum_url.into_into_dart().into_dart(),
             self.boltz_url.into_into_dart().into_dart(),
         ]
