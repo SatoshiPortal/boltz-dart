@@ -33,7 +33,10 @@ Once we have all our structs and functions in dart, we can organize them into cl
 You can now use the `test/boltz-test.dart` file to test whether the expected logic is being exposed correctly over ffi. 
 
 ## NOTE
-Submarine swap test requires using a new invoice for every test. You can generate test invoices here:
+
+The reverse swap test can be run without any updates to local variables.
+
+The submarine swap test requires using a new invoice for every test. You can generate test invoices here:
 
 https://starblocks.acinq.co
 
@@ -89,6 +92,10 @@ The main classes and their methods are:
   - [ ] refund
 - [ ] BtcLbtcSwap
 
+## Dependencies
+
+Currently we depend on a alpha version of `boltz-rust` which will see ongoing updates. If updates from the git repo are not reflecting, 
+remove the directory `$HOME/.cargo/git/checkouts/boltz-rust*`, run `cargo update` and then rebuild.
 
 ### Resources:
 

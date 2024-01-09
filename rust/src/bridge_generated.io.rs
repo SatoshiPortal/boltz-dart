@@ -28,6 +28,27 @@ pub extern "C" fn wire_new_btc_ln_submarine__static_method__Api(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_new_btc_ln_reverse__static_method__Api(
+    port_: i64,
+    mnemonic: *mut wire_uint_8_list,
+    index: u64,
+    out_amount: u64,
+    network: i32,
+    electrum_url: *mut wire_uint_8_list,
+    boltz_url: *mut wire_uint_8_list,
+) {
+    wire_new_btc_ln_reverse__static_method__Api_impl(
+        port_,
+        mnemonic,
+        index,
+        out_amount,
+        network,
+        electrum_url,
+        boltz_url,
+    )
+}
+
+#[no_mangle]
 pub extern "C" fn wire_swap_status__static_method__Api(
     port_: i64,
     boltz_url: *mut wire_uint_8_list,

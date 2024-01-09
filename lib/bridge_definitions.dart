@@ -25,6 +25,17 @@ abstract class BoltzDart {
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnSubmarineStaticMethodApiConstMeta;
 
+  Future<BtcLnSwap> newBtcLnReverseStaticMethodApi(
+      {required String mnemonic,
+      required int index,
+      required int outAmount,
+      required Network network,
+      required String electrumUrl,
+      required String boltzUrl,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta;
+
   Future<String> swapStatusStaticMethodApi(
       {required String boltzUrl, required String id, dynamic hint});
 

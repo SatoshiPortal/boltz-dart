@@ -99,6 +99,72 @@ impl Api {
 
     }
     
+    pub fn new_btc_ln_reverse(        
+        mnemonic: String,
+        index: u64,
+        out_amount: u64,
+        network: Network,
+        electrum_url: String,
+        boltz_url: String,
+    ) -> anyhow::Result<BtcLnSwap,BoltzError>{
+            let swap_type = SwapType::Reverse;
+            let claim_keypair = match KeyPair::new(mnemonic, index, swap_type.clone()) {
+                Ok(keypair) => keypair,
+                Err(err) => return Err(err.into()),
+            };
+            let preimage = Preimage::new();
+            let boltz_client = BoltzApiClient::new(&boltz_url);
+            // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
+            let boltz_pairs = match boltz_client.get_pairs() {
+                Ok(result)=>result,
+                Err(e)=> return Err(e.into())
+            };
+
+            let pair_hash = match boltz_pairs
+            .pairs
+            .pairs
+            .get("BTC/BTC")
+            .map(|pair_info| pair_info.hash.clone()){
+                Some(result)=>result,
+                None=> return Err(S5Error::new(ErrorKind::BoltzApi, "Could not find BTC/BTC pair-hash from boltz response").into())
+            };
+
+            let swap_request = CreateSwapRequest::new_btc_reverse(pair_hash, preimage.sha256.to_string(), claim_keypair.clone().public_key, out_amount);
+            let response = match boltz_client.create_swap(swap_request){
+                Ok(result)=>result,
+                Err(e)=>return Err(e.into())
+            };
+
+            if !response.validate_invoice_preimage256(preimage.sha256){
+                return Err(S5Error::new(ErrorKind::BoltzApi, "Preimage used in response invoice does not match! Report to support!").into());
+            }
+            // let btc_swap_script = BtcSwapScript::submarine_from_str(&response.clone().redeem_script.unwrap()).unwrap();
+        
+            // let payment_address = match btc_swap_script.to_address(network.clone().into()){
+            //     Ok(result)=>result.to_string(),
+            //     Err(e)=>return Err(e.into())
+            // };
+
+            // if &payment_address != &response.clone().address.unwrap(){
+            //     return Err(S5Error::new(ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
+            // }
+
+            Ok(BtcLnSwap::new(
+                response.clone().id,
+                swap_type,
+                network,
+                claim_keypair,
+                preimage.into(),
+                response.clone().redeem_script.unwrap(),
+                response.clone().invoice.unwrap(),
+                out_amount,
+                response.clone().lockup_address.unwrap(),
+                electrum_url,
+                boltz_url,
+            ))
+
+    }
+    
     pub fn swap_status(boltz_url: String, id: String)->anyhow::Result<String, BoltzError>{
         let boltz_client = BoltzApiClient::new(&boltz_url);
         // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
@@ -108,6 +174,7 @@ impl Api {
         }
     }
     
+
 
 }
 

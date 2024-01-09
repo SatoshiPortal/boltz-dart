@@ -22,6 +22,6 @@ profiler = true
 
 [dependencies]
 
-boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust" }
+boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust", branch = "trunk" }
 flutter_rust_bridge = "1.82.6"
 anyhow = "1.0.68"

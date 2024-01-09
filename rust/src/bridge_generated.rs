@@ -80,6 +80,41 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
         },
     )
 }
+fn wire_new_btc_ln_reverse__static_method__Api_impl(
+    port_: MessagePort,
+    mnemonic: impl Wire2Api<String> + UnwindSafe,
+    index: impl Wire2Api<u64> + UnwindSafe,
+    out_amount: impl Wire2Api<u64> + UnwindSafe,
+    network: impl Wire2Api<Network> + UnwindSafe,
+    electrum_url: impl Wire2Api<String> + UnwindSafe,
+    boltz_url: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, BtcLnSwap, _>(
+        WrapInfo {
+            debug_name: "new_btc_ln_reverse__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_mnemonic = mnemonic.wire2api();
+            let api_index = index.wire2api();
+            let api_out_amount = out_amount.wire2api();
+            let api_network = network.wire2api();
+            let api_electrum_url = electrum_url.wire2api();
+            let api_boltz_url = boltz_url.wire2api();
+            move |task_callback| {
+                Api::new_btc_ln_reverse(
+                    api_mnemonic,
+                    api_index,
+                    api_out_amount,
+                    api_network,
+                    api_electrum_url,
+                    api_boltz_url,
+                )
+            }
+        },
+    )
+}
 fn wire_swap_status__static_method__Api_impl(
     port_: MessagePort,
     boltz_url: impl Wire2Api<String> + UnwindSafe,

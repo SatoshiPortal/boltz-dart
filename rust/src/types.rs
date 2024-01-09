@@ -78,7 +78,7 @@ impl Into<BoltzSwapType> for SwapType {
     fn into(self) -> BoltzSwapType {
         match self {
             SwapType::Submarine => BoltzSwapType::Submarine,
-            SwapType::Reverse => BoltzSwapType::Reverse,
+            SwapType::Reverse => BoltzSwapType::ReverseSubmarine,
         }
     }
 }

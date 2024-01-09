@@ -86,6 +86,45 @@ class BoltzDartImpl implements BoltzDart {
             ],
           );
 
+  Future<BtcLnSwap> newBtcLnReverseStaticMethodApi(
+      {required String mnemonic,
+      required int index,
+      required int outAmount,
+      required Network network,
+      required String electrumUrl,
+      required String boltzUrl,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_String(mnemonic);
+    var arg1 = _platform.api2wire_u64(index);
+    var arg2 = _platform.api2wire_u64(outAmount);
+    var arg3 = api2wire_network(network);
+    var arg4 = _platform.api2wire_String(electrumUrl);
+    var arg5 = _platform.api2wire_String(boltzUrl);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_new_btc_ln_reverse__static_method__Api(
+              port_, arg0, arg1, arg2, arg3, arg4, arg5),
+      parseSuccessData: _wire2api_btc_ln_swap,
+      parseErrorData: _wire2api_boltz_error,
+      constMeta: kNewBtcLnReverseStaticMethodApiConstMeta,
+      argValues: [mnemonic, index, outAmount, network, electrumUrl, boltzUrl],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "new_btc_ln_reverse__static_method__Api",
+        argNames: [
+          "mnemonic",
+          "index",
+          "outAmount",
+          "network",
+          "electrumUrl",
+          "boltzUrl"
+        ],
+      );
+
   Future<String> swapStatusStaticMethodApi(
       {required String boltzUrl, required String id, dynamic hint}) {
     var arg0 = _platform.api2wire_String(boltzUrl);
@@ -406,6 +445,42 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
               int,
               ffi.Pointer<wire_uint_8_list>,
               ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_new_btc_ln_reverse__static_method__Api(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> mnemonic,
+    int index,
+    int out_amount,
+    int network,
+    ffi.Pointer<wire_uint_8_list> electrum_url,
+    ffi.Pointer<wire_uint_8_list> boltz_url,
+  ) {
+    return _wire_new_btc_ln_reverse__static_method__Api(
+      port_,
+      mnemonic,
+      index,
+      out_amount,
+      network,
+      electrum_url,
+      boltz_url,
+    );
+  }
+
+  late final _wire_new_btc_ln_reverse__static_method__ApiPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<wire_uint_8_list>,
+                  ffi.Uint64,
+                  ffi.Uint64,
+                  ffi.Int32,
+                  ffi.Pointer<wire_uint_8_list>,
+                  ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_new_btc_ln_reverse__static_method__Api');
+  late final _wire_new_btc_ln_reverse__static_method__Api =
+      _wire_new_btc_ln_reverse__static_method__ApiPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_uint_8_list>, int, int, int,
+              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_swap_status__static_method__Api(
     int port_,
