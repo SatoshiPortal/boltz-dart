@@ -45,7 +45,7 @@ void main() {
 
         expect(swap.keys.secretKey, expectedSecretKey);
 
-        print("PAYMENT DETAILS: ${swap.onchainAddress}:${swap.outAmount} sats");
+        print("PAYMENT DETAILS: ${swap.outAddress}:${swap.outAmount} sats");
       } catch (e) {
         print((e as bridge.BoltzError).kind);
         print((e as bridge.BoltzError).message);

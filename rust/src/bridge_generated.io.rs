@@ -58,6 +58,57 @@ pub extern "C" fn wire_btc_ln_reverse_claim__static_method__Api(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_new_lbtc_ln_submarine__static_method__Api(
+    port_: i64,
+    mnemonic: *mut wire_uint_8_list,
+    index: u64,
+    invoice: *mut wire_uint_8_list,
+    network: i32,
+    electrum_url: *mut wire_uint_8_list,
+    boltz_url: *mut wire_uint_8_list,
+) {
+    wire_new_lbtc_ln_submarine__static_method__Api_impl(
+        port_,
+        mnemonic,
+        index,
+        invoice,
+        network,
+        electrum_url,
+        boltz_url,
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn wire_new_lbtc_ln_reverse__static_method__Api(
+    port_: i64,
+    mnemonic: *mut wire_uint_8_list,
+    index: u64,
+    out_amount: u64,
+    network: i32,
+    electrum_url: *mut wire_uint_8_list,
+    boltz_url: *mut wire_uint_8_list,
+) {
+    wire_new_lbtc_ln_reverse__static_method__Api_impl(
+        port_,
+        mnemonic,
+        index,
+        out_amount,
+        network,
+        electrum_url,
+        boltz_url,
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn wire_lbtc_ln_reverse_claim__static_method__Api(
+    port_: i64,
+    swap: *mut wire_LbtcLnSwap,
+    fee: u64,
+) {
+    wire_lbtc_ln_reverse_claim__static_method__Api_impl(port_, swap, fee)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_swap_status__static_method__Api(
     port_: i64,
     boltz_url: *mut wire_uint_8_list,
@@ -71,6 +122,11 @@ pub extern "C" fn wire_swap_status__static_method__Api(
 #[no_mangle]
 pub extern "C" fn new_box_autoadd_btc_ln_swap_0() -> *mut wire_BtcLnSwap {
     support::new_leak_box_ptr(wire_BtcLnSwap::new_with_null_ptr())
+}
+
+#[no_mangle]
+pub extern "C" fn new_box_autoadd_lbtc_ln_swap_0() -> *mut wire_LbtcLnSwap {
+    support::new_leak_box_ptr(wire_LbtcLnSwap::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -98,6 +154,12 @@ impl Wire2Api<BtcLnSwap> for *mut wire_BtcLnSwap {
         Wire2Api::<BtcLnSwap>::wire2api(*wrap).into()
     }
 }
+impl Wire2Api<LbtcLnSwap> for *mut wire_LbtcLnSwap {
+    fn wire2api(self) -> LbtcLnSwap {
+        let wrap = unsafe { support::box_from_leak_ptr(self) };
+        Wire2Api::<LbtcLnSwap>::wire2api(*wrap).into()
+    }
+}
 impl Wire2Api<BtcLnSwap> for wire_BtcLnSwap {
     fn wire2api(self) -> BtcLnSwap {
         BtcLnSwap {
@@ -109,7 +171,7 @@ impl Wire2Api<BtcLnSwap> for wire_BtcLnSwap {
             redeem_script: self.redeem_script.wire2api(),
             invoice: self.invoice.wire2api(),
             out_amount: self.out_amount.wire2api(),
-            onchain_address: self.onchain_address.wire2api(),
+            out_address: self.out_address.wire2api(),
             electrum_url: self.electrum_url.wire2api(),
             boltz_url: self.boltz_url.wire2api(),
         }
@@ -121,6 +183,24 @@ impl Wire2Api<KeyPair> for wire_KeyPair {
         KeyPair {
             secret_key: self.secret_key.wire2api(),
             public_key: self.public_key.wire2api(),
+        }
+    }
+}
+impl Wire2Api<LbtcLnSwap> for wire_LbtcLnSwap {
+    fn wire2api(self) -> LbtcLnSwap {
+        LbtcLnSwap {
+            id: self.id.wire2api(),
+            kind: self.kind.wire2api(),
+            network: self.network.wire2api(),
+            keys: self.keys.wire2api(),
+            preimage: self.preimage.wire2api(),
+            redeem_script: self.redeem_script.wire2api(),
+            invoice: self.invoice.wire2api(),
+            out_amount: self.out_amount.wire2api(),
+            out_address: self.out_address.wire2api(),
+            blinding_key: self.blinding_key.wire2api(),
+            electrum_url: self.electrum_url.wire2api(),
+            boltz_url: self.boltz_url.wire2api(),
         }
     }
 }
@@ -156,7 +236,7 @@ pub struct wire_BtcLnSwap {
     redeem_script: *mut wire_uint_8_list,
     invoice: *mut wire_uint_8_list,
     out_amount: u64,
-    onchain_address: *mut wire_uint_8_list,
+    out_address: *mut wire_uint_8_list,
     electrum_url: *mut wire_uint_8_list,
     boltz_url: *mut wire_uint_8_list,
 }
@@ -166,6 +246,23 @@ pub struct wire_BtcLnSwap {
 pub struct wire_KeyPair {
     secret_key: *mut wire_uint_8_list,
     public_key: *mut wire_uint_8_list,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_LbtcLnSwap {
+    id: *mut wire_uint_8_list,
+    kind: i32,
+    network: i32,
+    keys: wire_KeyPair,
+    preimage: wire_PreImage,
+    redeem_script: *mut wire_uint_8_list,
+    invoice: *mut wire_uint_8_list,
+    out_amount: u64,
+    out_address: *mut wire_uint_8_list,
+    blinding_key: *mut wire_uint_8_list,
+    electrum_url: *mut wire_uint_8_list,
+    boltz_url: *mut wire_uint_8_list,
 }
 
 #[repr(C)]
@@ -206,7 +303,7 @@ impl NewWithNullPtr for wire_BtcLnSwap {
             redeem_script: core::ptr::null_mut(),
             invoice: core::ptr::null_mut(),
             out_amount: Default::default(),
-            onchain_address: core::ptr::null_mut(),
+            out_address: core::ptr::null_mut(),
             electrum_url: core::ptr::null_mut(),
             boltz_url: core::ptr::null_mut(),
         }
@@ -229,6 +326,31 @@ impl NewWithNullPtr for wire_KeyPair {
 }
 
 impl Default for wire_KeyPair {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+
+impl NewWithNullPtr for wire_LbtcLnSwap {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            id: core::ptr::null_mut(),
+            kind: Default::default(),
+            network: Default::default(),
+            keys: Default::default(),
+            preimage: Default::default(),
+            redeem_script: core::ptr::null_mut(),
+            invoice: core::ptr::null_mut(),
+            out_amount: Default::default(),
+            out_address: core::ptr::null_mut(),
+            blinding_key: core::ptr::null_mut(),
+            electrum_url: core::ptr::null_mut(),
+            boltz_url: core::ptr::null_mut(),
+        }
+    }
+}
+
+impl Default for wire_LbtcLnSwap {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }

@@ -86,7 +86,7 @@ class BtcLnSwap {
     try {
       final swapType = _btcLnSwap.kind;
       if (swapType == bridge.SwapType.Submarine) {
-        return "${_btcLnSwap.onchainAddress}:${_btcLnSwap.outAmount}";
+        return "${_btcLnSwap.outAddress}:${_btcLnSwap.outAmount}";
       }
 
       return _btcLnSwap.invoice;
@@ -97,7 +97,8 @@ class BtcLnSwap {
 }
 
 class SwapFees {
-  static Future<({double btc, double lbtc})> estimateFee({required String boltzUrl}) async {
+  static Future<({double btc, double lbtc})> estimateFee(
+      {required String boltzUrl}) async {
     try {
       final res = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl);
       return (btc: res.$1, lbtc: res.$2);
