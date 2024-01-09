@@ -94,6 +94,17 @@ class BtcLnSwap {
   }
 }
 
+class SwapFees {
+  static Future<({double btc, double lbtc})> estimateFee({required String boltzUrl}) async {
+    try {
+      final res = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl);
+      return (btc: res.$1, lbtc: res.$2);
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
+
 
 // done
   // new submarine swap
