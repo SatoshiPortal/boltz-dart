@@ -6,7 +6,7 @@ use boltz_client::util::error::ErrorKind;
 use boltz_client::util::error::S5Error;
 use boltz_client::util::preimage::Preimage;
 
-use crate::btc_ln::BtcLnSwap;
+use crate::types::BtcLnSwap;
 use crate::error::BoltzError;
 use crate::types::Network;
 use crate::types::SwapType;

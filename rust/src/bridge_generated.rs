@@ -20,8 +20,8 @@ use std::sync::Arc;
 
 // Section: imports
 
-use crate::btc_ln::BtcLnSwap;
 use crate::error::BoltzError;
+use crate::types::BtcLnSwap;
 use crate::types::KeyPair;
 use crate::types::Network;
 use crate::types::PreImage;

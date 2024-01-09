@@ -46,8 +46,11 @@ cd -
 ```
 
 In the project root directory, run codegen to generate rust and flutter ffi code.
+
 #### Generate dart code
 ```
+## NON DEBIAN USERS MUST RUN: export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"
+## THEN
 flutter_rust_bridge_codegen --rust-input rust/src/api.rs --dart-output lib/bridge_generated.dart --dart-decl-output lib/bridge_definitions.dart
 ```
 

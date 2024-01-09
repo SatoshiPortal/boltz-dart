@@ -15,7 +15,7 @@ final api = DynamicLibrary.open('./test/libboltz_dart.dylib');
 final apiLinux = DynamicLibrary.open('./test/libboltz_dart.so');
 
 
-// const _libName = 'native';
+// const _libName = 'boltz';
 
 /// Use for Darwin framework lookup.
 /// Use an explicit package constant to avoid
