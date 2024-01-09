@@ -11,7 +11,7 @@ void main() {
     ffi = BoltzDartImpl(apiLinux);
   });
 
-  group('BTC SUBMARINE SWAP', () {
+  group('BTC-LN SUBMARINE SWAP', () {
     test('Test create swap', () async {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
@@ -22,7 +22,7 @@ void main() {
       // CREATE NEW INVOICE PER TEST:
       // ORDER HALF A TON OF COFFEE AT: https://starblocks.acinq.co/
       const invoice =
-          "lntb30m1pje6zytpp50y00jtjamj078tvw88juck6trs5wwrca4ajsuqxsmt6radmn869qdpyxysysctvvcsxzgz5dahzqmmxyppk7enxv4jsxqrrsscqp79qy9qsqsp5tmdqqgrgl4l0d59nz5jpfh0lnmcy8dtfsv558scgwcfags0mpjrqlmt4zmyq3ncsle4ppxefu4u33sgu56snm2clsuhn8q8ggqm5t0f8344gpy8drnfh4pqfucaaqnze4f44scjz0yda3st7rnhpjz69yasq46nvp3";
+          "lntb30m1pje68vcpp5nfttynznk9cmvqy08kl5s8zwzm0jw27yjfnah8keejyrn04ptrfsdpyxysysctvvcsxzgz5dahzqmmxyppk7enxv4jsxqrrsscqp79qy9qsqsp5tvlr5050qsx0z8v028eugl4xsa0qevcykvez562vwl7rsha4shes7qpvf3ntayzh5ppaex2cu5j5jvemjxwc4kv0tufqkll8hxd7q34ptl79y0t203kgw5jqek5pwv03dchhplaullatavwxrxfypyjvrzqq64katd";
       try {
         final btcLnSubmarineSwap = await ffi.newBtcLnSubmarineStaticMethodApi(
           mnemonic: mnemonic,

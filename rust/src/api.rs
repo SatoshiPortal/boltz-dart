@@ -72,16 +72,16 @@ impl Api {
             if !response.validate_script_preimage160(preimage.hash160){
                 return Err(S5Error::new(ErrorKind::BoltzApi, "Preimage used in response invoice does not match! Report to support!").into());
             }
-            let btc_swap_script = BtcSwapScript::submarine_from_str(&response.clone().redeem_script.unwrap()).unwrap();
+            // let btc_swap_script = BtcSwapScript::submarine_from_str(&response.clone().redeem_script.unwrap()).unwrap();
         
-            let payment_address = match btc_swap_script.to_address(network.clone().into()){
-                Ok(result)=>result.to_string(),
-                Err(e)=>return Err(e.into())
-            };
+            // let payment_address = match btc_swap_script.to_address(network.clone().into()){
+            //     Ok(result)=>result.to_string(),
+            //     Err(e)=>return Err(e.into())
+            // };
 
-            if &payment_address != &response.clone().address.unwrap(){
-                return Err(S5Error::new(ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
-            }
+            // if &payment_address != &response.clone().address.unwrap(){
+            //     return Err(S5Error::new(ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
+            // }
 
             Ok(BtcLnSwap::new(
                 response.clone().id,
