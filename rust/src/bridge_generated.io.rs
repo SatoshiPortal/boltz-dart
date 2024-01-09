@@ -2,18 +2,24 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_keypair_from_mnemonic__static_method__Api(
+pub extern "C" fn wire_new_btc_ln_submarine__static_method__Api(
     port_: i64,
     mnemonic: *mut wire_uint_8_list,
     index: u64,
-    swap_type: i32,
+    invoice: *mut wire_uint_8_list,
+    network: i32,
+    electrum_url: *mut wire_uint_8_list,
+    boltz_url: *mut wire_uint_8_list,
 ) {
-    wire_keypair_from_mnemonic__static_method__Api_impl(port_, mnemonic, index, swap_type)
-}
-
-#[no_mangle]
-pub extern "C" fn wire_preimage_random__static_method__Api(port_: i64) {
-    wire_preimage_random__static_method__Api_impl(port_)
+    wire_new_btc_ln_submarine__static_method__Api_impl(
+        port_,
+        mnemonic,
+        index,
+        invoice,
+        network,
+        electrum_url,
+        boltz_url,
+    )
 }
 
 // Section: allocate functions

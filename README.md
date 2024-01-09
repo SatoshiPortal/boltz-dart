@@ -27,14 +27,28 @@ Then go ahead and run `flutter run` (for web, run `dart run flutter_rust_bridge:
 
 Once you have edited `api.rs` to incorporate your own Rust code, the bridge files `bridge_definitions.dart` and `bridge_generated.dart` are generated using the following command (note: append ` --wasm` to add web support):
 
-### Windows
-```
-flutter_rust_bridge_codegen --rust-input rust\src\api.rs --dart-output .\lib\bridge_generated.dart --dart-decl-output .\lib\bridge_definitions.dart
-```
 
 ### Linux/MacOS/any other Unix
+
+After writing rust structs and static functions:
+
+#### Compile rust library (native)
+
+Move into the rust directory, build binaries and copy them into the test folder
 ```
-flutter_rust_bridge_codegen --rust-input rust/src/api.rs --dart-output ./lib/bridge_generated.dart --dart-decl-output ./lib/bridge_definitions.dart
+cd rust 
+cargo build --release
+# macos
+cp target/release/libboltz_dart.dylib ../test/
+# linux
+cp target/release/libboltz_dart.so ../test/
+cd -
+```
+
+In the project root directory, run codegen to generate rust and flutter ffi code.
+#### Generate dart code
+```
+flutter_rust_bridge_codegen --rust-input rust/src/api.rs --dart-output lib/bridge_generated.dart --dart-decl-output lib/bridge_definitions.dart
 ```
 
 ## Scaffolding in existing projects

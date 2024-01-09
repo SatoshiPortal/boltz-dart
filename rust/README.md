@@ -11,22 +11,26 @@ m/purpose/network/21/0/*
 ```dart
 
 import 'package:boltz_client_flutter/boltz_client_flutter.dart';
+
 final network = BitcoinNetwork.Mainnet;
 final electrumUrl = 'electrum.bullbitcoin.com:50002'
 final boltzUrl = 'api.boltz.exchange';
-
 final index = 12;
-final keyPair = KeyPair('bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon', index);
+final mnemonic = 'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
+
+// out value determined by invoice
 final invoice = 'lnbc1...scanned-by-user-paying-external-ln-wallet...';
 
 final fees = getBoltzFees(boltzUrl);
 
+// Backup this structure
 final boltzBtcLnSubmarineSwap  = BtcLnSwap.newSubmarine(
+    mnemonic, 
+    index,
+    invoice
     network,
     electrumUrl,
     boltzUrl,
-    keyPair,
-    invoice
 );
 
 final paymentDetails = boltzBtcLnSubmarineSwap.paymentDetails();
@@ -46,18 +50,18 @@ final txid = boltzBtcLnSubmarineSwap.refund(address, absoluteFees);
 m/purpose/network/42/0/*
 
 ```dart
-final index = 13;
-final keyPair = KeyPair('bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon', index);
-final preImage = Preimage();
+final index = 12;
+final mnemonic = 'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
+// explicit out value
 final outValue = 100000;
 final fees = getBoltzFees(boltzUrl);
 final boltzBtcLnReverseSwap  = BtcLnSwap.newReverse(
+    mnemonic,
+    index,
     network,
+    outValue,
     electrumUrl,
     boltzUrl,
-    keyPair,
-    preImage,
-    outValue
 );
 final paymentDetails = boltzBtcLnReverseSwap.paymentDetails();
 // Pay invoice provided by boltz (user is recieving a payment from an external LN wallet)

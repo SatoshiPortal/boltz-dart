@@ -12,7 +12,7 @@ export 'bridge_definitions.dart';
 export 'bridge_generated.dart';
 
 final api = DynamicLibrary.open('./test/libboltz_dart.dylib');
-
+final apiLinux = DynamicLibrary.open('./test/libboltz_dart.so');
 
 
 // const _libName = 'native';

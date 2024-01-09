@@ -2,11 +2,12 @@
 // preimage
 // 
 use boltz_client::{
-    swaps::boltz::SwapType,
+    swaps::boltz::SwapType as BoltzSwapType,
     util::{derivation::ChildKeys, error::S5Error},
     util::preimage::Preimage as BoltzPreImage, network::electrum::BitcoinNetwork,
 };
 
+#[derive(Clone)]
 pub struct KeyPair {
     pub secret_key: String,
     pub public_key: String,
@@ -36,6 +37,7 @@ impl KeyPair {
 // Impl into secp256k1::KeyPair
 
 
+#[derive(Clone)]
 pub struct PreImage {
     pub value: String,
     pub sha256: String,
@@ -65,20 +67,22 @@ impl Into<PreImage> for BoltzPreImage {
 }
 
 
-pub enum BoltzSwapType {
+#[derive(Clone)]
+pub enum SwapType {
     Submarine,
     Reverse,
 }
 
-impl Into<SwapType> for BoltzSwapType {
-    fn into(self) -> SwapType {
+impl Into<BoltzSwapType> for SwapType {
+    fn into(self) -> BoltzSwapType {
         match self {
-            BoltzSwapType::Submarine => SwapType::Submarine,
-            BoltzSwapType::Reverse => SwapType::Reverse,
+            SwapType::Submarine => BoltzSwapType::Submarine,
+            SwapType::Reverse => BoltzSwapType::Reverse,
         }
     }
 }
 
+#[derive(Clone)]
 pub enum Network {
     Testnet,
     LiquidTestnet,
