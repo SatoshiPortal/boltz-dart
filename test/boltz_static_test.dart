@@ -1,16 +1,7 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-import '../lib/bridge_generated.dart';
-import '../lib/ffi.dart';
+import 'package:boltz_dart/ffi.dart';
 import 'package:test/test.dart';
 
 void main() {
-  late BoltzDartImpl ffi;
-
-  setUp(() {
-    ffi = BoltzDartImpl(apiLinux);
-  });
-
   group('BTC-LN SWAPS', () {
     test('FEE ESTIMATION', () async {
       const boltzUrl = 'https://api.testnet.boltz.exchange';
