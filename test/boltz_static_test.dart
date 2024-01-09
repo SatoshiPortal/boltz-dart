@@ -1,3 +1,4 @@
+import 'package:boltz_dart/bridge_definitions.dart';
 import 'package:boltz_dart/ffi.dart';
 import 'package:test/test.dart';
 

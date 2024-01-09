@@ -6,6 +6,8 @@ class BtcLnSwap {
 
   BtcLnSwap._(this._btcLnSwap);
 
+  bridge.BtcLnSwap get btcLnSwap => _btcLnSwap;
+
   static Future<BtcLnSwap> newSubmarine(
       {required String mnemonic,
       required int index,

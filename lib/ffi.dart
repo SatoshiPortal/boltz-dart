@@ -3,8 +3,8 @@ import 'dart:io' show Platform;
 
 import 'bridge_generated.dart';
 
-export 'bridge_definitions.dart';
-export 'bridge_generated.dart';
+// export 'bridge_definitions.dart';
+// export 'bridge_generated.dart';
 
 final _api = DynamicLibrary.open(
   './test/libboltz_dart.${Platform.operatingSystem == 'linux' ? '.so' : 'dylib'}',
