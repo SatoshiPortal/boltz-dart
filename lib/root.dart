@@ -96,9 +96,103 @@ class BtcLnSwap {
   }
 }
 
+class LbtcLnSwap {
+  final bridge.LbtcLnSwap _lbtcLnSwap;
+
+  LbtcLnSwap._(this._lbtcLnSwap);
+
+  bridge.LbtcLnSwap get lbtcLnSwap => _lbtcLnSwap;
+
+  static Future<LbtcLnSwap> newSubmarine({
+    required String mnemonic,
+    required int index,
+    required String invoice,
+    required bridge.Network network,
+    required String electrumUrl,
+    required String boltzUrl,
+  }) async {
+    try {
+      final res = await ffi.newLbtcLnSubmarineStaticMethodApi(
+        mnemonic: mnemonic,
+        index: index,
+        invoice: invoice,
+        network: network,
+        electrumUrl: electrumUrl,
+        boltzUrl: boltzUrl,
+      );
+
+      return LbtcLnSwap._(res);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<LbtcLnSwap> newReverse({
+    required String mnemonic,
+    required int index,
+    required int outAmount,
+    required bridge.Network network,
+    required String electrumUrl,
+    required String boltzUrl,
+  }) async {
+    try {
+      final res = await ffi.newLbtcLnReverseStaticMethodApi(
+        mnemonic: mnemonic,
+        index: index,
+        outAmount: outAmount,
+        network: network,
+        electrumUrl: electrumUrl,
+        boltzUrl: boltzUrl,
+      );
+
+      return LbtcLnSwap._(res);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> claim({required int fee}) async {
+    try {
+      final res = await ffi.lbtcLnReverseClaimStaticMethodApi(
+        swap: _lbtcLnSwap,
+        fee: fee,
+      );
+
+      return res;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> status() async {
+    try {
+      final res = await ffi.swapStatusStaticMethodApi(
+        boltzUrl: _lbtcLnSwap.boltzUrl,
+        id: _lbtcLnSwap.id,
+      );
+
+      return res;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> paymentDetails() async {
+    try {
+      final swapType = _lbtcLnSwap.kind;
+      if (swapType == bridge.SwapType.Submarine) {
+        return "${_lbtcLnSwap.outAddress}:${_lbtcLnSwap.outAmount}";
+      }
+
+      return _lbtcLnSwap.invoice;
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
+
 class SwapFees {
-  static Future<({double btc, double lbtc})> estimateFee(
-      {required String boltzUrl}) async {
+  static Future<({double btc, double lbtc})> estimateFee({required String boltzUrl}) async {
     try {
       final res = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl);
       return (btc: res.$1, lbtc: res.$2);
