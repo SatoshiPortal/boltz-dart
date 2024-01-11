@@ -45,7 +45,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<BtcLnSwap,BoltzError>{
             let swap_type = SwapType::Submarine;
-            let refund_keypair = match KeyPair::new(mnemonic, index, swap_type.clone()) {
+            let refund_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -114,7 +114,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<BtcLnSwap,BoltzError>{
             let swap_type = SwapType::Reverse;
-            let claim_keypair = match KeyPair::new(mnemonic, index, swap_type.clone()) {
+            let claim_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -225,7 +225,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<LbtcLnSwap,BoltzError>{
             let swap_type = SwapType::Submarine;
-            let refund_keypair = match KeyPair::new(mnemonic, index, swap_type.clone()) {
+            let refund_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -295,7 +295,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<LbtcLnSwap,BoltzError>{
             let swap_type = SwapType::Reverse;
-            let claim_keypair = match KeyPair::new(mnemonic, index, swap_type.clone()) {
+            let claim_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
