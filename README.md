@@ -85,18 +85,18 @@ Transaction(Sweep):
 The main classes and their methods are:
 
 - [ ] BtcLnSwap
-  - [ ] newSubmarine
-  - [ ] newReverse
-  - [ ] paymentDetails
-  - [ ] status
-  - [ ] claim
+  - [x] newSubmarine
+  - [x] newReverse
+  - [x] paymentDetails
+  - [x] status
+  - [x] claim
   - [ ] refund
 - [ ] LbtcLnSwap
-  - [ ] newSubmarine
-  - [ ] newReverse
-  - [ ] paymentDetails
-  - [ ] status
-  - [ ] claim
+  - [x] newSubmarine
+  - [x] newReverse
+  - [x] paymentDetails
+  - [x] status
+  - [x] claim
   - [ ] refund
 - [ ] BtcLbtcSwap
 
