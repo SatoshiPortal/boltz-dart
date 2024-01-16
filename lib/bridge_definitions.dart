@@ -18,7 +18,7 @@ abstract class BoltzDart {
       {required String mnemonic,
       required int index,
       required String invoice,
-      required Network network,
+      required Chain network,
       required String electrumUrl,
       required String boltzUrl,
       dynamic hint});
@@ -29,15 +29,20 @@ abstract class BoltzDart {
       {required String mnemonic,
       required int index,
       required int outAmount,
-      required Network network,
+      required Chain network,
       required String electrumUrl,
       required String boltzUrl,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta;
 
+  Future<int> btcLnTxSizeStaticMethodApi(
+      {required BtcLnSwap swap, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kBtcLnTxSizeStaticMethodApiConstMeta;
+
   Future<String> btcLnReverseClaimStaticMethodApi(
-      {required BtcLnSwap swap, required int fee, dynamic hint});
+      {required BtcLnSwap swap, required int absFee, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kBtcLnReverseClaimStaticMethodApiConstMeta;
 
@@ -45,7 +50,7 @@ abstract class BoltzDart {
       {required String mnemonic,
       required int index,
       required String invoice,
-      required Network network,
+      required Chain network,
       required String electrumUrl,
       required String boltzUrl,
       dynamic hint});
@@ -57,15 +62,20 @@ abstract class BoltzDart {
       {required String mnemonic,
       required int index,
       required int outAmount,
-      required Network network,
+      required Chain network,
       required String electrumUrl,
       required String boltzUrl,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewLbtcLnReverseStaticMethodApiConstMeta;
 
+  Future<int> lbtcLnTxSizeStaticMethodApi(
+      {required LbtcLnSwap swap, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kLbtcLnTxSizeStaticMethodApiConstMeta;
+
   Future<String> lbtcLnReverseClaimStaticMethodApi(
-      {required LbtcLnSwap swap, required int fee, dynamic hint});
+      {required LbtcLnSwap swap, required int absFee, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
       get kLbtcLnReverseClaimStaticMethodApiConstMeta;
@@ -89,7 +99,7 @@ class BoltzError implements FrbException {
 class BtcLnSwap {
   final String id;
   final SwapType kind;
-  final Network network;
+  final Chain network;
   final KeyPair keys;
   final PreImage preimage;
   final String redeemScript;
@@ -114,6 +124,11 @@ class BtcLnSwap {
   });
 }
 
+enum Chain {
+  Testnet,
+  LiquidTestnet,
+}
+
 class KeyPair {
   final String secretKey;
   final String publicKey;
@@ -127,7 +142,7 @@ class KeyPair {
 class LbtcLnSwap {
   final String id;
   final SwapType kind;
-  final Network network;
+  final Chain network;
   final KeyPair keys;
   final PreImage preimage;
   final String redeemScript;
@@ -152,11 +167,6 @@ class LbtcLnSwap {
     required this.electrumUrl,
     required this.boltzUrl,
   });
-}
-
-enum Network {
-  Testnet,
-  LiquidTestnet,
 }
 
 class PreImage {

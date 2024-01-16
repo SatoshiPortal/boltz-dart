@@ -19,7 +19,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Network.Testnet;
+      const network = bridge.Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -56,7 +56,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Network.Testnet;
+      const network = bridge.Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -93,7 +93,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Network.Testnet;
+      const network = bridge.Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -128,7 +128,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Network.Testnet;
+      const network = bridge.Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 

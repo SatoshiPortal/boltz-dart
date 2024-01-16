@@ -49,12 +49,17 @@ pub extern "C" fn wire_new_btc_ln_reverse__static_method__Api(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_btc_ln_tx_size__static_method__Api(port_: i64, swap: *mut wire_BtcLnSwap) {
+    wire_btc_ln_tx_size__static_method__Api_impl(port_, swap)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_btc_ln_reverse_claim__static_method__Api(
     port_: i64,
     swap: *mut wire_BtcLnSwap,
-    fee: u64,
+    abs_fee: u64,
 ) {
-    wire_btc_ln_reverse_claim__static_method__Api_impl(port_, swap, fee)
+    wire_btc_ln_reverse_claim__static_method__Api_impl(port_, swap, abs_fee)
 }
 
 #[no_mangle]
@@ -100,12 +105,17 @@ pub extern "C" fn wire_new_lbtc_ln_reverse__static_method__Api(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_lbtc_ln_tx_size__static_method__Api(port_: i64, swap: *mut wire_LbtcLnSwap) {
+    wire_lbtc_ln_tx_size__static_method__Api_impl(port_, swap)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_lbtc_ln_reverse_claim__static_method__Api(
     port_: i64,
     swap: *mut wire_LbtcLnSwap,
-    fee: u64,
+    abs_fee: u64,
 ) {
-    wire_lbtc_ln_reverse_claim__static_method__Api_impl(port_, swap, fee)
+    wire_lbtc_ln_reverse_claim__static_method__Api_impl(port_, swap, abs_fee)
 }
 
 #[no_mangle]
@@ -204,7 +214,6 @@ impl Wire2Api<LbtcLnSwap> for wire_LbtcLnSwap {
         }
     }
 }
-
 impl Wire2Api<PreImage> for wire_PreImage {
     fn wire2api(self) -> PreImage {
         PreImage {

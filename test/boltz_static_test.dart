@@ -19,7 +19,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = Network.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
       // CREATE NEW INVOICE PER TEST:
@@ -67,7 +67,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = Network.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -113,7 +113,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = Network.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
       // CREATE NEW INVOICE PER TEST:
@@ -162,7 +162,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = Network.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 

@@ -1,11 +1,10 @@
-use boltz_client::network::electrum::NetworkConfig;
-use boltz_client::swaps::bitcoin::BtcSwapScript;
+use boltz_client::{network::electrum::ElectrumConfig, swaps::bitcoin::BtcSwapScript};
 use boltz_client::swaps::bitcoin::BtcSwapTx;
 use boltz_client::swaps::liquid::LBtcSwapScript;
 use boltz_client::swaps::liquid::LBtcSwapTx;
 use boltz_client::util::preimage::Preimage as BoltzPreImage;
 use boltz_client::{KeyPair as CoreKeyPair, Secp256k1};
-// use boltz_client::network::electrum::NetworkConfig;
+// use boltz_client::network::electrum::ElectrumConfig;
 // use boltz_client::swaps::boltz;
 use boltz_client::swaps::boltz::BoltzApiClient;
 use boltz_client::swaps::boltz::CreateSwapRequest;
@@ -17,7 +16,7 @@ use boltz_client::util::preimage::Preimage;
 use crate::types::BtcLnSwap;
 use crate::types::BoltzError;
 use crate::types::LbtcLnSwap;
-use crate::types::Network;
+use crate::types::Chain;
 use crate::types::SwapType;
 use crate::types::KeyPair;
 use crate::types::PreImage;
@@ -25,10 +24,9 @@ use crate::types::PreImage;
 pub struct Api {}
 
 impl Api {
-
     pub fn swap_fees(boltz_url: String)->anyhow::Result<(f64,f64), BoltzError>{
         let boltz_client = BoltzApiClient::new(&boltz_url);
-        // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
+        // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
         match boltz_client.get_fee_estimation() {
             Ok(result)=>Ok((result.btc, result.lbtc)),
             Err(e)=> return Err(e.into())
@@ -40,7 +38,7 @@ impl Api {
         mnemonic: String,
         index: u64,
         invoice: String,
-        network: Network,
+        network: Chain,
         electrum_url: String,
         boltz_url: String,
     ) -> anyhow::Result<BtcLnSwap,BoltzError>{
@@ -50,7 +48,7 @@ impl Api {
                 Err(err) => return Err(err.into()),
             };
             let boltz_client = BoltzApiClient::new(&boltz_url);
-            // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
+            // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
             let boltz_pairs = match boltz_client.get_pairs() {
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
@@ -109,7 +107,7 @@ impl Api {
         mnemonic: String,
         index: u64,
         out_amount: u64,
-        network: Network,
+        network: Chain,
         electrum_url: String,
         boltz_url: String,
     ) -> anyhow::Result<BtcLnSwap,BoltzError>{
@@ -120,7 +118,7 @@ impl Api {
             };
             let preimage = Preimage::new();
             let boltz_client = BoltzApiClient::new(&boltz_url);
-            // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
+            // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
             let boltz_pairs = match boltz_client.get_pairs() {
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
@@ -171,7 +169,34 @@ impl Api {
 
     }
     
-    pub fn btc_ln_reverse_claim(swap: BtcLnSwap, fee: u64)->anyhow::Result<String, BoltzError>{
+    pub fn btc_ln_tx_size(swap: BtcLnSwap)->anyhow::Result<usize, BoltzError>{
+        if swap.kind == SwapType::Submarine {
+            return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
+        }
+        else{
+            ()
+        }
+        let script = match BtcSwapScript::reverse_from_str(&swap.redeem_script){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
+        let mut tx = match BtcSwapTx::new_claim(script, swap.out_address, swap.network.into()){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        let secp = Secp256k1::new();
+        let size = match tx.size(
+            CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
+            BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+        ){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        Ok(size)
+    }
+
+    pub fn btc_ln_reverse_claim(swap: BtcLnSwap, abs_fee: u64)->anyhow::Result<String, BoltzError>{
         if swap.kind == SwapType::Submarine {
             return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
         }
@@ -183,7 +208,7 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let network_config = NetworkConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true, false, None);
+        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
         let script_balance = match script
         .get_balance(network_config.clone()){
             Ok(result)=>result,
@@ -191,7 +216,7 @@ impl Api {
         };
 
         if script_balance.0 > 0 || script_balance.1 > 0 {
-            let mut tx = match BtcSwapTx::new_claim(script, swap.out_address, fee as u32, swap.network.clone().into()){
+            let mut tx = match BtcSwapTx::new_claim(script, swap.out_address, swap.network.into()){
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
             };
@@ -199,8 +224,7 @@ impl Api {
             let signed = match tx.drain(
                 CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
                 BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
-                swap.out_amount, 
-                network_config.clone(),
+                abs_fee,
             ){
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
@@ -220,7 +244,7 @@ impl Api {
         mnemonic: String,
         index: u64,
         invoice: String,
-        network: Network,
+        network: Chain,
         electrum_url: String,
         boltz_url: String,
     ) -> anyhow::Result<LbtcLnSwap,BoltzError>{
@@ -230,7 +254,7 @@ impl Api {
                 Err(err) => return Err(err.into()),
             };
             let boltz_client = BoltzApiClient::new(&boltz_url);
-            // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
+            // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
             let boltz_pairs = match boltz_client.get_pairs() {
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
@@ -290,7 +314,7 @@ impl Api {
         mnemonic: String,
         index: u64,
         out_amount: u64,
-        network: Network,
+        network: Chain,
         electrum_url: String,
         boltz_url: String,
     ) -> anyhow::Result<LbtcLnSwap,BoltzError>{
@@ -301,7 +325,7 @@ impl Api {
             };
             let preimage = Preimage::new();
             let boltz_client = BoltzApiClient::new(&boltz_url);
-            // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
+            // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
             let boltz_pairs = match boltz_client.get_pairs() {
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
@@ -353,19 +377,49 @@ impl Api {
 
     }
     
-    pub fn lbtc_ln_reverse_claim(swap: LbtcLnSwap, fee: u64)->anyhow::Result<String, BoltzError>{
+    pub fn lbtc_ln_tx_size(swap: LbtcLnSwap)->anyhow::Result<usize, BoltzError>{
         if swap.kind == SwapType::Submarine {
             return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
         }
         else{
             ()
         }
-
         let script = match LBtcSwapScript::reverse_from_str(&swap.redeem_script, swap.blinding_key){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let network_config = NetworkConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true, false, None);
+        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
+        let mut tx = match LBtcSwapTx::new_claim(script, swap.out_address){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        let _ = match tx.fetch_utxo(network_config){
+            Ok(_)=>(),
+            Err(e)=> return Err(e.into())
+        }; // CAN WE MOCK THIS?
+        let secp = Secp256k1::new();
+        let size = match tx.size(
+            CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
+            BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+        ){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        Ok(size)
+    }
+
+    pub fn lbtc_ln_reverse_claim(swap: LbtcLnSwap, abs_fee: u64)->anyhow::Result<String, BoltzError>{
+        if swap.kind == SwapType::Submarine {
+            return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
+        }
+        else{
+            ()
+        }
+        let script = match LBtcSwapScript::reverse_from_str(&swap.redeem_script, swap.blinding_key){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
         // let script_balance = match script
         // .get_balance(network_config.clone()){
         //     Ok(result)=>result,
@@ -373,24 +427,28 @@ impl Api {
         // };
 
         // if script_balance.0 > 0 || script_balance.1 > 0 {
-            let mut tx = match LBtcSwapTx::new_claim(script, swap.out_address, fee as u32){
-                Ok(result)=>result,
-                Err(e)=> return Err(e.into())
-            };
-            let secp = Secp256k1::new();
-            let signed = match tx.drain(
-                CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
-                BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
-                network_config.clone()
-            ){
-                Ok(result)=>result,
-                Err(e)=> return Err(e.into())
-            };
-            let txid = match tx.broadcast(signed, network_config){
-                Ok(result)=>result,
-                Err(e)=> return Err(e.into())
-            };
-            Ok(txid)
+        let mut tx = match LBtcSwapTx::new_claim(script, swap.out_address){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        let _ = match tx.fetch_utxo(network_config.clone()){
+            Ok(_)=>(),
+            Err(e)=> return Err(e.into())
+        };
+        let secp = Secp256k1::new();
+        let signed = match tx.drain(
+            CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
+            BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+            abs_fee
+        ){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        let txid = match tx.broadcast(signed, network_config){
+            Ok(result)=>result,
+            Err(e)=> return Err(e.into())
+        };
+        Ok(txid)
         // }
         // else{
         //     return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
@@ -399,13 +457,12 @@ impl Api {
 
     pub fn swap_status(boltz_url: String, id: String)->anyhow::Result<String, BoltzError>{
         let boltz_client = BoltzApiClient::new(&boltz_url);
-        // let network_config = NetworkConfig::new(network.into(), &electrum_url, true, true, false, None);
+        // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
         match boltz_client.swap_status(SwapStatusRequest{id: id}) {
             Ok(result)=>Ok(result.status),
             Err(e)=> return Err(e.into())
         }
-    }
-    
+    }  
 }
 
 // flutter_rust_bridge_codegen --rust-input rust/src/api.rs --dart-output lib/bridge_generated.dart --dart-decl-output lib/bridge_definitions.dart

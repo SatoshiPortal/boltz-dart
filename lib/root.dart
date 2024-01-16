@@ -12,7 +12,7 @@ class BtcLnSwap {
       {required String mnemonic,
       required int index,
       required String invoice,
-      required bridge.Network network,
+      required bridge.Chain network,
       required String electrumUrl,
       required String boltzUrl,
       dynamic hint}) async {
@@ -36,7 +36,7 @@ class BtcLnSwap {
       {required String mnemonic,
       required int index,
       required int outAmount,
-      required bridge.Network network,
+      required bridge.Chain network,
       required String electrumUrl,
       required String boltzUrl,
       dynamic hint}) async {
@@ -56,11 +56,11 @@ class BtcLnSwap {
     }
   }
 
-  Future<String> claim({required int fee}) async {
+  Future<String> claim({required int absFee}) async {
     try {
       final res = await ffi.btcLnReverseClaimStaticMethodApi(
         swap: _btcLnSwap,
-        fee: fee,
+        absFee: absFee,
       );
 
       return res;
@@ -107,7 +107,7 @@ class LbtcLnSwap {
     required String mnemonic,
     required int index,
     required String invoice,
-    required bridge.Network network,
+    required bridge.Chain network,
     required String electrumUrl,
     required String boltzUrl,
   }) async {
@@ -131,7 +131,7 @@ class LbtcLnSwap {
     required String mnemonic,
     required int index,
     required int outAmount,
-    required bridge.Network network,
+    required bridge.Chain network,
     required String electrumUrl,
     required String boltzUrl,
   }) async {
@@ -151,11 +151,11 @@ class LbtcLnSwap {
     }
   }
 
-  Future<String> claim({required int fee}) async {
+  Future<String> claim({required int absFee}) async {
     try {
       final res = await ffi.lbtcLnReverseClaimStaticMethodApi(
         swap: _lbtcLnSwap,
-        fee: fee,
+        absFee: absFee,
       );
 
       return res;
@@ -192,7 +192,8 @@ class LbtcLnSwap {
 }
 
 class SwapFees {
-  static Future<({double btc, double lbtc})> estimateFee({required String boltzUrl}) async {
+  static Future<({double btc, double lbtc})> estimateFee(
+      {required String boltzUrl}) async {
     try {
       final res = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl);
       return (btc: res.$1, lbtc: res.$2);

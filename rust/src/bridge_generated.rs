@@ -22,9 +22,9 @@ use std::sync::Arc;
 
 use crate::types::BoltzError;
 use crate::types::BtcLnSwap;
+use crate::types::Chain;
 use crate::types::KeyPair;
 use crate::types::LbtcLnSwap;
-use crate::types::Network;
 use crate::types::PreImage;
 use crate::types::SwapType;
 
@@ -51,7 +51,7 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
     mnemonic: impl Wire2Api<String> + UnwindSafe,
     index: impl Wire2Api<u64> + UnwindSafe,
     invoice: impl Wire2Api<String> + UnwindSafe,
-    network: impl Wire2Api<Network> + UnwindSafe,
+    network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
 ) {
@@ -86,7 +86,7 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
     mnemonic: impl Wire2Api<String> + UnwindSafe,
     index: impl Wire2Api<u64> + UnwindSafe,
     out_amount: impl Wire2Api<u64> + UnwindSafe,
-    network: impl Wire2Api<Network> + UnwindSafe,
+    network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
 ) {
@@ -116,10 +116,26 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
         },
     )
 }
+fn wire_btc_ln_tx_size__static_method__Api_impl(
+    port_: MessagePort,
+    swap: impl Wire2Api<BtcLnSwap> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, usize, _>(
+        WrapInfo {
+            debug_name: "btc_ln_tx_size__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap = swap.wire2api();
+            move |task_callback| Api::btc_ln_tx_size(api_swap)
+        },
+    )
+}
 fn wire_btc_ln_reverse_claim__static_method__Api_impl(
     port_: MessagePort,
     swap: impl Wire2Api<BtcLnSwap> + UnwindSafe,
-    fee: impl Wire2Api<u64> + UnwindSafe,
+    abs_fee: impl Wire2Api<u64> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
         WrapInfo {
@@ -129,8 +145,8 @@ fn wire_btc_ln_reverse_claim__static_method__Api_impl(
         },
         move || {
             let api_swap = swap.wire2api();
-            let api_fee = fee.wire2api();
-            move |task_callback| Api::btc_ln_reverse_claim(api_swap, api_fee)
+            let api_abs_fee = abs_fee.wire2api();
+            move |task_callback| Api::btc_ln_reverse_claim(api_swap, api_abs_fee)
         },
     )
 }
@@ -139,7 +155,7 @@ fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
     mnemonic: impl Wire2Api<String> + UnwindSafe,
     index: impl Wire2Api<u64> + UnwindSafe,
     invoice: impl Wire2Api<String> + UnwindSafe,
-    network: impl Wire2Api<Network> + UnwindSafe,
+    network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
 ) {
@@ -174,7 +190,7 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
     mnemonic: impl Wire2Api<String> + UnwindSafe,
     index: impl Wire2Api<u64> + UnwindSafe,
     out_amount: impl Wire2Api<u64> + UnwindSafe,
-    network: impl Wire2Api<Network> + UnwindSafe,
+    network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
 ) {
@@ -204,10 +220,26 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
         },
     )
 }
+fn wire_lbtc_ln_tx_size__static_method__Api_impl(
+    port_: MessagePort,
+    swap: impl Wire2Api<LbtcLnSwap> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, usize, _>(
+        WrapInfo {
+            debug_name: "lbtc_ln_tx_size__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap = swap.wire2api();
+            move |task_callback| Api::lbtc_ln_tx_size(api_swap)
+        },
+    )
+}
 fn wire_lbtc_ln_reverse_claim__static_method__Api_impl(
     port_: MessagePort,
     swap: impl Wire2Api<LbtcLnSwap> + UnwindSafe,
-    fee: impl Wire2Api<u64> + UnwindSafe,
+    abs_fee: impl Wire2Api<u64> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
         WrapInfo {
@@ -217,8 +249,8 @@ fn wire_lbtc_ln_reverse_claim__static_method__Api_impl(
         },
         move || {
             let api_swap = swap.wire2api();
-            let api_fee = fee.wire2api();
-            move |task_callback| Api::lbtc_ln_reverse_claim(api_swap, api_fee)
+            let api_abs_fee = abs_fee.wire2api();
+            move |task_callback| Api::lbtc_ln_reverse_claim(api_swap, api_abs_fee)
         },
     )
 }
@@ -263,19 +295,18 @@ where
     }
 }
 
+impl Wire2Api<Chain> for i32 {
+    fn wire2api(self) -> Chain {
+        match self {
+            0 => Chain::Testnet,
+            1 => Chain::LiquidTestnet,
+            _ => unreachable!("Invalid variant for Chain: {}", self),
+        }
+    }
+}
 impl Wire2Api<i32> for i32 {
     fn wire2api(self) -> i32 {
         self
-    }
-}
-
-impl Wire2Api<Network> for i32 {
-    fn wire2api(self) -> Network {
-        match self {
-            0 => Network::Testnet,
-            1 => Network::LiquidTestnet,
-            _ => unreachable!("Invalid variant for Network: {}", self),
-        }
     }
 }
 
@@ -342,6 +373,22 @@ impl rust2dart::IntoIntoDart<BtcLnSwap> for BtcLnSwap {
     }
 }
 
+impl support::IntoDart for Chain {
+    fn into_dart(self) -> support::DartAbi {
+        match self {
+            Self::Testnet => 0,
+            Self::LiquidTestnet => 1,
+        }
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Chain {}
+impl rust2dart::IntoIntoDart<Chain> for Chain {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
 impl support::IntoDart for KeyPair {
     fn into_dart(self) -> support::DartAbi {
         vec![
@@ -379,22 +426,6 @@ impl support::IntoDart for LbtcLnSwap {
 }
 impl support::IntoDartExceptPrimitive for LbtcLnSwap {}
 impl rust2dart::IntoIntoDart<LbtcLnSwap> for LbtcLnSwap {
-    fn into_into_dart(self) -> Self {
-        self
-    }
-}
-
-impl support::IntoDart for Network {
-    fn into_dart(self) -> support::DartAbi {
-        match self {
-            Self::Testnet => 0,
-            Self::LiquidTestnet => 1,
-        }
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Network {}
-impl rust2dart::IntoIntoDart<Network> for Network {
     fn into_into_dart(self) -> Self {
         self
     }
