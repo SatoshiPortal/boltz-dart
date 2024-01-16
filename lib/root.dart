@@ -56,6 +56,17 @@ class BtcLnSwap {
     }
   }
 
+  Future<int> size() async {
+    try {
+      final res = await ffi.btcLnTxSizeStaticMethodApi(
+        swap: _btcLnSwap,
+      );
+      return res;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<String> claim({required int absFee}) async {
     try {
       final res = await ffi.btcLnReverseClaimStaticMethodApi(
@@ -146,6 +157,17 @@ class LbtcLnSwap {
       );
 
       return LbtcLnSwap._(res);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<int> size() async {
+    try {
+      final res = await ffi.lbtcLnTxSizeStaticMethodApi(
+        swap: _lbtcLnSwap,
+      );
+      return res;
     } catch (e) {
       rethrow;
     }
