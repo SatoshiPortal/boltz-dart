@@ -20,6 +20,7 @@ use std::sync::Arc;
 
 // Section: imports
 
+use crate::types::AllFees;
 use crate::types::BoltzError;
 use crate::types::BtcLnSwap;
 use crate::types::Chain;
@@ -36,7 +37,7 @@ fn wire_swap_fees__static_method__Api_impl(
     boltz_url: impl Wire2Api<String> + UnwindSafe,
     output_amount: impl Wire2Api<u64> + UnwindSafe,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (SwapFees, SwapFees), _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, AllFees, _>(
         WrapInfo {
             debug_name: "swap_fees__static_method__Api",
             port: Some(port_),
@@ -334,6 +335,24 @@ impl Wire2Api<u8> for u8 {
 }
 
 // Section: impl IntoDart
+
+impl support::IntoDart for AllFees {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.btc_submarine.into_into_dart().into_dart(),
+            self.btc_reverse.into_into_dart().into_dart(),
+            self.lbtc_submarine.into_into_dart().into_dart(),
+            self.lbtc_reverse.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for AllFees {}
+impl rust2dart::IntoIntoDart<AllFees> for AllFees {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
 
 impl support::IntoDart for BoltzError {
     fn into_dart(self) -> support::DartAbi {

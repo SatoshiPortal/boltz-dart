@@ -9,7 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class BoltzDart {
-  Future<(SwapFees, SwapFees)> swapFeesStaticMethodApi(
+  Future<AllFees> swapFeesStaticMethodApi(
       {required String boltzUrl, required int outputAmount, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta;
@@ -84,6 +84,20 @@ abstract class BoltzDart {
       {required String boltzUrl, required String id, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta;
+}
+
+class AllFees {
+  final SwapFees btcSubmarine;
+  final SwapFees btcReverse;
+  final SwapFees lbtcSubmarine;
+  final SwapFees lbtcReverse;
+
+  const AllFees({
+    required this.btcSubmarine,
+    required this.btcReverse,
+    required this.lbtcSubmarine,
+    required this.lbtcReverse,
+  });
 }
 
 class BoltzError implements FrbException {

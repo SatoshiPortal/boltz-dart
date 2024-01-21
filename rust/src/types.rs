@@ -98,6 +98,13 @@ impl Into<BChain> for Chain {
     }
 }
 
+pub struct AllFees{
+    pub btc_submarine: SwapFees,
+    pub btc_reverse: SwapFees,
+    pub lbtc_submarine: SwapFees,
+    pub lbtc_reverse: SwapFees, 
+}
+
 pub struct SwapFees {
     pub boltz_fees: u64,
     pub lockup_fees: u64,

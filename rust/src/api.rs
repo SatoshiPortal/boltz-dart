@@ -13,7 +13,7 @@ use boltz_client::util::error::ErrorKind;
 use boltz_client::util::error::S5Error;
 use boltz_client::util::secrets::Preimage;
 
-use crate::types::{BtcLnSwap, SwapFees};
+use crate::types::{BtcLnSwap, SwapFees, AllFees};
 use crate::types::BoltzError;
 use crate::types::LbtcLnSwap;
 use crate::types::Chain;
@@ -24,33 +24,38 @@ use crate::types::PreImage;
 pub struct Api {}
 
 impl Api {
-    pub fn swap_fees(boltz_url: String, output_amount: u64)->anyhow::Result<(SwapFees,SwapFees), BoltzError>{
-        let boltz_client = BoltzApiClient::new(&boltz_url);
-        // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
+    pub fn swap_fees(boltz_url: String, output_amount: u64)->anyhow::Result<AllFees, BoltzError>{
         let boltz_client = BoltzApiClient::new(&boltz_url);
         let boltz_pairs = match boltz_client.get_pairs() {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
         let btc_pair = boltz_pairs.get_btc_pair();
-        let boltz_fees = btc_pair.fees.reverse_boltz(output_amount).unwrap();
-        let reverse_lockup = btc_pair.fees.reverse_lockup().unwrap();
-        let reverse_claim = btc_pair.fees.reverse_claim_estimate();
-        let btc_swap_fees = SwapFees{
-            boltz_fees: boltz_fees,
-            lockup_fees: reverse_lockup,
-            claim_fees: reverse_claim
+
+        let btc_submarine = SwapFees{
+            boltz_fees: btc_pair.fees.submarine_boltz(output_amount)?,
+            lockup_fees: btc_pair.fees.submarine_lockup_estimate(),
+            claim_fees: btc_pair.fees.submarine_claim()?
         };
-        let lbtc_pair = boltz_pairs.get_btc_pair();
-        let boltz_fees = btc_pair.fees.submarine_boltz(output_amount).unwrap();
-        let submarine_claim = btc_pair.fees.submarine_claim().unwrap();
-        let submarine_lockup = btc_pair.fees.submarine_lockup_estimate();
-        let lbtc_swap_fees = SwapFees{
-            boltz_fees: boltz_fees,
-            lockup_fees: submarine_lockup,
-            claim_fees: submarine_claim
+        let btc_reverse = SwapFees{
+            boltz_fees: btc_pair.fees.reverse_boltz(output_amount)?,
+            lockup_fees: btc_pair.fees.reverse_lockup()?,
+            claim_fees: btc_pair.fees.reverse_claim_estimate()
         };
-        Ok((btc_swap_fees , lbtc_swap_fees))
+        let lbtc_pair = boltz_pairs.get_lbtc_pair();
+
+        let lbtc_submarine = SwapFees{
+            boltz_fees: lbtc_pair.fees.submarine_boltz(output_amount)?,
+            lockup_fees: lbtc_pair.fees.submarine_lockup_estimate(),
+            claim_fees: lbtc_pair.fees.submarine_claim()?
+        };
+        let lbtc_reverse = SwapFees{
+            boltz_fees: lbtc_pair.fees.reverse_boltz(output_amount)?,
+            lockup_fees: lbtc_pair.fees.reverse_lockup()?,
+            claim_fees: lbtc_pair.fees.reverse_claim_estimate()
+        };
+       
+        Ok(AllFees{btc_submarine,btc_reverse,lbtc_submarine,lbtc_reverse})
     }
     
     // Should take pair hash from previous call as input

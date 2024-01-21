@@ -9,10 +9,9 @@ void main() {
       final outputAmount = 100000;
       final fees = await ffi.swapFeesStaticMethodApi(
           boltzUrl: boltzUrl, outputAmount: outputAmount);
-      print(
-          "USER MUST ACCEPT FEE TO PROCEED:\nbtc: ${fees.$1} sats/byte\nlbtc: ${fees.$2} sats/byte");
-      expect((fees.$1.boltzFees > 0.0), true);
-      expect((fees.$2.boltzFees > 0.0), true);
+
+      expect((fees.btcReverse.boltzFees > 0.0), true);
+      expect((fees.btcSubmarine.boltzFees > 0.0), true);
     });
   });
   group('BITCOIN SWAPS', () {

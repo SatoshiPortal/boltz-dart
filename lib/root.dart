@@ -216,12 +216,12 @@ class LbtcLnSwap {
 }
 
 class AllSwapFees {
-  static Future<({SwapFees btcFees, SwapFees lbtcFees})> estimateFee(
+  static Future<AllFees> estimateFee(
       {required String boltzUrl, required int outputAmount}) async {
     try {
       final res = await ffi.swapFeesStaticMethodApi(
           boltzUrl: boltzUrl, outputAmount: outputAmount);
-      return (btcFees: res.$1, lbtcFees: res.$2);
+      return res;
     } catch (e) {
       rethrow;
     }

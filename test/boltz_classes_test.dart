@@ -9,10 +9,9 @@ void main() {
     final amount = 100000;
     final fees =
         await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
-    print(
-        "USER MUST ACCEPT FEE TO PROCEED:\nbtc: ${fees.btcFees.boltzFees + fees.btcFees.claimFees + fees.btcFees.lockupFees} sats\nlbtc: ${fees.lbtcFees.boltzFees + fees.lbtcFees.claimFees + fees.lbtcFees.lockupFees} sats");
-    expect((fees.btcFees.boltzFees > 0.0), true);
-    expect((fees.lbtcFees.boltzFees > 0.0), true);
+
+    expect((fees.btcReverse.boltzFees > 0.0), true);
+    expect((fees.btcSubmarine.boltzFees > 0.0), true);
   });
 
   group('BTC-LN SWAPS', () {

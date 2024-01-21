@@ -26,14 +26,14 @@ class BoltzDartImpl implements BoltzDart {
   factory BoltzDartImpl.wasm(FutureOr<WasmModule> module) =>
       BoltzDartImpl(module as ExternalLibrary);
   BoltzDartImpl.raw(this._platform);
-  Future<(SwapFees, SwapFees)> swapFeesStaticMethodApi(
+  Future<AllFees> swapFeesStaticMethodApi(
       {required String boltzUrl, required int outputAmount, dynamic hint}) {
     var arg0 = _platform.api2wire_String(boltzUrl);
     var arg1 = _platform.api2wire_u64(outputAmount);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) =>
           _platform.inner.wire_swap_fees__static_method__Api(port_, arg0, arg1),
-      parseSuccessData: _wire2api___record__swap_fees_swap_fees,
+      parseSuccessData: _wire2api_all_fees,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kSwapFeesStaticMethodApiConstMeta,
       argValues: [boltzUrl, outputAmount],
@@ -320,14 +320,15 @@ class BoltzDartImpl implements BoltzDart {
     return raw as String;
   }
 
-  (SwapFees, SwapFees) _wire2api___record__swap_fees_swap_fees(dynamic raw) {
+  AllFees _wire2api_all_fees(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
-    }
-    return (
-      _wire2api_swap_fees(arr[0]),
-      _wire2api_swap_fees(arr[1]),
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return AllFees(
+      btcSubmarine: _wire2api_swap_fees(arr[0]),
+      btcReverse: _wire2api_swap_fees(arr[1]),
+      lbtcSubmarine: _wire2api_swap_fees(arr[2]),
+      lbtcReverse: _wire2api_swap_fees(arr[3]),
     );
   }
 
