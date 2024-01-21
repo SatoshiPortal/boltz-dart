@@ -99,6 +99,10 @@ impl Into<BChain> for Chain {
 }
 
 pub struct AllFees{
+    pub btc_limit_min: u64,
+    pub btc_limit_max: u64,
+    pub lbtc_limit_min: u64,
+    pub lbtc_limit_max: u64,
     pub btc_submarine: SwapFees,
     pub btc_reverse: SwapFees,
     pub lbtc_submarine: SwapFees,

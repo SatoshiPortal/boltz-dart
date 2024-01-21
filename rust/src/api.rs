@@ -42,6 +42,8 @@ impl Api {
             lockup_fees: btc_pair.fees.reverse_lockup()?,
             claim_fees: btc_pair.fees.reverse_claim_estimate()
         };
+
+        let btc_limit_max = btc_pair.limits.
         let lbtc_pair = boltz_pairs.get_lbtc_pair();
 
         let lbtc_submarine = SwapFees{
@@ -55,7 +57,7 @@ impl Api {
             claim_fees: lbtc_pair.fees.reverse_claim_estimate()
         };
        
-        Ok(AllFees{btc_submarine,btc_reverse,lbtc_submarine,lbtc_reverse})
+        Ok(AllFees{btc_limit_min, lbtc_limit_min, btc_limit_max, lbtc_limit_max, btc_submarine,btc_reverse,lbtc_submarine,lbtc_reverse})
     }
     
     // Should take pair hash from previous call as input

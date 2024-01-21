@@ -16,7 +16,7 @@ types.rs structures and enums are also re-exported via api.rs
 ```bash
 # in the project root directory
 
-./compile.sh
+./compile.native.sh # build for your native platform. adds binary to dart test folder.
 
 ```
 

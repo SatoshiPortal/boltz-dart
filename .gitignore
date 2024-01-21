@@ -51,3 +51,5 @@ jniLibs
 rust/target/
 rust/builds/
 pubspec.lock
+test/libboltz_dart.dylib
+test/libboltz_dart.so
