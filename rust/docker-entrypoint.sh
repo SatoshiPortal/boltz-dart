@@ -1,3 +1,3 @@
 #!/bin/bash
-./boltz-dart/build.sh
+/boltz-dart/rust/build.sh
 exec "$@"

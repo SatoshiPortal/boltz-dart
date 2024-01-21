@@ -207,7 +207,6 @@ class LbtcLnSwap {
       if (swapType == bridge.SwapType.Submarine) {
         return "${_lbtcLnSwap.outAddress}:${_lbtcLnSwap.outAmount}";
       }
-
       return _lbtcLnSwap.invoice;
     } catch (e) {
       rethrow;
