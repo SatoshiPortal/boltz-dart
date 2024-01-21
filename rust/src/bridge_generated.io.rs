@@ -2,8 +2,12 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_swap_fees__static_method__Api(port_: i64, boltz_url: *mut wire_uint_8_list) {
-    wire_swap_fees__static_method__Api_impl(port_, boltz_url)
+pub extern "C" fn wire_swap_fees__static_method__Api(
+    port_: i64,
+    boltz_url: *mut wire_uint_8_list,
+    output_amount: u64,
+) {
+    wire_swap_fees__static_method__Api_impl(port_, boltz_url, output_amount)
 }
 
 #[no_mangle]

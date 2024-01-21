@@ -3,8 +3,8 @@
 // 
 use boltz_client::{
     swaps::boltz::SwapType as BoltzSwapType,
-    util::{derivation::SwapKey, error::S5Error},
-    util::preimage::Preimage as BoltzPreImage, network::Chain as BChain,
+    util::{secrets::SwapKey, error::S5Error},
+    util::secrets::Preimage as BoltzPreImage, network::Chain as BChain,
 };
 // use crate::types::{KeyPair, PreImage, Network, SwapType};
 
@@ -96,6 +96,12 @@ impl Into<BChain> for Chain {
             Chain::LiquidTestnet => BChain::LiquidTestnet,
         }
     }
+}
+
+pub struct SwapFees {
+    pub boltz_fees: u64,
+    pub lockup_fees: u64,
+    pub claim_fees: u64
 }
 
 pub struct BtcLnSwap {

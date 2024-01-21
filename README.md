@@ -24,6 +24,14 @@ Compile will first build native binaries of the rust code and move them to the d
 
 It will then run flutter_rust_bridge_codegen and generate ffi code in rust and dart. 
 
+### Non-debian linux users
+
+On non-debian systems you will get some errors with the bridge_generated.rs files. You may need to set the path the clang in CPATH manually.
+
+```bash
+export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"
+```
+
 ## dart classes
 
 Once we have all our structs and functions in dart, we can organize them into classes to improve the UX of the library.
@@ -53,14 +61,6 @@ https://1ml.com/testnet/node/029040945df331e634fba152ce6a21e3dfca87b68d275e078ca
 Invoices > 1m sats: 
 
 https://1ml.com/testnet/node/03f060953bef5b777dc77e44afa3859d022fc1a77c55138deb232ad7255e869c00
-
-
-### Non-debian linux users
-
-
-```bash
-export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"
-```
 
 ## project status
 

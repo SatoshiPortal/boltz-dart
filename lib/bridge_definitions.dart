@@ -9,8 +9,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class BoltzDart {
-  Future<(double, double)> swapFeesStaticMethodApi(
-      {required String boltzUrl, dynamic hint});
+  Future<(SwapFees, SwapFees)> swapFeesStaticMethodApi(
+      {required String boltzUrl, required int outputAmount, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta;
 
@@ -178,6 +178,18 @@ class PreImage {
     required this.value,
     required this.sha256,
     required this.hash160,
+  });
+}
+
+class SwapFees {
+  final int boltzFees;
+  final int lockupFees;
+  final int claimFees;
+
+  const SwapFees({
+    required this.boltzFees,
+    required this.lockupFees,
+    required this.claimFees,
   });
 }
 

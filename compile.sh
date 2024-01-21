@@ -1,5 +1,6 @@
 #!/bin/bash
 cd rust || exit 1
+cargo update
 cargo build --release
 OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then

@@ -26,16 +26,17 @@ class BoltzDartImpl implements BoltzDart {
   factory BoltzDartImpl.wasm(FutureOr<WasmModule> module) =>
       BoltzDartImpl(module as ExternalLibrary);
   BoltzDartImpl.raw(this._platform);
-  Future<(double, double)> swapFeesStaticMethodApi(
-      {required String boltzUrl, dynamic hint}) {
+  Future<(SwapFees, SwapFees)> swapFeesStaticMethodApi(
+      {required String boltzUrl, required int outputAmount, dynamic hint}) {
     var arg0 = _platform.api2wire_String(boltzUrl);
+    var arg1 = _platform.api2wire_u64(outputAmount);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) =>
-          _platform.inner.wire_swap_fees__static_method__Api(port_, arg0),
-      parseSuccessData: _wire2api___record__f64_f64,
+          _platform.inner.wire_swap_fees__static_method__Api(port_, arg0, arg1),
+      parseSuccessData: _wire2api___record__swap_fees_swap_fees,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kSwapFeesStaticMethodApiConstMeta,
-      argValues: [boltzUrl],
+      argValues: [boltzUrl, outputAmount],
       hint: hint,
     ));
   }
@@ -43,7 +44,7 @@ class BoltzDartImpl implements BoltzDart {
   FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta =>
       const FlutterRustBridgeTaskConstMeta(
         debugName: "swap_fees__static_method__Api",
-        argNames: ["boltzUrl"],
+        argNames: ["boltzUrl", "outputAmount"],
       );
 
   Future<BtcLnSwap> newBtcLnSubmarineStaticMethodApi(
@@ -319,14 +320,14 @@ class BoltzDartImpl implements BoltzDart {
     return raw as String;
   }
 
-  (double, double) _wire2api___record__f64_f64(dynamic raw) {
+  (SwapFees, SwapFees) _wire2api___record__swap_fees_swap_fees(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 2) {
       throw Exception('Expected 2 elements, got ${arr.length}');
     }
     return (
-      _wire2api_f64(arr[0]),
-      _wire2api_f64(arr[1]),
+      _wire2api_swap_fees(arr[0]),
+      _wire2api_swap_fees(arr[1]),
     );
   }
 
@@ -361,10 +362,6 @@ class BoltzDartImpl implements BoltzDart {
 
   Chain _wire2api_chain(dynamic raw) {
     return Chain.values[raw as int];
-  }
-
-  double _wire2api_f64(dynamic raw) {
-    return raw as double;
   }
 
   int _wire2api_i32(dynamic raw) {
@@ -409,6 +406,17 @@ class BoltzDartImpl implements BoltzDart {
       value: _wire2api_String(arr[0]),
       sha256: _wire2api_String(arr[1]),
       hash160: _wire2api_String(arr[2]),
+    );
+  }
+
+  SwapFees _wire2api_swap_fees(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return SwapFees(
+      boltzFees: _wire2api_u64(arr[0]),
+      lockupFees: _wire2api_u64(arr[1]),
+      claimFees: _wire2api_u64(arr[2]),
     );
   }
 
@@ -648,20 +656,22 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   void wire_swap_fees__static_method__Api(
     int port_,
     ffi.Pointer<wire_uint_8_list> boltz_url,
+    int output_amount,
   ) {
     return _wire_swap_fees__static_method__Api(
       port_,
       boltz_url,
+      output_amount,
     );
   }
 
   late final _wire_swap_fees__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_swap_fees__static_method__Api');
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+              ffi.Uint64)>>('wire_swap_fees__static_method__Api');
   late final _wire_swap_fees__static_method__Api =
       _wire_swap_fees__static_method__ApiPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>, int)>();
 
   void wire_new_btc_ln_submarine__static_method__Api(
     int port_,

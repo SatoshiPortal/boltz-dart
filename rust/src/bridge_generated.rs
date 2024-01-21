@@ -26,6 +26,7 @@ use crate::types::Chain;
 use crate::types::KeyPair;
 use crate::types::LbtcLnSwap;
 use crate::types::PreImage;
+use crate::types::SwapFees;
 use crate::types::SwapType;
 
 // Section: wire functions
@@ -33,8 +34,9 @@ use crate::types::SwapType;
 fn wire_swap_fees__static_method__Api_impl(
     port_: MessagePort,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    output_amount: impl Wire2Api<u64> + UnwindSafe,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (f64, f64), _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (SwapFees, SwapFees), _>(
         WrapInfo {
             debug_name: "swap_fees__static_method__Api",
             port: Some(port_),
@@ -42,7 +44,8 @@ fn wire_swap_fees__static_method__Api_impl(
         },
         move || {
             let api_boltz_url = boltz_url.wire2api();
-            move |task_callback| Api::swap_fees(api_boltz_url)
+            let api_output_amount = output_amount.wire2api();
+            move |task_callback| Api::swap_fees(api_boltz_url, api_output_amount)
         },
     )
 }
@@ -443,6 +446,23 @@ impl support::IntoDart for PreImage {
 }
 impl support::IntoDartExceptPrimitive for PreImage {}
 impl rust2dart::IntoIntoDart<PreImage> for PreImage {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for SwapFees {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.boltz_fees.into_into_dart().into_dart(),
+            self.lockup_fees.into_into_dart().into_dart(),
+            self.claim_fees.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for SwapFees {}
+impl rust2dart::IntoIntoDart<SwapFees> for SwapFees {
     fn into_into_dart(self) -> Self {
         self
     }

@@ -6,12 +6,13 @@ import 'package:test/test.dart';
 void main() {
   test('FEE ESTIMATION', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
-
-    final fees = await SwapFees.estimateFee(boltzUrl: boltzUrl);
+    final amount = 100000;
+    final fees =
+        await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
     print(
-        "USER MUST ACCEPT FEE TO PROCEED:\nbtc: ${fees.btc} sats/byte\nlbtc: ${fees.lbtc} sats/byte");
-    expect((fees.btc > 0.0), true);
-    expect((fees.lbtc > 0.0), true);
+        "USER MUST ACCEPT FEE TO PROCEED:\nbtc: ${fees.btcFees.boltzFees + fees.btcFees.claimFees + fees.btcFees.lockupFees} sats\nlbtc: ${fees.lbtcFees.boltzFees + fees.lbtcFees.claimFees + fees.lbtcFees.lockupFees} sats");
+    expect((fees.btcFees.boltzFees > 0.0), true);
+    expect((fees.lbtcFees.boltzFees > 0.0), true);
   });
 
   group('BTC-LN SWAPS', () {

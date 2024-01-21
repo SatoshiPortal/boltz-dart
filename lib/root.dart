@@ -1,3 +1,5 @@
+import 'package:boltz_dart/bridge_definitions.dart';
+
 import 'bridge_definitions.dart' as bridge;
 import 'ffi.dart';
 
@@ -213,12 +215,13 @@ class LbtcLnSwap {
   }
 }
 
-class SwapFees {
-  static Future<({double btc, double lbtc})> estimateFee(
-      {required String boltzUrl}) async {
+class AllSwapFees {
+  static Future<({SwapFees btcFees, SwapFees lbtcFees})> estimateFee(
+      {required String boltzUrl, required int outputAmount}) async {
     try {
-      final res = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl);
-      return (btc: res.$1, lbtc: res.$2);
+      final res = await ffi.swapFeesStaticMethodApi(
+          boltzUrl: boltzUrl, outputAmount: outputAmount);
+      return (btcFees: res.$1, lbtcFees: res.$2);
     } catch (e) {
       rethrow;
     }
