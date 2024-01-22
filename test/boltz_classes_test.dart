@@ -2,6 +2,20 @@ import 'package:boltz_dart/bridge_definitions.dart' as bridge;
 import 'package:boltz_dart/ffi.dart';
 import 'package:boltz_dart/root.dart';
 import 'package:test/test.dart';
+import 'dart:io';
+
+void countdown(int totalSeconds) {
+  for (var i = totalSeconds; i >= 0; i--) {
+    // Constructing the countdown message
+    var message = 'Pay invoice within $i seconds';
+
+    // Print the message, overwriting the previous line
+    stdout.write('\r$message');
+    stdout.flush(); // Ensure the output is written to the terminal immediately
+    sleep(Duration(seconds: totalSeconds));
+  }
+  stdout.writeln('\nInvoice payment period expired.');
+}
 
 void main() {
   test('FEE ESTIMATION', () async {
@@ -42,6 +56,8 @@ void main() {
 
         final swap = btcLnSubmarineSwap.btcLnSwap;
         print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+        final paymentDetails = btcLnSubmarineSwap.paymentDetails();
+        print("PAYMENT DETAILS: ${paymentDetails}");
 
         expect(swap.keys.secretKey, expectedSecretKey);
 
@@ -78,8 +94,18 @@ void main() {
         print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
 
         expect(swap.keys.secretKey, expectedSecretKey);
-
-        print("PAYMENT DETAILS: ${swap.invoice}");
+        final paymentDetails = await btcLnSubmarineSwap.paymentDetails();
+        print("PAYMENT DETAILS: ${paymentDetails}");
+        print("PAY INVOICE WITHIN 30 seconds...");
+        countdown(60);
+        final status = await btcLnSubmarineSwap.status();
+        print("STATUS: ${status}");
+        final fees = await AllSwapFees.estimateFee(
+            boltzUrl: boltzUrl, outputAmount: outAmount);
+        final claimFeesEstimate = fees.btcReverse.claimFeesEstimate;
+        print("CLAIM FEE ESTIMATE: $claimFeesEstimate");
+        final txid = await btcLnSubmarineSwap.claim(absFee: claimFeesEstimate);
+        print("TXID: $txid");
       } catch (e) {
         print(e);
         print((e as bridge.BoltzError).kind);

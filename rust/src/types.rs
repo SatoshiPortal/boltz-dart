@@ -97,24 +97,29 @@ impl Into<BChain> for Chain {
         }
     }
 }
-
 pub struct AllFees{
-    pub btc_limit_min: u64,
-    pub btc_limit_max: u64,
-    pub lbtc_limit_min: u64,
-    pub lbtc_limit_max: u64,
-    pub btc_submarine: SwapFees,
-    pub btc_reverse: SwapFees,
-    pub lbtc_submarine: SwapFees,
-    pub lbtc_reverse: SwapFees, 
+    pub btc_limits: Limits,
+    pub lbtc_limits: Limits,
+    pub btc_submarine: SubmarineSwapFees,
+    pub btc_reverse: ReverseSwapFees,
+    pub lbtc_submarine: SubmarineSwapFees,
+    pub lbtc_reverse: ReverseSwapFees, 
 }
+pub struct Limits {
+    pub minimal: u64,
+    pub maximal: u64,
+}
+pub struct SubmarineSwapFees {
+    pub boltz_fees: u64,
+    pub claim_fees: u64,
+    pub lockup_fees_estimate: u64,
 
-pub struct SwapFees {
+}
+pub struct ReverseSwapFees {
     pub boltz_fees: u64,
     pub lockup_fees: u64,
-    pub claim_fees: u64
+    pub claim_fees_estimate: u64
 }
-
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,

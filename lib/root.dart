@@ -1,5 +1,4 @@
 import 'package:boltz_dart/bridge_definitions.dart';
-
 import 'bridge_definitions.dart' as bridge;
 import 'ffi.dart';
 
@@ -226,7 +225,6 @@ class AllSwapFees {
     }
   }
 }
-
 
 // done
   // new submarine swap

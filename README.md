@@ -16,7 +16,8 @@ types.rs structures and enums are also re-exported via api.rs
 ```bash
 # in the project root directory
 
-./compile.native.sh # build for your native platform. adds binary to dart test folder.
+./compile.native.sh # build for your native platform (linux/macos). adds binary to dart test folder.
+./compile.android.sh # build for android
 
 ```
 
@@ -26,8 +27,21 @@ It will then run flutter_rust_bridge_codegen and generate ffi code in rust and d
 
 ### Non-debian linux users
 
-On non-debian systems you will get some errors with the bridge_generated.rs files. You may need to set the path the clang in CPATH manually.
+On non-debian systems you will get some errors with the `bridge_generated.dart` files.
 
+Error would be related to:
+```rust
+  void store_dart_post_cobject(
+    int ptr,
+  ) {
+    return _store_dart_post_cobject(
+      ptr,
+    );
+  }
+```
+
+You may need to set the path the clang in CPATH manually.
+Run the following:
 ```bash
 export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"
 ```

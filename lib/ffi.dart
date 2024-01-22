@@ -10,8 +10,6 @@ final _api = DynamicLibrary.open(
   './test/libboltz_dart${Platform.operatingSystem == 'linux' ? '.so' : '.dylib'}',
 );
 final ffi = BoltzDartImpl(_api);
-
-
 // 
 // 
 // 

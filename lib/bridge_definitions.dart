@@ -87,12 +87,16 @@ abstract class BoltzDart {
 }
 
 class AllFees {
-  final SwapFees btcSubmarine;
-  final SwapFees btcReverse;
-  final SwapFees lbtcSubmarine;
-  final SwapFees lbtcReverse;
+  final Limits btcLimits;
+  final Limits lbtcLimits;
+  final SubmarineSwapFees btcSubmarine;
+  final ReverseSwapFees btcReverse;
+  final SubmarineSwapFees lbtcSubmarine;
+  final ReverseSwapFees lbtcReverse;
 
   const AllFees({
+    required this.btcLimits,
+    required this.lbtcLimits,
     required this.btcSubmarine,
     required this.btcReverse,
     required this.lbtcSubmarine,
@@ -183,6 +187,16 @@ class LbtcLnSwap {
   });
 }
 
+class Limits {
+  final int minimal;
+  final int maximal;
+
+  const Limits({
+    required this.minimal,
+    required this.maximal,
+  });
+}
+
 class PreImage {
   final String value;
   final String sha256;
@@ -195,15 +209,27 @@ class PreImage {
   });
 }
 
-class SwapFees {
+class ReverseSwapFees {
   final int boltzFees;
   final int lockupFees;
-  final int claimFees;
+  final int claimFeesEstimate;
 
-  const SwapFees({
+  const ReverseSwapFees({
     required this.boltzFees,
     required this.lockupFees,
+    required this.claimFeesEstimate,
+  });
+}
+
+class SubmarineSwapFees {
+  final int boltzFees;
+  final int claimFees;
+  final int lockupFeesEstimate;
+
+  const SubmarineSwapFees({
+    required this.boltzFees,
     required this.claimFees,
+    required this.lockupFeesEstimate,
   });
 }
 

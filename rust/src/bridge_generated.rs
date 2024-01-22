@@ -26,8 +26,10 @@ use crate::types::BtcLnSwap;
 use crate::types::Chain;
 use crate::types::KeyPair;
 use crate::types::LbtcLnSwap;
+use crate::types::Limits;
 use crate::types::PreImage;
-use crate::types::SwapFees;
+use crate::types::ReverseSwapFees;
+use crate::types::SubmarineSwapFees;
 use crate::types::SwapType;
 
 // Section: wire functions
@@ -339,10 +341,8 @@ impl Wire2Api<u8> for u8 {
 impl support::IntoDart for AllFees {
     fn into_dart(self) -> support::DartAbi {
         vec![
-            self.btc_limit_min.into_into_dart().into_dart(),
-            self.btc_limit_max.into_into_dart().into_dart(),
-            self.lbtc_limit_min.into_into_dart().into_dart(),
-            self.lbtc_limit_max.into_into_dart().into_dart(),
+            self.btc_limits.into_into_dart().into_dart(),
+            self.lbtc_limits.into_into_dart().into_dart(),
             self.btc_submarine.into_into_dart().into_dart(),
             self.btc_reverse.into_into_dart().into_dart(),
             self.lbtc_submarine.into_into_dart().into_dart(),
@@ -457,6 +457,22 @@ impl rust2dart::IntoIntoDart<LbtcLnSwap> for LbtcLnSwap {
     }
 }
 
+impl support::IntoDart for Limits {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.minimal.into_into_dart().into_dart(),
+            self.maximal.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Limits {}
+impl rust2dart::IntoIntoDart<Limits> for Limits {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
 impl support::IntoDart for PreImage {
     fn into_dart(self) -> support::DartAbi {
         vec![
@@ -474,18 +490,35 @@ impl rust2dart::IntoIntoDart<PreImage> for PreImage {
     }
 }
 
-impl support::IntoDart for SwapFees {
+impl support::IntoDart for ReverseSwapFees {
     fn into_dart(self) -> support::DartAbi {
         vec![
             self.boltz_fees.into_into_dart().into_dart(),
             self.lockup_fees.into_into_dart().into_dart(),
-            self.claim_fees.into_into_dart().into_dart(),
+            self.claim_fees_estimate.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
-impl support::IntoDartExceptPrimitive for SwapFees {}
-impl rust2dart::IntoIntoDart<SwapFees> for SwapFees {
+impl support::IntoDartExceptPrimitive for ReverseSwapFees {}
+impl rust2dart::IntoIntoDart<ReverseSwapFees> for ReverseSwapFees {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for SubmarineSwapFees {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.boltz_fees.into_into_dart().into_dart(),
+            self.claim_fees.into_into_dart().into_dart(),
+            self.lockup_fees_estimate.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for SubmarineSwapFees {}
+impl rust2dart::IntoIntoDart<SubmarineSwapFees> for SubmarineSwapFees {
     fn into_into_dart(self) -> Self {
         self
     }
@@ -518,20 +551,3 @@ support::lazy_static! {
 mod io;
 #[cfg(not(target_family = "wasm"))]
 pub use self::io::*;
-
-    // ----------- DUMMY CODE FOR BINDGEN ----------
-
-    // copied from: allo-isolate
-    pub type DartPort = i64;
-    pub type DartPostCObjectFnType = unsafe extern "C" fn(port_id: DartPort, message: *mut std::ffi::c_void) -> bool;
-    #[no_mangle] pub unsafe extern "C" fn store_dart_post_cobject(ptr: DartPostCObjectFnType) { panic!("dummy code") }
-    #[no_mangle] pub unsafe extern "C" fn get_dart_object(ptr: usize) -> Dart_Handle { panic!("dummy code") }
-    #[no_mangle] pub unsafe extern "C" fn drop_dart_object(ptr: usize) { panic!("dummy code") }
-    #[no_mangle] pub unsafe extern "C" fn new_dart_opaque(handle: Dart_Handle) -> usize { panic!("dummy code") }
-    #[no_mangle] pub unsafe extern "C" fn init_frb_dart_api_dl(obj: *mut c_void) -> isize { panic!("dummy code") }
-
-    pub struct DartCObject;
-    pub type WireSyncReturn = *mut DartCObject;
-
-    // ---------------------------------------------
-    

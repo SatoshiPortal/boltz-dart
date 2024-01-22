@@ -322,13 +322,15 @@ class BoltzDartImpl implements BoltzDart {
 
   AllFees _wire2api_all_fees(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
     return AllFees(
-      btcSubmarine: _wire2api_swap_fees(arr[0]),
-      btcReverse: _wire2api_swap_fees(arr[1]),
-      lbtcSubmarine: _wire2api_swap_fees(arr[2]),
-      lbtcReverse: _wire2api_swap_fees(arr[3]),
+      btcLimits: _wire2api_limits(arr[0]),
+      lbtcLimits: _wire2api_limits(arr[1]),
+      btcSubmarine: _wire2api_submarine_swap_fees(arr[2]),
+      btcReverse: _wire2api_reverse_swap_fees(arr[3]),
+      lbtcSubmarine: _wire2api_submarine_swap_fees(arr[4]),
+      lbtcReverse: _wire2api_reverse_swap_fees(arr[5]),
     );
   }
 
@@ -399,6 +401,16 @@ class BoltzDartImpl implements BoltzDart {
     );
   }
 
+  Limits _wire2api_limits(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return Limits(
+      minimal: _wire2api_u64(arr[0]),
+      maximal: _wire2api_u64(arr[1]),
+    );
+  }
+
   PreImage _wire2api_pre_image(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 3)
@@ -410,14 +422,25 @@ class BoltzDartImpl implements BoltzDart {
     );
   }
 
-  SwapFees _wire2api_swap_fees(dynamic raw) {
+  ReverseSwapFees _wire2api_reverse_swap_fees(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 3)
       throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return SwapFees(
+    return ReverseSwapFees(
       boltzFees: _wire2api_u64(arr[0]),
       lockupFees: _wire2api_u64(arr[1]),
-      claimFees: _wire2api_u64(arr[2]),
+      claimFeesEstimate: _wire2api_u64(arr[2]),
+    );
+  }
+
+  SubmarineSwapFees _wire2api_submarine_swap_fees(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return SubmarineSwapFees(
+      boltzFees: _wire2api_u64(arr[0]),
+      claimFees: _wire2api_u64(arr[1]),
+      lockupFeesEstimate: _wire2api_u64(arr[2]),
     );
   }
 

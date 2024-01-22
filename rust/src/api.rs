@@ -13,13 +13,13 @@ use boltz_client::util::error::ErrorKind;
 use boltz_client::util::error::S5Error;
 use boltz_client::util::secrets::Preimage;
 
-use crate::types::{BtcLnSwap, SwapFees, AllFees};
+use crate::types::{BtcLnSwap, SubmarineSwapFees, ReverseSwapFees, AllFees, Limits};
 use crate::types::BoltzError;
 use crate::types::LbtcLnSwap;
 use crate::types::Chain;
 use crate::types::SwapType;
 use crate::types::KeyPair;
-use crate::types::PreImage;
+// use crate::types::PreImage;
 
 pub struct Api {}
 
@@ -31,33 +31,38 @@ impl Api {
             Err(e)=> return Err(e.into())
         };
         let btc_pair = boltz_pairs.get_btc_pair();
-
-        let btc_submarine = SwapFees{
+        let btc_limits = Limits {
+            minimal: btc_pair.limits.minimal as u64,
+            maximal: btc_pair.limits.maximal as u64,
+        };
+        let btc_submarine = SubmarineSwapFees{
             boltz_fees: btc_pair.fees.submarine_boltz(output_amount)?,
-            lockup_fees: btc_pair.fees.submarine_lockup_estimate(),
+            lockup_fees_estimate: btc_pair.fees.submarine_lockup_estimate(),
             claim_fees: btc_pair.fees.submarine_claim()?
         };
-        let btc_reverse = SwapFees{
+        let btc_reverse = ReverseSwapFees{
             boltz_fees: btc_pair.fees.reverse_boltz(output_amount)?,
             lockup_fees: btc_pair.fees.reverse_lockup()?,
-            claim_fees: btc_pair.fees.reverse_claim_estimate()
+            claim_fees_estimate: btc_pair.fees.reverse_claim_estimate()
         };
 
-        let btc_limit_max = btc_pair.limits.
         let lbtc_pair = boltz_pairs.get_lbtc_pair();
-
-        let lbtc_submarine = SwapFees{
+        let lbtc_limits = Limits {
+            minimal: lbtc_pair.limits.minimal as u64,
+            maximal: lbtc_pair.limits.maximal as u64,
+        };
+        let lbtc_submarine = SubmarineSwapFees{
             boltz_fees: lbtc_pair.fees.submarine_boltz(output_amount)?,
-            lockup_fees: lbtc_pair.fees.submarine_lockup_estimate(),
+            lockup_fees_estimate: lbtc_pair.fees.submarine_lockup_estimate(),
             claim_fees: lbtc_pair.fees.submarine_claim()?
         };
-        let lbtc_reverse = SwapFees{
+        let lbtc_reverse = ReverseSwapFees{
             boltz_fees: lbtc_pair.fees.reverse_boltz(output_amount)?,
             lockup_fees: lbtc_pair.fees.reverse_lockup()?,
-            claim_fees: lbtc_pair.fees.reverse_claim_estimate()
+            claim_fees_estimate: lbtc_pair.fees.reverse_claim_estimate()
         };
        
-        Ok(AllFees{btc_limit_min, lbtc_limit_min, btc_limit_max, lbtc_limit_max, btc_submarine,btc_reverse,lbtc_submarine,lbtc_reverse})
+        Ok(AllFees{btc_limits, lbtc_limits, btc_submarine,btc_reverse,lbtc_submarine,lbtc_reverse})
     }
     
     // Should take pair hash from previous call as input
@@ -81,7 +86,6 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
             let btc_pair = boltz_pairs.get_btc_pair();
-
             let swap_request = CreateSwapRequest::new_btc_submarine(btc_pair.hash, invoice.clone(), refund_keypair.clone().public_key);
             let response = match boltz_client.create_swap(swap_request){
                 Ok(result)=>result,
@@ -91,7 +95,6 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-
             let swap_script = match response.into_btc_sub_swap_script(&preimage){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
