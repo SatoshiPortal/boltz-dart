@@ -2,6 +2,10 @@ import 'package:boltz_dart/bridge_definitions.dart';
 import 'bridge_definitions.dart' as bridge;
 import 'ffi.dart';
 
+// m/84'/0'/0'/<0;1>/index (segwit wallet; address index handled by bdk)
+// m/84'/0'/21'/<0;1>/index (sub swap wallet; address index handled by client)
+// m/84'/0'/42'/<0;1>/index (sub swap wallet; address index handled by client)
+
 class BtcLnSwap {
   final bridge.BtcLnSwap _btcLnSwap;
 

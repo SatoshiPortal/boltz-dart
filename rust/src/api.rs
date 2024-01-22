@@ -64,7 +64,6 @@ impl Api {
        
         Ok(AllFees{btc_limits, lbtc_limits, btc_submarine,btc_reverse,lbtc_submarine,lbtc_reverse})
     }
-    
     // Should take pair hash from previous call as input
     pub fn new_btc_ln_submarine(        
         mnemonic: String,

@@ -109,12 +109,15 @@ pub struct Limits {
     pub minimal: u64,
     pub maximal: u64,
 }
+
+// 1. lockup (client) 2. [claim (boltz) | refund (client)]
 pub struct SubmarineSwapFees {
     pub boltz_fees: u64,
     pub claim_fees: u64,
     pub lockup_fees_estimate: u64,
-
 }
+
+// 1. lockup (boltz) 2. [claim (client) | refund (boltz)]
 pub struct ReverseSwapFees {
     pub boltz_fees: u64,
     pub lockup_fees: u64,

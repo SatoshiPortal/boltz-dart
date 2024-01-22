@@ -29,7 +29,7 @@ void main() {
   });
 
   group('BTC-LN SWAPS', () {
-    test('SUBMARINE SWAP', () async {
+    test('SUBMARINE SWAP (SEND)', () async {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
@@ -38,10 +38,8 @@ void main() {
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
       const invoice =
-          "lntb30m1pje68ahpp5jye9st2ajtl5ldsmspehmn803hj30mvh566mzw90zx9uewxx43cqdpyxysysctvvcsxzgz5dahzqmmxyppk7enxv4jsxqrrsscqp79qy9qsqsp5lqkdgaduy7qsrpe7edtrhadp4z4rm222hh90vt79j5uarnnfjnhs0hjalp2pnwg54pmm6hvqa8d4tmwcjdgjrm0sg58fj7xqm00hg6wqj069e9tmlj0r6kr8fqkt8qyhwr8ysdmwck86p8c6z4g0dr6u6vcpeu6z5f";
+          "lntb30m1pj6uz4epp5e4gqhar3tfl307rygwh52xaxddp5fnjm3yqgvlh22hvulfwglv9sdpyxysysctvvcsxzgz5dahzqmmxyppk7enxv4jsxqrrsscqp79qy9qsqsp5gqxwczfrj58laly8rjapnhsxqs7zradeyquzk4pas2zcmhzt9r7qz45k6hwe8yr73r0gngzy8epqrlm9zejlaax7xlwcp36hj27ydrrqknna4lw7j3zsdzqy9cl8d4zhadnhnecccc28z8h59v83y20vaqcpy8x9zy";
       try {
-        // this sh
-
         final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
           mnemonic: mnemonic,
           index: index,
@@ -68,7 +66,7 @@ void main() {
       }
     });
 
-    test('REVERSE SWAP', () async {
+    test('REVERSE SWAP (RECEIVE)', () async {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
@@ -95,9 +93,10 @@ void main() {
 
         expect(swap.keys.secretKey, expectedSecretKey);
         final paymentDetails = await btcLnSubmarineSwap.paymentDetails();
+
         print("PAYMENT DETAILS: ${paymentDetails}");
         print("PAY INVOICE WITHIN 30 seconds...");
-        countdown(60);
+        countdown(360);
         final status = await btcLnSubmarineSwap.status();
         print("STATUS: ${status}");
         final fees = await AllSwapFees.estimateFee(
