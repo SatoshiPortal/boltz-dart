@@ -30,7 +30,6 @@ class BtcLnSwap {
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
       );
-
       return BtcLnSwap._(res);
     } catch (e) {
       rethrow;
@@ -54,7 +53,6 @@ class BtcLnSwap {
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
       );
-
       return BtcLnSwap._(res);
     } catch (e) {
       rethrow;
@@ -78,7 +76,6 @@ class BtcLnSwap {
         swap: _btcLnSwap,
         absFee: absFee,
       );
-
       return res;
     } catch (e) {
       rethrow;
@@ -91,7 +88,6 @@ class BtcLnSwap {
         boltzUrl: _btcLnSwap.boltzUrl,
         id: _btcLnSwap.id,
       );
-
       return res;
     } catch (e) {
       rethrow;
@@ -104,7 +100,6 @@ class BtcLnSwap {
       if (swapType == bridge.SwapType.Submarine) {
         return "${_btcLnSwap.outAddress}:${_btcLnSwap.outAmount}";
       }
-
       return _btcLnSwap.invoice;
     } catch (e) {
       rethrow;

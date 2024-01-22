@@ -163,11 +163,11 @@ class LbtcLnSwap {
   final Chain network;
   final KeyPair keys;
   final PreImage preimage;
-  final String blindingKey;
   final String redeemScript;
   final String invoice;
   final int outAmount;
   final String outAddress;
+  final String blindingKey;
   final String electrumUrl;
   final String boltzUrl;
 
