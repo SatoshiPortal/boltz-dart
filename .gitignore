@@ -45,7 +45,7 @@ app.*.map.json
 /android/app/release
 native/target
 xcuserdata
-jniLibs
+# jniLibs
 
 **Cargo.lock
 rust/target/
