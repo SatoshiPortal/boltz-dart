@@ -4,8 +4,16 @@ The top level directory of this project is a dart/flutter pub library.
 
 The `rust` folder containers the core code which uses the `boltz-rust` crate internally to expose an abstracted API to manage boltz swaps.
 
+## Dependencies
 
-## Update process
+```bash
+cargo install flutter_rust_bridge_codegen
+cargo install cargo-expand
+```
+
+For ios builds, make sure you have xcode installed.
+
+## Update & Build process
 
 Add new types to `types.rs` and static functions to `api.rs`
 
@@ -17,7 +25,8 @@ types.rs structures and enums are also re-exported via api.rs
 # in the project root directory
 
 ./compile.native.sh # build for your native platform (linux/macos). adds binary to dart test folder.
-./compile.android.sh # build for android
+./compile.android.sh # build for android (workds on linux and macos hosts)
+./compile.ios.sh # build for ios (can only build on macos hosts)
 
 ```
 

@@ -2,8 +2,6 @@ use boltz_client::{network::electrum::ElectrumConfig, swaps::bitcoin::BtcSwapScr
 use boltz_client::swaps::bitcoin::BtcSwapTx;
 use boltz_client::swaps::liquid::LBtcSwapScript;
 use boltz_client::swaps::liquid::LBtcSwapTx;
-use boltz_client::util::secrets::Preimage as BoltzPreImage;
-use boltz_client::{Keypair as CoreKeyPair, Secp256k1};
 // use boltz_client::network::electrum::ElectrumConfig;
 // use boltz_client::swaps::boltz;
 use boltz_client::swaps::boltz::BoltzApiClient;
@@ -150,9 +148,7 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-            let secp = Secp256k1::new();
-            let core_keypair = CoreKeyPair::from_seckey_str(&secp, &claim_keypair.secret_key).unwrap();
-            let swap_script = match response.into_btc_rev_swap_script(&preimage, core_keypair, network.clone().into()){
+            let swap_script = match response.into_btc_rev_swap_script(&preimage, claim_keypair.clone().into(), network.clone().into()){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
@@ -195,15 +191,14 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
-        let mut tx = match BtcSwapTx::new_claim(script, swap.out_address, swap.network.into()){
+        // let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
+        let tx = match BtcSwapTx::new_claim(script, swap.out_address, swap.network.into()){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let secp = Secp256k1::new();
         let size = match tx.size(
-            CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
-            BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+            swap.keys.clone().into(), 
+            swap.preimage.try_into().unwrap(), 
         ){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
@@ -235,10 +230,9 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
             };
-            let secp = Secp256k1::new();
             let signed = match tx.drain(
-                CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
-                BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+                swap.keys.clone().into(), 
+                swap.preimage.try_into().unwrap(), 
                 abs_fee,
             ){
                 Ok(result)=>result,
@@ -361,9 +355,7 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-            let secp = Secp256k1::new();
-            let core_keypair = CoreKeyPair::from_seckey_str(&secp, &claim_keypair.secret_key).unwrap();
-            let swap_script =  match response.into_lbtc_rev_swap_script(&preimage, &core_keypair, network.clone().into()){
+            let _ =  match response.into_lbtc_rev_swap_script(&preimage, &claim_keypair.clone().into(), network.clone().into()){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
@@ -415,10 +407,9 @@ impl Api {
             Ok(_)=>(),
             Err(e)=> return Err(e.into())
         }; // CAN WE MOCK THIS?
-        let secp = Secp256k1::new();
         let size = match tx.size(
-            CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
-            BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+            swap.keys.into(), 
+            swap.preimage.try_into().unwrap(), 
         ){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
@@ -453,10 +444,9 @@ impl Api {
             Ok(_)=>(),
             Err(e)=> return Err(e.into())
         };
-        let secp = Secp256k1::new();
         let signed = match tx.drain(
-            CoreKeyPair::from_seckey_str(&secp, &swap.keys.secret_key).unwrap(), 
-            BoltzPreImage::from_str(&swap.preimage.value).unwrap(), 
+            swap.keys.clone().into(), 
+            swap.preimage.try_into().unwrap(), 
             abs_fee
         ){
             Ok(result)=>result,
