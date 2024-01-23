@@ -1,10 +1,12 @@
 // network
 // preimage
-// 
+//
 use boltz_client::{
+    network::Chain as BChain,
     swaps::boltz::SwapType as BoltzSwapType,
-    util::{secrets::SwapKey, error::S5Error},
-    util::secrets::Preimage as BoltzPreImage, network::Chain as BChain,
+    util::secrets::Preimage as BoltzPreImage,
+    util::{error::S5Error, secrets::SwapKey},
+    Keypair, Secp256k1,
 };
 // use crate::types::{KeyPair, PreImage, Network, SwapType};
 
@@ -14,18 +16,32 @@ pub struct KeyPair {
     pub public_key: String,
 }
 
+impl Into<Keypair> for KeyPair {
+    fn into(self) -> Keypair {
+        let secp = Secp256k1::new();
+        Keypair::from_seckey_str(&secp, &self.secret_key).unwrap()
+    }
+}
+
 impl KeyPair {
-    pub fn new(mnemonic: String, network: Chain, index: u64, swap_type: SwapType) -> Result<Self, S5Error> {
+    pub fn new(
+        mnemonic: String,
+        network: Chain,
+        index: u64,
+        swap_type: SwapType,
+    ) -> Result<Self, S5Error> {
         match swap_type {
             SwapType::Submarine => {
-                let child_keys = SwapKey::from_submarine_account(&mnemonic,"", network.into(), index)?;
+                let child_keys =
+                    SwapKey::from_submarine_account(&mnemonic, "", network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
                 })
             }
             SwapType::Reverse => {
-                let child_keys = SwapKey::from_reverse_account(&mnemonic,"", network.into(), index)?;
+                let child_keys =
+                    SwapKey::from_reverse_account(&mnemonic, "", network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
@@ -36,39 +52,50 @@ impl KeyPair {
 }
 
 // Impl into secp256k1::KeyPair
-
+use boltz_client::util::secrets::Preimage;
+use std::convert::TryInto;
 
 #[derive(Clone)]
 pub struct PreImage {
     pub value: String,
     pub sha256: String,
-    pub hash160: String
+    pub hash160: String,
+}
+
+impl TryInto<Preimage> for PreImage {
+    type Error = S5Error; // Use a more specific error type in a real application
+
+    fn try_into(self) -> Result<Preimage, Self::Error> {
+        if !self.value.is_empty() {
+            Preimage::from_str(&self.value)
+        } else {
+            Preimage::from_sha256_str(&self.sha256)
+        }
+    }
 }
 
 impl PreImage {
-    pub(crate) fn new() -> Self {
+    pub(crate) fn _new() -> Self {
         let preimage = BoltzPreImage::new();
-        PreImage{
+        PreImage {
             value: preimage.to_string().unwrap(),
             sha256: preimage.sha256.to_string(),
             hash160: preimage.hash160.to_string(),
         }
-        
     }
 }
 
 impl Into<PreImage> for BoltzPreImage {
     fn into(self) -> PreImage {
-        PreImage{
+        PreImage {
             value: self.to_string().unwrap_or("".to_string()),
             sha256: self.sha256.to_string(),
-            hash160: self.hash160.to_string()
+            hash160: self.hash160.to_string(),
         }
     }
 }
 
-
-#[derive(Clone, PartialEq,Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub enum SwapType {
     Submarine,
     Reverse,
@@ -97,13 +124,13 @@ impl Into<BChain> for Chain {
         }
     }
 }
-pub struct AllFees{
+pub struct AllFees {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
     pub btc_submarine: SubmarineSwapFees,
     pub btc_reverse: ReverseSwapFees,
     pub lbtc_submarine: SubmarineSwapFees,
-    pub lbtc_reverse: ReverseSwapFees, 
+    pub lbtc_reverse: ReverseSwapFees,
 }
 pub struct Limits {
     pub minimal: u64,
@@ -121,7 +148,7 @@ pub struct SubmarineSwapFees {
 pub struct ReverseSwapFees {
     pub boltz_fees: u64,
     pub lockup_fees: u64,
-    pub claim_fees_estimate: u64
+    pub claim_fees_estimate: u64,
 }
 pub struct BtcLnSwap {
     pub id: String,
@@ -129,7 +156,7 @@ pub struct BtcLnSwap {
     pub network: Chain,
     pub keys: KeyPair,
     pub preimage: PreImage,
-    pub redeem_script:String,
+    pub redeem_script: String,
     pub invoice: String,
     pub out_amount: u64,
     pub out_address: String,
@@ -173,7 +200,7 @@ pub struct LbtcLnSwap {
     pub network: Chain,
     pub keys: KeyPair,
     pub preimage: PreImage,
-    pub redeem_script:String,
+    pub redeem_script: String,
     pub invoice: String,
     pub out_amount: u64,
     pub out_address: String,
@@ -220,7 +247,7 @@ pub struct BoltzError {
 }
 
 impl BoltzError {
-    pub fn new(kind: String, message: String) -> Self {
+    pub fn _new(kind: String, message: String) -> Self {
         BoltzError {
             kind: kind.to_string(),
             message: message,
