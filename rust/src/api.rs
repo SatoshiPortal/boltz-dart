@@ -1,3 +1,4 @@
+use boltz_client::Keypair;
 use boltz_client::{network::electrum::ElectrumConfig, swaps::bitcoin::BtcSwapScript};
 use boltz_client::swaps::bitcoin::BtcSwapTx;
 use boltz_client::swaps::liquid::LBtcSwapScript;
@@ -72,7 +73,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<BtcLnSwap,BoltzError>{
             let swap_type = SwapType::Submarine;
-            let refund_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
+            let refund_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -83,7 +84,7 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
             let btc_pair = boltz_pairs.get_btc_pair();
-            let swap_request = CreateSwapRequest::new_btc_submarine(btc_pair.hash, invoice.clone(), refund_keypair.clone().public_key);
+            let swap_request = CreateSwapRequest::new_btc_submarine(&btc_pair.hash, &invoice, &refund_keypair.public_key);
             let response = match boltz_client.create_swap(swap_request){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
@@ -96,17 +97,18 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-
+            let out_address = swap_script.to_address(network.into())?.to_string();
+            
             Ok(BtcLnSwap::new(
                 response.get_id(),
                 swap_type,
-                network.clone(),
+                network,
                 refund_keypair,
                 preimage.into(),
                 response.redeem_script.unwrap(),
                 invoice,
                 response.expected_amount.unwrap(),
-                swap_script.to_address(network.into())?.to_string(),
+                out_address,
                 electrum_url,
                 boltz_url,
             ))
@@ -122,7 +124,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<BtcLnSwap,BoltzError>{
             let swap_type = SwapType::Reverse;
-            let claim_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
+            let claim_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -134,25 +136,20 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
 
-            let pair_hash = match boltz_pairs
-            .pairs
-            .pairs
-            .get("BTC/BTC")
-            .map(|pair_info| pair_info.hash.clone()){
-                Some(result)=>result,
-                None=> return Err(S5Error::new(ErrorKind::BoltzApi, "Could not find BTC/BTC pair-hash from boltz response").into())
-            };
+            let pair_hash = boltz_pairs.get_btc_pair().hash;
 
-            let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(pair_hash, preimage.sha256.to_string(), claim_keypair.clone().public_key, out_amount);
+            let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(&pair_hash, &preimage.sha256.to_string(), &claim_keypair.public_key, out_amount);
             let response = match boltz_client.create_swap(swap_request){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-            let swap_script = match response.into_btc_rev_swap_script(&preimage, claim_keypair.clone().into(), network.clone().into()){
+            
+            let ckp: Keypair = claim_keypair.clone().into(); 
+            let swap_script = match response.into_btc_rev_swap_script(&preimage, &ckp, network.into()){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-
+            let out_address = swap_script.to_address(network.into())?.to_string();
             // let btc_swap_script = BtcSwapScript::submarine_from_str(&response.clone().redeem_script.unwrap()).unwrap();
         
             // let payment_address = match btc_swap_script.to_address(network.clone().into()){
@@ -167,13 +164,13 @@ impl Api {
             Ok(BtcLnSwap::new(
                 response.get_id(),
                 swap_type,
-                network.clone(),
+                network.into(),
                 claim_keypair,
                 preimage.into(),
-                response.clone().redeem_script.unwrap(),
+                response.get_redeem_script().unwrap(),
                 response.get_invoice().unwrap().to_string(),
                 out_amount,
-                swap_script.to_address(network.into())?.to_string(),
+                out_address,
                 electrum_url,
                 boltz_url,
             ))
@@ -196,9 +193,11 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
+        let ckp: Keypair = swap.keys.into();
+
         let size = match tx.size(
-            swap.keys.clone().into(), 
-            swap.preimage.try_into().unwrap(), 
+            &ckp, 
+            &swap.preimage.try_into().unwrap(), 
         ){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
@@ -218,9 +217,9 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
+        let network_config = ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true,10);
         let script_balance = match script
-        .get_balance(network_config.clone()){
+        .get_balance(&network_config){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
@@ -230,15 +229,16 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
             };
+            let ckp: Keypair = swap.keys.into();
             let signed = match tx.drain(
-                swap.keys.clone().into(), 
-                swap.preimage.try_into().unwrap(), 
+                &ckp, 
+                &swap.preimage.try_into().unwrap(), 
                 abs_fee,
             ){
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
             };
-            let txid = match tx.broadcast(signed, network_config){
+            let txid = match tx.broadcast(signed, &network_config){
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
             };
@@ -258,7 +258,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<LbtcLnSwap,BoltzError>{
             let swap_type = SwapType::Submarine;
-            let refund_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
+            let refund_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -269,16 +269,9 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
 
-            let pair_hash = match boltz_pairs
-            .pairs
-            .pairs
-            .get("L-BTC/BTC")
-            .map(|pair_info| pair_info.hash.clone()){
-                Some(result)=>result,
-                None=> return Err(S5Error::new(ErrorKind::BoltzApi, "Could not find BTC/BTC pair-hash from boltz response").into())
-            };
+            let pair_hash = boltz_pairs.get_lbtc_pair().hash;
 
-            let swap_request = CreateSwapRequest::new_btc_submarine(pair_hash, invoice.clone(), refund_keypair.clone().public_key);
+            let swap_request = CreateSwapRequest::new_btc_submarine(&pair_hash, &invoice, &refund_keypair.public_key);
             let response = match boltz_client.create_swap(swap_request){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
@@ -288,10 +281,12 @@ impl Api {
                 Err(e)=>return Err(e.into())
             };
 
-            let swap_script = match response.into_lbtc_sub_swap_script(&preimage){
+            let script = match response.into_lbtc_sub_swap_script(&preimage){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
+            let out_address = script.to_address(network.into())?.to_string();
+
             // let btc_swap_script = BtcSwapScript::submarine_from_str(&response.clone().redeem_script.unwrap()).unwrap();
         
             // let payment_address = match btc_swap_script.to_address(network.clone().into()){
@@ -306,13 +301,13 @@ impl Api {
             Ok(LbtcLnSwap::new(
                 response.get_id(),
                 swap_type,
-                network.clone(),
+                network,
                 refund_keypair,
                 preimage.into(),
-                response.clone().redeem_script.unwrap(),
+                response.get_redeem_script().unwrap(),
                 invoice,
-                response.clone().expected_amount.unwrap(),
-                swap_script.to_address(network.into())?.to_string(),
+                response.get_expected_amount().unwrap(),
+                out_address,
                 "".to_string(),
                 electrum_url,
                 boltz_url,
@@ -329,7 +324,7 @@ impl Api {
         boltz_url: String,
     ) -> anyhow::Result<LbtcLnSwap,BoltzError>{
             let swap_type = SwapType::Reverse;
-            let claim_keypair = match KeyPair::new(mnemonic, network.clone().into(), index, swap_type.clone()) {
+            let claim_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -341,24 +336,19 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
 
-            let pair_hash = match boltz_pairs
-            .pairs
-            .pairs
-            .get("L-BTC/BTC")
-            .map(|pair_info| pair_info.hash.clone()){
-                Some(result)=>result,
-                None=> return Err(S5Error::new(ErrorKind::BoltzApi, "Could not find BTC/BTC pair-hash from boltz response").into())
-            };
+            let pair_hash = boltz_pairs.get_lbtc_pair().hash;
 
-            let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(pair_hash, preimage.sha256.to_string(), claim_keypair.clone().public_key, out_amount);
+            let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(&pair_hash, &preimage.sha256.to_string(), &claim_keypair.public_key, out_amount);
             let response = match boltz_client.create_swap(swap_request){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-            let _ =  match response.into_lbtc_rev_swap_script(&preimage, &claim_keypair.clone().into(), network.clone().into()){
+            let ckp = claim_keypair.clone().into();
+            let script =  match response.into_lbtc_rev_swap_script(&preimage, &ckp, network.into()){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
+            let out_address = script.to_address(network.into()).unwrap().to_string();
             // let btc_swap_script = BtcSwapScript::submarine_from_str(&response.clone().redeem_script.unwrap()).unwrap();
         
             // let payment_address = match btc_swap_script.to_address(network.clone().into()){
@@ -376,10 +366,10 @@ impl Api {
                 network,
                 claim_keypair,
                 preimage.into(),
-                response.clone().redeem_script.unwrap(),
+                response.get_redeem_script().unwrap(),
                 response.get_invoice()?.to_string(),
                 out_amount,
-                response.clone().lockup_address.unwrap(),
+                out_address,
                 response.get_blinding_key()?,
                 electrum_url,
                 boltz_url,
@@ -398,12 +388,12 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
+        let network_config = ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true,10);
         let mut tx = match LBtcSwapTx::new_claim(script, swap.out_address){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let _ = match tx.fetch_utxo(network_config){
+        let _ = match tx.fetch_utxo(&network_config){
             Ok(_)=>(),
             Err(e)=> return Err(e.into())
         }; // CAN WE MOCK THIS?
@@ -428,31 +418,26 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
-        // let script_balance = match script
-        // .get_balance(network_config.clone()){
-        //     Ok(result)=>result,
-        //     Err(e)=> return Err(e.into())
-        // };
+        let network_config = ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true,10);
 
         // if script_balance.0 > 0 || script_balance.1 > 0 {
         let mut tx = match LBtcSwapTx::new_claim(script, swap.out_address){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let _ = match tx.fetch_utxo(network_config.clone()){
+        let _ = match tx.fetch_utxo(&network_config){
             Ok(_)=>(),
             Err(e)=> return Err(e.into())
         };
         let signed = match tx.drain(
-            swap.keys.clone().into(), 
+            swap.keys.into(), 
             swap.preimage.try_into().unwrap(), 
             abs_fee
         ){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let txid = match tx.broadcast(signed, network_config){
+        let txid = match tx.broadcast(signed, &network_config){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };

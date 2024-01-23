@@ -6,7 +6,7 @@ use boltz_client::{
     swaps::boltz::SwapType as BoltzSwapType,
     util::secrets::Preimage as BoltzPreImage,
     util::{error::S5Error, secrets::SwapKey},
-    Keypair, Secp256k1,
+    Keypair, Secp256k1, ZKKeyPair, ZKSecp256k1
 };
 // use crate::types::{KeyPair, PreImage, Network, SwapType};
 
@@ -33,7 +33,7 @@ impl KeyPair {
         match swap_type {
             SwapType::Submarine => {
                 let child_keys =
-                    SwapKey::from_submarine_account(&mnemonic, "", network.into(), index)?;
+                    SwapKey::from_submarine_account(&mnemonic, "", &network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
@@ -95,7 +95,7 @@ impl Into<PreImage> for BoltzPreImage {
     }
 }
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum SwapType {
     Submarine,
     Reverse,
@@ -110,7 +110,7 @@ impl Into<BoltzSwapType> for SwapType {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub enum Chain {
     Testnet,
     LiquidTestnet,
