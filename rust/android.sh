@@ -1,7 +1,9 @@
 #!/bin/bash
 # Setup jniLibs directory
-REPO="../"
-JNI_DIR=$REPO/android/app/src/main/jniLibs # final binaries stored here
+ROOT="target"
+VERSION="0.1.0"
+NAME="boltz-dart"
+JNI_DIR=$ROOT/$NAME.$VERSION/jniLibs # final binaries stored here
 
 if [ -d "$JNI_DIR" ]; then rm -r "$JNI_DIR"
 fi

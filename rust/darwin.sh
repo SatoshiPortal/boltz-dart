@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # Setup
-BUILD_DIR=boltz-dart.0.1.0
-MACOS_DIR="../macos" # final binaries stored here
-IOS_DIR="../ios" # final binaries stored here
+ROOT="target"
+VERSION="0.1.0"
+NAME="boltz-dart"
+BUILD_DIR=$ROOT/$NAME.$VERSION
+# MACOS_DIR="../macos" # final binaries stored here
+# IOS_DIR="../ios" # final binaries stored here
 FRAMEWORK="libboltz_dart.xcframework"
 LIBNAME=libboltz_dart.a
 
@@ -12,11 +15,13 @@ MAC_LIPO_DIR=$BUILD_DIR/mac-lipo
 IOS_LIPO=$IOS_LIPO_DIR/$LIBNAME
 MAC_LIPO=$MAC_LIPO_DIR/$LIBNAME
 
+if [ -d "$IOS_LIPO_DIR" ]; then rm -r $IOS_LIPO_DIR
+fi
+if [ -d "$MAC_LIPO_DIR" ]; then rm -r $MAC_LIPO_DIR
+fi
+if [ -d "$BUILD_DIR/$FRAMEWORK" ]; then rm -r $BUILD_DIR/$FRAMEWORK
+fi
 
-if [ -d "$IOS_DIR/$FRAMEWORK" ]; then rm -r $IOS_DIR/$FRAMEWORK
-fi
-if [ -d "$MACOS_DIR/$FRAMEWORK" ]; then rm -r $MACOS_DIR/$FRAMEWORK
-fi
 mkdir -p $IOS_LIPO_DIR $MAC_LIPO_DIR
 
 # Build static libs
@@ -46,9 +51,5 @@ xcodebuild -create-xcframework \
         -library target/aarch64-apple-ios/release/$LIBNAME \
         -output $BUILD_DIR/$FRAMEWORK
 
-# Copy to destination folder
-cp -r $BUILD_DIR/$FRAMEWORK $IOS_DIR
-cp -r $BUILD_DIR/$FRAMEWORK $MACOS_DIR
 
-## Cleanup
-rm -rf $BUILD_DIR
+rm -rf $IOS_LIPO_DIR $MAC_LIPO_DIR
