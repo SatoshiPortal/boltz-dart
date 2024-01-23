@@ -43,9 +43,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/src/main/jniLibs
 native/target
 xcuserdata
 # jniLibs
+
+ios/libboltz_dart.xcframework
+macos/libboltz_dart.xcframework
 
 **Cargo.lock
 rust/target/
