@@ -21,8 +21,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    sumResult = boltz_dart.sum(1, 2);
-    sumAsyncResult = boltz_dart.sumAsync(3, 4);
+    // sumResult = boltz_dart.sum(1, 2);
+    // sumAsyncResult = boltz_dart.sumAsync(3, 4);
   }
 
   @override
@@ -55,8 +55,7 @@ class _MyAppState extends State<MyApp> {
                 FutureBuilder<int>(
                   future: sumAsyncResult,
                   builder: (BuildContext context, AsyncSnapshot<int> value) {
-                    final displayValue =
-                        (value.hasData) ? value.data : 'loading';
+                    final displayValue = (value.hasData) ? value.data : 'loading';
                     return Text(
                       'await sumAsync(3, 4) = $displayValue',
                       style: textStyle,

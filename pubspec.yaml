@@ -1,7 +1,7 @@
 name: boltz_dart
 description: A Flutter library for the Boltz dart client
 version: 1.0.0+1
-homepage: https://github.com/LtbLightning/bdk-flutter
+homepage: https://github.com/SatoshiPortal/boltz-dart
 
 environment:
   sdk: ">=3.1.5 <4.0.0"

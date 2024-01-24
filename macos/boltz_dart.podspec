@@ -1,3 +1,37 @@
+read_key_value_pairs = lambda do |file_path|
+  pairs = {}
+  File.foreach(file_path) do |line|
+    key, value = line.chomp.split('=')
+    pairs[key] = value
+  end
+  pairs
+end
+podspec_dir = File.dirname(__FILE__)
+assets_dir = File.join(podspec_dir, '..', 'assets')
+config_file_path = File.join(assets_dir, 'release.config.txt')
+config = read_key_value_pairs.call(config_file_path)
+
+tag_version = "#{config['TAG_VERSION']}"
+framework = 'boltz_dart.xcframework'
+lib_name = "boltz_dart.#{tag_version}"
+url = "#{config['REPOSITORY_URL']}#{tag_version}/#{lib_name}.zip"
+frameworks_dir = "macos"
+
+
+`
+cd ../
+if [ ! -d #{lib_name} ]; then
+    curl -L #{url} -o #{lib_name}.zip
+    unzip #{lib_name}.zip
+    rm -rf __MACOSX
+    rm #{lib_name}.zip
+fi
+
+if [ ! -d #{frameworks_dir}/#{framework} ]; then
+        cp -R #{lib_name}/#{framework} #{frameworks_dir}
+fi
+`
+
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
 # Run `pod lib lint boltz_dart.podspec` to validate before publishing.
