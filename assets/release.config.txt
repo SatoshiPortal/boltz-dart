@@ -1,0 +1,2 @@
+TAG_VERSION=1.0.0+1
+REPOSITORY_URL=https://github.com/SatoshiPortal/boltz-dart/releases/download/
