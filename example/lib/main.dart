@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:boltz_dart/boltz_dart.dart' as boltz_dart;
+// import 'package:boltz_dart/boltz_dart.dart' as boltz_dart;
 
 void main() {
   runApp(const MyApp());

@@ -1,5 +1,5 @@
 import 'package:boltz_dart/bridge_definitions.dart';
-import 'package:boltz_dart/ffi.dart';
+import 'package:boltz_dart/loader.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -7,8 +7,8 @@ void main() {
     test('FEE ESTIMATION', () async {
       const boltzUrl = 'https://api.testnet.boltz.exchange';
       final outputAmount = 100000;
-      final fees = await ffi.swapFeesStaticMethodApi(
-          boltzUrl: boltzUrl, outputAmount: outputAmount);
+      final fees =
+          await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl, outputAmount: outputAmount);
 
       expect((fees.btcReverse.boltzFees > 0.0), true);
       expect((fees.btcSubmarine.boltzFees > 0.0), true);

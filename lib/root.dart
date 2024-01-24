@@ -1,10 +1,20 @@
+import 'dart:io';
+
 import 'package:boltz_dart/bridge_definitions.dart';
+import 'package:boltz_dart/loader.dart';
 import 'bridge_definitions.dart' as bridge;
-import 'ffi.dart';
 
 // m/84'/0'/0'/<0;1>/index (segwit wallet; address index handled by bdk)
 // m/84'/0'/21'/<0;1>/index (sub swap wallet; address index handled by client)
 // m/84'/0'/42'/<0;1>/index (sub swap wallet; address index handled by client)
+
+Future<void> setCurrentDirectory() async {
+  try {
+    await Dylib.downloadUnitTestDylib(Directory.current.path);
+  } catch (e) {
+    print(e.toString());
+  }
+}
 
 class BtcLnSwap {
   final bridge.BtcLnSwap _btcLnSwap;
@@ -213,11 +223,9 @@ class LbtcLnSwap {
 }
 
 class AllSwapFees {
-  static Future<AllFees> estimateFee(
-      {required String boltzUrl, required int outputAmount}) async {
+  static Future<AllFees> estimateFee({required String boltzUrl, required int outputAmount}) async {
     try {
-      final res = await ffi.swapFeesStaticMethodApi(
-          boltzUrl: boltzUrl, outputAmount: outputAmount);
+      final res = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl, outputAmount: outputAmount);
       return res;
     } catch (e) {
       rethrow;

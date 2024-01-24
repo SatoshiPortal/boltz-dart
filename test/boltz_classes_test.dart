@@ -1,5 +1,4 @@
 import 'package:boltz_dart/bridge_definitions.dart' as bridge;
-import 'package:boltz_dart/ffi.dart';
 import 'package:boltz_dart/root.dart';
 import 'package:test/test.dart';
 import 'dart:io';
@@ -21,8 +20,7 @@ void main() {
   test('FEE ESTIMATION', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
-    final fees =
-        await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
     expect((fees.btcReverse.boltzFees > 0.0), true);
     expect((fees.btcSubmarine.boltzFees > 0.0), true);
@@ -99,8 +97,7 @@ void main() {
         countdown(360);
         final status = await btcLnSubmarineSwap.status();
         print("STATUS: ${status}");
-        final fees = await AllSwapFees.estimateFee(
-            boltzUrl: boltzUrl, outputAmount: outAmount);
+        final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
         final claimFeesEstimate = fees.btcReverse.claimFeesEstimate;
         print("CLAIM FEE ESTIMATE: $claimFeesEstimate");
         final txid = await btcLnSubmarineSwap.claim(absFee: claimFeesEstimate);
