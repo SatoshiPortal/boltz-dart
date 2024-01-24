@@ -19,7 +19,18 @@ Map<String, dynamic> _$$SwapStatusResponseImplToJson(
     };
 
 const _$SwapStatusEnumMap = {
+  SwapStatus.swapCreated: 'swap.created',
+  SwapStatus.swapExpired: 'swap.expired',
   SwapStatus.mempool: 'transaction.mempool',
   SwapStatus.claimed: 'transaction.claimed',
   SwapStatus.confirmed: 'transaction.confirmed',
+  SwapStatus.refunded: 'transaction.refunded',
+  SwapStatus.failed: 'transaction.failed',
+  SwapStatus.invoiceSet: 'invoice.set',
+  SwapStatus.invoicePending: 'invoice.pending',
+  SwapStatus.invoicePaid: 'invoice.paid',
+  SwapStatus.invoiceFailedToPay: 'invoice.failedToPay',
+  SwapStatus.invoiceSettled: 'invoice.settled',
+  SwapStatus.invoiceExpired: 'invoice.expired',
+  SwapStatus.minerfeePaid: 'minerfee.paid',
 };

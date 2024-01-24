@@ -35,13 +35,42 @@ void main() {
     expect(status, equals(SwapStatus.claimed));
   });
 
+  // TODO: Flows for
+  // btc to ln-btc - Success
+  //   invoiceSet
+  //   mempool
+  //   confirmed
+  //   invoicePending
+  //   invoicePaid
+  //   claimed
+
+  // btc to ln-btc - Failure (Not enough inbound liquidity)  / Refund
+  //   invoiceSet
+  //   mempool
+  //   confirmed
+  //   invoicePending (Attempt refund 1. before this, 2. after this)
+  //   waiting
+
+  // ln-btc to btc
+  // l-btc to ln-btc
+  //   invoiceSet
+  //   mempool
+  //   invoicePending
+  //   invoicePaid
+  //   claimed
+  // ln-btc to l-btc
+  //
+  // Try with sending mismatching amounts
   test('Get status stream', () async {
     final api = await BoltzApi.newBoltzApi();
 
-    Stream<SwapStatusResponse> eventStream = api.getSwapStatusStream('5Nke2TZdZLZ5');
+    // const swapId = 'M4RTmRP9ukCH'; // Send / Liquidity problem. Boltz cannot send lightning payment
+    // const swapId = 'Dvrz92';
+    const swapId = 'JCzhae';
+    Stream<SwapStatusResponse> eventStream = api.getSwapStatusStream(swapId);
 
     // Define a timeout for the test to avoid it running indefinitely
-    var timeout = Duration(seconds: 10);
+    var timeout = Duration(minutes: 120);
 
     // A list to store received events
     var receivedEvents = <SwapStatusResponse>[];
@@ -77,5 +106,5 @@ void main() {
     SwapStatusResponse firstEvent = receivedEvents.first;
 
     expect(firstEvent.status, equals(SwapStatus.claimed));
-  });
+  }, timeout: const Timeout(Duration(minutes: 120)));
 }
