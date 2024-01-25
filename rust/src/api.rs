@@ -29,7 +29,7 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let btc_pair = boltz_pairs.get_btc_pair();
+        let btc_pair = boltz_pairs.get_btc_pair()?;
         let btc_limits = Limits {
             minimal: btc_pair.limits.minimal as u64,
             maximal: btc_pair.limits.maximal as u64,
@@ -45,7 +45,7 @@ impl Api {
             claim_fees_estimate: btc_pair.fees.reverse_claim_estimate()
         };
 
-        let lbtc_pair = boltz_pairs.get_lbtc_pair();
+        let lbtc_pair = boltz_pairs.get_lbtc_pair()?;
         let lbtc_limits = Limits {
             minimal: lbtc_pair.limits.minimal as u64,
             maximal: lbtc_pair.limits.maximal as u64,
@@ -83,7 +83,7 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
             };
-            let btc_pair = boltz_pairs.get_btc_pair();
+            let btc_pair = boltz_pairs.get_btc_pair()?;
             let swap_request = CreateSwapRequest::new_btc_submarine(&btc_pair.hash, &invoice, &refund_keypair.public_key);
             let response = match boltz_client.create_swap(swap_request){
                 Ok(result)=>result,
@@ -93,7 +93,7 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-            let swap_script = match response.into_btc_sub_swap_script(&preimage){
+            let swap_script = match response.into_btc_sub_swap_script(&preimage, &refund_keypair.clone().into(),network.into()){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
@@ -105,9 +105,9 @@ impl Api {
                 network,
                 refund_keypair,
                 preimage.into(),
-                response.redeem_script.unwrap(),
+                response.get_redeem_script()?,
                 invoice,
-                response.expected_amount.unwrap(),
+                response.get_funding_amount()?,
                 out_address,
                 electrum_url,
                 boltz_url,
@@ -136,7 +136,7 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
 
-            let pair_hash = boltz_pairs.get_btc_pair().hash;
+            let pair_hash = boltz_pairs.get_btc_pair()?.hash;
 
             let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(&pair_hash, &preimage.sha256.to_string(), &claim_keypair.public_key, out_amount);
             let response = match boltz_client.create_swap(swap_request){
@@ -230,7 +230,7 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
             let ckp: Keypair = swap.keys.into();
-            let signed = match tx.drain(
+            let signed = match tx.sign_claim(
                 &ckp, 
                 &swap.preimage.try_into().unwrap(), 
                 abs_fee,
@@ -269,7 +269,7 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
 
-            let pair_hash = boltz_pairs.get_lbtc_pair().hash;
+            let pair_hash = boltz_pairs.get_lbtc_pair()?.hash;
 
             let swap_request = CreateSwapRequest::new_btc_submarine(&pair_hash, &invoice, &refund_keypair.public_key);
             let response = match boltz_client.create_swap(swap_request){
@@ -281,7 +281,7 @@ impl Api {
                 Err(e)=>return Err(e.into())
             };
 
-            let script = match response.into_lbtc_sub_swap_script(&preimage){
+            let script = match response.into_lbtc_sub_swap_script(&preimage, &refund_keypair.clone().into(), network.into()){
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
@@ -306,7 +306,7 @@ impl Api {
                 preimage.into(),
                 response.get_redeem_script().unwrap(),
                 invoice,
-                response.get_expected_amount().unwrap(),
+                response.get_funding_amount().unwrap(),
                 out_address,
                 "".to_string(),
                 electrum_url,
@@ -336,7 +336,7 @@ impl Api {
                 Err(e)=> return Err(e.into())
             };
 
-            let pair_hash = boltz_pairs.get_lbtc_pair().hash;
+            let pair_hash = boltz_pairs.get_lbtc_pair()?.hash;
 
             let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(&pair_hash, &preimage.sha256.to_string(), &claim_keypair.public_key, out_amount);
             let response = match boltz_client.create_swap(swap_request){
@@ -384,7 +384,7 @@ impl Api {
         else{
             ()
         }
-        let script = match LBtcSwapScript::reverse_from_str(&swap.redeem_script, swap.blinding_key){
+        let script = match LBtcSwapScript::reverse_from_str(&swap.redeem_script, &swap.blinding_key){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
@@ -398,8 +398,8 @@ impl Api {
             Err(e)=> return Err(e.into())
         }; // CAN WE MOCK THIS?
         let size = match tx.size(
-            swap.keys.into(), 
-            swap.preimage.try_into().unwrap(), 
+            &swap.keys.into(), 
+            &swap.preimage.try_into().unwrap(), 
         ){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
@@ -414,7 +414,7 @@ impl Api {
         else{
             ()
         }
-        let script = match LBtcSwapScript::reverse_from_str(&swap.redeem_script, swap.blinding_key){
+        let script = match LBtcSwapScript::reverse_from_str(&swap.redeem_script, &swap.blinding_key){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
@@ -429,9 +429,9 @@ impl Api {
             Ok(_)=>(),
             Err(e)=> return Err(e.into())
         };
-        let signed = match tx.drain(
-            swap.keys.into(), 
-            swap.preimage.try_into().unwrap(), 
+        let signed = match tx.sign_claim(
+            &swap.keys.into(), 
+            &swap.preimage.try_into().unwrap(), 
             abs_fee
         ){
             Ok(result)=>result,

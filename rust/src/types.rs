@@ -33,7 +33,7 @@ impl KeyPair {
         match swap_type {
             SwapType::Submarine => {
                 let child_keys =
-                    SwapKey::from_submarine_account(&mnemonic, "", &network.into(), index)?;
+                    SwapKey::from_submarine_account(&mnemonic, "", network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
