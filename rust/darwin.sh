@@ -2,7 +2,7 @@
 
 # Setup
 ROOT="target"
-VERSION="0.1.0"
+VERSION="0.1.1"
 NAME="libboltz"
 BUILD_DIR=$ROOT/$NAME.$VERSION
 # MACOS_DIR="../macos" # final binaries stored here
