@@ -47,17 +47,12 @@ class _MyAppState extends State<MyApp> {
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
       );
-
       const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
-
       final swap = btcLnSubmarineSwap.btcLnSwap;
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
       final paymentDetails = btcLnSubmarineSwap.paymentDetails();
       print("PAYMENT DETAILS: ${paymentDetails}");
-
       // expect(swap.keys.secretKey, expectedSecretKey);
-
-      print("PAYMENT DETAILS: ${swap.outAddress}:${swap.outAmount} sats");
     } catch (e) {
       print('err');
       // print((e as bridge.BoltzError).kind);
