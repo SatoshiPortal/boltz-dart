@@ -3,7 +3,7 @@
 
 // import 'bridge_generated.dart';
 
-// const String _libName = 'boltz_dart';
+// const String _libName = 'libboltzclient';
 
 // /// The dynamic library in which the symbols for [BoltzDartBindings] can be found.
 // final DynamicLibrary _dylib = () {

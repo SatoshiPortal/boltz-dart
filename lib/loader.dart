@@ -9,7 +9,7 @@ import 'bridge_generated.dart';
 
 class Dylib {
   static Map<String, dynamic>? _config;
-  static String get libName => "unittest.boltz.${_config!['TAG_VERSION']}";
+  static String get libName => "unittest.libboltz.${_config!['TAG_VERSION']}";
   static String get remoteUrl =>
       "${_config!['REPOSITORY_URL']}${_config!['TAG_VERSION']}/$libName.zip";
   static Future<void> _loadJsonAsset() async {
@@ -60,7 +60,7 @@ class Dylib {
     final assetsDir = '${currentDirectory.path}/build/unit_test_assets';
 
     if (Platform.isMacOS) {
-      return "$assetsDir/$libName/macos/librust_boltz_ffi.dylib";
+      return "$assetsDir/$libName/macos/libboltzclient.dylib";
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");
     }
@@ -77,7 +77,7 @@ class Dylib {
     if (Platform.isIOS || Platform.isMacOS) {
       return DynamicLibrary.executable();
     } else if (Platform.isAndroid) {
-      return DynamicLibrary.open("librust_boltz_ffi.so");
+      return DynamicLibrary.open("libboltzclient.so");
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");
     }

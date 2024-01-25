@@ -5,8 +5,7 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "boltz_dart"
-# path = "src/api.rs"
+name = "boltzclient"
 doctest = false
 crate-type = ["staticlib", "cdylib", "lib"] 
 

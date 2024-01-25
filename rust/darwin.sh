@@ -7,8 +7,8 @@ NAME="libboltz"
 BUILD_DIR=$ROOT/$NAME.$VERSION
 # MACOS_DIR="../macos" # final binaries stored here
 # IOS_DIR="../ios" # final binaries stored here
-FRAMEWORK="libboltz_dart.xcframework"
-LIBNAME=libboltz_dart.a
+FRAMEWORK="libboltz.xcframework"
+LIBNAME=libboltzclient.a
 
 IOS_LIPO_DIR=$BUILD_DIR/ios-sim-lipo
 MAC_LIPO_DIR=$BUILD_DIR/mac-lipo
