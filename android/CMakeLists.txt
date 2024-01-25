@@ -17,7 +17,7 @@ endforeach()
 
 
 set(LIB_NAME "libboltz.${TAG_VERSION}")
-set(URL "${REPOSITORY_URL}/release/tag${TAG_VERSION}/${LIB_NAME}.zip")
+set(URL "${REPOSITORY_URL}${TAG_VERSION}/${LIB_NAME}.zip")
 set(OUTPUT_PATH "${CMAKE_PARENT_DIR}/${LIB_NAME}.zip")
 if(NOT EXISTS "${CMAKE_PARENT_DIR}/${LIB_NAME}")
         file(DOWNLOAD ${URL} ${OUTPUT_PATH}
