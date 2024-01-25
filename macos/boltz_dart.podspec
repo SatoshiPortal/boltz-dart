@@ -38,15 +38,14 @@ fi
 #
 Pod::Spec.new do |s|
   s.name             = 'boltz_dart'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter FFI plugin project.'
+  s.version          = '0.1.1'
+  s.summary          = 'A boltz swap client.'
   s.description      = <<-DESC
-A new Flutter FFI plugin project.
+  A boltz swap client
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'http://github.com/SatoshiPortal'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
-
+  s.author           = { 'SatoshiPortal' => 'ishi@satoshiportal.com' }
   # This will ensure the source files in Classes/ are included in the native
   # builds of apps using this FFI plugin. Podspec does not support relative
   # paths, so Classes contains a forwarder C file that relatively imports

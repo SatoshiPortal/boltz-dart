@@ -1,7 +1,7 @@
 #!/bin/bash
 # Setup jniLibs directory
 ROOT="target"
-VERSION="0.1.0"
+VERSION="0.1.1"
 NAME="libboltz"
 JNI_DIR=$ROOT/$NAME.$VERSION/jniLibs # final binaries stored here
 
