@@ -3,7 +3,7 @@
 # Setup
 ROOT="target"
 VERSION="0.1.0"
-NAME="boltz-dart"
+NAME="libboltz"
 BUILD_DIR=$ROOT/$NAME.$VERSION
 # MACOS_DIR="../macos" # final binaries stored here
 # IOS_DIR="../ios" # final binaries stored here

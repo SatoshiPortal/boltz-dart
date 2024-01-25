@@ -12,8 +12,8 @@ config_file_path = File.join(assets_dir, 'release.config.txt')
 config = read_key_value_pairs.call(config_file_path)
 
 tag_version = "#{config['TAG_VERSION']}"
-framework = 'libboltz_dart.xcframework'
-lib_name = "libboltz_dart.#{tag_version}"
+framework = 'libboltz.xcframework'
+lib_name = "libboltz.#{tag_version}"
 url = "#{config['REPOSITORY_URL']}#{tag_version}/#{lib_name}.zip"
 frameworks_dir = "ios"
 
