@@ -1,17 +1,15 @@
 name: boltz_dart
-description: A Flutter library for the Boltz dart client
-version: 1.0.0+1
+description: A dart/flutter library for boltz swaps
+version: 0.1.0
 homepage: https://github.com/SatoshiPortal/boltz-dart
 
 environment:
   sdk: ">=3.1.5 <4.0.0"
   flutter: ">=3.0.0"
 
-
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
   ffi: ^2.0.1
   flutter_rust_bridge: ^1.82.2
@@ -26,7 +24,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^3.0.0
   ffigen: ^9.0.0
   test: ^1.24.3
@@ -50,4 +47,4 @@ flutter:
 # flutter_rust_bridge:
 #   rust_input: rust/src/api.rs
 #   dart_output: lib/bridge_generated.dart
-  # dart_decl_output: lib/bridge_generated.dart
+# dart_decl_output: lib/bridge_generated.dart
