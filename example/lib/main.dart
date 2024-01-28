@@ -40,13 +40,13 @@ class _MyAppState extends State<MyApp> {
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
       );
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      // const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
       final swap = btcLnSubmarineSwap.btcLnSwap;
-      print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+      debugPrint("SWAP CREATED SUCCESSFULLY: ${swap.id}");
       final paymentDetails = btcLnSubmarineSwap.paymentDetails();
-      print("PAYMENT DETAILS: ${paymentDetails}");
+      debugPrint("PAYMENT DETAILS: $paymentDetails");
     } catch (e) {
-      print('err');
+      debugPrint('err::$e');
     }
   }
 
@@ -57,16 +57,15 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Native Packages'),
+          title: const Text('Boltz Dart Example'),
         ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: Column(
+            child: const Column(
               children: [
-                const Text(
-                  'This calls a native function through FFI that is shipped as source in the package. '
-                  'The native code is built as part of the Flutter Runner build.',
+                Text(
+                  'Check console for output',
                   style: textStyle,
                   textAlign: TextAlign.center,
                 ),
