@@ -1,0 +1,22 @@
+PODS:
+  - boltz_dart (0.1.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - boltz_dart (from `.symlinks/plugins/boltz_dart/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  boltz_dart:
+    :path: ".symlinks/plugins/boltz_dart/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  boltz_dart: 9697d6cc2129d14508291015b889b9de9a12528e
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+
+PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+
+COCOAPODS: 1.12.1
