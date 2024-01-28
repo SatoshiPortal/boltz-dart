@@ -5,7 +5,7 @@ import 'package:archive/archive.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:http/http.dart' as http;
 
-import 'bridge_generated.dart';
+import '../generated/bindings.dart';
 
 class Dylib {
   static Map<String, dynamic>? _config;

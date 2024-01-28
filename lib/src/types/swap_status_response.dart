@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'package:boltz_dart/types/swap.dart';
+import 'package:boltz_dart/src/types/swap.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'swap_status_response.freezed.dart';
 part 'swap_status_response.g.dart';
 
-SwapStatusResponse swapStatusResponseFromJson(String str) => SwapStatusResponse.fromJson(json.decode(str));
+SwapStatusResponse swapStatusResponseFromJson(String str) =>
+    SwapStatusResponse.fromJson(json.decode(str));
 
 String swapStatusResponseToJson(SwapStatusResponse data) => json.encode(data.toJson());
 
@@ -15,5 +16,6 @@ class SwapStatusResponse with _$SwapStatusResponse {
     required SwapStatus status,
   }) = _SwapStatusResponse;
 
-  factory SwapStatusResponse.fromJson(Map<String, dynamic> json) => _$SwapStatusResponseFromJson(json);
+  factory SwapStatusResponse.fromJson(Map<String, dynamic> json) =>
+      _$SwapStatusResponseFromJson(json);
 }

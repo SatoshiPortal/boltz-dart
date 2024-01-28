@@ -7,9 +7,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:boltz_dart/types/supported_pair.dart';
-import 'package:boltz_dart/types/swap.dart';
-import 'package:boltz_dart/types/swap_status_response.dart';
+import 'package:boltz_dart/src/types/supported_pair.dart';
+import 'package:boltz_dart/src/types/swap.dart';
+import 'package:boltz_dart/src/types/swap_status_response.dart';
 import 'package:dio/dio.dart';
 
 final String baseUrl = 'https://api.testnet.boltz.exchange';

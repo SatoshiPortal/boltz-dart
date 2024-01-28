@@ -1,5 +1,5 @@
-import 'package:boltz_dart/bridge_definitions.dart';
-import 'package:boltz_dart/loader.dart';
+import 'package:boltz_dart/src/generated/bridge_definitions.dart';
+import 'package:boltz_dart/src/utils/loader.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,5 +1,6 @@
-import 'package:boltz_dart/bridge_definitions.dart' as bridge;
-import 'package:boltz_dart/root.dart';
+// import 'package:boltz_dart/bridge_definitions.dart' as bridge;
+// import 'package:boltz_dart/root.dart';
+import 'package:boltz_dart/boltz_dart.dart';
 import 'package:test/test.dart';
 import 'dart:io';
 
@@ -31,7 +32,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Chain.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -59,8 +60,8 @@ void main() {
 
         print("PAYMENT DETAILS: ${swap.outAddress}:${swap.outAmount} sats");
       } catch (e) {
-        print((e as bridge.BoltzError).kind);
-        print((e as bridge.BoltzError).message);
+        print((e as BoltzError).kind);
+        print((e as BoltzError).message);
       }
     });
 
@@ -68,7 +69,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Chain.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -104,8 +105,8 @@ void main() {
         print("TXID: $txid");
       } catch (e) {
         print(e);
-        print((e as bridge.BoltzError).kind);
-        print((e as bridge.BoltzError).message);
+        print((e as BoltzError).kind);
+        print((e as BoltzError).message);
       }
     });
   });
@@ -115,7 +116,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Chain.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -141,8 +142,8 @@ void main() {
 
         print("PAYMENT DETAILS: ${swap.outAddress}:${swap.outAmount} sats");
       } catch (e) {
-        print((e as bridge.BoltzError).kind);
-        print((e as bridge.BoltzError).message);
+        print((e as BoltzError).kind);
+        print((e as BoltzError).message);
       }
     });
 
@@ -150,7 +151,7 @@ void main() {
       const mnemonic =
           'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
       const index = 0;
-      const network = bridge.Chain.Testnet;
+      const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
@@ -176,8 +177,8 @@ void main() {
         print("PAYMENT DETAILS: ${swap.invoice}");
       } catch (e) {
         print(e);
-        print((e as bridge.BoltzError).kind);
-        print((e as bridge.BoltzError).message);
+        print((e as BoltzError).kind);
+        print((e as BoltzError).message);
       }
     });
   });

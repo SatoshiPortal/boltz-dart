@@ -1,8 +1,7 @@
 import 'dart:io';
-
-import 'package:boltz_dart/bridge_definitions.dart';
-import 'package:boltz_dart/loader.dart';
-import 'bridge_definitions.dart' as bridge;
+import 'package:boltz_dart/src/utils/loader.dart';
+import 'generated/bridge_definitions.dart' as bridge;
+import 'generated/bridge_definitions.dart';
 
 // m/84'/0'/0'/<0;1>/index (segwit wallet; address index handled by bdk)
 // m/84'/0'/21'/<0;1>/index (sub swap wallet; address index handled by client)

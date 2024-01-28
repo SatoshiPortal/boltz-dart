@@ -1,7 +1,5 @@
-import 'package:boltz_dart/bridge_definitions.dart' as bd;
-import 'package:boltz_dart/root.dart';
+import 'package:boltz_dart/boltz_dart.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 // import 'package:boltz_dart/boltz_dart.dart' as boltz_dart;
 
@@ -32,7 +30,7 @@ class _MyAppState extends State<MyApp> {
     const mnemonic =
         'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
     const index = 0;
-    const network = bd.Chain.Testnet;
+    const network = Chain.Testnet;
     const electrumUrl = 'electrum.bullbitcoin.com:60002';
     const boltzUrl = 'https://api.testnet.boltz.exchange';
 
