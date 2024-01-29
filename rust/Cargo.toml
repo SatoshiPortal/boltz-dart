@@ -9,6 +9,17 @@ name = "boltzclient"
 doctest = false
 crate-type = ["staticlib", "cdylib", "lib"] 
 
+[dependencies]
+boltz-client = { version = "0.1.0"}
+flutter_rust_bridge = "1.82.2"
+anyhow = "1.0.68"
+
+[build-dependencies]
+flutter_rust_bridge_codegen = { version = "= 1.82.6"  }
+
+[build]
+profiler = true
+
 [profile.release]
 strip = true
 opt-level = "z"
@@ -16,11 +27,5 @@ lto = true
 codegen-units = 1
 panic = "abort"
 
-[build]
-profiler = true
 
-[dependencies]
 
-boltz-client = { version = "0.1.0"}
-flutter_rust_bridge = "1.82.2"
-anyhow = "1.0.68"
