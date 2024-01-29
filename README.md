@@ -9,6 +9,8 @@ The `rust` folder containers the core code which uses the `boltz-rust` crate int
 ```bash
 cargo install flutter_rust_bridge_codegen
 cargo install cargo-expand
+cargo install cargo-ndk
+@if [ $$(uname) == "Darwin" ] ; then cargo install cargo-lipo ; fi
 ```
 
 For ios builds, make sure you have xcode installed.

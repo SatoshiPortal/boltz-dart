@@ -7,7 +7,7 @@ JNI_DIR=$ROOT/$NAME.$VERSION/jniLibs # final binaries stored here
 
 if [ -d "$JNI_DIR" ]; then rm -r "$JNI_DIR"
 fi
-mkdir -p $BUILD_DIR/$JNI_DIR
+mkdir -p ./$JNI_DIR
 
 # Set up cargo-ndk
 cargo install cargo-ndk
