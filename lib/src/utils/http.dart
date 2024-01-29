@@ -68,14 +68,16 @@ class BoltzApi {
     }
   }
 
-  Stream<SwapStatusResponse> getSwapStatusStream(String swapId) async* {
+  Stream<SwapStatusResponse> getSwapStatusStream(String swapId,
+      {Duration timeoutDuration = const Duration(minutes: 30)}) async* {
     try {
-      Response<dynamic> rs = await _dio.get('/streamswapstatus?id=$swapId',
-          options: Options(headers: {
-            "Accept": "text/event-stream",
-            "Cache-Control": "no-cache",
-          }, responseType: ResponseType.stream));
-      // .timeout(const Duration(seconds: 10));
+      Response<dynamic> rs = await _dio
+          .get('/streamswapstatus?id=$swapId',
+              options: Options(headers: {
+                "Accept": "text/event-stream",
+                "Cache-Control": "no-cache",
+              }, responseType: ResponseType.stream))
+          .timeout(timeoutDuration);
 
       StreamTransformer<Uint8List, List<int>> unit8Transformer = StreamTransformer.fromHandlers(
         handleData: (data, sink) {
@@ -83,7 +85,10 @@ class BoltzApi {
         },
       );
 
-      await for (var line in rs.data!.stream
+      await for (var line in (rs.data!.stream as Stream)
+          .timeout(timeoutDuration, onTimeout: (EventSink<dynamic> sink) {
+            sink.close();
+          })
           .transform(unit8Transformer)
           .transform(const Utf8Decoder())
           .transform(const LineSplitter())) {
@@ -93,6 +98,7 @@ class BoltzApi {
           var jsonString = line.substring(6);
           var jsonMap = json.decode(jsonString) as Map<String, dynamic>;
           SwapStatusResponse resp = SwapStatusResponse.fromJson(jsonMap);
+          print(DateTime.now());
           print(resp);
           yield resp;
         }

@@ -67,8 +67,6 @@ void main() {
   test('Get status stream', () async {
     final api = await BoltzApi.newBoltzApi();
 
-    // const swapId = 'M4RTmRP9ukCH'; // Send / Liquidity problem. Boltz cannot send lightning payment
-    // const swapId = 'Dvrz92';
     // const swapId = 'kuaECCcK4ZJ9'; // #2
     // const swapId = 'TSMILwPf2HCu'; // #3
     // const swapId = 'c9A3aEaQz1Iu'; // #4
@@ -76,38 +74,27 @@ void main() {
     const swapId = 'QbkqhN9ed2zQ'; // #6
     Stream<SwapStatusResponse> eventStream = api.getSwapStatusStream(swapId);
 
-    // Define a timeout for the test to avoid it running indefinitely
-    var timeout = Duration(minutes: 120);
-
-    // A list to store received events
     var receivedEvents = <SwapStatusResponse>[];
 
-    // Completer to signal the end of the test
     var completer = Completer();
 
-    // Listen to the stream
-    var subscription = eventStream.listen(
-      (event) {
-        receivedEvents.add(event);
+    var subscription = eventStream.listen((event) {
+      receivedEvents.add(event);
 
-        // Optionally, you can set a condition to complete the test
-        // For example, if a specific event is received
-        //if (event == 'specific_event') {
-        //  completer.complete();
-        //}
-      },
-      onError: (e) {
-        completer.completeError(e);
-      },
-    );
+      // Optionally, you can set a condition to complete the test
+      // For example, if a specific event is received
+      //if (event == 'specific_event') {
+      //  completer.complete();
+      //}
+    }, onError: (e) {
+      completer.completeError(e);
+    }, onDone: () {
+      completer.complete();
+    });
 
-    await Future.any([
-      completer.future,
-      Future.delayed(timeout).then((_) => completer.complete()),
-    ]);
+    await completer.future;
 
-    // Cancel the subscription after completion
-    // await subscription.cancel();
+    await subscription.cancel();
 
     print('receivedEvents: $receivedEvents');
     SwapStatusResponse firstEvent = receivedEvents.first;
