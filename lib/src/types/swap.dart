@@ -7,20 +7,26 @@ enum SwapStatus {
   @JsonValue('swap.expired')
   swapExpired,
 
+  @JsonValue('swap.refunded')
+  swapRefunded,
+
   @JsonValue('transaction.mempool')
-  mempool,
+  txnMempool,
 
   @JsonValue('transaction.claimed')
-  claimed,
+  txnClaimed,
 
   @JsonValue('transaction.confirmed')
-  confirmed,
+  txnConfirmed,
 
   @JsonValue('transaction.refunded')
-  refunded,
+  txnRefunded,
 
   @JsonValue('transaction.failed')
-  failed,
+  txnFailed,
+
+  @JsonValue('transaction.lockupFailed')
+  txnLockupFailed,
 
   @JsonValue('invoice.set')
   invoiceSet,
@@ -51,17 +57,21 @@ extension SwapStatusX on SwapStatus {
         return 'swap.created';
       case SwapStatus.swapExpired:
         return 'swap.expired';
+      case SwapStatus.swapRefunded:
+        return 'swap.refunded';
 
-      case SwapStatus.mempool:
+      case SwapStatus.txnMempool:
         return 'transaction.mempool';
-      case SwapStatus.claimed:
+      case SwapStatus.txnClaimed:
         return 'transaction.claimed';
-      case SwapStatus.confirmed:
+      case SwapStatus.txnConfirmed:
         return 'transaction.confirmed';
-      case SwapStatus.refunded:
+      case SwapStatus.txnRefunded:
         return 'transaction.refunded';
-      case SwapStatus.failed:
+      case SwapStatus.txnFailed:
         return 'transaction.failed';
+      case SwapStatus.txnLockupFailed:
+        return 'transaction.lockupFailed';
 
       case SwapStatus.invoiceSet:
         return 'invoice.set';

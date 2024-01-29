@@ -24,8 +24,6 @@ class BoltzApi {
       final dio = Dio(
         BaseOptions(
           baseUrl: baseUrl,
-          // connectTimeout: 5000,
-          // receiveTimeout: 3000,
         ),
       );
       return BoltzApi._(dio);
@@ -70,7 +68,6 @@ class BoltzApi {
     }
   }
 
-  // Future<String> getSwapStatusStream(String swapId) async {
   Stream<SwapStatusResponse> getSwapStatusStream(String swapId) async* {
     try {
       Response<dynamic> rs = await _dio.get('/streamswapstatus?id=$swapId',
@@ -96,14 +93,9 @@ class BoltzApi {
           var jsonString = line.substring(6);
           var jsonMap = json.decode(jsonString) as Map<String, dynamic>;
           SwapStatusResponse resp = SwapStatusResponse.fromJson(jsonMap);
-          //print(jsonMap);
-          //print(SwapStatusResponse.fromJson(jsonMap));
+          print(resp);
           yield resp;
-          // yield const SwapStatusResponse(status: SwapStatus.confirmed);
-          // yield jsonMap; // Emit the event as a Map
         }
-
-        // yield const SwapStatusResponse(status: SwapStatus.confirmed);
       }
     } catch (e) {
       rethrow;

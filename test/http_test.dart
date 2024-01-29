@@ -35,7 +35,7 @@ void main() {
     final api = await BoltzApi.newBoltzApi();
     final status = await api.getSwapStatus('5Nke2TZdZLZ5');
 
-    expect(status, equals(SwapStatus.claimed));
+    expect(status, equals(SwapStatus.txnClaimed));
   });
 
   // TODO: Flows for
@@ -69,7 +69,11 @@ void main() {
 
     // const swapId = 'M4RTmRP9ukCH'; // Send / Liquidity problem. Boltz cannot send lightning payment
     // const swapId = 'Dvrz92';
-    const swapId = 'JCzhae';
+    // const swapId = 'kuaECCcK4ZJ9'; // #2
+    // const swapId = 'TSMILwPf2HCu'; // #3
+    // const swapId = 'c9A3aEaQz1Iu'; // #4
+    // const swapId = 'dhbn5n2ypzBC'; // #5
+    const swapId = 'QbkqhN9ed2zQ'; // #6
     Stream<SwapStatusResponse> eventStream = api.getSwapStatusStream(swapId);
 
     // Define a timeout for the test to avoid it running indefinitely
@@ -108,6 +112,6 @@ void main() {
     print('receivedEvents: $receivedEvents');
     SwapStatusResponse firstEvent = receivedEvents.first;
 
-    expect(firstEvent.status, equals(SwapStatus.claimed));
+    expect(firstEvent.status, equals(SwapStatus.txnClaimed));
   }, timeout: const Timeout(Duration(minutes: 120)));
 }
