@@ -61,9 +61,10 @@ pub extern "C" fn wire_btc_ln_tx_size__static_method__Api(port_: i64, swap: *mut
 pub extern "C" fn wire_btc_ln_reverse_claim__static_method__Api(
     port_: i64,
     swap: *mut wire_BtcLnSwap,
+    out_address: *mut wire_uint_8_list,
     abs_fee: u64,
 ) {
-    wire_btc_ln_reverse_claim__static_method__Api_impl(port_, swap, abs_fee)
+    wire_btc_ln_reverse_claim__static_method__Api_impl(port_, swap, out_address, abs_fee)
 }
 
 #[no_mangle]
@@ -117,9 +118,10 @@ pub extern "C" fn wire_lbtc_ln_tx_size__static_method__Api(port_: i64, swap: *mu
 pub extern "C" fn wire_lbtc_ln_reverse_claim__static_method__Api(
     port_: i64,
     swap: *mut wire_LbtcLnSwap,
+    out_address: *mut wire_uint_8_list,
     abs_fee: u64,
 ) {
-    wire_lbtc_ln_reverse_claim__static_method__Api_impl(port_, swap, abs_fee)
+    wire_lbtc_ln_reverse_claim__static_method__Api_impl(port_, swap, out_address, abs_fee)
 }
 
 #[no_mangle]
@@ -184,8 +186,8 @@ impl Wire2Api<BtcLnSwap> for wire_BtcLnSwap {
             preimage: self.preimage.wire2api(),
             redeem_script: self.redeem_script.wire2api(),
             invoice: self.invoice.wire2api(),
+            script_address: self.script_address.wire2api(),
             out_amount: self.out_amount.wire2api(),
-            out_address: self.out_address.wire2api(),
             electrum_url: self.electrum_url.wire2api(),
             boltz_url: self.boltz_url.wire2api(),
         }
@@ -211,7 +213,7 @@ impl Wire2Api<LbtcLnSwap> for wire_LbtcLnSwap {
             redeem_script: self.redeem_script.wire2api(),
             invoice: self.invoice.wire2api(),
             out_amount: self.out_amount.wire2api(),
-            out_address: self.out_address.wire2api(),
+            script_address: self.script_address.wire2api(),
             blinding_key: self.blinding_key.wire2api(),
             electrum_url: self.electrum_url.wire2api(),
             boltz_url: self.boltz_url.wire2api(),
@@ -248,8 +250,8 @@ pub struct wire_BtcLnSwap {
     preimage: wire_PreImage,
     redeem_script: *mut wire_uint_8_list,
     invoice: *mut wire_uint_8_list,
+    script_address: *mut wire_uint_8_list,
     out_amount: u64,
-    out_address: *mut wire_uint_8_list,
     electrum_url: *mut wire_uint_8_list,
     boltz_url: *mut wire_uint_8_list,
 }
@@ -272,7 +274,7 @@ pub struct wire_LbtcLnSwap {
     redeem_script: *mut wire_uint_8_list,
     invoice: *mut wire_uint_8_list,
     out_amount: u64,
-    out_address: *mut wire_uint_8_list,
+    script_address: *mut wire_uint_8_list,
     blinding_key: *mut wire_uint_8_list,
     electrum_url: *mut wire_uint_8_list,
     boltz_url: *mut wire_uint_8_list,
@@ -315,8 +317,8 @@ impl NewWithNullPtr for wire_BtcLnSwap {
             preimage: Default::default(),
             redeem_script: core::ptr::null_mut(),
             invoice: core::ptr::null_mut(),
+            script_address: core::ptr::null_mut(),
             out_amount: Default::default(),
-            out_address: core::ptr::null_mut(),
             electrum_url: core::ptr::null_mut(),
             boltz_url: core::ptr::null_mut(),
         }
@@ -355,7 +357,7 @@ impl NewWithNullPtr for wire_LbtcLnSwap {
             redeem_script: core::ptr::null_mut(),
             invoice: core::ptr::null_mut(),
             out_amount: Default::default(),
-            out_address: core::ptr::null_mut(),
+            script_address: core::ptr::null_mut(),
             blinding_key: core::ptr::null_mut(),
             electrum_url: core::ptr::null_mut(),
             boltz_url: core::ptr::null_mut(),

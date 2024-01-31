@@ -10,7 +10,7 @@ doctest = false
 crate-type = ["staticlib", "cdylib", "lib"] 
 
 [dependencies]
-boltz-client = { version = "0.1.0"}
+boltz-client = { version = "0.1.1"}
 flutter_rust_bridge = "1.82.2"
 anyhow = "1.0.68"
 

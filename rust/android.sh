@@ -24,6 +24,3 @@ cargo ndk -o $JNI_DIR \
         -t x86 \
         -t x86_64 \
         build --release
-
-
-     

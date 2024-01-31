@@ -7,8 +7,8 @@ void main() {
     test('FEE ESTIMATION', () async {
       const boltzUrl = 'https://api.testnet.boltz.exchange';
       final outputAmount = 100000;
-      final fees =
-          await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl, outputAmount: outputAmount);
+      final fees = await ffi.swapFeesStaticMethodApi(
+          boltzUrl: boltzUrl, outputAmount: outputAmount);
 
       expect((fees.btcReverse.boltzFees > 0.0), true);
       expect((fees.btcSubmarine.boltzFees > 0.0), true);
@@ -52,7 +52,7 @@ void main() {
         // this should be a method on BtcLnSwap
         // btcLnSubmarineSwap.paymentDetails
         print(
-            "PAYMENT DETAILS: ${btcLnSubmarineSwap.outAddress}:${btcLnSubmarineSwap.outAmount} sats");
+            "PAYMENT DETAILS: ${btcLnSubmarineSwap.scriptAddress}:${btcLnSubmarineSwap.outAmount} sats");
       } catch (e) {
         print((e as BoltzError).kind);
         print((e as BoltzError).message);
@@ -146,7 +146,7 @@ void main() {
         // this should be a method on BtcLnSwap
         // btcLnSubmarineSwap.paymentDetails
         print(
-            "PAYMENT DETAILS: ${btcLnSubmarineSwap.outAddress}:${btcLnSubmarineSwap.outAmount} sats");
+            "PAYMENT DETAILS: ${btcLnSubmarineSwap.scriptAddress}:${btcLnSubmarineSwap.outAmount} sats");
       } catch (e) {
         print(e);
         print((e as BoltzError).kind);

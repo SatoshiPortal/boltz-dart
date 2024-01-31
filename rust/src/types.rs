@@ -158,8 +158,8 @@ pub struct BtcLnSwap {
     pub preimage: PreImage,
     pub redeem_script: String,
     pub invoice: String,
+    pub script_address: String,
     pub out_amount: u64,
-    pub out_address: String,
     pub electrum_url: String,
     pub boltz_url: String,
 }
@@ -173,8 +173,8 @@ impl BtcLnSwap {
         preimage: PreImage,
         redeem_script: String,
         invoice: String,
+        script_address: String,
         out_amount: u64,
-        out_address: String,
         electrum_url: String,
         boltz_url: String,
     ) -> BtcLnSwap {
@@ -188,8 +188,8 @@ impl BtcLnSwap {
             invoice,
             electrum_url,
             boltz_url,
+            script_address,
             out_amount,
-            out_address,
         }
     }
 }
@@ -203,7 +203,7 @@ pub struct LbtcLnSwap {
     pub redeem_script: String,
     pub invoice: String,
     pub out_amount: u64,
-    pub out_address: String,
+    pub script_address: String,
     pub blinding_key: String,
     pub electrum_url: String,
     pub boltz_url: String,
@@ -236,7 +236,7 @@ impl LbtcLnSwap {
             boltz_url,
             out_amount,
             blinding_key,
-            out_address,
+            script_address: out_address,
         }
     }
 }

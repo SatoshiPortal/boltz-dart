@@ -21,7 +21,8 @@ void main() {
   test('FEE ESTIMATION', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
-    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+    final fees =
+        await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
     expect((fees.btcReverse.boltzFees > 0.0), true);
     expect((fees.btcSubmarine.boltzFees > 0.0), true);
@@ -58,7 +59,7 @@ void main() {
 
         expect(swap.keys.secretKey, expectedSecretKey);
 
-        print("PAYMENT DETAILS: ${swap.outAddress}:${swap.outAmount} sats");
+        print("PAYMENT DETAILS: ${swap.scriptAddress}:${swap.outAmount} sats");
       } catch (e) {
         print((e as BoltzError).kind);
         print((e as BoltzError).message);
@@ -72,7 +73,7 @@ void main() {
       const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
-
+      const outAddress = "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq.";
       const outAmount = 70000;
       try {
         // this should be a constructor newReverse on BtcLnSwap
@@ -98,10 +99,12 @@ void main() {
         countdown(360);
         final status = await btcLnSubmarineSwap.status();
         print("STATUS: ${status}");
-        final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
+        final fees = await AllSwapFees.estimateFee(
+            boltzUrl: boltzUrl, outputAmount: outAmount);
         final claimFeesEstimate = fees.btcReverse.claimFeesEstimate;
         print("CLAIM FEE ESTIMATE: $claimFeesEstimate");
-        final txid = await btcLnSubmarineSwap.claim(absFee: claimFeesEstimate);
+        final txid = await btcLnSubmarineSwap.claim(
+            outAddress: outAddress, absFee: claimFeesEstimate);
         print("TXID: $txid");
       } catch (e) {
         print(e);
@@ -140,7 +143,7 @@ void main() {
 
         expect(swap.keys.secretKey, expectedSecretKey);
 
-        print("PAYMENT DETAILS: ${swap.outAddress}:${swap.outAmount} sats");
+        print("PAYMENT DETAILS: ${btcLnSubmarineSwap.paymentDetails()}");
       } catch (e) {
         print((e as BoltzError).kind);
         print((e as BoltzError).message);

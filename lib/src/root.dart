@@ -79,10 +79,12 @@ class BtcLnSwap {
     }
   }
 
-  Future<String> claim({required int absFee}) async {
+  Future<String> claim(
+      {required String outAddress, required int absFee}) async {
     try {
       final res = await ffi.btcLnReverseClaimStaticMethodApi(
         swap: _btcLnSwap,
+        outAddress: outAddress,
         absFee: absFee,
       );
       return res;
@@ -107,7 +109,7 @@ class BtcLnSwap {
     try {
       final swapType = _btcLnSwap.kind;
       if (swapType == bridge.SwapType.Submarine) {
-        return "${_btcLnSwap.outAddress}:${_btcLnSwap.outAmount}";
+        return "${_btcLnSwap.scriptAddress}:${_btcLnSwap.outAmount}";
       }
       return _btcLnSwap.invoice;
     } catch (e) {
@@ -182,10 +184,12 @@ class LbtcLnSwap {
     }
   }
 
-  Future<String> claim({required int absFee}) async {
+  Future<String> claim(
+      {required String outAddress, required int absFee}) async {
     try {
       final res = await ffi.lbtcLnReverseClaimStaticMethodApi(
         swap: _lbtcLnSwap,
+        outAddress: outAddress,
         absFee: absFee,
       );
 
@@ -212,7 +216,7 @@ class LbtcLnSwap {
     try {
       final swapType = _lbtcLnSwap.kind;
       if (swapType == bridge.SwapType.Submarine) {
-        return "${_lbtcLnSwap.outAddress}:${_lbtcLnSwap.outAmount}";
+        return "${_lbtcLnSwap.scriptAddress}:${_lbtcLnSwap.outAmount}";
       }
       return _lbtcLnSwap.invoice;
     } catch (e) {
@@ -222,9 +226,11 @@ class LbtcLnSwap {
 }
 
 class AllSwapFees {
-  static Future<AllFees> estimateFee({required String boltzUrl, required int outputAmount}) async {
+  static Future<AllFees> estimateFee(
+      {required String boltzUrl, required int outputAmount}) async {
     try {
-      final res = await ffi.swapFeesStaticMethodApi(boltzUrl: boltzUrl, outputAmount: outputAmount);
+      final res = await ffi.swapFeesStaticMethodApi(
+          boltzUrl: boltzUrl, outputAmount: outputAmount);
       return res;
     } catch (e) {
       rethrow;
