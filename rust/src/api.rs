@@ -97,7 +97,7 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-            let out_address = swap_script.to_address(network.into())?.to_string();
+            let script_address = swap_script.to_address(network.into())?.to_string();
             
             Ok(BtcLnSwap::new(
                 response.get_id(),
@@ -107,8 +107,8 @@ impl Api {
                 preimage.into(),
                 response.get_redeem_script()?,
                 invoice,
+                script_address,
                 response.get_funding_amount()?,
-                out_address,
                 electrum_url,
                 boltz_url,
             ))
@@ -149,17 +149,7 @@ impl Api {
                 Ok(result)=>result,
                 Err(e)=>return Err(e.into())
             };
-            let out_address = swap_script.to_address(network.into())?.to_string();
-            // let btc_swap_script = BtcSwapScript::submarine_from_str(&response.clone().redeem_script.unwrap()).unwrap();
-        
-            // let payment_address = match btc_swap_script.to_address(network.clone().into()){
-            //     Ok(result)=>result.to_string(),
-            //     Err(e)=>return Err(e.into())
-            // };
-
-            // if &payment_address != &response.clone().address.unwrap(){
-            //     return Err(S5Error::new(ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
-            // }
+            let script_address = swap_script.to_address(network.into())?.to_string();
 
             Ok(BtcLnSwap::new(
                 response.get_id(),
@@ -169,8 +159,8 @@ impl Api {
                 preimage.into(),
                 response.get_redeem_script().unwrap(),
                 response.get_invoice().unwrap().to_string(),
+                script_address,
                 out_amount,
-                out_address,
                 electrum_url,
                 boltz_url,
             ))
@@ -188,8 +178,9 @@ impl Api {
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        // let network_config = ElectrumConfig::new(swap.network.clone().into(), &swap.electrum_url, true, true,10);
-        let tx = match BtcSwapTx::new_claim(script, swap.out_address, swap.network.into()){
+        let network_config = ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true, 10);
+        // okay to use script address, we are just chekcing size
+        let tx = match BtcSwapTx::new_claim(script, swap.script_address, &network_config){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
@@ -205,7 +196,7 @@ impl Api {
         Ok(size)
     }
 
-    pub fn btc_ln_reverse_claim(swap: BtcLnSwap, abs_fee: u64)->anyhow::Result<String, BoltzError>{
+    pub fn btc_ln_reverse_claim(swap: BtcLnSwap, out_address: String, abs_fee: u64)->anyhow::Result<String, BoltzError>{
         if swap.kind == SwapType::Submarine {
             return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
         }
@@ -225,7 +216,7 @@ impl Api {
         };
 
         if script_balance.0 > 0 || script_balance.1 > 0 {
-            let mut tx = match BtcSwapTx::new_claim(script, swap.out_address, swap.network.into()){
+            let tx = match BtcSwapTx::new_claim(script, out_address, &network_config){
                 Ok(result)=>result,
                 Err(e)=> return Err(e.into())
             };
@@ -389,14 +380,10 @@ impl Api {
             Err(e)=> return Err(e.into())
         };
         let network_config = ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true,10);
-        let mut tx = match LBtcSwapTx::new_claim(script, swap.out_address){
+        let mut tx = match LBtcSwapTx::new_claim(script, swap.script_address, &network_config){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let _ = match tx.fetch_utxo(&network_config){
-            Ok(_)=>(),
-            Err(e)=> return Err(e.into())
-        }; // CAN WE MOCK THIS?
         let size = match tx.size(
             &swap.keys.into(), 
             &swap.preimage.try_into().unwrap(), 
@@ -407,7 +394,7 @@ impl Api {
         Ok(size)
     }
 
-    pub fn lbtc_ln_reverse_claim(swap: LbtcLnSwap, abs_fee: u64)->anyhow::Result<String, BoltzError>{
+    pub fn lbtc_ln_reverse_claim(swap: LbtcLnSwap, out_address: String, abs_fee: u64)->anyhow::Result<String, BoltzError>{
         if swap.kind == SwapType::Submarine {
             return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
         }
@@ -421,14 +408,11 @@ impl Api {
         let network_config = ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true,10);
 
         // if script_balance.0 > 0 || script_balance.1 > 0 {
-        let mut tx = match LBtcSwapTx::new_claim(script, swap.out_address){
+        let mut tx = match LBtcSwapTx::new_claim(script, out_address, &network_config){
             Ok(result)=>result,
             Err(e)=> return Err(e.into())
         };
-        let _ = match tx.fetch_utxo(&network_config){
-            Ok(_)=>(),
-            Err(e)=> return Err(e.into())
-        };
+
         let signed = match tx.sign_claim(
             &swap.keys.into(), 
             &swap.preimage.try_into().unwrap(), 

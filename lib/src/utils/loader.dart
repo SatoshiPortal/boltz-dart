@@ -10,9 +10,11 @@ import '../generated/bindings.dart';
 class Dylib {
   static Map<String, dynamic>? _config;
   static String get libName => "unittest.libboltz.${_config!['TAG_VERSION']}";
-  static String get remoteUrl => "${_config!['REPOSITORY_URL']}${_config!['TAG_VERSION']}/$libName.zip";
+  static String get remoteUrl =>
+      "${_config!['REPOSITORY_URL']}${_config!['TAG_VERSION']}/$libName.zip";
   static Future<void> _loadJsonAsset() async {
-    final String content = await rootBundle.loadString("packages/boltz_flutter/assets/release.config.txt");
+    final String content = await rootBundle
+        .loadString("packages/boltz_flutter/assets/release.config.txt");
     Map<String, dynamic> configMap = {};
     List<String> lines = content.split('\n');
 
@@ -59,7 +61,10 @@ class Dylib {
 
     if (Platform.isMacOS) {
       // return "$assetsDir/$libName/macos/libboltzclient.dylib";
-      return "${currentDirectory.path}/libboltz_dart.dylib";
+      return "${assetsDir}/libboltz_dart.dylib";
+    } else if (Platform.isLinux) {
+      // return "$assetsDir/$libName/macos/libboltzclient.dylib";
+      return "${assetsDir}/libboltzclient.so";
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");
     }
@@ -76,6 +81,8 @@ class Dylib {
     if (Platform.isIOS || Platform.isMacOS) {
       return DynamicLibrary.executable();
     } else if (Platform.isAndroid) {
+      return DynamicLibrary.open("libboltzclient.so");
+    } else if (Platform.isLinux) {
       return DynamicLibrary.open("libboltzclient.so");
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");

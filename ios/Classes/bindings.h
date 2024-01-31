@@ -33,8 +33,8 @@ typedef struct wire_BtcLnSwap {
   struct wire_PreImage preimage;
   struct wire_uint_8_list *redeem_script;
   struct wire_uint_8_list *invoice;
+  struct wire_uint_8_list *script_address;
   uint64_t out_amount;
-  struct wire_uint_8_list *out_address;
   struct wire_uint_8_list *electrum_url;
   struct wire_uint_8_list *boltz_url;
 } wire_BtcLnSwap;
@@ -48,7 +48,7 @@ typedef struct wire_LbtcLnSwap {
   struct wire_uint_8_list *redeem_script;
   struct wire_uint_8_list *invoice;
   uint64_t out_amount;
-  struct wire_uint_8_list *out_address;
+  struct wire_uint_8_list *script_address;
   struct wire_uint_8_list *blinding_key;
   struct wire_uint_8_list *electrum_url;
   struct wire_uint_8_list *boltz_url;
@@ -90,6 +90,7 @@ void wire_btc_ln_tx_size__static_method__Api(int64_t port_, struct wire_BtcLnSwa
 
 void wire_btc_ln_reverse_claim__static_method__Api(int64_t port_,
                                                    struct wire_BtcLnSwap *swap,
+                                                   struct wire_uint_8_list *out_address,
                                                    uint64_t abs_fee);
 
 void wire_new_lbtc_ln_submarine__static_method__Api(int64_t port_,
@@ -112,6 +113,7 @@ void wire_lbtc_ln_tx_size__static_method__Api(int64_t port_, struct wire_LbtcLnS
 
 void wire_lbtc_ln_reverse_claim__static_method__Api(int64_t port_,
                                                     struct wire_LbtcLnSwap *swap,
+                                                    struct wire_uint_8_list *out_address,
                                                     uint64_t abs_fee);
 
 void wire_swap_status__static_method__Api(int64_t port_,

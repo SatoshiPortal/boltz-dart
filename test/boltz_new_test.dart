@@ -24,7 +24,8 @@ void main() {
   test('FEE ESTIMATION', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
-    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+    final fees =
+        await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
     expect((fees.btcReverse.boltzFees > 0.0), true);
     expect((fees.btcSubmarine.boltzFees > 0.0), true);
@@ -98,13 +99,15 @@ void main() {
 
       BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
 
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      const expectedSecretKey =
+          "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
       final swap = btcLnSubmarine.btcLnSwap;
+      final paymentDetails = btcLnSubmarine.paymentDetails();
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
       expect(swap.keys.secretKey, expectedSecretKey);
 
-      print("Pay on-chain. Pay less than this: ${swap.outAddress}:${swap.outAmount} sats");
+      print("Payment Details: $paymentDetails");
 
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
@@ -131,14 +134,15 @@ void main() {
           "lntb545u1pjm0zgkpp5vl6wgpfcuapqd5e2vz3sc064ph76y6kze60jmrvqyk5auzrx6f6qdqqcqzzsxqzpusp55fy9qvqs95qr0xmcn6u4qktwz6at6gcnpl560cjs4htvgw4wj3cs9qyyssqsv0alwgutgqjxpm03e7kf5f66gk4u8adduater9qyg6lrx6pgscxcgx5k2v075qangzjcrx4qjwvcc89txhjyxa6aqe0x37xhnf0maspnud9d8";
 
       BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
-
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      final paymentDetails = btcLnSubmarine.paymentDetails();
+      const expectedSecretKey =
+          "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
       final swap = btcLnSubmarine.btcLnSwap;
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
       expect(swap.keys.secretKey, expectedSecretKey);
 
-      print("Pay on-chain. Pay after Invoice expiry: ${swap.outAddress}:${swap.outAmount} sats");
+      print("Payment Details: $paymentDetails");
 
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
@@ -168,15 +172,16 @@ void main() {
           "lntb575u1pjmwah3pp59w8yqtprn0l449ndhdy2vjmw3jzlknax95wakh5ya9kg24jtm4fqdqqcqzzsxqyjw5qsp526wqw6337ft4eac7tfe9369dmw0d0c50w2ezmh3tvdlzwv835m4q9qyyssq60p80x2xasalqq4vdzrl2stac3zy5u4jndkddafml7pe20j8nap4xq52j0dgrdms05rqyen98h3zye39kxu3pesyaj2sxtsfge6g47gq0uv5zh";
 
       BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
-
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      final paymentDetails = btcLnSubmarine.paymentDetails();
+      const expectedSecretKey =
+          "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
       final swap = btcLnSubmarine.btcLnSwap;
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
       expect(swap.keys.secretKey, expectedSecretKey);
 
-      print("Pay on-chain: ${swap.outAddress}:${swap.outAmount} sats");
-
+      print("Payment details: $paymentDetails");
+      // swap.paymentDetails();
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
