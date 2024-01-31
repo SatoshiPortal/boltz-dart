@@ -38,10 +38,9 @@ void main() {
       const invoiceAmount = 123;
 
       await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
-        if (e is BoltzError) {
-          return e.kind == 'BoltzApi' && e.message == '{"error":"$invoiceAmount is less than minimal of 50000"}';
-        }
-        return false;
+        return e is BoltzError &&
+            e.kind == 'BoltzApi' &&
+            e.message == '{"error":"$invoiceAmount is less than minimal of 50000"}';
       })));
     });
 
@@ -52,10 +51,9 @@ void main() {
       const invoiceAmount = 26000000;
 
       await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
-        if (e is BoltzError) {
-          return e.kind == 'BoltzApi' && e.message == '{"error":"$invoiceAmount is exceeds maximal of 25000000"}';
-        }
-        return false;
+        return e is BoltzError &&
+            e.kind == 'BoltzApi' &&
+            e.message == '{"error":"$invoiceAmount is exceeds maximal of 25000000"}';
       })));
     });
 
@@ -66,12 +64,9 @@ void main() {
       await setupSubmarine(invoice);
 
       await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
-        if (e is BoltzError) {
-          print(e.kind);
-          print(e.message);
-          return e.kind == 'BoltzApi' && e.message == '{"error":"a swap with this invoice exists already"}';
-        }
-        return false;
+        return e is BoltzError &&
+            e.kind == 'BoltzApi' &&
+            e.message == '{"error":"a swap with this invoice exists already"}';
       })));
     });
 
@@ -80,10 +75,20 @@ void main() {
           "lntb510u1pjm0z48pp5p3frf3ngtfxfu2fpdv5jefdk5d4r5es6ad350jelq64kwj3z7jvqdqqcqzzsxqp9sp5fw6a2zjmlhx59k2x7rmv46aus79walrmlvmqhvpcy0wwhtwx68qs9qyyssqq9denfcmlnf37djfkxu0rr7c5gy0ad969cylhmuzyeusp9g3ecus0zyv4kugdcle438ujnn948whzrtev04sq889lnp959ns6ymdpwcpwvyszt";
 
       await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
-        if (e is BoltzError) {
-          return e.kind == 'BoltzApi' && e.message == '{"error":"the provided invoice expired already"}';
-        }
-        return false;
+        return e is BoltzError &&
+            e.kind == 'BoltzApi' &&
+            e.message == '{"error":"the provided invoice expired already"}';
+      })));
+    });
+
+    test('Neg: Invalid invoice', () async {
+      const invoice = "lntbinvalidinvoice";
+
+      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+        print(e);
+        return e is BoltzError &&
+            e.kind == 'BoltzApi' &&
+            e.message == '{"error":"No separator character for lntbinvalidinvoice"}';
       })));
     });
 
@@ -158,7 +163,7 @@ void main() {
       // expect(receivedEvents[2], equals(SwapStatus.swapRefunded));
     }, timeout: const Timeout(Duration(minutes: 30)));
 
-    test('Full flow - Success. Send exact amount or more', () async {
+    test('Positive: Send exact amount or more', () async {
       const invoice =
           "lntb575u1pjmwah3pp59w8yqtprn0l449ndhdy2vjmw3jzlknax95wakh5ya9kg24jtm4fqdqqcqzzsxqyjw5qsp526wqw6337ft4eac7tfe9369dmw0d0c50w2ezmh3tvdlzwv835m4q9qyyssq60p80x2xasalqq4vdzrl2stac3zy5u4jndkddafml7pe20j8nap4xq52j0dgrdms05rqyen98h3zye39kxu3pesyaj2sxtsfge6g47gq0uv5zh";
 
@@ -191,6 +196,85 @@ void main() {
       expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
     });
   }, timeout: const Timeout(Duration(minutes: 30)));
+
+  group('LN-BTC Reverse Submarince', () {
+    test('Neg: Minimum limit (50k sats)', () async {
+      const outAmount = 2500;
+
+      await expectLater(() async => await setupReverse(outAmount), throwsA(predicate((e) {
+        return e is BoltzError &&
+            e.kind == 'BoltzApi' &&
+            e.message == '{"error":"$outAmount is less than minimal of 50000"}';
+      })));
+    });
+
+    test('Neg: Maximum limit (25m sats)', () async {
+      const outAmount = 26000000;
+
+      await expectLater(() async => await setupReverse(outAmount), throwsA(predicate((e) {
+        return e is BoltzError &&
+            e.kind == 'BoltzApi' &&
+            e.message == '{"error":"$outAmount is exceeds maximal of 25000000"}';
+      })));
+    });
+
+    test('Neg: Invalid mnemonic (Not working)', () async {
+      const outAmount = 60000;
+
+      try {
+        await setupReverse(outAmount);
+      } catch (e) {
+        print(e);
+      }
+
+      /*
+        await expectLater(() async => await setupReverse(outAmount), throwsA(predicate((e) {
+          print(e);
+          return e is BoltzError &&
+              e.kind == 'BoltzApi' &&
+              e.message == '{"error":"a swap with this invoice exists already"}';
+        })));
+      */
+    });
+
+    test('Positive: ', () async {
+      int outAmount = 51000;
+
+      BtcLnSwap btcLnSubmarine = await setupReverse(outAmount);
+
+      const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
+
+      final swap = btcLnSubmarine.btcLnSwap;
+      print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+      expect(swap.keys.secretKey, expectedSecretKey);
+
+      print("Pay this invoice: ${swap.invoice}");
+
+      var completer = Completer();
+      var receivedEvents = <SwapStatusResponse>[];
+      final api = await BoltzApi.newBoltzApi();
+      var sub = api.getSwapStatusStream(swap.id).listen((event) async {
+        receivedEvents.add(event);
+        if (event.status == SwapStatus.txnMempool) {
+          // Find actual fee from AllFee class
+          await Future.delayed(Duration(seconds: 20));
+          String txnId = await btcLnSubmarine.claim(absFee: 1000);
+          print(txnId);
+          //
+        }
+        if (event.status == SwapStatus.invoiceSettled) {
+          completer.complete();
+        }
+      });
+      await completer.future;
+
+      await sub.cancel();
+
+      expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
+      expect(receivedEvents[0].status, equals(SwapStatus.txnMempool));
+      expect(receivedEvents[1].status, equals(SwapStatus.invoiceSettled));
+    }, timeout: const Timeout(Duration(minutes: 30)));
+  });
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
@@ -205,6 +289,26 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
     mnemonic: mnemonic,
     index: index,
     invoice: invoice,
+    network: network,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+  );
+
+  return btcLnSubmarineSwap;
+}
+
+Future<BtcLnSwap> setupReverse(int outAmount) async {
+  const mnemonic =
+      'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
+  const index = 0;
+  const network = Chain.Testnet;
+  const electrumUrl = 'electrum.bullbitcoin.com:60002';
+  const boltzUrl = 'https://api.testnet.boltz.exchange';
+
+  final btcLnSubmarineSwap = await BtcLnSwap.newReverse(
+    mnemonic: mnemonic,
+    index: index,
+    outAmount: outAmount,
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
