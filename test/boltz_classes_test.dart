@@ -73,7 +73,7 @@ void main() {
       const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
-      const outAddress = "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq.";
+      const outAddress = "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq";
       const outAmount = 70000;
       try {
         // this should be a constructor newReverse on BtcLnSwap

@@ -38,10 +38,12 @@ void main() {
           "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
       const invoiceAmount = 123;
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$invoiceAmount is less than minimal of 50000"}';
+            e.message ==
+                '{"error":"$invoiceAmount is less than minimal of 50000"}';
       })));
     });
 
@@ -51,10 +53,12 @@ void main() {
           "lntb260m1pjmwkv7pp5g8hy6pe8md7rz6jwcgvntgsqwr2eck0rcvj8trqkuehuvl9g2w4qdqqcqzzsxqyjw5qsp59fq60rmf6mkx9hhkcdw4akl7ksgzl3rfchgj94f6vfwzq9x7wvps9qyyssq2mkjtc67ktcnxf0cch8d66fkxlx9fyryy2k79cqv8gzjxw7wmh7xm3qdra7lawm6nvjrs2zyu50qf428uzqu25mxmvev6zckzt8ew7gp0xfna2";
       const invoiceAmount = 26000000;
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$invoiceAmount is exceeds maximal of 25000000"}';
+            e.message ==
+                '{"error":"$invoiceAmount is exceeds maximal of 25000000"}';
       })));
     });
 
@@ -64,7 +68,8 @@ void main() {
 
       await setupSubmarine(invoice);
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"a swap with this invoice exists already"}';
@@ -75,7 +80,8 @@ void main() {
       const invoice =
           "lntb510u1pjm0z48pp5p3frf3ngtfxfu2fpdv5jefdk5d4r5es6ad350jelq64kwj3z7jvqdqqcqzzsxqp9sp5fw6a2zjmlhx59k2x7rmv46aus79walrmlvmqhvpcy0wwhtwx68qs9qyyssqq9denfcmlnf37djfkxu0rr7c5gy0ad969cylhmuzyeusp9g3ecus0zyv4kugdcle438ujnn948whzrtev04sq889lnp959ns6ymdpwcpwvyszt";
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"the provided invoice expired already"}';
@@ -85,11 +91,13 @@ void main() {
     test('Neg: Invalid invoice', () async {
       const invoice = "lntbinvalidinvoice";
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         print(e);
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"No separator character for lntbinvalidinvoice"}';
+            e.message ==
+                '{"error":"No separator character for lntbinvalidinvoice"}';
       })));
     });
 
@@ -206,7 +214,8 @@ void main() {
     test('Neg: Minimum limit (50k sats)', () async {
       const outAmount = 2500;
 
-      await expectLater(() async => await setupReverse(outAmount), throwsA(predicate((e) {
+      await expectLater(() async => await setupReverse(outAmount),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"$outAmount is less than minimal of 50000"}';
@@ -216,10 +225,12 @@ void main() {
     test('Neg: Maximum limit (25m sats)', () async {
       const outAmount = 26000000;
 
-      await expectLater(() async => await setupReverse(outAmount), throwsA(predicate((e) {
+      await expectLater(() async => await setupReverse(outAmount),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$outAmount is exceeds maximal of 25000000"}';
+            e.message ==
+                '{"error":"$outAmount is exceeds maximal of 25000000"}';
       })));
     });
 
@@ -244,10 +255,12 @@ void main() {
 
     test('Positive: ', () async {
       int outAmount = 51000;
+      const outAddress = "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq";
 
       BtcLnSwap btcLnSubmarine = await setupReverse(outAmount);
 
-      const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
+      const expectedSecretKey =
+          "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
 
       final swap = btcLnSubmarine.btcLnSwap;
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
@@ -263,7 +276,8 @@ void main() {
         if (event.status == SwapStatus.txnMempool) {
           // Find actual fee from AllFee class
           await Future.delayed(Duration(seconds: 20));
-          String txnId = await btcLnSubmarine.claim(absFee: 1000);
+          String txnId =
+              await btcLnSubmarine.claim(outAddress: outAddress, absFee: 1000);
           print(txnId);
           //
         }
