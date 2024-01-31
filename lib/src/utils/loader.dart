@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 
 import '../generated/bindings.dart';
 
+const name = "libboltzclient";
+
 class Dylib {
   static Map<String, dynamic>? _config;
   static String get libName => "unittest.libboltz.${_config!['TAG_VERSION']}";
@@ -61,10 +63,9 @@ class Dylib {
 
     if (Platform.isMacOS) {
       // return "$assetsDir/$libName/macos/libboltzclient.dylib";
-      return "${assetsDir}/libboltz_dart.dylib";
+      return "$assetsDir/$name.dylib";
     } else if (Platform.isLinux) {
-      // return "$assetsDir/$libName/macos/libboltzclient.dylib";
-      return "${assetsDir}/libboltzclient.so";
+      return "$assetsDir/$name.so";
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");
     }
@@ -81,9 +82,9 @@ class Dylib {
     if (Platform.isIOS || Platform.isMacOS) {
       return DynamicLibrary.executable();
     } else if (Platform.isAndroid) {
-      return DynamicLibrary.open("libboltzclient.so");
+      return DynamicLibrary.open("$name.so");
     } else if (Platform.isLinux) {
-      return DynamicLibrary.open("libboltzclient.so");
+      return DynamicLibrary.open("$name.so");
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");
     }

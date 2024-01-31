@@ -4,9 +4,9 @@ cargo update
 cargo build --release
 OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then
-    cp target/release/libboltz_dart.so ../test/
+    cp target/release/libboltzclient.so ../build/unit_test_assets
 elif [ "$OS" = "Darwin" ]; then
-    cp target/release/libboltz_dart.dylib ../test/
+    cp target/release/libboltzclient.dylib ../build/unit_test_assets
 else
     echo "Unsupported OS: $OS"
     exit 1
