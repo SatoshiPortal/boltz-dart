@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p build/unit_test_assets
 cd rust || exit 1
 cargo update
 cargo build --release

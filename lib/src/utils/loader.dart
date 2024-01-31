@@ -74,7 +74,7 @@ class Dylib {
   static DynamicLibrary getDylib() {
     if (Platform.environment['FLUTTER_TEST'] == 'true') {
       try {
-        DynamicLibrary.open(_getUniTestDylibDir(Directory.current));
+        return DynamicLibrary.open(_getUniTestDylibDir(Directory.current));
       } catch (e) {
         throw Exception("Unable to open the unit test dylib!");
       }
