@@ -66,7 +66,7 @@ void main() {
       const invoice =
           "lntb510u1pjmwkmspp5hqxwu96lhqzvvv9gxul8memmkj833fsdu32aw4llgf37jrfx0m5qdqqcqzzsxqyjw5qsp55djvsgh0eyypz2l28cyhxajuudy8z27ge5ss82k80kdefzn3de6s9qyyssq9s0lqcr00e0raj86tde8zq6jnft5fq3xyqhjc4jzpcndqvkjtsuh9tmd4rhk52zc6tkgf3h9hk7pcuzxprmsfj5rmghl2jyzga3d8vqq5785ee";
 
-      await setupSubmarine(invoice);
+      // await setupSubmarine(invoice);
 
       await expectLater(() async => await setupSubmarine(invoice),
           throwsA(predicate((e) {
@@ -177,10 +177,10 @@ void main() {
 
     test('Positive: Send exact amount or more', () async {
       const invoice =
-          "lntb575u1pjmwah3pp59w8yqtprn0l449ndhdy2vjmw3jzlknax95wakh5ya9kg24jtm4fqdqqcqzzsxqyjw5qsp526wqw6337ft4eac7tfe9369dmw0d0c50w2ezmh3tvdlzwv835m4q9qyyssq60p80x2xasalqq4vdzrl2stac3zy5u4jndkddafml7pe20j8nap4xq52j0dgrdms05rqyen98h3zye39kxu3pesyaj2sxtsfge6g47gq0uv5zh";
+          "lntb1m1pjmkcg0pp5vsta4epuxy22ksk73n9a39pjkwa64ux5w3wj4sxasm4cqxyze92qdq8w368gaqxqyjw5qcqp2sp5lkac0whuret73z2kfqm7ql20v5myvrxf89y2pqm3xl4r9pxcu26srzjq2gyp9za7vc7vd8m59fvu63pu00u4pak35n4upuv4mhyw5l586dvkf6vkyqq20gqqqqqqqqpqqqqqzsqqc9qyyssqv27kvqsup9h3538zdyz852gpkfthvkvhudqdzj8gdfesaexlquvrhr33x55pnwlv4nd3k7hjmxyvgpwreukzga7kxlhae7dufzawvhqqruaq5e";
 
       BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
-      final paymentDetails = btcLnSubmarine.paymentDetails();
+      final paymentDetails = await btcLnSubmarine.paymentDetails();
       const expectedSecretKey =
           "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 

@@ -38,7 +38,7 @@ void main() {
       const boltzUrl = 'https://api.testnet.boltz.exchange';
 
       const invoice =
-          "lntb30m1pj6uz4epp5e4gqhar3tfl307rygwh52xaxddp5fnjm3yqgvlh22hvulfwglv9sdpyxysysctvvcsxzgz5dahzqmmxyppk7enxv4jsxqrrsscqp79qy9qsqsp5gqxwczfrj58laly8rjapnhsxqs7zradeyquzk4pas2zcmhzt9r7qz45k6hwe8yr73r0gngzy8epqrlm9zejlaax7xlwcp36hj27ydrrqknna4lw7j3zsdzqy9cl8d4zhadnhnecccc28z8h59v83y20vaqcpy8x9zy";
+          "lntb1m1pjmkn7dpp5erk9uc9qwc45m0sq45s5edk2alkzgz4gsaz36nk5jyyj8gac833qdq8w368gaqxqyjw5qcqp2sp5327rda00l6qx0atwysyruxjfm3wvzwye75vw49a8ur6t9ll0qgjqrzjq2gyp9za7vc7vd8m59fvu63pu00u4pak35n4upuv4mhyw5l586dvkf6vkyqq20gqqqqqqqqpqqqqqzsqqc9qyyssqhhejr5e4yyks20lpajqej2ec9l3z9wcjae7hs94vvfn5f7s844s5rgnpuvpuuy6gg3q9ty5w007gx7hfm79f07r929s3u97p3yku9vsqy48xeq";
       try {
         final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
           mnemonic: mnemonic,
