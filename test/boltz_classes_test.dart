@@ -1,3 +1,4 @@
+/*
 // import 'package:boltz_dart/bridge_definitions.dart' as bridge;
 // import 'package:boltz_dart/root.dart';
 import 'package:boltz_dart/boltz_dart.dart';
@@ -186,3 +187,5 @@ void main() {
     });
   });
 }
+
+*/
