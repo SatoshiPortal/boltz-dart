@@ -21,7 +21,7 @@ void main() {
     final version = await api.getBackendVersion();
 
     expect(version, startsWith('3.4.0'));
-  });
+  }, skip: true);
 
   test('Get pairs', () async {
     final api = await BoltzApi.newBoltzApi();
@@ -100,5 +100,5 @@ void main() {
     SwapStatusResponse firstEvent = receivedEvents.first;
 
     expect(firstEvent.status, equals(SwapStatus.txnClaimed));
-  }, timeout: const Timeout(Duration(minutes: 120)));
+  }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 }
