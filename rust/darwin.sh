@@ -2,7 +2,7 @@
 
 # Setup
 ROOT="target"
-VERSION="0.1.1"
+VERSION=$1
 NAME="libboltz"
 BUILD_DIR=$ROOT/$NAME.$VERSION
 # MACOS_DIR="../macos" # final binaries stored here
@@ -50,6 +50,5 @@ xcodebuild -create-xcframework \
         -library $MAC_LIPO \
         -library target/aarch64-apple-ios/release/$LIBNAME \
         -output $BUILD_DIR/$FRAMEWORK
-
 
 rm -rf $IOS_LIPO_DIR $MAC_LIPO_DIR

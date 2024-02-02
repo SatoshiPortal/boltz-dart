@@ -3,7 +3,7 @@ PROJECTNAME=$(shell basename "$(PWD)")
 # ##############################################################################
 # # GENERAL
 # ##############################################################################
-
+VERSION="0.1.2"
 .PHONY: help
 help: makefile
 	@echo
@@ -20,26 +20,21 @@ init:
 ## :
 
 ## all: Compile iOS, Android and bindings targets
-all: init build-jnilib build-xcframework build-unittest copy-build compress-build
+all: init jnilib xcframework linux
 
-build-linux:
-	  @echo "[Creating android jniLibs ...] $@"
-	  sh linux.sh
+linux:
+	  @echo "[Creating linux binary ...] $@"
+	  sh linux.sh $(VERSION)
 	  @echo "[Done ✅]"
 
-build-jnilib:
+jnilib:
 	  @echo "[Creating android jniLibs ...] $@"
-	  sh android.sh
+	  sh android.sh $(VERSION)
 	  @echo "[Done ✅]"
 
-build-xcframework:
+xcframework:
 	  @echo "[Creating rust_bdk_ffi.xcframework ...] $@"
-	  sh darwin.sh
-	  @echo "[Done ✅]"
-
-build-unittest:
-	  @echo "[Creating unittest ...] $@"
-	  sh unittest.sh
+	  sh darwin.sh $(VERSION)
 	  @echo "[Done ✅]"
 
 # compress-build:

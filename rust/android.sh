@@ -1,7 +1,7 @@
 #!/bin/bash
 # Setup jniLibs directory
 ROOT="target"
-VERSION="0.1.1"
+VERSION=$1
 NAME="libboltz"
 JNI_DIR=$ROOT/$NAME.$VERSION/jniLibs # final binaries stored here
 
@@ -10,7 +10,6 @@ fi
 mkdir -p ./$JNI_DIR
 
 # Set up cargo-ndk
-cargo install cargo-ndk
 rustup target add \
         aarch64-linux-android \
         armv7-linux-androideabi \

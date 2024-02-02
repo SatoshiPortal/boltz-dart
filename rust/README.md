@@ -72,3 +72,19 @@ final address = localWallet.getNewAddress();
 final absoluteFees = read.userInput();
 final txid = boltzBtcLnReverseSwap.claim(address, fees);
 ```
+
+# Build binaries on mac
+
+```
+cd rust
+make all
+```
+
+All targets should be able to be built on a M1 or later macos
+
+Linux builds will require some gcc libs
+
+```
+brew install aarch64-linux-gnu-gcc arm-linux-gnueabi-gcc arm-linux-gnueabihf-gcc i686-linux-gnu-gcc x86_64-linux-gnu-gcc
+
+```
