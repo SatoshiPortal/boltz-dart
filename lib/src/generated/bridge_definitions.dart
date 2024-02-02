@@ -9,8 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class BoltzDart {
-  Future<AllFees> swapFeesStaticMethodApi(
-      {required String boltzUrl, required int outputAmount, dynamic hint});
+  Future<AllFees> swapFeesStaticMethodApi({required String boltzUrl, required int outputAmount, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta;
 
@@ -36,16 +35,12 @@ abstract class BoltzDart {
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta;
 
-  Future<int> btcLnTxSizeStaticMethodApi(
-      {required BtcLnSwap swap, dynamic hint});
+  Future<int> btcLnTxSizeStaticMethodApi({required BtcLnSwap swap, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kBtcLnTxSizeStaticMethodApiConstMeta;
 
   Future<String> btcLnReverseClaimStaticMethodApi(
-      {required BtcLnSwap swap,
-      required String outAddress,
-      required int absFee,
-      dynamic hint});
+      {required BtcLnSwap swap, required String outAddress, required int absFee, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kBtcLnReverseClaimStaticMethodApiConstMeta;
 
@@ -58,8 +53,7 @@ abstract class BoltzDart {
       required String boltzUrl,
       dynamic hint});
 
-  FlutterRustBridgeTaskConstMeta
-      get kNewLbtcLnSubmarineStaticMethodApiConstMeta;
+  FlutterRustBridgeTaskConstMeta get kNewLbtcLnSubmarineStaticMethodApiConstMeta;
 
   Future<LbtcLnSwap> newLbtcLnReverseStaticMethodApi(
       {required String mnemonic,
@@ -72,22 +66,16 @@ abstract class BoltzDart {
 
   FlutterRustBridgeTaskConstMeta get kNewLbtcLnReverseStaticMethodApiConstMeta;
 
-  Future<int> lbtcLnTxSizeStaticMethodApi(
-      {required LbtcLnSwap swap, dynamic hint});
+  Future<int> lbtcLnTxSizeStaticMethodApi({required LbtcLnSwap swap, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kLbtcLnTxSizeStaticMethodApiConstMeta;
 
   Future<String> lbtcLnReverseClaimStaticMethodApi(
-      {required LbtcLnSwap swap,
-      required String outAddress,
-      required int absFee,
-      dynamic hint});
+      {required LbtcLnSwap swap, required String outAddress, required int absFee, dynamic hint});
 
-  FlutterRustBridgeTaskConstMeta
-      get kLbtcLnReverseClaimStaticMethodApiConstMeta;
+  FlutterRustBridgeTaskConstMeta get kLbtcLnReverseClaimStaticMethodApiConstMeta;
 
-  Future<String> swapStatusStaticMethodApi(
-      {required String boltzUrl, required String id, dynamic hint});
+  Future<String> swapStatusStaticMethodApi({required String boltzUrl, required String id, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta;
 }

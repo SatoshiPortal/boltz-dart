@@ -19,20 +19,16 @@ import 'dart:ffi' as ffi;
 
 class BoltzDartImpl implements BoltzDart {
   final BoltzDartPlatform _platform;
-  factory BoltzDartImpl(ExternalLibrary dylib) =>
-      BoltzDartImpl.raw(BoltzDartPlatform(dylib));
+  factory BoltzDartImpl(ExternalLibrary dylib) => BoltzDartImpl.raw(BoltzDartPlatform(dylib));
 
   /// Only valid on web/WASM platforms.
-  factory BoltzDartImpl.wasm(FutureOr<WasmModule> module) =>
-      BoltzDartImpl(module as ExternalLibrary);
+  factory BoltzDartImpl.wasm(FutureOr<WasmModule> module) => BoltzDartImpl(module as ExternalLibrary);
   BoltzDartImpl.raw(this._platform);
-  Future<AllFees> swapFeesStaticMethodApi(
-      {required String boltzUrl, required int outputAmount, dynamic hint}) {
+  Future<AllFees> swapFeesStaticMethodApi({required String boltzUrl, required int outputAmount, dynamic hint}) {
     var arg0 = _platform.api2wire_String(boltzUrl);
     var arg1 = _platform.api2wire_u64(outputAmount);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) =>
-          _platform.inner.wire_swap_fees__static_method__Api(port_, arg0, arg1),
+      callFfi: (port_) => _platform.inner.wire_swap_fees__static_method__Api(port_, arg0, arg1),
       parseSuccessData: _wire2api_all_fees,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kSwapFeesStaticMethodApiConstMeta,
@@ -41,8 +37,7 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
+  FlutterRustBridgeTaskConstMeta get kSwapFeesStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
         debugName: "swap_fees__static_method__Api",
         argNames: ["boltzUrl", "outputAmount"],
       );
@@ -62,9 +57,8 @@ class BoltzDartImpl implements BoltzDart {
     var arg4 = _platform.api2wire_String(electrumUrl);
     var arg5 = _platform.api2wire_String(boltzUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_new_btc_ln_submarine__static_method__Api(
-              port_, arg0, arg1, arg2, arg3, arg4, arg5),
+      callFfi: (port_) =>
+          _platform.inner.wire_new_btc_ln_submarine__static_method__Api(port_, arg0, arg1, arg2, arg3, arg4, arg5),
       parseSuccessData: _wire2api_btc_ln_swap,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kNewBtcLnSubmarineStaticMethodApiConstMeta,
@@ -73,19 +67,10 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta
-      get kNewBtcLnSubmarineStaticMethodApiConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "new_btc_ln_submarine__static_method__Api",
-            argNames: [
-              "mnemonic",
-              "index",
-              "invoice",
-              "network",
-              "electrumUrl",
-              "boltzUrl"
-            ],
-          );
+  FlutterRustBridgeTaskConstMeta get kNewBtcLnSubmarineStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "new_btc_ln_submarine__static_method__Api",
+        argNames: ["mnemonic", "index", "invoice", "network", "electrumUrl", "boltzUrl"],
+      );
 
   Future<BtcLnSwap> newBtcLnReverseStaticMethodApi(
       {required String mnemonic,
@@ -102,9 +87,8 @@ class BoltzDartImpl implements BoltzDart {
     var arg4 = _platform.api2wire_String(electrumUrl);
     var arg5 = _platform.api2wire_String(boltzUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_new_btc_ln_reverse__static_method__Api(
-              port_, arg0, arg1, arg2, arg3, arg4, arg5),
+      callFfi: (port_) =>
+          _platform.inner.wire_new_btc_ln_reverse__static_method__Api(port_, arg0, arg1, arg2, arg3, arg4, arg5),
       parseSuccessData: _wire2api_btc_ln_swap,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kNewBtcLnReverseStaticMethodApiConstMeta,
@@ -113,25 +97,15 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
+  FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
         debugName: "new_btc_ln_reverse__static_method__Api",
-        argNames: [
-          "mnemonic",
-          "index",
-          "outAmount",
-          "network",
-          "electrumUrl",
-          "boltzUrl"
-        ],
+        argNames: ["mnemonic", "index", "outAmount", "network", "electrumUrl", "boltzUrl"],
       );
 
-  Future<int> btcLnTxSizeStaticMethodApi(
-      {required BtcLnSwap swap, dynamic hint}) {
+  Future<int> btcLnTxSizeStaticMethodApi({required BtcLnSwap swap, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_btc_ln_swap(swap);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) =>
-          _platform.inner.wire_btc_ln_tx_size__static_method__Api(port_, arg0),
+      callFfi: (port_) => _platform.inner.wire_btc_ln_tx_size__static_method__Api(port_, arg0),
       parseSuccessData: _wire2api_usize,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kBtcLnTxSizeStaticMethodApiConstMeta,
@@ -140,24 +114,18 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta get kBtcLnTxSizeStaticMethodApiConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
+  FlutterRustBridgeTaskConstMeta get kBtcLnTxSizeStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
         debugName: "btc_ln_tx_size__static_method__Api",
         argNames: ["swap"],
       );
 
   Future<String> btcLnReverseClaimStaticMethodApi(
-      {required BtcLnSwap swap,
-      required String outAddress,
-      required int absFee,
-      dynamic hint}) {
+      {required BtcLnSwap swap, required String outAddress, required int absFee, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_btc_ln_swap(swap);
     var arg1 = _platform.api2wire_String(outAddress);
     var arg2 = _platform.api2wire_u64(absFee);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_btc_ln_reverse_claim__static_method__Api(
-              port_, arg0, arg1, arg2),
+      callFfi: (port_) => _platform.inner.wire_btc_ln_reverse_claim__static_method__Api(port_, arg0, arg1, arg2),
       parseSuccessData: _wire2api_String,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kBtcLnReverseClaimStaticMethodApiConstMeta,
@@ -166,12 +134,10 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta
-      get kBtcLnReverseClaimStaticMethodApiConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "btc_ln_reverse_claim__static_method__Api",
-            argNames: ["swap", "outAddress", "absFee"],
-          );
+  FlutterRustBridgeTaskConstMeta get kBtcLnReverseClaimStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "btc_ln_reverse_claim__static_method__Api",
+        argNames: ["swap", "outAddress", "absFee"],
+      );
 
   Future<LbtcLnSwap> newLbtcLnSubmarineStaticMethodApi(
       {required String mnemonic,
@@ -188,9 +154,8 @@ class BoltzDartImpl implements BoltzDart {
     var arg4 = _platform.api2wire_String(electrumUrl);
     var arg5 = _platform.api2wire_String(boltzUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_new_lbtc_ln_submarine__static_method__Api(
-              port_, arg0, arg1, arg2, arg3, arg4, arg5),
+      callFfi: (port_) =>
+          _platform.inner.wire_new_lbtc_ln_submarine__static_method__Api(port_, arg0, arg1, arg2, arg3, arg4, arg5),
       parseSuccessData: _wire2api_lbtc_ln_swap,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kNewLbtcLnSubmarineStaticMethodApiConstMeta,
@@ -199,19 +164,11 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta
-      get kNewLbtcLnSubmarineStaticMethodApiConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "new_lbtc_ln_submarine__static_method__Api",
-            argNames: [
-              "mnemonic",
-              "index",
-              "invoice",
-              "network",
-              "electrumUrl",
-              "boltzUrl"
-            ],
-          );
+  FlutterRustBridgeTaskConstMeta get kNewLbtcLnSubmarineStaticMethodApiConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "new_lbtc_ln_submarine__static_method__Api",
+        argNames: ["mnemonic", "index", "invoice", "network", "electrumUrl", "boltzUrl"],
+      );
 
   Future<LbtcLnSwap> newLbtcLnReverseStaticMethodApi(
       {required String mnemonic,
@@ -228,9 +185,8 @@ class BoltzDartImpl implements BoltzDart {
     var arg4 = _platform.api2wire_String(electrumUrl);
     var arg5 = _platform.api2wire_String(boltzUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_new_lbtc_ln_reverse__static_method__Api(
-              port_, arg0, arg1, arg2, arg3, arg4, arg5),
+      callFfi: (port_) =>
+          _platform.inner.wire_new_lbtc_ln_reverse__static_method__Api(port_, arg0, arg1, arg2, arg3, arg4, arg5),
       parseSuccessData: _wire2api_lbtc_ln_swap,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kNewLbtcLnReverseStaticMethodApiConstMeta,
@@ -239,26 +195,15 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta
-      get kNewLbtcLnReverseStaticMethodApiConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "new_lbtc_ln_reverse__static_method__Api",
-            argNames: [
-              "mnemonic",
-              "index",
-              "outAmount",
-              "network",
-              "electrumUrl",
-              "boltzUrl"
-            ],
-          );
+  FlutterRustBridgeTaskConstMeta get kNewLbtcLnReverseStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "new_lbtc_ln_reverse__static_method__Api",
+        argNames: ["mnemonic", "index", "outAmount", "network", "electrumUrl", "boltzUrl"],
+      );
 
-  Future<int> lbtcLnTxSizeStaticMethodApi(
-      {required LbtcLnSwap swap, dynamic hint}) {
+  Future<int> lbtcLnTxSizeStaticMethodApi({required LbtcLnSwap swap, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_lbtc_ln_swap(swap);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) =>
-          _platform.inner.wire_lbtc_ln_tx_size__static_method__Api(port_, arg0),
+      callFfi: (port_) => _platform.inner.wire_lbtc_ln_tx_size__static_method__Api(port_, arg0),
       parseSuccessData: _wire2api_usize,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kLbtcLnTxSizeStaticMethodApiConstMeta,
@@ -267,24 +212,18 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta get kLbtcLnTxSizeStaticMethodApiConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
+  FlutterRustBridgeTaskConstMeta get kLbtcLnTxSizeStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
         debugName: "lbtc_ln_tx_size__static_method__Api",
         argNames: ["swap"],
       );
 
   Future<String> lbtcLnReverseClaimStaticMethodApi(
-      {required LbtcLnSwap swap,
-      required String outAddress,
-      required int absFee,
-      dynamic hint}) {
+      {required LbtcLnSwap swap, required String outAddress, required int absFee, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_lbtc_ln_swap(swap);
     var arg1 = _platform.api2wire_String(outAddress);
     var arg2 = _platform.api2wire_u64(absFee);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_lbtc_ln_reverse_claim__static_method__Api(
-              port_, arg0, arg1, arg2),
+      callFfi: (port_) => _platform.inner.wire_lbtc_ln_reverse_claim__static_method__Api(port_, arg0, arg1, arg2),
       parseSuccessData: _wire2api_String,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kLbtcLnReverseClaimStaticMethodApiConstMeta,
@@ -293,20 +232,17 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta
-      get kLbtcLnReverseClaimStaticMethodApiConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "lbtc_ln_reverse_claim__static_method__Api",
-            argNames: ["swap", "outAddress", "absFee"],
-          );
+  FlutterRustBridgeTaskConstMeta get kLbtcLnReverseClaimStaticMethodApiConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "lbtc_ln_reverse_claim__static_method__Api",
+        argNames: ["swap", "outAddress", "absFee"],
+      );
 
-  Future<String> swapStatusStaticMethodApi(
-      {required String boltzUrl, required String id, dynamic hint}) {
+  Future<String> swapStatusStaticMethodApi({required String boltzUrl, required String id, dynamic hint}) {
     var arg0 = _platform.api2wire_String(boltzUrl);
     var arg1 = _platform.api2wire_String(id);
     return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_swap_status__static_method__Api(port_, arg0, arg1),
+      callFfi: (port_) => _platform.inner.wire_swap_status__static_method__Api(port_, arg0, arg1),
       parseSuccessData: _wire2api_String,
       parseErrorData: _wire2api_boltz_error,
       constMeta: kSwapStatusStaticMethodApiConstMeta,
@@ -315,8 +251,7 @@ class BoltzDartImpl implements BoltzDart {
     ));
   }
 
-  FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
+  FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta => const FlutterRustBridgeTaskConstMeta(
         debugName: "swap_status__static_method__Api",
         argNames: ["boltzUrl", "id"],
       );
@@ -332,8 +267,7 @@ class BoltzDartImpl implements BoltzDart {
 
   AllFees _wire2api_all_fees(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 6)
-      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    if (arr.length != 6) throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
     return AllFees(
       btcLimits: _wire2api_limits(arr[0]),
       lbtcLimits: _wire2api_limits(arr[1]),
@@ -346,8 +280,7 @@ class BoltzDartImpl implements BoltzDart {
 
   BoltzError _wire2api_boltz_error(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 2) throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return BoltzError(
       kind: _wire2api_String(arr[0]),
       message: _wire2api_String(arr[1]),
@@ -356,8 +289,7 @@ class BoltzDartImpl implements BoltzDart {
 
   BtcLnSwap _wire2api_btc_ln_swap(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 11)
-      throw Exception('unexpected arr length: expect 11 but see ${arr.length}');
+    if (arr.length != 11) throw Exception('unexpected arr length: expect 11 but see ${arr.length}');
     return BtcLnSwap(
       id: _wire2api_String(arr[0]),
       kind: _wire2api_swap_type(arr[1]),
@@ -383,8 +315,7 @@ class BoltzDartImpl implements BoltzDart {
 
   KeyPair _wire2api_key_pair(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 2) throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return KeyPair(
       secretKey: _wire2api_String(arr[0]),
       publicKey: _wire2api_String(arr[1]),
@@ -393,8 +324,7 @@ class BoltzDartImpl implements BoltzDart {
 
   LbtcLnSwap _wire2api_lbtc_ln_swap(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 12)
-      throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
+    if (arr.length != 12) throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
     return LbtcLnSwap(
       id: _wire2api_String(arr[0]),
       kind: _wire2api_swap_type(arr[1]),
@@ -413,8 +343,7 @@ class BoltzDartImpl implements BoltzDart {
 
   Limits _wire2api_limits(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 2) throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return Limits(
       minimal: _wire2api_u64(arr[0]),
       maximal: _wire2api_u64(arr[1]),
@@ -423,8 +352,7 @@ class BoltzDartImpl implements BoltzDart {
 
   PreImage _wire2api_pre_image(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 3) throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return PreImage(
       value: _wire2api_String(arr[0]),
       sha256: _wire2api_String(arr[1]),
@@ -434,8 +362,7 @@ class BoltzDartImpl implements BoltzDart {
 
   ReverseSwapFees _wire2api_reverse_swap_fees(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 3) throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return ReverseSwapFees(
       boltzFees: _wire2api_u64(arr[0]),
       lockupFees: _wire2api_u64(arr[1]),
@@ -445,8 +372,7 @@ class BoltzDartImpl implements BoltzDart {
 
   SubmarineSwapFees _wire2api_submarine_swap_fees(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 3) throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return SubmarineSwapFees(
       boltzFees: _wire2api_u64(arr[0]),
       claimFees: _wire2api_u64(arr[1]),
@@ -517,8 +443,7 @@ class BoltzDartPlatform extends FlutterRustBridgeBase<BoltzDartWire> {
   }
 
   @protected
-  ffi.Pointer<wire_LbtcLnSwap> api2wire_box_autoadd_lbtc_ln_swap(
-      LbtcLnSwap raw) {
+  ffi.Pointer<wire_LbtcLnSwap> api2wire_box_autoadd_lbtc_ln_swap(LbtcLnSwap raw) {
     final ptr = inner.new_box_autoadd_lbtc_ln_swap_0();
     _api_fill_to_wire_lbtc_ln_swap(raw, ptr.ref);
     return ptr;
@@ -539,13 +464,11 @@ class BoltzDartPlatform extends FlutterRustBridgeBase<BoltzDartWire> {
 
 // Section: api_fill_to_wire
 
-  void _api_fill_to_wire_box_autoadd_btc_ln_swap(
-      BtcLnSwap apiObj, ffi.Pointer<wire_BtcLnSwap> wireObj) {
+  void _api_fill_to_wire_box_autoadd_btc_ln_swap(BtcLnSwap apiObj, ffi.Pointer<wire_BtcLnSwap> wireObj) {
     _api_fill_to_wire_btc_ln_swap(apiObj, wireObj.ref);
   }
 
-  void _api_fill_to_wire_box_autoadd_lbtc_ln_swap(
-      LbtcLnSwap apiObj, ffi.Pointer<wire_LbtcLnSwap> wireObj) {
+  void _api_fill_to_wire_box_autoadd_lbtc_ln_swap(LbtcLnSwap apiObj, ffi.Pointer<wire_LbtcLnSwap> wireObj) {
     _api_fill_to_wire_lbtc_ln_swap(apiObj, wireObj.ref);
   }
 
@@ -568,8 +491,7 @@ class BoltzDartPlatform extends FlutterRustBridgeBase<BoltzDartWire> {
     wireObj.public_key = api2wire_String(apiObj.publicKey);
   }
 
-  void _api_fill_to_wire_lbtc_ln_swap(
-      LbtcLnSwap apiObj, wire_LbtcLnSwap wireObj) {
+  void _api_fill_to_wire_lbtc_ln_swap(LbtcLnSwap apiObj, wire_LbtcLnSwap wireObj) {
     wireObj.id = api2wire_String(apiObj.id);
     wireObj.kind = api2wire_swap_type(apiObj.kind);
     wireObj.network = api2wire_chain(apiObj.network);
@@ -604,17 +526,13 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   late final dartApi = DartApiDl(init_frb_dart_api_dl);
 
   /// Holds the symbol lookup function.
-  final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
-      _lookup;
+  final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) _lookup;
 
   /// The symbols are looked up in [dynamicLibrary].
-  BoltzDartWire(ffi.DynamicLibrary dynamicLibrary)
-      : _lookup = dynamicLibrary.lookup;
+  BoltzDartWire(ffi.DynamicLibrary dynamicLibrary) : _lookup = dynamicLibrary.lookup;
 
   /// The symbols are looked up with [lookup].
-  BoltzDartWire.fromLookup(
-      ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
-          lookup)
+  BoltzDartWire.fromLookup(ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) lookup)
       : _lookup = lookup;
 
   void store_dart_post_cobject(
@@ -626,10 +544,8 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _store_dart_post_cobjectPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(DartPostCObjectFnType)>>(
-          'store_dart_post_cobject');
-  late final _store_dart_post_cobject = _store_dart_post_cobjectPtr
-      .asFunction<void Function(DartPostCObjectFnType)>();
+      _lookup<ffi.NativeFunction<ffi.Void Function(DartPostCObjectFnType)>>('store_dart_post_cobject');
+  late final _store_dart_post_cobject = _store_dart_post_cobjectPtr.asFunction<void Function(DartPostCObjectFnType)>();
 
   Object get_dart_object(
     int ptr,
@@ -639,11 +555,8 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _get_dart_objectPtr =
-      _lookup<ffi.NativeFunction<ffi.Handle Function(ffi.UintPtr)>>(
-          'get_dart_object');
-  late final _get_dart_object =
-      _get_dart_objectPtr.asFunction<Object Function(int)>();
+  late final _get_dart_objectPtr = _lookup<ffi.NativeFunction<ffi.Handle Function(ffi.UintPtr)>>('get_dart_object');
+  late final _get_dart_object = _get_dart_objectPtr.asFunction<Object Function(int)>();
 
   void drop_dart_object(
     int ptr,
@@ -653,11 +566,8 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _drop_dart_objectPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.UintPtr)>>(
-          'drop_dart_object');
-  late final _drop_dart_object =
-      _drop_dart_objectPtr.asFunction<void Function(int)>();
+  late final _drop_dart_objectPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.UintPtr)>>('drop_dart_object');
+  late final _drop_dart_object = _drop_dart_objectPtr.asFunction<void Function(int)>();
 
   int new_dart_opaque(
     Object handle,
@@ -667,11 +577,8 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _new_dart_opaquePtr =
-      _lookup<ffi.NativeFunction<ffi.UintPtr Function(ffi.Handle)>>(
-          'new_dart_opaque');
-  late final _new_dart_opaque =
-      _new_dart_opaquePtr.asFunction<int Function(Object)>();
+  late final _new_dart_opaquePtr = _lookup<ffi.NativeFunction<ffi.UintPtr Function(ffi.Handle)>>('new_dart_opaque');
+  late final _new_dart_opaque = _new_dart_opaquePtr.asFunction<int Function(Object)>();
 
   int init_frb_dart_api_dl(
     ffi.Pointer<ffi.Void> obj,
@@ -682,10 +589,8 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _init_frb_dart_api_dlPtr =
-      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.Pointer<ffi.Void>)>>(
-          'init_frb_dart_api_dl');
-  late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
-      .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
+      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.Pointer<ffi.Void>)>>('init_frb_dart_api_dl');
+  late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr.asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
   void wire_swap_fees__static_method__Api(
     int port_,
@@ -699,13 +604,11 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _wire_swap_fees__static_method__ApiPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
-              ffi.Uint64)>>('wire_swap_fees__static_method__Api');
+  late final _wire_swap_fees__static_method__ApiPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>, ffi.Uint64)>>(
+          'wire_swap_fees__static_method__Api');
   late final _wire_swap_fees__static_method__Api =
-      _wire_swap_fees__static_method__ApiPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>, int)>();
+      _wire_swap_fees__static_method__ApiPtr.asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>, int)>();
 
   void wire_new_btc_ln_submarine__static_method__Api(
     int port_,
@@ -728,26 +631,19 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _wire_new_btc_ln_submarine__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Uint64,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Int32,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_new_btc_ln_submarine__static_method__Api');
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Uint64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Int32,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_new_btc_ln_submarine__static_method__Api');
   late final _wire_new_btc_ln_submarine__static_method__Api =
       _wire_new_btc_ln_submarine__static_method__ApiPtr.asFunction<
-          void Function(
-              int,
-              ffi.Pointer<wire_uint_8_list>,
-              int,
-              ffi.Pointer<wire_uint_8_list>,
-              int,
-              ffi.Pointer<wire_uint_8_list>,
-              ffi.Pointer<wire_uint_8_list>)>();
+          void Function(int, ffi.Pointer<wire_uint_8_list>, int, ffi.Pointer<wire_uint_8_list>, int,
+              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_new_btc_ln_reverse__static_method__Api(
     int port_,
@@ -770,20 +666,18 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _wire_new_btc_ln_reverse__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Uint64,
-                  ffi.Uint64,
-                  ffi.Int32,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_new_btc_ln_reverse__static_method__Api');
-  late final _wire_new_btc_ln_reverse__static_method__Api =
-      _wire_new_btc_ln_reverse__static_method__ApiPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_uint_8_list>, int, int, int,
-              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Uint64,
+              ffi.Uint64,
+              ffi.Int32,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_new_btc_ln_reverse__static_method__Api');
+  late final _wire_new_btc_ln_reverse__static_method__Api = _wire_new_btc_ln_reverse__static_method__ApiPtr.asFunction<
+      void Function(int, ffi.Pointer<wire_uint_8_list>, int, int, int, ffi.Pointer<wire_uint_8_list>,
+          ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_btc_ln_tx_size__static_method__Api(
     int port_,
@@ -795,13 +689,11 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _wire_btc_ln_tx_size__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_BtcLnSwap>)>>(
-      'wire_btc_ln_tx_size__static_method__Api');
+  late final _wire_btc_ln_tx_size__static_method__ApiPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64, ffi.Pointer<wire_BtcLnSwap>)>>(
+          'wire_btc_ln_tx_size__static_method__Api');
   late final _wire_btc_ln_tx_size__static_method__Api =
-      _wire_btc_ln_tx_size__static_method__ApiPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_BtcLnSwap>)>();
+      _wire_btc_ln_tx_size__static_method__ApiPtr.asFunction<void Function(int, ffi.Pointer<wire_BtcLnSwap>)>();
 
   void wire_btc_ln_reverse_claim__static_method__Api(
     int port_,
@@ -819,15 +711,10 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
 
   late final _wire_btc_ln_reverse_claim__static_method__ApiPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Int64,
-              ffi.Pointer<wire_BtcLnSwap>,
-              ffi.Pointer<wire_uint_8_list>,
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_BtcLnSwap>, ffi.Pointer<wire_uint_8_list>,
               ffi.Uint64)>>('wire_btc_ln_reverse_claim__static_method__Api');
-  late final _wire_btc_ln_reverse_claim__static_method__Api =
-      _wire_btc_ln_reverse_claim__static_method__ApiPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_BtcLnSwap>,
-              ffi.Pointer<wire_uint_8_list>, int)>();
+  late final _wire_btc_ln_reverse_claim__static_method__Api = _wire_btc_ln_reverse_claim__static_method__ApiPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_BtcLnSwap>, ffi.Pointer<wire_uint_8_list>, int)>();
 
   void wire_new_lbtc_ln_submarine__static_method__Api(
     int port_,
@@ -850,26 +737,19 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _wire_new_lbtc_ln_submarine__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Uint64,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Int32,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_new_lbtc_ln_submarine__static_method__Api');
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Uint64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Int32,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_new_lbtc_ln_submarine__static_method__Api');
   late final _wire_new_lbtc_ln_submarine__static_method__Api =
       _wire_new_lbtc_ln_submarine__static_method__ApiPtr.asFunction<
-          void Function(
-              int,
-              ffi.Pointer<wire_uint_8_list>,
-              int,
-              ffi.Pointer<wire_uint_8_list>,
-              int,
-              ffi.Pointer<wire_uint_8_list>,
-              ffi.Pointer<wire_uint_8_list>)>();
+          void Function(int, ffi.Pointer<wire_uint_8_list>, int, ffi.Pointer<wire_uint_8_list>, int,
+              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_new_lbtc_ln_reverse__static_method__Api(
     int port_,
@@ -892,20 +772,19 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _wire_new_lbtc_ln_reverse__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Uint64,
-                  ffi.Uint64,
-                  ffi.Int32,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_new_lbtc_ln_reverse__static_method__Api');
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Uint64,
+              ffi.Uint64,
+              ffi.Int32,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_new_lbtc_ln_reverse__static_method__Api');
   late final _wire_new_lbtc_ln_reverse__static_method__Api =
       _wire_new_lbtc_ln_reverse__static_method__ApiPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_uint_8_list>, int, int, int,
-              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+          void Function(int, ffi.Pointer<wire_uint_8_list>, int, int, int, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_lbtc_ln_tx_size__static_method__Api(
     int port_,
@@ -917,13 +796,11 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _wire_lbtc_ln_tx_size__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_LbtcLnSwap>)>>(
-      'wire_lbtc_ln_tx_size__static_method__Api');
+  late final _wire_lbtc_ln_tx_size__static_method__ApiPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64, ffi.Pointer<wire_LbtcLnSwap>)>>(
+          'wire_lbtc_ln_tx_size__static_method__Api');
   late final _wire_lbtc_ln_tx_size__static_method__Api =
-      _wire_lbtc_ln_tx_size__static_method__ApiPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_LbtcLnSwap>)>();
+      _wire_lbtc_ln_tx_size__static_method__ApiPtr.asFunction<void Function(int, ffi.Pointer<wire_LbtcLnSwap>)>();
 
   void wire_lbtc_ln_reverse_claim__static_method__Api(
     int port_,
@@ -941,15 +818,10 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
 
   late final _wire_lbtc_ln_reverse_claim__static_method__ApiPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Int64,
-              ffi.Pointer<wire_LbtcLnSwap>,
-              ffi.Pointer<wire_uint_8_list>,
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_LbtcLnSwap>, ffi.Pointer<wire_uint_8_list>,
               ffi.Uint64)>>('wire_lbtc_ln_reverse_claim__static_method__Api');
-  late final _wire_lbtc_ln_reverse_claim__static_method__Api =
-      _wire_lbtc_ln_reverse_claim__static_method__ApiPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_LbtcLnSwap>,
-              ffi.Pointer<wire_uint_8_list>, int)>();
+  late final _wire_lbtc_ln_reverse_claim__static_method__Api = _wire_lbtc_ln_reverse_claim__static_method__ApiPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_LbtcLnSwap>, ffi.Pointer<wire_uint_8_list>, int)>();
 
   void wire_swap_status__static_method__Api(
     int port_,
@@ -964,35 +836,29 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _wire_swap_status__static_method__ApiPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_uint_8_list>)>>(
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>>(
       'wire_swap_status__static_method__Api');
-  late final _wire_swap_status__static_method__Api =
-      _wire_swap_status__static_method__ApiPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_uint_8_list>,
-              ffi.Pointer<wire_uint_8_list>)>();
+  late final _wire_swap_status__static_method__Api = _wire_swap_status__static_method__ApiPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   ffi.Pointer<wire_BtcLnSwap> new_box_autoadd_btc_ln_swap_0() {
     return _new_box_autoadd_btc_ln_swap_0();
   }
 
   late final _new_box_autoadd_btc_ln_swap_0Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<wire_BtcLnSwap> Function()>>(
-          'new_box_autoadd_btc_ln_swap_0');
-  late final _new_box_autoadd_btc_ln_swap_0 = _new_box_autoadd_btc_ln_swap_0Ptr
-      .asFunction<ffi.Pointer<wire_BtcLnSwap> Function()>();
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_BtcLnSwap> Function()>>('new_box_autoadd_btc_ln_swap_0');
+  late final _new_box_autoadd_btc_ln_swap_0 =
+      _new_box_autoadd_btc_ln_swap_0Ptr.asFunction<ffi.Pointer<wire_BtcLnSwap> Function()>();
 
   ffi.Pointer<wire_LbtcLnSwap> new_box_autoadd_lbtc_ln_swap_0() {
     return _new_box_autoadd_lbtc_ln_swap_0();
   }
 
   late final _new_box_autoadd_lbtc_ln_swap_0Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<wire_LbtcLnSwap> Function()>>(
-          'new_box_autoadd_lbtc_ln_swap_0');
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_LbtcLnSwap> Function()>>('new_box_autoadd_lbtc_ln_swap_0');
   late final _new_box_autoadd_lbtc_ln_swap_0 =
-      _new_box_autoadd_lbtc_ln_swap_0Ptr
-          .asFunction<ffi.Pointer<wire_LbtcLnSwap> Function()>();
+      _new_box_autoadd_lbtc_ln_swap_0Ptr.asFunction<ffi.Pointer<wire_LbtcLnSwap> Function()>();
 
   ffi.Pointer<wire_uint_8_list> new_uint_8_list_0(
     int len,
@@ -1002,12 +868,9 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _new_uint_8_list_0Ptr = _lookup<
-          ffi
-          .NativeFunction<ffi.Pointer<wire_uint_8_list> Function(ffi.Int32)>>(
-      'new_uint_8_list_0');
-  late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr
-      .asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
+  late final _new_uint_8_list_0Ptr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_uint_8_list> Function(ffi.Int32)>>('new_uint_8_list_0');
+  late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr.asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
 
   void free_WireSyncReturn(
     WireSyncReturn ptr,
@@ -1018,10 +881,8 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _free_WireSyncReturnPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(WireSyncReturn)>>(
-          'free_WireSyncReturn');
-  late final _free_WireSyncReturn =
-      _free_WireSyncReturnPtr.asFunction<void Function(WireSyncReturn)>();
+      _lookup<ffi.NativeFunction<ffi.Void Function(WireSyncReturn)>>('free_WireSyncReturn');
+  late final _free_WireSyncReturn = _free_WireSyncReturnPtr.asFunction<void Function(WireSyncReturn)>();
 }
 
 final class _Dart_Handle extends ffi.Opaque {}
@@ -1103,7 +964,6 @@ final class wire_LbtcLnSwap extends ffi.Struct {
   external ffi.Pointer<wire_uint_8_list> boltz_url;
 }
 
-typedef DartPostCObjectFnType = ffi.Pointer<
-    ffi.NativeFunction<
-        ffi.Bool Function(DartPort port_id, ffi.Pointer<ffi.Void> message)>>;
+typedef DartPostCObjectFnType
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(DartPort port_id, ffi.Pointer<ffi.Void> message)>>;
 typedef DartPort = ffi.Int64;
