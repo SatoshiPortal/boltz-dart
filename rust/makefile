@@ -21,10 +21,10 @@ init:
 
 ## all: Compile iOS, Android and bindings targets
 all: init jnilib xcframework linux
-
+ 
 linux:
 	  @echo "[Creating linux binary ...] $@"
-	  sh linux.sh $(VERSION)
+	  docker run --platform linux/x86_64 --name bwcbuilder01 -v $(shell pwd):/boltz-dart bwcbuilder && docker stop bwcbuilder01 && docker rm bwcbuilder01
 	  @echo "[Done ✅]"
 
 jnilib:

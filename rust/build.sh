@@ -1,4 +1,3 @@
 #!/bin/bash -e
-./android.sh
-./darwin.sh
+./linux.sh
 exit

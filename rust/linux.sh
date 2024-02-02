@@ -7,9 +7,14 @@ LINUX_DIR=$ROOT/$NAME.$VERSION/linux # final binaries stored here
 # arm-unknown-linux-gnueabi \
 # armv7-unknown-linux-gnueabi \
 # i686-unknown-linux-gnu \
+
+cd boltz-dart
+
+#cd ./src || exit
+
 for TARGET in \
     x86_64-unknown-linux-gnu
 do
     rustup target add $TARGET
-    TARGET_CC=x86_64-unknown-linux-gnu cargo build --target-dir $LINUX_DIR -r --target=x86_64-unknown-linux-gnu
+    cargo build --target-dir $LINUX_DIR -r --target=x86_64-unknown-linux-gnu
 done
