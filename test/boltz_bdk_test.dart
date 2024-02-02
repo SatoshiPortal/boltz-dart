@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:boltz_dart/boltz_dart.dart';
 import 'package:boltz_dart/src/types/swap.dart';
 import 'package:boltz_dart/src/types/swap_status_response.dart';
 import 'package:boltz_dart/src/utils/http.dart';
+// import 'package:flutter_test/flutter_test.dart';
 import 'package:test/test.dart';
 import 'dart:io';
+import 'package:bdk_flutter/bdk_flutter.dart';
 
 void countdown(int totalSeconds) {
   for (var i = totalSeconds; i >= 0; i--) {
@@ -27,7 +30,18 @@ const network = Chain.Testnet;
 const electrumUrl = 'electrum.bullbitcoin.com:60002';
 const boltzUrl = 'https://api.testnet.boltz.exchange';
 
+late Wallet wallet;
+late Blockchain blockchain;
+
 void main() {
+  setUpAll(() async {
+    blockchain = await setupBlockchain();
+    wallet = await setupWallet(blockchain);
+  });
+  tearDownAll(() {
+    // TODO: to do anything with BDK?
+  });
+
   test('FEE ESTIMATION', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
@@ -35,6 +49,11 @@ void main() {
 
     expect((fees.btcReverse.boltzFees > 0.0), true);
     expect((fees.btcSubmarine.boltzFees > 0.0), true);
+  });
+
+  test('Exp: Send', () async {
+    final resp = await sendBitcoin("tb1pek4sdtgpgzuzl0w53nk05lcqndmxfj7dsywytl4z5x86sjvk8yts4pu2ed", 3000, blockchain);
+    print(resp);
   });
 
   group('BTC-LN Submarince', () {
@@ -112,6 +131,7 @@ void main() {
       expect(swap.keys.secretKey, expectedSecretKey);
 
       print("Send sats less than: $paymentDetails");
+      // swap.outAmount;
 
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
@@ -243,9 +263,11 @@ void main() {
       */
     }, skip: true);
 
-    test('Positive: ', () async {
+    test('Positive', () async {
       int outAmount = 51000;
-      const outAddress = "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq";
+
+      // String outAddress = await getAddressFromWallet(); // "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq";
+      String outAddress = "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq";
 
       BtcLnSwap btcLnSubmarine = await setupReverse(outAmount);
 
@@ -263,11 +285,11 @@ void main() {
       var sub = api.getSwapStatusStream(swap.id).listen((event) async {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnMempool) {
+          // Find actual fee from AllFee class
           await Future.delayed(Duration(seconds: 20));
-
           final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
           final claimFeesEstimate = fees.btcReverse.claimFeesEstimate;
-
+          // print("CLAIM FEE ESTIMATE: $claimFeesEstimate");
           String txnId = await btcLnSubmarine.claim(outAddress: outAddress, absFee: claimFeesEstimate);
           print(txnId);
         }
@@ -310,4 +332,52 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
   );
 
   return btcLnSubmarineSwap;
+}
+
+Future<Blockchain> setupBlockchain() async {
+  blockchain = await Blockchain.create(
+      config: BlockchainConfig.electrum(
+          config: ElectrumConfig(
+              stopGap: 10, timeout: 5, retry: 5, url: "ssl://electrum.blockstream.info:60002", validateDomain: true)));
+  return blockchain;
+}
+
+Future<Wallet> setupWallet(Blockchain blockchain) async {
+  final mnemonic =
+      await Mnemonic.fromString('fossil install fever ticket wisdom outer broken aspect lucky still flavor dial');
+  final descriptorSecretKey = await DescriptorSecretKey.create(network: Network.Testnet, mnemonic: mnemonic);
+  final externalDescriptor = await Descriptor.newBip84(
+      secretKey: descriptorSecretKey, network: Network.Testnet, keychain: KeychainKind.External);
+  final internalDescriptor = await Descriptor.newBip44(
+      secretKey: descriptorSecretKey, network: Network.Testnet, keychain: KeychainKind.Internal);
+
+  final wallet = await Wallet.create(
+      descriptor: externalDescriptor,
+      changeDescriptor: internalDescriptor,
+      network: Network.Testnet,
+      databaseConfig: const DatabaseConfig.memory());
+  final _ = await wallet.sync(blockchain);
+
+  return wallet;
+}
+
+Future<String> sendBitcoin(String address, double amount, Blockchain blockchain) async {
+  final bdkAddress = await Address.create(address: address);
+  final script = await bdkAddress.scriptPubKey();
+  final txBuilder = TxBuilder();
+  final txBuilderResult = await txBuilder.feeRate(2).addRecipient(script, amount.toInt()).finish(wallet);
+
+  final psbt = await wallet.sign(psbt: txBuilderResult.psbt);
+  final psbtStruct = PartiallySignedTransaction(psbtBase64: psbt.psbtBase64);
+  final tx = await psbtStruct.extractTx();
+
+  await blockchain.broadcast(tx);
+  final txid = await tx.txid();
+
+  return txid;
+}
+
+Future<String> getNextAddress(Wallet w) async {
+  AddressInfo addr = await w.getAddress(addressIndex: AddressIndex.lastUnused());
+  return addr.address;
 }
