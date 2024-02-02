@@ -26,6 +26,7 @@ const index = 0;
 const network = Chain.Testnet;
 const electrumUrl = 'electrum.bullbitcoin.com:60002';
 const boltzUrl = 'https://api.testnet.boltz.exchange';
+const testTimeout = Timeout(Duration(minutes: 30));
 
 void main() {
   test('FEE ESTIMATION', () async {
@@ -131,7 +132,7 @@ void main() {
 
       // TODO: Refund flow goes here
       // expect(receivedEvents[2], equals(SwapStatus.swapRefunded));
-    }, skip: true, timeout: const Timeout(Duration(minutes: 30)));
+    }, skip: true, timeout: testTimeout);
 
     test('Neg: LN Invoice expires', () async {
       const invoice =
@@ -168,7 +169,7 @@ void main() {
 
       // TODO: Refund flow goes here
       // expect(receivedEvents[2], equals(SwapStatus.swapRefunded));
-    }, skip: true, timeout: const Timeout(Duration(minutes: 30)));
+    }, skip: true, timeout: testTimeout);
 
     test('Positive: Send exact amount or more', () async {
       const invoice =
@@ -200,7 +201,7 @@ void main() {
       expect(receivedEvents[2].status, equals(SwapStatus.txnConfirmed));
       expect(receivedEvents[3].status, equals(SwapStatus.invoicePending));
       expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
-    }, skip: true, timeout: const Timeout(Duration(minutes: 30)));
+    }, skip: true, timeout: testTimeout);
   });
 
   group('LN-BTC Reverse Submarince', () {
@@ -280,9 +281,9 @@ void main() {
       await sub.cancel();
 
       expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
-      expect(receivedEvents[0].status, equals(SwapStatus.txnMempool));
-      expect(receivedEvents[1].status, equals(SwapStatus.invoiceSettled));
-    }, skip: true, timeout: const Timeout(Duration(minutes: 30)));
+      expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
+      expect(receivedEvents[2].status, equals(SwapStatus.invoiceSettled));
+    }, skip: true, timeout: testTimeout);
   });
 }
 
