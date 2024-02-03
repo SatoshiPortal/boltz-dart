@@ -19,8 +19,8 @@ init:
 	@if [ $$(uname) == "Darwin" ] ; then cargo install cargo-lipo ; fi
 ## :
 
-## all: Compile iOS, Android and bindings targets
-all: init jnilib xcframework linux
+## all: Compile iOS, Android & Linux binaries
+all: init jnilib xcframework zip
  
 linux:
 	@echo "[Creating linux binary ...] $@"
@@ -39,10 +39,10 @@ xcframework:
 	sh darwin.sh $(VERSION)
 	@echo "[Done ✅]"
 
-# compress-build:
-# 	@echo "[COMPRESSING BINARIES TO FLUTTER PACKAGE ...] $@"
-# 	sh compress.sh
-# 	@echo "[Done ✅]"
+zip:
+	@echo "[COMPRESSING BINARIES TO FLUTTER PACKAGE ...] $@"
+	sh compress.sh $(VERSION)
+	@echo "[Done ✅]"
 
 # copy-build:
 # 	@echo "[COPYING BINARIES TO FLUTTER PACKAGE ...] $@"
