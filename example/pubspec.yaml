@@ -11,7 +11,7 @@ environment:
 dependencies:
   boltz_dart:
     path: ../
-  bdk_flutter: ^0.30.0
+  bdk_flutter: 0.29.2
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
