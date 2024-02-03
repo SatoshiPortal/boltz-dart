@@ -1,5 +1,6 @@
 FROM amd64/rust:slim-bullseye
 ARG USER_ID
+ARG VERSION
 
 RUN if getent passwd $USER_ID >/dev/null; then \
         existing_user=$(getent passwd $USER_ID | cut -d: -f1) && \
@@ -28,7 +29,7 @@ ENV NDK_VERSION=23.0.7599858
 
 VOLUME ["/boltz-dart"]
 
-#WORKDIR /boltz-dart
+# WORKDIR /boltz-dart
 
 #Used for cargo build to find Cargo.toml 
 

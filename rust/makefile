@@ -23,19 +23,21 @@ init:
 all: init jnilib xcframework linux
  
 linux:
-	  @echo "[Creating linux binary ...] $@"
-	  docker run --platform linux/x86_64 --name bwcbuilder01 -v $(shell pwd):/boltz-dart bwcbuilder && docker stop bwcbuilder01 && docker rm bwcbuilder01
-	  @echo "[Done ✅]"
+	@echo "[Creating linux binary ...] $@"
+	docker stop bwcbuilder01 ; docker rm bwcbuilder01; \
+	docker build --platform linux/x86_64 --build-arg USER_ID=$(shell id -u) --build-arg VERSION=$(VERSION) -t bwcbuilder . && \
+	docker run --platform linux/x86_64 --name bwcbuilder01 -v $(shell pwd):/boltz-dart bwcbuilder ; docker stop bwcbuilder01 ; docker rm bwcbuilder01
+	@echo "[Done ✅]"
 
 jnilib:
-	  @echo "[Creating android jniLibs ...] $@"
-	  sh android.sh $(VERSION)
-	  @echo "[Done ✅]"
+	@echo "[Creating android jniLibs ...] $@"
+	sh android.sh $(VERSION)
+	@echo "[Done ✅]"
 
 xcframework:
-	  @echo "[Creating rust_bdk_ffi.xcframework ...] $@"
-	  sh darwin.sh $(VERSION)
-	  @echo "[Done ✅]"
+	@echo "[Creating rust_bdk_ffi.xcframework ...] $@"
+	sh darwin.sh $(VERSION)
+	@echo "[Done ✅]"
 
 # compress-build:
 # 	@echo "[COMPRESSING BINARIES TO FLUTTER PACKAGE ...] $@"

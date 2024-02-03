@@ -1,3 +1,4 @@
 #!/bin/bash
-/boltz-dart/linux.sh
+cd boltz-dart || exit 1
+bash linux.sh "$VERSION"
 exec "$@"
