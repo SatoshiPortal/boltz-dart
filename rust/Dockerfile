@@ -1,5 +1,6 @@
 FROM amd64/rust:slim-bullseye
 ARG USER_ID
+ARG VERSION
 
 RUN if getent passwd $USER_ID >/dev/null; then \
         existing_user=$(getent passwd $USER_ID | cut -d: -f1) && \
@@ -18,18 +19,23 @@ RUN apt-get update --allow-releaseinfo-change && \
     openssl libssl-dev git expect jq lsb-release tree \
     pkg-config autoconf libtool neovim
 
-// CHANGE THIS TO ONLY USE LINUX TARGETS
-RUN rustup target add x86_64-unknown-linux-gnu
 
 RUN mkdir /.cargo
-COPY config /.cargo/config
 RUN chown -R debian /.cargo
-
+RUN cargo 
+COPY Cargo.toml /.cargo/config
 ENV CARGO_HOME=/.cargo
 ENV NDK_VERSION=23.0.7599858
 
-
 VOLUME ["/boltz-dart"]
+
+# WORKDIR /boltz-dart
+
+#Used for cargo build to find Cargo.toml 
+
+RUN rustup target add x86_64-unknown-linux-gnu
+#RUN TARGET_CC=x86_64-unknown-linux-gnu cargo build --target-dir ./boltz-dart -r --target=x86_64-unknown-linux-gnu
+
 
 COPY docker-entrypoint.sh /usr/bin
 USER debian

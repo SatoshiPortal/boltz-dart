@@ -1,3 +1,4 @@
 #!/bin/bash
-/boltz-dart/rust/build.sh
+cd boltz-dart || exit 1
+bash linux.sh "$VERSION"
 exec "$@"
