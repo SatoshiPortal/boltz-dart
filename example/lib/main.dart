@@ -13,4 +13,5 @@ void main() {
   // claim swap script
   // check bdk wallet balance
   print("Boltz/BDK Demo");
+  final chain = boltz.Chain.LiquidTestnet;
 }
