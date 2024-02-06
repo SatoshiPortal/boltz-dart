@@ -276,7 +276,7 @@ impl Api {
         let pair_hash = boltz_pairs.get_lbtc_pair()?.hash;
 
         let swap_request =
-            CreateSwapRequest::new_btc_submarine(&pair_hash, &invoice, &refund_keypair.public_key);
+            CreateSwapRequest::new_lbtc_submarine(&pair_hash, &invoice, &refund_keypair.public_key);
         let response = match boltz_client.create_swap(swap_request) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -346,10 +346,10 @@ impl Api {
 
         let pair_hash = boltz_pairs.get_lbtc_pair()?.hash;
 
-        let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(
-            &pair_hash,
-            &preimage.sha256.to_string(),
-            &claim_keypair.public_key,
+        let swap_request = CreateSwapRequest::new_lbtc_reverse_invoice_amt(
+            pair_hash,
+            preimage.sha256.to_string(),
+            claim_keypair.clone().public_key,
             out_amount,
         );
         let response = match boltz_client.create_swap(swap_request) {
