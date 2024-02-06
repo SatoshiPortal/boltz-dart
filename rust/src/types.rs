@@ -10,6 +10,7 @@ use boltz_client::{
 };
 // use crate::types::{KeyPair, PreImage, Network, SwapType};
 
+#[frb(dart_metadata=("freezed"))]
 #[derive(Clone)]
 pub struct KeyPair {
     pub secret_key: String,
@@ -53,8 +54,10 @@ impl KeyPair {
 
 // Impl into secp256k1::KeyPair
 use boltz_client::util::secrets::Preimage;
+use flutter_rust_bridge::frb;
 use std::convert::TryInto;
 
+#[frb(dart_metadata=("freezed"))]
 #[derive(Clone)]
 pub struct PreImage {
     pub value: String,
@@ -95,6 +98,7 @@ impl Into<PreImage> for BoltzPreImage {
     }
 }
 
+#[frb(dart_metadata=("freezed"))]
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum SwapType {
     Submarine,
@@ -110,6 +114,7 @@ impl Into<BoltzSwapType> for SwapType {
     }
 }
 
+#[frb(dart_metadata=("freezed"))]
 #[derive(Clone, Copy)]
 pub enum Chain {
     Testnet,
@@ -124,6 +129,8 @@ impl Into<BChain> for Chain {
         }
     }
 }
+
+#[frb(dart_metadata=("freezed"))]
 pub struct AllFees {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
@@ -132,12 +139,15 @@ pub struct AllFees {
     pub lbtc_submarine: SubmarineSwapFees,
     pub lbtc_reverse: ReverseSwapFees,
 }
+
+#[frb(dart_metadata=("freezed"))]
 pub struct Limits {
     pub minimal: u64,
     pub maximal: u64,
 }
 
 // 1. lockup (client) 2. [claim (boltz) | refund (client)]
+#[frb(dart_metadata=("freezed"))]
 pub struct SubmarineSwapFees {
     pub boltz_fees: u64,
     pub claim_fees: u64,
@@ -145,11 +155,14 @@ pub struct SubmarineSwapFees {
 }
 
 // 1. lockup (boltz) 2. [claim (client) | refund (boltz)]
+#[frb(dart_metadata=("freezed"))]
 pub struct ReverseSwapFees {
     pub boltz_fees: u64,
     pub lockup_fees: u64,
     pub claim_fees_estimate: u64,
 }
+
+#[frb(dart_metadata=("freezed"))]
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,
@@ -194,6 +207,7 @@ impl BtcLnSwap {
     }
 }
 
+#[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnSwap {
     pub id: String,
     pub kind: SwapType,
@@ -241,6 +255,7 @@ impl LbtcLnSwap {
     }
 }
 
+#[frb(dart_metadata=("freezed"))]
 pub struct BoltzError {
     pub kind: String,
     pub message: String,

@@ -7,6 +7,9 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+
+part 'bridge_definitions.freezed.dart';
 
 abstract class BoltzDart {
   Future<AllFees> swapFeesStaticMethodApi(
@@ -92,60 +95,41 @@ abstract class BoltzDart {
   FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta;
 }
 
-class AllFees {
-  final Limits btcLimits;
-  final Limits lbtcLimits;
-  final SubmarineSwapFees btcSubmarine;
-  final ReverseSwapFees btcReverse;
-  final SubmarineSwapFees lbtcSubmarine;
-  final ReverseSwapFees lbtcReverse;
-
-  const AllFees({
-    required this.btcLimits,
-    required this.lbtcLimits,
-    required this.btcSubmarine,
-    required this.btcReverse,
-    required this.lbtcSubmarine,
-    required this.lbtcReverse,
-  });
+@freezed
+class AllFees with _$AllFees {
+  const factory AllFees({
+    required Limits btcLimits,
+    required Limits lbtcLimits,
+    required SubmarineSwapFees btcSubmarine,
+    required ReverseSwapFees btcReverse,
+    required SubmarineSwapFees lbtcSubmarine,
+    required ReverseSwapFees lbtcReverse,
+  }) = _AllFees;
 }
 
-class BoltzError implements FrbException {
-  final String kind;
-  final String message;
-
-  const BoltzError({
-    required this.kind,
-    required this.message,
-  });
+@freezed
+class BoltzError with _$BoltzError implements FrbException {
+  const factory BoltzError({
+    required String kind,
+    required String message,
+  }) = _BoltzError;
 }
 
-class BtcLnSwap {
-  final String id;
-  final SwapType kind;
-  final Chain network;
-  final KeyPair keys;
-  final PreImage preimage;
-  final String redeemScript;
-  final String invoice;
-  final String scriptAddress;
-  final int outAmount;
-  final String electrumUrl;
-  final String boltzUrl;
-
-  const BtcLnSwap({
-    required this.id,
-    required this.kind,
-    required this.network,
-    required this.keys,
-    required this.preimage,
-    required this.redeemScript,
-    required this.invoice,
-    required this.scriptAddress,
-    required this.outAmount,
-    required this.electrumUrl,
-    required this.boltzUrl,
-  });
+@freezed
+class BtcLnSwap with _$BtcLnSwap {
+  const factory BtcLnSwap({
+    required String id,
+    required SwapType kind,
+    required Chain network,
+    required KeyPair keys,
+    required PreImage preimage,
+    required String redeemScript,
+    required String invoice,
+    required String scriptAddress,
+    required int outAmount,
+    required String electrumUrl,
+    required String boltzUrl,
+  }) = _BtcLnSwap;
 }
 
 enum Chain {
@@ -153,90 +137,65 @@ enum Chain {
   LiquidTestnet,
 }
 
-class KeyPair {
-  final String secretKey;
-  final String publicKey;
-
-  const KeyPair({
-    required this.secretKey,
-    required this.publicKey,
-  });
+@freezed
+class KeyPair with _$KeyPair {
+  const factory KeyPair({
+    required String secretKey,
+    required String publicKey,
+  }) = _KeyPair;
 }
 
-class LbtcLnSwap {
-  final String id;
-  final SwapType kind;
-  final Chain network;
-  final KeyPair keys;
-  final PreImage preimage;
-  final String redeemScript;
-  final String invoice;
-  final int outAmount;
-  final String scriptAddress;
-  final String blindingKey;
-  final String electrumUrl;
-  final String boltzUrl;
-
-  const LbtcLnSwap({
-    required this.id,
-    required this.kind,
-    required this.network,
-    required this.keys,
-    required this.preimage,
-    required this.redeemScript,
-    required this.invoice,
-    required this.outAmount,
-    required this.scriptAddress,
-    required this.blindingKey,
-    required this.electrumUrl,
-    required this.boltzUrl,
-  });
+@freezed
+class LbtcLnSwap with _$LbtcLnSwap {
+  const factory LbtcLnSwap({
+    required String id,
+    required SwapType kind,
+    required Chain network,
+    required KeyPair keys,
+    required PreImage preimage,
+    required String redeemScript,
+    required String invoice,
+    required int outAmount,
+    required String scriptAddress,
+    required String blindingKey,
+    required String electrumUrl,
+    required String boltzUrl,
+  }) = _LbtcLnSwap;
 }
 
-class Limits {
-  final int minimal;
-  final int maximal;
-
-  const Limits({
-    required this.minimal,
-    required this.maximal,
-  });
+@freezed
+class Limits with _$Limits {
+  const factory Limits({
+    required int minimal,
+    required int maximal,
+  }) = _Limits;
 }
 
-class PreImage {
-  final String value;
-  final String sha256;
-  final String hash160;
-
-  const PreImage({
-    required this.value,
-    required this.sha256,
-    required this.hash160,
-  });
+@freezed
+class PreImage with _$PreImage {
+  const factory PreImage({
+    required String value,
+    required String sha256,
+    required String hash160,
+  }) = _PreImage;
 }
 
-class ReverseSwapFees {
-  final int boltzFees;
-  final int lockupFees;
-  final int claimFeesEstimate;
-
-  const ReverseSwapFees({
-    required this.boltzFees,
-    required this.lockupFees,
-    required this.claimFeesEstimate,
-  });
+@freezed
+class ReverseSwapFees with _$ReverseSwapFees {
+  const factory ReverseSwapFees({
+    required int boltzFees,
+    required int lockupFees,
+    required int claimFeesEstimate,
+  }) = _ReverseSwapFees;
 }
 
-class SubmarineSwapFees {
-  final int boltzFees;
-  final int claimFees;
-  final int lockupFeesEstimate;
-
-  const SubmarineSwapFees({
-    required this.boltzFees,
-    required this.claimFees,
-    required this.lockupFeesEstimate,
-  });
+@freezed
+class SubmarineSwapFees with _$SubmarineSwapFees {
+  const factory SubmarineSwapFees({
+    required int boltzFees,
+    required int claimFees,
+    required int lockupFeesEstimate,
+  }) = _SubmarineSwapFees;
 }
 
 enum SwapType {
