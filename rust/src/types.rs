@@ -1,6 +1,7 @@
 // network
 // preimage
 //
+use serde::{Serialize,Deserialize};
 use boltz_client::{
     network::Chain as BChain,
     swaps::boltz::SwapType as BoltzSwapType,
@@ -12,6 +13,8 @@ use boltz_client::{
 
 #[frb(dart_metadata=("freezed"))]
 #[derive(Clone)]
+#[derive(Serialize, Deserialize)]
+
 pub struct KeyPair {
     pub secret_key: String,
     pub public_key: String,
@@ -59,6 +62,8 @@ use std::convert::TryInto;
 
 #[frb(dart_metadata=("freezed"))]
 #[derive(Clone)]
+#[derive(Serialize, Deserialize)]
+
 pub struct PreImage {
     pub value: String,
     pub sha256: String,
@@ -100,6 +105,8 @@ impl Into<PreImage> for BoltzPreImage {
 
 #[frb(dart_metadata=("freezed"))]
 #[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Serialize, Deserialize)]
+
 pub enum SwapType {
     Submarine,
     Reverse,
@@ -116,6 +123,8 @@ impl Into<BoltzSwapType> for SwapType {
 
 #[frb(dart_metadata=("freezed"))]
 #[derive(Clone, Copy)]
+#[derive(Serialize, Deserialize)]
+
 pub enum Chain {
     Testnet,
     LiquidTestnet,
@@ -131,6 +140,7 @@ impl Into<BChain> for Chain {
 }
 
 #[frb(dart_metadata=("freezed"))]
+
 pub struct AllFees {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
@@ -163,6 +173,7 @@ pub struct ReverseSwapFees {
 }
 
 #[frb(dart_metadata=("freezed"))]
+#[derive(Serialize, Deserialize)]
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,
@@ -208,6 +219,8 @@ impl BtcLnSwap {
 }
 
 #[frb(dart_metadata=("freezed"))]
+#[derive(Serialize, Deserialize)]
+
 pub struct LbtcLnSwap {
     pub id: String,
     pub kind: SwapType,
@@ -256,6 +269,8 @@ impl LbtcLnSwap {
 }
 
 #[frb(dart_metadata=("freezed"))]
+#[derive(Serialize, Deserialize)]
+
 pub struct BoltzError {
     pub kind: String,
     pub message: String,
