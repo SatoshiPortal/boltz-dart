@@ -19,6 +19,7 @@ pub extern "C" fn wire_new_btc_ln_submarine__static_method__Api(
     network: i32,
     electrum_url: *mut wire_uint_8_list,
     boltz_url: *mut wire_uint_8_list,
+    pair_hash: *mut wire_uint_8_list,
 ) {
     wire_new_btc_ln_submarine__static_method__Api_impl(
         port_,
@@ -28,6 +29,7 @@ pub extern "C" fn wire_new_btc_ln_submarine__static_method__Api(
         network,
         electrum_url,
         boltz_url,
+        pair_hash,
     )
 }
 
@@ -40,6 +42,7 @@ pub extern "C" fn wire_new_btc_ln_reverse__static_method__Api(
     network: i32,
     electrum_url: *mut wire_uint_8_list,
     boltz_url: *mut wire_uint_8_list,
+    pair_hash: *mut wire_uint_8_list,
 ) {
     wire_new_btc_ln_reverse__static_method__Api_impl(
         port_,
@@ -49,6 +52,7 @@ pub extern "C" fn wire_new_btc_ln_reverse__static_method__Api(
         network,
         electrum_url,
         boltz_url,
+        pair_hash,
     )
 }
 
@@ -76,6 +80,7 @@ pub extern "C" fn wire_new_lbtc_ln_submarine__static_method__Api(
     network: i32,
     electrum_url: *mut wire_uint_8_list,
     boltz_url: *mut wire_uint_8_list,
+    pair_hash: *mut wire_uint_8_list,
 ) {
     wire_new_lbtc_ln_submarine__static_method__Api_impl(
         port_,
@@ -85,6 +90,7 @@ pub extern "C" fn wire_new_lbtc_ln_submarine__static_method__Api(
         network,
         electrum_url,
         boltz_url,
+        pair_hash,
     )
 }
 
@@ -97,6 +103,7 @@ pub extern "C" fn wire_new_lbtc_ln_reverse__static_method__Api(
     network: i32,
     electrum_url: *mut wire_uint_8_list,
     boltz_url: *mut wire_uint_8_list,
+    pair_hash: *mut wire_uint_8_list,
 ) {
     wire_new_lbtc_ln_reverse__static_method__Api_impl(
         port_,
@@ -106,6 +113,7 @@ pub extern "C" fn wire_new_lbtc_ln_reverse__static_method__Api(
         network,
         electrum_url,
         boltz_url,
+        pair_hash,
     )
 }
 

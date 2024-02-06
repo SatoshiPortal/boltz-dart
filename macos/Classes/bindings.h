@@ -76,7 +76,8 @@ void wire_new_btc_ln_submarine__static_method__Api(int64_t port_,
                                                    struct wire_uint_8_list *invoice,
                                                    int32_t network,
                                                    struct wire_uint_8_list *electrum_url,
-                                                   struct wire_uint_8_list *boltz_url);
+                                                   struct wire_uint_8_list *boltz_url,
+                                                   struct wire_uint_8_list *pair_hash);
 
 void wire_new_btc_ln_reverse__static_method__Api(int64_t port_,
                                                  struct wire_uint_8_list *mnemonic,
@@ -84,7 +85,8 @@ void wire_new_btc_ln_reverse__static_method__Api(int64_t port_,
                                                  uint64_t out_amount,
                                                  int32_t network,
                                                  struct wire_uint_8_list *electrum_url,
-                                                 struct wire_uint_8_list *boltz_url);
+                                                 struct wire_uint_8_list *boltz_url,
+                                                 struct wire_uint_8_list *pair_hash);
 
 void wire_btc_ln_tx_size__static_method__Api(int64_t port_, struct wire_BtcLnSwap *swap);
 
@@ -99,7 +101,8 @@ void wire_new_lbtc_ln_submarine__static_method__Api(int64_t port_,
                                                     struct wire_uint_8_list *invoice,
                                                     int32_t network,
                                                     struct wire_uint_8_list *electrum_url,
-                                                    struct wire_uint_8_list *boltz_url);
+                                                    struct wire_uint_8_list *boltz_url,
+                                                    struct wire_uint_8_list *pair_hash);
 
 void wire_new_lbtc_ln_reverse__static_method__Api(int64_t port_,
                                                   struct wire_uint_8_list *mnemonic,
@@ -107,7 +110,8 @@ void wire_new_lbtc_ln_reverse__static_method__Api(int64_t port_,
                                                   uint64_t out_amount,
                                                   int32_t network,
                                                   struct wire_uint_8_list *electrum_url,
-                                                  struct wire_uint_8_list *boltz_url);
+                                                  struct wire_uint_8_list *boltz_url,
+                                                  struct wire_uint_8_list *pair_hash);
 
 void wire_lbtc_ln_tx_size__static_method__Api(int64_t port_, struct wire_LbtcLnSwap *swap);
 

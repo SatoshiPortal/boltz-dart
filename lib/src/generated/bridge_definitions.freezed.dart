@@ -22,6 +22,8 @@ mixin _$AllFees {
   ReverseSwapFees get btcReverse => throw _privateConstructorUsedError;
   SubmarineSwapFees get lbtcSubmarine => throw _privateConstructorUsedError;
   ReverseSwapFees get lbtcReverse => throw _privateConstructorUsedError;
+  String get btcPairHash => throw _privateConstructorUsedError;
+  String get lbtcPairHash => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AllFeesCopyWith<AllFees> get copyWith => throw _privateConstructorUsedError;
@@ -38,7 +40,9 @@ abstract class $AllFeesCopyWith<$Res> {
       SubmarineSwapFees btcSubmarine,
       ReverseSwapFees btcReverse,
       SubmarineSwapFees lbtcSubmarine,
-      ReverseSwapFees lbtcReverse});
+      ReverseSwapFees lbtcReverse,
+      String btcPairHash,
+      String lbtcPairHash});
 
   $LimitsCopyWith<$Res> get btcLimits;
   $LimitsCopyWith<$Res> get lbtcLimits;
@@ -67,6 +71,8 @@ class _$AllFeesCopyWithImpl<$Res, $Val extends AllFees>
     Object? btcReverse = null,
     Object? lbtcSubmarine = null,
     Object? lbtcReverse = null,
+    Object? btcPairHash = null,
+    Object? lbtcPairHash = null,
   }) {
     return _then(_value.copyWith(
       btcLimits: null == btcLimits
@@ -93,6 +99,14 @@ class _$AllFeesCopyWithImpl<$Res, $Val extends AllFees>
           ? _value.lbtcReverse
           : lbtcReverse // ignore: cast_nullable_to_non_nullable
               as ReverseSwapFees,
+      btcPairHash: null == btcPairHash
+          ? _value.btcPairHash
+          : btcPairHash // ignore: cast_nullable_to_non_nullable
+              as String,
+      lbtcPairHash: null == lbtcPairHash
+          ? _value.lbtcPairHash
+          : lbtcPairHash // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -158,7 +172,9 @@ abstract class _$$AllFeesImplCopyWith<$Res> implements $AllFeesCopyWith<$Res> {
       SubmarineSwapFees btcSubmarine,
       ReverseSwapFees btcReverse,
       SubmarineSwapFees lbtcSubmarine,
-      ReverseSwapFees lbtcReverse});
+      ReverseSwapFees lbtcReverse,
+      String btcPairHash,
+      String lbtcPairHash});
 
   @override
   $LimitsCopyWith<$Res> get btcLimits;
@@ -191,6 +207,8 @@ class __$$AllFeesImplCopyWithImpl<$Res>
     Object? btcReverse = null,
     Object? lbtcSubmarine = null,
     Object? lbtcReverse = null,
+    Object? btcPairHash = null,
+    Object? lbtcPairHash = null,
   }) {
     return _then(_$AllFeesImpl(
       btcLimits: null == btcLimits
@@ -217,6 +235,14 @@ class __$$AllFeesImplCopyWithImpl<$Res>
           ? _value.lbtcReverse
           : lbtcReverse // ignore: cast_nullable_to_non_nullable
               as ReverseSwapFees,
+      btcPairHash: null == btcPairHash
+          ? _value.btcPairHash
+          : btcPairHash // ignore: cast_nullable_to_non_nullable
+              as String,
+      lbtcPairHash: null == lbtcPairHash
+          ? _value.lbtcPairHash
+          : lbtcPairHash // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -230,7 +256,9 @@ class _$AllFeesImpl implements _AllFees {
       required this.btcSubmarine,
       required this.btcReverse,
       required this.lbtcSubmarine,
-      required this.lbtcReverse});
+      required this.lbtcReverse,
+      required this.btcPairHash,
+      required this.lbtcPairHash});
 
   @override
   final Limits btcLimits;
@@ -244,10 +272,14 @@ class _$AllFeesImpl implements _AllFees {
   final SubmarineSwapFees lbtcSubmarine;
   @override
   final ReverseSwapFees lbtcReverse;
+  @override
+  final String btcPairHash;
+  @override
+  final String lbtcPairHash;
 
   @override
   String toString() {
-    return 'AllFees(btcLimits: $btcLimits, lbtcLimits: $lbtcLimits, btcSubmarine: $btcSubmarine, btcReverse: $btcReverse, lbtcSubmarine: $lbtcSubmarine, lbtcReverse: $lbtcReverse)';
+    return 'AllFees(btcLimits: $btcLimits, lbtcLimits: $lbtcLimits, btcSubmarine: $btcSubmarine, btcReverse: $btcReverse, lbtcSubmarine: $lbtcSubmarine, lbtcReverse: $lbtcReverse, btcPairHash: $btcPairHash, lbtcPairHash: $lbtcPairHash)';
   }
 
   @override
@@ -266,12 +298,24 @@ class _$AllFeesImpl implements _AllFees {
             (identical(other.lbtcSubmarine, lbtcSubmarine) ||
                 other.lbtcSubmarine == lbtcSubmarine) &&
             (identical(other.lbtcReverse, lbtcReverse) ||
-                other.lbtcReverse == lbtcReverse));
+                other.lbtcReverse == lbtcReverse) &&
+            (identical(other.btcPairHash, btcPairHash) ||
+                other.btcPairHash == btcPairHash) &&
+            (identical(other.lbtcPairHash, lbtcPairHash) ||
+                other.lbtcPairHash == lbtcPairHash));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, btcLimits, lbtcLimits,
-      btcSubmarine, btcReverse, lbtcSubmarine, lbtcReverse);
+  int get hashCode => Object.hash(
+      runtimeType,
+      btcLimits,
+      lbtcLimits,
+      btcSubmarine,
+      btcReverse,
+      lbtcSubmarine,
+      lbtcReverse,
+      btcPairHash,
+      lbtcPairHash);
 
   @JsonKey(ignore: true)
   @override
@@ -287,7 +331,9 @@ abstract class _AllFees implements AllFees {
       required final SubmarineSwapFees btcSubmarine,
       required final ReverseSwapFees btcReverse,
       required final SubmarineSwapFees lbtcSubmarine,
-      required final ReverseSwapFees lbtcReverse}) = _$AllFeesImpl;
+      required final ReverseSwapFees lbtcReverse,
+      required final String btcPairHash,
+      required final String lbtcPairHash}) = _$AllFeesImpl;
 
   @override
   Limits get btcLimits;
@@ -301,6 +347,10 @@ abstract class _AllFees implements AllFees {
   SubmarineSwapFees get lbtcSubmarine;
   @override
   ReverseSwapFees get lbtcReverse;
+  @override
+  String get btcPairHash;
+  @override
+  String get lbtcPairHash;
   @override
   @JsonKey(ignore: true)
   _$$AllFeesImplCopyWith<_$AllFeesImpl> get copyWith =>

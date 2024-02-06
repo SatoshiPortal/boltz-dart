@@ -138,6 +138,8 @@ pub struct AllFees {
     pub btc_reverse: ReverseSwapFees,
     pub lbtc_submarine: SubmarineSwapFees,
     pub lbtc_reverse: ReverseSwapFees,
+    pub btc_pair_hash: String, 
+    pub lbtc_pair_hash: String,
 }
 
 #[frb(dart_metadata=("freezed"))]

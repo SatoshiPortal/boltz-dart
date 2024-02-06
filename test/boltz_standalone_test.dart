@@ -29,7 +29,7 @@ const boltzUrl = 'https://api.testnet.boltz.exchange';
 const testTimeout = Timeout(Duration(minutes: 30));
 
 void main() {
-  test('FEE ESTIMATION', () async {
+  test('FEE & LIMITS', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
     final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
@@ -294,21 +294,24 @@ void main() {
       const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
+      final amount = 100000;
+      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
       const outAmount = 70000;
       try {
         // this should be a constructor newReverse on BtcLnSwap
-        final btcLnSubmarineSwap = await LbtcLnSwap.newReverse(
+        final lBtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
           mnemonic: mnemonic,
           index: index,
           outAmount: outAmount,
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          pairHash: fees.lbtcPairHash
         );
         const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
 
-        final swap = btcLnSubmarineSwap.lbtcLnSwap;
+        final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
         print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
 
         expect(swap.keys.secretKey, expectedSecretKey);
@@ -329,27 +332,30 @@ void main() {
       const network = Chain.Testnet;
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
+      final amount = 100000;
+      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
       const invoice =
           "lntb70u1pjuy9agpp5jdqj3wz4f042gcusdhfxy5chl8qgrznx552n7qmhjy5x2a5h9pjsdqqcqzzsxqyjw5qsp5v30w8undlhfx6y378955t3sw7a6knh7jnt6wmcgyew97c5w0hghq9qyyssq35nan8n3r9qm8p7ue5vnky6kf06rz7h6cjwpxa6j4flraqnzu2vxlazd4tdtfpuzspapg2w0v8ffm9hpp9pjeqm0rvjkf0uam5kg9wcqazv2wz";
       try {
-        final btcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
+        final lBtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
           mnemonic: mnemonic,
           index: index,
           invoice: invoice,
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          pairHash: fees.btcPairHash
         );
 
         const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
-        final swap = btcLnSubmarineSwap.lbtcLnSwap;
+        final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
         print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
 
         expect(swap.keys.secretKey, expectedSecretKey);
 
-        print("PAYMENT DETAILS: ${btcLnSubmarineSwap.paymentDetails()}");
+        print("PAYMENT DETAILS: ${lBtcLnSubmarineSwap.paymentDetails()}");
       } catch (e) {
         print((e as BoltzError).kind);
         print((e as BoltzError).message);
@@ -359,6 +365,10 @@ void main() {
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
+      const boltzUrl = 'https://api.testnet.boltz.exchange';
+    final amount = 100000;
+    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
     mnemonic: mnemonic,
     index: index,
@@ -366,12 +376,17 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
+    pairHash: fees.btcPairHash,
   );
 
   return btcLnSubmarineSwap;
 }
 
 Future<BtcLnSwap> setupReverse(int outAmount) async {
+  const boltzUrl = 'https://api.testnet.boltz.exchange';
+  final amount = 100000;
+  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
   final btcLnSubmarineSwap = await BtcLnSwap.newReverse(
     mnemonic: mnemonic,
     index: index,
@@ -379,6 +394,7 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
+    pairHash: fees.btcPairHash
   );
 
   return btcLnSubmarineSwap;

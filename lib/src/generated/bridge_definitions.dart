@@ -24,6 +24,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnSubmarineStaticMethodApiConstMeta;
@@ -35,6 +36,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta;
@@ -59,6 +61,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
@@ -71,6 +74,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewLbtcLnReverseStaticMethodApiConstMeta;
@@ -104,6 +108,8 @@ class AllFees with _$AllFees {
     required ReverseSwapFees btcReverse,
     required SubmarineSwapFees lbtcSubmarine,
     required ReverseSwapFees lbtcReverse,
+    required String btcPairHash,
+    required String lbtcPairHash,
   }) = _AllFees;
 }
 

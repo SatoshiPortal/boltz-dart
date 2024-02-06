@@ -60,6 +60,7 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, BtcLnSwap, _>(
         WrapInfo {
@@ -74,6 +75,7 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_btc_ln_submarine(
                     api_mnemonic,
@@ -82,6 +84,7 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -95,6 +98,7 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, BtcLnSwap, _>(
         WrapInfo {
@@ -109,6 +113,7 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_btc_ln_reverse(
                     api_mnemonic,
@@ -117,6 +122,7 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -166,6 +172,7 @@ fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, LbtcLnSwap, _>(
         WrapInfo {
@@ -180,6 +187,7 @@ fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_lbtc_ln_submarine(
                     api_mnemonic,
@@ -188,6 +196,7 @@ fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -201,6 +210,7 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, LbtcLnSwap, _>(
         WrapInfo {
@@ -215,6 +225,7 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_lbtc_ln_reverse(
                     api_mnemonic,
@@ -223,6 +234,7 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -351,6 +363,8 @@ impl support::IntoDart for AllFees {
             self.btc_reverse.into_into_dart().into_dart(),
             self.lbtc_submarine.into_into_dart().into_dart(),
             self.lbtc_reverse.into_into_dart().into_dart(),
+            self.btc_pair_hash.into_into_dart().into_dart(),
+            self.lbtc_pair_hash.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
