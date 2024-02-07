@@ -32,7 +32,8 @@ void main() {
   test('FEE & LIMITS', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
-    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+    final fees =
+        await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
     expect((fees.btcReverse.boltzFees > 0.0), true);
     expect((fees.btcSubmarine.boltzFees > 0.0), true);
@@ -41,7 +42,7 @@ void main() {
   test('DECODE EXPIRED BOLT11', () async {
     const invoice =
         "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
-    final decoded  = await Bolt11Invoice.decode(invoice: invoice);
+    final decoded = await Bolt11Invoice.decode(invoice: invoice);
     assert(decoded.isExpired);
     print('$decoded');
   });
@@ -52,10 +53,12 @@ void main() {
           "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
       const invoiceAmount = 123;
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$invoiceAmount is less than minimal of 50000"}';
+            e.message ==
+                '{"error":"$invoiceAmount is less than minimal of 50000"}';
       })));
     });
 
@@ -65,10 +68,12 @@ void main() {
           "lntb260m1pjmwkv7pp5g8hy6pe8md7rz6jwcgvntgsqwr2eck0rcvj8trqkuehuvl9g2w4qdqqcqzzsxqyjw5qsp59fq60rmf6mkx9hhkcdw4akl7ksgzl3rfchgj94f6vfwzq9x7wvps9qyyssq2mkjtc67ktcnxf0cch8d66fkxlx9fyryy2k79cqv8gzjxw7wmh7xm3qdra7lawm6nvjrs2zyu50qf428uzqu25mxmvev6zckzt8ew7gp0xfna2";
       const invoiceAmount = 26000000;
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$invoiceAmount is exceeds maximal of 25000000"}';
+            e.message ==
+                '{"error":"$invoiceAmount is exceeds maximal of 25000000"}';
       })));
     });
 
@@ -76,7 +81,8 @@ void main() {
       const invoice =
           "lntb510u1pjmwkmspp5hqxwu96lhqzvvv9gxul8memmkj833fsdu32aw4llgf37jrfx0m5qdqqcqzzsxqyjw5qsp55djvsgh0eyypz2l28cyhxajuudy8z27ge5ss82k80kdefzn3de6s9qyyssq9s0lqcr00e0raj86tde8zq6jnft5fq3xyqhjc4jzpcndqvkjtsuh9tmd4rhk52zc6tkgf3h9hk7pcuzxprmsfj5rmghl2jyzga3d8vqq5785ee";
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"a swap with this invoice exists already"}';
@@ -87,7 +93,8 @@ void main() {
       const invoice =
           "lntb510u1pjm0z48pp5p3frf3ngtfxfu2fpdv5jefdk5d4r5es6ad350jelq64kwj3z7jvqdqqcqzzsxqp9sp5fw6a2zjmlhx59k2x7rmv46aus79walrmlvmqhvpcy0wwhtwx68qs9qyyssqq9denfcmlnf37djfkxu0rr7c5gy0ad969cylhmuzyeusp9g3ecus0zyv4kugdcle438ujnn948whzrtev04sq889lnp959ns6ymdpwcpwvyszt";
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"the provided invoice expired already"}';
@@ -97,11 +104,13 @@ void main() {
     test('Neg: Invalid invoice', () async {
       const invoice = "lntbinvalidinvoice";
 
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice),
+          throwsA(predicate((e) {
         print(e);
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"No separator character for lntbinvalidinvoice"}';
+            e.message ==
+                '{"error":"No separator character for lntbinvalidinvoice"}';
       })));
     });
 
@@ -112,9 +121,11 @@ void main() {
 
       BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
 
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      const expectedSecretKey =
+          "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
       final swap = btcLnSubmarine.btcLnSwap;
+
       final paymentDetails = await btcLnSubmarine.paymentDetails();
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
       expect(swap.keys.secretKey, expectedSecretKey);
@@ -147,7 +158,8 @@ void main() {
 
       BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
       final paymentDetails = btcLnSubmarine.paymentDetails();
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      const expectedSecretKey =
+          "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
       final swap = btcLnSubmarine.btcLnSwap;
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
@@ -184,10 +196,13 @@ void main() {
 
       BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
       final paymentDetails = btcLnSubmarine.paymentDetails();
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      const expectedSecretKey =
+          "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
       final swap = btcLnSubmarine.btcLnSwap;
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+      final swapToJson = swap.toJson();
+      print("Swap toJSON: ${swapToJson}");
       expect(swap.keys.secretKey, expectedSecretKey);
 
       print("Send sats: $paymentDetails");
@@ -215,7 +230,8 @@ void main() {
     test('Neg: Minimum limit (50k sats)', () async {
       const outAmount = 2500;
 
-      await expectLater(() async => await setupReverse(outAmount), throwsA(predicate((e) {
+      await expectLater(() async => await setupReverse(outAmount),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"$outAmount is less than minimal of 50000"}';
@@ -225,10 +241,12 @@ void main() {
     test('Neg: Maximum limit (25m sats)', () async {
       const outAmount = 26000000;
 
-      await expectLater(() async => await setupReverse(outAmount), throwsA(predicate((e) {
+      await expectLater(() async => await setupReverse(outAmount),
+          throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$outAmount is exceeds maximal of 25000000"}';
+            e.message ==
+                '{"error":"$outAmount is exceeds maximal of 25000000"}';
       })));
     });
 
@@ -257,7 +275,8 @@ void main() {
 
       BtcLnSwap btcLnSubmarine = await setupReverse(outAmount);
 
-      const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
+      const expectedSecretKey =
+          "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
 
       final swap = btcLnSubmarine.btcLnSwap;
       print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
@@ -273,10 +292,12 @@ void main() {
         if (event.status == SwapStatus.txnMempool) {
           await Future.delayed(Duration(seconds: 20));
 
-          final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
+          final fees = await AllSwapFees.estimateFee(
+              boltzUrl: boltzUrl, outputAmount: outAmount);
           final claimFeesEstimate = fees.btcReverse.claimFeesEstimate;
 
-          String txnId = await btcLnSubmarine.claim(outAddress: outAddress, absFee: claimFeesEstimate);
+          String txnId = await btcLnSubmarine.claim(
+              outAddress: outAddress, absFee: claimFeesEstimate);
           print(txnId);
         }
         if (event.status == SwapStatus.invoiceSettled) {
@@ -302,23 +323,25 @@ void main() {
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
       final amount = 100000;
-      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+      final fees = await AllSwapFees.estimateFee(
+          boltzUrl: boltzUrl, outputAmount: amount);
 
       const outAmount = 70000;
       try {
         // this should be a constructor newReverse on BtcLnSwap
         final lBtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
-          mnemonic: mnemonic,
-          index: index,
-          outAmount: outAmount,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: fees.lbtcPairHash
-        );
-        const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
+            mnemonic: mnemonic,
+            index: index,
+            outAmount: outAmount,
+            network: network,
+            electrumUrl: electrumUrl,
+            boltzUrl: boltzUrl,
+            pairHash: fees.lbtcPairHash);
+        const expectedSecretKey =
+            "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
 
         final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
+        print("Swap toJson: ${swap.toJson()}");
         print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
 
         expect(swap.keys.secretKey, expectedSecretKey);
@@ -340,22 +363,23 @@ void main() {
       const electrumUrl = 'electrum.bullbitcoin.com:60002';
       const boltzUrl = 'https://api.testnet.boltz.exchange';
       final amount = 100000;
-      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+      final fees = await AllSwapFees.estimateFee(
+          boltzUrl: boltzUrl, outputAmount: amount);
 
       const invoice =
           "lntb70u1pjuy9agpp5jdqj3wz4f042gcusdhfxy5chl8qgrznx552n7qmhjy5x2a5h9pjsdqqcqzzsxqyjw5qsp5v30w8undlhfx6y378955t3sw7a6knh7jnt6wmcgyew97c5w0hghq9qyyssq35nan8n3r9qm8p7ue5vnky6kf06rz7h6cjwpxa6j4flraqnzu2vxlazd4tdtfpuzspapg2w0v8ffm9hpp9pjeqm0rvjkf0uam5kg9wcqazv2wz";
       try {
         final lBtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
-          mnemonic: mnemonic,
-          index: index,
-          invoice: invoice,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: fees.btcPairHash
-        );
+            mnemonic: mnemonic,
+            index: index,
+            invoice: invoice,
+            network: network,
+            electrumUrl: electrumUrl,
+            boltzUrl: boltzUrl,
+            pairHash: fees.btcPairHash);
 
-        const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+        const expectedSecretKey =
+            "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
         final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
         print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
@@ -372,9 +396,10 @@ void main() {
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
-      const boltzUrl = 'https://api.testnet.boltz.exchange';
-    final amount = 100000;
-    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+  const boltzUrl = 'https://api.testnet.boltz.exchange';
+  final amount = 100000;
+  final fees =
+      await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
     mnemonic: mnemonic,
@@ -392,17 +417,17 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
 Future<BtcLnSwap> setupReverse(int outAmount) async {
   const boltzUrl = 'https://api.testnet.boltz.exchange';
   final amount = 100000;
-  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+  final fees =
+      await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
   final btcLnSubmarineSwap = await BtcLnSwap.newReverse(
-    mnemonic: mnemonic,
-    index: index,
-    outAmount: outAmount,
-    network: network,
-    electrumUrl: electrumUrl,
-    boltzUrl: boltzUrl,
-    pairHash: fees.btcPairHash
-  );
+      mnemonic: mnemonic,
+      index: index,
+      outAmount: outAmount,
+      network: network,
+      electrumUrl: electrumUrl,
+      boltzUrl: boltzUrl,
+      pairHash: fees.btcPairHash);
 
   return btcLnSubmarineSwap;
 }
