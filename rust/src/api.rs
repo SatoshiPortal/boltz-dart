@@ -1,6 +1,9 @@
+use std::str::FromStr;
+
 use boltz_client::swaps::bitcoin::BtcSwapTx;
 use boltz_client::swaps::liquid::LBtcSwapScript;
 use boltz_client::swaps::liquid::LBtcSwapTx;
+use boltz_client::Bolt11Invoice;
 use boltz_client::Keypair;
 use boltz_client::{network::electrum::ElectrumConfig, swaps::bitcoin::BtcSwapScript};
 // use boltz_client::network::electrum::ElectrumConfig;
@@ -14,6 +17,7 @@ use boltz_client::util::secrets::Preimage;
 
 use crate::types::BoltzError;
 use crate::types::Chain;
+use crate::types::DecodedInvoice;
 use crate::types::KeyPair;
 use crate::types::LbtcLnSwap;
 use crate::types::SwapType;
@@ -60,6 +64,8 @@ impl Api {
             lockup_fees: lbtc_pair.fees.reverse_lockup()?,
             claim_fees_estimate: lbtc_pair.fees.reverse_claim_estimate(),
         };
+        let btc_pair_hash = btc_pair.hash;
+        let lbtc_pair_hash = lbtc_pair.hash;
 
         Ok(AllFees {
             btc_limits,
@@ -68,6 +74,8 @@ impl Api {
             btc_reverse,
             lbtc_submarine,
             lbtc_reverse,
+            btc_pair_hash,
+            lbtc_pair_hash
         })
     }
     // Should take pair hash from previous call as input
@@ -78,6 +86,7 @@ impl Api {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        pair_hash: String,
     ) -> anyhow::Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let refund_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
@@ -91,6 +100,12 @@ impl Api {
             Err(e) => return Err(e.into()),
         };
         let btc_pair = boltz_pairs.get_btc_pair()?;
+        if btc_pair.hash != pair_hash {
+            return Err(BoltzError{
+                kind: ErrorKind::Input.to_string(), 
+                message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
+            });
+        }
         let swap_request = CreateSwapRequest::new_btc_submarine(
             &btc_pair.hash,
             &invoice,
@@ -136,6 +151,7 @@ impl Api {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        pair_hash: String,
     ) -> anyhow::Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
         let claim_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
@@ -150,8 +166,13 @@ impl Api {
             Err(e) => return Err(e.into()),
         };
 
-        let pair_hash = boltz_pairs.get_btc_pair()?.hash;
-
+        let btc_pair = boltz_pairs.get_btc_pair()?;
+        if btc_pair.hash != pair_hash {
+            return Err(BoltzError{
+                kind: ErrorKind::Input.to_string(), 
+                message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
+            });
+        }
         let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(
             &pair_hash,
             &preimage.sha256.to_string(),
@@ -260,6 +281,7 @@ impl Api {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        pair_hash: String,
     ) -> anyhow::Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let refund_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
@@ -273,10 +295,15 @@ impl Api {
             Err(e) => return Err(e.into()),
         };
 
-        let pair_hash = boltz_pairs.get_lbtc_pair()?.hash;
-
+        let lbtc_pair = boltz_pairs.get_lbtc_pair()?;
+        if lbtc_pair.hash != pair_hash {
+            return Err(BoltzError{
+                kind: ErrorKind::Input.to_string(), 
+                message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
+            });
+        }
         let swap_request =
-            CreateSwapRequest::new_btc_submarine(&pair_hash, &invoice, &refund_keypair.public_key);
+            CreateSwapRequest::new_lbtc_submarine(&pair_hash, &invoice, &refund_keypair.public_key);
         let response = match boltz_client.create_swap(swap_request) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -330,6 +357,7 @@ impl Api {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        pair_hash: String,
     ) -> anyhow::Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
         let claim_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
@@ -344,12 +372,17 @@ impl Api {
             Err(e) => return Err(e.into()),
         };
 
-        let pair_hash = boltz_pairs.get_lbtc_pair()?.hash;
-
-        let swap_request = CreateSwapRequest::new_btc_reverse_invoice_amt(
-            &pair_hash,
-            &preimage.sha256.to_string(),
-            &claim_keypair.public_key,
+        let lbtc_pair = boltz_pairs.get_lbtc_pair()?;
+        if lbtc_pair.hash != pair_hash {
+            return Err(BoltzError{
+                kind: ErrorKind::Input.to_string(), 
+                message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
+            });
+        }
+        let swap_request = CreateSwapRequest::new_lbtc_reverse_invoice_amt(
+            pair_hash,
+            preimage.sha256.to_string(),
+            claim_keypair.clone().public_key,
             out_amount,
         );
         let response = match boltz_client.create_swap(swap_request) {
@@ -463,6 +496,14 @@ impl Api {
             Ok(result) => Ok(result.status),
             Err(e) => return Err(e.into()),
         }
+    }
+
+    pub fn decode_invoice(invoice_str: String)->anyhow::Result<DecodedInvoice, BoltzError>{
+        let invoice = match Bolt11Invoice::from_str(&invoice_str){
+            Ok(result)=>result,
+            Err(e) => return Err(BoltzError{kind: ErrorKind::Input.to_string(), message: e.to_string()})
+        };
+        Ok(invoice.into())
     }
 }
 

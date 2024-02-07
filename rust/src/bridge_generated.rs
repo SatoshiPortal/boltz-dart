@@ -24,6 +24,7 @@ use crate::types::AllFees;
 use crate::types::BoltzError;
 use crate::types::BtcLnSwap;
 use crate::types::Chain;
+use crate::types::DecodedInvoice;
 use crate::types::KeyPair;
 use crate::types::LbtcLnSwap;
 use crate::types::Limits;
@@ -60,6 +61,7 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, BtcLnSwap, _>(
         WrapInfo {
@@ -74,6 +76,7 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_btc_ln_submarine(
                     api_mnemonic,
@@ -82,6 +85,7 @@ fn wire_new_btc_ln_submarine__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -95,6 +99,7 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, BtcLnSwap, _>(
         WrapInfo {
@@ -109,6 +114,7 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_btc_ln_reverse(
                     api_mnemonic,
@@ -117,6 +123,7 @@ fn wire_new_btc_ln_reverse__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -166,6 +173,7 @@ fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, LbtcLnSwap, _>(
         WrapInfo {
@@ -180,6 +188,7 @@ fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_lbtc_ln_submarine(
                     api_mnemonic,
@@ -188,6 +197,7 @@ fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -201,6 +211,7 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
     network: impl Wire2Api<Chain> + UnwindSafe,
     electrum_url: impl Wire2Api<String> + UnwindSafe,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
+    pair_hash: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, LbtcLnSwap, _>(
         WrapInfo {
@@ -215,6 +226,7 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
             let api_network = network.wire2api();
             let api_electrum_url = electrum_url.wire2api();
             let api_boltz_url = boltz_url.wire2api();
+            let api_pair_hash = pair_hash.wire2api();
             move |task_callback| {
                 Api::new_lbtc_ln_reverse(
                     api_mnemonic,
@@ -223,6 +235,7 @@ fn wire_new_lbtc_ln_reverse__static_method__Api_impl(
                     api_network,
                     api_electrum_url,
                     api_boltz_url,
+                    api_pair_hash,
                 )
             }
         },
@@ -279,6 +292,22 @@ fn wire_swap_status__static_method__Api_impl(
             let api_boltz_url = boltz_url.wire2api();
             let api_id = id.wire2api();
             move |task_callback| Api::swap_status(api_boltz_url, api_id)
+        },
+    )
+}
+fn wire_decode_invoice__static_method__Api_impl(
+    port_: MessagePort,
+    invoice_str: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, DecodedInvoice, _>(
+        WrapInfo {
+            debug_name: "decode_invoice__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_invoice_str = invoice_str.wire2api();
+            move |task_callback| Api::decode_invoice(api_invoice_str)
         },
     )
 }
@@ -351,6 +380,8 @@ impl support::IntoDart for AllFees {
             self.btc_reverse.into_into_dart().into_dart(),
             self.lbtc_submarine.into_into_dart().into_dart(),
             self.lbtc_reverse.into_into_dart().into_dart(),
+            self.btc_pair_hash.into_into_dart().into_dart(),
+            self.lbtc_pair_hash.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -414,6 +445,27 @@ impl support::IntoDart for Chain {
 }
 impl support::IntoDartExceptPrimitive for Chain {}
 impl rust2dart::IntoIntoDart<Chain> for Chain {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for DecodedInvoice {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.msats.into_into_dart().into_dart(),
+            self.expiry.into_into_dart().into_dart(),
+            self.expires_in.into_into_dart().into_dart(),
+            self.expires_at.into_into_dart().into_dart(),
+            self.is_expired.into_into_dart().into_dart(),
+            self.network.into_into_dart().into_dart(),
+            self.cltv_exp_delta.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for DecodedInvoice {}
+impl rust2dart::IntoIntoDart<DecodedInvoice> for DecodedInvoice {
     fn into_into_dart(self) -> Self {
         self
     }

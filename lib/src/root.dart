@@ -29,6 +29,8 @@ class BtcLnSwap {
       required bridge.Chain network,
       required String electrumUrl,
       required String boltzUrl,
+          required String pairHash,
+
       dynamic hint}) async {
     try {
       final res = await ffi.newBtcLnSubmarineStaticMethodApi(
@@ -38,6 +40,7 @@ class BtcLnSwap {
         network: network,
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
+        pairHash: pairHash,
       );
       return BtcLnSwap._(res);
     } catch (e) {
@@ -52,6 +55,8 @@ class BtcLnSwap {
       required bridge.Chain network,
       required String electrumUrl,
       required String boltzUrl,
+          required String pairHash,
+
       dynamic hint}) async {
     try {
       final res = await ffi.newBtcLnReverseStaticMethodApi(
@@ -61,6 +66,7 @@ class BtcLnSwap {
         network: network,
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
+        pairHash: pairHash,
       );
       return BtcLnSwap._(res);
     } catch (e) {
@@ -132,6 +138,8 @@ class LbtcLnSwap {
     required bridge.Chain network,
     required String electrumUrl,
     required String boltzUrl,
+    required String pairHash,
+
   }) async {
     try {
       final res = await ffi.newLbtcLnSubmarineStaticMethodApi(
@@ -141,6 +149,7 @@ class LbtcLnSwap {
         network: network,
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
+        pairHash: pairHash,
       );
 
       return LbtcLnSwap._(res);
@@ -156,6 +165,7 @@ class LbtcLnSwap {
     required bridge.Chain network,
     required String electrumUrl,
     required String boltzUrl,
+    required String pairHash,
   }) async {
     try {
       final res = await ffi.newLbtcLnReverseStaticMethodApi(
@@ -165,6 +175,7 @@ class LbtcLnSwap {
         network: network,
         electrumUrl: electrumUrl,
         boltzUrl: boltzUrl,
+        pairHash: pairHash,
       );
 
       return LbtcLnSwap._(res);
@@ -238,6 +249,17 @@ class AllSwapFees {
   }
 }
 
+class Bolt11Invoice {
+  static Future<DecodedInvoice> decode({required String invoice}) async {
+    try{
+      final res = await ffi.decodeInvoiceStaticMethodApi(invoiceStr: invoice);
+      return res;
+    }
+    catch (e){
+      rethrow;
+    }
+  }
+}
 // done
   // new submarine swap
   // new reverse swap

@@ -29,7 +29,7 @@ const boltzUrl = 'https://api.testnet.boltz.exchange';
 const testTimeout = Timeout(Duration(minutes: 30));
 
 void main() {
-  test('FEE ESTIMATION', () async {
+  test('FEE & LIMITS', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
     final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
@@ -38,6 +38,13 @@ void main() {
     expect((fees.btcSubmarine.boltzFees > 0.0), true);
   });
 
+  test('DECODE EXPIRED BOLT11', () async {
+    const invoice =
+        "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
+    final decoded  = await Bolt11Invoice.decode(invoice: invoice);
+    assert(decoded.isExpired);
+    print('$decoded');
+  });
   group('BTC-LN Submarince', () {
     test('Neg: Minimum limit (50k sats)', () async {
       // An invoice with <50k sats
@@ -285,9 +292,90 @@ void main() {
       expect(receivedEvents[2].status, equals(SwapStatus.invoiceSettled));
     }, skip: true, timeout: testTimeout);
   });
+
+  group('LN-LBTC Reverse Submarine', () {
+    test('Positive', () async {
+      const mnemonic =
+          'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
+      const index = 0;
+      const network = Chain.Testnet;
+      const electrumUrl = 'electrum.bullbitcoin.com:60002';
+      const boltzUrl = 'https://api.testnet.boltz.exchange';
+      final amount = 100000;
+      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
+      const outAmount = 70000;
+      try {
+        // this should be a constructor newReverse on BtcLnSwap
+        final lBtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
+          mnemonic: mnemonic,
+          index: index,
+          outAmount: outAmount,
+          network: network,
+          electrumUrl: electrumUrl,
+          boltzUrl: boltzUrl,
+          pairHash: fees.lbtcPairHash
+        );
+        const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
+
+        final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
+        print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+
+        expect(swap.keys.secretKey, expectedSecretKey);
+
+        print("PAYMENT DETAILS: ${swap.invoice}");
+      } catch (e) {
+        print(e);
+        print((e as BoltzError).kind);
+        print((e as BoltzError).message);
+      }
+    });
+  });
+  group('LBTC-LN Submarine', () {
+    test('Positive', () async {
+      const mnemonic =
+          'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
+      const index = 0;
+      const network = Chain.Testnet;
+      const electrumUrl = 'electrum.bullbitcoin.com:60002';
+      const boltzUrl = 'https://api.testnet.boltz.exchange';
+      final amount = 100000;
+      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
+      const invoice =
+          "lntb70u1pjuy9agpp5jdqj3wz4f042gcusdhfxy5chl8qgrznx552n7qmhjy5x2a5h9pjsdqqcqzzsxqyjw5qsp5v30w8undlhfx6y378955t3sw7a6knh7jnt6wmcgyew97c5w0hghq9qyyssq35nan8n3r9qm8p7ue5vnky6kf06rz7h6cjwpxa6j4flraqnzu2vxlazd4tdtfpuzspapg2w0v8ffm9hpp9pjeqm0rvjkf0uam5kg9wcqazv2wz";
+      try {
+        final lBtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
+          mnemonic: mnemonic,
+          index: index,
+          invoice: invoice,
+          network: network,
+          electrumUrl: electrumUrl,
+          boltzUrl: boltzUrl,
+          pairHash: fees.btcPairHash
+        );
+
+        const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+
+        final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
+        print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+
+        expect(swap.keys.secretKey, expectedSecretKey);
+
+        print("PAYMENT DETAILS: ${lBtcLnSubmarineSwap.paymentDetails()}");
+      } catch (e) {
+        print((e as BoltzError).kind);
+        print((e as BoltzError).message);
+      }
+    });
+  });
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
+      const boltzUrl = 'https://api.testnet.boltz.exchange';
+    final amount = 100000;
+    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
     mnemonic: mnemonic,
     index: index,
@@ -295,12 +383,17 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
+    pairHash: fees.btcPairHash,
   );
 
   return btcLnSubmarineSwap;
 }
 
 Future<BtcLnSwap> setupReverse(int outAmount) async {
+  const boltzUrl = 'https://api.testnet.boltz.exchange';
+  final amount = 100000;
+  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
   final btcLnSubmarineSwap = await BtcLnSwap.newReverse(
     mnemonic: mnemonic,
     index: index,
@@ -308,6 +401,7 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
+    pairHash: fees.btcPairHash
   );
 
   return btcLnSubmarineSwap;

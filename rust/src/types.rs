@@ -3,11 +3,7 @@
 //
 use serde::{Serialize,Deserialize};
 use boltz_client::{
-    network::Chain as BChain,
-    swaps::boltz::SwapType as BoltzSwapType,
-    util::secrets::Preimage as BoltzPreImage,
-    util::{error::S5Error, secrets::SwapKey},
-    Keypair, Secp256k1, ZKKeyPair, ZKSecp256k1
+    network::Chain as BChain, swaps::boltz::SwapType as BoltzSwapType, util::{error::{ErrorKind, S5Error}, secrets::{Preimage as BoltzPreImage, SwapKey}}, Bolt11Invoice, Keypair, Secp256k1, ZKKeyPair, ZKSecp256k1
 };
 // use crate::types::{KeyPair, PreImage, Network, SwapType};
 
@@ -58,7 +54,7 @@ impl KeyPair {
 // Impl into secp256k1::KeyPair
 use boltz_client::util::secrets::Preimage;
 use flutter_rust_bridge::frb;
-use std::convert::TryInto;
+use std::{convert::TryInto, string::ParseError, time::Duration};
 
 #[frb(dart_metadata=("freezed"))]
 #[derive(Clone)]
@@ -103,6 +99,28 @@ impl Into<PreImage> for BoltzPreImage {
     }
 }
 
+pub struct DecodedInvoice {
+    pub msats: u64,
+    pub expiry: u64, 
+    pub expires_in: u64, 
+    pub expires_at: u64, 
+    pub is_expired: bool,
+    pub network: String,
+    pub cltv_exp_delta: u64
+}
+impl From<Bolt11Invoice> for DecodedInvoice {
+    fn from(invoice: Bolt11Invoice) -> DecodedInvoice {
+        DecodedInvoice {
+            expiry: invoice.expiry_time().as_secs(),
+            expires_in: invoice.duration_until_expiry().as_secs(), 
+            expires_at: invoice.expires_at().unwrap_or(Duration::from_secs(0)).as_secs(), 
+            is_expired: invoice.is_expired(),
+            msats: invoice.amount_milli_satoshis().unwrap_or(0),
+            cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
+            network: invoice.network().to_string(),
+        }
+    }
+}
 #[frb(dart_metadata=("freezed"))]
 #[derive(Clone, Copy, PartialEq, Eq)]
 #[derive(Serialize, Deserialize)]
@@ -148,6 +166,8 @@ pub struct AllFees {
     pub btc_reverse: ReverseSwapFees,
     pub lbtc_submarine: SubmarineSwapFees,
     pub lbtc_reverse: ReverseSwapFees,
+    pub btc_pair_hash: String, 
+    pub lbtc_pair_hash: String,
 }
 
 #[frb(dart_metadata=("freezed"))]

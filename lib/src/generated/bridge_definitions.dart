@@ -24,6 +24,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnSubmarineStaticMethodApiConstMeta;
@@ -35,6 +36,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewBtcLnReverseStaticMethodApiConstMeta;
@@ -59,6 +61,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
@@ -71,6 +74,7 @@ abstract class BoltzDart {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      required String pairHash,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kNewLbtcLnReverseStaticMethodApiConstMeta;
@@ -93,6 +97,11 @@ abstract class BoltzDart {
       {required String boltzUrl, required String id, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSwapStatusStaticMethodApiConstMeta;
+
+  Future<DecodedInvoice> decodeInvoiceStaticMethodApi(
+      {required String invoiceStr, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kDecodeInvoiceStaticMethodApiConstMeta;
 }
 
 @freezed
@@ -104,6 +113,8 @@ class AllFees with _$AllFees {
     required ReverseSwapFees btcReverse,
     required SubmarineSwapFees lbtcSubmarine,
     required ReverseSwapFees lbtcReverse,
+    required String btcPairHash,
+    required String lbtcPairHash,
   }) = _AllFees;
 }
 
@@ -135,6 +146,26 @@ class BtcLnSwap with _$BtcLnSwap {
 enum Chain {
   Testnet,
   LiquidTestnet,
+}
+
+class DecodedInvoice {
+  final int msats;
+  final int expiry;
+  final int expiresIn;
+  final int expiresAt;
+  final bool isExpired;
+  final String network;
+  final int cltvExpDelta;
+
+  const DecodedInvoice({
+    required this.msats,
+    required this.expiry,
+    required this.expiresIn,
+    required this.expiresAt,
+    required this.isExpired,
+    required this.network,
+    required this.cltvExpDelta,
+  });
 }
 
 @freezed
