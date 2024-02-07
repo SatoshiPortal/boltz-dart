@@ -10,6 +10,8 @@ import 'package:uuid/uuid.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 
 part 'bridge_definitions.freezed.dart';
+part 'bridge_definitions.g.dart';
+
 
 abstract class BoltzDart {
   Future<AllFees> swapFeesStaticMethodApi(
@@ -141,6 +143,9 @@ class BtcLnSwap with _$BtcLnSwap {
     required String electrumUrl,
     required String boltzUrl,
   }) = _BtcLnSwap;
+
+    factory BtcLnSwap.fromJson(Map<String, dynamic> json) => _$BtcLnSwapFromJson(json);
+
 }
 
 enum Chain {
@@ -174,6 +179,8 @@ class KeyPair with _$KeyPair {
     required String secretKey,
     required String publicKey,
   }) = _KeyPair;
+  factory KeyPair.fromJson(Map<String, dynamic> json) => _$KeyPairFromJson(json);
+
 }
 
 @freezed
@@ -192,6 +199,8 @@ class LbtcLnSwap with _$LbtcLnSwap {
     required String electrumUrl,
     required String boltzUrl,
   }) = _LbtcLnSwap;
+
+  factory LbtcLnSwap.fromJson(Map<String, dynamic> json) => _$LbtcLnSwapFromJson(json);
 }
 
 @freezed
@@ -209,6 +218,9 @@ class PreImage with _$PreImage {
     required String sha256,
     required String hash160,
   }) = _PreImage;
+
+    factory PreImage.fromJson(Map<String, dynamic> json) => _$PreImageFromJson(json);
+
 }
 
 @freezed

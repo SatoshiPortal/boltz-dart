@@ -492,6 +492,10 @@ abstract class _BoltzError implements BoltzError {
       throw _privateConstructorUsedError;
 }
 
+BtcLnSwap _$BtcLnSwapFromJson(Map<String, dynamic> json) {
+  return _BtcLnSwap.fromJson(json);
+}
+
 /// @nodoc
 mixin _$BtcLnSwap {
   String get id => throw _privateConstructorUsedError;
@@ -506,6 +510,7 @@ mixin _$BtcLnSwap {
   String get electrumUrl => throw _privateConstructorUsedError;
   String get boltzUrl => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $BtcLnSwapCopyWith<BtcLnSwap> get copyWith =>
       throw _privateConstructorUsedError;
@@ -723,7 +728,7 @@ class __$$BtcLnSwapImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$BtcLnSwapImpl implements _BtcLnSwap {
   const _$BtcLnSwapImpl(
       {required this.id,
@@ -737,6 +742,9 @@ class _$BtcLnSwapImpl implements _BtcLnSwap {
       required this.outAmount,
       required this.electrumUrl,
       required this.boltzUrl});
+
+  factory _$BtcLnSwapImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BtcLnSwapImplFromJson(json);
 
   @override
   final String id;
@@ -790,6 +798,7 @@ class _$BtcLnSwapImpl implements _BtcLnSwap {
                 other.boltzUrl == boltzUrl));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -810,6 +819,13 @@ class _$BtcLnSwapImpl implements _BtcLnSwap {
   @pragma('vm:prefer-inline')
   _$$BtcLnSwapImplCopyWith<_$BtcLnSwapImpl> get copyWith =>
       __$$BtcLnSwapImplCopyWithImpl<_$BtcLnSwapImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BtcLnSwapImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _BtcLnSwap implements BtcLnSwap {
@@ -825,6 +841,9 @@ abstract class _BtcLnSwap implements BtcLnSwap {
       required final int outAmount,
       required final String electrumUrl,
       required final String boltzUrl}) = _$BtcLnSwapImpl;
+
+  factory _BtcLnSwap.fromJson(Map<String, dynamic> json) =
+      _$BtcLnSwapImpl.fromJson;
 
   @override
   String get id;
@@ -854,11 +873,16 @@ abstract class _BtcLnSwap implements BtcLnSwap {
       throw _privateConstructorUsedError;
 }
 
+KeyPair _$KeyPairFromJson(Map<String, dynamic> json) {
+  return _KeyPair.fromJson(json);
+}
+
 /// @nodoc
 mixin _$KeyPair {
   String get secretKey => throw _privateConstructorUsedError;
   String get publicKey => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $KeyPairCopyWith<KeyPair> get copyWith => throw _privateConstructorUsedError;
 }
@@ -938,9 +962,12 @@ class __$$KeyPairImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$KeyPairImpl implements _KeyPair {
   const _$KeyPairImpl({required this.secretKey, required this.publicKey});
+
+  factory _$KeyPairImpl.fromJson(Map<String, dynamic> json) =>
+      _$$KeyPairImplFromJson(json);
 
   @override
   final String secretKey;
@@ -963,6 +990,7 @@ class _$KeyPairImpl implements _KeyPair {
                 other.publicKey == publicKey));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, secretKey, publicKey);
 
@@ -971,12 +999,21 @@ class _$KeyPairImpl implements _KeyPair {
   @pragma('vm:prefer-inline')
   _$$KeyPairImplCopyWith<_$KeyPairImpl> get copyWith =>
       __$$KeyPairImplCopyWithImpl<_$KeyPairImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$KeyPairImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _KeyPair implements KeyPair {
   const factory _KeyPair(
       {required final String secretKey,
       required final String publicKey}) = _$KeyPairImpl;
+
+  factory _KeyPair.fromJson(Map<String, dynamic> json) = _$KeyPairImpl.fromJson;
 
   @override
   String get secretKey;
@@ -986,6 +1023,10 @@ abstract class _KeyPair implements KeyPair {
   @JsonKey(ignore: true)
   _$$KeyPairImplCopyWith<_$KeyPairImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+LbtcLnSwap _$LbtcLnSwapFromJson(Map<String, dynamic> json) {
+  return _LbtcLnSwap.fromJson(json);
 }
 
 /// @nodoc
@@ -1003,6 +1044,7 @@ mixin _$LbtcLnSwap {
   String get electrumUrl => throw _privateConstructorUsedError;
   String get boltzUrl => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $LbtcLnSwapCopyWith<LbtcLnSwap> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1233,7 +1275,7 @@ class __$$LbtcLnSwapImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$LbtcLnSwapImpl implements _LbtcLnSwap {
   const _$LbtcLnSwapImpl(
       {required this.id,
@@ -1248,6 +1290,9 @@ class _$LbtcLnSwapImpl implements _LbtcLnSwap {
       required this.blindingKey,
       required this.electrumUrl,
       required this.boltzUrl});
+
+  factory _$LbtcLnSwapImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LbtcLnSwapImplFromJson(json);
 
   @override
   final String id;
@@ -1305,6 +1350,7 @@ class _$LbtcLnSwapImpl implements _LbtcLnSwap {
                 other.boltzUrl == boltzUrl));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -1326,6 +1372,13 @@ class _$LbtcLnSwapImpl implements _LbtcLnSwap {
   @pragma('vm:prefer-inline')
   _$$LbtcLnSwapImplCopyWith<_$LbtcLnSwapImpl> get copyWith =>
       __$$LbtcLnSwapImplCopyWithImpl<_$LbtcLnSwapImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LbtcLnSwapImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _LbtcLnSwap implements LbtcLnSwap {
@@ -1342,6 +1395,9 @@ abstract class _LbtcLnSwap implements LbtcLnSwap {
       required final String blindingKey,
       required final String electrumUrl,
       required final String boltzUrl}) = _$LbtcLnSwapImpl;
+
+  factory _LbtcLnSwap.fromJson(Map<String, dynamic> json) =
+      _$LbtcLnSwapImpl.fromJson;
 
   @override
   String get id;
@@ -1504,12 +1560,17 @@ abstract class _Limits implements Limits {
       throw _privateConstructorUsedError;
 }
 
+PreImage _$PreImageFromJson(Map<String, dynamic> json) {
+  return _PreImage.fromJson(json);
+}
+
 /// @nodoc
 mixin _$PreImage {
   String get value => throw _privateConstructorUsedError;
   String get sha256 => throw _privateConstructorUsedError;
   String get hash160 => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $PreImageCopyWith<PreImage> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1601,10 +1662,13 @@ class __$$PreImageImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$PreImageImpl implements _PreImage {
   const _$PreImageImpl(
       {required this.value, required this.sha256, required this.hash160});
+
+  factory _$PreImageImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PreImageImplFromJson(json);
 
   @override
   final String value;
@@ -1628,6 +1692,7 @@ class _$PreImageImpl implements _PreImage {
             (identical(other.hash160, hash160) || other.hash160 == hash160));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, value, sha256, hash160);
 
@@ -1636,6 +1701,13 @@ class _$PreImageImpl implements _PreImage {
   @pragma('vm:prefer-inline')
   _$$PreImageImplCopyWith<_$PreImageImpl> get copyWith =>
       __$$PreImageImplCopyWithImpl<_$PreImageImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PreImageImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _PreImage implements PreImage {
@@ -1643,6 +1715,9 @@ abstract class _PreImage implements PreImage {
       {required final String value,
       required final String sha256,
       required final String hash160}) = _$PreImageImpl;
+
+  factory _PreImage.fromJson(Map<String, dynamic> json) =
+      _$PreImageImpl.fromJson;
 
   @override
   String get value;
