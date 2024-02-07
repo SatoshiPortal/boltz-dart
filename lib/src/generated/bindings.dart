@@ -365,6 +365,26 @@ class BoltzDartImpl implements BoltzDart {
         argNames: ["boltzUrl", "id"],
       );
 
+  Future<DecodedInvoice> decodeInvoiceStaticMethodApi(
+      {required String invoiceStr, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(invoiceStr);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_decode_invoice__static_method__Api(port_, arg0),
+      parseSuccessData: _wire2api_decoded_invoice,
+      parseErrorData: _wire2api_boltz_error,
+      constMeta: kDecodeInvoiceStaticMethodApiConstMeta,
+      argValues: [invoiceStr],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kDecodeInvoiceStaticMethodApiConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "decode_invoice__static_method__Api",
+        argNames: ["invoiceStr"],
+      );
+
   void dispose() {
     _platform.dispose();
   }
@@ -400,6 +420,10 @@ class BoltzDartImpl implements BoltzDart {
     );
   }
 
+  bool _wire2api_bool(dynamic raw) {
+    return raw as bool;
+  }
+
   BtcLnSwap _wire2api_btc_ln_swap(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 11)
@@ -421,6 +445,21 @@ class BoltzDartImpl implements BoltzDart {
 
   Chain _wire2api_chain(dynamic raw) {
     return Chain.values[raw as int];
+  }
+
+  DecodedInvoice _wire2api_decoded_invoice(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    return DecodedInvoice(
+      msats: _wire2api_u64(arr[0]),
+      expiry: _wire2api_u64(arr[1]),
+      expiresIn: _wire2api_u64(arr[2]),
+      expiresAt: _wire2api_u64(arr[3]),
+      isExpired: _wire2api_bool(arr[4]),
+      network: _wire2api_String(arr[5]),
+      cltvExpDelta: _wire2api_u64(arr[6]),
+    );
   }
 
   int _wire2api_i32(dynamic raw) {
@@ -1046,6 +1085,24 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
       _wire_swap_status__static_method__ApiPtr.asFunction<
           void Function(int, ffi.Pointer<wire_uint_8_list>,
               ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_decode_invoice__static_method__Api(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> invoice_str,
+  ) {
+    return _wire_decode_invoice__static_method__Api(
+      port_,
+      invoice_str,
+    );
+  }
+
+  late final _wire_decode_invoice__static_method__ApiPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_decode_invoice__static_method__Api');
+  late final _wire_decode_invoice__static_method__Api =
+      _wire_decode_invoice__static_method__ApiPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
 
   ffi.Pointer<wire_BtcLnSwap> new_box_autoadd_btc_ln_swap_0() {
     return _new_box_autoadd_btc_ln_swap_0();

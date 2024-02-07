@@ -38,6 +38,13 @@ void main() {
     expect((fees.btcSubmarine.boltzFees > 0.0), true);
   });
 
+  test('DECODE EXPIRED BOLT11', () async {
+    const invoice =
+        "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
+    final decoded  = await Bolt11Invoice.decode(invoice: invoice);
+    assert(decoded.isExpired);
+    print('$decoded');
+  });
   group('BTC-LN Submarince', () {
     test('Neg: Minimum limit (50k sats)', () async {
       // An invoice with <50k sats

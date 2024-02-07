@@ -141,6 +141,14 @@ pub extern "C" fn wire_swap_status__static_method__Api(
     wire_swap_status__static_method__Api_impl(port_, boltz_url, id)
 }
 
+#[no_mangle]
+pub extern "C" fn wire_decode_invoice__static_method__Api(
+    port_: i64,
+    invoice_str: *mut wire_uint_8_list,
+) {
+    wire_decode_invoice__static_method__Api_impl(port_, invoice_str)
+}
+
 // Section: allocate functions
 
 #[no_mangle]

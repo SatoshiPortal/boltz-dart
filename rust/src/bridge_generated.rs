@@ -24,6 +24,7 @@ use crate::types::AllFees;
 use crate::types::BoltzError;
 use crate::types::BtcLnSwap;
 use crate::types::Chain;
+use crate::types::DecodedInvoice;
 use crate::types::KeyPair;
 use crate::types::LbtcLnSwap;
 use crate::types::Limits;
@@ -294,6 +295,22 @@ fn wire_swap_status__static_method__Api_impl(
         },
     )
 }
+fn wire_decode_invoice__static_method__Api_impl(
+    port_: MessagePort,
+    invoice_str: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, DecodedInvoice, _>(
+        WrapInfo {
+            debug_name: "decode_invoice__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_invoice_str = invoice_str.wire2api();
+            move |task_callback| Api::decode_invoice(api_invoice_str)
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -428,6 +445,27 @@ impl support::IntoDart for Chain {
 }
 impl support::IntoDartExceptPrimitive for Chain {}
 impl rust2dart::IntoIntoDart<Chain> for Chain {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for DecodedInvoice {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.msats.into_into_dart().into_dart(),
+            self.expiry.into_into_dart().into_dart(),
+            self.expires_in.into_into_dart().into_dart(),
+            self.expires_at.into_into_dart().into_dart(),
+            self.is_expired.into_into_dart().into_dart(),
+            self.network.into_into_dart().into_dart(),
+            self.cltv_exp_delta.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for DecodedInvoice {}
+impl rust2dart::IntoIntoDart<DecodedInvoice> for DecodedInvoice {
     fn into_into_dart(self) -> Self {
         self
     }

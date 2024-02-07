@@ -249,6 +249,17 @@ class AllSwapFees {
   }
 }
 
+class Bolt11Invoice {
+  static Future<DecodedInvoice> decode({required String invoice}) async {
+    try{
+      final res = await ffi.decodeInvoiceStaticMethodApi(invoiceStr: invoice);
+      return res;
+    }
+    catch (e){
+      rethrow;
+    }
+  }
+}
 // done
   // new submarine swap
   // new reverse swap

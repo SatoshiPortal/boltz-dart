@@ -1,6 +1,9 @@
+use std::str::FromStr;
+
 use boltz_client::swaps::bitcoin::BtcSwapTx;
 use boltz_client::swaps::liquid::LBtcSwapScript;
 use boltz_client::swaps::liquid::LBtcSwapTx;
+use boltz_client::Bolt11Invoice;
 use boltz_client::Keypair;
 use boltz_client::{network::electrum::ElectrumConfig, swaps::bitcoin::BtcSwapScript};
 // use boltz_client::network::electrum::ElectrumConfig;
@@ -14,6 +17,7 @@ use boltz_client::util::secrets::Preimage;
 
 use crate::types::BoltzError;
 use crate::types::Chain;
+use crate::types::DecodedInvoice;
 use crate::types::KeyPair;
 use crate::types::LbtcLnSwap;
 use crate::types::SwapType;
@@ -492,6 +496,14 @@ impl Api {
             Ok(result) => Ok(result.status),
             Err(e) => return Err(e.into()),
         }
+    }
+
+    pub fn decode_invoice(invoice_str: String)->anyhow::Result<DecodedInvoice, BoltzError>{
+        let invoice = match Bolt11Invoice::from_str(&invoice_str){
+            Ok(result)=>result,
+            Err(e) => return Err(BoltzError{kind: ErrorKind::Input.to_string(), message: e.to_string()})
+        };
+        Ok(invoice.into())
     }
 }
 

@@ -124,6 +124,8 @@ void wire_swap_status__static_method__Api(int64_t port_,
                                           struct wire_uint_8_list *boltz_url,
                                           struct wire_uint_8_list *id);
 
+void wire_decode_invoice__static_method__Api(int64_t port_, struct wire_uint_8_list *invoice_str);
+
 struct wire_BtcLnSwap *new_box_autoadd_btc_ln_swap_0(void);
 
 struct wire_LbtcLnSwap *new_box_autoadd_lbtc_ln_swap_0(void);
@@ -144,6 +146,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_lbtc_ln_tx_size__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_lbtc_ln_reverse_claim__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_swap_status__static_method__Api);
+    dummy_var ^= ((int64_t) (void*) wire_decode_invoice__static_method__Api);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_btc_ln_swap_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_lbtc_ln_swap_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);
