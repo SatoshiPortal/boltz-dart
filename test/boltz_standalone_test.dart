@@ -44,7 +44,7 @@ void main() {
   test('DECODE EXPIRED BOLT11', () async {
     const invoice =
         "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
-    final decoded  = await Bolt11Invoice.decode(invoice: invoice);
+    final decoded = await Bolt11Invoice.decode(invoice: invoice);
     assert(decoded.isExpired);
     print('$decoded');
   });
@@ -183,7 +183,7 @@ void main() {
 
     test('Positive: Send exact amount or more', () async {
       const invoice =
-          'lntb543230n1pjug2afpp5qqxdcq65q30s0jxm2xfx4l0k29wclrg9swgx90jrn0ypfxz6heysdqqcqzzsxqyjw5qsp5e22uwy5melu53q735qev86gd0a83yhq98ta25p66x20ugqx9ut7s9qyyssq9qr94492pk0k8fn72fq7xsre0mefdnr0yjhynx34zmwsyzuv20q84lf6q2rj86q5za6l2ne4dc35q4q38asrhq2l646fjl35y3ejtwqpztk2nu';
+          'lntb505u1pjugtmapp53t5hwslmgsk8kw4x8f54j2l78xy0zkjp82jcy5pg97g3ewdv0pfqdqqcqzzsxqyjw5qsp59gkclphagwawn8tyzptuspx34pk3aqvl9jt29jgcs5k0yf48ykys9qyyssqnn3z5a38jn0glef5nhvfpvw0glhk8h64z5v46yhg3py2m9zfjt2s760lqyl2rqd5u2dfe9a4kjy7cqpj7zk9v2qsz6ucdkapywkufsgp8qk0vr';
 
       try {
         BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
@@ -387,9 +387,8 @@ void main() {
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
-      const boltzUrl = 'https://api.testnet.boltz.exchange';
-    final amount = 100000;
-    final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+  final amount = 100000;
+  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
 
   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
     mnemonic: mnemonic,
@@ -405,45 +404,47 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
 }
 
 Future<BtcLnSwap> setupReverse(int outAmount) async {
-  const boltzUrl = 'https://api.testnet.boltz.exchange';
-  final amount = 100000;
-  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
 
   final btcLnSubmarineSwap = await BtcLnSwap.newReverse(
-    mnemonic: mnemonic,
-    index: index,
-    outAmount: outAmount,
-    network: network,
-    electrumUrl: electrumUrl,
-    boltzUrl: boltzUrl,
-    pairHash: fees.btcPairHash
-  );
+      mnemonic: mnemonic,
+      index: index,
+      outAmount: outAmount,
+      network: network,
+      electrumUrl: electrumUrl,
+      boltzUrl: boltzUrl,
+      pairHash: fees.btcPairHash);
 
   return btcLnSubmarineSwap;
 }
 
 Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
+  final amount = 100000;
+  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
   final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
-    mnemonic: mnemonic,
-    index: index,
-    invoice: invoice,
-    network: lnetwork,
-    electrumUrl: electrumUrl,
-    boltzUrl: boltzUrl,
-  );
+      mnemonic: mnemonic,
+      index: index,
+      invoice: invoice,
+      network: lnetwork,
+      electrumUrl: electrumUrl,
+      boltzUrl: boltzUrl,
+      pairHash: fees.lbtcPairHash);
 
   return lbtcLnSubmarineSwap;
 }
 
 Future<LbtcLnSwap> setupLReverse(int amount) async {
+  final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
+
   final lbtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
-    mnemonic: mnemonic,
-    index: index,
-    outAmount: amount,
-    network: lnetwork,
-    electrumUrl: electrumUrl,
-    boltzUrl: boltzUrl,
-  );
+      mnemonic: mnemonic,
+      index: index,
+      outAmount: amount,
+      network: lnetwork,
+      electrumUrl: electrumUrl,
+      boltzUrl: boltzUrl,
+      pairHash: fees.lbtcPairHash);
 
   return lbtcLnSubmarineSwap;
 }
