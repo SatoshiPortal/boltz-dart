@@ -13,6 +13,9 @@ enum SwapStatus {
   @JsonValue('transaction.mempool')
   txnMempool,
 
+  @JsonValue('transaction.claim.pending')
+  txnClaimPending,
+
   @JsonValue('transaction.claimed')
   txnClaimed,
 
@@ -62,6 +65,8 @@ extension SwapStatusX on SwapStatus {
 
       case SwapStatus.txnMempool:
         return 'transaction.mempool';
+      case SwapStatus.txnClaimPending:
+        return 'transaction.claim.pending';
       case SwapStatus.txnClaimed:
         return 'transaction.claimed';
       case SwapStatus.txnConfirmed:

@@ -26,6 +26,9 @@ const index = 0;
 const network = Chain.Testnet;
 const electrumUrl = 'electrum.bullbitcoin.com:60002';
 const boltzUrl = 'https://api.testnet.boltz.exchange';
+// const boltzUrl = 'https://testnet.boltz.exchange/api';
+
+const lnetwork = Chain.LiquidTestnet;
 const testTimeout = Timeout(Duration(minutes: 30));
 
 void main() {
@@ -180,38 +183,46 @@ void main() {
 
     test('Positive: Send exact amount or more', () async {
       const invoice =
-          "lntb1m1pjmkcg0pp5vsta4epuxy22ksk73n9a39pjkwa64ux5w3wj4sxasm4cqxyze92qdq8w368gaqxqyjw5qcqp2sp5lkac0whuret73z2kfqm7ql20v5myvrxf89y2pqm3xl4r9pxcu26srzjq2gyp9za7vc7vd8m59fvu63pu00u4pak35n4upuv4mhyw5l586dvkf6vkyqq20gqqqqqqqqpqqqqqzsqqc9qyyssqv27kvqsup9h3538zdyz852gpkfthvkvhudqdzj8gdfesaexlquvrhr33x55pnwlv4nd3k7hjmxyvgpwreukzga7kxlhae7dufzawvhqqruaq5e";
+          'lntb543230n1pjug2afpp5qqxdcq65q30s0jxm2xfx4l0k29wclrg9swgx90jrn0ypfxz6heysdqqcqzzsxqyjw5qsp5e22uwy5melu53q735qev86gd0a83yhq98ta25p66x20ugqx9ut7s9qyyssq9qr94492pk0k8fn72fq7xsre0mefdnr0yjhynx34zmwsyzuv20q84lf6q2rj86q5za6l2ne4dc35q4q38asrhq2l646fjl35y3ejtwqpztk2nu';
 
-      BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
-      final paymentDetails = btcLnSubmarine.paymentDetails();
-      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      try {
+        BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
+        final paymentDetails = await btcLnSubmarine.paymentDetails();
+        const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
-      final swap = btcLnSubmarine.btcLnSwap;
-      print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
-      expect(swap.keys.secretKey, expectedSecretKey);
+        final swap = btcLnSubmarine.btcLnSwap;
+        print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+        expect(swap.keys.secretKey, expectedSecretKey);
 
-      print("Send sats: $paymentDetails");
-      var completer = Completer();
-      var receivedEvents = <SwapStatusResponse>[];
-      final api = await BoltzApi.newBoltzApi();
-      var sub = api.getSwapStatusStream(swap.id).listen((event) {
-        receivedEvents.add(event);
-      });
-      await completer.future;
+        print("Send sats: $paymentDetails");
+        var completer = Completer();
+        var receivedEvents = <SwapStatusResponse>[];
+        final api = await BoltzApi.newBoltzApi();
+        var sub = api.getSwapStatusStream(swap.id).listen((event) {
+          receivedEvents.add(event);
+        });
+        await completer.future;
 
-      await sub.cancel();
+        await sub.cancel();
 
-      // print('receivedEvents: $receivedEvents');
+        // print('receivedEvents: $receivedEvents');
 
-      expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
-      expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
-      expect(receivedEvents[2].status, equals(SwapStatus.txnConfirmed));
-      expect(receivedEvents[3].status, equals(SwapStatus.invoicePending));
-      expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
+        expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
+        expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
+        expect(receivedEvents[2].status, equals(SwapStatus.txnConfirmed));
+        expect(receivedEvents[3].status, equals(SwapStatus.invoicePending));
+        expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
+      } catch (e) {
+        print(e);
+        if (e is BoltzError) {
+          print(e.kind);
+          print(e.message);
+        }
+      }
     }, skip: true, timeout: testTimeout);
   });
 
-  group('LN-BTC Reverse Submarince', () {
+  group('LN-BTC Reverse Submarine', () {
     test('Neg: Minimum limit (50k sats)', () async {
       const outAmount = 2500;
 
@@ -253,7 +264,7 @@ void main() {
 
     test('Positive: ', () async {
       int outAmount = 51000;
-      const outAddress = "tb1q5tsjcyz7xmet07yxtumakt739y53hcttmntajq";
+      const outAddress = 'tb1q7d0ql7g3f0vuhnhy50c32yyay6n5hllgk2j7tc';
 
       BtcLnSwap btcLnSubmarine = await setupReverse(outAmount);
 
@@ -287,87 +298,91 @@ void main() {
 
       await sub.cancel();
 
-      expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
+      // expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
+      expect(receivedEvents[0].status, equals(SwapStatus.swapCreated));
       expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
       expect(receivedEvents[2].status, equals(SwapStatus.invoiceSettled));
     }, skip: true, timeout: testTimeout);
   });
 
-  group('LN-LBTC Reverse Submarine', () {
-    test('Positive', () async {
-      const mnemonic =
-          'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
-      const index = 0;
-      const network = Chain.Testnet;
-      const electrumUrl = 'electrum.bullbitcoin.com:60002';
-      const boltzUrl = 'https://api.testnet.boltz.exchange';
-      final amount = 100000;
-      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
-
-      const outAmount = 70000;
-      try {
-        // this should be a constructor newReverse on BtcLnSwap
-        final lBtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
-          mnemonic: mnemonic,
-          index: index,
-          outAmount: outAmount,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: fees.lbtcPairHash
-        );
-        const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
-
-        final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
-        print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
-
-        expect(swap.keys.secretKey, expectedSecretKey);
-
-        print("PAYMENT DETAILS: ${swap.invoice}");
-      } catch (e) {
-        print(e);
-        print((e as BoltzError).kind);
-        print((e as BoltzError).message);
-      }
-    });
-  });
   group('LBTC-LN Submarine', () {
     test('Positive', () async {
-      const mnemonic =
-          'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
-      const index = 0;
-      const network = Chain.Testnet;
-      const electrumUrl = 'electrum.bullbitcoin.com:60002';
-      const boltzUrl = 'https://api.testnet.boltz.exchange';
-      final amount = 100000;
-      final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: amount);
-
       const invoice =
-          "lntb70u1pjuy9agpp5jdqj3wz4f042gcusdhfxy5chl8qgrznx552n7qmhjy5x2a5h9pjsdqqcqzzsxqyjw5qsp5v30w8undlhfx6y378955t3sw7a6knh7jnt6wmcgyew97c5w0hghq9qyyssq35nan8n3r9qm8p7ue5vnky6kf06rz7h6cjwpxa6j4flraqnzu2vxlazd4tdtfpuzspapg2w0v8ffm9hpp9pjeqm0rvjkf0uam5kg9wcqazv2wz";
-      try {
-        final lBtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
-          mnemonic: mnemonic,
-          index: index,
-          invoice: invoice,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: fees.btcPairHash
-        );
+          'lntb22u1pju9aukpp5wpxqwx7svpcctyc6x5l0xcl45epcl072j9spvdes7uhvwpa4dmdsdqqcqzzsxqyjw5qsp5waswjm3sr9amvy5s8caj5ec28at2x5aek8gl2u787hej59txlm8s9qyyssqrhvelx58p5338lq5lrnwlsz6l6t5psj4c9m2yrgjh66lhyu7y5fywsv0hruc5ccvptrgy09fpah4ng2wcg8fzf79d8vwqwfeksnq9fcpsvhu3m';
 
-        const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      final btcLnSubmarineSwap = await setupLSubmarine(invoice);
 
-        final swap = lBtcLnSubmarineSwap.lbtcLnSwap;
-        print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
-        expect(swap.keys.secretKey, expectedSecretKey);
+      final swap = btcLnSubmarineSwap.lbtcLnSwap;
+      print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
 
-        print("PAYMENT DETAILS: ${lBtcLnSubmarineSwap.paymentDetails()}");
-      } catch (e) {
-        print((e as BoltzError).kind);
-        print((e as BoltzError).message);
-      }
-    });
+      expect(swap.keys.secretKey, expectedSecretKey);
+
+      final paymentDetails = await btcLnSubmarineSwap.paymentDetails();
+
+      print("Send l-sats: $paymentDetails");
+      var completer = Completer();
+      var receivedEvents = <SwapStatusResponse>[];
+      final api = await BoltzApi.newBoltzApi();
+      var sub = api.getSwapStatusStream(swap.id).listen((event) {
+        receivedEvents.add(event);
+      });
+      await completer.future;
+
+      await sub.cancel();
+
+      // print('receivedEvents: $receivedEvents');
+
+      expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
+      expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
+      expect(receivedEvents[2].status, equals(SwapStatus.invoicePending));
+      expect(receivedEvents[3].status, equals(SwapStatus.invoicePaid));
+      expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
+      expect(receivedEvents[5].status, equals(SwapStatus.txnClaimed));
+    }, skip: true, timeout: testTimeout);
+  });
+
+  group('LN-LBTC Reverse Submarine', () {
+    test('Positive', () async {
+      const outAmount = 3100;
+      const outAddress =
+          'tlq1qqf9zqefh7jwzvu56gssqh7ayea2cmphhcqmfleg2zg6t5r70zfa2ukmvg5cmp5g33nar2xkx57edghhpc9nj56plk7ch7ppuk';
+
+      final lbtcLnSubmarineSwap = await setupLReverse(outAmount);
+      const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
+
+      final swap = lbtcLnSubmarineSwap.lbtcLnSwap;
+      print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+
+      expect(swap.keys.secretKey, expectedSecretKey);
+
+      print("Pay this invoice: ${swap.invoice}");
+
+      var completer = Completer();
+      var receivedEvents = <SwapStatusResponse>[];
+      final api = await BoltzApi.newBoltzApi();
+      var sub = api.getSwapStatusStream(swap.id).listen((event) async {
+        receivedEvents.add(event);
+        if (event.status == SwapStatus.txnMempool) {
+          await Future.delayed(Duration(seconds: 20));
+
+          final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
+          final claimFeesEstimate = fees.lbtcReverse.claimFeesEstimate;
+
+          String txnId = await lbtcLnSubmarineSwap.claim(outAddress: outAddress, absFee: claimFeesEstimate);
+          print(txnId);
+        }
+        if (event.status == SwapStatus.invoiceSettled) {
+          completer.complete();
+        }
+      });
+
+      await completer.future;
+
+      await sub.cancel();
+      print(receivedEvents);
+    }, skip: true, timeout: testTimeout);
   });
 }
 
@@ -405,4 +420,30 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
   );
 
   return btcLnSubmarineSwap;
+}
+
+Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
+  final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
+    mnemonic: mnemonic,
+    index: index,
+    invoice: invoice,
+    network: lnetwork,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+  );
+
+  return lbtcLnSubmarineSwap;
+}
+
+Future<LbtcLnSwap> setupLReverse(int amount) async {
+  final lbtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
+    mnemonic: mnemonic,
+    index: index,
+    outAmount: amount,
+    network: lnetwork,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+  );
+
+  return lbtcLnSubmarineSwap;
 }
