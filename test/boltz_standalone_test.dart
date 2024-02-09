@@ -7,6 +7,8 @@ import 'package:boltz_dart/src/utils/http.dart';
 import 'package:test/test.dart';
 import 'dart:io';
 
+import 'test_data.dart';
+
 void countdown(int totalSeconds) {
   for (var i = totalSeconds; i >= 0; i--) {
     // Constructing the countdown message
@@ -42,44 +44,31 @@ void main() {
   });
 
   test('DECODE EXPIRED BOLT11', () async {
-    const invoice =
-        "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
-    final decoded = await Bolt11Invoice.decode(invoice: invoice);
+    final decoded = await Bolt11Invoice.decode(invoice: expiredBolt11Invoice);
     assert(decoded.isExpired);
     print('$decoded');
   });
   group('BTC-LN Submarince', () {
     test('Neg: Minimum limit (50k sats)', () async {
       // An invoice with <50k sats
-      const invoice =
-          "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
-      const invoiceAmount = 123;
-
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice123), throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$invoiceAmount is less than minimal of 50000"}';
+            e.message == '{"error":"$invoice123Amount is less than minimal of 50000"}';
       })));
     });
 
     test('Neg: Maximum limit (25m sats)', () async {
       // An invoice with >25m sats
-      const invoice =
-          "lntb260m1pjmwkv7pp5g8hy6pe8md7rz6jwcgvntgsqwr2eck0rcvj8trqkuehuvl9g2w4qdqqcqzzsxqyjw5qsp59fq60rmf6mkx9hhkcdw4akl7ksgzl3rfchgj94f6vfwzq9x7wvps9qyyssq2mkjtc67ktcnxf0cch8d66fkxlx9fyryy2k79cqv8gzjxw7wmh7xm3qdra7lawm6nvjrs2zyu50qf428uzqu25mxmvev6zckzt8ew7gp0xfna2";
-      const invoiceAmount = 26000000;
-
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invoice26m), throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
-            e.message == '{"error":"$invoiceAmount is exceeds maximal of 25000000"}';
+            e.message == '{"error":"$invoice123Amount is exceeds maximal of 25000000"}';
       })));
     });
 
     test('Neg: Used Invoice', () async {
-      const invoice =
-          "lntb510u1pjmwkmspp5hqxwu96lhqzvvv9gxul8memmkj833fsdu32aw4llgf37jrfx0m5qdqqcqzzsxqyjw5qsp55djvsgh0eyypz2l28cyhxajuudy8z27ge5ss82k80kdefzn3de6s9qyyssq9s0lqcr00e0raj86tde8zq6jnft5fq3xyqhjc4jzpcndqvkjtsuh9tmd4rhk52zc6tkgf3h9hk7pcuzxprmsfj5rmghl2jyzga3d8vqq5785ee";
-
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(usedInvoice), throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"a swap with this invoice exists already"}';
@@ -87,10 +76,7 @@ void main() {
     });
 
     test('Neg: Expired invoice', () async {
-      const invoice =
-          "lntb510u1pjm0z48pp5p3frf3ngtfxfu2fpdv5jefdk5d4r5es6ad350jelq64kwj3z7jvqdqqcqzzsxqp9sp5fw6a2zjmlhx59k2x7rmv46aus79walrmlvmqhvpcy0wwhtwx68qs9qyyssqq9denfcmlnf37djfkxu0rr7c5gy0ad969cylhmuzyeusp9g3ecus0zyv4kugdcle438ujnn948whzrtev04sq889lnp959ns6ymdpwcpwvyszt";
-
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(expiredInvoice), throwsA(predicate((e) {
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
             e.message == '{"error":"the provided invoice expired already"}';
@@ -98,9 +84,7 @@ void main() {
     });
 
     test('Neg: Invalid invoice', () async {
-      const invoice = "lntbinvalidinvoice";
-
-      await expectLater(() async => await setupSubmarine(invoice), throwsA(predicate((e) {
+      await expectLater(() async => await setupSubmarine(invalidInvoice), throwsA(predicate((e) {
         print(e);
         return e is BoltzError &&
             e.kind == 'BoltzApi' &&
@@ -109,11 +93,7 @@ void main() {
     });
 
     test('Neg: Send less on-chain sats', () async {
-      // Setup a fresh Invoice here
-      const invoice =
-          "lntb525u1pjmke0xpp59hj2fdp5nnjvwtnrvd0r4u36knnmkp3lnyvn4kj70zs8edelvggqdqqcqzzsxqyjw5qsp5zxpqx8cd022kl9x6f0pnz63a5xyuz60v0qwrggw2rkg2q2dfhemq9qyyssq2uxfn8lp984tt8rq3jhxwtx839c7mxdl0k8u07dn2m8ll4lvsa7n7qnwts6w5fp6c6ejhr4fmxmsxn7jjhzywv3sfs6v4rlaz87p6fgpcwtnpy";
-
-      BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
+      BtcLnSwap btcLnSubmarine = await setupSubmarine(workingFreshInvoice1);
 
       const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
@@ -145,11 +125,8 @@ void main() {
     }, skip: true, timeout: testTimeout);
 
     test('Neg: LN Invoice expires', () async {
-      const invoice =
-          "lntb545u1pjm0zgkpp5vl6wgpfcuapqd5e2vz3sc064ph76y6kze60jmrvqyk5auzrx6f6qdqqcqzzsxqzpusp55fy9qvqs95qr0xmcn6u4qktwz6at6gcnpl560cjs4htvgw4wj3cs9qyyssqsv0alwgutgqjxpm03e7kf5f66gk4u8adduater9qyg6lrx6pgscxcgx5k2v075qangzjcrx4qjwvcc89txhjyxa6aqe0x37xhnf0maspnud9d8";
-
-      BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
-      final paymentDetails = btcLnSubmarine.paymentDetails();
+      BtcLnSwap btcLnSubmarine = await setupSubmarine(invoiceWith1minExpiry);
+      final paymentDetails = await btcLnSubmarine.paymentDetails();
       const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
       final swap = btcLnSubmarine.btcLnSwap;
@@ -182,43 +159,34 @@ void main() {
     }, skip: true, timeout: testTimeout);
 
     test('Positive: Send exact amount or more', () async {
-      const invoice =
-          'lntb505u1pjugtmapp53t5hwslmgsk8kw4x8f54j2l78xy0zkjp82jcy5pg97g3ewdv0pfqdqqcqzzsxqyjw5qsp59gkclphagwawn8tyzptuspx34pk3aqvl9jt29jgcs5k0yf48ykys9qyyssqnn3z5a38jn0glef5nhvfpvw0glhk8h64z5v46yhg3py2m9zfjt2s760lqyl2rqd5u2dfe9a4kjy7cqpj7zk9v2qsz6ucdkapywkufsgp8qk0vr';
+      BtcLnSwap btcLnSubmarine = await setupSubmarine(workingFreshInvoice2);
+      final paymentDetails = await btcLnSubmarine.paymentDetails();
+      const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
-      try {
-        BtcLnSwap btcLnSubmarine = await setupSubmarine(invoice);
-        final paymentDetails = await btcLnSubmarine.paymentDetails();
-        const expectedSecretKey = "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
+      final swap = btcLnSubmarine.btcLnSwap;
+      print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
+      expect(swap.keys.secretKey, expectedSecretKey);
 
-        final swap = btcLnSubmarine.btcLnSwap;
-        print("SWAP CREATED SUCCESSFULLY: ${swap.id}");
-        expect(swap.keys.secretKey, expectedSecretKey);
-
-        print("Send sats: $paymentDetails");
-        var completer = Completer();
-        var receivedEvents = <SwapStatusResponse>[];
-        final api = await BoltzApi.newBoltzApi();
-        var sub = api.getSwapStatusStream(swap.id).listen((event) {
-          receivedEvents.add(event);
-        });
-        await completer.future;
-
-        await sub.cancel();
-
-        // print('receivedEvents: $receivedEvents');
-
-        expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
-        expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
-        expect(receivedEvents[2].status, equals(SwapStatus.txnConfirmed));
-        expect(receivedEvents[3].status, equals(SwapStatus.invoicePending));
-        expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
-      } catch (e) {
-        print(e);
-        if (e is BoltzError) {
-          print(e.kind);
-          print(e.message);
+      print("Send sats: $paymentDetails");
+      var completer = Completer();
+      var receivedEvents = <SwapStatusResponse>[];
+      final api = await BoltzApi.newBoltzApi();
+      var sub = api.getSwapStatusStream(swap.id).listen((event) {
+        receivedEvents.add(event);
+        if (event.status == SwapStatus.txnClaimed) {
+          completer.complete();
         }
-      }
+      });
+      await completer.future;
+
+      await sub.cancel();
+
+      expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
+      expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
+      expect(receivedEvents[2].status, equals(SwapStatus.txnConfirmed));
+      expect(receivedEvents[3].status, equals(SwapStatus.invoicePending));
+      expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
+      expect(receivedEvents[5].status, equals(SwapStatus.txnClaimed));
     }, skip: true, timeout: testTimeout);
   });
 
@@ -263,10 +231,7 @@ void main() {
     }, skip: true);
 
     test('Positive: ', () async {
-      int outAmount = 51000;
-      const outAddress = 'tb1q7d0ql7g3f0vuhnhy50c32yyay6n5hllgk2j7tc';
-
-      BtcLnSwap btcLnSubmarine = await setupReverse(outAmount);
+      BtcLnSwap btcLnSubmarine = await setupReverse(btcLnReverseSwapAmount);
 
       const expectedSecretKey = "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
 
@@ -284,10 +249,10 @@ void main() {
         if (event.status == SwapStatus.txnMempool) {
           await Future.delayed(Duration(seconds: 20));
 
-          final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
+          final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: btcLnReverseSwapAmount);
           final claimFeesEstimate = fees.btcReverse.claimFeesEstimate;
 
-          String txnId = await btcLnSubmarine.claim(outAddress: outAddress, absFee: claimFeesEstimate);
+          String txnId = await btcLnSubmarine.claim(outAddress: btcReceiveAddress, absFee: claimFeesEstimate);
           print(txnId);
         }
         if (event.status == SwapStatus.invoiceSettled) {
@@ -327,19 +292,20 @@ void main() {
       final api = await BoltzApi.newBoltzApi();
       var sub = api.getSwapStatusStream(swap.id).listen((event) {
         receivedEvents.add(event);
+        if (event.status == SwapStatus.txnClaimed) {
+          completer.complete();
+        }
       });
       await completer.future;
 
       await sub.cancel();
 
-      // print('receivedEvents: $receivedEvents');
-
       expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
       expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
       expect(receivedEvents[2].status, equals(SwapStatus.invoicePending));
       expect(receivedEvents[3].status, equals(SwapStatus.invoicePaid));
-      expect(receivedEvents[4].status, equals(SwapStatus.invoicePaid));
-      expect(receivedEvents[5].status, equals(SwapStatus.txnClaimed));
+      // expect(receivedEvents[4].status, equals(SwapStatus.txnClaimPending));
+      expect(receivedEvents[4].status, equals(SwapStatus.txnClaimed));
     }, skip: true, timeout: testTimeout);
   });
 
@@ -364,8 +330,8 @@ void main() {
       final api = await BoltzApi.newBoltzApi();
       var sub = api.getSwapStatusStream(swap.id).listen((event) async {
         receivedEvents.add(event);
-        if (event.status == SwapStatus.txnMempool) {
-          await Future.delayed(Duration(seconds: 20));
+        if (event.status == SwapStatus.txnConfirmed) {
+          await Future.delayed(Duration(seconds: 300));
 
           final fees = await AllSwapFees.estimateFee(boltzUrl: boltzUrl, outputAmount: outAmount);
           final claimFeesEstimate = fees.lbtcReverse.claimFeesEstimate;
@@ -382,6 +348,10 @@ void main() {
 
       await sub.cancel();
       print(receivedEvents);
+
+      expect(receivedEvents[0].status, equals(SwapStatus.swapCreated));
+      expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
+      expect(receivedEvents[2].status, equals(SwapStatus.txnConfirmed));
     }, skip: true, timeout: testTimeout);
   });
 }
