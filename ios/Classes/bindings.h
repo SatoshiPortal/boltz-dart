@@ -95,6 +95,11 @@ void wire_btc_ln_reverse_claim__static_method__Api(int64_t port_,
                                                    struct wire_uint_8_list *out_address,
                                                    uint64_t abs_fee);
 
+void wire_btc_ln_submarine_refund__static_method__Api(int64_t port_,
+                                                      struct wire_BtcLnSwap *swap,
+                                                      struct wire_uint_8_list *out_address,
+                                                      uint64_t abs_fee);
+
 void wire_new_lbtc_ln_submarine__static_method__Api(int64_t port_,
                                                     struct wire_uint_8_list *mnemonic,
                                                     uint64_t index,
@@ -120,6 +125,11 @@ void wire_lbtc_ln_reverse_claim__static_method__Api(int64_t port_,
                                                     struct wire_uint_8_list *out_address,
                                                     uint64_t abs_fee);
 
+void wire_lbtc_ln_submarine_refund__static_method__Api(int64_t port_,
+                                                       struct wire_LbtcLnSwap *swap,
+                                                       struct wire_uint_8_list *out_address,
+                                                       uint64_t abs_fee);
+
 void wire_swap_status__static_method__Api(int64_t port_,
                                           struct wire_uint_8_list *boltz_url,
                                           struct wire_uint_8_list *id);
@@ -141,10 +151,12 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_new_btc_ln_reverse__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_btc_ln_tx_size__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_btc_ln_reverse_claim__static_method__Api);
+    dummy_var ^= ((int64_t) (void*) wire_btc_ln_submarine_refund__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_new_lbtc_ln_submarine__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_new_lbtc_ln_reverse__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_lbtc_ln_tx_size__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_lbtc_ln_reverse_claim__static_method__Api);
+    dummy_var ^= ((int64_t) (void*) wire_lbtc_ln_submarine_refund__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_swap_status__static_method__Api);
     dummy_var ^= ((int64_t) (void*) wire_decode_invoice__static_method__Api);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_btc_ln_swap_0);

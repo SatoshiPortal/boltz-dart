@@ -72,6 +72,16 @@ pub extern "C" fn wire_btc_ln_reverse_claim__static_method__Api(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_btc_ln_submarine_refund__static_method__Api(
+    port_: i64,
+    swap: *mut wire_BtcLnSwap,
+    out_address: *mut wire_uint_8_list,
+    abs_fee: u64,
+) {
+    wire_btc_ln_submarine_refund__static_method__Api_impl(port_, swap, out_address, abs_fee)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_new_lbtc_ln_submarine__static_method__Api(
     port_: i64,
     mnemonic: *mut wire_uint_8_list,
@@ -130,6 +140,16 @@ pub extern "C" fn wire_lbtc_ln_reverse_claim__static_method__Api(
     abs_fee: u64,
 ) {
     wire_lbtc_ln_reverse_claim__static_method__Api_impl(port_, swap, out_address, abs_fee)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_lbtc_ln_submarine_refund__static_method__Api(
+    port_: i64,
+    swap: *mut wire_LbtcLnSwap,
+    out_address: *mut wire_uint_8_list,
+    abs_fee: u64,
+) {
+    wire_lbtc_ln_submarine_refund__static_method__Api_impl(port_, swap, out_address, abs_fee)
 }
 
 #[no_mangle]

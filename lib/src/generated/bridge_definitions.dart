@@ -54,6 +54,15 @@ abstract class BoltzDart {
 
   FlutterRustBridgeTaskConstMeta get kBtcLnReverseClaimStaticMethodApiConstMeta;
 
+  Future<String> btcLnSubmarineRefundStaticMethodApi(
+      {required BtcLnSwap swap,
+      required String outAddress,
+      required int absFee,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kBtcLnSubmarineRefundStaticMethodApiConstMeta;
+
   Future<LbtcLnSwap> newLbtcLnSubmarineStaticMethodApi(
       {required String mnemonic,
       required int index,
@@ -92,6 +101,15 @@ abstract class BoltzDart {
 
   FlutterRustBridgeTaskConstMeta
       get kLbtcLnReverseClaimStaticMethodApiConstMeta;
+
+  Future<String> lbtcLnSubmarineRefundStaticMethodApi(
+      {required LbtcLnSwap swap,
+      required String outAddress,
+      required int absFee,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kLbtcLnSubmarineRefundStaticMethodApiConstMeta;
 
   Future<String> swapStatusStaticMethodApi(
       {required String boltzUrl, required String id, dynamic hint});

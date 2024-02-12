@@ -98,6 +98,21 @@ class BtcLnSwap {
       rethrow;
     }
   }
+  
+  Future<String> refund(
+      {required String outAddress, required int absFee}) async {
+    try {
+      final res = await ffi.btcLnSubmarineRefundStaticMethodApi(
+        swap: _btcLnSwap,
+        outAddress: outAddress,
+        absFee: absFee,
+      );
+
+      return res;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future<String> status({dynamic hint}) async {
     try {
@@ -199,6 +214,21 @@ class LbtcLnSwap {
       {required String outAddress, required int absFee}) async {
     try {
       final res = await ffi.lbtcLnReverseClaimStaticMethodApi(
+        swap: _lbtcLnSwap,
+        outAddress: outAddress,
+        absFee: absFee,
+      );
+
+      return res;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+    Future<String> refund(
+      {required String outAddress, required int absFee}) async {
+    try {
+      final res = await ffi.lbtcLnSubmarineRefundStaticMethodApi(
         swap: _lbtcLnSwap,
         outAddress: outAddress,
         absFee: absFee,

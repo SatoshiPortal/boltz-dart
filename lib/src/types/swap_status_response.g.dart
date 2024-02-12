@@ -23,6 +23,7 @@ const _$SwapStatusEnumMap = {
   SwapStatus.swapExpired: 'swap.expired',
   SwapStatus.swapRefunded: 'swap.refunded',
   SwapStatus.txnMempool: 'transaction.mempool',
+  SwapStatus.txnClaimPending: 'transaction.claim.pending',
   SwapStatus.txnClaimed: 'transaction.claimed',
   SwapStatus.txnConfirmed: 'transaction.confirmed',
   SwapStatus.txnRefunded: 'transaction.refunded',
