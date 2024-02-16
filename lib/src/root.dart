@@ -15,14 +15,14 @@ Future<void> setCurrentDirectory() async {
   }
 }
 
-class BtcLnSwap {
+class BtcLnBoltzSwap {
   final bridge.BtcLnSwap _btcLnSwap;
 
-  BtcLnSwap._(this._btcLnSwap);
+  BtcLnBoltzSwap._(this._btcLnSwap);
 
   bridge.BtcLnSwap get btcLnSwap => _btcLnSwap;
 
-  static Future<BtcLnSwap> newSubmarine(
+  static Future<BtcLnBoltzSwap> newSubmarine(
       {required String mnemonic,
       required int index,
       required String invoice,
@@ -42,13 +42,13 @@ class BtcLnSwap {
         boltzUrl: boltzUrl,
         pairHash: pairHash,
       );
-      return BtcLnSwap._(res);
+      return BtcLnBoltzSwap._(res);
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<BtcLnSwap> newReverse(
+  static Future<BtcLnBoltzSwap> newReverse(
       {required String mnemonic,
       required int index,
       required int outAmount,
@@ -68,7 +68,7 @@ class BtcLnSwap {
         boltzUrl: boltzUrl,
         pairHash: pairHash,
       );
-      return BtcLnSwap._(res);
+      return BtcLnBoltzSwap._(res);
     } catch (e) {
       rethrow;
     }
@@ -139,14 +139,14 @@ class BtcLnSwap {
   }
 }
 
-class LbtcLnSwap {
+class LbtcLnBoltzSwap {
   final bridge.LbtcLnSwap _lbtcLnSwap;
 
-  LbtcLnSwap._(this._lbtcLnSwap);
+  LbtcLnBoltzSwap._(this._lbtcLnSwap);
 
   bridge.LbtcLnSwap get lbtcLnSwap => _lbtcLnSwap;
 
-  static Future<LbtcLnSwap> newSubmarine({
+  static Future<LbtcLnBoltzSwap> newSubmarine({
     required String mnemonic,
     required int index,
     required String invoice,
@@ -167,13 +167,13 @@ class LbtcLnSwap {
         pairHash: pairHash,
       );
 
-      return LbtcLnSwap._(res);
+      return LbtcLnBoltzSwap._(res);
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<LbtcLnSwap> newReverse({
+  static Future<LbtcLnBoltzSwap> newReverse({
     required String mnemonic,
     required int index,
     required int outAmount,
@@ -193,7 +193,7 @@ class LbtcLnSwap {
         pairHash: pairHash,
       );
 
-      return LbtcLnSwap._(res);
+      return LbtcLnBoltzSwap._(res);
     } catch (e) {
       rethrow;
     }
