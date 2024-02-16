@@ -18,7 +18,7 @@ Future<void> setCurrentDirectory() async {
 class BtcLnBoltzSwap {
   final bridge.BtcLnSwap _btcLnSwap;
 
-  BtcLnBoltzSwap._(this._btcLnSwap);
+  BtcLnBoltzSwap(this._btcLnSwap);
 
   bridge.BtcLnSwap get btcLnSwap => _btcLnSwap;
 
@@ -42,7 +42,7 @@ class BtcLnBoltzSwap {
         boltzUrl: boltzUrl,
         pairHash: pairHash,
       );
-      return BtcLnBoltzSwap._(res);
+      return BtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
@@ -68,7 +68,7 @@ class BtcLnBoltzSwap {
         boltzUrl: boltzUrl,
         pairHash: pairHash,
       );
-      return BtcLnBoltzSwap._(res);
+      return BtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
@@ -142,7 +142,7 @@ class BtcLnBoltzSwap {
 class LbtcLnBoltzSwap {
   final bridge.LbtcLnSwap _lbtcLnSwap;
 
-  LbtcLnBoltzSwap._(this._lbtcLnSwap);
+  LbtcLnBoltzSwap(this._lbtcLnSwap);
 
   bridge.LbtcLnSwap get lbtcLnSwap => _lbtcLnSwap;
 
@@ -167,7 +167,7 @@ class LbtcLnBoltzSwap {
         pairHash: pairHash,
       );
 
-      return LbtcLnBoltzSwap._(res);
+      return LbtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
@@ -193,7 +193,7 @@ class LbtcLnBoltzSwap {
         pairHash: pairHash,
       );
 
-      return LbtcLnBoltzSwap._(res);
+      return LbtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
