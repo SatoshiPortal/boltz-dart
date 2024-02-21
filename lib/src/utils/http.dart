@@ -1,8 +1,3 @@
-// create a API client using dio for following endpoints:
-// - https://docs.boltz.exchange/v/api/api#backend-version
-// - https://docs.boltz.exchange/v/api/api#supported-pairs
-// - Got for testnet base url
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -11,6 +6,7 @@ import 'package:boltz_dart/src/types/supported_pair.dart';
 import 'package:boltz_dart/src/types/swap.dart';
 import 'package:boltz_dart/src/types/swap_status_response.dart';
 import 'package:dio/dio.dart';
+import 'package:web_socket_channel/io.dart';
 
 final String baseUrl = 'https://api.testnet.boltz.exchange';
 
@@ -63,6 +59,39 @@ class BoltzApi {
     try {
       final res = await _dio.post('/swapstatus', data: {'id': swapId});
       return getSwapStatusFromString(res.data['status']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Stream<SwapStatusResponse> getSwapStatusStreamMultiple(List<String> swapIds) async* {
+    try {
+      var channel = IOWebSocketChannel.connect('wss://api.testnet.boltz.exchange/v2/ws');
+
+      // Map<String, dynamic> payload = {'channel': 'swap.update', 'args': swapIds};
+      // Map<String, dynamic> payload = {'op': 'subscribe', 'args': swapIds};
+      // Map<String, dynamic> payload = {'op': 'subscribe', 'channel': 'swap.update'};
+      // Map<String, dynamic> payload = {'op': 'subscribe', 'channel': 'swap.update', 'args': swapIds[0]};
+      // Map<String, dynamic> payload = {'op': 'subscribe', 'channel': 'swap.update', 'args': swapIds, 'extra': 'param'};
+      Map<String, dynamic> payload = {'op': 'subscribe', 'channel': 'swap.update', 'args': swapIds};
+
+      channel.sink.add(jsonEncode(payload));
+
+      await for (final msg in channel.stream) {
+        final resp = jsonDecode(msg);
+        if (resp['error'] != null) {
+          yield SwapStatusResponse(id: '', status: SwapStatus.swapError, error: resp['error']);
+        } else if (resp['event'] == 'update') {
+          final swapList = resp['args'];
+          for (final swap in swapList) {
+            if (swap['error'] == null) {
+              yield SwapStatusResponse.fromJson(swap);
+            } else {
+              yield SwapStatusResponse(id: swap['id'], status: SwapStatus.swapError, error: swap['error']);
+            }
+          }
+        }
+      }
     } catch (e) {
       rethrow;
     }

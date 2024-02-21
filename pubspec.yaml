@@ -20,6 +20,7 @@ dependencies:
   json_annotation: ^4.8.1
   archive: ^3.4.10
   http: ^1.2.0
+  web_socket_channel: ^2.1.0
 
 dev_dependencies:
   flutter_test:

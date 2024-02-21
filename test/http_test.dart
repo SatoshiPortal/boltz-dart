@@ -101,4 +101,39 @@ void main() {
 
     expect(firstEvent.status, equals(SwapStatus.txnClaimed));
   }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
+
+  test('Get status stream multiple', () async {
+    final api = await BoltzApi.newBoltzApi();
+
+    const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
+    Stream<SwapStatusResponse> eventStream = api.getSwapStatusStreamMultiple(swapIds);
+
+    var receivedEvents = <SwapStatusResponse>[];
+
+    var completer = Completer();
+
+    var subscription = eventStream.listen((event) {
+      receivedEvents.add(event);
+
+      print(event);
+
+      // Optionally, you can set a condition to complete the test
+      // For example, if a specific event is received
+      //if (event == 'specific_event') {
+      //  completer.complete();
+      //}
+    }, onError: (e) {
+      print('onError');
+      completer.completeError(e);
+    }, onDone: () {
+      print('onDone');
+      completer.complete();
+    });
+
+    await completer.future;
+
+    await subscription.cancel();
+
+    print('receivedEvents: $receivedEvents');
+  }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 }

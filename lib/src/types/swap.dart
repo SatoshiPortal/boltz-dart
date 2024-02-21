@@ -10,6 +10,9 @@ enum SwapStatus {
   @JsonValue('swap.refunded')
   swapRefunded,
 
+  @JsonValue('swap.error')
+  swapError,
+
   @JsonValue('transaction.mempool')
   txnMempool,
 
@@ -62,6 +65,8 @@ extension SwapStatusX on SwapStatus {
         return 'swap.expired';
       case SwapStatus.swapRefunded:
         return 'swap.refunded';
+      case SwapStatus.swapError:
+        return 'swap.error';
 
       case SwapStatus.txnMempool:
         return 'transaction.mempool';
