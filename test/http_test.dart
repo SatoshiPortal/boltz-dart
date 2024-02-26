@@ -136,4 +136,41 @@ void main() {
 
     print('receivedEvents: $receivedEvents');
   }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
+
+  test('SwapStatus to string', () async {
+    print(SwapStatus.invoicePaid.toJson());
+    print(SwapStatusResponse(id: 'abc', status: SwapStatus.invoicePaid).toJson());
+    print(SwapStatusResponse.fromJson(jsonDecode('{"id":"abc","status":"invoice.paid"}')));
+  });
+
+  test('Get status stream multiple: Creaet, Update, Close', () async {
+    final api = await BoltzApi.newBoltzApi();
+
+    api.createSwapStatusChannel();
+
+    const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
+    Stream<SwapStatusResponse> eventStream = api.updateSwapStatusChannel(swapIds);
+
+    var receivedEvents = <SwapStatusResponse>[];
+
+    var completer = Completer();
+
+    var subscription = eventStream.listen((event) {
+      receivedEvents.add(event);
+
+      print(event);
+    }, onError: (e) {
+      print('onError');
+      completer.completeError(e);
+    }, onDone: () {
+      print('onDone');
+      completer.complete();
+    });
+
+    await completer.future;
+
+    await subscription.cancel();
+
+    print('receivedEvents: $receivedEvents');
+  }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 }

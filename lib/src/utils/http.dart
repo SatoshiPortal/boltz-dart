@@ -13,6 +13,8 @@ final String baseUrl = 'https://api.testnet.boltz.exchange';
 class BoltzApi {
   final Dio _dio;
 
+  IOWebSocketChannel? channel;
+
   BoltzApi._(this._dio);
 
   static Future<BoltzApi> newBoltzApi() async {
@@ -64,10 +66,56 @@ class BoltzApi {
     }
   }
 
+  bool isSwapStatusChannelOpen() {
+    return channel != null;
+  }
+
+  void createSwapStatusChannel() {
+    channel = IOWebSocketChannel.connect('wss://api.testnet.boltz.exchange/v2/ws');
+  }
+
+  Stream<SwapStatusResponse> updateSwapStatusChannel(List<String> swapIds) async* {
+    try {
+      if (channel == null) {
+        throw Exception('Channel not created');
+      }
+      Map<String, dynamic> payload = {'op': 'subscribe', 'channel': 'swap.update', 'args': swapIds};
+
+      channel!.sink.add(jsonEncode(payload));
+
+      await for (final msg in channel!.stream) {
+        final resp = jsonDecode(msg);
+        if (resp['error'] != null) {
+          yield SwapStatusResponse(id: '', status: SwapStatus.swapError, error: resp['error']);
+        } else if (resp['event'] == 'update') {
+          final swapList = resp['args'];
+          for (final swap in swapList) {
+            if (swap['error'] == null) {
+              yield SwapStatusResponse.fromJson(swap);
+              channel!.sink.close();
+            } else {
+              yield SwapStatusResponse(id: swap['id'], status: SwapStatus.swapError, error: swap['error']);
+              channel!.sink.close();
+            }
+          }
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  void closeSwapStatusChannel() {
+    if (channel == null) {
+      throw Exception('Channel not created');
+    }
+    channel?.sink.close();
+    channel = null;
+  }
+
   Stream<SwapStatusResponse> getSwapStatusStreamMultiple(List<String> swapIds) async* {
     try {
-      var channel = IOWebSocketChannel.connect('wss://api.testnet.boltz.exchange/v2/ws');
-
+      final channel = IOWebSocketChannel.connect('wss://api.testnet.boltz.exchange/v2/ws');
       // Map<String, dynamic> payload = {'channel': 'swap.update', 'args': swapIds};
       // Map<String, dynamic> payload = {'op': 'subscribe', 'args': swapIds};
       // Map<String, dynamic> payload = {'op': 'subscribe', 'channel': 'swap.update'};
@@ -86,8 +134,10 @@ class BoltzApi {
           for (final swap in swapList) {
             if (swap['error'] == null) {
               yield SwapStatusResponse.fromJson(swap);
+              channel.sink.close();
             } else {
               yield SwapStatusResponse(id: swap['id'], status: SwapStatus.swapError, error: swap['error']);
+              channel.sink.close();
             }
           }
         }
@@ -126,6 +176,7 @@ class BoltzApi {
         if (line.startsWith('data: ')) {
           var jsonString = line.substring(6);
           var jsonMap = json.decode(jsonString) as Map<String, dynamic>;
+          jsonMap['id'] = swapId;
           SwapStatusResponse resp = SwapStatusResponse.fromJson(jsonMap);
           print(DateTime.now());
           print(resp);
