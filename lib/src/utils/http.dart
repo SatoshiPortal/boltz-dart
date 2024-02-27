@@ -85,6 +85,7 @@ class BoltzApi {
       channel!.sink.add(jsonEncode(payload));
 
       await for (final msg in channel!.stream) {
+        print(msg);
         final resp = jsonDecode(msg);
         if (resp['error'] != null) {
           yield SwapStatusResponse(id: '', status: SwapStatus.swapError, error: resp['error']);
@@ -93,7 +94,7 @@ class BoltzApi {
           for (final swap in swapList) {
             if (swap['error'] == null) {
               yield SwapStatusResponse.fromJson(swap);
-              channel!.sink.close();
+              // channel!.sink.close();
             } else {
               yield SwapStatusResponse(id: swap['id'], status: SwapStatus.swapError, error: swap['error']);
               channel!.sink.close();
