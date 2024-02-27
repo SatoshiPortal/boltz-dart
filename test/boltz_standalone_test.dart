@@ -107,7 +107,9 @@ void main() {
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
-      var sub = api.getSwapStatusStream(swap.id).listen((event) {
+      api.createSwapStatusChannel();
+
+      var sub = api.updateSwapStatusChannel([swap.id]).listen((event) {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnLockupFailed) {
           completer.complete();
@@ -116,6 +118,7 @@ void main() {
       await completer.future;
 
       await sub.cancel();
+      api.closeSwapStatusChannel();
 
       expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
       expect(receivedEvents[1].status, equals(SwapStatus.txnLockupFailed));
@@ -138,7 +141,8 @@ void main() {
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
-      var sub = api.getSwapStatusStream(swap.id).listen((event) {
+      api.createSwapStatusChannel();
+      var sub = api.updateSwapStatusChannel([swap.id]).listen((event) {
         receivedEvents.add(event);
         if (event.status == SwapStatus.invoiceFailedToPay) {
           completer.complete();
@@ -147,6 +151,7 @@ void main() {
       await completer.future;
 
       await sub.cancel();
+      api.closeSwapStatusChannel();
 
       expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
       expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
@@ -171,7 +176,8 @@ void main() {
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
-      var sub = api.getSwapStatusStream(swap.id).listen((event) {
+      api.createSwapStatusChannel();
+      var sub = api.updateSwapStatusChannel([swap.id]).listen((event) {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnClaimed) {
           completer.complete();
@@ -180,6 +186,7 @@ void main() {
       await completer.future;
 
       await sub.cancel();
+      api.closeSwapStatusChannel();
 
       expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
       expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
@@ -244,7 +251,8 @@ void main() {
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
-      var sub = api.getSwapStatusStream(swap.id).listen((event) async {
+      api.createSwapStatusChannel();
+      var sub = api.updateSwapStatusChannel([swap.id]).listen((event) async {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnMempool) {
           await Future.delayed(Duration(seconds: 20));
@@ -262,6 +270,7 @@ void main() {
       await completer.future;
 
       await sub.cancel();
+      api.closeSwapStatusChannel();
 
       // expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
       expect(receivedEvents[0].status, equals(SwapStatus.swapCreated));
@@ -290,7 +299,8 @@ void main() {
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
-      var sub = api.getSwapStatusStream(swap.id).listen((event) {
+      api.createSwapStatusChannel();
+      var sub = api.updateSwapStatusChannel([swap.id]).listen((event) {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnClaimed) {
           completer.complete();
@@ -299,6 +309,7 @@ void main() {
       await completer.future;
 
       await sub.cancel();
+      api.closeSwapStatusChannel;
 
       expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
       expect(receivedEvents[1].status, equals(SwapStatus.txnMempool));
@@ -328,7 +339,8 @@ void main() {
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
-      var sub = api.getSwapStatusStream(swap.id).listen((event) async {
+      api.createSwapStatusChannel();
+      var sub = api.updateSwapStatusChannel([swap.id]).listen((event) async {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnConfirmed) {
           await Future.delayed(Duration(seconds: 300));
@@ -347,6 +359,7 @@ void main() {
       await completer.future;
 
       await sub.cancel();
+      api.closeSwapStatusChannel();
       print(receivedEvents);
 
       expect(receivedEvents[0].status, equals(SwapStatus.swapCreated));
