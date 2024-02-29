@@ -146,10 +146,11 @@ void main() {
   test('Get status stream multiple: Creaet, Update, Close', () async {
     final api = await BoltzApi.newBoltzApi();
 
-    api.createSwapStatusChannel();
+    api.initialize();
 
-    const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
-    Stream<SwapStatusResponse> eventStream = api.updateSwapStatusChannel(swapIds);
+    // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
+    const List<String> swapIds = ['67ptET'];
+    Stream<SwapStatusResponse> eventStream = api.subscribeSwapStatus(swapIds);
 
     var receivedEvents = <SwapStatusResponse>[];
 
@@ -172,5 +173,44 @@ void main() {
     await subscription.cancel();
 
     print('receivedEvents: $receivedEvents');
+  }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
+
+  test('Get status stream multiple; Multiple calls to update', () async {
+    final api = await BoltzApi.newBoltzApi();
+
+    var receivedEvents = <SwapStatusResponse>[];
+
+    // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
+    const List<String> swapIds1 = ['67ptET'];
+    Stream<SwapStatusResponse> eventStream1 = api.subscribeSwapStatus(swapIds1);
+
+    var completer1 = Completer();
+
+    var sub1 = eventStream1.listen((event) {
+      receivedEvents.add(event);
+      print('Listen data');
+      print(event);
+      completer1.complete();
+    });
+
+    await completer1.future;
+    await sub1.cancel();
+
+    const List<String> swapIds2 = ['EXVCx6'];
+    Stream<SwapStatusResponse> eventStream2 = api.subscribeSwapStatus(swapIds2);
+
+    var completer2 = Completer();
+
+    var sub2 = eventStream2.listen((event) {
+      receivedEvents.add(event);
+      print('Listen2 data');
+      print(event);
+      completer2.complete();
+    });
+
+    await completer2.future;
+    await sub2.cancel();
+
+    // print('receivedEvents: $receivedEvents');
   }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 }
