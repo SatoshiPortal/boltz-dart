@@ -146,11 +146,11 @@ void main() {
   test('Get status stream multiple: Creaet, Update, Close', () async {
     final api = await BoltzApi.newBoltzApi();
 
-    api.createSwapStatusChannel();
+    api.initialize();
 
     // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
     const List<String> swapIds = ['67ptET'];
-    Stream<SwapStatusResponse> eventStream = api.updateSwapStatusChannel(swapIds);
+    Stream<SwapStatusResponse> eventStream = api.subscribeSwapStatus(swapIds);
 
     var receivedEvents = <SwapStatusResponse>[];
 
