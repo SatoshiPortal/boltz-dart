@@ -34,6 +34,11 @@ const lnetwork = Chain.LiquidTestnet;
 const testTimeout = Timeout(Duration(minutes: 30));
 
 void main() {
+  test('Swap status string', () {
+    final status = SwapStatus.invoiceFailedToPay;
+    expect(status.asString, 'Invoice failed to pay');
+  });
+
   test('FEE & LIMITS', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     final amount = 100000;
