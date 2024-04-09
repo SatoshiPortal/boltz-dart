@@ -165,6 +165,28 @@ fn wire_btc_ln_reverse_claim__static_method__Api_impl(
         },
     )
 }
+fn wire_btc_ln_submarine_refund__static_method__Api_impl(
+    port_: MessagePort,
+    swap: impl Wire2Api<BtcLnSwap> + UnwindSafe,
+    out_address: impl Wire2Api<String> + UnwindSafe,
+    abs_fee: impl Wire2Api<u64> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "btc_ln_submarine_refund__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap = swap.wire2api();
+            let api_out_address = out_address.wire2api();
+            let api_abs_fee = abs_fee.wire2api();
+            move |task_callback| {
+                Api::btc_ln_submarine_refund(api_swap, api_out_address, api_abs_fee)
+            }
+        },
+    )
+}
 fn wire_new_lbtc_ln_submarine__static_method__Api_impl(
     port_: MessagePort,
     mnemonic: impl Wire2Api<String> + UnwindSafe,
@@ -277,6 +299,28 @@ fn wire_lbtc_ln_reverse_claim__static_method__Api_impl(
         },
     )
 }
+fn wire_lbtc_ln_submarine_refund__static_method__Api_impl(
+    port_: MessagePort,
+    swap: impl Wire2Api<LbtcLnSwap> + UnwindSafe,
+    out_address: impl Wire2Api<String> + UnwindSafe,
+    abs_fee: impl Wire2Api<u64> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+        WrapInfo {
+            debug_name: "lbtc_ln_submarine_refund__static_method__Api",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap = swap.wire2api();
+            let api_out_address = out_address.wire2api();
+            let api_abs_fee = abs_fee.wire2api();
+            move |task_callback| {
+                Api::lbtc_ln_submarine_refund(api_swap, api_out_address, api_abs_fee)
+            }
+        },
+    )
+}
 fn wire_swap_status__static_method__Api_impl(
     port_: MessagePort,
     boltz_url: impl Wire2Api<String> + UnwindSafe,
@@ -337,8 +381,10 @@ where
 impl Wire2Api<Chain> for i32 {
     fn wire2api(self) -> Chain {
         match self {
-            0 => Chain::Testnet,
-            1 => Chain::LiquidTestnet,
+            0 => Chain::Bitcoin,
+            1 => Chain::BitcoinTestnet,
+            2 => Chain::Liquid,
+            3 => Chain::LiquidTestnet,
             _ => unreachable!("Invalid variant for Chain: {}", self),
         }
     }
@@ -437,8 +483,10 @@ impl rust2dart::IntoIntoDart<BtcLnSwap> for BtcLnSwap {
 impl support::IntoDart for Chain {
     fn into_dart(self) -> support::DartAbi {
         match self {
-            Self::Testnet => 0,
-            Self::LiquidTestnet => 1,
+            Self::Bitcoin => 0,
+            Self::BitcoinTestnet => 1,
+            Self::Liquid => 2,
+            Self::LiquidTestnet => 3,
         }
         .into_dart()
     }

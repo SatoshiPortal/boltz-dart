@@ -15,14 +15,14 @@ Future<void> setCurrentDirectory() async {
   }
 }
 
-class BtcLnSwap {
+class BtcLnBoltzSwap {
   final bridge.BtcLnSwap _btcLnSwap;
 
-  BtcLnSwap._(this._btcLnSwap);
+  BtcLnBoltzSwap(this._btcLnSwap);
 
   bridge.BtcLnSwap get btcLnSwap => _btcLnSwap;
 
-  static Future<BtcLnSwap> newSubmarine(
+  static Future<BtcLnBoltzSwap> newSubmarine(
       {required String mnemonic,
       required int index,
       required String invoice,
@@ -42,13 +42,13 @@ class BtcLnSwap {
         boltzUrl: boltzUrl,
         pairHash: pairHash,
       );
-      return BtcLnSwap._(res);
+      return BtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<BtcLnSwap> newReverse(
+  static Future<BtcLnBoltzSwap> newReverse(
       {required String mnemonic,
       required int index,
       required int outAmount,
@@ -68,7 +68,7 @@ class BtcLnSwap {
         boltzUrl: boltzUrl,
         pairHash: pairHash,
       );
-      return BtcLnSwap._(res);
+      return BtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
@@ -93,6 +93,21 @@ class BtcLnSwap {
         outAddress: outAddress,
         absFee: absFee,
       );
+      return res;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  Future<String> refund(
+      {required String outAddress, required int absFee}) async {
+    try {
+      final res = await ffi.btcLnSubmarineRefundStaticMethodApi(
+        swap: _btcLnSwap,
+        outAddress: outAddress,
+        absFee: absFee,
+      );
+
       return res;
     } catch (e) {
       rethrow;
@@ -124,14 +139,14 @@ class BtcLnSwap {
   }
 }
 
-class LbtcLnSwap {
+class LbtcLnBoltzSwap {
   final bridge.LbtcLnSwap _lbtcLnSwap;
 
-  LbtcLnSwap._(this._lbtcLnSwap);
+  LbtcLnBoltzSwap(this._lbtcLnSwap);
 
   bridge.LbtcLnSwap get lbtcLnSwap => _lbtcLnSwap;
 
-  static Future<LbtcLnSwap> newSubmarine({
+  static Future<LbtcLnBoltzSwap> newSubmarine({
     required String mnemonic,
     required int index,
     required String invoice,
@@ -152,13 +167,13 @@ class LbtcLnSwap {
         pairHash: pairHash,
       );
 
-      return LbtcLnSwap._(res);
+      return LbtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<LbtcLnSwap> newReverse({
+  static Future<LbtcLnBoltzSwap> newReverse({
     required String mnemonic,
     required int index,
     required int outAmount,
@@ -178,7 +193,7 @@ class LbtcLnSwap {
         pairHash: pairHash,
       );
 
-      return LbtcLnSwap._(res);
+      return LbtcLnBoltzSwap(res);
     } catch (e) {
       rethrow;
     }
@@ -199,6 +214,21 @@ class LbtcLnSwap {
       {required String outAddress, required int absFee}) async {
     try {
       final res = await ffi.lbtcLnReverseClaimStaticMethodApi(
+        swap: _lbtcLnSwap,
+        outAddress: outAddress,
+        absFee: absFee,
+      );
+
+      return res;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+    Future<String> refund(
+      {required String outAddress, required int absFee}) async {
+    try {
+      final res = await ffi.lbtcLnSubmarineRefundStaticMethodApi(
         swap: _lbtcLnSwap,
         outAddress: outAddress,
         absFee: absFee,

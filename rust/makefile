@@ -20,7 +20,7 @@ init:
 ## :
 
 ## all: Compile iOS, Android & Linux binaries
-all: init jnilib xcframework zip
+all: init jnilib zip
  
 linux:
 	@echo "[Creating linux binary ...] $@"

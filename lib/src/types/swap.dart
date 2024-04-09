@@ -10,8 +10,14 @@ enum SwapStatus {
   @JsonValue('swap.refunded')
   swapRefunded,
 
+  @JsonValue('swap.error')
+  swapError,
+
   @JsonValue('transaction.mempool')
   txnMempool,
+
+  @JsonValue('transaction.claim.pending')
+  txnClaimPending,
 
   @JsonValue('transaction.claimed')
   txnClaimed,
@@ -59,9 +65,13 @@ extension SwapStatusX on SwapStatus {
         return 'swap.expired';
       case SwapStatus.swapRefunded:
         return 'swap.refunded';
+      case SwapStatus.swapError:
+        return 'swap.error';
 
       case SwapStatus.txnMempool:
         return 'transaction.mempool';
+      case SwapStatus.txnClaimPending:
+        return 'transaction.claim.pending';
       case SwapStatus.txnClaimed:
         return 'transaction.claimed';
       case SwapStatus.txnConfirmed:
@@ -88,6 +98,53 @@ extension SwapStatusX on SwapStatus {
 
       case SwapStatus.minerfeePaid:
         return 'minerfee.paid';
+
+      default:
+        throw ArgumentError('Invalid SwapStatus: $this');
+    }
+  }
+
+  String get asString {
+    switch (this) {
+      case SwapStatus.swapCreated:
+        return 'Swap created';
+      case SwapStatus.swapExpired:
+        return 'Swap expired';
+      case SwapStatus.swapRefunded:
+        return 'Swap refunded';
+      case SwapStatus.swapError:
+        return 'Swap error';
+
+      case SwapStatus.txnMempool:
+        return 'Transaction mempool';
+      case SwapStatus.txnClaimPending:
+        return 'Transaction claim pending';
+      case SwapStatus.txnClaimed:
+        return 'Transaction claimed';
+      case SwapStatus.txnConfirmed:
+        return 'Transaction confirmed';
+      case SwapStatus.txnRefunded:
+        return 'Transaction refunded';
+      case SwapStatus.txnFailed:
+        return 'Transaction failed';
+      case SwapStatus.txnLockupFailed:
+        return 'Transaction lockup failed';
+
+      case SwapStatus.invoiceSet:
+        return 'Invoice set';
+      case SwapStatus.invoicePending:
+        return 'Invoice pending';
+      case SwapStatus.invoicePaid:
+        return 'Invoice paid';
+      case SwapStatus.invoiceFailedToPay:
+        return 'Invoice failed to pay';
+      case SwapStatus.invoiceSettled:
+        return 'Invoice invoice settled';
+      case SwapStatus.invoiceExpired:
+        return 'Invoice expired';
+
+      case SwapStatus.minerfeePaid:
+        return 'Minerfee paid';
 
       default:
         throw ArgumentError('Invalid SwapStatus: $this');

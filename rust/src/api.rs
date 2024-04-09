@@ -273,6 +273,48 @@ impl Api {
             return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
         }
     }
+    
+    pub fn btc_ln_submarine_refund(
+        swap: BtcLnSwap,
+        out_address: String,
+        abs_fee: u64,
+    ) -> anyhow::Result<String, BoltzError> {
+        if swap.kind == SwapType::Reverse {
+            return Err(S5Error::new(ErrorKind::Input, "Reverse swaps are not refundable").into());
+        } else {
+            ()
+        }
+
+        let script = match BtcSwapScript::submarine_from_str(&swap.redeem_script) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let network_config =
+            ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true, 10);
+        let script_balance = match script.get_balance(&network_config) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+
+        if script_balance.0 > 0 || script_balance.1 > 0 {
+            let tx = match BtcSwapTx::new_refund(script, out_address, &network_config) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
+            let ckp: Keypair = swap.keys.into();
+            let signed = match tx.sign_refund(&ckp, abs_fee) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
+            let txid = match tx.broadcast(signed, &network_config) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
+            Ok(txid)
+        } else {
+            return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
+        }
+    }
 
     pub fn new_lbtc_ln_submarine(
         mnemonic: String,
@@ -487,6 +529,41 @@ impl Api {
         // else{
         //     return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
         // }
+    }
+
+    pub fn lbtc_ln_submarine_refund(
+        swap: LbtcLnSwap,
+        out_address: String,
+        abs_fee: u64,
+    ) -> anyhow::Result<String, BoltzError> {
+        if swap.kind == SwapType::Reverse {
+            return Err(S5Error::new(ErrorKind::Input, "Reverse swaps are not refundable").into());
+        } else {
+            ()
+        }
+
+        let script = match LBtcSwapScript::submarine_from_str(&swap.redeem_script, &swap.blinding_key) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let network_config =
+            ElectrumConfig::new(swap.network.into(), &swap.electrum_url, true, true, 10);
+
+        let mut tx = match LBtcSwapTx::new_refund(script, out_address, &network_config) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = swap.keys.into();
+        let signed = match tx.sign_refund(&ckp, abs_fee) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let txid = match tx.broadcast(signed, &network_config) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        Ok(txid)
+
     }
 
     pub fn swap_status(boltz_url: String, id: String) -> anyhow::Result<String, BoltzError> {

@@ -195,6 +195,33 @@ class BoltzDartImpl implements BoltzDart {
             argNames: ["swap", "outAddress", "absFee"],
           );
 
+  Future<String> btcLnSubmarineRefundStaticMethodApi(
+      {required BtcLnSwap swap,
+      required String outAddress,
+      required int absFee,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_btc_ln_swap(swap);
+    var arg1 = _platform.api2wire_String(outAddress);
+    var arg2 = _platform.api2wire_u64(absFee);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_btc_ln_submarine_refund__static_method__Api(
+              port_, arg0, arg1, arg2),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: _wire2api_boltz_error,
+      constMeta: kBtcLnSubmarineRefundStaticMethodApiConstMeta,
+      argValues: [swap, outAddress, absFee],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kBtcLnSubmarineRefundStaticMethodApiConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "btc_ln_submarine_refund__static_method__Api",
+            argNames: ["swap", "outAddress", "absFee"],
+          );
+
   Future<LbtcLnSwap> newLbtcLnSubmarineStaticMethodApi(
       {required String mnemonic,
       required int index,
@@ -341,6 +368,33 @@ class BoltzDartImpl implements BoltzDart {
       get kLbtcLnReverseClaimStaticMethodApiConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "lbtc_ln_reverse_claim__static_method__Api",
+            argNames: ["swap", "outAddress", "absFee"],
+          );
+
+  Future<String> lbtcLnSubmarineRefundStaticMethodApi(
+      {required LbtcLnSwap swap,
+      required String outAddress,
+      required int absFee,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_lbtc_ln_swap(swap);
+    var arg1 = _platform.api2wire_String(outAddress);
+    var arg2 = _platform.api2wire_u64(absFee);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_lbtc_ln_submarine_refund__static_method__Api(
+              port_, arg0, arg1, arg2),
+      parseSuccessData: _wire2api_String,
+      parseErrorData: _wire2api_boltz_error,
+      constMeta: kLbtcLnSubmarineRefundStaticMethodApiConstMeta,
+      argValues: [swap, outAddress, absFee],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kLbtcLnSubmarineRefundStaticMethodApiConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "lbtc_ln_submarine_refund__static_method__Api",
             argNames: ["swap", "outAddress", "absFee"],
           );
 
@@ -703,7 +757,7 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
       : _lookup = lookup;
 
   void store_dart_post_cobject(
-    DartPostCObjectFnType ptr,
+    int ptr,
   ) {
     return _store_dart_post_cobject(
       ptr,
@@ -711,10 +765,10 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
   }
 
   late final _store_dart_post_cobjectPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(DartPostCObjectFnType)>>(
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>(
           'store_dart_post_cobject');
-  late final _store_dart_post_cobject = _store_dart_post_cobjectPtr
-      .asFunction<void Function(DartPostCObjectFnType)>();
+  late final _store_dart_post_cobject =
+      _store_dart_post_cobjectPtr.asFunction<void Function(int)>();
 
   Object get_dart_object(
     int ptr,
@@ -928,6 +982,32 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
           void Function(int, ffi.Pointer<wire_BtcLnSwap>,
               ffi.Pointer<wire_uint_8_list>, int)>();
 
+  void wire_btc_ln_submarine_refund__static_method__Api(
+    int port_,
+    ffi.Pointer<wire_BtcLnSwap> swap,
+    ffi.Pointer<wire_uint_8_list> out_address,
+    int abs_fee,
+  ) {
+    return _wire_btc_ln_submarine_refund__static_method__Api(
+      port_,
+      swap,
+      out_address,
+      abs_fee,
+    );
+  }
+
+  late final _wire_btc_ln_submarine_refund__static_method__ApiPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_BtcLnSwap>,
+              ffi.Pointer<wire_uint_8_list>,
+              ffi.Uint64)>>('wire_btc_ln_submarine_refund__static_method__Api');
+  late final _wire_btc_ln_submarine_refund__static_method__Api =
+      _wire_btc_ln_submarine_refund__static_method__ApiPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_BtcLnSwap>,
+              ffi.Pointer<wire_uint_8_list>, int)>();
+
   void wire_new_lbtc_ln_submarine__static_method__Api(
     int port_,
     ffi.Pointer<wire_uint_8_list> mnemonic,
@@ -1061,6 +1141,30 @@ class BoltzDartWire implements FlutterRustBridgeWireBase {
               ffi.Uint64)>>('wire_lbtc_ln_reverse_claim__static_method__Api');
   late final _wire_lbtc_ln_reverse_claim__static_method__Api =
       _wire_lbtc_ln_reverse_claim__static_method__ApiPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_LbtcLnSwap>,
+              ffi.Pointer<wire_uint_8_list>, int)>();
+
+  void wire_lbtc_ln_submarine_refund__static_method__Api(
+    int port_,
+    ffi.Pointer<wire_LbtcLnSwap> swap,
+    ffi.Pointer<wire_uint_8_list> out_address,
+    int abs_fee,
+  ) {
+    return _wire_lbtc_ln_submarine_refund__static_method__Api(
+      port_,
+      swap,
+      out_address,
+      abs_fee,
+    );
+  }
+
+  late final _wire_lbtc_ln_submarine_refund__static_method__ApiPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_LbtcLnSwap>,
+                  ffi.Pointer<wire_uint_8_list>, ffi.Uint64)>>(
+      'wire_lbtc_ln_submarine_refund__static_method__Api');
+  late final _wire_lbtc_ln_submarine_refund__static_method__Api =
+      _wire_lbtc_ln_submarine_refund__static_method__ApiPtr.asFunction<
           void Function(int, ffi.Pointer<wire_LbtcLnSwap>,
               ffi.Pointer<wire_uint_8_list>, int)>();
 
@@ -1233,8 +1337,3 @@ final class wire_LbtcLnSwap extends ffi.Struct {
 
   external ffi.Pointer<wire_uint_8_list> boltz_url;
 }
-
-typedef DartPostCObjectFnType = ffi.Pointer<
-    ffi.NativeFunction<
-        ffi.Bool Function(DartPort port_id, ffi.Pointer<ffi.Void> message)>>;
-typedef DartPort = ffi.Int64;
