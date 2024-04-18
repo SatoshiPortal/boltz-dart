@@ -1,4 +1,4 @@
-#!/bin/bash
+`#!/bin/bash
 # Setup jniLibs directory
 ROOT="target"
 VERSION=$1
@@ -22,4 +22,4 @@ cargo ndk -o $JNI_DIR \
         -t arm64-v8a \
         -t x86 \
         -t x86_64 \
-        build --release
+        build --release`

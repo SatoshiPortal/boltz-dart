@@ -3,8 +3,10 @@
 //
 use serde::{Serialize,Deserialize};
 use boltz_client::{
-    network::Chain as BChain, swaps::boltz::SwapType as BoltzSwapType, util::{error::{ErrorKind, S5Error}, secrets::{Preimage as BoltzPreImage, SwapKey}}, Bolt11Invoice, Keypair, Secp256k1, ZKKeyPair, ZKSecp256k1
+    network::Chain as BChain, swaps::boltz::SwapType as BoltzSwapType, util::{secrets::{Preimage as BoltzPreImage, SwapKey}}, Bolt11Invoice, Keypair, Secp256k1, ZKKeyPair, ZKSecp256k1
 };
+use boltz_client::error::Error as S5Error;
+
 // use crate::types::{KeyPair, PreImage, Network, SwapType};
 
 #[frb(dart_metadata=("freezed"))]
@@ -313,8 +315,8 @@ impl BoltzError {
 impl From<S5Error> for BoltzError {
     fn from(value: S5Error) -> Self {
         BoltzError {
-            kind: value.kind.to_string(),
-            message: value.message,
+            kind: value.name(),
+            message: value.message(),
         }
     }
 }

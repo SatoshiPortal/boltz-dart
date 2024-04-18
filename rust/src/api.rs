@@ -11,8 +11,7 @@ use boltz_client::{network::electrum::ElectrumConfig, swaps::bitcoin::BtcSwapScr
 use boltz_client::swaps::boltz::BoltzApiClient;
 use boltz_client::swaps::boltz::CreateSwapRequest;
 use boltz_client::swaps::boltz::SwapStatusRequest;
-use boltz_client::util::error::ErrorKind;
-use boltz_client::util::error::S5Error;
+// use boltz_client::error::Error;
 use boltz_client::util::secrets::Preimage;
 
 use crate::types::BoltzError;
@@ -33,35 +32,35 @@ impl Api {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let btc_pair = boltz_pairs.get_btc_pair()?;
+        let btc_pair = boltz_pairs.get_btc_pair().unwrap();
         let btc_limits = Limits {
             minimal: btc_pair.limits.minimal as u64,
             maximal: btc_pair.limits.maximal as u64,
         };
         let btc_submarine = SubmarineSwapFees {
-            boltz_fees: btc_pair.fees.submarine_boltz(output_amount)?,
+            boltz_fees: btc_pair.fees.submarine_boltz(output_amount),
             lockup_fees_estimate: btc_pair.fees.submarine_lockup_estimate(),
-            claim_fees: btc_pair.fees.submarine_claim()?,
+            claim_fees: btc_pair.fees.submarine_claim(),
         };
         let btc_reverse = ReverseSwapFees {
-            boltz_fees: btc_pair.fees.reverse_boltz(output_amount)?,
-            lockup_fees: btc_pair.fees.reverse_lockup()?,
+            boltz_fees: btc_pair.fees.reverse_boltz(output_amount),
+            lockup_fees: btc_pair.fees.reverse_lockup(),
             claim_fees_estimate: btc_pair.fees.reverse_claim_estimate(),
         };
 
-        let lbtc_pair = boltz_pairs.get_lbtc_pair()?;
+        let lbtc_pair = boltz_pairs.get_lbtc_pair().unwrap();
         let lbtc_limits = Limits {
             minimal: lbtc_pair.limits.minimal as u64,
             maximal: lbtc_pair.limits.maximal as u64,
         };
         let lbtc_submarine = SubmarineSwapFees {
-            boltz_fees: lbtc_pair.fees.submarine_boltz(output_amount)?,
+            boltz_fees: lbtc_pair.fees.submarine_boltz(output_amount),
             lockup_fees_estimate: lbtc_pair.fees.submarine_lockup_estimate(),
-            claim_fees: lbtc_pair.fees.submarine_claim()?,
+            claim_fees: lbtc_pair.fees.submarine_claim(),
         };
         let lbtc_reverse = ReverseSwapFees {
-            boltz_fees: lbtc_pair.fees.reverse_boltz(output_amount)?,
-            lockup_fees: lbtc_pair.fees.reverse_lockup()?,
+            boltz_fees: lbtc_pair.fees.reverse_boltz(output_amount),
+            lockup_fees: lbtc_pair.fees.reverse_lockup(),
             claim_fees_estimate: lbtc_pair.fees.reverse_claim_estimate(),
         };
         let btc_pair_hash = btc_pair.hash;
@@ -99,10 +98,10 @@ impl Api {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let btc_pair = boltz_pairs.get_btc_pair()?;
+        let btc_pair = boltz_pairs.get_btc_pair().unwrap();
         if btc_pair.hash != pair_hash {
             return Err(BoltzError{
-                kind: ErrorKind::Input.to_string(), 
+                kind: "Input".to_string(), 
                 message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
             });
         }
@@ -166,10 +165,10 @@ impl Api {
             Err(e) => return Err(e.into()),
         };
 
-        let btc_pair = boltz_pairs.get_btc_pair()?;
+        let btc_pair = boltz_pairs.get_btc_pair().unwrap();
         if btc_pair.hash != pair_hash {
             return Err(BoltzError{
-                kind: ErrorKind::Input.to_string(), 
+                kind: "Input".to_string(), 
                 message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
             });
         }
@@ -208,7 +207,7 @@ impl Api {
 
     pub fn btc_ln_tx_size(swap: BtcLnSwap) -> anyhow::Result<usize, BoltzError> {
         if swap.kind == SwapType::Submarine {
-            return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
+            return Err(BoltzError{kind: "Input".to_string(), message: "Submarine swaps are not claimable".to_string()});
         } else {
             ()
         }
@@ -225,7 +224,7 @@ impl Api {
         };
         let ckp: Keypair = swap.keys.into();
 
-        let size = match tx.size(&ckp, &swap.preimage.try_into().unwrap()) {
+        let size = match tx.unwrap().size(&ckp, &swap.preimage.try_into().unwrap()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
@@ -238,7 +237,7 @@ impl Api {
         abs_fee: u64,
     ) -> anyhow::Result<String, BoltzError> {
         if swap.kind == SwapType::Submarine {
-            return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
+            return Err(BoltzError{kind: "Input".to_string(),message: "Submarine swaps are not claimable".to_string()});
         } else {
             ()
         }
@@ -256,7 +255,7 @@ impl Api {
 
         if script_balance.0 > 0 || script_balance.1 > 0 {
             let tx = match BtcSwapTx::new_claim(script, out_address, &network_config) {
-                Ok(result) => result,
+                Ok(result) => result.unwrap(),
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = swap.keys.into();
@@ -268,9 +267,9 @@ impl Api {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
-            Ok(txid)
+            Ok(txid.to_string())
         } else {
-            return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
+            return Err(BoltzError{kind: "Script".to_string(), message: "Script is not funded yet!".to_string()});
         }
     }
     
@@ -280,7 +279,7 @@ impl Api {
         abs_fee: u64,
     ) -> anyhow::Result<String, BoltzError> {
         if swap.kind == SwapType::Reverse {
-            return Err(S5Error::new(ErrorKind::Input, "Reverse swaps are not refundable").into());
+            return Err(BoltzError{kind: "Input".to_string(), message: "Reverse swaps are not refundable".to_string()});
         } else {
             ()
         }
@@ -298,7 +297,7 @@ impl Api {
 
         if script_balance.0 > 0 || script_balance.1 > 0 {
             let tx = match BtcSwapTx::new_refund(script, out_address, &network_config) {
-                Ok(result) => result,
+                Ok(result) => result.unwrap(),
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = swap.keys.into();
@@ -310,9 +309,9 @@ impl Api {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
-            Ok(txid)
+            Ok(txid.to_string())
         } else {
-            return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
+            return Err(BoltzError{kind: "Script".to_string(), message:"Script is not funded yet!".to_string()});
         }
     }
 
@@ -337,10 +336,10 @@ impl Api {
             Err(e) => return Err(e.into()),
         };
 
-        let lbtc_pair = boltz_pairs.get_lbtc_pair()?;
+        let lbtc_pair = boltz_pairs.get_lbtc_pair().unwrap();
         if lbtc_pair.hash != pair_hash {
             return Err(BoltzError{
-                kind: ErrorKind::Input.to_string(), 
+                kind: "Input".to_string(), 
                 message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
             });
         }
@@ -373,7 +372,7 @@ impl Api {
         // };
 
         // if &payment_address != &response.clone().address.unwrap(){
-        //     return Err(S5Error::new(ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
+        //     return Err(BoltzError{kind: ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
         // }
 
         Ok(LbtcLnSwap::new(
@@ -414,10 +413,10 @@ impl Api {
             Err(e) => return Err(e.into()),
         };
 
-        let lbtc_pair = boltz_pairs.get_lbtc_pair()?;
+        let lbtc_pair = boltz_pairs.get_lbtc_pair().unwrap();
         if lbtc_pair.hash != pair_hash {
             return Err(BoltzError{
-                kind: ErrorKind::Input.to_string(), 
+                kind: "Input".to_string(), 
                 message: "Pair hash has updated. Check fees with boltz and use updated hash.".to_string()
             });
         }
@@ -445,7 +444,7 @@ impl Api {
         // };
 
         // if &payment_address != &response.clone().address.unwrap(){
-        //     return Err(S5Error::new(ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
+        //     return Err(BoltzError{kind: ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
         // }
 
         Ok(LbtcLnSwap::new(
@@ -466,7 +465,7 @@ impl Api {
 
     pub fn lbtc_ln_tx_size(swap: LbtcLnSwap) -> anyhow::Result<usize, BoltzError> {
         if swap.kind == SwapType::Submarine {
-            return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
+            return Err(BoltzError{kind: "Input".to_string(), message: "Submarine swaps are not claimable".to_string()});
         } else {
             ()
         }
@@ -494,7 +493,7 @@ impl Api {
         abs_fee: u64,
     ) -> anyhow::Result<String, BoltzError> {
         if swap.kind == SwapType::Submarine {
-            return Err(S5Error::new(ErrorKind::Input, "Submarine swaps are not claimable").into());
+            return Err(BoltzError{kind: "Input".to_string(), message: "Submarine swaps are not claimable".to_string()});
         } else {
             ()
         }
@@ -527,7 +526,7 @@ impl Api {
         Ok(txid)
         // }
         // else{
-        //     return Err(S5Error::new(ErrorKind::Script, "Script is not funded yet!").into());
+        //     return Err(BoltzError{kind: ErrorKind::Script, "Script is not funded yet!").into());
         // }
     }
 
@@ -537,7 +536,7 @@ impl Api {
         abs_fee: u64,
     ) -> anyhow::Result<String, BoltzError> {
         if swap.kind == SwapType::Reverse {
-            return Err(S5Error::new(ErrorKind::Input, "Reverse swaps are not refundable").into());
+            return Err(BoltzError{kind: "Input".to_string(), message: "Reverse swaps are not refundable".to_string()});
         } else {
             ()
         }
@@ -578,7 +577,7 @@ impl Api {
     pub fn decode_invoice(invoice_str: String)->anyhow::Result<DecodedInvoice, BoltzError>{
         let invoice = match Bolt11Invoice::from_str(&invoice_str){
             Ok(result)=>result,
-            Err(e) => return Err(BoltzError{kind: ErrorKind::Input.to_string(), message: e.to_string()})
+            Err(e) => return Err(BoltzError{kind: "Input".to_string(), message: e.to_string()})
         };
         Ok(invoice.into())
     }
