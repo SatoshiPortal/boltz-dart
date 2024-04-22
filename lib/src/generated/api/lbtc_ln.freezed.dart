@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$LbtcLnSwap {
+mixin _$LbtcLnV1Swap {
   String get id => throw _privateConstructorUsedError;
   SwapType get kind => throw _privateConstructorUsedError;
   Chain get network => throw _privateConstructorUsedError;
@@ -30,15 +30,15 @@ mixin _$LbtcLnSwap {
   String get boltzUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $LbtcLnSwapCopyWith<LbtcLnSwap> get copyWith =>
+  $LbtcLnV1SwapCopyWith<LbtcLnV1Swap> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LbtcLnSwapCopyWith<$Res> {
-  factory $LbtcLnSwapCopyWith(
-          LbtcLnSwap value, $Res Function(LbtcLnSwap) then) =
-      _$LbtcLnSwapCopyWithImpl<$Res, LbtcLnSwap>;
+abstract class $LbtcLnV1SwapCopyWith<$Res> {
+  factory $LbtcLnV1SwapCopyWith(
+          LbtcLnV1Swap value, $Res Function(LbtcLnV1Swap) then) =
+      _$LbtcLnV1SwapCopyWithImpl<$Res, LbtcLnV1Swap>;
   @useResult
   $Res call(
       {String id,
@@ -59,9 +59,9 @@ abstract class $LbtcLnSwapCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LbtcLnSwapCopyWithImpl<$Res, $Val extends LbtcLnSwap>
-    implements $LbtcLnSwapCopyWith<$Res> {
-  _$LbtcLnSwapCopyWithImpl(this._value, this._then);
+class _$LbtcLnV1SwapCopyWithImpl<$Res, $Val extends LbtcLnV1Swap>
+    implements $LbtcLnV1SwapCopyWith<$Res> {
+  _$LbtcLnV1SwapCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -154,11 +154,11 @@ class _$LbtcLnSwapCopyWithImpl<$Res, $Val extends LbtcLnSwap>
 }
 
 /// @nodoc
-abstract class _$$LbtcLnSwapImplCopyWith<$Res>
-    implements $LbtcLnSwapCopyWith<$Res> {
-  factory _$$LbtcLnSwapImplCopyWith(
-          _$LbtcLnSwapImpl value, $Res Function(_$LbtcLnSwapImpl) then) =
-      __$$LbtcLnSwapImplCopyWithImpl<$Res>;
+abstract class _$$LbtcLnV1SwapImplCopyWith<$Res>
+    implements $LbtcLnV1SwapCopyWith<$Res> {
+  factory _$$LbtcLnV1SwapImplCopyWith(
+          _$LbtcLnV1SwapImpl value, $Res Function(_$LbtcLnV1SwapImpl) then) =
+      __$$LbtcLnV1SwapImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -182,11 +182,11 @@ abstract class _$$LbtcLnSwapImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LbtcLnSwapImplCopyWithImpl<$Res>
-    extends _$LbtcLnSwapCopyWithImpl<$Res, _$LbtcLnSwapImpl>
-    implements _$$LbtcLnSwapImplCopyWith<$Res> {
-  __$$LbtcLnSwapImplCopyWithImpl(
-      _$LbtcLnSwapImpl _value, $Res Function(_$LbtcLnSwapImpl) _then)
+class __$$LbtcLnV1SwapImplCopyWithImpl<$Res>
+    extends _$LbtcLnV1SwapCopyWithImpl<$Res, _$LbtcLnV1SwapImpl>
+    implements _$$LbtcLnV1SwapImplCopyWith<$Res> {
+  __$$LbtcLnV1SwapImplCopyWithImpl(
+      _$LbtcLnV1SwapImpl _value, $Res Function(_$LbtcLnV1SwapImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -205,7 +205,7 @@ class __$$LbtcLnSwapImplCopyWithImpl<$Res>
     Object? electrumUrl = null,
     Object? boltzUrl = null,
   }) {
-    return _then(_$LbtcLnSwapImpl(
+    return _then(_$LbtcLnV1SwapImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -260,8 +260,8 @@ class __$$LbtcLnSwapImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LbtcLnSwapImpl extends _LbtcLnSwap {
-  const _$LbtcLnSwapImpl(
+class _$LbtcLnV1SwapImpl extends _LbtcLnV1Swap {
+  const _$LbtcLnV1SwapImpl(
       {required this.id,
       required this.kind,
       required this.network,
@@ -303,14 +303,14 @@ class _$LbtcLnSwapImpl extends _LbtcLnSwap {
 
   @override
   String toString() {
-    return 'LbtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, redeemScript: $redeemScript, invoice: $invoice, outAmount: $outAmount, scriptAddress: $scriptAddress, blindingKey: $blindingKey, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl)';
+    return 'LbtcLnV1Swap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, redeemScript: $redeemScript, invoice: $invoice, outAmount: $outAmount, scriptAddress: $scriptAddress, blindingKey: $blindingKey, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LbtcLnSwapImpl &&
+            other is _$LbtcLnV1SwapImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.kind, kind) || other.kind == kind) &&
             (identical(other.network, network) || other.network == network) &&
@@ -351,12 +351,12 @@ class _$LbtcLnSwapImpl extends _LbtcLnSwap {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LbtcLnSwapImplCopyWith<_$LbtcLnSwapImpl> get copyWith =>
-      __$$LbtcLnSwapImplCopyWithImpl<_$LbtcLnSwapImpl>(this, _$identity);
+  _$$LbtcLnV1SwapImplCopyWith<_$LbtcLnV1SwapImpl> get copyWith =>
+      __$$LbtcLnV1SwapImplCopyWithImpl<_$LbtcLnV1SwapImpl>(this, _$identity);
 }
 
-abstract class _LbtcLnSwap extends LbtcLnSwap {
-  const factory _LbtcLnSwap(
+abstract class _LbtcLnV1Swap extends LbtcLnV1Swap {
+  const factory _LbtcLnV1Swap(
       {required final String id,
       required final SwapType kind,
       required final Chain network,
@@ -368,8 +368,8 @@ abstract class _LbtcLnSwap extends LbtcLnSwap {
       required final String scriptAddress,
       required final String blindingKey,
       required final String electrumUrl,
-      required final String boltzUrl}) = _$LbtcLnSwapImpl;
-  const _LbtcLnSwap._() : super._();
+      required final String boltzUrl}) = _$LbtcLnV1SwapImpl;
+  const _LbtcLnV1Swap._() : super._();
 
   @override
   String get id;
@@ -397,6 +397,6 @@ abstract class _LbtcLnSwap extends LbtcLnSwap {
   String get boltzUrl;
   @override
   @JsonKey(ignore: true)
-  _$$LbtcLnSwapImplCopyWith<_$LbtcLnSwapImpl> get copyWith =>
+  _$$LbtcLnV1SwapImplCopyWith<_$LbtcLnV1SwapImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

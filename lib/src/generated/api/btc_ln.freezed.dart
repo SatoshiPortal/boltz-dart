@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$BtcLnSwap {
+mixin _$BtcLnV1Swap {
   String get id => throw _privateConstructorUsedError;
   SwapType get kind => throw _privateConstructorUsedError;
   Chain get network => throw _privateConstructorUsedError;
@@ -29,14 +29,15 @@ mixin _$BtcLnSwap {
   String get boltzUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $BtcLnSwapCopyWith<BtcLnSwap> get copyWith =>
+  $BtcLnV1SwapCopyWith<BtcLnV1Swap> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BtcLnSwapCopyWith<$Res> {
-  factory $BtcLnSwapCopyWith(BtcLnSwap value, $Res Function(BtcLnSwap) then) =
-      _$BtcLnSwapCopyWithImpl<$Res, BtcLnSwap>;
+abstract class $BtcLnV1SwapCopyWith<$Res> {
+  factory $BtcLnV1SwapCopyWith(
+          BtcLnV1Swap value, $Res Function(BtcLnV1Swap) then) =
+      _$BtcLnV1SwapCopyWithImpl<$Res, BtcLnV1Swap>;
   @useResult
   $Res call(
       {String id,
@@ -56,9 +57,9 @@ abstract class $BtcLnSwapCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
-    implements $BtcLnSwapCopyWith<$Res> {
-  _$BtcLnSwapCopyWithImpl(this._value, this._then);
+class _$BtcLnV1SwapCopyWithImpl<$Res, $Val extends BtcLnV1Swap>
+    implements $BtcLnV1SwapCopyWith<$Res> {
+  _$BtcLnV1SwapCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -146,11 +147,11 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
 }
 
 /// @nodoc
-abstract class _$$BtcLnSwapImplCopyWith<$Res>
-    implements $BtcLnSwapCopyWith<$Res> {
-  factory _$$BtcLnSwapImplCopyWith(
-          _$BtcLnSwapImpl value, $Res Function(_$BtcLnSwapImpl) then) =
-      __$$BtcLnSwapImplCopyWithImpl<$Res>;
+abstract class _$$BtcLnV1SwapImplCopyWith<$Res>
+    implements $BtcLnV1SwapCopyWith<$Res> {
+  factory _$$BtcLnV1SwapImplCopyWith(
+          _$BtcLnV1SwapImpl value, $Res Function(_$BtcLnV1SwapImpl) then) =
+      __$$BtcLnV1SwapImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -173,11 +174,11 @@ abstract class _$$BtcLnSwapImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$BtcLnSwapImplCopyWithImpl<$Res>
-    extends _$BtcLnSwapCopyWithImpl<$Res, _$BtcLnSwapImpl>
-    implements _$$BtcLnSwapImplCopyWith<$Res> {
-  __$$BtcLnSwapImplCopyWithImpl(
-      _$BtcLnSwapImpl _value, $Res Function(_$BtcLnSwapImpl) _then)
+class __$$BtcLnV1SwapImplCopyWithImpl<$Res>
+    extends _$BtcLnV1SwapCopyWithImpl<$Res, _$BtcLnV1SwapImpl>
+    implements _$$BtcLnV1SwapImplCopyWith<$Res> {
+  __$$BtcLnV1SwapImplCopyWithImpl(
+      _$BtcLnV1SwapImpl _value, $Res Function(_$BtcLnV1SwapImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -195,7 +196,7 @@ class __$$BtcLnSwapImplCopyWithImpl<$Res>
     Object? electrumUrl = null,
     Object? boltzUrl = null,
   }) {
-    return _then(_$BtcLnSwapImpl(
+    return _then(_$BtcLnV1SwapImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -246,8 +247,8 @@ class __$$BtcLnSwapImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BtcLnSwapImpl extends _BtcLnSwap {
-  const _$BtcLnSwapImpl(
+class _$BtcLnV1SwapImpl extends _BtcLnV1Swap {
+  const _$BtcLnV1SwapImpl(
       {required this.id,
       required this.kind,
       required this.network,
@@ -286,14 +287,14 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
 
   @override
   String toString() {
-    return 'BtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, redeemScript: $redeemScript, invoice: $invoice, scriptAddress: $scriptAddress, outAmount: $outAmount, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl)';
+    return 'BtcLnV1Swap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, redeemScript: $redeemScript, invoice: $invoice, scriptAddress: $scriptAddress, outAmount: $outAmount, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BtcLnSwapImpl &&
+            other is _$BtcLnV1SwapImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.kind, kind) || other.kind == kind) &&
             (identical(other.network, network) || other.network == network) &&
@@ -331,12 +332,12 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$BtcLnSwapImplCopyWith<_$BtcLnSwapImpl> get copyWith =>
-      __$$BtcLnSwapImplCopyWithImpl<_$BtcLnSwapImpl>(this, _$identity);
+  _$$BtcLnV1SwapImplCopyWith<_$BtcLnV1SwapImpl> get copyWith =>
+      __$$BtcLnV1SwapImplCopyWithImpl<_$BtcLnV1SwapImpl>(this, _$identity);
 }
 
-abstract class _BtcLnSwap extends BtcLnSwap {
-  const factory _BtcLnSwap(
+abstract class _BtcLnV1Swap extends BtcLnV1Swap {
+  const factory _BtcLnV1Swap(
       {required final String id,
       required final SwapType kind,
       required final Chain network,
@@ -347,8 +348,8 @@ abstract class _BtcLnSwap extends BtcLnSwap {
       required final String scriptAddress,
       required final int outAmount,
       required final String electrumUrl,
-      required final String boltzUrl}) = _$BtcLnSwapImpl;
-  const _BtcLnSwap._() : super._();
+      required final String boltzUrl}) = _$BtcLnV1SwapImpl;
+  const _BtcLnV1Swap._() : super._();
 
   @override
   String get id;
@@ -374,6 +375,6 @@ abstract class _BtcLnSwap extends BtcLnSwap {
   String get boltzUrl;
   @override
   @JsonKey(ignore: true)
-  _$$BtcLnSwapImplCopyWith<_$BtcLnSwapImpl> get copyWith =>
+  _$$BtcLnV1SwapImplCopyWith<_$BtcLnV1SwapImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

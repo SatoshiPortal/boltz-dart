@@ -115,7 +115,7 @@ void main() {
     });
 
     test('Neg: Send less on-chain sats', () async {
-      BtcLnSwap btcLnSubmarine = await setupSubmarine(workingFreshInvoice1);
+      BtcLnV1Swap btcLnSubmarine = await setupSubmarine(workingFreshInvoice1);
 
       const expectedSecretKey =
           "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
@@ -147,7 +147,7 @@ void main() {
     }, skip: true, timeout: testTimeout);
 
     test('Neg: LN Invoice expires', () async {
-      BtcLnSwap btcLnSubmarine = await setupSubmarine(invoiceWith1minExpiry);
+      BtcLnV1Swap btcLnSubmarine = await setupSubmarine(invoiceWith1minExpiry);
       // final paymentDetails = await btcLnSubmarine.paymentDetails();
       const expectedSecretKey =
           "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
@@ -182,7 +182,7 @@ void main() {
     }, skip: true, timeout: testTimeout);
 
     test('Positive: Send exact amount or more', () async {
-      BtcLnSwap btcLnSubmarine = await setupSubmarine(workingFreshInvoice2);
+      BtcLnV1Swap btcLnSubmarine = await setupSubmarine(workingFreshInvoice2);
       const expectedSecretKey =
           "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
@@ -251,21 +251,21 @@ void main() {
     }, skip: true);
 
     test('Positive: ', () async {
-      BtcLnSwap btcLnSubmarine = await setupReverse(btcLnReverseSwapAmount);
+      BtcLnV1Swap btcLnReverse = await setupReverse(btcLnReverseSwapAmount);
 
       const expectedSecretKey =
           "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
 
-      print("SWAP CREATED SUCCESSFULLY: ${btcLnSubmarine.id}");
-      expect(btcLnSubmarine.keys.secretKey, expectedSecretKey);
+      print("SWAP CREATED SUCCESSFULLY: ${btcLnReverse.id}");
+      expect(btcLnReverse.keys.secretKey, expectedSecretKey);
 
-      print("Pay this invoice: ${btcLnSubmarine.invoice}");
+      print("Pay this invoice: ${btcLnReverse.invoice}");
 
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
       var sub =
-          api.subscribeSwapStatus([btcLnSubmarine.id]).listen((event) async {
+          api.subscribeSwapStatus([btcLnReverse.id]).listen((event) async {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnMempool) {
           await Future.delayed(Duration(seconds: 20));
@@ -273,7 +273,7 @@ void main() {
           final fees = await AllFees.fetch(boltzUrl: boltzUrl);
           final claimFeesEstimate = fees.btcReverse.claimFeesEstimate;
 
-          String txnId = await btcLnSubmarine.reverseV1Claim(
+          String txnId = await btcLnReverse.claim(
               outAddress: btcReceiveAddress, absFee: claimFeesEstimate);
           print(txnId);
         }
@@ -337,21 +337,21 @@ void main() {
       const outAddress =
           'tlq1qqf9zqefh7jwzvu56gssqh7ayea2cmphhcqmfleg2zg6t5r70zfa2ukmvg5cmp5g33nar2xkx57edghhpc9nj56plk7ch7ppuk';
 
-      final lbtcLnSubmarineSwap = await setupLReverse(outAmount);
+      final lbtcLnReverseSwap = await setupLReverse(outAmount);
       const expectedSecretKey =
           "a0a62dd7225288f41a741c293a3220035b4c71686dc34c01ec84cbe6ab11b4e1";
 
-      print("SWAP CREATED SUCCESSFULLY: ${lbtcLnSubmarineSwap.id}");
+      print("SWAP CREATED SUCCESSFULLY: ${lbtcLnReverseSwap.id}");
 
-      expect(lbtcLnSubmarineSwap.keys.secretKey, expectedSecretKey);
+      expect(lbtcLnReverseSwap.keys.secretKey, expectedSecretKey);
 
-      print("Pay this invoice: ${lbtcLnSubmarineSwap.invoice}");
+      print("Pay this invoice: ${lbtcLnReverseSwap.invoice}");
 
       var completer = Completer();
       var receivedEvents = <SwapStatusResponse>[];
       final api = await BoltzApi.newBoltzApi();
-      var sub = api
-          .subscribeSwapStatus([lbtcLnSubmarineSwap.id]).listen((event) async {
+      var sub =
+          api.subscribeSwapStatus([lbtcLnReverseSwap.id]).listen((event) async {
         receivedEvents.add(event);
         if (event.status == SwapStatus.txnConfirmed) {
           await Future.delayed(Duration(seconds: 300));
@@ -359,7 +359,7 @@ void main() {
           final fees = await AllFees.fetch(boltzUrl: boltzUrl);
           final claimFeesEstimate = fees.lbtcReverse.claimFeesEstimate;
 
-          String txnId = await lbtcLnSubmarineSwap.reverseV1Claim(
+          String txnId = await lbtcLnReverseSwap.claim(
               outAddress: outAddress, absFee: claimFeesEstimate);
           print(txnId);
         }
@@ -380,11 +380,11 @@ void main() {
   });
 }
 
-Future<BtcLnSwap> setupSubmarine(String invoice) async {
+Future<BtcLnV1Swap> setupSubmarine(String invoice) async {
   final amount = 100000;
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
-  final btcLnSubmarineSwap = await BtcLnSwap.createSubmarineV1(
+  final btcLnSubmarineSwap = await BtcLnV1Swap.newSubmarine(
     mnemonic: mnemonic,
     index: index,
     invoice: invoice,
@@ -397,10 +397,10 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
   return btcLnSubmarineSwap;
 }
 
-Future<BtcLnSwap> setupReverse(int outAmount) async {
+Future<BtcLnV1Swap> setupReverse(int outAmount) async {
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
-  final btcLnReverseSwap = await BtcLnSwap.createReverseV1(
+  final btcLnReverseSwap = await BtcLnV1Swap.newReverse(
       mnemonic: mnemonic,
       index: index,
       outAmount: outAmount,
@@ -412,11 +412,11 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
   return btcLnReverseSwap;
 }
 
-Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
+Future<LbtcLnV1Swap> setupLSubmarine(String invoice) async {
   final amount = 100000;
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
-  final lbtcLnSubmarineSwap = await LbtcLnSwap.createSubmarineV1(
+  final lbtcLnSubmarineSwap = await LbtcLnV1Swap.newSubmarine(
       mnemonic: mnemonic,
       index: index,
       invoice: invoice,
@@ -428,10 +428,10 @@ Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
   return lbtcLnSubmarineSwap;
 }
 
-Future<LbtcLnSwap> setupLReverse(int amount) async {
+Future<LbtcLnV1Swap> setupLReverse(int amount) async {
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
-  final lbtcLnSubmarineSwap = await LbtcLnSwap.createReverseV1(
+  final lbtcLnSubmarineSwap = await LbtcLnV1Swap.newReverse(
       mnemonic: mnemonic,
       index: index,
       outAmount: amount,

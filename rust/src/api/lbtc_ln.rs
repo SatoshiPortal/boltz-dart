@@ -3,7 +3,7 @@ use boltz_client::{network::electrum::ElectrumConfig, swaps::{boltz::{BoltzApiCl
 use flutter_rust_bridge::frb;
 
 #[frb(dart_metadata=("freezed"))]
-pub struct LbtcLnSwap {
+pub struct LbtcLnV1Swap {
     pub id: String,
     pub kind: SwapType,
     pub network: Chain,
@@ -18,7 +18,7 @@ pub struct LbtcLnSwap {
     pub boltz_url: String,
 }
 
-impl LbtcLnSwap {
+impl LbtcLnV1Swap {
     pub fn new(
         id: String,
         kind: SwapType,
@@ -32,8 +32,8 @@ impl LbtcLnSwap {
         blinding_key: String,
         electrum_url: String,
         boltz_url: String,
-    ) -> LbtcLnSwap {
-        LbtcLnSwap {
+    ) -> LbtcLnV1Swap {
+        LbtcLnV1Swap {
             id,
             kind,
             network,
@@ -48,7 +48,7 @@ impl LbtcLnSwap {
             script_address: out_address,
         }
     }
-    pub fn create_submarine_v1(
+    pub fn new_submarine(
         mnemonic: String,
         index: u64,
         invoice: String,
@@ -56,7 +56,7 @@ impl LbtcLnSwap {
         electrum_url: String,
         boltz_url: String,
         pair_hash: String,
-    ) -> Result<LbtcLnSwap, BoltzError> {
+    ) -> Result<LbtcLnV1Swap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let refund_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
             Ok(keypair) => keypair,
@@ -108,7 +108,7 @@ impl LbtcLnSwap {
         //     return Err(BoltzError{kind: ErrorKind::BoltzApi, "Payment address in response does not match constructed script! Report to support!").into());
         // }
 
-        Ok(LbtcLnSwap::new(
+        Ok(LbtcLnV1Swap::new(
             response.get_id(),
             swap_type,
             network,
@@ -124,7 +124,7 @@ impl LbtcLnSwap {
         ))
     }
 
-    pub fn create_reverse_v1(
+    pub fn new_reverse(
         mnemonic: String,
         index: u64,
         out_amount: u64,
@@ -132,7 +132,7 @@ impl LbtcLnSwap {
         electrum_url: String,
         boltz_url: String,
         pair_hash: String,
-    ) -> Result<LbtcLnSwap, BoltzError> {
+    ) -> Result<LbtcLnV1Swap, BoltzError> {
         let swap_type = SwapType::Reverse;
         let claim_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
             Ok(keypair) => keypair,
@@ -170,7 +170,7 @@ impl LbtcLnSwap {
         };
         let out_address = script.to_address(network.into()).unwrap().to_string();
 
-        Ok(LbtcLnSwap::new(
+        Ok(LbtcLnV1Swap::new(
             response.get_id(),
             swap_type,
             network,
@@ -186,7 +186,7 @@ impl LbtcLnSwap {
         ))
     }
 
-    pub fn reverse_v1_claim(
+    pub fn claim(
         &self,
         out_address: String,
         abs_fee: u64,
@@ -225,7 +225,7 @@ impl LbtcLnSwap {
         Ok(txid)
     }
 
-    pub fn submarine_v1_refund(
+    pub fn refund(
         &self,
         out_address: String,
         abs_fee: u64,
@@ -260,7 +260,7 @@ impl LbtcLnSwap {
 
     }
 
-    pub fn tx_size(swap: LbtcLnSwap) -> Result<usize, BoltzError> {
+    pub fn tx_size(swap: LbtcLnV1Swap) -> Result<usize, BoltzError> {
         if swap.kind == SwapType::Submarine {
             return Err(BoltzError{kind: "Input".to_string(), message: "Submarine swaps are not claimable".to_string()});
         } else {

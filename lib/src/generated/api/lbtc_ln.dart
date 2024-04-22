@@ -11,9 +11,9 @@ import 'types.dart';
 part 'lbtc_ln.freezed.dart';
 
 @freezed
-class LbtcLnSwap with _$LbtcLnSwap {
-  const LbtcLnSwap._();
-  const factory LbtcLnSwap({
+class LbtcLnV1Swap with _$LbtcLnV1Swap {
+  const LbtcLnV1Swap._();
+  const factory LbtcLnV1Swap({
     required String id,
     required SwapType kind,
     required Chain network,
@@ -26,47 +26,17 @@ class LbtcLnSwap with _$LbtcLnSwap {
     required String blindingKey,
     required String electrumUrl,
     required String boltzUrl,
-  }) = _LbtcLnSwap;
-  static Future<LbtcLnSwap> createReverseV1(
-          {required String mnemonic,
-          required int index,
-          required int outAmount,
-          required Chain network,
-          required String electrumUrl,
-          required String boltzUrl,
-          required String pairHash,
-          dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapCreateReverseV1(
-          mnemonic: mnemonic,
-          index: index,
-          outAmount: outAmount,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: pairHash,
-          hint: hint);
-
-  static Future<LbtcLnSwap> createSubmarineV1(
-          {required String mnemonic,
-          required int index,
-          required String invoice,
-          required Chain network,
-          required String electrumUrl,
-          required String boltzUrl,
-          required String pairHash,
-          dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapCreateSubmarineV1(
-          mnemonic: mnemonic,
-          index: index,
-          invoice: invoice,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: pairHash,
-          hint: hint);
+  }) = _LbtcLnV1Swap;
+  Future<String> claim(
+          {required String outAddress, required int absFee, dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnV1SwapClaim(
+        that: this,
+        outAddress: outAddress,
+        absFee: absFee,
+      );
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<LbtcLnSwap> newInstance(
+  static Future<LbtcLnV1Swap> newInstance(
           {required String id,
           required SwapType kind,
           required Chain network,
@@ -80,7 +50,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
           required String electrumUrl,
           required String boltzUrl,
           dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapNew(
+      BoltzCore.instance.api.lbtcLnV1SwapNew(
           id: id,
           kind: kind,
           network: network,
@@ -95,22 +65,52 @@ class LbtcLnSwap with _$LbtcLnSwap {
           boltzUrl: boltzUrl,
           hint: hint);
 
-  Future<String> reverseV1Claim(
+  static Future<LbtcLnV1Swap> newReverse(
+          {required String mnemonic,
+          required int index,
+          required int outAmount,
+          required Chain network,
+          required String electrumUrl,
+          required String boltzUrl,
+          required String pairHash,
+          dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnV1SwapNewReverse(
+          mnemonic: mnemonic,
+          index: index,
+          outAmount: outAmount,
+          network: network,
+          electrumUrl: electrumUrl,
+          boltzUrl: boltzUrl,
+          pairHash: pairHash,
+          hint: hint);
+
+  static Future<LbtcLnV1Swap> newSubmarine(
+          {required String mnemonic,
+          required int index,
+          required String invoice,
+          required Chain network,
+          required String electrumUrl,
+          required String boltzUrl,
+          required String pairHash,
+          dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnV1SwapNewSubmarine(
+          mnemonic: mnemonic,
+          index: index,
+          invoice: invoice,
+          network: network,
+          electrumUrl: electrumUrl,
+          boltzUrl: boltzUrl,
+          pairHash: pairHash,
+          hint: hint);
+
+  Future<String> refund(
           {required String outAddress, required int absFee, dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapReverseV1Claim(
+      BoltzCore.instance.api.lbtcLnV1SwapRefund(
         that: this,
         outAddress: outAddress,
         absFee: absFee,
       );
 
-  Future<String> submarineV1Refund(
-          {required String outAddress, required int absFee, dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapSubmarineV1Refund(
-        that: this,
-        outAddress: outAddress,
-        absFee: absFee,
-      );
-
-  static Future<int> txSize({required LbtcLnSwap swap, dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapTxSize(swap: swap, hint: hint);
+  static Future<int> txSize({required LbtcLnV1Swap swap, dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnV1SwapTxSize(swap: swap, hint: hint);
 }

@@ -66,33 +66,13 @@ class BoltzCore
 }
 
 abstract class BoltzCoreApi extends BaseApi {
-  Future<String> btcLnSwapBtcLnSubmarineRefund(
-      {required BtcLnSwap that,
+  Future<String> btcLnV1SwapClaim(
+      {required BtcLnV1Swap that,
       required String outAddress,
       required int absFee,
       dynamic hint});
 
-  Future<BtcLnSwap> btcLnSwapCreateReverseV1(
-      {required String mnemonic,
-      required int index,
-      required int outAmount,
-      required Chain network,
-      required String electrumUrl,
-      required String boltzUrl,
-      required String pairHash,
-      dynamic hint});
-
-  Future<BtcLnSwap> btcLnSwapCreateSubmarineV1(
-      {required String mnemonic,
-      required int index,
-      required String invoice,
-      required Chain network,
-      required String electrumUrl,
-      required String boltzUrl,
-      required String pairHash,
-      dynamic hint});
-
-  Future<BtcLnSwap> btcLnSwapNew(
+  Future<BtcLnV1Swap> btcLnV1SwapNew(
       {required String id,
       required SwapType kind,
       required Chain network,
@@ -106,18 +86,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required String boltzUrl,
       dynamic hint});
 
-  Future<String> btcLnSwapReverseV1Claim(
-      {required BtcLnSwap that,
-      required String outAddress,
-      required int absFee,
-      dynamic hint});
-
-  Future<int> btcLnSwapTxSize({required BtcLnSwap that, dynamic hint});
-
-  Future<BoltzError> boltzErrorNew(
-      {required String kind, required String message, dynamic hint});
-
-  Future<LbtcLnSwap> lbtcLnSwapCreateReverseV1(
+  Future<BtcLnV1Swap> btcLnV1SwapNewReverse(
       {required String mnemonic,
       required int index,
       required int outAmount,
@@ -127,7 +96,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required String pairHash,
       dynamic hint});
 
-  Future<LbtcLnSwap> lbtcLnSwapCreateSubmarineV1(
+  Future<BtcLnV1Swap> btcLnV1SwapNewSubmarine(
       {required String mnemonic,
       required int index,
       required String invoice,
@@ -137,7 +106,24 @@ abstract class BoltzCoreApi extends BaseApi {
       required String pairHash,
       dynamic hint});
 
-  Future<LbtcLnSwap> lbtcLnSwapNew(
+  Future<String> btcLnV1SwapRefund(
+      {required BtcLnV1Swap that,
+      required String outAddress,
+      required int absFee,
+      dynamic hint});
+
+  Future<int> btcLnV1SwapTxSize({required BtcLnV1Swap that, dynamic hint});
+
+  Future<BoltzError> boltzErrorNew(
+      {required String kind, required String message, dynamic hint});
+
+  Future<String> lbtcLnV1SwapClaim(
+      {required LbtcLnV1Swap that,
+      required String outAddress,
+      required int absFee,
+      dynamic hint});
+
+  Future<LbtcLnV1Swap> lbtcLnV1SwapNew(
       {required String id,
       required SwapType kind,
       required Chain network,
@@ -152,19 +138,33 @@ abstract class BoltzCoreApi extends BaseApi {
       required String boltzUrl,
       dynamic hint});
 
-  Future<String> lbtcLnSwapReverseV1Claim(
-      {required LbtcLnSwap that,
+  Future<LbtcLnV1Swap> lbtcLnV1SwapNewReverse(
+      {required String mnemonic,
+      required int index,
+      required int outAmount,
+      required Chain network,
+      required String electrumUrl,
+      required String boltzUrl,
+      required String pairHash,
+      dynamic hint});
+
+  Future<LbtcLnV1Swap> lbtcLnV1SwapNewSubmarine(
+      {required String mnemonic,
+      required int index,
+      required String invoice,
+      required Chain network,
+      required String electrumUrl,
+      required String boltzUrl,
+      required String pairHash,
+      dynamic hint});
+
+  Future<String> lbtcLnV1SwapRefund(
+      {required LbtcLnV1Swap that,
       required String outAddress,
       required int absFee,
       dynamic hint});
 
-  Future<String> lbtcLnSwapSubmarineV1Refund(
-      {required LbtcLnSwap that,
-      required String outAddress,
-      required int absFee,
-      dynamic hint});
-
-  Future<int> lbtcLnSwapTxSize({required LbtcLnSwap swap, dynamic hint});
+  Future<int> lbtcLnV1SwapTxSize({required LbtcLnV1Swap swap, dynamic hint});
 
   Future<AllFees> allFeesFetch({required String boltzUrl, dynamic hint});
 
@@ -191,146 +191,36 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   });
 
   @override
-  Future<String> btcLnSwapBtcLnSubmarineRefund(
-      {required BtcLnSwap that,
+  Future<String> btcLnV1SwapClaim(
+      {required BtcLnV1Swap that,
       required String outAddress,
       required int absFee,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        var arg0 = cst_encode_box_autoadd_btc_ln_v_1_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_u_64(absFee);
-        return wire.wire_BtcLnSwap_btc_ln_submarine_refund(
-            port_, arg0, arg1, arg2);
+        return wire.wire_BtcLnV1Swap_claim(port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kBtcLnSwapBtcLnSubmarineRefundConstMeta,
+      constMeta: kBtcLnV1SwapClaimConstMeta,
       argValues: [that, outAddress, absFee],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kBtcLnSwapBtcLnSubmarineRefundConstMeta =>
-      const TaskConstMeta(
-        debugName: "BtcLnSwap_btc_ln_submarine_refund",
+  TaskConstMeta get kBtcLnV1SwapClaimConstMeta => const TaskConstMeta(
+        debugName: "BtcLnV1Swap_claim",
         argNames: ["that", "outAddress", "absFee"],
       );
 
   @override
-  Future<BtcLnSwap> btcLnSwapCreateReverseV1(
-      {required String mnemonic,
-      required int index,
-      required int outAmount,
-      required Chain network,
-      required String electrumUrl,
-      required String boltzUrl,
-      required String pairHash,
-      dynamic hint}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_u_64(index);
-        var arg2 = cst_encode_u_64(outAmount);
-        var arg3 = cst_encode_chain(network);
-        var arg4 = cst_encode_String(electrumUrl);
-        var arg5 = cst_encode_String(boltzUrl);
-        var arg6 = cst_encode_String(pairHash);
-        return wire.wire_BtcLnSwap_create_reverse_v1(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_btc_ln_swap,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kBtcLnSwapCreateReverseV1ConstMeta,
-      argValues: [
-        mnemonic,
-        index,
-        outAmount,
-        network,
-        electrumUrl,
-        boltzUrl,
-        pairHash
-      ],
-      apiImpl: this,
-      hint: hint,
-    ));
-  }
-
-  TaskConstMeta get kBtcLnSwapCreateReverseV1ConstMeta => const TaskConstMeta(
-        debugName: "BtcLnSwap_create_reverse_v1",
-        argNames: [
-          "mnemonic",
-          "index",
-          "outAmount",
-          "network",
-          "electrumUrl",
-          "boltzUrl",
-          "pairHash"
-        ],
-      );
-
-  @override
-  Future<BtcLnSwap> btcLnSwapCreateSubmarineV1(
-      {required String mnemonic,
-      required int index,
-      required String invoice,
-      required Chain network,
-      required String electrumUrl,
-      required String boltzUrl,
-      required String pairHash,
-      dynamic hint}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_u_64(index);
-        var arg2 = cst_encode_String(invoice);
-        var arg3 = cst_encode_chain(network);
-        var arg4 = cst_encode_String(electrumUrl);
-        var arg5 = cst_encode_String(boltzUrl);
-        var arg6 = cst_encode_String(pairHash);
-        return wire.wire_BtcLnSwap_create_submarine_v1(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_btc_ln_swap,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kBtcLnSwapCreateSubmarineV1ConstMeta,
-      argValues: [
-        mnemonic,
-        index,
-        invoice,
-        network,
-        electrumUrl,
-        boltzUrl,
-        pairHash
-      ],
-      apiImpl: this,
-      hint: hint,
-    ));
-  }
-
-  TaskConstMeta get kBtcLnSwapCreateSubmarineV1ConstMeta => const TaskConstMeta(
-        debugName: "BtcLnSwap_create_submarine_v1",
-        argNames: [
-          "mnemonic",
-          "index",
-          "invoice",
-          "network",
-          "electrumUrl",
-          "boltzUrl",
-          "pairHash"
-        ],
-      );
-
-  @override
-  Future<BtcLnSwap> btcLnSwapNew(
+  Future<BtcLnV1Swap> btcLnV1SwapNew(
       {required String id,
       required SwapType kind,
       required Chain network,
@@ -356,14 +246,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg8 = cst_encode_u_64(outAmount);
         var arg9 = cst_encode_String(electrumUrl);
         var arg10 = cst_encode_String(boltzUrl);
-        return wire.wire_BtcLnSwap_new(port_, arg0, arg1, arg2, arg3, arg4,
+        return wire.wire_BtcLnV1Swap_new(port_, arg0, arg1, arg2, arg3, arg4,
             arg5, arg6, arg7, arg8, arg9, arg10);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_btc_ln_swap,
+        decodeSuccessData: dco_decode_btc_ln_v_1_swap,
         decodeErrorData: null,
       ),
-      constMeta: kBtcLnSwapNewConstMeta,
+      constMeta: kBtcLnV1SwapNewConstMeta,
       argValues: [
         id,
         kind,
@@ -382,8 +272,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     ));
   }
 
-  TaskConstMeta get kBtcLnSwapNewConstMeta => const TaskConstMeta(
-        debugName: "BtcLnSwap_new",
+  TaskConstMeta get kBtcLnV1SwapNewConstMeta => const TaskConstMeta(
+        debugName: "BtcLnV1Swap_new",
         argNames: [
           "id",
           "kind",
@@ -400,54 +290,162 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<String> btcLnSwapReverseV1Claim(
-      {required BtcLnSwap that,
+  Future<BtcLnV1Swap> btcLnV1SwapNewReverse(
+      {required String mnemonic,
+      required int index,
+      required int outAmount,
+      required Chain network,
+      required String electrumUrl,
+      required String boltzUrl,
+      required String pairHash,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(mnemonic);
+        var arg1 = cst_encode_u_64(index);
+        var arg2 = cst_encode_u_64(outAmount);
+        var arg3 = cst_encode_chain(network);
+        var arg4 = cst_encode_String(electrumUrl);
+        var arg5 = cst_encode_String(boltzUrl);
+        var arg6 = cst_encode_String(pairHash);
+        return wire.wire_BtcLnV1Swap_new_reverse(
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_btc_ln_v_1_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kBtcLnV1SwapNewReverseConstMeta,
+      argValues: [
+        mnemonic,
+        index,
+        outAmount,
+        network,
+        electrumUrl,
+        boltzUrl,
+        pairHash
+      ],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kBtcLnV1SwapNewReverseConstMeta => const TaskConstMeta(
+        debugName: "BtcLnV1Swap_new_reverse",
+        argNames: [
+          "mnemonic",
+          "index",
+          "outAmount",
+          "network",
+          "electrumUrl",
+          "boltzUrl",
+          "pairHash"
+        ],
+      );
+
+  @override
+  Future<BtcLnV1Swap> btcLnV1SwapNewSubmarine(
+      {required String mnemonic,
+      required int index,
+      required String invoice,
+      required Chain network,
+      required String electrumUrl,
+      required String boltzUrl,
+      required String pairHash,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(mnemonic);
+        var arg1 = cst_encode_u_64(index);
+        var arg2 = cst_encode_String(invoice);
+        var arg3 = cst_encode_chain(network);
+        var arg4 = cst_encode_String(electrumUrl);
+        var arg5 = cst_encode_String(boltzUrl);
+        var arg6 = cst_encode_String(pairHash);
+        return wire.wire_BtcLnV1Swap_new_submarine(
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_btc_ln_v_1_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kBtcLnV1SwapNewSubmarineConstMeta,
+      argValues: [
+        mnemonic,
+        index,
+        invoice,
+        network,
+        electrumUrl,
+        boltzUrl,
+        pairHash
+      ],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kBtcLnV1SwapNewSubmarineConstMeta => const TaskConstMeta(
+        debugName: "BtcLnV1Swap_new_submarine",
+        argNames: [
+          "mnemonic",
+          "index",
+          "invoice",
+          "network",
+          "electrumUrl",
+          "boltzUrl",
+          "pairHash"
+        ],
+      );
+
+  @override
+  Future<String> btcLnV1SwapRefund(
+      {required BtcLnV1Swap that,
       required String outAddress,
       required int absFee,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        var arg0 = cst_encode_box_autoadd_btc_ln_v_1_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_u_64(absFee);
-        return wire.wire_BtcLnSwap_reverse_v1_claim(port_, arg0, arg1, arg2);
+        return wire.wire_BtcLnV1Swap_refund(port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kBtcLnSwapReverseV1ClaimConstMeta,
+      constMeta: kBtcLnV1SwapRefundConstMeta,
       argValues: [that, outAddress, absFee],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kBtcLnSwapReverseV1ClaimConstMeta => const TaskConstMeta(
-        debugName: "BtcLnSwap_reverse_v1_claim",
+  TaskConstMeta get kBtcLnV1SwapRefundConstMeta => const TaskConstMeta(
+        debugName: "BtcLnV1Swap_refund",
         argNames: ["that", "outAddress", "absFee"],
       );
 
   @override
-  Future<int> btcLnSwapTxSize({required BtcLnSwap that, dynamic hint}) {
+  Future<int> btcLnV1SwapTxSize({required BtcLnV1Swap that, dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
-        return wire.wire_BtcLnSwap_tx_size(port_, arg0);
+        var arg0 = cst_encode_box_autoadd_btc_ln_v_1_swap(that);
+        return wire.wire_BtcLnV1Swap_tx_size(port_, arg0);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_usize,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kBtcLnSwapTxSizeConstMeta,
+      constMeta: kBtcLnV1SwapTxSizeConstMeta,
       argValues: [that],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kBtcLnSwapTxSizeConstMeta => const TaskConstMeta(
-        debugName: "BtcLnSwap_tx_size",
+  TaskConstMeta get kBtcLnV1SwapTxSizeConstMeta => const TaskConstMeta(
+        debugName: "BtcLnV1Swap_tx_size",
         argNames: ["that"],
       );
 
@@ -477,116 +475,36 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<LbtcLnSwap> lbtcLnSwapCreateReverseV1(
-      {required String mnemonic,
-      required int index,
-      required int outAmount,
-      required Chain network,
-      required String electrumUrl,
-      required String boltzUrl,
-      required String pairHash,
+  Future<String> lbtcLnV1SwapClaim(
+      {required LbtcLnV1Swap that,
+      required String outAddress,
+      required int absFee,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_u_64(index);
-        var arg2 = cst_encode_u_64(outAmount);
-        var arg3 = cst_encode_chain(network);
-        var arg4 = cst_encode_String(electrumUrl);
-        var arg5 = cst_encode_String(boltzUrl);
-        var arg6 = cst_encode_String(pairHash);
-        return wire.wire_LbtcLnSwap_create_reverse_v1(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_v_1_swap(that);
+        var arg1 = cst_encode_String(outAddress);
+        var arg2 = cst_encode_u_64(absFee);
+        return wire.wire_LbtcLnV1Swap_claim(port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_lbtc_ln_swap,
+        decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kLbtcLnSwapCreateReverseV1ConstMeta,
-      argValues: [
-        mnemonic,
-        index,
-        outAmount,
-        network,
-        electrumUrl,
-        boltzUrl,
-        pairHash
-      ],
+      constMeta: kLbtcLnV1SwapClaimConstMeta,
+      argValues: [that, outAddress, absFee],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kLbtcLnSwapCreateReverseV1ConstMeta => const TaskConstMeta(
-        debugName: "LbtcLnSwap_create_reverse_v1",
-        argNames: [
-          "mnemonic",
-          "index",
-          "outAmount",
-          "network",
-          "electrumUrl",
-          "boltzUrl",
-          "pairHash"
-        ],
+  TaskConstMeta get kLbtcLnV1SwapClaimConstMeta => const TaskConstMeta(
+        debugName: "LbtcLnV1Swap_claim",
+        argNames: ["that", "outAddress", "absFee"],
       );
 
   @override
-  Future<LbtcLnSwap> lbtcLnSwapCreateSubmarineV1(
-      {required String mnemonic,
-      required int index,
-      required String invoice,
-      required Chain network,
-      required String electrumUrl,
-      required String boltzUrl,
-      required String pairHash,
-      dynamic hint}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_u_64(index);
-        var arg2 = cst_encode_String(invoice);
-        var arg3 = cst_encode_chain(network);
-        var arg4 = cst_encode_String(electrumUrl);
-        var arg5 = cst_encode_String(boltzUrl);
-        var arg6 = cst_encode_String(pairHash);
-        return wire.wire_LbtcLnSwap_create_submarine_v1(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_lbtc_ln_swap,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kLbtcLnSwapCreateSubmarineV1ConstMeta,
-      argValues: [
-        mnemonic,
-        index,
-        invoice,
-        network,
-        electrumUrl,
-        boltzUrl,
-        pairHash
-      ],
-      apiImpl: this,
-      hint: hint,
-    ));
-  }
-
-  TaskConstMeta get kLbtcLnSwapCreateSubmarineV1ConstMeta =>
-      const TaskConstMeta(
-        debugName: "LbtcLnSwap_create_submarine_v1",
-        argNames: [
-          "mnemonic",
-          "index",
-          "invoice",
-          "network",
-          "electrumUrl",
-          "boltzUrl",
-          "pairHash"
-        ],
-      );
-
-  @override
-  Future<LbtcLnSwap> lbtcLnSwapNew(
+  Future<LbtcLnV1Swap> lbtcLnV1SwapNew(
       {required String id,
       required SwapType kind,
       required Chain network,
@@ -614,14 +532,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg9 = cst_encode_String(blindingKey);
         var arg10 = cst_encode_String(electrumUrl);
         var arg11 = cst_encode_String(boltzUrl);
-        return wire.wire_LbtcLnSwap_new(port_, arg0, arg1, arg2, arg3, arg4,
+        return wire.wire_LbtcLnV1Swap_new(port_, arg0, arg1, arg2, arg3, arg4,
             arg5, arg6, arg7, arg8, arg9, arg10, arg11);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_lbtc_ln_swap,
+        decodeSuccessData: dco_decode_lbtc_ln_v_1_swap,
         decodeErrorData: null,
       ),
-      constMeta: kLbtcLnSwapNewConstMeta,
+      constMeta: kLbtcLnV1SwapNewConstMeta,
       argValues: [
         id,
         kind,
@@ -641,8 +559,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     ));
   }
 
-  TaskConstMeta get kLbtcLnSwapNewConstMeta => const TaskConstMeta(
-        debugName: "LbtcLnSwap_new",
+  TaskConstMeta get kLbtcLnV1SwapNewConstMeta => const TaskConstMeta(
+        debugName: "LbtcLnV1Swap_new",
         argNames: [
           "id",
           "kind",
@@ -660,85 +578,162 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<String> lbtcLnSwapReverseV1Claim(
-      {required LbtcLnSwap that,
+  Future<LbtcLnV1Swap> lbtcLnV1SwapNewReverse(
+      {required String mnemonic,
+      required int index,
+      required int outAmount,
+      required Chain network,
+      required String electrumUrl,
+      required String boltzUrl,
+      required String pairHash,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(mnemonic);
+        var arg1 = cst_encode_u_64(index);
+        var arg2 = cst_encode_u_64(outAmount);
+        var arg3 = cst_encode_chain(network);
+        var arg4 = cst_encode_String(electrumUrl);
+        var arg5 = cst_encode_String(boltzUrl);
+        var arg6 = cst_encode_String(pairHash);
+        return wire.wire_LbtcLnV1Swap_new_reverse(
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_lbtc_ln_v_1_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kLbtcLnV1SwapNewReverseConstMeta,
+      argValues: [
+        mnemonic,
+        index,
+        outAmount,
+        network,
+        electrumUrl,
+        boltzUrl,
+        pairHash
+      ],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kLbtcLnV1SwapNewReverseConstMeta => const TaskConstMeta(
+        debugName: "LbtcLnV1Swap_new_reverse",
+        argNames: [
+          "mnemonic",
+          "index",
+          "outAmount",
+          "network",
+          "electrumUrl",
+          "boltzUrl",
+          "pairHash"
+        ],
+      );
+
+  @override
+  Future<LbtcLnV1Swap> lbtcLnV1SwapNewSubmarine(
+      {required String mnemonic,
+      required int index,
+      required String invoice,
+      required Chain network,
+      required String electrumUrl,
+      required String boltzUrl,
+      required String pairHash,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(mnemonic);
+        var arg1 = cst_encode_u_64(index);
+        var arg2 = cst_encode_String(invoice);
+        var arg3 = cst_encode_chain(network);
+        var arg4 = cst_encode_String(electrumUrl);
+        var arg5 = cst_encode_String(boltzUrl);
+        var arg6 = cst_encode_String(pairHash);
+        return wire.wire_LbtcLnV1Swap_new_submarine(
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_lbtc_ln_v_1_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kLbtcLnV1SwapNewSubmarineConstMeta,
+      argValues: [
+        mnemonic,
+        index,
+        invoice,
+        network,
+        electrumUrl,
+        boltzUrl,
+        pairHash
+      ],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kLbtcLnV1SwapNewSubmarineConstMeta => const TaskConstMeta(
+        debugName: "LbtcLnV1Swap_new_submarine",
+        argNames: [
+          "mnemonic",
+          "index",
+          "invoice",
+          "network",
+          "electrumUrl",
+          "boltzUrl",
+          "pairHash"
+        ],
+      );
+
+  @override
+  Future<String> lbtcLnV1SwapRefund(
+      {required LbtcLnV1Swap that,
       required String outAddress,
       required int absFee,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_v_1_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_u_64(absFee);
-        return wire.wire_LbtcLnSwap_reverse_v1_claim(port_, arg0, arg1, arg2);
+        return wire.wire_LbtcLnV1Swap_refund(port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kLbtcLnSwapReverseV1ClaimConstMeta,
+      constMeta: kLbtcLnV1SwapRefundConstMeta,
       argValues: [that, outAddress, absFee],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kLbtcLnSwapReverseV1ClaimConstMeta => const TaskConstMeta(
-        debugName: "LbtcLnSwap_reverse_v1_claim",
+  TaskConstMeta get kLbtcLnV1SwapRefundConstMeta => const TaskConstMeta(
+        debugName: "LbtcLnV1Swap_refund",
         argNames: ["that", "outAddress", "absFee"],
       );
 
   @override
-  Future<String> lbtcLnSwapSubmarineV1Refund(
-      {required LbtcLnSwap that,
-      required String outAddress,
-      required int absFee,
-      dynamic hint}) {
+  Future<int> lbtcLnV1SwapTxSize({required LbtcLnV1Swap swap, dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
-        var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_u_64(absFee);
-        return wire.wire_LbtcLnSwap_submarine_v1_refund(
-            port_, arg0, arg1, arg2);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_String,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kLbtcLnSwapSubmarineV1RefundConstMeta,
-      argValues: [that, outAddress, absFee],
-      apiImpl: this,
-      hint: hint,
-    ));
-  }
-
-  TaskConstMeta get kLbtcLnSwapSubmarineV1RefundConstMeta =>
-      const TaskConstMeta(
-        debugName: "LbtcLnSwap_submarine_v1_refund",
-        argNames: ["that", "outAddress", "absFee"],
-      );
-
-  @override
-  Future<int> lbtcLnSwapTxSize({required LbtcLnSwap swap, dynamic hint}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(swap);
-        return wire.wire_LbtcLnSwap_tx_size(port_, arg0);
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_v_1_swap(swap);
+        return wire.wire_LbtcLnV1Swap_tx_size(port_, arg0);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_usize,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kLbtcLnSwapTxSizeConstMeta,
+      constMeta: kLbtcLnV1SwapTxSizeConstMeta,
       argValues: [swap],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kLbtcLnSwapTxSizeConstMeta => const TaskConstMeta(
-        debugName: "LbtcLnSwap_tx_size",
+  TaskConstMeta get kLbtcLnV1SwapTxSizeConstMeta => const TaskConstMeta(
+        debugName: "LbtcLnV1Swap_tx_size",
         argNames: ["swap"],
       );
 
@@ -885,9 +880,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  BtcLnSwap dco_decode_box_autoadd_btc_ln_swap(dynamic raw) {
+  BtcLnV1Swap dco_decode_box_autoadd_btc_ln_v_1_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_btc_ln_swap(raw);
+    return dco_decode_btc_ln_v_1_swap(raw);
   }
 
   @protected
@@ -897,9 +892,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  LbtcLnSwap dco_decode_box_autoadd_lbtc_ln_swap(dynamic raw) {
+  LbtcLnV1Swap dco_decode_box_autoadd_lbtc_ln_v_1_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_lbtc_ln_swap(raw);
+    return dco_decode_lbtc_ln_v_1_swap(raw);
   }
 
   @protected
@@ -909,12 +904,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  BtcLnSwap dco_decode_btc_ln_swap(dynamic raw) {
+  BtcLnV1Swap dco_decode_btc_ln_v_1_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 11)
       throw Exception('unexpected arr length: expect 11 but see ${arr.length}');
-    return BtcLnSwap(
+    return BtcLnV1Swap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
       network: dco_decode_chain(arr[2]),
@@ -977,12 +972,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw) {
+  LbtcLnV1Swap dco_decode_lbtc_ln_v_1_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 12)
       throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
-    return LbtcLnSwap(
+    return LbtcLnV1Swap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
       network: dco_decode_chain(arr[2]),
@@ -1129,9 +1124,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  BtcLnSwap sse_decode_box_autoadd_btc_ln_swap(SseDeserializer deserializer) {
+  BtcLnV1Swap sse_decode_box_autoadd_btc_ln_v_1_swap(
+      SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_btc_ln_swap(deserializer));
+    return (sse_decode_btc_ln_v_1_swap(deserializer));
   }
 
   @protected
@@ -1141,9 +1137,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  LbtcLnSwap sse_decode_box_autoadd_lbtc_ln_swap(SseDeserializer deserializer) {
+  LbtcLnV1Swap sse_decode_box_autoadd_lbtc_ln_v_1_swap(
+      SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_lbtc_ln_swap(deserializer));
+    return (sse_decode_lbtc_ln_v_1_swap(deserializer));
   }
 
   @protected
@@ -1153,7 +1150,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  BtcLnSwap sse_decode_btc_ln_swap(SseDeserializer deserializer) {
+  BtcLnV1Swap sse_decode_btc_ln_v_1_swap(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_id = sse_decode_String(deserializer);
     var var_kind = sse_decode_swap_type(deserializer);
@@ -1166,7 +1163,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_outAmount = sse_decode_u_64(deserializer);
     var var_electrumUrl = sse_decode_String(deserializer);
     var var_boltzUrl = sse_decode_String(deserializer);
-    return BtcLnSwap(
+    return BtcLnV1Swap(
         id: var_id,
         kind: var_kind,
         network: var_network,
@@ -1228,7 +1225,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  LbtcLnSwap sse_decode_lbtc_ln_swap(SseDeserializer deserializer) {
+  LbtcLnV1Swap sse_decode_lbtc_ln_v_1_swap(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_id = sse_decode_String(deserializer);
     var var_kind = sse_decode_swap_type(deserializer);
@@ -1242,7 +1239,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_blindingKey = sse_decode_String(deserializer);
     var var_electrumUrl = sse_decode_String(deserializer);
     var var_boltzUrl = sse_decode_String(deserializer);
-    return LbtcLnSwap(
+    return LbtcLnV1Swap(
         id: var_id,
         kind: var_kind,
         network: var_network,
@@ -1418,10 +1415,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_box_autoadd_btc_ln_swap(
-      BtcLnSwap self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_btc_ln_v_1_swap(
+      BtcLnV1Swap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_btc_ln_swap(self, serializer);
+    sse_encode_btc_ln_v_1_swap(self, serializer);
   }
 
   @protected
@@ -1431,10 +1428,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_box_autoadd_lbtc_ln_swap(
-      LbtcLnSwap self, SseSerializer serializer) {
+  void sse_encode_box_autoadd_lbtc_ln_v_1_swap(
+      LbtcLnV1Swap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_lbtc_ln_swap(self, serializer);
+    sse_encode_lbtc_ln_v_1_swap(self, serializer);
   }
 
   @protected
@@ -1445,7 +1442,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_btc_ln_swap(BtcLnSwap self, SseSerializer serializer) {
+  void sse_encode_btc_ln_v_1_swap(BtcLnV1Swap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.id, serializer);
     sse_encode_swap_type(self.kind, serializer);
@@ -1499,7 +1496,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_lbtc_ln_swap(LbtcLnSwap self, SseSerializer serializer) {
+  void sse_encode_lbtc_ln_v_1_swap(
+      LbtcLnV1Swap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.id, serializer);
     sse_encode_swap_type(self.kind, serializer);

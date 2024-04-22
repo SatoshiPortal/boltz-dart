@@ -8,7 +8,7 @@ use boltz_client::{
 use flutter_rust_bridge::frb;
 
 #[frb(dart_metadata=("freezed"))]
-pub struct BtcLnSwap {
+pub struct BtcLnV1Swap {
     pub id: String,
     pub kind: SwapType,
     pub network: Chain,
@@ -21,7 +21,7 @@ pub struct BtcLnSwap {
     pub electrum_url: String,
     pub boltz_url: String,
 }
-impl BtcLnSwap {
+impl BtcLnV1Swap {
     pub fn new(
         id: String,
         kind: SwapType,
@@ -34,8 +34,8 @@ impl BtcLnSwap {
         out_amount: u64,
         electrum_url: String,
         boltz_url: String,
-    ) -> BtcLnSwap {
-        BtcLnSwap {
+    ) -> BtcLnV1Swap {
+        BtcLnV1Swap {
             id,
             kind,
             network,
@@ -50,7 +50,7 @@ impl BtcLnSwap {
         }
     }
 
-    pub fn create_submarine_v1(
+    pub fn new_submarine(
         mnemonic: String,
         index: u64,
         invoice: String,
@@ -58,7 +58,7 @@ impl BtcLnSwap {
         electrum_url: String,
         boltz_url: String,
         pair_hash: String,
-    ) -> Result<BtcLnSwap, BoltzError> {
+    ) -> Result<BtcLnV1Swap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let refund_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
             Ok(keypair) => keypair,
@@ -101,7 +101,7 @@ impl BtcLnSwap {
         };
         let script_address = swap_script.to_address(network.into())?.to_string();
 
-        Ok(BtcLnSwap::new(
+        Ok(BtcLnV1Swap::new(
             response.get_id(),
             swap_type,
             network,
@@ -116,7 +116,7 @@ impl BtcLnSwap {
         ))
     }
 
-    pub fn create_reverse_v1(
+    pub fn new_reverse(
         mnemonic: String,
         index: u64,
         out_amount: u64,
@@ -124,7 +124,7 @@ impl BtcLnSwap {
         electrum_url: String,
         boltz_url: String,
         pair_hash: String,
-    ) -> Result<BtcLnSwap, BoltzError> {
+    ) -> Result<BtcLnV1Swap, BoltzError> {
         let swap_type = SwapType::Reverse;
         let claim_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
             Ok(keypair) => keypair,
@@ -164,7 +164,7 @@ impl BtcLnSwap {
         };
         let script_address = swap_script.to_address(network.into())?.to_string();
 
-        Ok(BtcLnSwap::new(
+        Ok(BtcLnV1Swap::new(
             response.get_id(),
             swap_type,
             network.into(),
@@ -179,7 +179,7 @@ impl BtcLnSwap {
         ))
     }
 
-    pub fn reverse_v1_claim(
+    pub fn claim(
         &self,
         out_address: String,
         abs_fee: u64,
@@ -222,7 +222,7 @@ impl BtcLnSwap {
         }
     }
 
-    pub fn btc_ln_submarine_refund(
+    pub fn refund(
         &self,
         out_address: String,
         abs_fee: u64,

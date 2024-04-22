@@ -68,11 +68,11 @@ impl CstDecode<crate::api::error::BoltzError>
         }
     }
 }
-impl CstDecode<crate::api::btc_ln::BtcLnSwap>
+impl CstDecode<crate::api::btc_ln::BtcLnV1Swap>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::btc_ln::BtcLnSwap {
+    fn cst_decode(self) -> crate::api::btc_ln::BtcLnV1Swap {
         let self_ = self
             .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
             .unwrap();
@@ -82,7 +82,7 @@ impl CstDecode<crate::api::btc_ln::BtcLnSwap>
             "Expected 11 elements, got {}",
             self_.length()
         );
-        crate::api::btc_ln::BtcLnSwap {
+        crate::api::btc_ln::BtcLnV1Swap {
             id: self_.get(0).cst_decode(),
             kind: self_.get(1).cst_decode(),
             network: self_.get(2).cst_decode(),
@@ -142,11 +142,11 @@ impl CstDecode<crate::api::types::KeyPair>
         }
     }
 }
-impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>
+impl CstDecode<crate::api::lbtc_ln::LbtcLnV1Swap>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnSwap {
+    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnV1Swap {
         let self_ = self
             .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
             .unwrap();
@@ -156,7 +156,7 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>
             "Expected 12 elements, got {}",
             self_.length()
         );
-        crate::api::lbtc_ln::LbtcLnSwap {
+        crate::api::lbtc_ln::LbtcLnV1Swap {
             id: self_.get(0).cst_decode(),
             kind: self_.get(1).cst_decode(),
             network: self_.get(2).cst_decode(),
@@ -333,63 +333,17 @@ impl CstDecode<usize> for flutter_rust_bridge::for_generated::wasm_bindgen::JsVa
 }
 
 #[wasm_bindgen]
-pub fn wire_BtcLnSwap_btc_ln_submarine_refund(
+pub fn wire_BtcLnV1Swap_claim(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
 ) {
-    wire_BtcLnSwap_btc_ln_submarine_refund_impl(port_, that, out_address, abs_fee)
+    wire_BtcLnV1Swap_claim_impl(port_, that, out_address, abs_fee)
 }
 
 #[wasm_bindgen]
-pub fn wire_BtcLnSwap_create_reverse_v1(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    mnemonic: String,
-    index: u64,
-    out_amount: u64,
-    network: i32,
-    electrum_url: String,
-    boltz_url: String,
-    pair_hash: String,
-) {
-    wire_BtcLnSwap_create_reverse_v1_impl(
-        port_,
-        mnemonic,
-        index,
-        out_amount,
-        network,
-        electrum_url,
-        boltz_url,
-        pair_hash,
-    )
-}
-
-#[wasm_bindgen]
-pub fn wire_BtcLnSwap_create_submarine_v1(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    mnemonic: String,
-    index: u64,
-    invoice: String,
-    network: i32,
-    electrum_url: String,
-    boltz_url: String,
-    pair_hash: String,
-) {
-    wire_BtcLnSwap_create_submarine_v1_impl(
-        port_,
-        mnemonic,
-        index,
-        invoice,
-        network,
-        electrum_url,
-        boltz_url,
-        pair_hash,
-    )
-}
-
-#[wasm_bindgen]
-pub fn wire_BtcLnSwap_new(
+pub fn wire_BtcLnV1Swap_new(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: String,
     kind: i32,
@@ -403,7 +357,7 @@ pub fn wire_BtcLnSwap_new(
     electrum_url: String,
     boltz_url: String,
 ) {
-    wire_BtcLnSwap_new_impl(
+    wire_BtcLnV1Swap_new_impl(
         port_,
         id,
         kind,
@@ -420,34 +374,7 @@ pub fn wire_BtcLnSwap_new(
 }
 
 #[wasm_bindgen]
-pub fn wire_BtcLnSwap_reverse_v1_claim(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
-    out_address: String,
-    abs_fee: u64,
-) {
-    wire_BtcLnSwap_reverse_v1_claim_impl(port_, that, out_address, abs_fee)
-}
-
-#[wasm_bindgen]
-pub fn wire_BtcLnSwap_tx_size(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
-) {
-    wire_BtcLnSwap_tx_size_impl(port_, that)
-}
-
-#[wasm_bindgen]
-pub fn wire_BoltzError_new(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    kind: String,
-    message: String,
-) {
-    wire_BoltzError_new_impl(port_, kind, message)
-}
-
-#[wasm_bindgen]
-pub fn wire_LbtcLnSwap_create_reverse_v1(
+pub fn wire_BtcLnV1Swap_new_reverse(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
     index: u64,
@@ -457,7 +384,7 @@ pub fn wire_LbtcLnSwap_create_reverse_v1(
     boltz_url: String,
     pair_hash: String,
 ) {
-    wire_LbtcLnSwap_create_reverse_v1_impl(
+    wire_BtcLnV1Swap_new_reverse_impl(
         port_,
         mnemonic,
         index,
@@ -470,7 +397,7 @@ pub fn wire_LbtcLnSwap_create_reverse_v1(
 }
 
 #[wasm_bindgen]
-pub fn wire_LbtcLnSwap_create_submarine_v1(
+pub fn wire_BtcLnV1Swap_new_submarine(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
     index: u64,
@@ -480,7 +407,7 @@ pub fn wire_LbtcLnSwap_create_submarine_v1(
     boltz_url: String,
     pair_hash: String,
 ) {
-    wire_LbtcLnSwap_create_submarine_v1_impl(
+    wire_BtcLnV1Swap_new_submarine_impl(
         port_,
         mnemonic,
         index,
@@ -493,7 +420,44 @@ pub fn wire_LbtcLnSwap_create_submarine_v1(
 }
 
 #[wasm_bindgen]
-pub fn wire_LbtcLnSwap_new(
+pub fn wire_BtcLnV1Swap_refund(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    out_address: String,
+    abs_fee: u64,
+) {
+    wire_BtcLnV1Swap_refund_impl(port_, that, out_address, abs_fee)
+}
+
+#[wasm_bindgen]
+pub fn wire_BtcLnV1Swap_tx_size(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_BtcLnV1Swap_tx_size_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire_BoltzError_new(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    kind: String,
+    message: String,
+) {
+    wire_BoltzError_new_impl(port_, kind, message)
+}
+
+#[wasm_bindgen]
+pub fn wire_LbtcLnV1Swap_claim(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    out_address: String,
+    abs_fee: u64,
+) {
+    wire_LbtcLnV1Swap_claim_impl(port_, that, out_address, abs_fee)
+}
+
+#[wasm_bindgen]
+pub fn wire_LbtcLnV1Swap_new(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: String,
     kind: i32,
@@ -508,7 +472,7 @@ pub fn wire_LbtcLnSwap_new(
     electrum_url: String,
     boltz_url: String,
 ) {
-    wire_LbtcLnSwap_new_impl(
+    wire_LbtcLnV1Swap_new_impl(
         port_,
         id,
         kind,
@@ -526,31 +490,67 @@ pub fn wire_LbtcLnSwap_new(
 }
 
 #[wasm_bindgen]
-pub fn wire_LbtcLnSwap_reverse_v1_claim(
+pub fn wire_LbtcLnV1Swap_new_reverse(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    mnemonic: String,
+    index: u64,
+    out_amount: u64,
+    network: i32,
+    electrum_url: String,
+    boltz_url: String,
+    pair_hash: String,
+) {
+    wire_LbtcLnV1Swap_new_reverse_impl(
+        port_,
+        mnemonic,
+        index,
+        out_amount,
+        network,
+        electrum_url,
+        boltz_url,
+        pair_hash,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_LbtcLnV1Swap_new_submarine(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    mnemonic: String,
+    index: u64,
+    invoice: String,
+    network: i32,
+    electrum_url: String,
+    boltz_url: String,
+    pair_hash: String,
+) {
+    wire_LbtcLnV1Swap_new_submarine_impl(
+        port_,
+        mnemonic,
+        index,
+        invoice,
+        network,
+        electrum_url,
+        boltz_url,
+        pair_hash,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_LbtcLnV1Swap_refund(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
 ) {
-    wire_LbtcLnSwap_reverse_v1_claim_impl(port_, that, out_address, abs_fee)
+    wire_LbtcLnV1Swap_refund_impl(port_, that, out_address, abs_fee)
 }
 
 #[wasm_bindgen]
-pub fn wire_LbtcLnSwap_submarine_v1_refund(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
-    out_address: String,
-    abs_fee: u64,
-) {
-    wire_LbtcLnSwap_submarine_v1_refund_impl(port_, that, out_address, abs_fee)
-}
-
-#[wasm_bindgen]
-pub fn wire_LbtcLnSwap_tx_size(
+pub fn wire_LbtcLnV1Swap_tx_size(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     swap: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
-    wire_LbtcLnSwap_tx_size_impl(port_, swap)
+    wire_LbtcLnV1Swap_tx_size_impl(port_, swap)
 }
 
 #[wasm_bindgen]
