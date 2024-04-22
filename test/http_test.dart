@@ -139,8 +139,10 @@ void main() {
 
   test('SwapStatus to string', () async {
     print(SwapStatus.invoicePaid.toJson());
-    print(SwapStatusResponse(id: 'abc', status: SwapStatus.invoicePaid).toJson());
-    print(SwapStatusResponse.fromJson(jsonDecode('{"id":"abc","status":"invoice.paid"}')));
+    print(
+        SwapStatusResponse(id: 'abc', status: SwapStatus.invoicePaid).toJson());
+    print(SwapStatusResponse.fromJson(
+        jsonDecode('{"id":"abc","status":"invoice.paid"}')));
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {

@@ -13,7 +13,11 @@ part 'swap_status_response.g.dart';
 @freezed
 class SwapStatusResponse with _$SwapStatusResponse {
   const factory SwapStatusResponse(
-      {required String id, required SwapStatus status, String? failureReason, String? error}) = _SwapStatusResponse;
+      {required String id,
+      required SwapStatus status,
+      String? failureReason,
+      String? error}) = _SwapStatusResponse;
 
-  factory SwapStatusResponse.fromJson(Map<String, dynamic> json) => _$SwapStatusResponseFromJson(json);
+  factory SwapStatusResponse.fromJson(Map<String, dynamic> json) =>
+      _$SwapStatusResponseFromJson(json);
 }

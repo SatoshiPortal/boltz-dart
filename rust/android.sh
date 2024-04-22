@@ -1,4 +1,4 @@
-`#!/bin/bash
+#!/bin/bash
 # Setup jniLibs directory
 ROOT="target"
 VERSION=$1
@@ -7,7 +7,7 @@ JNI_DIR=$ROOT/$NAME.$VERSION/jniLibs # final binaries stored here
 
 if [ -d "$JNI_DIR" ]; then rm -r "$JNI_DIR"
 fi
-mkdir -p ./$JNI_DIR
+mkdir -p ./"$JNI_DIR"
 
 # Set up cargo-ndk
 rustup target add \
@@ -17,9 +17,9 @@ rustup target add \
         i686-linux-android
 
 # Build the android libraries in the jniLibs directory
-cargo ndk -o $JNI_DIR \
+cargo ndk -o "$JNI_DIR" \
         -t armeabi-v7a \
         -t arm64-v8a \
         -t x86 \
         -t x86_64 \
-        build --release`
+        build --release

@@ -14,13 +14,12 @@ help: makefile
 
 ## init: Install missing dependencies.
 init:
-	cargo install flutter_rust_bridge_codegen
 	cargo install cargo-ndk
 	@if [ $$(uname) == "Darwin" ] ; then cargo install cargo-lipo ; fi
 ## :
 
 ## all: Compile iOS, Android & Linux binaries
-all: init jnilib zip
+all: init unit-test jniLibs zip
  
 linux:
 	@echo "[Creating linux binary ...] $@"
@@ -29,7 +28,7 @@ linux:
 	docker run --platform linux/x86_64 --name bwcbuilder01 -v $(shell pwd):/boltz-dart bwcbuilder ; docker stop bwcbuilder01 ; docker rm bwcbuilder01
 	@echo "[Done ✅]"
 
-jnilib:
+jniLibs:
 	@echo "[Creating android jniLibs ...] $@"
 	sh android.sh $(VERSION)
 	@echo "[Done ✅]"
@@ -43,7 +42,11 @@ zip:
 	@echo "[COMPRESSING BINARIES TO FLUTTER PACKAGE ...] $@"
 	sh compress.sh $(VERSION)
 	@echo "[Done ✅]"
-
+	
+unit-test:
+	@echo "[Creating unit-test binaries ...] $@"
+	sh unit-test.sh $(VERSION)
+	@echo "[Done ✅]"
 # copy-build:
 # 	@echo "[COPYING BINARIES TO FLUTTER PACKAGE ...] $@"
 # 	sh copy.sh

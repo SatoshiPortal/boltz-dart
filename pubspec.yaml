@@ -11,8 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  flutter_rust_bridge: 2.0.0-dev.28
   ffi: ^2.0.1
-  flutter_rust_bridge: ^1.82.2
   meta: ^1.8.0
   uuid: ^4.1.0
   dio: ^5.4.0
@@ -21,6 +21,8 @@ dependencies:
   archive: ^3.4.10
   http: ^1.2.0
   web_socket_channel: ^2.1.0
+  rust_lib_boltz_dart:
+    path: rust_builder
 
 dev_dependencies:
   flutter_test:
@@ -32,7 +34,8 @@ dev_dependencies:
   freezed: ^2.4.6
   json_serializable: ^6.7.1
   crypto: ^3.0.3
-  bdk_flutter: 0.29.2
+  integration_test:
+    sdk: flutter
 
 flutter:
   assets:

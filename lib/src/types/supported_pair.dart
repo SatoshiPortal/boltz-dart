@@ -4,7 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'supported_pair.freezed.dart';
 part 'supported_pair.g.dart';
 
-SupportedPair supportedPairFromJson(String str) => SupportedPair.fromJson(json.decode(str));
+SupportedPair supportedPairFromJson(String str) =>
+    SupportedPair.fromJson(json.decode(str));
 
 String supportedPairToJson(SupportedPair data) => json.encode(data.toJson());
 
@@ -18,7 +19,8 @@ class SupportedPair with _$SupportedPair {
     required Fees fees,
   }) = _SupportedPair;
 
-  factory SupportedPair.fromJson(Map<String, dynamic> json) => _$SupportedPairFromJson(json);
+  factory SupportedPair.fromJson(Map<String, dynamic> json) =>
+      _$SupportedPairFromJson(json);
 }
 
 @freezed
@@ -39,7 +41,8 @@ class MinerFees with _$MinerFees {
     required EAsset quoteAsset,
   }) = _MinerFees;
 
-  factory MinerFees.fromJson(Map<String, dynamic> json) => _$MinerFeesFromJson(json);
+  factory MinerFees.fromJson(Map<String, dynamic> json) =>
+      _$MinerFeesFromJson(json);
 }
 
 @freezed
@@ -59,7 +62,8 @@ class Reverse with _$Reverse {
     required int lockup,
   }) = _Reverse;
 
-  factory Reverse.fromJson(Map<String, dynamic> json) => _$ReverseFromJson(json);
+  factory Reverse.fromJson(Map<String, dynamic> json) =>
+      _$ReverseFromJson(json);
 }
 
 @freezed
@@ -80,5 +84,6 @@ class MaximalZeroConf with _$MaximalZeroConf {
     required int quoteAsset,
   }) = _MaximalZeroConf;
 
-  factory MaximalZeroConf.fromJson(Map<String, dynamic> json) => _$MaximalZeroConfFromJson(json);
+  factory MaximalZeroConf.fromJson(Map<String, dynamic> json) =>
+      _$MaximalZeroConfFromJson(json);
 }

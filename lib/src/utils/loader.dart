@@ -2,10 +2,12 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:boltz_dart/src/generated/frb_generated.io.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:http/http.dart' as http;
 
-import '../generated/bindings.dart';
+import '../generated/frb_generated.dart';
 
 const name = "libboltzclient";
 
@@ -33,7 +35,7 @@ class Dylib {
 
   static Future<void> downloadUnitTestDylib(String currentDirectory) async {
     await _loadJsonAsset();
-    final assetsDir = '$currentDirectory/build/unit_test_assets';
+    final assetsDir = '$currentDirectory/build/unit_test_assets/$libName';
     if (!(await Directory('$assetsDir/$libName').exists())) {
       try {
         final response = await http.get(Uri.parse(remoteUrl));
@@ -71,24 +73,36 @@ class Dylib {
     }
   }
 
-  static DynamicLibrary getDylib() {
+  static ExternalLibrary getDylib() {
     if (Platform.environment['FLUTTER_TEST'] == 'true') {
       try {
-        return DynamicLibrary.open(_getUniTestDylibDir(Directory.current));
+        return ExternalLibrary.open(_getUniTestDylibDir(Directory.current));
       } catch (e) {
         throw Exception("Unable to open the unit test dylib!");
       }
     }
     if (Platform.isIOS || Platform.isMacOS) {
-      return DynamicLibrary.executable();
+      return ExternalLibrary.open("$name.dylib");
     } else if (Platform.isAndroid) {
-      return DynamicLibrary.open("$name.so");
+      return ExternalLibrary.open("$name.so");
     } else if (Platform.isLinux) {
-      return DynamicLibrary.open("$name.so");
+      return ExternalLibrary.open("$name.so");
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");
     }
   }
 }
 
-final ffi = BoltzDartImpl(Dylib.getDylib());
+class LibBoltz {
+  static String get libName => "libboltzclient.so";
+
+  static Future<void> init() async {
+    try {
+      if (!BoltzCore.instance.initialized) {
+        await BoltzCore.init(externalLibrary: Dylib.getDylib());
+      }
+    } catch (e) {
+      throw Exception("Failed to initialize boltz-client");
+    }
+  }
+}
