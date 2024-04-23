@@ -45,15 +45,6 @@ void main() {
     expect(status.asString, 'Invoice failed to pay');
   });
 
-  test('KeyPair Test', () async {
-    final key = KeyPair(
-      mnemonic: mnemonic,
-      network: Chain.bitcoinTestnet,
-      index: 1,
-      swapType: SwapType.reverse,
-    );
-    print(key.publicKey);
-  });
   test('FEE & LIMITS', () async {
     const boltzUrl = 'https://api.testnet.boltz.exchange';
     // final amount = 100000;

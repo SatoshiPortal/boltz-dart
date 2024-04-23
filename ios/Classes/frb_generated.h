@@ -102,119 +102,119 @@ typedef struct wire_cst_decoded_invoice {
   uint64_t cltv_exp_delta;
 } wire_cst_decoded_invoice;
 
-void frbgen_boltz_dart_wire_BtcLnV1Swap_claim(int64_t port_,
-                                              struct wire_cst_btc_ln_v_1_swap *that,
-                                              struct wire_cst_list_prim_u_8_strict *out_address,
-                                              uint64_t abs_fee);
+void frbgen_boltz_dart_wire_btc_ln_v_1_swap_claim(int64_t port_,
+                                                  struct wire_cst_btc_ln_v_1_swap *that,
+                                                  struct wire_cst_list_prim_u_8_strict *out_address,
+                                                  uint64_t abs_fee);
 
-void frbgen_boltz_dart_wire_BtcLnV1Swap_new(int64_t port_,
-                                            struct wire_cst_list_prim_u_8_strict *id,
-                                            int32_t kind,
-                                            int32_t network,
-                                            struct wire_cst_key_pair *keys,
-                                            struct wire_cst_pre_image *preimage,
-                                            struct wire_cst_list_prim_u_8_strict *redeem_script,
-                                            struct wire_cst_list_prim_u_8_strict *invoice,
-                                            struct wire_cst_list_prim_u_8_strict *script_address,
-                                            uint64_t out_amount,
-                                            struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                            struct wire_cst_list_prim_u_8_strict *boltz_url);
+void frbgen_boltz_dart_wire_btc_ln_v_1_swap_new(int64_t port_,
+                                                struct wire_cst_list_prim_u_8_strict *id,
+                                                int32_t kind,
+                                                int32_t network,
+                                                struct wire_cst_key_pair *keys,
+                                                struct wire_cst_pre_image *preimage,
+                                                struct wire_cst_list_prim_u_8_strict *redeem_script,
+                                                struct wire_cst_list_prim_u_8_strict *invoice,
+                                                struct wire_cst_list_prim_u_8_strict *script_address,
+                                                uint64_t out_amount,
+                                                struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                struct wire_cst_list_prim_u_8_strict *boltz_url);
 
-void frbgen_boltz_dart_wire_BtcLnV1Swap_new_reverse(int64_t port_,
-                                                    struct wire_cst_list_prim_u_8_strict *mnemonic,
-                                                    uint64_t index,
-                                                    uint64_t out_amount,
-                                                    int32_t network,
-                                                    struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                    struct wire_cst_list_prim_u_8_strict *boltz_url,
-                                                    struct wire_cst_list_prim_u_8_strict *pair_hash);
+void frbgen_boltz_dart_wire_btc_ln_v_1_swap_new_reverse(int64_t port_,
+                                                        struct wire_cst_list_prim_u_8_strict *mnemonic,
+                                                        uint64_t index,
+                                                        uint64_t out_amount,
+                                                        int32_t network,
+                                                        struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                        struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                        struct wire_cst_list_prim_u_8_strict *pair_hash);
 
-void frbgen_boltz_dart_wire_BtcLnV1Swap_new_submarine(int64_t port_,
-                                                      struct wire_cst_list_prim_u_8_strict *mnemonic,
-                                                      uint64_t index,
-                                                      struct wire_cst_list_prim_u_8_strict *invoice,
-                                                      int32_t network,
-                                                      struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                      struct wire_cst_list_prim_u_8_strict *boltz_url,
-                                                      struct wire_cst_list_prim_u_8_strict *pair_hash);
+void frbgen_boltz_dart_wire_btc_ln_v_1_swap_new_submarine(int64_t port_,
+                                                          struct wire_cst_list_prim_u_8_strict *mnemonic,
+                                                          uint64_t index,
+                                                          struct wire_cst_list_prim_u_8_strict *invoice,
+                                                          int32_t network,
+                                                          struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                          struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                          struct wire_cst_list_prim_u_8_strict *pair_hash);
 
-void frbgen_boltz_dart_wire_BtcLnV1Swap_refund(int64_t port_,
-                                               struct wire_cst_btc_ln_v_1_swap *that,
-                                               struct wire_cst_list_prim_u_8_strict *out_address,
-                                               uint64_t abs_fee);
+void frbgen_boltz_dart_wire_btc_ln_v_1_swap_refund(int64_t port_,
+                                                   struct wire_cst_btc_ln_v_1_swap *that,
+                                                   struct wire_cst_list_prim_u_8_strict *out_address,
+                                                   uint64_t abs_fee);
 
-void frbgen_boltz_dart_wire_BtcLnV1Swap_tx_size(int64_t port_,
-                                                struct wire_cst_btc_ln_v_1_swap *that);
+void frbgen_boltz_dart_wire_btc_ln_v_1_swap_tx_size(int64_t port_,
+                                                    struct wire_cst_btc_ln_v_1_swap *that);
 
-void frbgen_boltz_dart_wire_BoltzError_new(int64_t port_,
-                                           struct wire_cst_list_prim_u_8_strict *kind,
-                                           struct wire_cst_list_prim_u_8_strict *message);
+void frbgen_boltz_dart_wire_boltz_error_new(int64_t port_,
+                                            struct wire_cst_list_prim_u_8_strict *kind,
+                                            struct wire_cst_list_prim_u_8_strict *message);
 
-void frbgen_boltz_dart_wire_LbtcLnV1Swap_claim(int64_t port_,
-                                               struct wire_cst_lbtc_ln_v_1_swap *that,
-                                               struct wire_cst_list_prim_u_8_strict *out_address,
-                                               uint64_t abs_fee);
+void frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_claim(int64_t port_,
+                                                   struct wire_cst_lbtc_ln_v_1_swap *that,
+                                                   struct wire_cst_list_prim_u_8_strict *out_address,
+                                                   uint64_t abs_fee);
 
-void frbgen_boltz_dart_wire_LbtcLnV1Swap_new(int64_t port_,
-                                             struct wire_cst_list_prim_u_8_strict *id,
-                                             int32_t kind,
-                                             int32_t network,
-                                             struct wire_cst_key_pair *keys,
-                                             struct wire_cst_pre_image *preimage,
-                                             struct wire_cst_list_prim_u_8_strict *redeem_script,
-                                             struct wire_cst_list_prim_u_8_strict *invoice,
-                                             uint64_t out_amount,
-                                             struct wire_cst_list_prim_u_8_strict *out_address,
-                                             struct wire_cst_list_prim_u_8_strict *blinding_key,
-                                             struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                             struct wire_cst_list_prim_u_8_strict *boltz_url);
+void frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new(int64_t port_,
+                                                 struct wire_cst_list_prim_u_8_strict *id,
+                                                 int32_t kind,
+                                                 int32_t network,
+                                                 struct wire_cst_key_pair *keys,
+                                                 struct wire_cst_pre_image *preimage,
+                                                 struct wire_cst_list_prim_u_8_strict *redeem_script,
+                                                 struct wire_cst_list_prim_u_8_strict *invoice,
+                                                 uint64_t out_amount,
+                                                 struct wire_cst_list_prim_u_8_strict *out_address,
+                                                 struct wire_cst_list_prim_u_8_strict *blinding_key,
+                                                 struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                 struct wire_cst_list_prim_u_8_strict *boltz_url);
 
-void frbgen_boltz_dart_wire_LbtcLnV1Swap_new_reverse(int64_t port_,
-                                                     struct wire_cst_list_prim_u_8_strict *mnemonic,
-                                                     uint64_t index,
-                                                     uint64_t out_amount,
-                                                     int32_t network,
-                                                     struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                     struct wire_cst_list_prim_u_8_strict *boltz_url,
-                                                     struct wire_cst_list_prim_u_8_strict *pair_hash);
+void frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new_reverse(int64_t port_,
+                                                         struct wire_cst_list_prim_u_8_strict *mnemonic,
+                                                         uint64_t index,
+                                                         uint64_t out_amount,
+                                                         int32_t network,
+                                                         struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                         struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                         struct wire_cst_list_prim_u_8_strict *pair_hash);
 
-void frbgen_boltz_dart_wire_LbtcLnV1Swap_new_submarine(int64_t port_,
-                                                       struct wire_cst_list_prim_u_8_strict *mnemonic,
-                                                       uint64_t index,
-                                                       struct wire_cst_list_prim_u_8_strict *invoice,
-                                                       int32_t network,
-                                                       struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                       struct wire_cst_list_prim_u_8_strict *boltz_url,
-                                                       struct wire_cst_list_prim_u_8_strict *pair_hash);
+void frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new_submarine(int64_t port_,
+                                                           struct wire_cst_list_prim_u_8_strict *mnemonic,
+                                                           uint64_t index,
+                                                           struct wire_cst_list_prim_u_8_strict *invoice,
+                                                           int32_t network,
+                                                           struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                           struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                           struct wire_cst_list_prim_u_8_strict *pair_hash);
 
-void frbgen_boltz_dart_wire_LbtcLnV1Swap_refund(int64_t port_,
-                                                struct wire_cst_lbtc_ln_v_1_swap *that,
-                                                struct wire_cst_list_prim_u_8_strict *out_address,
-                                                uint64_t abs_fee);
+void frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_refund(int64_t port_,
+                                                    struct wire_cst_lbtc_ln_v_1_swap *that,
+                                                    struct wire_cst_list_prim_u_8_strict *out_address,
+                                                    uint64_t abs_fee);
 
-void frbgen_boltz_dart_wire_LbtcLnV1Swap_tx_size(int64_t port_,
-                                                 struct wire_cst_lbtc_ln_v_1_swap *swap);
+void frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_tx_size(int64_t port_,
+                                                     struct wire_cst_lbtc_ln_v_1_swap *swap);
 
-void frbgen_boltz_dart_wire_AllFees_fetch(int64_t port_,
-                                          struct wire_cst_list_prim_u_8_strict *boltz_url);
+void frbgen_boltz_dart_wire_all_fees_fetch(int64_t port_,
+                                           struct wire_cst_list_prim_u_8_strict *boltz_url);
 
-void frbgen_boltz_dart_wire_DecodedInvoice_from_string(int64_t port_,
-                                                       struct wire_cst_list_prim_u_8_strict *s);
+void frbgen_boltz_dart_wire_decoded_invoice_from_string(int64_t port_,
+                                                        struct wire_cst_list_prim_u_8_strict *s);
 
-void frbgen_boltz_dart_wire_KeyPair_generate(int64_t port_,
-                                             struct wire_cst_list_prim_u_8_strict *mnemonic,
-                                             int32_t network,
-                                             uint64_t index,
-                                             int32_t swap_type);
+void frbgen_boltz_dart_wire_key_pair_generate(int64_t port_,
+                                              struct wire_cst_list_prim_u_8_strict *mnemonic,
+                                              int32_t network,
+                                              uint64_t index,
+                                              int32_t swap_type);
 
-WireSyncRust2DartDco frbgen_boltz_dart_wire_KeyPair_new(struct wire_cst_list_prim_u_8_strict *secret_key,
-                                                        struct wire_cst_list_prim_u_8_strict *public_key);
+WireSyncRust2DartDco frbgen_boltz_dart_wire_key_pair_new(struct wire_cst_list_prim_u_8_strict *secret_key,
+                                                         struct wire_cst_list_prim_u_8_strict *public_key);
 
-void frbgen_boltz_dart_wire_PreImage_generate(int64_t port_);
+void frbgen_boltz_dart_wire_pre_image_generate(int64_t port_);
 
-WireSyncRust2DartDco frbgen_boltz_dart_wire_PreImage_new(struct wire_cst_list_prim_u_8_strict *value,
-                                                         struct wire_cst_list_prim_u_8_strict *sha256,
-                                                         struct wire_cst_list_prim_u_8_strict *hash160);
+WireSyncRust2DartDco frbgen_boltz_dart_wire_pre_image_new(struct wire_cst_list_prim_u_8_strict *value,
+                                                          struct wire_cst_list_prim_u_8_strict *sha256,
+                                                          struct wire_cst_list_prim_u_8_strict *hash160);
 
 struct wire_cst_btc_ln_v_1_swap *frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_v_1_swap(void);
 
@@ -232,25 +232,25 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_v_1_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_box_autoadd_pre_image);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_list_prim_u_8_strict);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_AllFees_fetch);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_BoltzError_new);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_BtcLnV1Swap_claim);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_BtcLnV1Swap_new);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_BtcLnV1Swap_new_reverse);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_BtcLnV1Swap_new_submarine);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_BtcLnV1Swap_refund);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_BtcLnV1Swap_tx_size);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_DecodedInvoice_from_string);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_KeyPair_generate);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_KeyPair_new);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_LbtcLnV1Swap_claim);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_LbtcLnV1Swap_new);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_LbtcLnV1Swap_new_reverse);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_LbtcLnV1Swap_new_submarine);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_LbtcLnV1Swap_refund);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_LbtcLnV1Swap_tx_size);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_PreImage_generate);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_PreImage_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_all_fees_fetch);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_boltz_error_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_1_swap_claim);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_1_swap_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_1_swap_new_reverse);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_1_swap_new_submarine);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_1_swap_refund);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_1_swap_tx_size);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_decoded_invoice_from_string);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_generate);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_claim);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new_reverse);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new_submarine);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_refund);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_tx_size);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_pre_image_generate);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_pre_image_new);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);
     return dummy_var;
 }
