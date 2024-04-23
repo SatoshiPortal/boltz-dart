@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:boltz_dart/src/generated/api/types.dart';
+// import 'package:boltz_dart/src/generated/api/types.dart';
 import 'package:boltz_dart/src/utils/loader.dart';
-import 'generated/frb_generated.dart' as bridge;
+// import 'generated/frb_generated.dart' as bridge;
 
 // m/84'/0'/0'/<0;1>/index (segwit wallet; address index handled by bdk)
 // m/84'/0'/21'/<0;1>/index (sub swap wallet; address index handled by client)
