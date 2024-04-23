@@ -3,6 +3,31 @@
 The top level directory of this project is a dart/flutter pub library.
 
 The `rust` folder containers the core code which uses the `boltz-rust` crate internally to expose an abstracted API to manage boltz swaps.
+## Usage
+Init the library in your apps main()
+
+Eg:
+```dart
+
+Future main({bool fromTest = false}) async {
+  if (!fromTest) WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(isOptional: true);
+  Bloc.observer = BBlocObserver();
+  // await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+
+  await setupLocator(fromTest: fromTest);
+  final delegate = await Localise.getDelegate();
+  LwkCore.init();
+  BoltzCore.init();
+  runApp(
+    LocalizedApp(
+      delegate,
+      const BullBitcoinWalletApp(),
+    ),
+  );
+}
+```
 
 ## Dependencies
 Docker is required for linux builds.
@@ -117,22 +142,18 @@ Transaction(Sweep):
 
 The main classes and their methods are:
 
-- [ ] BtcLnSwap
+- [x] BtcLnV1Swap
   - [x] newSubmarine
   - [x] newReverse
-  - [x] paymentDetails
-  - [x] status
   - [x] claim
-  - [ ] refund
-- [ ] LbtcLnSwap
+  - [x] refund
+- [x] LbtcLnV1Swap
   - [x] newSubmarine
   - [x] newReverse
-  - [x] paymentDetails
-  - [x] status
   - [x] claim
-  - [ ] refund
+  - [x] refund
 - [ ] BtcLbtcSwap
-
+- [x] BoltzApi
 ## Dependencies
 
 To stay in sync with `boltz-rust` following updates, use: 
