@@ -576,13 +576,21 @@ class BoltzCoreWire implements BaseWire {
   void wire_DecodedInvoice_from_string(NativePortType port_, String s) =>
       wasmModule.wire_DecodedInvoice_from_string(port_, s);
 
-  dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_KeyPair_new(
-              String mnemonic, int network, Object index, int swap_type) =>
-          wasmModule.wire_KeyPair_new(mnemonic, network, index, swap_type);
+  void wire_KeyPair_generate(NativePortType port_, String mnemonic, int network,
+          Object index, int swap_type) =>
+      wasmModule.wire_KeyPair_generate(
+          port_, mnemonic, network, index, swap_type);
 
   dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_PreImage_new() => wasmModule.wire_PreImage_new();
+      wire_KeyPair_new(String secret_key, String public_key) =>
+          wasmModule.wire_KeyPair_new(secret_key, public_key);
+
+  void wire_PreImage_generate(NativePortType port_) =>
+      wasmModule.wire_PreImage_generate(port_);
+
+  dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire_PreImage_new(String value, String sha256, String hash160) =>
+          wasmModule.wire_PreImage_new(value, sha256, hash160);
 }
 
 @JS('wasm_bindgen')
@@ -691,10 +699,14 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external void wire_DecodedInvoice_from_string(NativePortType port_, String s);
 
-  external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_KeyPair_new(
-          String mnemonic, int network, Object index, int swap_type);
+  external void wire_KeyPair_generate(NativePortType port_, String mnemonic,
+      int network, Object index, int swap_type);
 
   external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_PreImage_new();
+      wire_KeyPair_new(String secret_key, String public_key);
+
+  external void wire_PreImage_generate(NativePortType port_);
+
+  external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire_PreImage_new(String value, String sha256, String hash160);
 }

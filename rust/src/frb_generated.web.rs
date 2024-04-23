@@ -570,16 +570,34 @@ pub fn wire_DecodedInvoice_from_string(
 }
 
 #[wasm_bindgen]
-pub fn wire_KeyPair_new(
+pub fn wire_KeyPair_generate(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
     network: i32,
     index: u64,
     swap_type: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_KeyPair_new_impl(mnemonic, network, index, swap_type)
+) {
+    wire_KeyPair_generate_impl(port_, mnemonic, network, index, swap_type)
 }
 
 #[wasm_bindgen]
-pub fn wire_PreImage_new() -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_PreImage_new_impl()
+pub fn wire_KeyPair_new(
+    secret_key: String,
+    public_key: String,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_KeyPair_new_impl(secret_key, public_key)
+}
+
+#[wasm_bindgen]
+pub fn wire_PreImage_generate(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    wire_PreImage_generate_impl(port_)
+}
+
+#[wasm_bindgen]
+pub fn wire_PreImage_new(
+    value: String,
+    sha256: String,
+    hash160: String,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_PreImage_new_impl(value, sha256, hash160)
 }

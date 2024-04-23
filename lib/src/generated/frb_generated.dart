@@ -171,14 +171,23 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<DecodedInvoice> decodedInvoiceFromString(
       {required String s, dynamic hint});
 
-  KeyPair keyPairNew(
+  Future<KeyPair> keyPairGenerate(
       {required String mnemonic,
       required Chain network,
       required int index,
       required SwapType swapType,
       dynamic hint});
 
-  PreImage preImageNew({dynamic hint});
+  KeyPair keyPairNew(
+      {required String secretKey, required String publicKey, dynamic hint});
+
+  Future<PreImage> preImageGenerate({dynamic hint});
+
+  PreImage preImageNew(
+      {required String value,
+      required String sha256,
+      required String hash160,
+      dynamic hint});
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -785,26 +794,51 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  KeyPair keyPairNew(
+  Future<KeyPair> keyPairGenerate(
       {required String mnemonic,
       required Chain network,
       required int index,
       required SwapType swapType,
       dynamic hint}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
         var arg1 = cst_encode_chain(network);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_swap_type(swapType);
-        return wire.wire_KeyPair_new(arg0, arg1, arg2, arg3);
+        return wire.wire_KeyPair_generate(port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_key_pair,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kKeyPairNewConstMeta,
+      constMeta: kKeyPairGenerateConstMeta,
       argValues: [mnemonic, network, index, swapType],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kKeyPairGenerateConstMeta => const TaskConstMeta(
+        debugName: "KeyPair_generate",
+        argNames: ["mnemonic", "network", "index", "swapType"],
+      );
+
+  @override
+  KeyPair keyPairNew(
+      {required String secretKey, required String publicKey, dynamic hint}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_String(secretKey);
+        var arg1 = cst_encode_String(publicKey);
+        return wire.wire_KeyPair_new(arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_key_pair,
+        decodeErrorData: null,
+      ),
+      constMeta: kKeyPairNewConstMeta,
+      argValues: [secretKey, publicKey],
       apiImpl: this,
       hint: hint,
     ));
@@ -812,21 +846,50 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kKeyPairNewConstMeta => const TaskConstMeta(
         debugName: "KeyPair_new",
-        argNames: ["mnemonic", "network", "index", "swapType"],
+        argNames: ["secretKey", "publicKey"],
       );
 
   @override
-  PreImage preImageNew({dynamic hint}) {
+  Future<PreImage> preImageGenerate({dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        return wire.wire_PreImage_generate(port_);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_pre_image,
+        decodeErrorData: null,
+      ),
+      constMeta: kPreImageGenerateConstMeta,
+      argValues: [],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kPreImageGenerateConstMeta => const TaskConstMeta(
+        debugName: "PreImage_generate",
+        argNames: [],
+      );
+
+  @override
+  PreImage preImageNew(
+      {required String value,
+      required String sha256,
+      required String hash160,
+      dynamic hint}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
-        return wire.wire_PreImage_new();
+        var arg0 = cst_encode_String(value);
+        var arg1 = cst_encode_String(sha256);
+        var arg2 = cst_encode_String(hash160);
+        return wire.wire_PreImage_new(arg0, arg1, arg2);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_pre_image,
         decodeErrorData: null,
       ),
       constMeta: kPreImageNewConstMeta,
-      argValues: [],
+      argValues: [value, sha256, hash160],
       apiImpl: this,
       hint: hint,
     ));
@@ -834,7 +897,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kPreImageNewConstMeta => const TaskConstMeta(
         debugName: "PreImage_new",
-        argNames: [],
+        argNames: ["value", "sha256", "hash160"],
       );
 
   @protected

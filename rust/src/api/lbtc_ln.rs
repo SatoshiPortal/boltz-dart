@@ -58,7 +58,7 @@ impl LbtcLnV1Swap {
         pair_hash: String,
     ) -> Result<LbtcLnV1Swap, BoltzError> {
         let swap_type = SwapType::Submarine;
-        let refund_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
+        let refund_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };
@@ -134,7 +134,7 @@ impl LbtcLnV1Swap {
         pair_hash: String,
     ) -> Result<LbtcLnV1Swap, BoltzError> {
         let swap_type = SwapType::Reverse;
-        let claim_keypair = match KeyPair::new(mnemonic, network.into(), index, swap_type) {
+        let claim_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };

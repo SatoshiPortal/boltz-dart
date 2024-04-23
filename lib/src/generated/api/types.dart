@@ -56,18 +56,25 @@ class KeyPair with _$KeyPair {
     required String secretKey,
     required String publicKey,
   }) = _KeyPair;
-  factory KeyPair(
+  static Future<KeyPair> generate(
           {required String mnemonic,
           required Chain network,
           required int index,
           required SwapType swapType,
           dynamic hint}) =>
-      BoltzCore.instance.api.keyPairNew(
+      BoltzCore.instance.api.keyPairGenerate(
           mnemonic: mnemonic,
           network: network,
           index: index,
           swapType: swapType,
           hint: hint);
+
+  factory KeyPair(
+          {required String secretKey,
+          required String publicKey,
+          dynamic hint}) =>
+      BoltzCore.instance.api
+          .keyPairNew(secretKey: secretKey, publicKey: publicKey, hint: hint);
 }
 
 @freezed
@@ -86,8 +93,16 @@ class PreImage with _$PreImage {
     required String sha256,
     required String hash160,
   }) = _PreImage;
-  factory PreImage({dynamic hint}) =>
-      BoltzCore.instance.api.preImageNew(hint: hint);
+  static Future<PreImage> generate({dynamic hint}) =>
+      BoltzCore.instance.api.preImageGenerate(hint: hint);
+
+  factory PreImage(
+          {required String value,
+          required String sha256,
+          required String hash160,
+          dynamic hint}) =>
+      BoltzCore.instance.api.preImageNew(
+          value: value, sha256: sha256, hash160: hash160, hint: hint);
 }
 
 @freezed

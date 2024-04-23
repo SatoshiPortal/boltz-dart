@@ -509,11 +509,40 @@ fn wire_DecodedInvoice_from_string_impl(
         },
     )
 }
-fn wire_KeyPair_new_impl(
+fn wire_KeyPair_generate_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
     index: impl CstDecode<u64>,
     swap_type: impl CstDecode<crate::api::types::SwapType>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "KeyPair_generate",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_mnemonic = mnemonic.cst_decode();
+            let api_network = network.cst_decode();
+            let api_index = index.cst_decode();
+            let api_swap_type = swap_type.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::types::KeyPair::generate(
+                        api_mnemonic,
+                        api_network,
+                        api_index,
+                        api_swap_type,
+                    )
+                })())
+            }
+        },
+    )
+}
+fn wire_KeyPair_new_impl(
+    secret_key: impl CstDecode<String>,
+    public_key: impl CstDecode<String>,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -522,17 +551,38 @@ fn wire_KeyPair_new_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
         },
         move || {
-            let api_mnemonic = mnemonic.cst_decode();
-            let api_network = network.cst_decode();
-            let api_index = index.cst_decode();
-            let api_swap_type = swap_type.cst_decode();
+            let api_secret_key = secret_key.cst_decode();
+            let api_public_key = public_key.cst_decode();
             transform_result_dco((move || {
-                crate::api::types::KeyPair::new(api_mnemonic, api_network, api_index, api_swap_type)
+                Result::<_, ()>::Ok(crate::api::types::KeyPair::new(
+                    api_secret_key,
+                    api_public_key,
+                ))
             })())
         },
     )
 }
-fn wire_PreImage_new_impl() -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+fn wire_PreImage_generate_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "PreImage_generate",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            move |context| {
+                transform_result_dco((move || {
+                    Result::<_, ()>::Ok(crate::api::types::PreImage::generate())
+                })())
+            }
+        },
+    )
+}
+fn wire_PreImage_new_impl(
+    value: impl CstDecode<String>,
+    sha256: impl CstDecode<String>,
+    hash160: impl CstDecode<String>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "PreImage_new",
@@ -540,8 +590,15 @@ fn wire_PreImage_new_impl() -> flutter_rust_bridge::for_generated::WireSyncRust2
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
         },
         move || {
+            let api_value = value.cst_decode();
+            let api_sha256 = sha256.cst_decode();
+            let api_hash160 = hash160.cst_decode();
             transform_result_dco((move || {
-                Result::<_, ()>::Ok(crate::api::types::PreImage::new())
+                Result::<_, ()>::Ok(crate::api::types::PreImage::new(
+                    api_value,
+                    api_sha256,
+                    api_hash160,
+                ))
             })())
         },
     )

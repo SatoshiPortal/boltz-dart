@@ -583,19 +583,36 @@ pub extern "C" fn frbgen_boltz_dart_wire_DecodedInvoice_from_string(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_KeyPair_new(
+pub extern "C" fn frbgen_boltz_dart_wire_KeyPair_generate(
+    port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     network: i32,
     index: u64,
     swap_type: i32,
+) {
+    wire_KeyPair_generate_impl(port_, mnemonic, network, index, swap_type)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_KeyPair_new(
+    secret_key: *mut wire_cst_list_prim_u_8_strict,
+    public_key: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_KeyPair_new_impl(mnemonic, network, index, swap_type)
+    wire_KeyPair_new_impl(secret_key, public_key)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_PreImage_generate(port_: i64) {
+    wire_PreImage_generate_impl(port_)
 }
 
 #[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_PreImage_new(
+    value: *mut wire_cst_list_prim_u_8_strict,
+    sha256: *mut wire_cst_list_prim_u_8_strict,
+    hash160: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_PreImage_new_impl()
+    wire_PreImage_new_impl(value, sha256, hash160)
 }
 
 #[no_mangle]

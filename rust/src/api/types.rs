@@ -67,7 +67,14 @@ impl Into<Keypair> for KeyPair {
 
 impl KeyPair {
     #[frb(sync)]
-    pub fn new(
+    pub fn new(secret_key: String, public_key: String)->Self{
+        KeyPair{
+            secret_key,
+            public_key
+        }
+    }
+
+    pub fn generate(
         mnemonic: String,
         network: Chain,
         index: u64,
@@ -119,7 +126,14 @@ impl TryInto<Preimage> for PreImage {
 
 impl PreImage {
     #[frb(sync)]
-    pub fn new() -> Self {
+    pub fn new(value: String, sha256: String, hash160: String)->Self{
+        PreImage{
+            value,
+            sha256,
+            hash160
+        }
+    }
+    pub fn generate() -> Self {
         let preimage = Preimage::new();
         PreImage {
             value: preimage.to_string().unwrap(),

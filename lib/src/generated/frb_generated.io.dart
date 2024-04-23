@@ -1015,13 +1015,15 @@ class BoltzCoreWire implements BaseWire {
       _wire_DecodedInvoice_from_stringPtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
-  WireSyncRust2DartDco wire_KeyPair_new(
+  void wire_KeyPair_generate(
+    int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
     int network,
     int index,
     int swap_type,
   ) {
-    return _wire_KeyPair_new(
+    return _wire_KeyPair_generate(
+      port_,
       mnemonic,
       network,
       index,
@@ -1029,26 +1031,76 @@ class BoltzCoreWire implements BaseWire {
     );
   }
 
-  late final _wire_KeyPair_newPtr = _lookup<
+  late final _wire_KeyPair_generatePtr = _lookup<
       ffi.NativeFunction<
-          WireSyncRust2DartDco Function(
+          ffi.Void Function(
+              ffi.Int64,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Int32,
               ffi.Uint64,
-              ffi.Int32)>>('frbgen_boltz_dart_wire_KeyPair_new');
-  late final _wire_KeyPair_new = _wire_KeyPair_newPtr.asFunction<
-      WireSyncRust2DartDco Function(
-          ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, int, int)>();
+              ffi.Int32)>>('frbgen_boltz_dart_wire_KeyPair_generate');
+  late final _wire_KeyPair_generate = _wire_KeyPair_generatePtr.asFunction<
+      void Function(
+          int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, int, int)>();
 
-  WireSyncRust2DartDco wire_PreImage_new() {
-    return _wire_PreImage_new();
+  WireSyncRust2DartDco wire_KeyPair_new(
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> secret_key,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> public_key,
+  ) {
+    return _wire_KeyPair_new(
+      secret_key,
+      public_key,
+    );
   }
 
-  late final _wire_PreImage_newPtr =
-      _lookup<ffi.NativeFunction<WireSyncRust2DartDco Function()>>(
-          'frbgen_boltz_dart_wire_PreImage_new');
-  late final _wire_PreImage_new =
-      _wire_PreImage_newPtr.asFunction<WireSyncRust2DartDco Function()>();
+  late final _wire_KeyPair_newPtr = _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_KeyPair_new');
+  late final _wire_KeyPair_new = _wire_KeyPair_newPtr.asFunction<
+      WireSyncRust2DartDco Function(ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  void wire_PreImage_generate(
+    int port_,
+  ) {
+    return _wire_PreImage_generate(
+      port_,
+    );
+  }
+
+  late final _wire_PreImage_generatePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'frbgen_boltz_dart_wire_PreImage_generate');
+  late final _wire_PreImage_generate =
+      _wire_PreImage_generatePtr.asFunction<void Function(int)>();
+
+  WireSyncRust2DartDco wire_PreImage_new(
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> value,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> sha256,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> hash160,
+  ) {
+    return _wire_PreImage_new(
+      value,
+      sha256,
+      hash160,
+    );
+  }
+
+  late final _wire_PreImage_newPtr = _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_PreImage_new');
+  late final _wire_PreImage_new = _wire_PreImage_newPtr.asFunction<
+      WireSyncRust2DartDco Function(
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   ffi.Pointer<wire_cst_btc_ln_v_1_swap> cst_new_box_autoadd_btc_ln_v_1_swap() {
     return _cst_new_box_autoadd_btc_ln_v_1_swap();
