@@ -240,7 +240,6 @@ abstract class BoltzCoreApi extends BaseApi {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
-      required String pairHash,
       dynamic hint});
 
   Future<LbtcLnV2Swap> lbtcLnV2SwapNewSubmarine(
@@ -250,7 +249,6 @@ abstract class BoltzCoreApi extends BaseApi {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
-      required String pairHash,
       dynamic hint});
 
   Future<String> lbtcLnV2SwapRefund(
@@ -1189,7 +1187,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
-      required String pairHash,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1199,24 +1196,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg3 = cst_encode_chain(network);
         var arg4 = cst_encode_String(electrumUrl);
         var arg5 = cst_encode_String(boltzUrl);
-        var arg6 = cst_encode_String(pairHash);
         return wire.wire_lbtc_ln_v_2_swap_new_reverse(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_lbtc_ln_v_2_swap,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kLbtcLnV2SwapNewReverseConstMeta,
-      argValues: [
-        mnemonic,
-        index,
-        outAmount,
-        network,
-        electrumUrl,
-        boltzUrl,
-        pairHash
-      ],
+      argValues: [mnemonic, index, outAmount, network, electrumUrl, boltzUrl],
       apiImpl: this,
       hint: hint,
     ));
@@ -1230,8 +1218,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "outAmount",
           "network",
           "electrumUrl",
-          "boltzUrl",
-          "pairHash"
+          "boltzUrl"
         ],
       );
 
@@ -1243,7 +1230,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
-      required String pairHash,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1253,24 +1239,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg3 = cst_encode_chain(network);
         var arg4 = cst_encode_String(electrumUrl);
         var arg5 = cst_encode_String(boltzUrl);
-        var arg6 = cst_encode_String(pairHash);
         return wire.wire_lbtc_ln_v_2_swap_new_submarine(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_lbtc_ln_v_2_swap,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kLbtcLnV2SwapNewSubmarineConstMeta,
-      argValues: [
-        mnemonic,
-        index,
-        invoice,
-        network,
-        electrumUrl,
-        boltzUrl,
-        pairHash
-      ],
+      argValues: [mnemonic, index, invoice, network, electrumUrl, boltzUrl],
       apiImpl: this,
       hint: hint,
     ));
@@ -1284,8 +1261,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "invoice",
           "network",
           "electrumUrl",
-          "boltzUrl",
-          "pairHash"
+          "boltzUrl"
         ],
       );
 

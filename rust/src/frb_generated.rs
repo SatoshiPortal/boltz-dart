@@ -756,7 +756,6 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
-    pair_hash: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -771,7 +770,6 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
-            let api_pair_hash = pair_hash.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     crate::api::lbtc_ln::LbtcLnV2Swap::new_reverse(
@@ -781,7 +779,6 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
-                        api_pair_hash,
                     )
                 })())
             }
@@ -796,7 +793,6 @@ fn wire_lbtc_ln_v_2_swap_new_submarine_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
-    pair_hash: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -811,7 +807,6 @@ fn wire_lbtc_ln_v_2_swap_new_submarine_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
-            let api_pair_hash = pair_hash.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     crate::api::lbtc_ln::LbtcLnV2Swap::new_submarine(
@@ -821,7 +816,6 @@ fn wire_lbtc_ln_v_2_swap_new_submarine_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
-                        api_pair_hash,
                     )
                 })())
             }

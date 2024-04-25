@@ -310,8 +310,7 @@ void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(int64_t port_,
                                                          uint64_t out_amount,
                                                          int32_t network,
                                                          struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                         struct wire_cst_list_prim_u_8_strict *boltz_url,
-                                                         struct wire_cst_list_prim_u_8_strict *pair_hash);
+                                                         struct wire_cst_list_prim_u_8_strict *boltz_url);
 
 void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(int64_t port_,
                                                            struct wire_cst_list_prim_u_8_strict *mnemonic,
@@ -319,8 +318,7 @@ void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(int64_t port_,
                                                            struct wire_cst_list_prim_u_8_strict *invoice,
                                                            int32_t network,
                                                            struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                           struct wire_cst_list_prim_u_8_strict *boltz_url,
-                                                           struct wire_cst_list_prim_u_8_strict *pair_hash);
+                                                           struct wire_cst_list_prim_u_8_strict *boltz_url);
 
 void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_refund(int64_t port_,
                                                     struct wire_cst_lbtc_ln_v_2_swap *that,

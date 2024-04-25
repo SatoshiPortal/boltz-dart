@@ -168,7 +168,6 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           required Chain network,
           required String electrumUrl,
           required String boltzUrl,
-          required String pairHash,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnV2SwapNewReverse(
           mnemonic: mnemonic,
@@ -177,7 +176,6 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
-          pairHash: pairHash,
           hint: hint);
 
   static Future<LbtcLnV2Swap> newSubmarine(
@@ -187,7 +185,6 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           required Chain network,
           required String electrumUrl,
           required String boltzUrl,
-          required String pairHash,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnV2SwapNewSubmarine(
           mnemonic: mnemonic,
@@ -196,7 +193,6 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
-          pairHash: pairHash,
           hint: hint);
 
   Future<String> refund(

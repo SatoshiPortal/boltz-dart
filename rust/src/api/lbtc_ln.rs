@@ -350,7 +350,7 @@ impl LbtcLnV2Swap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
-        pair_hash: String,
+        // pair_hash: String,
     ) -> Result<LbtcLnV2Swap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let refund_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
@@ -403,7 +403,7 @@ impl LbtcLnV2Swap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
-        pair_hash: String,
+        // pair_hash: String,
     ) -> Result<LbtcLnV2Swap, BoltzError> {
         let swap_type = SwapType::Reverse;
         let claim_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {

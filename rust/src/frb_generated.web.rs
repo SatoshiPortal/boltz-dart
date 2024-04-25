@@ -826,7 +826,6 @@ pub fn wire_lbtc_ln_v_2_swap_new_reverse(
     network: i32,
     electrum_url: String,
     boltz_url: String,
-    pair_hash: String,
 ) {
     wire_lbtc_ln_v_2_swap_new_reverse_impl(
         port_,
@@ -836,7 +835,6 @@ pub fn wire_lbtc_ln_v_2_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
-        pair_hash,
     )
 }
 
@@ -849,7 +847,6 @@ pub fn wire_lbtc_ln_v_2_swap_new_submarine(
     network: i32,
     electrum_url: String,
     boltz_url: String,
-    pair_hash: String,
 ) {
     wire_lbtc_ln_v_2_swap_new_submarine_impl(
         port_,
@@ -859,7 +856,6 @@ pub fn wire_lbtc_ln_v_2_swap_new_submarine(
         network,
         electrum_url,
         boltz_url,
-        pair_hash,
     )
 }
 

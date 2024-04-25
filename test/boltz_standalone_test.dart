@@ -173,7 +173,7 @@ void main() {
     }, skip: true, timeout: testTimeout);
 
     test('Positive: Send exact amount or more', () async {
-      BtcLnV1Swap btcLnSubmarine = await setupSubmarine(workingFreshInvoice2);
+      BtcLnV2Swap btcLnSubmarine = await setupSubmarine(workingFreshInvoice2);
       const expectedSecretKey =
           "9b496356fbb59d95656acc879a5d7a9169eb3d77e5b7c511aeb827925e5b49e9";
 
@@ -375,30 +375,31 @@ Future<BtcLnV1Swap> setupSubmarine(String invoice) async {
   final amount = 100000;
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
-  final btcLnSubmarineSwap = await BtcLnV1Swap.newSubmarine(
+  final btcLnSubmarineSwap = await BtcLnV2Swap.newSubmarine(
     mnemonic: mnemonic,
     index: index,
     invoice: invoice,
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
-    pairHash: fees.btcPairHash,
+    // pairHash: fees.btcPairHash,
   );
 
   return btcLnSubmarineSwap;
 }
 
-Future<BtcLnV1Swap> setupReverse(int outAmount) async {
+Future<BtcLnV2Swap> setupReverse(int outAmount) async {
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
-  final btcLnReverseSwap = await BtcLnV1Swap.newReverse(
-      mnemonic: mnemonic,
-      index: index,
-      outAmount: outAmount,
-      network: network,
-      electrumUrl: electrumUrl,
-      boltzUrl: boltzUrl,
-      pairHash: fees.btcPairHash);
+  final btcLnReverseSwap = await BtcLnV2Swap.newReverse(
+    mnemonic: mnemonic,
+    index: index,
+    outAmount: outAmount,
+    network: network,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+    // pairHash: fees.btcPairHash,
+  );
 
   return btcLnReverseSwap;
 }
@@ -407,14 +408,15 @@ Future<LbtcLnV1Swap> setupLSubmarine(String invoice) async {
   final amount = 100000;
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
-  final lbtcLnSubmarineSwap = await LbtcLnV1Swap.newSubmarine(
-      mnemonic: mnemonic,
-      index: index,
-      invoice: invoice,
-      network: lnetwork,
-      electrumUrl: electrumUrl,
-      boltzUrl: boltzUrl,
-      pairHash: fees.lbtcPairHash);
+  final lbtcLnSubmarineSwap = await LbtcLnV2Swap.newSubmarine(
+    mnemonic: mnemonic,
+    index: index,
+    invoice: invoice,
+    network: lnetwork,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+    // pairHash: fees.lbtcPairHash,
+  );
 
   return lbtcLnSubmarineSwap;
 }

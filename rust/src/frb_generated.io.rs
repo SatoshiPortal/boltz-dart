@@ -891,7 +891,6 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
-    pair_hash: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_lbtc_ln_v_2_swap_new_reverse_impl(
         port_,
@@ -901,7 +900,6 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
-        pair_hash,
     )
 }
 
@@ -914,7 +912,6 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
-    pair_hash: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_lbtc_ln_v_2_swap_new_submarine_impl(
         port_,
@@ -924,7 +921,6 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(
         network,
         electrum_url,
         boltz_url,
-        pair_hash,
     )
 }
 

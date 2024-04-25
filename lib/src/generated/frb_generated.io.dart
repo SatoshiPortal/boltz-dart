@@ -1534,7 +1534,6 @@ class BoltzCoreWire implements BaseWire {
     int network,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> pair_hash,
   ) {
     return _wire_lbtc_ln_v_2_swap_new_reverse(
       port_,
@@ -1544,7 +1543,6 @@ class BoltzCoreWire implements BaseWire {
       network,
       electrum_url,
       boltz_url,
-      pair_hash,
     );
   }
 
@@ -1557,7 +1555,6 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Uint64,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
       'frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse');
   late final _wire_lbtc_ln_v_2_swap_new_reverse =
@@ -1569,7 +1566,6 @@ class BoltzCoreWire implements BaseWire {
               int,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire_lbtc_ln_v_2_swap_new_submarine(
@@ -1580,7 +1576,6 @@ class BoltzCoreWire implements BaseWire {
     int network,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> pair_hash,
   ) {
     return _wire_lbtc_ln_v_2_swap_new_submarine(
       port_,
@@ -1590,7 +1585,6 @@ class BoltzCoreWire implements BaseWire {
       network,
       electrum_url,
       boltz_url,
-      pair_hash,
     );
   }
 
@@ -1603,7 +1597,6 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
       'frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine');
   late final _wire_lbtc_ln_v_2_swap_new_submarine =
@@ -1614,7 +1607,6 @@ class BoltzCoreWire implements BaseWire {
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 

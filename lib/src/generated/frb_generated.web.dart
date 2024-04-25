@@ -876,10 +876,9 @@ class BoltzCoreWire implements BaseWire {
           Object out_amount,
           int network,
           String electrum_url,
-          String boltz_url,
-          String pair_hash) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_new_reverse(port_, mnemonic, index,
-          out_amount, network, electrum_url, boltz_url, pair_hash);
+          String boltz_url) =>
+      wasmModule.wire_lbtc_ln_v_2_swap_new_reverse(
+          port_, mnemonic, index, out_amount, network, electrum_url, boltz_url);
 
   void wire_lbtc_ln_v_2_swap_new_submarine(
           NativePortType port_,
@@ -888,10 +887,9 @@ class BoltzCoreWire implements BaseWire {
           String invoice,
           int network,
           String electrum_url,
-          String boltz_url,
-          String pair_hash) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_new_submarine(port_, mnemonic, index,
-          invoice, network, electrum_url, boltz_url, pair_hash);
+          String boltz_url) =>
+      wasmModule.wire_lbtc_ln_v_2_swap_new_submarine(
+          port_, mnemonic, index, invoice, network, electrum_url, boltz_url);
 
   void wire_lbtc_ln_v_2_swap_refund(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee) =>
@@ -1093,8 +1091,7 @@ class BoltzCoreWasmModule implements WasmModule {
       Object out_amount,
       int network,
       String electrum_url,
-      String boltz_url,
-      String pair_hash);
+      String boltz_url);
 
   external void wire_lbtc_ln_v_2_swap_new_submarine(
       NativePortType port_,
@@ -1103,8 +1100,7 @@ class BoltzCoreWasmModule implements WasmModule {
       String invoice,
       int network,
       String electrum_url,
-      String boltz_url,
-      String pair_hash);
+      String boltz_url);
 
   external void wire_lbtc_ln_v_2_swap_refund(NativePortType port_,
       List<dynamic> that, String out_address, Object abs_fee);
