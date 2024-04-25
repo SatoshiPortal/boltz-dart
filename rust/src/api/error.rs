@@ -2,6 +2,7 @@ use boltz_client::error::Error;
 use serde::{Serialize,Deserialize};
 
 #[derive(Serialize, Deserialize)]
+#[derive(Debug,Clone)]
 pub struct BoltzError {
     pub kind: String,
     pub message: String,

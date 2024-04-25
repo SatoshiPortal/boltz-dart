@@ -360,6 +360,235 @@ abstract class _AllFees extends AllFees {
 }
 
 /// @nodoc
+mixin _$BtcSwapScriptV2Str {
+  SwapType get swapType => throw _privateConstructorUsedError;
+  String? get fundingAddrs => throw _privateConstructorUsedError;
+  String get hashlock => throw _privateConstructorUsedError;
+  String get receiverPubkey => throw _privateConstructorUsedError;
+  int get locktime => throw _privateConstructorUsedError;
+  String get senderPubkey => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $BtcSwapScriptV2StrCopyWith<BtcSwapScriptV2Str> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BtcSwapScriptV2StrCopyWith<$Res> {
+  factory $BtcSwapScriptV2StrCopyWith(
+          BtcSwapScriptV2Str value, $Res Function(BtcSwapScriptV2Str) then) =
+      _$BtcSwapScriptV2StrCopyWithImpl<$Res, BtcSwapScriptV2Str>;
+  @useResult
+  $Res call(
+      {SwapType swapType,
+      String? fundingAddrs,
+      String hashlock,
+      String receiverPubkey,
+      int locktime,
+      String senderPubkey});
+}
+
+/// @nodoc
+class _$BtcSwapScriptV2StrCopyWithImpl<$Res, $Val extends BtcSwapScriptV2Str>
+    implements $BtcSwapScriptV2StrCopyWith<$Res> {
+  _$BtcSwapScriptV2StrCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? swapType = null,
+    Object? fundingAddrs = freezed,
+    Object? hashlock = null,
+    Object? receiverPubkey = null,
+    Object? locktime = null,
+    Object? senderPubkey = null,
+  }) {
+    return _then(_value.copyWith(
+      swapType: null == swapType
+          ? _value.swapType
+          : swapType // ignore: cast_nullable_to_non_nullable
+              as SwapType,
+      fundingAddrs: freezed == fundingAddrs
+          ? _value.fundingAddrs
+          : fundingAddrs // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hashlock: null == hashlock
+          ? _value.hashlock
+          : hashlock // ignore: cast_nullable_to_non_nullable
+              as String,
+      receiverPubkey: null == receiverPubkey
+          ? _value.receiverPubkey
+          : receiverPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      locktime: null == locktime
+          ? _value.locktime
+          : locktime // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderPubkey: null == senderPubkey
+          ? _value.senderPubkey
+          : senderPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$BtcSwapScriptV2StrImplCopyWith<$Res>
+    implements $BtcSwapScriptV2StrCopyWith<$Res> {
+  factory _$$BtcSwapScriptV2StrImplCopyWith(_$BtcSwapScriptV2StrImpl value,
+          $Res Function(_$BtcSwapScriptV2StrImpl) then) =
+      __$$BtcSwapScriptV2StrImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {SwapType swapType,
+      String? fundingAddrs,
+      String hashlock,
+      String receiverPubkey,
+      int locktime,
+      String senderPubkey});
+}
+
+/// @nodoc
+class __$$BtcSwapScriptV2StrImplCopyWithImpl<$Res>
+    extends _$BtcSwapScriptV2StrCopyWithImpl<$Res, _$BtcSwapScriptV2StrImpl>
+    implements _$$BtcSwapScriptV2StrImplCopyWith<$Res> {
+  __$$BtcSwapScriptV2StrImplCopyWithImpl(_$BtcSwapScriptV2StrImpl _value,
+      $Res Function(_$BtcSwapScriptV2StrImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? swapType = null,
+    Object? fundingAddrs = freezed,
+    Object? hashlock = null,
+    Object? receiverPubkey = null,
+    Object? locktime = null,
+    Object? senderPubkey = null,
+  }) {
+    return _then(_$BtcSwapScriptV2StrImpl(
+      swapType: null == swapType
+          ? _value.swapType
+          : swapType // ignore: cast_nullable_to_non_nullable
+              as SwapType,
+      fundingAddrs: freezed == fundingAddrs
+          ? _value.fundingAddrs
+          : fundingAddrs // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hashlock: null == hashlock
+          ? _value.hashlock
+          : hashlock // ignore: cast_nullable_to_non_nullable
+              as String,
+      receiverPubkey: null == receiverPubkey
+          ? _value.receiverPubkey
+          : receiverPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      locktime: null == locktime
+          ? _value.locktime
+          : locktime // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderPubkey: null == senderPubkey
+          ? _value.senderPubkey
+          : senderPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$BtcSwapScriptV2StrImpl implements _BtcSwapScriptV2Str {
+  const _$BtcSwapScriptV2StrImpl(
+      {required this.swapType,
+      this.fundingAddrs,
+      required this.hashlock,
+      required this.receiverPubkey,
+      required this.locktime,
+      required this.senderPubkey});
+
+  @override
+  final SwapType swapType;
+  @override
+  final String? fundingAddrs;
+  @override
+  final String hashlock;
+  @override
+  final String receiverPubkey;
+  @override
+  final int locktime;
+  @override
+  final String senderPubkey;
+
+  @override
+  String toString() {
+    return 'BtcSwapScriptV2Str(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BtcSwapScriptV2StrImpl &&
+            (identical(other.swapType, swapType) ||
+                other.swapType == swapType) &&
+            (identical(other.fundingAddrs, fundingAddrs) ||
+                other.fundingAddrs == fundingAddrs) &&
+            (identical(other.hashlock, hashlock) ||
+                other.hashlock == hashlock) &&
+            (identical(other.receiverPubkey, receiverPubkey) ||
+                other.receiverPubkey == receiverPubkey) &&
+            (identical(other.locktime, locktime) ||
+                other.locktime == locktime) &&
+            (identical(other.senderPubkey, senderPubkey) ||
+                other.senderPubkey == senderPubkey));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
+      receiverPubkey, locktime, senderPubkey);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BtcSwapScriptV2StrImplCopyWith<_$BtcSwapScriptV2StrImpl> get copyWith =>
+      __$$BtcSwapScriptV2StrImplCopyWithImpl<_$BtcSwapScriptV2StrImpl>(
+          this, _$identity);
+}
+
+abstract class _BtcSwapScriptV2Str implements BtcSwapScriptV2Str {
+  const factory _BtcSwapScriptV2Str(
+      {required final SwapType swapType,
+      final String? fundingAddrs,
+      required final String hashlock,
+      required final String receiverPubkey,
+      required final int locktime,
+      required final String senderPubkey}) = _$BtcSwapScriptV2StrImpl;
+
+  @override
+  SwapType get swapType;
+  @override
+  String? get fundingAddrs;
+  @override
+  String get hashlock;
+  @override
+  String get receiverPubkey;
+  @override
+  int get locktime;
+  @override
+  String get senderPubkey;
+  @override
+  @JsonKey(ignore: true)
+  _$$BtcSwapScriptV2StrImplCopyWith<_$BtcSwapScriptV2StrImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$DecodedInvoice {
   int get msats => throw _privateConstructorUsedError;
   int get expiry => throw _privateConstructorUsedError;
@@ -829,6 +1058,256 @@ abstract class _KeyPair extends KeyPair {
   @override
   @JsonKey(ignore: true)
   _$$KeyPairImplCopyWith<_$KeyPairImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$LBtcSwapScriptV2Str {
+  SwapType get swapType => throw _privateConstructorUsedError;
+  String? get fundingAddrs => throw _privateConstructorUsedError;
+  String get hashlock => throw _privateConstructorUsedError;
+  String get receiverPubkey => throw _privateConstructorUsedError;
+  int get locktime => throw _privateConstructorUsedError;
+  String get senderPubkey => throw _privateConstructorUsedError;
+  String get blindingKey => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $LBtcSwapScriptV2StrCopyWith<LBtcSwapScriptV2Str> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LBtcSwapScriptV2StrCopyWith<$Res> {
+  factory $LBtcSwapScriptV2StrCopyWith(
+          LBtcSwapScriptV2Str value, $Res Function(LBtcSwapScriptV2Str) then) =
+      _$LBtcSwapScriptV2StrCopyWithImpl<$Res, LBtcSwapScriptV2Str>;
+  @useResult
+  $Res call(
+      {SwapType swapType,
+      String? fundingAddrs,
+      String hashlock,
+      String receiverPubkey,
+      int locktime,
+      String senderPubkey,
+      String blindingKey});
+}
+
+/// @nodoc
+class _$LBtcSwapScriptV2StrCopyWithImpl<$Res, $Val extends LBtcSwapScriptV2Str>
+    implements $LBtcSwapScriptV2StrCopyWith<$Res> {
+  _$LBtcSwapScriptV2StrCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? swapType = null,
+    Object? fundingAddrs = freezed,
+    Object? hashlock = null,
+    Object? receiverPubkey = null,
+    Object? locktime = null,
+    Object? senderPubkey = null,
+    Object? blindingKey = null,
+  }) {
+    return _then(_value.copyWith(
+      swapType: null == swapType
+          ? _value.swapType
+          : swapType // ignore: cast_nullable_to_non_nullable
+              as SwapType,
+      fundingAddrs: freezed == fundingAddrs
+          ? _value.fundingAddrs
+          : fundingAddrs // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hashlock: null == hashlock
+          ? _value.hashlock
+          : hashlock // ignore: cast_nullable_to_non_nullable
+              as String,
+      receiverPubkey: null == receiverPubkey
+          ? _value.receiverPubkey
+          : receiverPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      locktime: null == locktime
+          ? _value.locktime
+          : locktime // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderPubkey: null == senderPubkey
+          ? _value.senderPubkey
+          : senderPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      blindingKey: null == blindingKey
+          ? _value.blindingKey
+          : blindingKey // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LBtcSwapScriptV2StrImplCopyWith<$Res>
+    implements $LBtcSwapScriptV2StrCopyWith<$Res> {
+  factory _$$LBtcSwapScriptV2StrImplCopyWith(_$LBtcSwapScriptV2StrImpl value,
+          $Res Function(_$LBtcSwapScriptV2StrImpl) then) =
+      __$$LBtcSwapScriptV2StrImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {SwapType swapType,
+      String? fundingAddrs,
+      String hashlock,
+      String receiverPubkey,
+      int locktime,
+      String senderPubkey,
+      String blindingKey});
+}
+
+/// @nodoc
+class __$$LBtcSwapScriptV2StrImplCopyWithImpl<$Res>
+    extends _$LBtcSwapScriptV2StrCopyWithImpl<$Res, _$LBtcSwapScriptV2StrImpl>
+    implements _$$LBtcSwapScriptV2StrImplCopyWith<$Res> {
+  __$$LBtcSwapScriptV2StrImplCopyWithImpl(_$LBtcSwapScriptV2StrImpl _value,
+      $Res Function(_$LBtcSwapScriptV2StrImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? swapType = null,
+    Object? fundingAddrs = freezed,
+    Object? hashlock = null,
+    Object? receiverPubkey = null,
+    Object? locktime = null,
+    Object? senderPubkey = null,
+    Object? blindingKey = null,
+  }) {
+    return _then(_$LBtcSwapScriptV2StrImpl(
+      swapType: null == swapType
+          ? _value.swapType
+          : swapType // ignore: cast_nullable_to_non_nullable
+              as SwapType,
+      fundingAddrs: freezed == fundingAddrs
+          ? _value.fundingAddrs
+          : fundingAddrs // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hashlock: null == hashlock
+          ? _value.hashlock
+          : hashlock // ignore: cast_nullable_to_non_nullable
+              as String,
+      receiverPubkey: null == receiverPubkey
+          ? _value.receiverPubkey
+          : receiverPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      locktime: null == locktime
+          ? _value.locktime
+          : locktime // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderPubkey: null == senderPubkey
+          ? _value.senderPubkey
+          : senderPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      blindingKey: null == blindingKey
+          ? _value.blindingKey
+          : blindingKey // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LBtcSwapScriptV2StrImpl implements _LBtcSwapScriptV2Str {
+  const _$LBtcSwapScriptV2StrImpl(
+      {required this.swapType,
+      this.fundingAddrs,
+      required this.hashlock,
+      required this.receiverPubkey,
+      required this.locktime,
+      required this.senderPubkey,
+      required this.blindingKey});
+
+  @override
+  final SwapType swapType;
+  @override
+  final String? fundingAddrs;
+  @override
+  final String hashlock;
+  @override
+  final String receiverPubkey;
+  @override
+  final int locktime;
+  @override
+  final String senderPubkey;
+  @override
+  final String blindingKey;
+
+  @override
+  String toString() {
+    return 'LBtcSwapScriptV2Str(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LBtcSwapScriptV2StrImpl &&
+            (identical(other.swapType, swapType) ||
+                other.swapType == swapType) &&
+            (identical(other.fundingAddrs, fundingAddrs) ||
+                other.fundingAddrs == fundingAddrs) &&
+            (identical(other.hashlock, hashlock) ||
+                other.hashlock == hashlock) &&
+            (identical(other.receiverPubkey, receiverPubkey) ||
+                other.receiverPubkey == receiverPubkey) &&
+            (identical(other.locktime, locktime) ||
+                other.locktime == locktime) &&
+            (identical(other.senderPubkey, senderPubkey) ||
+                other.senderPubkey == senderPubkey) &&
+            (identical(other.blindingKey, blindingKey) ||
+                other.blindingKey == blindingKey));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
+      receiverPubkey, locktime, senderPubkey, blindingKey);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LBtcSwapScriptV2StrImplCopyWith<_$LBtcSwapScriptV2StrImpl> get copyWith =>
+      __$$LBtcSwapScriptV2StrImplCopyWithImpl<_$LBtcSwapScriptV2StrImpl>(
+          this, _$identity);
+}
+
+abstract class _LBtcSwapScriptV2Str implements LBtcSwapScriptV2Str {
+  const factory _LBtcSwapScriptV2Str(
+      {required final SwapType swapType,
+      final String? fundingAddrs,
+      required final String hashlock,
+      required final String receiverPubkey,
+      required final int locktime,
+      required final String senderPubkey,
+      required final String blindingKey}) = _$LBtcSwapScriptV2StrImpl;
+
+  @override
+  SwapType get swapType;
+  @override
+  String? get fundingAddrs;
+  @override
+  String get hashlock;
+  @override
+  String get receiverPubkey;
+  @override
+  int get locktime;
+  @override
+  String get senderPubkey;
+  @override
+  String get blindingKey;
+  @override
+  @JsonKey(ignore: true)
+  _$$LBtcSwapScriptV2StrImplCopyWith<_$LBtcSwapScriptV2StrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

@@ -1,9 +1,15 @@
 use super::{
     error::BoltzError,
-    types::{Chain, KeyPair, PreImage, SwapType},
+    types::{BtcSwapScriptV2Str, Chain, KeyPair, PreImage, SwapType},
 };
 use boltz_client::{
-    network::electrum::ElectrumConfig, swaps::boltz::{BoltzApiClient, CreateSwapRequest}, util::secrets::Preimage, BtcSwapScript, BtcSwapTx, Keypair
+    network::electrum::ElectrumConfig,
+    swaps::{
+        boltz::{BoltzApiClient, CreateSwapRequest},
+        boltzv2::BoltzApiClientV2,
+    },
+    util::secrets::Preimage,
+    BtcSwapScript, BtcSwapScriptV2, BtcSwapTx, BtcSwapTxV2, Keypair, PublicKey,
 };
 use flutter_rust_bridge::frb;
 
@@ -179,13 +185,12 @@ impl BtcLnV1Swap {
         ))
     }
 
-    pub fn claim(
-        &self,
-        out_address: String,
-        abs_fee: u64,
-    ) -> Result<String, BoltzError> {
+    pub fn claim(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
-            return Err(BoltzError{kind: "Input".to_string(),message: "Submarine swaps are not claimable".to_string()});
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Submarine swaps are not claimable".to_string(),
+            });
         } else {
             ()
         }
@@ -218,17 +223,19 @@ impl BtcLnV1Swap {
             };
             Ok(txid.to_string())
         } else {
-            return Err(BoltzError{kind: "Script".to_string(), message: "Script is not funded yet!".to_string()});
+            return Err(BoltzError {
+                kind: "Script".to_string(),
+                message: "Script is not funded yet!".to_string(),
+            });
         }
     }
 
-    pub fn refund(
-        &self,
-        out_address: String,
-        abs_fee: u64,
-    ) -> Result<String, BoltzError> {
+    pub fn refund(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
-            return Err(BoltzError{kind: "Input".to_string(), message: "Reverse swaps are not refundable".to_string()});
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Reverse swaps are not refundable".to_string(),
+            });
         } else {
             ()
         }
@@ -260,13 +267,19 @@ impl BtcLnV1Swap {
             };
             Ok(txid.to_string())
         } else {
-            return Err(BoltzError{kind: "Script".to_string(), message:"Script is not funded yet!".to_string()});
+            return Err(BoltzError {
+                kind: "Script".to_string(),
+                message: "Script is not funded yet!".to_string(),
+            });
         }
     }
 
     pub fn tx_size(&self) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
-            return Err(BoltzError{kind: "Input".to_string(), message: "Submarine swaps are not claimable".to_string()});
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Submarine swaps are not claimable".to_string(),
+            });
         } else {
             ()
         }
@@ -274,10 +287,292 @@ impl BtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let network_config =
-            ElectrumConfig::new(self.network.clone().into(), &self.electrum_url, true, true, 10);
+        let network_config = ElectrumConfig::new(
+            self.network.clone().into(),
+            &self.electrum_url,
+            true,
+            true,
+            10,
+        );
         // okay to use script address, we are just chekcing size
         let tx = match BtcSwapTx::new_claim(script, self.script_address.clone(), &network_config) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().into();
+
+        let size = match tx.unwrap().size(&ckp, &self.preimage.clone().try_into()?) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        Ok(size)
+    }
+}
+
+#[frb(dart_metadata=("freezed"))]
+pub struct BtcLnV2Swap {
+    pub id: String,
+    pub kind: SwapType,
+    pub network: Chain,
+    pub keys: KeyPair,
+    pub preimage: PreImage,
+    pub swap_script: BtcSwapScriptV2Str,
+    pub invoice: String,
+    pub script_address: String,
+    pub out_amount: u64,
+    pub electrum_url: String,
+    pub boltz_url: String,
+}
+impl BtcLnV2Swap {
+    pub fn new(
+        id: String,
+        kind: SwapType,
+        network: Chain,
+        keys: KeyPair,
+        preimage: PreImage,
+        swap_script: BtcSwapScriptV2Str,
+        invoice: String,
+        script_address: String,
+        out_amount: u64,
+        electrum_url: String,
+        boltz_url: String,
+    ) -> BtcLnV2Swap {
+        BtcLnV2Swap {
+            id,
+            kind,
+            network,
+            keys,
+            preimage,
+            swap_script,
+            invoice,
+            electrum_url,
+            boltz_url,
+            script_address,
+            out_amount,
+        }
+    }
+
+    pub fn new_submarine(
+        mnemonic: String,
+        index: u64,
+        invoice: String,
+        network: Chain,
+        electrum_url: String,
+        boltz_url: String,
+    ) -> Result<BtcLnV2Swap, BoltzError> {
+        let swap_type = SwapType::Submarine;
+        let refund_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
+            Ok(keypair) => keypair,
+            Err(err) => return Err(err.into()),
+        };
+        let refund_kps: Keypair = refund_keypair.clone().into();
+        let preimage = match Preimage::from_invoice_str(&invoice) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let boltz_client = BoltzApiClientV2::new(&boltz_url);
+        let create_swap_req = boltz_client::swaps::boltzv2::CreateSubmarineRequest {
+            from: "BTC".to_string(),
+            to: "BTC".to_string(),
+            invoice: invoice.to_string(),
+            referral_id: None,
+            refund_public_key: refund_kps.public_key().into(),
+        };
+
+        let create_swap_response = boltz_client.post_swap_req(&create_swap_req)?;
+
+        let swap_script = BtcSwapScriptV2::submarine_from_swap_resp(
+            &create_swap_response,
+            refund_kps.public_key().into(),
+        )?;
+
+        let script_address = swap_script.to_address(network.into())?.to_string();
+
+        Ok(BtcLnV2Swap::new(
+            create_swap_response.id,
+            swap_type,
+            network,
+            refund_keypair,
+            preimage.into(),
+            swap_script.into(),
+            invoice,
+            script_address,
+            create_swap_response.expected_amount,
+            electrum_url,
+            boltz_url,
+        ))
+    }
+
+    pub fn new_reverse(
+        mnemonic: String,
+        index: u64,
+        out_amount: u64,
+        network: Chain,
+        electrum_url: String,
+        boltz_url: String,
+    ) -> Result<BtcLnV2Swap, BoltzError> {
+        let swap_type = SwapType::Reverse;
+        let claim_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
+            Ok(keypair) => keypair,
+            Err(err) => return Err(err.into()),
+        };
+        let preimage = Preimage::new();
+        let ckp: Keypair = claim_keypair.clone().into();
+        let claim_public_key = PublicKey {
+            compressed: true,
+            inner: ckp.public_key(),
+        };
+
+        let boltz_client = BoltzApiClientV2::new(&boltz_url);
+        // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
+        let create_reverse_req = boltz_client::swaps::boltzv2::CreateReverseRequest {
+            invoice_amount: out_amount as u32,
+            from: "BTC".to_string(),
+            to: "BTC".to_string(),
+            preimage_hash: preimage.sha256,
+            claim_public_key,
+            referral_id: None,
+        };
+
+        let create_swap_response = boltz_client.post_reverse_req(create_reverse_req).unwrap();
+
+        let swap_script =
+            BtcSwapScriptV2::reverse_from_swap_resp(&create_swap_response, claim_public_key)
+                .unwrap();
+
+        let script_address = swap_script.to_address(network.into())?.to_string();
+
+        Ok(BtcLnV2Swap::new(
+            create_swap_response.id,
+            swap_type,
+            network.into(),
+            claim_keypair,
+            preimage.into(),
+            swap_script.into(),
+            create_swap_response.invoice,
+            script_address,
+            out_amount,
+            electrum_url,
+            boltz_url,
+        ))
+    }
+
+    pub fn claim(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
+        if self.kind == SwapType::Submarine {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Submarine swaps are not claimable".to_string(),
+            });
+        } else {
+            ()
+        }
+        // let our_keys: PublicKey = PublicKey::from_str(&self.keys.public_key).unwrap();
+
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
+        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+        let script_balance = match swap_script.get_balance(&network_config) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+
+        if script_balance.0 > 0 || script_balance.1 > 0 {
+            let tx = match BtcSwapTxV2::new_claim(swap_script, out_address, &network_config) {
+                Ok(result) => result.unwrap(),
+                Err(e) => return Err(e.into()),
+            };
+            let ckp: Keypair = self.keys.clone().into();
+            let preimage = self.preimage.clone();
+            let signed = match tx.sign_claim(
+                &ckp,
+                &preimage.try_into()?,
+                abs_fee,
+                Some((&boltz_client, self.id.clone())),
+            ) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
+            let txid = match tx.broadcast(&signed, &network_config) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
+            Ok(txid.to_string())
+        } else {
+            return Err(BoltzError {
+                kind: "Script".to_string(),
+                message: "Script is not funded yet!".to_string(),
+            });
+        }
+    }
+
+    pub fn refund(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
+        if self.kind == SwapType::Reverse {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Reverse swaps are not refundable".to_string(),
+            });
+        } else {
+            ()
+        }
+
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
+        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+
+        let script_balance = match swap_script.get_balance(&network_config) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+
+        if script_balance.0 > 0 || script_balance.1 > 0 {
+            let tx =
+                match BtcSwapTxV2::new_refund(swap_script.clone(), &out_address, &network_config) {
+                    Ok(result) => result.unwrap(),
+                    Err(e) => return Err(e.into()),
+                };
+            let ckp: Keypair = self.keys.clone().into();
+            let signed = match tx.sign_refund(&ckp, abs_fee) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
+            let txid = match tx.broadcast(&signed, &network_config) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
+            Ok(txid.to_string())
+        } else {
+            return Err(BoltzError {
+                kind: "Script".to_string(),
+                message: "Script is not funded yet!".to_string(),
+            });
+        }
+    }
+
+    pub fn tx_size(&self) -> Result<usize, BoltzError> {
+        if self.kind == SwapType::Submarine {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Submarine swaps are not claimable".to_string(),
+            });
+        } else {
+            ()
+        }
+        let network_config = ElectrumConfig::new(
+            self.network.clone().into(),
+            &self.electrum_url,
+            true,
+            true,
+            10,
+        );
+        // okay to use script address, we are just chekcing size
+        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+
+        let tx = match BtcSwapTxV2::new_claim(
+            swap_script.clone(),
+            self.script_address.clone(),
+            &network_config,
+        ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };

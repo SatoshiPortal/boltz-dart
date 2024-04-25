@@ -26,6 +26,18 @@ class AllFees with _$AllFees {
       BoltzCore.instance.api.allFeesFetch(boltzUrl: boltzUrl, hint: hint);
 }
 
+@freezed
+class BtcSwapScriptV2Str with _$BtcSwapScriptV2Str {
+  const factory BtcSwapScriptV2Str({
+    required SwapType swapType,
+    String? fundingAddrs,
+    required String hashlock,
+    required String receiverPubkey,
+    required int locktime,
+    required String senderPubkey,
+  }) = _BtcSwapScriptV2Str;
+}
+
 enum Chain {
   bitcoin,
   bitcoinTestnet,
@@ -75,6 +87,19 @@ class KeyPair with _$KeyPair {
           dynamic hint}) =>
       BoltzCore.instance.api
           .keyPairNew(secretKey: secretKey, publicKey: publicKey, hint: hint);
+}
+
+@freezed
+class LBtcSwapScriptV2Str with _$LBtcSwapScriptV2Str {
+  const factory LBtcSwapScriptV2Str({
+    required SwapType swapType,
+    String? fundingAddrs,
+    required String hashlock,
+    required String receiverPubkey,
+    required int locktime,
+    required String senderPubkey,
+    required String blindingKey,
+  }) = _LBtcSwapScriptV2Str;
 }
 
 @freezed

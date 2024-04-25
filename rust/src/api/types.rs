@@ -6,7 +6,7 @@ use flutter_rust_bridge::frb;
 //
 use serde::{Serialize,Deserialize};
 use boltz_client::{
-    network::Chain as BChain, swaps::boltz::{BoltzApiClient, SwapType as BoltzSwapType}, util::secrets::SwapKey, Bolt11Invoice, Keypair, Secp256k1 
+    network::Chain as BChain, swaps::boltz::{BoltzApiClient, SwapType as BoltzSwapType}, util::secrets::SwapKey, Address, Bolt11Invoice, BtcSwapScriptV2, ElementsAddress, Hash, Keypair, LBtcSwapScriptV2, PublicKey, Secp256k1, ZKKeyPair
 };
 
 use super::error::BoltzError;
@@ -27,6 +27,15 @@ impl Into<BoltzSwapType> for SwapType {
         }
     }
 }
+impl From<BoltzSwapType> for SwapType {
+    fn from(boltz_swap_type: BoltzSwapType) -> Self {
+        match boltz_swap_type {
+            BoltzSwapType::Submarine => SwapType::Submarine,
+            BoltzSwapType::ReverseSubmarine => SwapType::Reverse,
+        }
+    }
+}
+
 
 #[derive(Clone, Copy)]
 #[derive(Serialize, Deserialize)]
@@ -274,5 +283,114 @@ impl DecodedInvoice {
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
             network: invoice.network().to_string(),
         })
+    }
+}
+
+#[frb(dart_metadata=("freezed"))]
+#[derive(Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize)]
+pub struct BtcSwapScriptV2Str {
+    pub swap_type: SwapType,
+    pub funding_addrs: Option<String>, 
+    pub hashlock: String,
+    pub receiver_pubkey: String,
+    pub locktime: u32,
+    pub sender_pubkey: String,
+}
+
+impl TryInto<BtcSwapScriptV2> for BtcSwapScriptV2Str {
+    type Error = BoltzError; // Use a more specific error type in a real application
+
+    fn try_into(self) -> Result<BtcSwapScriptV2, Self::Error> {
+        let mut address: Option<Address>;
+        if self.funding_addrs.is_some(){
+             address = Some(Address::from_str(&self.funding_addrs.unwrap()).unwrap().assume_checked());
+        }
+        else{
+            address = None;
+        }
+        let hashlock = Hash::from_str(&self.hashlock).unwrap();
+        let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
+        let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();
+        let locktime = boltz_client::LockTime::from_height(self.locktime).unwrap();
+        Ok(BtcSwapScriptV2{
+            swap_type: self.swap_type.clone().into(), 
+            funding_addrs: address,
+            hashlock:hashlock,
+            receiver_pubkey: receiver_pubkey,
+            locktime: locktime,
+            sender_pubkey: sender_pubkey,
+        })
+        
+    }
+}
+
+impl From<BtcSwapScriptV2> for BtcSwapScriptV2Str {
+    fn from(swap: BtcSwapScriptV2) -> Self {
+        BtcSwapScriptV2Str {
+            swap_type: swap.swap_type.into(), 
+            funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()), 
+            hashlock: swap.hashlock.to_string(), 
+            receiver_pubkey: swap.receiver_pubkey.to_string(), 
+            locktime: swap.locktime.to_consensus_u32(), 
+            sender_pubkey: swap.sender_pubkey.to_string(), 
+        }
+    }
+}
+
+#[frb(dart_metadata=("freezed"))]
+#[derive(Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize)]
+pub struct LBtcSwapScriptV2Str {
+    pub swap_type: SwapType,
+    pub funding_addrs: Option<String>, 
+    pub hashlock: String,
+    pub receiver_pubkey: String,
+    pub locktime: u32,
+    pub sender_pubkey: String,
+    pub blinding_key: String,
+}
+
+impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
+    type Error = BoltzError; // Use a more specific error type in a real application
+
+    fn try_into(self) -> Result<LBtcSwapScriptV2, Self::Error> {
+        let mut address: Option<ElementsAddress>;
+        if self.funding_addrs.is_some(){
+             address = Some(ElementsAddress::from_str(&self.funding_addrs.unwrap()).unwrap());
+        }
+        else{
+            address = None;
+        }
+        let hashlock = Hash::from_str(&self.hashlock).unwrap();
+        let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
+        let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();
+        let locktime = boltz_client::ElementsLockTime::from_height(self.locktime).unwrap();
+        let blinding_key = ZKKeyPair::from_str(&self.blinding_key).unwrap();
+
+        Ok(LBtcSwapScriptV2{
+            swap_type: self.swap_type.clone().into(), 
+            funding_addrs: address,
+            hashlock:hashlock,
+            receiver_pubkey: receiver_pubkey,
+            locktime: locktime,
+            sender_pubkey: sender_pubkey,
+            blinding_key: blinding_key,
+        })
+        
+    }
+}
+
+impl From<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
+    fn from(swap: LBtcSwapScriptV2) -> Self {
+        LBtcSwapScriptV2Str {
+            swap_type: swap.swap_type.into(), 
+            funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()), 
+            hashlock: swap.hashlock.to_string(), 
+            receiver_pubkey: swap.receiver_pubkey.to_string(), 
+            locktime: swap.locktime.to_consensus_u32(), 
+            sender_pubkey: swap.sender_pubkey.to_string(), 
+            blinding_key: swap.blinding_key.display_secret().to_string(),
+        }
     }
 }

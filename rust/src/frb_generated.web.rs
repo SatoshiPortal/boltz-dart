@@ -97,6 +97,59 @@ impl CstDecode<crate::api::btc_ln::BtcLnV1Swap>
         }
     }
 }
+impl CstDecode<crate::api::btc_ln::BtcLnV2Swap>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::btc_ln::BtcLnV2Swap {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            11,
+            "Expected 11 elements, got {}",
+            self_.length()
+        );
+        crate::api::btc_ln::BtcLnV2Swap {
+            id: self_.get(0).cst_decode(),
+            kind: self_.get(1).cst_decode(),
+            network: self_.get(2).cst_decode(),
+            keys: self_.get(3).cst_decode(),
+            preimage: self_.get(4).cst_decode(),
+            swap_script: self_.get(5).cst_decode(),
+            invoice: self_.get(6).cst_decode(),
+            script_address: self_.get(7).cst_decode(),
+            out_amount: self_.get(8).cst_decode(),
+            electrum_url: self_.get(9).cst_decode(),
+            boltz_url: self_.get(10).cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::types::BtcSwapScriptV2Str>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::BtcSwapScriptV2Str {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            6,
+            "Expected 6 elements, got {}",
+            self_.length()
+        );
+        crate::api::types::BtcSwapScriptV2Str {
+            swap_type: self_.get(0).cst_decode(),
+            funding_addrs: self_.get(1).cst_decode(),
+            hashlock: self_.get(2).cst_decode(),
+            receiver_pubkey: self_.get(3).cst_decode(),
+            locktime: self_.get(4).cst_decode(),
+            sender_pubkey: self_.get(5).cst_decode(),
+        }
+    }
+}
 impl CstDecode<crate::api::types::DecodedInvoice>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
@@ -142,6 +195,31 @@ impl CstDecode<crate::api::types::KeyPair>
         }
     }
 }
+impl CstDecode<crate::api::types::LBtcSwapScriptV2Str>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::LBtcSwapScriptV2Str {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            7,
+            "Expected 7 elements, got {}",
+            self_.length()
+        );
+        crate::api::types::LBtcSwapScriptV2Str {
+            swap_type: self_.get(0).cst_decode(),
+            funding_addrs: self_.get(1).cst_decode(),
+            hashlock: self_.get(2).cst_decode(),
+            receiver_pubkey: self_.get(3).cst_decode(),
+            locktime: self_.get(4).cst_decode(),
+            sender_pubkey: self_.get(5).cst_decode(),
+            blinding_key: self_.get(6).cst_decode(),
+        }
+    }
+}
 impl CstDecode<crate::api::lbtc_ln::LbtcLnV1Swap>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
@@ -163,6 +241,36 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnV1Swap>
             keys: self_.get(3).cst_decode(),
             preimage: self_.get(4).cst_decode(),
             redeem_script: self_.get(5).cst_decode(),
+            invoice: self_.get(6).cst_decode(),
+            out_amount: self_.get(7).cst_decode(),
+            script_address: self_.get(8).cst_decode(),
+            blinding_key: self_.get(9).cst_decode(),
+            electrum_url: self_.get(10).cst_decode(),
+            boltz_url: self_.get(11).cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnV2Swap {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            12,
+            "Expected 12 elements, got {}",
+            self_.length()
+        );
+        crate::api::lbtc_ln::LbtcLnV2Swap {
+            id: self_.get(0).cst_decode(),
+            kind: self_.get(1).cst_decode(),
+            network: self_.get(2).cst_decode(),
+            keys: self_.get(3).cst_decode(),
+            preimage: self_.get(4).cst_decode(),
+            swap_script: self_.get(5).cst_decode(),
             invoice: self_.get(6).cst_decode(),
             out_amount: self_.get(7).cst_decode(),
             script_address: self_.get(8).cst_decode(),
@@ -196,6 +304,12 @@ impl CstDecode<Vec<u8>> for Box<[u8]> {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> Vec<u8> {
         self.into_vec()
+    }
+}
+impl CstDecode<Option<String>> for Option<String> {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> Option<String> {
+        self.map(CstDecode::cst_decode)
     }
 }
 impl CstDecode<crate::api::types::PreImage>
@@ -307,6 +421,12 @@ impl CstDecode<crate::api::types::SwapType>
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::SwapType {
         (self.unchecked_into_f64() as i32).cst_decode()
+    }
+}
+impl CstDecode<u32> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> u32 {
+        self.unchecked_into_f64() as _
     }
 }
 impl CstDecode<u64> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
@@ -438,6 +558,107 @@ pub fn wire_btc_ln_v_1_swap_tx_size(
 }
 
 #[wasm_bindgen]
+pub fn wire_btc_ln_v_2_swap_claim(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    out_address: String,
+    abs_fee: u64,
+) {
+    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee)
+}
+
+#[wasm_bindgen]
+pub fn wire_btc_ln_v_2_swap_new(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    id: String,
+    kind: i32,
+    network: i32,
+    keys: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    preimage: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    swap_script: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    invoice: String,
+    script_address: String,
+    out_amount: u64,
+    electrum_url: String,
+    boltz_url: String,
+) {
+    wire_btc_ln_v_2_swap_new_impl(
+        port_,
+        id,
+        kind,
+        network,
+        keys,
+        preimage,
+        swap_script,
+        invoice,
+        script_address,
+        out_amount,
+        electrum_url,
+        boltz_url,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_btc_ln_v_2_swap_new_reverse(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    mnemonic: String,
+    index: u64,
+    out_amount: u64,
+    network: i32,
+    electrum_url: String,
+    boltz_url: String,
+) {
+    wire_btc_ln_v_2_swap_new_reverse_impl(
+        port_,
+        mnemonic,
+        index,
+        out_amount,
+        network,
+        electrum_url,
+        boltz_url,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_btc_ln_v_2_swap_new_submarine(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    mnemonic: String,
+    index: u64,
+    invoice: String,
+    network: i32,
+    electrum_url: String,
+    boltz_url: String,
+) {
+    wire_btc_ln_v_2_swap_new_submarine_impl(
+        port_,
+        mnemonic,
+        index,
+        invoice,
+        network,
+        electrum_url,
+        boltz_url,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_btc_ln_v_2_swap_refund(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    out_address: String,
+    abs_fee: u64,
+) {
+    wire_btc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee)
+}
+
+#[wasm_bindgen]
+pub fn wire_btc_ln_v_2_swap_tx_size(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_btc_ln_v_2_swap_tx_size_impl(port_, that)
+}
+
+#[wasm_bindgen]
 pub fn wire_boltz_error_new(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     kind: String,
@@ -551,6 +772,113 @@ pub fn wire_lbtc_ln_v_1_swap_tx_size(
     swap: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
     wire_lbtc_ln_v_1_swap_tx_size_impl(port_, swap)
+}
+
+#[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_claim(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    out_address: String,
+    abs_fee: u64,
+) {
+    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee)
+}
+
+#[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_new(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    id: String,
+    kind: i32,
+    network: i32,
+    keys: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    preimage: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    swap_script: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    invoice: String,
+    out_amount: u64,
+    out_address: String,
+    blinding_key: String,
+    electrum_url: String,
+    boltz_url: String,
+) {
+    wire_lbtc_ln_v_2_swap_new_impl(
+        port_,
+        id,
+        kind,
+        network,
+        keys,
+        preimage,
+        swap_script,
+        invoice,
+        out_amount,
+        out_address,
+        blinding_key,
+        electrum_url,
+        boltz_url,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_new_reverse(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    mnemonic: String,
+    index: u64,
+    out_amount: u64,
+    network: i32,
+    electrum_url: String,
+    boltz_url: String,
+    pair_hash: String,
+) {
+    wire_lbtc_ln_v_2_swap_new_reverse_impl(
+        port_,
+        mnemonic,
+        index,
+        out_amount,
+        network,
+        electrum_url,
+        boltz_url,
+        pair_hash,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_new_submarine(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    mnemonic: String,
+    index: u64,
+    invoice: String,
+    network: i32,
+    electrum_url: String,
+    boltz_url: String,
+    pair_hash: String,
+) {
+    wire_lbtc_ln_v_2_swap_new_submarine_impl(
+        port_,
+        mnemonic,
+        index,
+        invoice,
+        network,
+        electrum_url,
+        boltz_url,
+        pair_hash,
+    )
+}
+
+#[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_refund(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    out_address: String,
+    abs_fee: u64,
+) {
+    wire_lbtc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee)
+}
+
+#[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_tx_size(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_lbtc_ln_v_2_swap_tx_size_impl(port_, that)
 }
 
 #[wasm_bindgen]

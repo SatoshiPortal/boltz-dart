@@ -148,7 +148,7 @@ void main() {
   test('Get status stream multiple: Creaet, Update, Close', () async {
     final api = await BoltzApi.newBoltzApi();
 
-    api.initialize();
+    api.initialize(testnetBaseUrl);
 
     // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
     const List<String> swapIds = ['67ptET'];
