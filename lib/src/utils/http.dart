@@ -256,11 +256,25 @@ String httpProtocolCheck(String url) {
 }
 
 String wssProtocolCheck(String url) {
-  const List<String> protocols = ['wss://', 'ws://'];
-  for (var protocol in protocols) {
+  // Define the WebSocket protocols and HTTP protocols
+  const List<String> wsProtocols = ['wss://', 'ws://'];
+  const List<String> httpProtocols = ['http://', 'https://'];
+
+  // First, remove any http or https protocol if present
+  for (var protocol in httpProtocols) {
+    if (url.startsWith(protocol)) {
+      url = url.substring(protocol.length);
+      break;
+    }
+  }
+
+  // Now check if the url starts with any WebSocket protocol
+  for (var protocol in wsProtocols) {
     if (url.startsWith(protocol)) {
       return url;
     }
   }
+
+  // If no WebSocket protocol is present, prepend 'wss://'
   return 'wss://$url';
 }

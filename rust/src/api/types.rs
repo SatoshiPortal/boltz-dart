@@ -9,6 +9,8 @@ use boltz_client::{
     network::Chain as BChain, swaps::boltz::{BoltzApiClient, SwapType as BoltzSwapType}, util::secrets::SwapKey, Address, Bolt11Invoice, BtcSwapScriptV2, ElementsAddress, Hash, Keypair, LBtcSwapScriptV2, PublicKey, Secp256k1, ZKKeyPair
 };
 
+use crate::util::check_protocol;
+
 use super::error::BoltzError;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -177,7 +179,7 @@ pub struct AllFees {
 
 impl AllFees {
     pub fn fetch(boltz_url: String)->Result<Self,BoltzError>{
-        let boltz_client = BoltzApiClient::new(&boltz_url);
+        let boltz_client = BoltzApiClient::new(&check_protocol(&boltz_url));
         let boltz_pairs = match boltz_client.get_pairs() {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -392,5 +394,17 @@ impl From<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
             sender_pubkey: swap.sender_pubkey.to_string(), 
             blinding_key: swap.blinding_key.display_secret().to_string(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use boltz_client::swaps::boltz::BOLTZ_TESTNET_URL;
+
+    use super::*;
+    #[test]
+    fn test_fetch_all_fees() {
+        let fees = AllFees::fetch(BOLTZ_TESTNET_URL.to_owned());
+        println!("{:#?}", fees);
     }
 }
