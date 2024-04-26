@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:boltz_dart/src/types/supported_pair.dart';
 import 'package:boltz_dart/src/types/swap.dart';
@@ -22,7 +21,7 @@ class BoltzApi {
 
   void initialize(String baseUrl) {
     // print('initialize');
-    channel = IOWebSocketChannel.connect('wss://$baseUrl/v2/ws');
+    channel = IOWebSocketChannel.connect(wssProtocolCheck('$baseUrl/v2/ws'));
     // Initialize the broadcast controller
     _broadcastController = StreamController<SwapStatusResponse>.broadcast();
 
@@ -74,7 +73,7 @@ class BoltzApi {
     try {
       final dio = Dio(
         BaseOptions(
-          baseUrl: 'https://$boltzUrl',
+          baseUrl: httpProtocolCheck(boltzUrl),
         ),
       );
       BoltzApi api = BoltzApi._(dio);
@@ -244,4 +243,24 @@ class BoltzApi {
   //     rethrow;
   //   }
   // }
+}
+
+String httpProtocolCheck(String url) {
+  const List<String> protocols = ['http://', 'https://'];
+  for (var protocol in protocols) {
+    if (url.startsWith(protocol)) {
+      return url;
+    }
+  }
+  return 'https://$url';
+}
+
+String wssProtocolCheck(String url) {
+  const List<String> protocols = ['wss://', 'ws://'];
+  for (var protocol in protocols) {
+    if (url.startsWith(protocol)) {
+      return url;
+    }
+  }
+  return 'wss://$url';
 }

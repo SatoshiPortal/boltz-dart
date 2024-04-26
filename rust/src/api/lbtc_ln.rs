@@ -1,3 +1,5 @@
+use crate::util::check_protocol;
+
 use super::{
     error::BoltzError,
     types::{Chain, KeyPair, LBtcSwapScriptV2Str, PreImage, SwapType},
@@ -71,7 +73,7 @@ impl LbtcLnV1Swap {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };
-        let boltz_client = BoltzApiClient::new(&boltz_url);
+        let boltz_client = BoltzApiClient::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
         let boltz_pairs = match boltz_client.get_pairs() {
             Ok(result) => result,
@@ -149,7 +151,7 @@ impl LbtcLnV1Swap {
             Err(err) => return Err(err.into()),
         };
         let preimage = Preimage::new();
-        let boltz_client = BoltzApiClient::new(&boltz_url);
+        let boltz_client = BoltzApiClient::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
         let boltz_pairs = match boltz_client.get_pairs() {
             Ok(result) => result,
@@ -364,7 +366,7 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_client = BoltzApiClientV2::new(&boltz_url);
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
         let create_swap_req = boltz_client::swaps::boltzv2::CreateSubmarineRequest {
             from: "L-BTC".to_string(),
             to: "BTC".to_string(),
@@ -417,7 +419,7 @@ impl LbtcLnV2Swap {
             inner: ckp.public_key(),
         };
 
-        let boltz_client = BoltzApiClientV2::new(&boltz_url);
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
         let create_reverse_req = boltz_client::swaps::boltzv2::CreateReverseRequest {
             invoice_amount: out_amount as u32,
@@ -464,7 +466,7 @@ impl LbtcLnV2Swap {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
 
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
 
         let tx = match LBtcSwapTxV2::new_claim(swap_script, out_address, &network_config) {
