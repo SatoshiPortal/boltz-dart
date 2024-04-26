@@ -17,14 +17,14 @@ void main() {
   // });
 
   test('Version', () async {
-    final api = await BoltzApi.newBoltzApi();
+    final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
     final version = await api.getBackendVersion();
 
     expect(version, startsWith('3.4.0'));
   }, skip: true);
 
   test('Get pairs', () async {
-    final api = await BoltzApi.newBoltzApi();
+    final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
     final pairs = await api.getSupportedPairs();
     // print(pairs);
 
@@ -32,7 +32,7 @@ void main() {
   });
 
   test('Get status', () async {
-    final api = await BoltzApi.newBoltzApi();
+    final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
     final status = await api.getSwapStatus('5Nke2TZdZLZ5');
 
     expect(status, equals(SwapStatus.txnClaimed));
@@ -65,7 +65,7 @@ void main() {
   //
   // Try with sending mismatching amounts
   //test('Get status stream', () async {
-  //  final api = await BoltzApi.newBoltzApi();
+  //  final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
 
   //  // const swapId = 'kuaECCcK4ZJ9'; // #2
   //  // const swapId = 'TSMILwPf2HCu'; // #3
@@ -103,7 +103,7 @@ void main() {
   //}, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 
   // test('Get status stream multiple', () async {
-  //   final api = await BoltzApi.newBoltzApi();
+  //   final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
 
   //   const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
   //   Stream<SwapStatusResponse> eventStream = api.getSwapStatusStreamMultiple(swapIds);
@@ -146,7 +146,7 @@ void main() {
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {
-    final api = await BoltzApi.newBoltzApi();
+    final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
 
     api.initialize(testnetBaseUrl);
 
@@ -178,7 +178,7 @@ void main() {
   }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 
   test('Get status stream multiple; Multiple calls to update', () async {
-    final api = await BoltzApi.newBoltzApi();
+    final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
 
     var receivedEvents = <SwapStatusResponse>[];
 

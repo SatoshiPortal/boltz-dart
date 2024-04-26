@@ -31,7 +31,8 @@ class BoltzApi {
       // Parse the message and add it to the broadcast controller
       final resp = jsonDecode(msg);
       if (resp['error'] != null) {
-        _broadcastController!.add(SwapStatusResponse(id: '', status: SwapStatus.swapError, error: resp['error']));
+        _broadcastController!.add(SwapStatusResponse(
+            id: '', status: SwapStatus.swapError, error: resp['error']));
       } else if (resp['event'] == 'update') {
         final swapList = resp['args'];
         for (final swap in swapList) {
@@ -39,8 +40,10 @@ class BoltzApi {
             print(swap);
             _broadcastController!.add(SwapStatusResponse.fromJson(swap));
           } else {
-            _broadcastController!
-                .add(SwapStatusResponse(id: swap['id'], status: SwapStatus.swapError, error: swap['error']));
+            _broadcastController!.add(SwapStatusResponse(
+                id: swap['id'],
+                status: SwapStatus.swapError,
+                error: swap['error']));
           }
         }
       }
@@ -51,7 +54,11 @@ class BoltzApi {
 
   Stream<SwapStatusResponse> subscribeSwapStatus(List<String> swapIds) {
     // Ensure payload is sent whenever this function is called, to subscribe to new swap IDs
-    Map<String, dynamic> payload = {'op': 'subscribe', 'channel': 'swap.update', 'args': swapIds};
+    Map<String, dynamic> payload = {
+      'op': 'subscribe',
+      'channel': 'swap.update',
+      'args': swapIds
+    };
     channel!.sink.add(jsonEncode(payload));
 
     // Return the broadcast stream
@@ -63,9 +70,8 @@ class BoltzApi {
     _broadcastController?.close();
   }
 
-  static Future<BoltzApi> newBoltzApi({bool? isTestnet = false}) async {
+  static Future<BoltzApi> newBoltzApi(String boltzUrl) async {
     try {
-      String boltzUrl = (isTestnet == null || isTestnet == false) ? mainnetBaseUrl : testnetBaseUrl;
       final dio = Dio(
         BaseOptions(
           baseUrl: 'https://$boltzUrl',
