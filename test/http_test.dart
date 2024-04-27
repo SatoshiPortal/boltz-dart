@@ -4,6 +4,7 @@ import 'dart:convert';
 // import 'package:boltz_dart/http.dart';
 // import 'package:boltz_dart/types/swap.dart';
 // import 'package:boltz_dart/types/swap_status_response.dart';
+import 'package:boltz_dart/boltz_dart.dart';
 import 'package:boltz_dart/src/types/swap.dart';
 import 'package:boltz_dart/src/types/swap_status_response.dart';
 import 'package:boltz_dart/src/utils/http.dart';
@@ -139,10 +140,8 @@ void main() {
 
   test('SwapStatus to string', () async {
     print(SwapStatus.invoicePaid.toJson());
-    print(
-        SwapStatusResponse(id: 'abc', status: SwapStatus.invoicePaid).toJson());
-    print(SwapStatusResponse.fromJson(
-        jsonDecode('{"id":"abc","status":"invoice.paid"}')));
+    print(SwapStreamStatus(id: 'abc', status: SwapStatus.invoicePaid).toJson());
+    print(SwapStatusResponse.fromJson(jsonDecode('{"status":"invoice.paid"}')));
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {
@@ -152,9 +151,9 @@ void main() {
 
     // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
     const List<String> swapIds = ['67ptET'];
-    Stream<SwapStatusResponse> eventStream = api.subscribeSwapStatus(swapIds);
+    Stream<SwapStreamStatus> eventStream = api.subscribeSwapStatus(swapIds);
 
-    var receivedEvents = <SwapStatusResponse>[];
+    var receivedEvents = <SwapStreamStatus>[];
 
     var completer = Completer();
 
@@ -180,11 +179,11 @@ void main() {
   test('Get status stream multiple; Multiple calls to update', () async {
     final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
 
-    var receivedEvents = <SwapStatusResponse>[];
+    var receivedEvents = <SwapStreamStatus>[];
 
     // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
     const List<String> swapIds1 = ['67ptET'];
-    Stream<SwapStatusResponse> eventStream1 = api.subscribeSwapStatus(swapIds1);
+    Stream<SwapStreamStatus> eventStream1 = api.subscribeSwapStatus(swapIds1);
 
     var completer1 = Completer();
 
@@ -199,7 +198,7 @@ void main() {
     await sub1.cancel();
 
     const List<String> swapIds2 = ['EXVCx6'];
-    Stream<SwapStatusResponse> eventStream2 = api.subscribeSwapStatus(swapIds2);
+    Stream<SwapStreamStatus> eventStream2 = api.subscribeSwapStatus(swapIds2);
 
     var completer2 = Completer();
 

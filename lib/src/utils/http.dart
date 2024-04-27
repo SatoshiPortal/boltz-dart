@@ -14,7 +14,7 @@ class BoltzApi {
   final Dio _dio;
 
   IOWebSocketChannel? channel;
-  StreamController<SwapStatusResponse>? _broadcastController;
+  StreamController<SwapStreamStatus>? _broadcastController;
   StreamSubscription? _channelSubscription;
 
   BoltzApi._(this._dio);
@@ -23,23 +23,23 @@ class BoltzApi {
     // print('initialize');
     channel = IOWebSocketChannel.connect(wssProtocolCheck('$baseUrl/v2/ws'));
     // Initialize the broadcast controller
-    _broadcastController = StreamController<SwapStatusResponse>.broadcast();
+    _broadcastController = StreamController<SwapStreamStatus>.broadcast();
 
     // Listen to the channel's stream once and distribute the data
     _channelSubscription = channel!.stream.listen((msg) {
       // Parse the message and add it to the broadcast controller
       final resp = jsonDecode(msg);
       if (resp['error'] != null) {
-        _broadcastController!.add(SwapStatusResponse(
+        _broadcastController!.add(SwapStreamStatus(
             id: '', status: SwapStatus.swapError, error: resp['error']));
       } else if (resp['event'] == 'update') {
         final swapList = resp['args'];
         for (final swap in swapList) {
           if (swap['error'] == null) {
             print(swap);
-            _broadcastController!.add(SwapStatusResponse.fromJson(swap));
+            _broadcastController!.add(SwapStreamStatus.fromJson(swap));
           } else {
-            _broadcastController!.add(SwapStatusResponse(
+            _broadcastController!.add(SwapStreamStatus(
                 id: swap['id'],
                 status: SwapStatus.swapError,
                 error: swap['error']));
@@ -51,7 +51,7 @@ class BoltzApi {
     });
   }
 
-  Stream<SwapStatusResponse> subscribeSwapStatus(List<String> swapIds) {
+  Stream<SwapStreamStatus> subscribeSwapStatus(List<String> swapIds) {
     // Ensure payload is sent whenever this function is called, to subscribe to new swap IDs
     Map<String, dynamic> payload = {
       'op': 'subscribe',
@@ -111,10 +111,10 @@ class BoltzApi {
     }
   }
 
-  Future<SwapStatus> getSwapStatus(String swapId) async {
+  Future<SwapStatusResponse> getSwapStatus(String swapId) async {
     try {
       final res = await _dio.post('/swapstatus', data: {'id': swapId});
-      return getSwapStatusFromString(res.data['status']);
+      return res.data as SwapStatusResponse;
     } catch (e) {
       rethrow;
     }

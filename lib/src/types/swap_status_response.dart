@@ -5,19 +5,39 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'swap_status_response.freezed.dart';
 part 'swap_status_response.g.dart';
 
-// SwapStatusResponse swapStatusResponseFromJson(String str) =>
-//     SwapStatusResponse.fromJson(json.decode(str));
+@freezed
+class Transaction with _$Transaction {
+  const factory Transaction({
+    required String id,
+    required String hex,
+    int? eta,
+  }) = _Transaction;
 
-// String swapStatusResponseToJson(SwapStatusResponse data) => json.encode(data.toJson());
+  factory Transaction.fromJson(Map<String, dynamic> json) =>
+      _$TransactionFromJson(json);
+}
 
 @freezed
 class SwapStatusResponse with _$SwapStatusResponse {
-  const factory SwapStatusResponse(
-      {required String id,
-      required SwapStatus status,
-      String? failureReason,
-      String? error}) = _SwapStatusResponse;
+  const factory SwapStatusResponse({
+    required SwapStatus status,
+    Transaction? transaction,
+    String? failureReason,
+    String? error,
+  }) = _SwapStatusResponse;
 
   factory SwapStatusResponse.fromJson(Map<String, dynamic> json) =>
       _$SwapStatusResponseFromJson(json);
+}
+
+@freezed
+class SwapStreamStatus with _$SwapStreamStatus {
+  const factory SwapStreamStatus({
+    required String id,
+    required SwapStatus status,
+    String? error,
+  }) = _SwapStreamStatus;
+
+  factory SwapStreamStatus.fromJson(Map<String, dynamic> json) =>
+      _$SwapStreamStatusFromJson(json);
 }

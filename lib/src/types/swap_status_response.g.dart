@@ -6,11 +6,27 @@ part of 'swap_status_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
+    _$TransactionImpl(
+      id: json['id'] as String,
+      hex: json['hex'] as String,
+      eta: json['eta'] as int?,
+    );
+
+Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'hex': instance.hex,
+      'eta': instance.eta,
+    };
+
 _$SwapStatusResponseImpl _$$SwapStatusResponseImplFromJson(
         Map<String, dynamic> json) =>
     _$SwapStatusResponseImpl(
-      id: json['id'] as String,
       status: $enumDecode(_$SwapStatusEnumMap, json['status']),
+      transaction: json['transaction'] == null
+          ? null
+          : Transaction.fromJson(json['transaction'] as Map<String, dynamic>),
       failureReason: json['failureReason'] as String?,
       error: json['error'] as String?,
     );
@@ -18,8 +34,8 @@ _$SwapStatusResponseImpl _$$SwapStatusResponseImplFromJson(
 Map<String, dynamic> _$$SwapStatusResponseImplToJson(
         _$SwapStatusResponseImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'status': _$SwapStatusEnumMap[instance.status]!,
+      'transaction': instance.transaction,
       'failureReason': instance.failureReason,
       'error': instance.error,
     };
@@ -44,3 +60,19 @@ const _$SwapStatusEnumMap = {
   SwapStatus.invoiceExpired: 'invoice.expired',
   SwapStatus.minerfeePaid: 'minerfee.paid',
 };
+
+_$SwapStreamStatusImpl _$$SwapStreamStatusImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SwapStreamStatusImpl(
+      id: json['id'] as String,
+      status: $enumDecode(_$SwapStatusEnumMap, json['status']),
+      error: json['error'] as String?,
+    );
+
+Map<String, dynamic> _$$SwapStreamStatusImplToJson(
+        _$SwapStreamStatusImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'status': _$SwapStatusEnumMap[instance.status]!,
+      'error': instance.error,
+    };

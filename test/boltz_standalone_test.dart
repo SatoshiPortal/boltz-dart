@@ -117,7 +117,7 @@ void main() {
       print("Send $btcLnSubmarine.amount to $btcLnSubmarine.address");
 
       var completer = Completer();
-      var receivedEvents = <SwapStatusResponse>[];
+      var receivedEvents = <SwapStreamStatus>[];
       final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
 
       var sub = api.subscribeSwapStatus([btcLnSubmarine.id]).listen((event) {
@@ -150,7 +150,7 @@ void main() {
       print("Send $btcLnSubmarine.amount to $btcLnSubmarine.address");
 
       var completer = Completer();
-      var receivedEvents = <SwapStatusResponse>[];
+      var receivedEvents = <SwapStreamStatus>[];
       final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
       var sub = api.subscribeSwapStatus([btcLnSubmarine.id]).listen((event) {
         receivedEvents.add(event);
@@ -182,7 +182,7 @@ void main() {
 
       print("Send $btcLnSubmarine.amount sats to $btcLnSubmarine.address");
       var completer = Completer();
-      var receivedEvents = <SwapStatusResponse>[];
+      var receivedEvents = <SwapStreamStatus>[];
       final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
       var sub = api.subscribeSwapStatus([btcLnSubmarine.id]).listen((event) {
         receivedEvents.add(event);
@@ -253,7 +253,7 @@ void main() {
       print("Pay this invoice: ${btcLnReverse.invoice}");
 
       var completer = Completer();
-      var receivedEvents = <SwapStatusResponse>[];
+      var receivedEvents = <SwapStreamStatus>[];
       final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
       var sub =
           api.subscribeSwapStatus([btcLnReverse.id]).listen((event) async {
@@ -300,7 +300,7 @@ void main() {
       print(
           "Send $lBtcLnSubmarineSwap.amount l-sats to $lBtcLnSubmarineSwap.address");
       var completer = Completer();
-      var receivedEvents = <SwapStatusResponse>[];
+      var receivedEvents = <SwapStreamStatus>[];
       final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
       var sub =
           api.subscribeSwapStatus([lBtcLnSubmarineSwap.id]).listen((event) {
@@ -339,7 +339,7 @@ void main() {
       print("Pay this invoice: ${lbtcLnReverseSwap.invoice}");
 
       var completer = Completer();
-      var receivedEvents = <SwapStatusResponse>[];
+      var receivedEvents = <SwapStreamStatus>[];
       final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
       var sub =
           api.subscribeSwapStatus([lbtcLnReverseSwap.id]).listen((event) async {
