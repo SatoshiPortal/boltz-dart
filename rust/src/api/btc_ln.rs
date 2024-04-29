@@ -78,7 +78,16 @@ impl BtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let btc_pair = boltz_pairs.get_btc_pair().unwrap();
+        let btc_pair = match boltz_pairs.get_btc_pair() {
+            Some(result) => result,
+            None => {
+                return Err(BoltzError::new(
+                    "BoltzApi".to_owned(),
+                    "Could not get BTC pair".to_owned(),
+                ))
+            }
+        };
+
         if btc_pair.hash != pair_hash {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -147,7 +156,15 @@ impl BtcLnV1Swap {
             Err(e) => return Err(e.into()),
         };
 
-        let btc_pair = boltz_pairs.get_btc_pair().unwrap();
+        let btc_pair = match boltz_pairs.get_btc_pair() {
+            Some(result) => result,
+            None => {
+                return Err(BoltzError::new(
+                    "BoltzApi".to_owned(),
+                    "Could not get BTC pair".to_owned(),
+                ))
+            }
+        };
         if btc_pair.hash != pair_hash {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -179,8 +196,8 @@ impl BtcLnV1Swap {
             network.into(),
             claim_keypair,
             preimage.into(),
-            response.get_redeem_script().unwrap(),
-            response.get_invoice().unwrap().to_string(),
+            response.get_redeem_script()?,
+            response.get_invoice()?.to_string(),
             script_address,
             out_amount,
             electrum_url,
@@ -299,12 +316,12 @@ impl BtcLnV1Swap {
         );
         // okay to use script address, we are just chekcing size
         let tx = match BtcSwapTx::new_claim(script, self.script_address.clone(), &network_config) {
-            Ok(result) => result,
+            Ok(result) => result.unwrap(),
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().into();
 
-        let size = match tx.unwrap().size(&ckp, &self.preimage.clone().try_into()?) {
+        let size = match tx.size(&ckp, &self.preimage.clone().try_into()?) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
@@ -437,11 +454,10 @@ impl BtcLnV2Swap {
             referral_id: None,
         };
 
-        let create_swap_response = boltz_client.post_reverse_req(create_reverse_req).unwrap();
+        let create_swap_response = boltz_client.post_reverse_req(create_reverse_req)?;
 
         let swap_script =
-            BtcSwapScriptV2::reverse_from_swap_resp(&create_swap_response, claim_public_key)
-                .unwrap();
+            BtcSwapScriptV2::reverse_from_swap_resp(&create_swap_response, claim_public_key)?;
 
         let script_address = swap_script.to_address(network.into())?.to_string();
 
@@ -460,7 +476,12 @@ impl BtcLnV2Swap {
         ))
     }
 
-    pub fn claim(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
+    pub fn claim(
+        &self,
+        out_address: String,
+        abs_fee: u64,
+        cooperate: bool,
+    ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -474,7 +495,7 @@ impl BtcLnV2Swap {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
-        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into()?;
         let script_balance = match swap_script.get_balance(&network_config) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -491,7 +512,11 @@ impl BtcLnV2Swap {
                 &ckp,
                 &preimage.try_into()?,
                 abs_fee,
-                Some((&boltz_client, self.id.clone())),
+                if cooperate {
+                    Some((&boltz_client, self.id.clone()))
+                } else {
+                    None
+                },
             ) {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
@@ -520,7 +545,7 @@ impl BtcLnV2Swap {
         }
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
-        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into()?;
 
         let script_balance = match swap_script.get_balance(&network_config) {
             Ok(result) => result,
@@ -568,19 +593,19 @@ impl BtcLnV2Swap {
             10,
         );
         // okay to use script address, we are just chekcing size
-        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into()?;
 
         let tx = match BtcSwapTxV2::new_claim(
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
         ) {
-            Ok(result) => result,
+            Ok(result) => result.unwrap(),
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().into();
 
-        let size = match tx.unwrap().size(&ckp, &self.preimage.clone().try_into()?) {
+        let size = match tx.size(&ckp, &self.preimage.clone().try_into()?) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };

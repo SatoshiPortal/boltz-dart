@@ -628,8 +628,9 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_claim(
     that: *mut wire_cst_btc_ln_v_2_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
+    cooperate: bool,
 ) {
-    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee)
+    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, cooperate)
 }
 
 #[no_mangle]
@@ -845,8 +846,9 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim(
     that: *mut wire_cst_lbtc_ln_v_2_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
+    cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee)
+    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, cooperate)
 }
 
 #[no_mangle]

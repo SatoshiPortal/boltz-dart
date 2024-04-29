@@ -7,11 +7,12 @@ use super::{
 use boltz_client::{
     network::electrum::ElectrumConfig, swaps::{
         boltz::{BoltzApiClient, CreateSwapRequest},
-        boltzv2::BoltzApiClientV2,
+        boltzv2::{BoltzApiClientV2, BOLTZ_MAINNET_URL_V2, BOLTZ_TESTNET_URL_V2},
         liquid::{LBtcSwapScript, LBtcSwapTx},
     }, util::secrets::Preimage, Amount, BtcSwapScriptV2, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey
 };
 use flutter_rust_bridge::frb;
+use elements::{ hex::ToHex, pset::serialize::Serialize};
 
 #[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnV1Swap {
@@ -80,7 +81,11 @@ impl LbtcLnV1Swap {
             Err(e) => return Err(e.into()),
         };
 
-        let lbtc_pair = boltz_pairs.get_lbtc_pair().unwrap();
+        let lbtc_pair = match boltz_pairs.get_lbtc_pair(){
+            Some(result)=>result,
+            None=>return Err(BoltzError::new("BoltzApi".to_owned(), "Could not get L-BTC pair".to_owned())),
+        };
+        
         if lbtc_pair.hash != pair_hash {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -126,9 +131,9 @@ impl LbtcLnV1Swap {
             network,
             refund_keypair,
             preimage.into(),
-            response.get_redeem_script().unwrap(),
+            response.get_redeem_script()?,
             invoice,
-            response.get_funding_amount().unwrap(),
+            response.get_funding_amount()?,
             out_address,
             "".to_string(),
             electrum_url,
@@ -158,8 +163,11 @@ impl LbtcLnV1Swap {
             Err(e) => return Err(e.into()),
         };
 
-        let lbtc_pair = boltz_pairs.get_lbtc_pair().unwrap();
-        if lbtc_pair.hash != pair_hash {
+        let lbtc_pair = match boltz_pairs.get_lbtc_pair(){
+            Some(result)=>result,
+            None=>return Err(BoltzError::new("BoltzApi".to_owned(), "Could not get L-BTC pair".to_owned())),
+        };
+                if lbtc_pair.hash != pair_hash {
             return Err(BoltzError {
                 kind: "Input".to_string(),
                 message: "Pair hash has updated. Check fees with boltz and use updated hash."
@@ -181,7 +189,7 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let out_address = script.to_address(network.into()).unwrap().to_string();
+        let out_address = script.to_address(network.into())?.to_string();
 
         Ok(LbtcLnV1Swap::new(
             response.get_id(),
@@ -189,7 +197,7 @@ impl LbtcLnV1Swap {
             network,
             claim_keypair,
             preimage.into(),
-            response.get_redeem_script().unwrap(),
+            response.get_redeem_script()?,
             response.get_invoice()?.to_string(),
             out_amount,
             out_address,
@@ -230,11 +238,13 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let txid = match tx.broadcast(signed, &network_config) {
+        // let boltz_url = if self.network == Chain::LiquidTestnet {BOLTZ_TESTNET_URL_V2} else {BOLTZ_MAINNET_URL_V2};
+        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        Ok(txid)
+        Ok(txid.to_string())
     }
 
     pub fn refund(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
@@ -264,11 +274,12 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let txid = match tx.broadcast(signed, &network_config) {
+        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        Ok(txid)
+        Ok(txid.to_string())
     }
 
     pub fn tx_size(swap: LbtcLnV1Swap) -> Result<usize, BoltzError> {
@@ -430,10 +441,10 @@ impl LbtcLnV2Swap {
             referral_id: None,
         };
 
-        let response = boltz_client.post_reverse_req(create_reverse_req).unwrap();
+        let response = boltz_client.post_reverse_req(create_reverse_req)?;
 
         let swap_script =
-            LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key).unwrap();
+            LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key)?;
 
         let script_address = swap_script.to_address(network.into())?.to_string();
 
@@ -453,7 +464,7 @@ impl LbtcLnV2Swap {
         ))
     }
 
-    pub fn claim(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
+    pub fn claim(&self, out_address: String, abs_fee: u64, cooperate: bool) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -467,7 +478,7 @@ impl LbtcLnV2Swap {
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
 
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
-        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
 
         let tx = match LBtcSwapTxV2::new_claim(swap_script, out_address, &network_config) {
             Ok(result) => result,
@@ -479,7 +490,7 @@ impl LbtcLnV2Swap {
             &ckp,
             &preimage.try_into()?,
             Amount::from_sat(abs_fee),
-            Some((&boltz_client, self.id.clone())),
+            if cooperate {Some((&boltz_client, self.id.clone()))} else {None},
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -503,12 +514,12 @@ impl LbtcLnV2Swap {
 
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
-        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
 
-        let script_balance = match swap_script.get_balance(&network_config) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
+        // let script_balance = match swap_script.get_balance(&network_config) {
+        //     Ok(result) => result,
+        //     Err(e) => return Err(e.into()),
+        // };
         let tx = match LBtcSwapTxV2::new_refund(swap_script.clone(), &out_address, &network_config)
         {
             Ok(result) => result,
@@ -542,7 +553,7 @@ impl LbtcLnV2Swap {
             true,
             10,
         );
-        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into().unwrap();
+        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
 
         let tx = match LBtcSwapTxV2::new_claim(
             swap_script.clone(),

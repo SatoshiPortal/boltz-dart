@@ -972,12 +972,14 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_btc_ln_v_2_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     int abs_fee,
+    bool cooperate,
   ) {
     return _wire_btc_ln_v_2_swap_claim(
       port_,
       that,
       out_address,
       abs_fee,
+      cooperate,
     );
   }
 
@@ -987,11 +989,12 @@ class BoltzCoreWire implements BaseWire {
               ffi.Int64,
               ffi.Pointer<wire_cst_btc_ln_v_2_swap>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Uint64)>>('frbgen_boltz_dart_wire_btc_ln_v_2_swap_claim');
+              ffi.Uint64,
+              ffi.Bool)>>('frbgen_boltz_dart_wire_btc_ln_v_2_swap_claim');
   late final _wire_btc_ln_v_2_swap_claim =
       _wire_btc_ln_v_2_swap_claimPtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_btc_ln_v_2_swap>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)>();
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, bool)>();
 
   void wire_btc_ln_v_2_swap_new(
     int port_,
@@ -1439,12 +1442,14 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_lbtc_ln_v_2_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     int abs_fee,
+    bool cooperate,
   ) {
     return _wire_lbtc_ln_v_2_swap_claim(
       port_,
       that,
       out_address,
       abs_fee,
+      cooperate,
     );
   }
 
@@ -1454,11 +1459,12 @@ class BoltzCoreWire implements BaseWire {
               ffi.Int64,
               ffi.Pointer<wire_cst_lbtc_ln_v_2_swap>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Uint64)>>('frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim');
+              ffi.Uint64,
+              ffi.Bool)>>('frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim');
   late final _wire_lbtc_ln_v_2_swap_claim =
       _wire_lbtc_ln_v_2_swap_claimPtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_lbtc_ln_v_2_swap>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)>();
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, bool)>();
 
   void wire_lbtc_ln_v_2_swap_new(
     int port_,

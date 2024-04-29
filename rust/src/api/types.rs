@@ -4,17 +4,20 @@ use flutter_rust_bridge::frb;
 // network
 // preimage
 //
-use serde::{Serialize,Deserialize};
 use boltz_client::{
-    network::Chain as BChain, swaps::boltz::{BoltzApiClient, SwapType as BoltzSwapType}, util::secrets::SwapKey, Address, Bolt11Invoice, BtcSwapScriptV2, ElementsAddress, Hash, Keypair, LBtcSwapScriptV2, PublicKey, Secp256k1, ZKKeyPair
+    network::Chain as BChain,
+    swaps::boltz::{BoltzApiClient, SwapType as BoltzSwapType},
+    util::secrets::SwapKey,
+    Address, Bolt11Invoice, BtcSwapScriptV2, ElementsAddress, Hash, Keypair, LBtcSwapScriptV2,
+    PublicKey, Secp256k1, ZKKeyPair,
 };
+use serde::{Deserialize, Serialize};
 
 use crate::util::check_protocol;
 
 use super::error::BoltzError;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub enum SwapType {
     Submarine,
@@ -38,16 +41,13 @@ impl From<BoltzSwapType> for SwapType {
     }
 }
 
-
-#[derive(Clone, Copy)]
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Copy, Serialize, Deserialize, PartialEq)]
 #[frb(dart_metadata=("freezed"))]
 pub enum Chain {
     Bitcoin,
     BitcoinTestnet,
-    Liquid,    
+    Liquid,
     LiquidTestnet,
-
 }
 
 impl Into<BChain> for Chain {
@@ -61,8 +61,7 @@ impl Into<BChain> for Chain {
     }
 }
 
-#[derive(Clone)]
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct KeyPair {
     pub secret_key: String,
@@ -78,10 +77,10 @@ impl Into<Keypair> for KeyPair {
 
 impl KeyPair {
     #[frb(sync)]
-    pub fn new(secret_key: String, public_key: String)->Self{
-        KeyPair{
+    pub fn new(secret_key: String, public_key: String) -> Self {
+        KeyPair {
             secret_key,
-            public_key
+            public_key,
         }
     }
 
@@ -114,8 +113,7 @@ impl KeyPair {
 
 use boltz_client::util::secrets::Preimage;
 
-#[derive(Debug,Clone)]
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct PreImage {
     pub value: String,
@@ -137,11 +135,11 @@ impl TryInto<Preimage> for PreImage {
 
 impl PreImage {
     #[frb(sync)]
-    pub fn new(value: String, sha256: String, hash160: String)->Self{
-        PreImage{
+    pub fn new(value: String, sha256: String, hash160: String) -> Self {
+        PreImage {
             value,
             sha256,
-            hash160
+            hash160,
         }
     }
     pub fn generate() -> Self {
@@ -164,7 +162,7 @@ impl Into<PreImage> for Preimage {
     }
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct AllFees {
     pub btc_limits: Limits,
@@ -173,18 +171,27 @@ pub struct AllFees {
     pub btc_reverse: ReverseSwapFees,
     pub lbtc_submarine: SubmarineSwapFees,
     pub lbtc_reverse: ReverseSwapFees,
-    pub btc_pair_hash: String, 
+    pub btc_pair_hash: String,
     pub lbtc_pair_hash: String,
 }
 
 impl AllFees {
-    pub fn fetch(boltz_url: String)->Result<Self,BoltzError>{
+    pub fn fetch(boltz_url: String) -> Result<Self, BoltzError> {
         let boltz_client = BoltzApiClient::new(&check_protocol(&boltz_url));
         let boltz_pairs = match boltz_client.get_pairs() {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let btc_pair = boltz_pairs.get_btc_pair().unwrap();
+
+        let btc_pair = match boltz_pairs.get_btc_pair() {
+            Some(result) => result,
+            None => {
+                return Err(BoltzError::new(
+                    "BoltzApi".to_owned(),
+                    "Could not get BTC pair".to_owned(),
+                ))
+            }
+        };
         let btc_limits = Limits {
             minimal: btc_pair.limits.minimal as u64,
             maximal: btc_pair.limits.maximal as u64,
@@ -200,7 +207,15 @@ impl AllFees {
             claim_fees_estimate: btc_pair.fees.reverse_claim_estimate(),
         };
 
-        let lbtc_pair = boltz_pairs.get_lbtc_pair().unwrap();
+        let lbtc_pair = match boltz_pairs.get_lbtc_pair() {
+            Some(result) => result,
+            None => {
+                return Err(BoltzError::new(
+                    "BoltzApi".to_owned(),
+                    "Could not get L-BTC pair".to_owned(),
+                ))
+            }
+        };
         let lbtc_limits = Limits {
             minimal: lbtc_pair.limits.minimal as u64,
             maximal: lbtc_pair.limits.maximal as u64,
@@ -226,12 +241,12 @@ impl AllFees {
             lbtc_submarine,
             lbtc_reverse,
             btc_pair_hash,
-            lbtc_pair_hash
+            lbtc_pair_hash,
         })
     }
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct Limits {
     pub minimal: u64,
@@ -240,7 +255,7 @@ pub struct Limits {
 
 // 1. lockup (client) 2. [claim (boltz) | refund (client)]
 #[frb(dart_metadata=("freezed"))]
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct SubmarineSwapFees {
     pub boltz_fees_rate: f64,
     pub claim_fees: u64,
@@ -249,7 +264,7 @@ pub struct SubmarineSwapFees {
 
 // 1. lockup (boltz) 2. [claim (client) | refund (boltz)]
 #[frb(dart_metadata=("freezed"))]
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct ReverseSwapFees {
     pub boltz_fees_rate: f64,
     pub lockup_fees: u64,
@@ -257,29 +272,32 @@ pub struct ReverseSwapFees {
 }
 
 #[frb(dart_metadata=("freezed"))]
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct DecodedInvoice {
     pub msats: u64,
-    pub expiry: u64, 
-    pub expires_in: u64, 
-    pub expires_at: u64, 
+    pub expiry: u64,
+    pub expires_in: u64,
+    pub expires_at: u64,
     pub is_expired: bool,
     pub network: String,
-    pub cltv_exp_delta: u64
+    pub cltv_exp_delta: u64,
 }
 impl DecodedInvoice {
     pub fn from_string(s: String) -> Result<Self, BoltzError> {
         // Attempt to parse the string to a Bolt11Invoice
-        let invoice = match Bolt11Invoice::from_str(&s){
-            Ok(result)=>result,
-            Err(e)=>return Err(BoltzError::new("Input".to_string(), e.to_string()))
+        let invoice = match Bolt11Invoice::from_str(&s) {
+            Ok(result) => result,
+            Err(e) => return Err(BoltzError::new("Input".to_string(), e.to_string())),
         };
 
         // If parsing succeeded, convert Bolt11Invoice to DecodedInvoice
         Ok(DecodedInvoice {
             expiry: invoice.expiry_time().as_secs(),
             expires_in: invoice.duration_until_expiry().as_secs(),
-            expires_at: invoice.expires_at().unwrap_or(Duration::from_secs(0)).as_secs(),
+            expires_at: invoice
+                .expires_at()
+                .unwrap_or(Duration::from_secs(0))
+                .as_secs(),
             is_expired: invoice.is_expired(),
             msats: invoice.amount_milli_satoshis().unwrap_or(0),
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
@@ -289,11 +307,10 @@ impl DecodedInvoice {
 }
 
 #[frb(dart_metadata=("freezed"))]
-#[derive(Clone, PartialEq, Eq)]
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BtcSwapScriptV2Str {
     pub swap_type: SwapType,
-    pub funding_addrs: Option<String>, 
+    pub funding_addrs: Option<String>,
     pub hashlock: String,
     pub receiver_pubkey: String,
     pub locktime: u32,
@@ -305,47 +322,48 @@ impl TryInto<BtcSwapScriptV2> for BtcSwapScriptV2Str {
 
     fn try_into(self) -> Result<BtcSwapScriptV2, Self::Error> {
         let mut address: Option<Address>;
-        if self.funding_addrs.is_some(){
-             address = Some(Address::from_str(&self.funding_addrs.unwrap()).unwrap().assume_checked());
-        }
-        else{
+        if self.funding_addrs.is_some() {
+            address = Some(
+                Address::from_str(&self.funding_addrs.unwrap())
+                    .unwrap()
+                    .assume_checked(),
+            );
+        } else {
             address = None;
         }
         let hashlock = Hash::from_str(&self.hashlock).unwrap();
         let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
         let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();
         let locktime = boltz_client::LockTime::from_height(self.locktime).unwrap();
-        Ok(BtcSwapScriptV2{
-            swap_type: self.swap_type.clone().into(), 
+        Ok(BtcSwapScriptV2 {
+            swap_type: self.swap_type.clone().into(),
             funding_addrs: address,
-            hashlock:hashlock,
+            hashlock: hashlock,
             receiver_pubkey: receiver_pubkey,
             locktime: locktime,
             sender_pubkey: sender_pubkey,
         })
-        
     }
 }
 
 impl From<BtcSwapScriptV2> for BtcSwapScriptV2Str {
     fn from(swap: BtcSwapScriptV2) -> Self {
         BtcSwapScriptV2Str {
-            swap_type: swap.swap_type.into(), 
-            funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()), 
-            hashlock: swap.hashlock.to_string(), 
-            receiver_pubkey: swap.receiver_pubkey.to_string(), 
-            locktime: swap.locktime.to_consensus_u32(), 
-            sender_pubkey: swap.sender_pubkey.to_string(), 
+            swap_type: swap.swap_type.into(),
+            funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()),
+            hashlock: swap.hashlock.to_string(),
+            receiver_pubkey: swap.receiver_pubkey.to_string(),
+            locktime: swap.locktime.to_consensus_u32(),
+            sender_pubkey: swap.sender_pubkey.to_string(),
         }
     }
 }
 
 #[frb(dart_metadata=("freezed"))]
-#[derive(Clone, PartialEq, Eq)]
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LBtcSwapScriptV2Str {
     pub swap_type: SwapType,
-    pub funding_addrs: Option<String>, 
+    pub funding_addrs: Option<String>,
     pub hashlock: String,
     pub receiver_pubkey: String,
     pub locktime: u32,
@@ -358,10 +376,9 @@ impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
 
     fn try_into(self) -> Result<LBtcSwapScriptV2, Self::Error> {
         let mut address: Option<ElementsAddress>;
-        if self.funding_addrs.is_some(){
-             address = Some(ElementsAddress::from_str(&self.funding_addrs.unwrap()).unwrap());
-        }
-        else{
+        if self.funding_addrs.is_some() {
+            address = Some(ElementsAddress::from_str(&self.funding_addrs.unwrap()).unwrap());
+        } else {
             address = None;
         }
         let hashlock = Hash::from_str(&self.hashlock).unwrap();
@@ -370,28 +387,27 @@ impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
         let locktime = boltz_client::ElementsLockTime::from_height(self.locktime).unwrap();
         let blinding_key = ZKKeyPair::from_str(&self.blinding_key).unwrap();
 
-        Ok(LBtcSwapScriptV2{
-            swap_type: self.swap_type.clone().into(), 
+        Ok(LBtcSwapScriptV2 {
+            swap_type: self.swap_type.clone().into(),
             funding_addrs: address,
-            hashlock:hashlock,
+            hashlock: hashlock,
             receiver_pubkey: receiver_pubkey,
             locktime: locktime,
             sender_pubkey: sender_pubkey,
             blinding_key: blinding_key,
         })
-        
     }
 }
 
 impl From<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
     fn from(swap: LBtcSwapScriptV2) -> Self {
         LBtcSwapScriptV2Str {
-            swap_type: swap.swap_type.into(), 
-            funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()), 
-            hashlock: swap.hashlock.to_string(), 
-            receiver_pubkey: swap.receiver_pubkey.to_string(), 
-            locktime: swap.locktime.to_consensus_u32(), 
-            sender_pubkey: swap.sender_pubkey.to_string(), 
+            swap_type: swap.swap_type.into(),
+            funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()),
+            hashlock: swap.hashlock.to_string(),
+            receiver_pubkey: swap.receiver_pubkey.to_string(),
+            locktime: swap.locktime.to_consensus_u32(),
+            sender_pubkey: swap.sender_pubkey.to_string(),
             blinding_key: swap.blinding_key.display_secret().to_string(),
         }
     }

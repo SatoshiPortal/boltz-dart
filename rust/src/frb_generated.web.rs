@@ -563,8 +563,9 @@ pub fn wire_btc_ln_v_2_swap_claim(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
+    cooperate: bool,
 ) {
-    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee)
+    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, cooperate)
 }
 
 #[wasm_bindgen]
@@ -780,8 +781,9 @@ pub fn wire_lbtc_ln_v_2_swap_claim(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
+    cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee)
+    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, cooperate)
 }
 
 #[wasm_bindgen]

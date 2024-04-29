@@ -123,9 +123,16 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
     required String boltzUrl,
   }) = _BtcLnV2Swap;
   Future<String> claim(
-          {required String outAddress, required int absFee, dynamic hint}) =>
+          {required String outAddress,
+          required int absFee,
+          required bool cooperate,
+          dynamic hint}) =>
       BoltzCore.instance.api.btcLnV2SwapClaim(
-          that: this, outAddress: outAddress, absFee: absFee, hint: hint);
+          that: this,
+          outAddress: outAddress,
+          absFee: absFee,
+          cooperate: cooperate,
+          hint: hint);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<BtcLnV2Swap> newInstance(

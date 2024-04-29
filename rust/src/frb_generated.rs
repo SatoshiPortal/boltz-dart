@@ -243,6 +243,7 @@ fn wire_btc_ln_v_2_swap_claim_impl(
     that: impl CstDecode<crate::api::btc_ln::BtcLnV2Swap>,
     out_address: impl CstDecode<String>,
     abs_fee: impl CstDecode<u64>,
+    cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -254,9 +255,15 @@ fn wire_btc_ln_v_2_swap_claim_impl(
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
             let api_abs_fee = abs_fee.cst_decode();
+            let api_cooperate = cooperate.cst_decode();
             move |context| {
                 transform_result_dco((move || {
-                    crate::api::btc_ln::BtcLnV2Swap::claim(&api_that, api_out_address, api_abs_fee)
+                    crate::api::btc_ln::BtcLnV2Swap::claim(
+                        &api_that,
+                        api_out_address,
+                        api_abs_fee,
+                        api_cooperate,
+                    )
                 })())
             }
         },
@@ -670,6 +677,7 @@ fn wire_lbtc_ln_v_2_swap_claim_impl(
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap>,
     out_address: impl CstDecode<String>,
     abs_fee: impl CstDecode<u64>,
+    cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -681,12 +689,14 @@ fn wire_lbtc_ln_v_2_swap_claim_impl(
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
             let api_abs_fee = abs_fee.cst_decode();
+            let api_cooperate = cooperate.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     crate::api::lbtc_ln::LbtcLnV2Swap::claim(
                         &api_that,
                         api_out_address,
                         api_abs_fee,
+                        api_cooperate,
                     )
                 })())
             }

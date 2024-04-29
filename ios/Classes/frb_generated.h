@@ -197,7 +197,8 @@ void frbgen_boltz_dart_wire_btc_ln_v_1_swap_tx_size(int64_t port_,
 void frbgen_boltz_dart_wire_btc_ln_v_2_swap_claim(int64_t port_,
                                                   struct wire_cst_btc_ln_v_2_swap *that,
                                                   struct wire_cst_list_prim_u_8_strict *out_address,
-                                                  uint64_t abs_fee);
+                                                  uint64_t abs_fee,
+                                                  bool cooperate);
 
 void frbgen_boltz_dart_wire_btc_ln_v_2_swap_new(int64_t port_,
                                                 struct wire_cst_list_prim_u_8_strict *id,
@@ -288,7 +289,8 @@ void frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_tx_size(int64_t port_,
 void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim(int64_t port_,
                                                    struct wire_cst_lbtc_ln_v_2_swap *that,
                                                    struct wire_cst_list_prim_u_8_strict *out_address,
-                                                   uint64_t abs_fee);
+                                                   uint64_t abs_fee,
+                                                   bool cooperate);
 
 void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new(int64_t port_,
                                                  struct wire_cst_list_prim_u_8_strict *id,
