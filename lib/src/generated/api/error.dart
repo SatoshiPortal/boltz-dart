@@ -5,30 +5,19 @@
 
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+part 'error.freezed.dart';
 
-class BoltzError implements FrbException {
-  final String kind;
-  final String message;
-
-  const BoltzError({
-    required this.kind,
-    required this.message,
-  });
-
+@freezed
+class BoltzError with _$BoltzError implements FrbException {
+  const BoltzError._();
+  const factory BoltzError({
+    required String kind,
+    required String message,
+  }) = _BoltzError;
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<BoltzError> newInstance(
           {required String kind, required String message, dynamic hint}) =>
       BoltzCore.instance.api
           .boltzErrorNew(kind: kind, message: message, hint: hint);
-
-  @override
-  int get hashCode => kind.hashCode ^ message.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is BoltzError &&
-          runtimeType == other.runtimeType &&
-          kind == other.kind &&
-          message == other.message;
 }
