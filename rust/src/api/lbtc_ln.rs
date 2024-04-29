@@ -238,8 +238,8 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        // let boltz_url = if self.network == Chain::LiquidTestnet {BOLTZ_TESTNET_URL_V2} else {BOLTZ_MAINNET_URL_V2};
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_url = if self.network == Chain::LiquidTestnet {BOLTZ_TESTNET_URL_V2} else {BOLTZ_MAINNET_URL_V2};
+        let boltz_client = BoltzApiClientV2::new(boltz_url);
         let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -274,7 +274,8 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_url = if self.network == Chain::LiquidTestnet {BOLTZ_TESTNET_URL_V2} else {BOLTZ_MAINNET_URL_V2};
+        let boltz_client = BoltzApiClientV2::new(boltz_url);
         let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
