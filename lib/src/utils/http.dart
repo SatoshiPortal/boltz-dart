@@ -67,6 +67,7 @@ class BoltzApi {
   void dispose() {
     _channelSubscription?.cancel();
     _broadcastController?.close();
+    channel!.sink.close();
   }
 
   static Future<BoltzApi> newBoltzApi(String boltzUrl) async {
