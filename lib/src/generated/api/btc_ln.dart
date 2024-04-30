@@ -125,14 +125,17 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
   Future<String> claim(
           {required String outAddress,
           required int absFee,
-          required bool cooperate,
+          required bool tryCooperate,
           dynamic hint}) =>
       BoltzCore.instance.api.btcLnV2SwapClaim(
           that: this,
           outAddress: outAddress,
           absFee: absFee,
-          cooperate: cooperate,
+          tryCooperate: tryCooperate,
           hint: hint);
+
+  Future<void> coopCloseSubmarine({dynamic hint}) => BoltzCore.instance.api
+      .btcLnV2SwapCoopCloseSubmarine(that: this, hint: hint);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<BtcLnV2Swap> newInstance(
@@ -197,9 +200,16 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           hint: hint);
 
   Future<String> refund(
-          {required String outAddress, required int absFee, dynamic hint}) =>
+          {required String outAddress,
+          required int absFee,
+          required bool tryCooperate,
+          dynamic hint}) =>
       BoltzCore.instance.api.btcLnV2SwapRefund(
-          that: this, outAddress: outAddress, absFee: absFee, hint: hint);
+          that: this,
+          outAddress: outAddress,
+          absFee: absFee,
+          tryCooperate: tryCooperate,
+          hint: hint);
 
   Future<int> txSize({dynamic hint}) =>
       BoltzCore.instance.api.btcLnV2SwapTxSize(that: this, hint: hint);

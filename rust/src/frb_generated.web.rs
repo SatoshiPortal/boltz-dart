@@ -563,9 +563,17 @@ pub fn wire_btc_ln_v_2_swap_claim(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
-    cooperate: bool,
+    try_cooperate: bool,
 ) {
-    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, cooperate)
+    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, try_cooperate)
+}
+
+#[wasm_bindgen]
+pub fn wire_btc_ln_v_2_swap_coop_close_submarine(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_btc_ln_v_2_swap_coop_close_submarine_impl(port_, that)
 }
 
 #[wasm_bindgen]
@@ -647,8 +655,9 @@ pub fn wire_btc_ln_v_2_swap_refund(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
+    try_cooperate: bool,
 ) {
-    wire_btc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee)
+    wire_btc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[wasm_bindgen]
@@ -781,9 +790,17 @@ pub fn wire_lbtc_ln_v_2_swap_claim(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
-    cooperate: bool,
+    try_cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, cooperate)
+    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, try_cooperate)
+}
+
+#[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_coop_close_submarine(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_lbtc_ln_v_2_swap_coop_close_submarine_impl(port_, that)
 }
 
 #[wasm_bindgen]
@@ -867,8 +884,9 @@ pub fn wire_lbtc_ln_v_2_swap_refund(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     abs_fee: u64,
+    try_cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee)
+    wire_lbtc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[wasm_bindgen]

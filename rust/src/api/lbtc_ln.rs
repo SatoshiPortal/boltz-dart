@@ -5,14 +5,17 @@ use super::{
     types::{Chain, KeyPair, LBtcSwapScriptV2Str, PreImage, SwapType},
 };
 use boltz_client::{
-    network::electrum::ElectrumConfig, swaps::{
+    network::electrum::ElectrumConfig,
+    swaps::{
         boltz::{BoltzApiClient, CreateSwapRequest},
         boltzv2::{BoltzApiClientV2, BOLTZ_MAINNET_URL_V2, BOLTZ_TESTNET_URL_V2},
         liquid::{LBtcSwapScript, LBtcSwapTx},
-    }, util::secrets::Preimage, Amount, BtcSwapScriptV2, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey
+    },
+    util::secrets::Preimage,
+    Amount, BtcSwapScriptV2, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey,
 };
+use elements::{hex::ToHex, pset::serialize::Serialize};
 use flutter_rust_bridge::frb;
-use elements::{ hex::ToHex, pset::serialize::Serialize};
 use serde_json::Value;
 
 #[frb(dart_metadata=("freezed"))]
@@ -82,11 +85,16 @@ impl LbtcLnV1Swap {
             Err(e) => return Err(e.into()),
         };
 
-        let lbtc_pair = match boltz_pairs.get_lbtc_pair(){
-            Some(result)=>result,
-            None=>return Err(BoltzError::new("BoltzApi".to_owned(), "Could not get L-BTC pair".to_owned())),
+        let lbtc_pair = match boltz_pairs.get_lbtc_pair() {
+            Some(result) => result,
+            None => {
+                return Err(BoltzError::new(
+                    "BoltzApi".to_owned(),
+                    "Could not get L-BTC pair".to_owned(),
+                ))
+            }
         };
-        
+
         if lbtc_pair.hash != pair_hash {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -164,11 +172,16 @@ impl LbtcLnV1Swap {
             Err(e) => return Err(e.into()),
         };
 
-        let lbtc_pair = match boltz_pairs.get_lbtc_pair(){
-            Some(result)=>result,
-            None=>return Err(BoltzError::new("BoltzApi".to_owned(), "Could not get L-BTC pair".to_owned())),
+        let lbtc_pair = match boltz_pairs.get_lbtc_pair() {
+            Some(result) => result,
+            None => {
+                return Err(BoltzError::new(
+                    "BoltzApi".to_owned(),
+                    "Could not get L-BTC pair".to_owned(),
+                ))
+            }
         };
-                if lbtc_pair.hash != pair_hash {
+        if lbtc_pair.hash != pair_hash {
             return Err(BoltzError {
                 kind: "Input".to_string(),
                 message: "Pair hash has updated. Check fees with boltz and use updated hash."
@@ -239,12 +252,17 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_url = if self.network == Chain::LiquidTestnet {BOLTZ_TESTNET_URL_V2} else {BOLTZ_MAINNET_URL_V2};
-        let boltz_client = BoltzApiClientV2::new(boltz_url);
-        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
+        let boltz_url = if self.network == Chain::LiquidTestnet {
+            BOLTZ_TESTNET_URL_V2
+        } else {
+            BOLTZ_MAINNET_URL_V2
         };
+        let boltz_client = BoltzApiClientV2::new(boltz_url);
+        let txid =
+            match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
         Ok(extract_id(txid)?)
     }
 
@@ -275,12 +293,17 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_url = if self.network == Chain::LiquidTestnet {BOLTZ_TESTNET_URL_V2} else {BOLTZ_MAINNET_URL_V2};
-        let boltz_client = BoltzApiClientV2::new(boltz_url);
-        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
+        let boltz_url = if self.network == Chain::LiquidTestnet {
+            BOLTZ_TESTNET_URL_V2
+        } else {
+            BOLTZ_MAINNET_URL_V2
         };
+        let boltz_client = BoltzApiClientV2::new(boltz_url);
+        let txid =
+            match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
         Ok(extract_id(txid)?)
     }
 
@@ -445,8 +468,7 @@ impl LbtcLnV2Swap {
 
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
 
-        let swap_script =
-            LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key)?;
+        let swap_script = LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key)?;
 
         let script_address = swap_script.to_address(network.into())?.to_string();
 
@@ -465,8 +487,33 @@ impl LbtcLnV2Swap {
             boltz_url,
         ))
     }
+    pub fn coop_close_submarine(&self) -> Result<(), BoltzError> {
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
 
-    pub fn claim(&self, out_address: String, abs_fee: u64, cooperate: bool) -> Result<String, BoltzError> {
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
+        // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
+
+        let tx = match LBtcSwapTxV2::new_refund(swap_script, &self.script_address, &network_config)
+        {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().into();
+
+        let claim_tx_response = boltz_client.get_claim_tx_details(&self.id)?;
+
+        let (partial_sig, pub_nonce) = tx.submarine_partial_sig(&ckp, &claim_tx_response)?;
+        boltz_client.post_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
+        Ok(())
+    }
+    pub fn claim(
+        &self,
+        out_address: String,
+        abs_fee: u64,
+        try_cooperate: bool,
+    ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -492,19 +539,24 @@ impl LbtcLnV2Swap {
             &ckp,
             &preimage.try_into()?,
             Amount::from_sat(abs_fee),
-            if cooperate {Some((&boltz_client, self.id.clone()))} else {None},
+            if try_cooperate {
+                Some((&boltz_client, self.id.clone()))
+            } else {
+                None
+            },
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
+        let txid =
+            match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
         Ok(extract_id(txid)?)
     }
 
-    pub fn refund(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
+    pub fn refund(&self, out_address: String, abs_fee: u64, try_cooperate: bool) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -533,10 +585,11 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
+        let txid =
+            match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
+                Ok(result) => result,
+                Err(e) => return Err(e.into()),
+            };
         Ok(extract_id(txid)?)
     }
 
@@ -580,6 +633,9 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
     // Attempt to access the `id` field directly
     match response.get("id") {
         Some(id_value) if id_value.is_string() => Ok(id_value.as_str().unwrap().to_string()),
-        _ => Err(BoltzError::new("BoltzApi".to_string(), "TxId not found in boltz response".to_string())),
+        _ => Err(BoltzError::new(
+            "BoltzApi".to_string(),
+            "TxId not found in boltz response".to_string(),
+        )),
     }
 }

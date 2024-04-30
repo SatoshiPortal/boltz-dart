@@ -118,8 +118,11 @@ abstract class BoltzCoreApi extends BaseApi {
       {required BtcLnV2Swap that,
       required String outAddress,
       required int absFee,
-      required bool cooperate,
+      required bool tryCooperate,
       dynamic hint});
+
+  Future<void> btcLnV2SwapCoopCloseSubmarine(
+      {required BtcLnV2Swap that, dynamic hint});
 
   Future<BtcLnV2Swap> btcLnV2SwapNew(
       {required String id,
@@ -157,6 +160,7 @@ abstract class BoltzCoreApi extends BaseApi {
       {required BtcLnV2Swap that,
       required String outAddress,
       required int absFee,
+      required bool tryCooperate,
       dynamic hint});
 
   Future<int> btcLnV2SwapTxSize({required BtcLnV2Swap that, dynamic hint});
@@ -217,8 +221,11 @@ abstract class BoltzCoreApi extends BaseApi {
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
-      required bool cooperate,
+      required bool tryCooperate,
       dynamic hint});
+
+  Future<void> lbtcLnV2SwapCoopCloseSubmarine(
+      {required LbtcLnV2Swap that, dynamic hint});
 
   Future<LbtcLnV2Swap> lbtcLnV2SwapNew(
       {required String id,
@@ -257,6 +264,7 @@ abstract class BoltzCoreApi extends BaseApi {
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
+      required bool tryCooperate,
       dynamic hint});
 
   Future<int> lbtcLnV2SwapTxSize({required LbtcLnV2Swap that, dynamic hint});
@@ -577,14 +585,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       {required BtcLnV2Swap that,
       required String outAddress,
       required int absFee,
-      required bool cooperate,
+      required bool tryCooperate,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_btc_ln_v_2_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_u_64(absFee);
-        var arg3 = cst_encode_bool(cooperate);
+        var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire_btc_ln_v_2_swap_claim(port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
@@ -592,7 +600,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kBtcLnV2SwapClaimConstMeta,
-      argValues: [that, outAddress, absFee, cooperate],
+      argValues: [that, outAddress, absFee, tryCooperate],
       apiImpl: this,
       hint: hint,
     ));
@@ -600,7 +608,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kBtcLnV2SwapClaimConstMeta => const TaskConstMeta(
         debugName: "btc_ln_v_2_swap_claim",
-        argNames: ["that", "outAddress", "absFee", "cooperate"],
+        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
+      );
+
+  @override
+  Future<void> btcLnV2SwapCoopCloseSubmarine(
+      {required BtcLnV2Swap that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_v_2_swap(that);
+        return wire.wire_btc_ln_v_2_swap_coop_close_submarine(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kBtcLnV2SwapCoopCloseSubmarineConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kBtcLnV2SwapCoopCloseSubmarineConstMeta =>
+      const TaskConstMeta(
+        debugName: "btc_ln_v_2_swap_coop_close_submarine",
+        argNames: ["that"],
       );
 
   @override
@@ -764,20 +797,22 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       {required BtcLnV2Swap that,
       required String outAddress,
       required int absFee,
+      required bool tryCooperate,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_btc_ln_v_2_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_u_64(absFee);
-        return wire.wire_btc_ln_v_2_swap_refund(port_, arg0, arg1, arg2);
+        var arg3 = cst_encode_bool(tryCooperate);
+        return wire.wire_btc_ln_v_2_swap_refund(port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kBtcLnV2SwapRefundConstMeta,
-      argValues: [that, outAddress, absFee],
+      argValues: [that, outAddress, absFee, tryCooperate],
       apiImpl: this,
       hint: hint,
     ));
@@ -785,7 +820,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kBtcLnV2SwapRefundConstMeta => const TaskConstMeta(
         debugName: "btc_ln_v_2_swap_refund",
-        argNames: ["that", "outAddress", "absFee"],
+        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
       );
 
   @override
@@ -1104,14 +1139,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
-      required bool cooperate,
+      required bool tryCooperate,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_lbtc_ln_v_2_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_u_64(absFee);
-        var arg3 = cst_encode_bool(cooperate);
+        var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire_lbtc_ln_v_2_swap_claim(port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
@@ -1119,7 +1154,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kLbtcLnV2SwapClaimConstMeta,
-      argValues: [that, outAddress, absFee, cooperate],
+      argValues: [that, outAddress, absFee, tryCooperate],
       apiImpl: this,
       hint: hint,
     ));
@@ -1127,7 +1162,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kLbtcLnV2SwapClaimConstMeta => const TaskConstMeta(
         debugName: "lbtc_ln_v_2_swap_claim",
-        argNames: ["that", "outAddress", "absFee", "cooperate"],
+        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
+      );
+
+  @override
+  Future<void> lbtcLnV2SwapCoopCloseSubmarine(
+      {required LbtcLnV2Swap that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_v_2_swap(that);
+        return wire.wire_lbtc_ln_v_2_swap_coop_close_submarine(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kLbtcLnV2SwapCoopCloseSubmarineConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kLbtcLnV2SwapCoopCloseSubmarineConstMeta =>
+      const TaskConstMeta(
+        debugName: "lbtc_ln_v_2_swap_coop_close_submarine",
+        argNames: ["that"],
       );
 
   @override
@@ -1295,20 +1355,22 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
+      required bool tryCooperate,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_lbtc_ln_v_2_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_u_64(absFee);
-        return wire.wire_lbtc_ln_v_2_swap_refund(port_, arg0, arg1, arg2);
+        var arg3 = cst_encode_bool(tryCooperate);
+        return wire.wire_lbtc_ln_v_2_swap_refund(port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kLbtcLnV2SwapRefundConstMeta,
-      argValues: [that, outAddress, absFee],
+      argValues: [that, outAddress, absFee, tryCooperate],
       apiImpl: this,
       hint: hint,
     ));
@@ -1316,7 +1378,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kLbtcLnV2SwapRefundConstMeta => const TaskConstMeta(
         debugName: "lbtc_ln_v_2_swap_refund",
-        argNames: ["that", "outAddress", "absFee"],
+        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
       );
 
   @override

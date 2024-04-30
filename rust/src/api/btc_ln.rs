@@ -423,6 +423,27 @@ impl BtcLnV2Swap {
         ))
     }
 
+    pub fn coop_close_submarine(&self) -> Result<(), BoltzError> {
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
+
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into()?;
+        // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
+
+        let tx = match BtcSwapTxV2::new_refund(swap_script, &self.script_address, &network_config)
+        {
+            Ok(result) => result.unwrap(),
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().into();
+
+        let claim_tx_response = boltz_client.get_claim_tx_details(&self.id)?;
+
+        let (partial_sig, pub_nonce) = tx.submarine_partial_sig(&ckp, &claim_tx_response)?;
+        boltz_client.post_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
+        Ok(())
+    }
     pub fn new_reverse(
         mnemonic: String,
         index: u64,
@@ -480,7 +501,7 @@ impl BtcLnV2Swap {
         &self,
         out_address: String,
         abs_fee: u64,
-        cooperate: bool,
+        try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
@@ -512,7 +533,7 @@ impl BtcLnV2Swap {
                 &ckp,
                 &preimage.try_into()?,
                 abs_fee,
-                if cooperate {
+                if try_cooperate {
                     Some((&boltz_client, self.id.clone()))
                 } else {
                     None
@@ -534,7 +555,7 @@ impl BtcLnV2Swap {
         }
     }
 
-    pub fn refund(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
+    pub fn refund(&self, out_address: String, abs_fee: u64, try_cooperate: bool) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
