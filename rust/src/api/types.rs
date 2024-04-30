@@ -306,8 +306,8 @@ impl DecodedInvoice {
     }
 }
 
-#[frb(dart_metadata=("freezed"))]
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct BtcSwapScriptV2Str {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,
@@ -317,20 +317,40 @@ pub struct BtcSwapScriptV2Str {
     pub sender_pubkey: String,
 }
 
+impl BtcSwapScriptV2Str {
+    #[frb(sync)]
+    pub fn new(
+        swap_type: SwapType, 
+        funding_addrs: Option<String>, 
+        hashlock: String, 
+        receiver_pubkey: String, 
+        locktime: u32, 
+        sender_pubkey: String
+    ) -> Self {
+        BtcSwapScriptV2Str {
+            swap_type,
+            funding_addrs,
+            hashlock,
+            receiver_pubkey,
+            locktime,
+            sender_pubkey,
+        }
+    }
+}
+
 impl TryInto<BtcSwapScriptV2> for BtcSwapScriptV2Str {
     type Error = BoltzError; // Use a more specific error type in a real application
 
     fn try_into(self) -> Result<BtcSwapScriptV2, Self::Error> {
-        let mut address: Option<Address>;
-        if self.funding_addrs.is_some() {
-            address = Some(
+        let address: Option<Address> = if self.funding_addrs.is_some() {
+            Some(
                 Address::from_str(&self.funding_addrs.unwrap())
                     .unwrap()
                     .assume_checked(),
-            );
+            )
         } else {
-            address = None;
-        }
+            None
+        };
         let hashlock = Hash::from_str(&self.hashlock).unwrap();
         let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
         let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();
@@ -359,8 +379,8 @@ impl From<BtcSwapScriptV2> for BtcSwapScriptV2Str {
     }
 }
 
-#[frb(dart_metadata=("freezed"))]
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct LBtcSwapScriptV2Str {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,
@@ -370,17 +390,37 @@ pub struct LBtcSwapScriptV2Str {
     pub sender_pubkey: String,
     pub blinding_key: String,
 }
-
+impl LBtcSwapScriptV2Str {
+    #[frb(sync)]
+    pub fn new(
+        swap_type: SwapType, 
+        funding_addrs: Option<String>, 
+        hashlock: String, 
+        receiver_pubkey: String, 
+        locktime: u32, 
+        sender_pubkey: String, 
+        blinding_key: String
+    ) -> Self {
+        LBtcSwapScriptV2Str {
+            swap_type,
+            funding_addrs,
+            hashlock,
+            receiver_pubkey,
+            locktime,
+            sender_pubkey,
+            blinding_key,
+        }
+    }
+}
 impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
     type Error = BoltzError; // Use a more specific error type in a real application
 
     fn try_into(self) -> Result<LBtcSwapScriptV2, Self::Error> {
-        let mut address: Option<ElementsAddress>;
-        if self.funding_addrs.is_some() {
-            address = Some(ElementsAddress::from_str(&self.funding_addrs.unwrap()).unwrap());
+        let address: Option<ElementsAddress> = if self.funding_addrs.is_some() {
+            Some(ElementsAddress::from_str(&self.funding_addrs.unwrap()).unwrap())
         } else {
-            address = None;
-        }
+            None
+        };
         let hashlock = Hash::from_str(&self.hashlock).unwrap();
         let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
         let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();

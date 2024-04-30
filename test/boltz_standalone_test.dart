@@ -10,7 +10,6 @@ import 'package:boltz_dart/src/types/swap_status_response.dart';
 import 'package:boltz_dart/src/utils/http.dart';
 import 'package:boltz_dart/src/utils/loader.dart';
 import 'package:test/test.dart';
-import 'dart:io';
 
 import 'test_data.dart';
 
@@ -372,7 +371,7 @@ void main() {
 }
 
 Future<BtcLnV1Swap> setupSubmarine(String invoice) async {
-  final amount = 100000;
+  // final amount = 100000;
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
   final btcLnSubmarineSwap = await BtcLnV1Swap.newSubmarine(
@@ -404,7 +403,7 @@ Future<BtcLnV1Swap> setupReverse(int outAmount) async {
 }
 
 Future<LbtcLnV1Swap> setupLSubmarine(String invoice) async {
-  final amount = 100000;
+  // final amount = 100000;
   final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
   final lbtcLnSubmarineSwap = await LbtcLnV1Swap.newSubmarine(

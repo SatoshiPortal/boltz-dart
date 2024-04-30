@@ -333,6 +333,13 @@ void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_tx_size(int64_t port_,
 void frbgen_boltz_dart_wire_all_fees_fetch(int64_t port_,
                                            struct wire_cst_list_prim_u_8_strict *boltz_url);
 
+WireSyncRust2DartDco frbgen_boltz_dart_wire_btc_swap_script_v_2_str_new(int32_t swap_type,
+                                                                        struct wire_cst_list_prim_u_8_strict *funding_addrs,
+                                                                        struct wire_cst_list_prim_u_8_strict *hashlock,
+                                                                        struct wire_cst_list_prim_u_8_strict *receiver_pubkey,
+                                                                        uint32_t locktime,
+                                                                        struct wire_cst_list_prim_u_8_strict *sender_pubkey);
+
 void frbgen_boltz_dart_wire_decoded_invoice_from_string(int64_t port_,
                                                         struct wire_cst_list_prim_u_8_strict *s);
 
@@ -344,6 +351,14 @@ void frbgen_boltz_dart_wire_key_pair_generate(int64_t port_,
 
 WireSyncRust2DartDco frbgen_boltz_dart_wire_key_pair_new(struct wire_cst_list_prim_u_8_strict *secret_key,
                                                          struct wire_cst_list_prim_u_8_strict *public_key);
+
+WireSyncRust2DartDco frbgen_boltz_dart_wire_l_btc_swap_script_v_2_str_new(int32_t swap_type,
+                                                                          struct wire_cst_list_prim_u_8_strict *funding_addrs,
+                                                                          struct wire_cst_list_prim_u_8_strict *hashlock,
+                                                                          struct wire_cst_list_prim_u_8_strict *receiver_pubkey,
+                                                                          uint32_t locktime,
+                                                                          struct wire_cst_list_prim_u_8_strict *sender_pubkey,
+                                                                          struct wire_cst_list_prim_u_8_strict *blinding_key);
 
 void frbgen_boltz_dart_wire_pre_image_generate(int64_t port_);
 
@@ -393,9 +408,11 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_2_swap_refund);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_v_2_swap_tx_size);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_swap_script_v_2_str_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_decoded_invoice_from_string);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_generate);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_l_btc_swap_script_v_2_str_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_claim);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new_reverse);

@@ -28,7 +28,8 @@ class AllFees with _$AllFees {
 
 @freezed
 class BtcSwapScriptV2Str with _$BtcSwapScriptV2Str {
-  const factory BtcSwapScriptV2Str({
+  const BtcSwapScriptV2Str._();
+  const factory BtcSwapScriptV2Str.raw({
     required SwapType swapType,
     String? fundingAddrs,
     required String hashlock,
@@ -36,6 +37,22 @@ class BtcSwapScriptV2Str with _$BtcSwapScriptV2Str {
     required int locktime,
     required String senderPubkey,
   }) = _BtcSwapScriptV2Str;
+  factory BtcSwapScriptV2Str(
+          {required SwapType swapType,
+          String? fundingAddrs,
+          required String hashlock,
+          required String receiverPubkey,
+          required int locktime,
+          required String senderPubkey,
+          dynamic hint}) =>
+      BoltzCore.instance.api.btcSwapScriptV2StrNew(
+          swapType: swapType,
+          fundingAddrs: fundingAddrs,
+          hashlock: hashlock,
+          receiverPubkey: receiverPubkey,
+          locktime: locktime,
+          senderPubkey: senderPubkey,
+          hint: hint);
 }
 
 enum Chain {
@@ -91,7 +108,8 @@ class KeyPair with _$KeyPair {
 
 @freezed
 class LBtcSwapScriptV2Str with _$LBtcSwapScriptV2Str {
-  const factory LBtcSwapScriptV2Str({
+  const LBtcSwapScriptV2Str._();
+  const factory LBtcSwapScriptV2Str.raw({
     required SwapType swapType,
     String? fundingAddrs,
     required String hashlock,
@@ -100,6 +118,24 @@ class LBtcSwapScriptV2Str with _$LBtcSwapScriptV2Str {
     required String senderPubkey,
     required String blindingKey,
   }) = _LBtcSwapScriptV2Str;
+  factory LBtcSwapScriptV2Str(
+          {required SwapType swapType,
+          String? fundingAddrs,
+          required String hashlock,
+          required String receiverPubkey,
+          required int locktime,
+          required String senderPubkey,
+          required String blindingKey,
+          dynamic hint}) =>
+      BoltzCore.instance.api.lBtcSwapScriptV2StrNew(
+          swapType: swapType,
+          fundingAddrs: fundingAddrs,
+          hashlock: hashlock,
+          receiverPubkey: receiverPubkey,
+          locktime: locktime,
+          senderPubkey: senderPubkey,
+          blindingKey: blindingKey,
+          hint: hint);
 }
 
 @freezed

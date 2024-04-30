@@ -953,6 +953,25 @@ pub extern "C" fn frbgen_boltz_dart_wire_all_fees_fetch(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_btc_swap_script_v_2_str_new(
+    swap_type: i32,
+    funding_addrs: *mut wire_cst_list_prim_u_8_strict,
+    hashlock: *mut wire_cst_list_prim_u_8_strict,
+    receiver_pubkey: *mut wire_cst_list_prim_u_8_strict,
+    locktime: u32,
+    sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_btc_swap_script_v_2_str_new_impl(
+        swap_type,
+        funding_addrs,
+        hashlock,
+        receiver_pubkey,
+        locktime,
+        sender_pubkey,
+    )
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_decoded_invoice_from_string(
     port_: i64,
     s: *mut wire_cst_list_prim_u_8_strict,
@@ -977,6 +996,27 @@ pub extern "C" fn frbgen_boltz_dart_wire_key_pair_new(
     public_key: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_key_pair_new_impl(secret_key, public_key)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_l_btc_swap_script_v_2_str_new(
+    swap_type: i32,
+    funding_addrs: *mut wire_cst_list_prim_u_8_strict,
+    hashlock: *mut wire_cst_list_prim_u_8_strict,
+    receiver_pubkey: *mut wire_cst_list_prim_u_8_strict,
+    locktime: u32,
+    sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
+    blinding_key: *mut wire_cst_list_prim_u_8_strict,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_l_btc_swap_script_v_2_str_new_impl(
+        swap_type,
+        funding_addrs,
+        hashlock,
+        receiver_pubkey,
+        locktime,
+        sender_pubkey,
+        blinding_key,
+    )
 }
 
 #[no_mangle]

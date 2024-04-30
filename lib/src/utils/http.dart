@@ -36,7 +36,7 @@ class BoltzApi {
         final swapList = resp['args'];
         for (final swap in swapList) {
           if (swap['error'] == null) {
-            print(swap);
+            // print(swap);
             _broadcastController!.add(SwapStreamStatus.fromJson(swap));
           } else {
             _broadcastController!.add(SwapStreamStatus(

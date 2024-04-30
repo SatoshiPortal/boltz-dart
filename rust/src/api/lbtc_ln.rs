@@ -13,6 +13,7 @@ use boltz_client::{
 };
 use flutter_rust_bridge::frb;
 use elements::{ hex::ToHex, pset::serialize::Serialize};
+use serde_json::Value;
 
 #[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnV1Swap {
@@ -244,7 +245,7 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        Ok(txid.to_string())
+        Ok(extract_id(txid)?)
     }
 
     pub fn refund(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
@@ -280,7 +281,7 @@ impl LbtcLnV1Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        Ok(txid.to_string())
+        Ok(extract_id(txid)?)
     }
 
     pub fn tx_size(swap: LbtcLnV1Swap) -> Result<usize, BoltzError> {
@@ -496,11 +497,11 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let txid = match tx.broadcast(&signed, &network_config) {
+        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        Ok(txid.to_string())
+        Ok(extract_id(txid)?)
     }
 
     pub fn refund(&self, out_address: String, abs_fee: u64) -> Result<String, BoltzError> {
@@ -516,6 +517,7 @@ impl LbtcLnV2Swap {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
 
         // let script_balance = match swap_script.get_balance(&network_config) {
         //     Ok(result) => result,
@@ -531,11 +533,11 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let txid = match tx.broadcast(&signed, &network_config) {
+        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        Ok(txid.to_string())
+        Ok(extract_id(txid)?)
     }
 
     pub fn tx_size(&self) -> Result<usize, BoltzError> {
@@ -571,5 +573,13 @@ impl LbtcLnV2Swap {
             Err(e) => return Err(e.into()),
         };
         Ok(size)
+    }
+}
+
+fn extract_id(response: Value) -> Result<String, BoltzError> {
+    // Attempt to access the `id` field directly
+    match response.get("id") {
+        Some(id_value) if id_value.is_string() => Ok(id_value.as_str().unwrap().to_string()),
+        _ => Err(BoltzError::new("BoltzApi".to_string(), "TxId not found in boltz response".to_string())),
     }
 }

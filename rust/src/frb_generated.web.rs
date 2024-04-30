@@ -888,6 +888,25 @@ pub fn wire_all_fees_fetch(
 }
 
 #[wasm_bindgen]
+pub fn wire_btc_swap_script_v_2_str_new(
+    swap_type: i32,
+    funding_addrs: Option<String>,
+    hashlock: String,
+    receiver_pubkey: String,
+    locktime: u32,
+    sender_pubkey: String,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_btc_swap_script_v_2_str_new_impl(
+        swap_type,
+        funding_addrs,
+        hashlock,
+        receiver_pubkey,
+        locktime,
+        sender_pubkey,
+    )
+}
+
+#[wasm_bindgen]
 pub fn wire_decoded_invoice_from_string(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: String,
@@ -912,6 +931,27 @@ pub fn wire_key_pair_new(
     public_key: String,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_key_pair_new_impl(secret_key, public_key)
+}
+
+#[wasm_bindgen]
+pub fn wire_l_btc_swap_script_v_2_str_new(
+    swap_type: i32,
+    funding_addrs: Option<String>,
+    hashlock: String,
+    receiver_pubkey: String,
+    locktime: u32,
+    sender_pubkey: String,
+    blinding_key: String,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_l_btc_swap_script_v_2_str_new_impl(
+        swap_type,
+        funding_addrs,
+        hashlock,
+        receiver_pubkey,
+        locktime,
+        sender_pubkey,
+        blinding_key,
+    )
 }
 
 #[wasm_bindgen]

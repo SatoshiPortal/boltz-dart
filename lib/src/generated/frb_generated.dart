@@ -263,6 +263,15 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<AllFees> allFeesFetch({required String boltzUrl, dynamic hint});
 
+  BtcSwapScriptV2Str btcSwapScriptV2StrNew(
+      {required SwapType swapType,
+      String? fundingAddrs,
+      required String hashlock,
+      required String receiverPubkey,
+      required int locktime,
+      required String senderPubkey,
+      dynamic hint});
+
   Future<DecodedInvoice> decodedInvoiceFromString(
       {required String s, dynamic hint});
 
@@ -275,6 +284,16 @@ abstract class BoltzCoreApi extends BaseApi {
 
   KeyPair keyPairNew(
       {required String secretKey, required String publicKey, dynamic hint});
+
+  LBtcSwapScriptV2Str lBtcSwapScriptV2StrNew(
+      {required SwapType swapType,
+      String? fundingAddrs,
+      required String hashlock,
+      required String receiverPubkey,
+      required int locktime,
+      required String senderPubkey,
+      required String blindingKey,
+      dynamic hint});
 
   Future<PreImage> preImageGenerate({dynamic hint});
 
@@ -1347,6 +1366,56 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  BtcSwapScriptV2Str btcSwapScriptV2StrNew(
+      {required SwapType swapType,
+      String? fundingAddrs,
+      required String hashlock,
+      required String receiverPubkey,
+      required int locktime,
+      required String senderPubkey,
+      dynamic hint}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_swap_type(swapType);
+        var arg1 = cst_encode_opt_String(fundingAddrs);
+        var arg2 = cst_encode_String(hashlock);
+        var arg3 = cst_encode_String(receiverPubkey);
+        var arg4 = cst_encode_u_32(locktime);
+        var arg5 = cst_encode_String(senderPubkey);
+        return wire.wire_btc_swap_script_v_2_str_new(
+            arg0, arg1, arg2, arg3, arg4, arg5);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_btc_swap_script_v_2_str,
+        decodeErrorData: null,
+      ),
+      constMeta: kBtcSwapScriptV2StrNewConstMeta,
+      argValues: [
+        swapType,
+        fundingAddrs,
+        hashlock,
+        receiverPubkey,
+        locktime,
+        senderPubkey
+      ],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kBtcSwapScriptV2StrNewConstMeta => const TaskConstMeta(
+        debugName: "btc_swap_script_v_2_str_new",
+        argNames: [
+          "swapType",
+          "fundingAddrs",
+          "hashlock",
+          "receiverPubkey",
+          "locktime",
+          "senderPubkey"
+        ],
+      );
+
+  @override
   Future<DecodedInvoice> decodedInvoiceFromString(
       {required String s, dynamic hint}) {
     return handler.executeNormal(NormalTask(
@@ -1424,6 +1493,60 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kKeyPairNewConstMeta => const TaskConstMeta(
         debugName: "key_pair_new",
         argNames: ["secretKey", "publicKey"],
+      );
+
+  @override
+  LBtcSwapScriptV2Str lBtcSwapScriptV2StrNew(
+      {required SwapType swapType,
+      String? fundingAddrs,
+      required String hashlock,
+      required String receiverPubkey,
+      required int locktime,
+      required String senderPubkey,
+      required String blindingKey,
+      dynamic hint}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_swap_type(swapType);
+        var arg1 = cst_encode_opt_String(fundingAddrs);
+        var arg2 = cst_encode_String(hashlock);
+        var arg3 = cst_encode_String(receiverPubkey);
+        var arg4 = cst_encode_u_32(locktime);
+        var arg5 = cst_encode_String(senderPubkey);
+        var arg6 = cst_encode_String(blindingKey);
+        return wire.wire_l_btc_swap_script_v_2_str_new(
+            arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_l_btc_swap_script_v_2_str,
+        decodeErrorData: null,
+      ),
+      constMeta: kLBtcSwapScriptV2StrNewConstMeta,
+      argValues: [
+        swapType,
+        fundingAddrs,
+        hashlock,
+        receiverPubkey,
+        locktime,
+        senderPubkey,
+        blindingKey
+      ],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kLBtcSwapScriptV2StrNewConstMeta => const TaskConstMeta(
+        debugName: "l_btc_swap_script_v_2_str_new",
+        argNames: [
+          "swapType",
+          "fundingAddrs",
+          "hashlock",
+          "receiverPubkey",
+          "locktime",
+          "senderPubkey",
+          "blindingKey"
+        ],
       );
 
   @override
@@ -1617,7 +1740,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     final arr = raw as List<dynamic>;
     if (arr.length != 6)
       throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
-    return BtcSwapScriptV2Str(
+    return BtcSwapScriptV2Str.raw(
       swapType: dco_decode_swap_type(arr[0]),
       fundingAddrs: dco_decode_opt_String(arr[1]),
       hashlock: dco_decode_String(arr[2]),
@@ -1680,7 +1803,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     final arr = raw as List<dynamic>;
     if (arr.length != 7)
       throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
-    return LBtcSwapScriptV2Str(
+    return LBtcSwapScriptV2Str.raw(
       swapType: dco_decode_swap_type(arr[0]),
       fundingAddrs: dco_decode_opt_String(arr[1]),
       hashlock: dco_decode_String(arr[2]),
@@ -1997,7 +2120,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_receiverPubkey = sse_decode_String(deserializer);
     var var_locktime = sse_decode_u_32(deserializer);
     var var_senderPubkey = sse_decode_String(deserializer);
-    return BtcSwapScriptV2Str(
+    return BtcSwapScriptV2Str.raw(
         swapType: var_swapType,
         fundingAddrs: var_fundingAddrs,
         hashlock: var_hashlock,
@@ -2064,7 +2187,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_locktime = sse_decode_u_32(deserializer);
     var var_senderPubkey = sse_decode_String(deserializer);
     var var_blindingKey = sse_decode_String(deserializer);
-    return LBtcSwapScriptV2Str(
+    return LBtcSwapScriptV2Str.raw(
         swapType: var_swapType,
         fundingAddrs: var_fundingAddrs,
         hashlock: var_hashlock,

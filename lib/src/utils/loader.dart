@@ -1,8 +1,6 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:boltz_dart/src/generated/frb_generated.io.dart';
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:http/http.dart' as http;

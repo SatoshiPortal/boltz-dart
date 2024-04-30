@@ -367,6 +367,49 @@ mixin _$BtcSwapScriptV2Str {
   String get receiverPubkey => throw _privateConstructorUsedError;
   int get locktime => throw _privateConstructorUsedError;
   String get senderPubkey => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey)
+        raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(SwapType swapType, String? fundingAddrs, String hashlock,
+            String receiverPubkey, int locktime, String senderPubkey)?
+        raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(SwapType swapType, String? fundingAddrs, String hashlock,
+            String receiverPubkey, int locktime, String senderPubkey)?
+        raw,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_BtcSwapScriptV2Str value) raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_BtcSwapScriptV2Str value)? raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_BtcSwapScriptV2Str value)? raw,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BtcSwapScriptV2StrCopyWith<BtcSwapScriptV2Str> get copyWith =>
@@ -503,14 +546,15 @@ class __$$BtcSwapScriptV2StrImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BtcSwapScriptV2StrImpl implements _BtcSwapScriptV2Str {
+class _$BtcSwapScriptV2StrImpl extends _BtcSwapScriptV2Str {
   const _$BtcSwapScriptV2StrImpl(
       {required this.swapType,
       this.fundingAddrs,
       required this.hashlock,
       required this.receiverPubkey,
       required this.locktime,
-      required this.senderPubkey});
+      required this.senderPubkey})
+      : super._();
 
   @override
   final SwapType swapType;
@@ -527,7 +571,7 @@ class _$BtcSwapScriptV2StrImpl implements _BtcSwapScriptV2Str {
 
   @override
   String toString() {
-    return 'BtcSwapScriptV2Str(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey)';
+    return 'BtcSwapScriptV2Str.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey)';
   }
 
   @override
@@ -559,9 +603,79 @@ class _$BtcSwapScriptV2StrImpl implements _BtcSwapScriptV2Str {
   _$$BtcSwapScriptV2StrImplCopyWith<_$BtcSwapScriptV2StrImpl> get copyWith =>
       __$$BtcSwapScriptV2StrImplCopyWithImpl<_$BtcSwapScriptV2StrImpl>(
           this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey)
+        raw,
+  }) {
+    return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
+        senderPubkey);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(SwapType swapType, String? fundingAddrs, String hashlock,
+            String receiverPubkey, int locktime, String senderPubkey)?
+        raw,
+  }) {
+    return raw?.call(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
+        senderPubkey);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(SwapType swapType, String? fundingAddrs, String hashlock,
+            String receiverPubkey, int locktime, String senderPubkey)?
+        raw,
+    required TResult orElse(),
+  }) {
+    if (raw != null) {
+      return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
+          senderPubkey);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_BtcSwapScriptV2Str value) raw,
+  }) {
+    return raw(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_BtcSwapScriptV2Str value)? raw,
+  }) {
+    return raw?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_BtcSwapScriptV2Str value)? raw,
+    required TResult orElse(),
+  }) {
+    if (raw != null) {
+      return raw(this);
+    }
+    return orElse();
+  }
 }
 
-abstract class _BtcSwapScriptV2Str implements BtcSwapScriptV2Str {
+abstract class _BtcSwapScriptV2Str extends BtcSwapScriptV2Str {
   const factory _BtcSwapScriptV2Str(
       {required final SwapType swapType,
       final String? fundingAddrs,
@@ -569,6 +683,7 @@ abstract class _BtcSwapScriptV2Str implements BtcSwapScriptV2Str {
       required final String receiverPubkey,
       required final int locktime,
       required final String senderPubkey}) = _$BtcSwapScriptV2StrImpl;
+  const _BtcSwapScriptV2Str._() : super._();
 
   @override
   SwapType get swapType;
@@ -1070,6 +1185,62 @@ mixin _$LBtcSwapScriptV2Str {
   int get locktime => throw _privateConstructorUsedError;
   String get senderPubkey => throw _privateConstructorUsedError;
   String get blindingKey => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            String blindingKey)
+        raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            String blindingKey)?
+        raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            String blindingKey)?
+        raw,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LBtcSwapScriptV2Str value) raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_LBtcSwapScriptV2Str value)? raw,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LBtcSwapScriptV2Str value)? raw,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LBtcSwapScriptV2StrCopyWith<LBtcSwapScriptV2Str> get copyWith =>
@@ -1218,7 +1389,7 @@ class __$$LBtcSwapScriptV2StrImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LBtcSwapScriptV2StrImpl implements _LBtcSwapScriptV2Str {
+class _$LBtcSwapScriptV2StrImpl extends _LBtcSwapScriptV2Str {
   const _$LBtcSwapScriptV2StrImpl(
       {required this.swapType,
       this.fundingAddrs,
@@ -1226,7 +1397,8 @@ class _$LBtcSwapScriptV2StrImpl implements _LBtcSwapScriptV2Str {
       required this.receiverPubkey,
       required this.locktime,
       required this.senderPubkey,
-      required this.blindingKey});
+      required this.blindingKey})
+      : super._();
 
   @override
   final SwapType swapType;
@@ -1245,7 +1417,7 @@ class _$LBtcSwapScriptV2StrImpl implements _LBtcSwapScriptV2Str {
 
   @override
   String toString() {
-    return 'LBtcSwapScriptV2Str(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey)';
+    return 'LBtcSwapScriptV2Str.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey)';
   }
 
   @override
@@ -1279,9 +1451,92 @@ class _$LBtcSwapScriptV2StrImpl implements _LBtcSwapScriptV2Str {
   _$$LBtcSwapScriptV2StrImplCopyWith<_$LBtcSwapScriptV2StrImpl> get copyWith =>
       __$$LBtcSwapScriptV2StrImplCopyWithImpl<_$LBtcSwapScriptV2StrImpl>(
           this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            String blindingKey)
+        raw,
+  }) {
+    return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
+        senderPubkey, blindingKey);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            String blindingKey)?
+        raw,
+  }) {
+    return raw?.call(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
+        senderPubkey, blindingKey);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            String blindingKey)?
+        raw,
+    required TResult orElse(),
+  }) {
+    if (raw != null) {
+      return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
+          senderPubkey, blindingKey);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LBtcSwapScriptV2Str value) raw,
+  }) {
+    return raw(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_LBtcSwapScriptV2Str value)? raw,
+  }) {
+    return raw?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LBtcSwapScriptV2Str value)? raw,
+    required TResult orElse(),
+  }) {
+    if (raw != null) {
+      return raw(this);
+    }
+    return orElse();
+  }
 }
 
-abstract class _LBtcSwapScriptV2Str implements LBtcSwapScriptV2Str {
+abstract class _LBtcSwapScriptV2Str extends LBtcSwapScriptV2Str {
   const factory _LBtcSwapScriptV2Str(
       {required final SwapType swapType,
       final String? fundingAddrs,
@@ -1290,6 +1545,7 @@ abstract class _LBtcSwapScriptV2Str implements LBtcSwapScriptV2Str {
       required final int locktime,
       required final String senderPubkey,
       required final String blindingKey}) = _$LBtcSwapScriptV2StrImpl;
+  const _LBtcSwapScriptV2Str._() : super._();
 
   @override
   SwapType get swapType;

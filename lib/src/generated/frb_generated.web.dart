@@ -905,6 +905,17 @@ class BoltzCoreWire implements BaseWire {
   void wire_all_fees_fetch(NativePortType port_, String boltz_url) =>
       wasmModule.wire_all_fees_fetch(port_, boltz_url);
 
+  dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire_btc_swap_script_v_2_str_new(
+              int swap_type,
+              String? funding_addrs,
+              String hashlock,
+              String receiver_pubkey,
+              int locktime,
+              String sender_pubkey) =>
+          wasmModule.wire_btc_swap_script_v_2_str_new(swap_type, funding_addrs,
+              hashlock, receiver_pubkey, locktime, sender_pubkey);
+
   void wire_decoded_invoice_from_string(NativePortType port_, String s) =>
       wasmModule.wire_decoded_invoice_from_string(port_, s);
 
@@ -916,6 +927,24 @@ class BoltzCoreWire implements BaseWire {
   dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_key_pair_new(String secret_key, String public_key) =>
           wasmModule.wire_key_pair_new(secret_key, public_key);
+
+  dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire_l_btc_swap_script_v_2_str_new(
+              int swap_type,
+              String? funding_addrs,
+              String hashlock,
+              String receiver_pubkey,
+              int locktime,
+              String sender_pubkey,
+              String blinding_key) =>
+          wasmModule.wire_l_btc_swap_script_v_2_str_new(
+              swap_type,
+              funding_addrs,
+              hashlock,
+              receiver_pubkey,
+              locktime,
+              sender_pubkey,
+              blinding_key);
 
   void wire_pre_image_generate(NativePortType port_) =>
       wasmModule.wire_pre_image_generate(port_);
@@ -1112,6 +1141,15 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external void wire_all_fees_fetch(NativePortType port_, String boltz_url);
 
+  external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire_btc_swap_script_v_2_str_new(
+          int swap_type,
+          String? funding_addrs,
+          String hashlock,
+          String receiver_pubkey,
+          int locktime,
+          String sender_pubkey);
+
   external void wire_decoded_invoice_from_string(
       NativePortType port_, String s);
 
@@ -1120,6 +1158,16 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_key_pair_new(String secret_key, String public_key);
+
+  external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
+      wire_l_btc_swap_script_v_2_str_new(
+          int swap_type,
+          String? funding_addrs,
+          String hashlock,
+          String receiver_pubkey,
+          int locktime,
+          String sender_pubkey,
+          String blinding_key);
 
   external void wire_pre_image_generate(NativePortType port_);
 

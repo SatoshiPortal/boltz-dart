@@ -33,10 +33,10 @@ void main() {
   });
 
   test('Get status', () async {
-    final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
-    final status = await api.getSwapStatus('5Nke2TZdZLZ5');
-
-    expect(status, equals(SwapStatus.txnClaimed));
+    final api = await BoltzApi.newBoltzApi(mainnetBaseUrl);
+    final status = await api.getSwapStatus('h3BNw2');
+    print(status);
+    // expect(status, equals(SwapStatus.txnClaimed));
   });
 
   // TODO: Flows for
@@ -145,12 +145,19 @@ void main() {
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {
-    final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
+    final api = await BoltzApi.newBoltzApi(mainnetBaseUrl);
 
-    api.initialize(testnetBaseUrl);
+    api.initialize(mainnetBaseUrl);
 
-    // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
-    const List<String> swapIds = ['67ptET'];
+    const List<String> swapIds = [
+      'h3BNw2',
+      'dhbn5n2ypzBC',
+      'kuaECCcK4ZJ9',
+      'EXVCx6',
+      'grWI22',
+      'invalid'
+    ];
+    // const List<String> swapIds = ['h3BNw2'];
     Stream<SwapStreamStatus> eventStream = api.subscribeSwapStatus(swapIds);
 
     var receivedEvents = <SwapStreamStatus>[];

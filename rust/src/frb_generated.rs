@@ -898,6 +898,40 @@ fn wire_all_fees_fetch_impl(
         },
     )
 }
+fn wire_btc_swap_script_v_2_str_new_impl(
+    swap_type: impl CstDecode<crate::api::types::SwapType>,
+    funding_addrs: impl CstDecode<Option<String>>,
+    hashlock: impl CstDecode<String>,
+    receiver_pubkey: impl CstDecode<String>,
+    locktime: impl CstDecode<u32>,
+    sender_pubkey: impl CstDecode<String>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "btc_swap_script_v_2_str_new",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_swap_type = swap_type.cst_decode();
+            let api_funding_addrs = funding_addrs.cst_decode();
+            let api_hashlock = hashlock.cst_decode();
+            let api_receiver_pubkey = receiver_pubkey.cst_decode();
+            let api_locktime = locktime.cst_decode();
+            let api_sender_pubkey = sender_pubkey.cst_decode();
+            transform_result_dco((move || {
+                Result::<_, ()>::Ok(crate::api::types::BtcSwapScriptV2Str::new(
+                    api_swap_type,
+                    api_funding_addrs,
+                    api_hashlock,
+                    api_receiver_pubkey,
+                    api_locktime,
+                    api_sender_pubkey,
+                ))
+            })())
+        },
+    )
+}
 fn wire_decoded_invoice_from_string_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: impl CstDecode<String>,
@@ -966,6 +1000,43 @@ fn wire_key_pair_new_impl(
                 Result::<_, ()>::Ok(crate::api::types::KeyPair::new(
                     api_secret_key,
                     api_public_key,
+                ))
+            })())
+        },
+    )
+}
+fn wire_l_btc_swap_script_v_2_str_new_impl(
+    swap_type: impl CstDecode<crate::api::types::SwapType>,
+    funding_addrs: impl CstDecode<Option<String>>,
+    hashlock: impl CstDecode<String>,
+    receiver_pubkey: impl CstDecode<String>,
+    locktime: impl CstDecode<u32>,
+    sender_pubkey: impl CstDecode<String>,
+    blinding_key: impl CstDecode<String>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "l_btc_swap_script_v_2_str_new",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_swap_type = swap_type.cst_decode();
+            let api_funding_addrs = funding_addrs.cst_decode();
+            let api_hashlock = hashlock.cst_decode();
+            let api_receiver_pubkey = receiver_pubkey.cst_decode();
+            let api_locktime = locktime.cst_decode();
+            let api_sender_pubkey = sender_pubkey.cst_decode();
+            let api_blinding_key = blinding_key.cst_decode();
+            transform_result_dco((move || {
+                Result::<_, ()>::Ok(crate::api::types::LBtcSwapScriptV2Str::new(
+                    api_swap_type,
+                    api_funding_addrs,
+                    api_hashlock,
+                    api_receiver_pubkey,
+                    api_locktime,
+                    api_sender_pubkey,
+                    api_blinding_key,
                 ))
             })())
         },

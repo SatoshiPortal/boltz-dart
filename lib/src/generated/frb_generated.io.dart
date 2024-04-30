@@ -1678,6 +1678,44 @@ class BoltzCoreWire implements BaseWire {
   late final _wire_all_fees_fetch = _wire_all_fees_fetchPtr.asFunction<
       void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
+  WireSyncRust2DartDco wire_btc_swap_script_v_2_str_new(
+    int swap_type,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> funding_addrs,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> hashlock,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> receiver_pubkey,
+    int locktime,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> sender_pubkey,
+  ) {
+    return _wire_btc_swap_script_v_2_str_new(
+      swap_type,
+      funding_addrs,
+      hashlock,
+      receiver_pubkey,
+      locktime,
+      sender_pubkey,
+    );
+  }
+
+  late final _wire_btc_swap_script_v_2_str_newPtr = _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                  ffi.Int32,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Uint32,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_btc_swap_script_v_2_str_new');
+  late final _wire_btc_swap_script_v_2_str_new =
+      _wire_btc_swap_script_v_2_str_newPtr.asFunction<
+          WireSyncRust2DartDco Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
   void wire_decoded_invoice_from_string(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> s,
@@ -1744,6 +1782,48 @@ class BoltzCoreWire implements BaseWire {
   late final _wire_key_pair_new = _wire_key_pair_newPtr.asFunction<
       WireSyncRust2DartDco Function(ffi.Pointer<wire_cst_list_prim_u_8_strict>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  WireSyncRust2DartDco wire_l_btc_swap_script_v_2_str_new(
+    int swap_type,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> funding_addrs,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> hashlock,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> receiver_pubkey,
+    int locktime,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> sender_pubkey,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> blinding_key,
+  ) {
+    return _wire_l_btc_swap_script_v_2_str_new(
+      swap_type,
+      funding_addrs,
+      hashlock,
+      receiver_pubkey,
+      locktime,
+      sender_pubkey,
+      blinding_key,
+    );
+  }
+
+  late final _wire_l_btc_swap_script_v_2_str_newPtr = _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                  ffi.Int32,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Uint32,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_l_btc_swap_script_v_2_str_new');
+  late final _wire_l_btc_swap_script_v_2_str_new =
+      _wire_l_btc_swap_script_v_2_str_newPtr.asFunction<
+          WireSyncRust2DartDco Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire_pre_image_generate(
     int port_,
