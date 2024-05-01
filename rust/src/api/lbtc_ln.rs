@@ -200,7 +200,7 @@ impl LbtcLnV1Swap {
             Err(e) => return Err(e.into()),
         };
         let ckp = claim_keypair.clone().into();
-        
+
         let script = match response.into_lbtc_rev_swap_script(&preimage, &ckp, network.into()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -456,6 +456,7 @@ impl LbtcLnV2Swap {
             compressed: true,
             inner: ckp.public_key(),
         };
+        println!("Claim Pub: {:?}", claim_public_key);
 
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
@@ -469,10 +470,12 @@ impl LbtcLnV2Swap {
         };
 
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
+        println!("Got Reverse swap response: {:?}", response);
 
         let swap_script = LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key)?;
-            
-        // let script_address = swap_script.to_address(network.into())?.to_string();
+        println!("Got Reverse swap response: {:#?}", swap_script);
+
+        let script_address = swap_script.to_address(network.into())?.to_string();
 
         Ok(LbtcLnV2Swap::new(
             response.id,
@@ -483,7 +486,7 @@ impl LbtcLnV2Swap {
             swap_script.clone().into(),
             response.invoice,
             out_amount,
-            response.lockup_address,
+            script_address,
             swap_script.blinding_key.display_secret().to_string(),
             electrum_url,
             boltz_url,
@@ -652,5 +655,23 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
             "BoltzApi".to_string(),
             "TxId not found in boltz response".to_string(),
         )),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_v2_reverse() {
+        let mnemonic = "bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon".to_string();
+        let index = 1;
+        let out_amount = 100000;
+        let network = Chain::LiquidTestnet;
+        let electrum_url = "blockstream.info:465".to_string();
+        let boltz_url = "api.boltz.exchange/v2".to_string();
+
+        let swap = LbtcLnV2Swap::new_reverse(mnemonic, index, out_amount, network, electrum_url, boltz_url).unwrap();
+
     }
 }

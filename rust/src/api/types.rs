@@ -423,6 +423,7 @@ impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
         };
         let hashlock = Hash::from_str(&self.hashlock).unwrap();
         let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
+        
         let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();
         let locktime = boltz_client::ElementsLockTime::from_height(self.locktime).unwrap();
         let blinding_key = ZKKeyPair::from_str(&self.blinding_key).unwrap();
