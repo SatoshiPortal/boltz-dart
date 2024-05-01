@@ -445,9 +445,9 @@ impl From<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
             swap_type: swap.swap_type.into(),
             funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()),
             hashlock: swap.hashlock.to_string(),
-            receiver_pubkey: swap.receiver_pubkey.to_string(),
+            receiver_pubkey: swap.receiver_pubkey.inner.to_string(),
             locktime: swap.locktime.to_consensus_u32(),
-            sender_pubkey: swap.sender_pubkey.to_string(),
+            sender_pubkey: swap.sender_pubkey.inner.to_string(),
             blinding_key: swap.blinding_key.display_secret().to_string(),
         }
     }

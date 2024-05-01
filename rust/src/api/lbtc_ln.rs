@@ -471,8 +471,8 @@ impl LbtcLnV2Swap {
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
 
         let swap_script = LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key)?;
-
-        let script_address = swap_script.to_address(network.into())?.to_string();
+            
+        // let script_address = swap_script.to_address(network.into())?.to_string();
 
         Ok(LbtcLnV2Swap::new(
             response.id,
@@ -483,7 +483,7 @@ impl LbtcLnV2Swap {
             swap_script.clone().into(),
             response.invoice,
             out_amount,
-            script_address,
+            response.lockup_address,
             swap_script.blinding_key.display_secret().to_string(),
             electrum_url,
             boltz_url,
