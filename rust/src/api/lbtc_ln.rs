@@ -164,6 +164,7 @@ impl LbtcLnV1Swap {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };
+
         let preimage = Preimage::new();
         let boltz_client = BoltzApiClient::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
@@ -199,6 +200,7 @@ impl LbtcLnV1Swap {
             Err(e) => return Err(e.into()),
         };
         let ckp = claim_keypair.clone().into();
+        
         let script = match response.into_lbtc_rev_swap_script(&preimage, &ckp, network.into()) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
