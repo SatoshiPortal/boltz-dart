@@ -228,7 +228,7 @@ impl BtcLnV1Swap {
 
         if script_balance.0 > 0 || script_balance.1 > 0 {
             let tx = match BtcSwapTx::new_claim(script, out_address, &network_config) {
-                Ok(result) => result.unwrap(),
+                Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = self.keys.clone().into();
@@ -273,7 +273,7 @@ impl BtcLnV1Swap {
 
         if script_balance.0 > 0 || script_balance.1 > 0 {
             let tx = match BtcSwapTx::new_refund(script, out_address, &network_config) {
-                Ok(result) => result.unwrap(),
+                Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = self.keys.clone().into();
@@ -316,7 +316,7 @@ impl BtcLnV1Swap {
         );
         // okay to use script address, we are just chekcing size
         let tx = match BtcSwapTx::new_claim(script, self.script_address.clone(), &network_config) {
-            Ok(result) => result.unwrap(),
+            Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().into();
@@ -431,9 +431,8 @@ impl BtcLnV2Swap {
         let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into()?;
         // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
 
-        let tx = match BtcSwapTxV2::new_refund(swap_script, &self.script_address, &network_config)
-        {
-            Ok(result) => result.unwrap(),
+        let tx = match BtcSwapTxV2::new_refund(swap_script, &self.script_address, &network_config) {
+            Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().into();
@@ -524,7 +523,7 @@ impl BtcLnV2Swap {
 
         if script_balance.0 > 0 || script_balance.1 > 0 {
             let tx = match BtcSwapTxV2::new_claim(swap_script, out_address, &network_config) {
-                Ok(result) => result.unwrap(),
+                Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = self.keys.clone().into();
@@ -555,7 +554,12 @@ impl BtcLnV2Swap {
         }
     }
 
-    pub fn refund(&self, out_address: String, abs_fee: u64, try_cooperate: bool) -> Result<String, BoltzError> {
+    pub fn refund(
+        &self,
+        out_address: String,
+        abs_fee: u64,
+        try_cooperate: bool,
+    ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -567,6 +571,8 @@ impl BtcLnV2Swap {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let swap_script: BtcSwapScriptV2 = self.swap_script.clone().try_into()?;
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let id = self.id.clone();
 
         let script_balance = match swap_script.get_balance(&network_config) {
             Ok(result) => result,
@@ -576,11 +582,20 @@ impl BtcLnV2Swap {
         if script_balance.0 > 0 || script_balance.1 > 0 {
             let tx =
                 match BtcSwapTxV2::new_refund(swap_script.clone(), &out_address, &network_config) {
-                    Ok(result) => result.unwrap(),
+                    Ok(result) => result,
                     Err(e) => return Err(e.into()),
                 };
             let ckp: Keypair = self.keys.clone().into();
-            let signed = match tx.sign_refund(&ckp, abs_fee) {
+            
+            let signed = match tx.sign_refund(
+                &ckp,
+                abs_fee,
+                if try_cooperate {
+                    Some((&boltz_client, &id))
+                } else {
+                    None
+                },
+            ) {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
@@ -621,7 +636,7 @@ impl BtcLnV2Swap {
             self.script_address.clone(),
             &network_config,
         ) {
-            Ok(result) => result.unwrap(),
+            Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().into();

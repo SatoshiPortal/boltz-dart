@@ -12,7 +12,7 @@ use boltz_client::{
         liquid::{LBtcSwapScript, LBtcSwapTx},
     },
     util::secrets::Preimage,
-    Amount, BtcSwapScriptV2, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey,
+    Amount, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey,
 };
 use elements::{hex::ToHex, pset::serialize::Serialize};
 use flutter_rust_bridge::frb;
@@ -556,7 +556,12 @@ impl LbtcLnV2Swap {
         Ok(extract_id(txid)?)
     }
 
-    pub fn refund(&self, out_address: String, abs_fee: u64, try_cooperate: bool) -> Result<String, BoltzError> {
+    pub fn refund(
+        &self,
+        out_address: String,
+        abs_fee: u64,
+        try_cooperate: bool,
+    ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -570,7 +575,7 @@ impl LbtcLnV2Swap {
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
-
+        let id = self.id.clone();
         // let script_balance = match swap_script.get_balance(&network_config) {
         //     Ok(result) => result,
         //     Err(e) => return Err(e.into()),
@@ -581,7 +586,15 @@ impl LbtcLnV2Swap {
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().into();
-        let signed = match tx.sign_refund(&ckp, Amount::from_sat(abs_fee)) {
+        let signed = match tx.sign_refund(
+            &ckp,
+            Amount::from_sat(abs_fee),
+            if try_cooperate {
+                Some((&boltz_client, &id))
+            } else {
+                None
+            },
+        ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
