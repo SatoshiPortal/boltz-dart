@@ -456,7 +456,6 @@ impl LbtcLnV2Swap {
             compressed: true,
             inner: ckp.public_key(),
         };
-        println!("Claim Pub: {:?}", claim_public_key);
 
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
@@ -470,10 +469,8 @@ impl LbtcLnV2Swap {
         };
 
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
-        println!("Got Reverse swap response: {:?}", response);
 
         let swap_script = LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key)?;
-        println!("Got Reverse swap response: {:#?}", swap_script);
 
         let script_address = swap_script.to_address(network.into())?.to_string();
 
