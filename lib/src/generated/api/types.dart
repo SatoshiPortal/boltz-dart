@@ -73,9 +73,14 @@ class DecodedInvoice with _$DecodedInvoice {
     required bool isExpired,
     required String network,
     required int cltvExpDelta,
+    (String, double)? routeHint,
   }) = _DecodedInvoice;
-  static Future<DecodedInvoice> fromString({required String s, dynamic hint}) =>
-      BoltzCore.instance.api.decodedInvoiceFromString(s: s, hint: hint);
+
+  /// Add boltz_url & chain for route hint check
+  static Future<DecodedInvoice> fromString(
+          {required String s, String? boltzUrl, Chain? chain, dynamic hint}) =>
+      BoltzCore.instance.api.decodedInvoiceFromString(
+          s: s, boltzUrl: boltzUrl, chain: chain, hint: hint);
 }
 
 @freezed

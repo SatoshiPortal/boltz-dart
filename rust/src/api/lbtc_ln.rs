@@ -5,16 +5,12 @@ use super::{
     types::{Chain, KeyPair, LBtcSwapScriptV2Str, PreImage, SwapType},
 };
 use boltz_client::{
-    network::electrum::ElectrumConfig,
-    swaps::{
+    network::electrum::ElectrumConfig, swaps::{
         boltz::{BoltzApiClient, CreateSwapRequest},
         boltzv2::{BoltzApiClientV2, BOLTZ_MAINNET_URL_V2, BOLTZ_TESTNET_URL_V2},
-        liquid::{LBtcSwapScript, LBtcSwapTx},
-    },
-    util::secrets::Preimage,
-    Amount, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey,
+        liquid::{LBtcSwapScript, LBtcSwapTx}, magic_routing,
+    }, util::secrets::Preimage, Amount, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey, Serialize, ToHex
 };
-use elements::{hex::ToHex, pset::serialize::Serialize};
 use flutter_rust_bridge::frb;
 use serde_json::Value;
 
@@ -440,6 +436,7 @@ impl LbtcLnV2Swap {
         mnemonic: String,
         index: u64,
         out_amount: u64,
+        out_address: Option<String>,
         network: Chain,
         electrum_url: String,
         boltz_url: String,
@@ -459,13 +456,32 @@ impl LbtcLnV2Swap {
 
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
-        let create_reverse_req = boltz_client::swaps::boltzv2::CreateReverseRequest {
-            invoice_amount: out_amount as u32,
-            from: "BTC".to_string(),
-            to: "L-BTC".to_string(),
-            preimage_hash: preimage.sha256,
-            claim_public_key,
-            referral_id: None,
+        
+        let create_reverse_req = if out_address.is_some() {
+            let address = out_address.unwrap();
+            boltz_client::swaps::boltzv2::CreateReverseRequest {
+                invoice_amount: out_amount as u32,
+                from: "BTC".to_string(),
+                to: "L-BTC".to_string(),
+                preimage_hash: preimage.sha256,
+                claim_public_key,
+                referral_id: None,
+                address: Some(address.clone()),
+                address_signature: Some(
+                    magic_routing::sign_address(&address, &ckp)?.to_string(),
+                ),
+            }
+        } else {
+            boltz_client::swaps::boltzv2::CreateReverseRequest {
+                invoice_amount: out_amount as u32,
+                from: "BTC".to_string(),
+                to: "L-BTC".to_string(),
+                preimage_hash: preimage.sha256,
+                claim_public_key,
+                referral_id: None,
+                address: None,
+                address_signature: None,
+            }
         };
 
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
@@ -524,7 +540,6 @@ impl LbtcLnV2Swap {
         } else {
             ()
         }
-
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
 
@@ -664,11 +679,12 @@ mod tests {
         let mnemonic = "bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon".to_string();
         let index = 1;
         let out_amount = 100000;
+        let out_address = None;
         let network = Chain::LiquidTestnet;
         let electrum_url = "blockstream.info:465".to_string();
         let boltz_url = "api.boltz.exchange/v2".to_string();
 
-        let swap = LbtcLnV2Swap::new_reverse(mnemonic, index, out_amount, network, electrum_url, boltz_url).unwrap();
+        let _ = LbtcLnV2Swap::new_reverse(mnemonic, index, out_amount, out_address, network, electrum_url, boltz_url).unwrap();
 
     }
 }

@@ -6,7 +6,7 @@ use flutter_rust_bridge::frb;
 //
 use boltz_client::{
     network::Chain as BChain,
-    swaps::boltz::{BoltzApiClient, SwapType as BoltzSwapType},
+    swaps::{boltz::{BoltzApiClient, SwapType as BoltzSwapType}, boltzv2::BoltzApiClientV2, magic_routing},
     util::secrets::SwapKey,
     Address, Bolt11Invoice, BtcSwapScriptV2, ElementsAddress, Hash, Keypair, LBtcSwapScriptV2,
     PublicKey, Secp256k1, ZKKeyPair,
@@ -281,16 +281,28 @@ pub struct DecodedInvoice {
     pub is_expired: bool,
     pub network: String,
     pub cltv_exp_delta: u64,
+    /// (address, btc_amount)
+    pub route_hint: Option<(String, f64)>,
 }
 impl DecodedInvoice {
-    pub fn from_string(s: String) -> Result<Self, BoltzError> {
+    /// Add boltz_url & chain for route hint check
+    pub fn from_string(s: String, boltz_url: Option<String>, chain: Option<Chain>) -> Result<Self, BoltzError> {
         // Attempt to parse the string to a Bolt11Invoice
         let invoice = match Bolt11Invoice::from_str(&s) {
             Ok(result) => result,
             Err(e) => return Err(BoltzError::new("Input".to_string(), e.to_string())),
         };
 
-        // If parsing succeeded, convert Bolt11Invoice to DecodedInvoice
+        let route_hint = if boltz_url.is_some() && chain.is_some() {
+            let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url.unwrap()));
+            match magic_routing::check_for_mrh(&boltz_client, &s, chain.unwrap().into())?{
+                Some(r)=>Some(r),
+                None=> None
+            }
+        } else {
+            None
+        };
+
         Ok(DecodedInvoice {
             expiry: invoice.expiry_time().as_secs(),
             expires_in: invoice.duration_until_expiry().as_secs(),
@@ -302,9 +314,11 @@ impl DecodedInvoice {
             msats: invoice.amount_milli_satoshis().unwrap_or(0),
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
             network: invoice.network().to_string(),
+            route_hint: route_hint,
         })
     }
 }
+
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]

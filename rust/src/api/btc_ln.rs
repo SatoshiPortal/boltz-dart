@@ -9,6 +9,7 @@ use boltz_client::{
     swaps::{
         boltz::{BoltzApiClient, CreateSwapRequest},
         boltzv2::BoltzApiClientV2,
+        magic_routing,
     },
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapScriptV2, BtcSwapTx, BtcSwapTxV2, Keypair, PublicKey,
@@ -447,6 +448,7 @@ impl BtcLnV2Swap {
         mnemonic: String,
         index: u64,
         out_amount: u64,
+        out_address: Option<String>,
         network: Chain,
         electrum_url: String,
         boltz_url: String,
@@ -464,14 +466,32 @@ impl BtcLnV2Swap {
         };
 
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
-        // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
-        let create_reverse_req = boltz_client::swaps::boltzv2::CreateReverseRequest {
-            invoice_amount: out_amount as u32,
-            from: "BTC".to_string(),
-            to: "BTC".to_string(),
-            preimage_hash: preimage.sha256,
-            claim_public_key,
-            referral_id: None,
+
+        let create_reverse_req = if out_address.is_some() {
+            let address = out_address.unwrap();
+            boltz_client::swaps::boltzv2::CreateReverseRequest {
+                invoice_amount: out_amount as u32,
+                from: "BTC".to_string(),
+                to: "BTC".to_string(),
+                preimage_hash: preimage.sha256,
+                claim_public_key,
+                referral_id: None,
+                address: Some(address.clone()),
+                address_signature: Some(
+                    magic_routing::sign_address(&address, &ckp)?.to_string(),
+                ),
+            }
+        } else {
+            boltz_client::swaps::boltzv2::CreateReverseRequest {
+                invoice_amount: out_amount as u32,
+                from: "BTC".to_string(),
+                to: "BTC".to_string(),
+                preimage_hash: preimage.sha256,
+                claim_public_key,
+                referral_id: None,
+                address: None,
+                address_signature: None,
+            }
         };
 
         let create_swap_response = boltz_client.post_reverse_req(create_reverse_req)?;
@@ -586,7 +606,7 @@ impl BtcLnV2Swap {
                     Err(e) => return Err(e.into()),
                 };
             let ckp: Keypair = self.keys.clone().into();
-            
+
             let signed = match tx.sign_refund(
                 &ckp,
                 abs_fee,

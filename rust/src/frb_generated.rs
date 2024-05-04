@@ -346,6 +346,7 @@ fn wire_btc_ln_v_2_swap_new_reverse_impl(
     mnemonic: impl CstDecode<String>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
+    out_address: impl CstDecode<Option<String>>,
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
@@ -360,6 +361,7 @@ fn wire_btc_ln_v_2_swap_new_reverse_impl(
             let api_mnemonic = mnemonic.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
+            let api_out_address = out_address.cst_decode();
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
@@ -369,6 +371,7 @@ fn wire_btc_ln_v_2_swap_new_reverse_impl(
                         api_mnemonic,
                         api_index,
                         api_out_amount,
+                        api_out_address,
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
@@ -810,6 +813,7 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
     mnemonic: impl CstDecode<String>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
+    out_address: impl CstDecode<Option<String>>,
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
@@ -824,6 +828,7 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
             let api_mnemonic = mnemonic.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
+            let api_out_address = out_address.cst_decode();
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
@@ -833,6 +838,7 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
                         api_mnemonic,
                         api_index,
                         api_out_amount,
+                        api_out_address,
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
@@ -985,6 +991,8 @@ fn wire_btc_swap_script_v_2_str_new_impl(
 fn wire_decoded_invoice_from_string_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: impl CstDecode<String>,
+    boltz_url: impl CstDecode<Option<String>>,
+    chain: impl CstDecode<Option<crate::api::types::Chain>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -994,9 +1002,11 @@ fn wire_decoded_invoice_from_string_impl(
         },
         move || {
             let api_s = s.cst_decode();
+            let api_boltz_url = boltz_url.cst_decode();
+            let api_chain = chain.cst_decode();
             move |context| {
                 transform_result_dco((move || {
-                    crate::api::types::DecodedInvoice::from_string(api_s)
+                    crate::api::types::DecodedInvoice::from_string(api_s, api_boltz_url, api_chain)
                 })())
             }
         },
@@ -1356,6 +1366,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
         let mut var_isExpired = <bool>::sse_decode(deserializer);
         let mut var_network = <String>::sse_decode(deserializer);
         let mut var_cltvExpDelta = <u64>::sse_decode(deserializer);
+        let mut var_routeHint = <Option<(String, f64)>>::sse_decode(deserializer);
         return crate::api::types::DecodedInvoice {
             msats: var_msats,
             expiry: var_expiry,
@@ -1364,6 +1375,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
             is_expired: var_isExpired,
             network: var_network,
             cltv_exp_delta: var_cltvExpDelta,
+            route_hint: var_routeHint,
         };
     }
 }
@@ -1515,6 +1527,28 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<crate::api::types::Chain> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::types::Chain>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<(String, f64)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<(String, f64)>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for crate::api::types::PreImage {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1526,6 +1560,15 @@ impl SseDecode for crate::api::types::PreImage {
             sha256: var_sha256,
             hash160: var_hash160,
         };
+    }
+}
+
+impl SseDecode for (String, f64) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 = <f64>::sse_decode(deserializer);
+        return (var_field0, var_field1);
     }
 }
 
@@ -1782,6 +1825,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::DecodedInvoice {
             self.is_expired.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
             self.cltv_exp_delta.into_into_dart().into_dart(),
+            self.route_hint.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2108,6 +2152,7 @@ impl SseEncode for crate::api::types::DecodedInvoice {
         <bool>::sse_encode(self.is_expired, serializer);
         <String>::sse_encode(self.network, serializer);
         <u64>::sse_encode(self.cltv_exp_delta, serializer);
+        <Option<(String, f64)>>::sse_encode(self.route_hint, serializer);
     }
 }
 
@@ -2210,12 +2255,40 @@ impl SseEncode for Option<String> {
     }
 }
 
+impl SseEncode for Option<crate::api::types::Chain> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::types::Chain>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<(String, f64)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <(String, f64)>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for crate::api::types::PreImage {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.value, serializer);
         <String>::sse_encode(self.sha256, serializer);
         <String>::sse_encode(self.hash160, serializer);
+    }
+}
+
+impl SseEncode for (String, f64) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <f64>::sse_encode(self.1, serializer);
     }
 }
 

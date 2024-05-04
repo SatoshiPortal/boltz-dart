@@ -160,8 +160,8 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             .unwrap();
         assert_eq!(
             self_.length(),
-            7,
-            "Expected 7 elements, got {}",
+            8,
+            "Expected 8 elements, got {}",
             self_.length()
         );
         crate::api::types::DecodedInvoice {
@@ -172,6 +172,7 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             is_expired: self_.get(4).cst_decode(),
             network: self_.get(5).cst_decode(),
             cltv_exp_delta: self_.get(6).cst_decode(),
+            route_hint: self_.get(7).cst_decode(),
         }
     }
 }
@@ -331,6 +332,21 @@ impl CstDecode<crate::api::types::PreImage>
             sha256: self_.get(1).cst_decode(),
             hash160: self_.get(2).cst_decode(),
         }
+    }
+}
+impl CstDecode<(String, f64)> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> (String, f64) {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            2,
+            "Expected 2 elements, got {}",
+            self_.length()
+        );
+        (self_.get(0).cst_decode(), self_.get(1).cst_decode())
     }
 }
 impl CstDecode<crate::api::types::ReverseSwapFees>
@@ -613,6 +629,7 @@ pub fn wire_btc_ln_v_2_swap_new_reverse(
     mnemonic: String,
     index: u64,
     out_amount: u64,
+    out_address: Option<String>,
     network: i32,
     electrum_url: String,
     boltz_url: String,
@@ -622,6 +639,7 @@ pub fn wire_btc_ln_v_2_swap_new_reverse(
         mnemonic,
         index,
         out_amount,
+        out_address,
         network,
         electrum_url,
         boltz_url,
@@ -842,6 +860,7 @@ pub fn wire_lbtc_ln_v_2_swap_new_reverse(
     mnemonic: String,
     index: u64,
     out_amount: u64,
+    out_address: Option<String>,
     network: i32,
     electrum_url: String,
     boltz_url: String,
@@ -851,6 +870,7 @@ pub fn wire_lbtc_ln_v_2_swap_new_reverse(
         mnemonic,
         index,
         out_amount,
+        out_address,
         network,
         electrum_url,
         boltz_url,
@@ -928,8 +948,10 @@ pub fn wire_btc_swap_script_v_2_str_new(
 pub fn wire_decoded_invoice_from_string(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: String,
+    boltz_url: Option<String>,
+    chain: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
-    wire_decoded_invoice_from_string_impl(port_, s)
+    wire_decoded_invoice_from_string_impl(port_, s, boltz_url, chain)
 }
 
 #[wasm_bindgen]

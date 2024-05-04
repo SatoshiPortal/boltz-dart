@@ -5,6 +5,7 @@ cargo build --release
 OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then
     cp target/release/libboltzclient.so target/unittest.libboltz.$VERSION
+    cp target/release/libboltzclient.so ../build/unit_test_assets/lib
 elif [ "$OS" = "Darwin" ]; then
     cp target/release/libboltzclient.dylib target/unittest.libboltz.$VERSION
 else
