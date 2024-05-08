@@ -46,6 +46,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain dco_decode_box_autoadd_chain(dynamic raw);
 
   @protected
+  double dco_decode_box_autoadd_f_64(dynamic raw);
+
+  @protected
   KeyPair dco_decode_box_autoadd_key_pair(dynamic raw);
 
   @protected
@@ -60,9 +63,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   PreImage dco_decode_box_autoadd_pre_image(dynamic raw);
-
-  @protected
-  (String, double) dco_decode_box_autoadd_record_string_f_64(dynamic raw);
 
   @protected
   BtcLnV1Swap dco_decode_btc_ln_v_1_swap(dynamic raw);
@@ -110,13 +110,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain? dco_decode_opt_box_autoadd_chain(dynamic raw);
 
   @protected
-  (String, double)? dco_decode_opt_box_autoadd_record_string_f_64(dynamic raw);
+  double? dco_decode_opt_box_autoadd_f_64(dynamic raw);
 
   @protected
   PreImage dco_decode_pre_image(dynamic raw);
-
-  @protected
-  (String, double) dco_decode_record_string_f_64(dynamic raw);
 
   @protected
   ReverseSwapFees dco_decode_reverse_swap_fees(dynamic raw);
@@ -170,6 +167,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain sse_decode_box_autoadd_chain(SseDeserializer deserializer);
 
   @protected
+  double sse_decode_box_autoadd_f_64(SseDeserializer deserializer);
+
+  @protected
   KeyPair sse_decode_box_autoadd_key_pair(SseDeserializer deserializer);
 
   @protected
@@ -186,10 +186,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   PreImage sse_decode_box_autoadd_pre_image(SseDeserializer deserializer);
-
-  @protected
-  (String, double) sse_decode_box_autoadd_record_string_f_64(
-      SseDeserializer deserializer);
 
   @protected
   BtcLnV1Swap sse_decode_btc_ln_v_1_swap(SseDeserializer deserializer);
@@ -239,14 +235,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain? sse_decode_opt_box_autoadd_chain(SseDeserializer deserializer);
 
   @protected
-  (String, double)? sse_decode_opt_box_autoadd_record_string_f_64(
-      SseDeserializer deserializer);
+  double? sse_decode_opt_box_autoadd_f_64(SseDeserializer deserializer);
 
   @protected
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
-
-  @protected
-  (String, double) sse_decode_record_string_f_64(SseDeserializer deserializer);
 
   @protected
   ReverseSwapFees sse_decode_reverse_swap_fees(SseDeserializer deserializer);
@@ -326,6 +318,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  double cst_encode_box_autoadd_f_64(double raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_f_64(raw);
+  }
+
+  @protected
   List<dynamic> cst_encode_box_autoadd_key_pair(KeyPair raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_key_pair(raw);
@@ -354,13 +352,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   List<dynamic> cst_encode_box_autoadd_pre_image(PreImage raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_pre_image(raw);
-  }
-
-  @protected
-  List<dynamic> cst_encode_box_autoadd_record_string_f_64(
-      (String, double) raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_record_string_f_64(raw);
   }
 
   @protected
@@ -423,7 +414,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_bool(raw.isExpired),
       cst_encode_String(raw.network),
       cst_encode_u_64(raw.cltvExpDelta),
-      cst_encode_opt_box_autoadd_record_string_f_64(raw.routeHint)
+      cst_encode_opt_String(raw.mrhAddress),
+      cst_encode_opt_box_autoadd_f_64(raw.mrhAmount)
     ];
   }
 
@@ -510,10 +502,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic>? cst_encode_opt_box_autoadd_record_string_f_64(
-      (String, double)? raw) {
+  double? cst_encode_opt_box_autoadd_f_64(double? raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    return raw == null ? null : cst_encode_box_autoadd_record_string_f_64(raw);
+    return raw == null ? null : cst_encode_box_autoadd_f_64(raw);
   }
 
   @protected
@@ -524,12 +515,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.sha256),
       cst_encode_String(raw.hash160)
     ];
-  }
-
-  @protected
-  List<dynamic> cst_encode_record_string_f_64((String, double) raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [cst_encode_String(raw.$1), cst_encode_f_64(raw.$2)];
   }
 
   @protected
@@ -613,6 +598,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_box_autoadd_chain(Chain self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_f_64(double self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_key_pair(KeyPair self, SseSerializer serializer);
 
   @protected
@@ -630,10 +618,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_box_autoadd_pre_image(
       PreImage self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_box_autoadd_record_string_f_64(
-      (String, double) self, SseSerializer serializer);
 
   @protected
   void sse_encode_btc_ln_v_1_swap(BtcLnV1Swap self, SseSerializer serializer);
@@ -685,15 +669,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_opt_box_autoadd_chain(Chain? self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_record_string_f_64(
-      (String, double)? self, SseSerializer serializer);
+  void sse_encode_opt_box_autoadd_f_64(double? self, SseSerializer serializer);
 
   @protected
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_record_string_f_64(
-      (String, double) self, SseSerializer serializer);
 
   @protected
   void sse_encode_reverse_swap_fees(

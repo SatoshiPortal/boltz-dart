@@ -712,7 +712,8 @@ mixin _$DecodedInvoice {
   bool get isExpired => throw _privateConstructorUsedError;
   String get network => throw _privateConstructorUsedError;
   int get cltvExpDelta => throw _privateConstructorUsedError;
-  (String, double)? get routeHint => throw _privateConstructorUsedError;
+  String? get mrhAddress => throw _privateConstructorUsedError;
+  double? get mrhAmount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DecodedInvoiceCopyWith<DecodedInvoice> get copyWith =>
@@ -733,7 +734,8 @@ abstract class $DecodedInvoiceCopyWith<$Res> {
       bool isExpired,
       String network,
       int cltvExpDelta,
-      (String, double)? routeHint});
+      String? mrhAddress,
+      double? mrhAmount});
 }
 
 /// @nodoc
@@ -756,7 +758,8 @@ class _$DecodedInvoiceCopyWithImpl<$Res, $Val extends DecodedInvoice>
     Object? isExpired = null,
     Object? network = null,
     Object? cltvExpDelta = null,
-    Object? routeHint = freezed,
+    Object? mrhAddress = freezed,
+    Object? mrhAmount = freezed,
   }) {
     return _then(_value.copyWith(
       msats: null == msats
@@ -787,10 +790,14 @@ class _$DecodedInvoiceCopyWithImpl<$Res, $Val extends DecodedInvoice>
           ? _value.cltvExpDelta
           : cltvExpDelta // ignore: cast_nullable_to_non_nullable
               as int,
-      routeHint: freezed == routeHint
-          ? _value.routeHint
-          : routeHint // ignore: cast_nullable_to_non_nullable
-              as (String, double)?,
+      mrhAddress: freezed == mrhAddress
+          ? _value.mrhAddress
+          : mrhAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      mrhAmount: freezed == mrhAmount
+          ? _value.mrhAmount
+          : mrhAmount // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -811,7 +818,8 @@ abstract class _$$DecodedInvoiceImplCopyWith<$Res>
       bool isExpired,
       String network,
       int cltvExpDelta,
-      (String, double)? routeHint});
+      String? mrhAddress,
+      double? mrhAmount});
 }
 
 /// @nodoc
@@ -832,7 +840,8 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
     Object? isExpired = null,
     Object? network = null,
     Object? cltvExpDelta = null,
-    Object? routeHint = freezed,
+    Object? mrhAddress = freezed,
+    Object? mrhAmount = freezed,
   }) {
     return _then(_$DecodedInvoiceImpl(
       msats: null == msats
@@ -863,10 +872,14 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
           ? _value.cltvExpDelta
           : cltvExpDelta // ignore: cast_nullable_to_non_nullable
               as int,
-      routeHint: freezed == routeHint
-          ? _value.routeHint
-          : routeHint // ignore: cast_nullable_to_non_nullable
-              as (String, double)?,
+      mrhAddress: freezed == mrhAddress
+          ? _value.mrhAddress
+          : mrhAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      mrhAmount: freezed == mrhAmount
+          ? _value.mrhAmount
+          : mrhAmount // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -882,7 +895,8 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
       required this.isExpired,
       required this.network,
       required this.cltvExpDelta,
-      this.routeHint})
+      this.mrhAddress,
+      this.mrhAmount})
       : super._();
 
   @override
@@ -900,11 +914,13 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
   @override
   final int cltvExpDelta;
   @override
-  final (String, double)? routeHint;
+  final String? mrhAddress;
+  @override
+  final double? mrhAmount;
 
   @override
   String toString() {
-    return 'DecodedInvoice(msats: $msats, expiry: $expiry, expiresIn: $expiresIn, expiresAt: $expiresAt, isExpired: $isExpired, network: $network, cltvExpDelta: $cltvExpDelta, routeHint: $routeHint)';
+    return 'DecodedInvoice(msats: $msats, expiry: $expiry, expiresIn: $expiresIn, expiresAt: $expiresAt, isExpired: $isExpired, network: $network, cltvExpDelta: $cltvExpDelta, mrhAddress: $mrhAddress, mrhAmount: $mrhAmount)';
   }
 
   @override
@@ -923,13 +939,15 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
             (identical(other.network, network) || other.network == network) &&
             (identical(other.cltvExpDelta, cltvExpDelta) ||
                 other.cltvExpDelta == cltvExpDelta) &&
-            (identical(other.routeHint, routeHint) ||
-                other.routeHint == routeHint));
+            (identical(other.mrhAddress, mrhAddress) ||
+                other.mrhAddress == mrhAddress) &&
+            (identical(other.mrhAmount, mrhAmount) ||
+                other.mrhAmount == mrhAmount));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, msats, expiry, expiresIn,
-      expiresAt, isExpired, network, cltvExpDelta, routeHint);
+      expiresAt, isExpired, network, cltvExpDelta, mrhAddress, mrhAmount);
 
   @JsonKey(ignore: true)
   @override
@@ -948,7 +966,8 @@ abstract class _DecodedInvoice extends DecodedInvoice {
       required final bool isExpired,
       required final String network,
       required final int cltvExpDelta,
-      final (String, double)? routeHint}) = _$DecodedInvoiceImpl;
+      final String? mrhAddress,
+      final double? mrhAmount}) = _$DecodedInvoiceImpl;
   const _DecodedInvoice._() : super._();
 
   @override
@@ -966,7 +985,9 @@ abstract class _DecodedInvoice extends DecodedInvoice {
   @override
   int get cltvExpDelta;
   @override
-  (String, double)? get routeHint;
+  String? get mrhAddress;
+  @override
+  double? get mrhAmount;
   @override
   @JsonKey(ignore: true)
   _$$DecodedInvoiceImplCopyWith<_$DecodedInvoiceImpl> get copyWith =>

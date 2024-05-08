@@ -1756,6 +1756,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  double dco_decode_box_autoadd_f_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as double;
+  }
+
+  @protected
   KeyPair dco_decode_box_autoadd_key_pair(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_key_pair(raw);
@@ -1784,12 +1790,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   PreImage dco_decode_box_autoadd_pre_image(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_pre_image(raw);
-  }
-
-  @protected
-  (String, double) dco_decode_box_autoadd_record_string_f_64(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw as (String, double);
   }
 
   @protected
@@ -1860,8 +1860,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   DecodedInvoice dco_decode_decoded_invoice(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 8)
-      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    if (arr.length != 9)
+      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
     return DecodedInvoice(
       msats: dco_decode_u_64(arr[0]),
       expiry: dco_decode_u_64(arr[1]),
@@ -1870,7 +1870,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       isExpired: dco_decode_bool(arr[4]),
       network: dco_decode_String(arr[5]),
       cltvExpDelta: dco_decode_u_64(arr[6]),
-      routeHint: dco_decode_opt_box_autoadd_record_string_f_64(arr[7]),
+      mrhAddress: dco_decode_opt_String(arr[7]),
+      mrhAmount: dco_decode_opt_box_autoadd_f_64(arr[8]),
     );
   }
 
@@ -1990,9 +1991,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  (String, double)? dco_decode_opt_box_autoadd_record_string_f_64(dynamic raw) {
+  double? dco_decode_opt_box_autoadd_f_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_record_string_f_64(raw);
+    return raw == null ? null : dco_decode_box_autoadd_f_64(raw);
   }
 
   @protected
@@ -2005,19 +2006,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       value: dco_decode_String(arr[0]),
       sha256: dco_decode_String(arr[1]),
       hash160: dco_decode_String(arr[2]),
-    );
-  }
-
-  @protected
-  (String, double) dco_decode_record_string_f_64(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
-    }
-    return (
-      dco_decode_String(arr[0]),
-      dco_decode_f_64(arr[1]),
     );
   }
 
@@ -2154,6 +2142,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  double sse_decode_box_autoadd_f_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_f_64(deserializer));
+  }
+
+  @protected
   KeyPair sse_decode_box_autoadd_key_pair(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_key_pair(deserializer));
@@ -2184,13 +2178,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   PreImage sse_decode_box_autoadd_pre_image(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_pre_image(deserializer));
-  }
-
-  @protected
-  (String, double) sse_decode_box_autoadd_record_string_f_64(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_record_string_f_64(deserializer));
   }
 
   @protected
@@ -2285,8 +2272,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_isExpired = sse_decode_bool(deserializer);
     var var_network = sse_decode_String(deserializer);
     var var_cltvExpDelta = sse_decode_u_64(deserializer);
-    var var_routeHint =
-        sse_decode_opt_box_autoadd_record_string_f_64(deserializer);
+    var var_mrhAddress = sse_decode_opt_String(deserializer);
+    var var_mrhAmount = sse_decode_opt_box_autoadd_f_64(deserializer);
     return DecodedInvoice(
         msats: var_msats,
         expiry: var_expiry,
@@ -2295,7 +2282,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         isExpired: var_isExpired,
         network: var_network,
         cltvExpDelta: var_cltvExpDelta,
-        routeHint: var_routeHint);
+        mrhAddress: var_mrhAddress,
+        mrhAmount: var_mrhAmount);
   }
 
   @protected
@@ -2437,12 +2425,11 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  (String, double)? sse_decode_opt_box_autoadd_record_string_f_64(
-      SseDeserializer deserializer) {
+  double? sse_decode_opt_box_autoadd_f_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_record_string_f_64(deserializer));
+      return (sse_decode_box_autoadd_f_64(deserializer));
     } else {
       return null;
     }
@@ -2456,14 +2443,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_hash160 = sse_decode_String(deserializer);
     return PreImage.raw(
         value: var_value, sha256: var_sha256, hash160: var_hash160);
-  }
-
-  @protected
-  (String, double) sse_decode_record_string_f_64(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_field0 = sse_decode_String(deserializer);
-    var var_field1 = sse_decode_f_64(deserializer);
-    return (var_field0, var_field1);
   }
 
   @protected
@@ -2641,6 +2620,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_box_autoadd_f_64(double self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_f_64(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_key_pair(KeyPair self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_key_pair(self, serializer);
@@ -2672,13 +2657,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       PreImage self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_pre_image(self, serializer);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_record_string_f_64(
-      (String, double) self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_record_string_f_64(self, serializer);
   }
 
   @protected
@@ -2742,7 +2720,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_bool(self.isExpired, serializer);
     sse_encode_String(self.network, serializer);
     sse_encode_u_64(self.cltvExpDelta, serializer);
-    sse_encode_opt_box_autoadd_record_string_f_64(self.routeHint, serializer);
+    sse_encode_opt_String(self.mrhAddress, serializer);
+    sse_encode_opt_box_autoadd_f_64(self.mrhAmount, serializer);
   }
 
   @protected
@@ -2849,13 +2828,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_opt_box_autoadd_record_string_f_64(
-      (String, double)? self, SseSerializer serializer) {
+  void sse_encode_opt_box_autoadd_f_64(double? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     sse_encode_bool(self != null, serializer);
     if (self != null) {
-      sse_encode_box_autoadd_record_string_f_64(self, serializer);
+      sse_encode_box_autoadd_f_64(self, serializer);
     }
   }
 
@@ -2865,14 +2843,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.value, serializer);
     sse_encode_String(self.sha256, serializer);
     sse_encode_String(self.hash160, serializer);
-  }
-
-  @protected
-  void sse_encode_record_string_f_64(
-      (String, double) self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.$1, serializer);
-    sse_encode_f_64(self.$2, serializer);
   }
 
   @protected

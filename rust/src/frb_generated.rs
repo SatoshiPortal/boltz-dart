@@ -1366,7 +1366,8 @@ impl SseDecode for crate::api::types::DecodedInvoice {
         let mut var_isExpired = <bool>::sse_decode(deserializer);
         let mut var_network = <String>::sse_decode(deserializer);
         let mut var_cltvExpDelta = <u64>::sse_decode(deserializer);
-        let mut var_routeHint = <Option<(String, f64)>>::sse_decode(deserializer);
+        let mut var_mrhAddress = <Option<String>>::sse_decode(deserializer);
+        let mut var_mrhAmount = <Option<f64>>::sse_decode(deserializer);
         return crate::api::types::DecodedInvoice {
             msats: var_msats,
             expiry: var_expiry,
@@ -1375,7 +1376,8 @@ impl SseDecode for crate::api::types::DecodedInvoice {
             is_expired: var_isExpired,
             network: var_network,
             cltv_exp_delta: var_cltvExpDelta,
-            route_hint: var_routeHint,
+            mrh_address: var_mrhAddress,
+            mrh_amount: var_mrhAmount,
         };
     }
 }
@@ -1538,11 +1540,11 @@ impl SseDecode for Option<crate::api::types::Chain> {
     }
 }
 
-impl SseDecode for Option<(String, f64)> {
+impl SseDecode for Option<f64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
-            return Some(<(String, f64)>::sse_decode(deserializer));
+            return Some(<f64>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -1560,15 +1562,6 @@ impl SseDecode for crate::api::types::PreImage {
             sha256: var_sha256,
             hash160: var_hash160,
         };
-    }
-}
-
-impl SseDecode for (String, f64) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_field0 = <String>::sse_decode(deserializer);
-        let mut var_field1 = <f64>::sse_decode(deserializer);
-        return (var_field0, var_field1);
     }
 }
 
@@ -1825,7 +1818,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::DecodedInvoice {
             self.is_expired.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
             self.cltv_exp_delta.into_into_dart().into_dart(),
-            self.route_hint.into_into_dart().into_dart(),
+            self.mrh_address.into_into_dart().into_dart(),
+            self.mrh_amount.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2152,7 +2146,8 @@ impl SseEncode for crate::api::types::DecodedInvoice {
         <bool>::sse_encode(self.is_expired, serializer);
         <String>::sse_encode(self.network, serializer);
         <u64>::sse_encode(self.cltv_exp_delta, serializer);
-        <Option<(String, f64)>>::sse_encode(self.route_hint, serializer);
+        <Option<String>>::sse_encode(self.mrh_address, serializer);
+        <Option<f64>>::sse_encode(self.mrh_amount, serializer);
     }
 }
 
@@ -2265,12 +2260,12 @@ impl SseEncode for Option<crate::api::types::Chain> {
     }
 }
 
-impl SseEncode for Option<(String, f64)> {
+impl SseEncode for Option<f64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
-            <(String, f64)>::sse_encode(value, serializer);
+            <f64>::sse_encode(value, serializer);
         }
     }
 }
@@ -2281,14 +2276,6 @@ impl SseEncode for crate::api::types::PreImage {
         <String>::sse_encode(self.value, serializer);
         <String>::sse_encode(self.sha256, serializer);
         <String>::sse_encode(self.hash160, serializer);
-    }
-}
-
-impl SseEncode for (String, f64) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.0, serializer);
-        <f64>::sse_encode(self.1, serializer);
     }
 }
 

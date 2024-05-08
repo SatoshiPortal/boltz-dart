@@ -73,6 +73,12 @@ impl CstDecode<crate::api::types::Chain> for *mut i32 {
         CstDecode::<crate::api::types::Chain>::cst_decode(*wrap).into()
     }
 }
+impl CstDecode<f64> for *mut f64 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> f64 {
+        unsafe { *flutter_rust_bridge::for_generated::box_from_leak_ptr(self) }
+    }
+}
 impl CstDecode<crate::api::types::KeyPair> for *mut wire_cst_key_pair {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::KeyPair {
@@ -106,13 +112,6 @@ impl CstDecode<crate::api::types::PreImage> for *mut wire_cst_pre_image {
     fn cst_decode(self) -> crate::api::types::PreImage {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
         CstDecode::<crate::api::types::PreImage>::cst_decode(*wrap).into()
-    }
-}
-impl CstDecode<(String, f64)> for *mut wire_cst_record_string_f_64 {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> (String, f64) {
-        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<(String, f64)>::cst_decode(*wrap).into()
     }
 }
 impl CstDecode<crate::api::btc_ln::BtcLnV1Swap> for wire_cst_btc_ln_v_1_swap {
@@ -175,7 +174,8 @@ impl CstDecode<crate::api::types::DecodedInvoice> for wire_cst_decoded_invoice {
             is_expired: self.is_expired.cst_decode(),
             network: self.network.cst_decode(),
             cltv_exp_delta: self.cltv_exp_delta.cst_decode(),
-            route_hint: self.route_hint.cst_decode(),
+            mrh_address: self.mrh_address.cst_decode(),
+            mrh_amount: self.mrh_amount.cst_decode(),
         }
     }
 }
@@ -266,12 +266,6 @@ impl CstDecode<crate::api::types::PreImage> for wire_cst_pre_image {
             sha256: self.sha256.cst_decode(),
             hash160: self.hash160.cst_decode(),
         }
-    }
-}
-impl CstDecode<(String, f64)> for wire_cst_record_string_f_64 {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> (String, f64) {
-        (self.field0.cst_decode(), self.field1.cst_decode())
     }
 }
 impl CstDecode<crate::api::types::ReverseSwapFees> for wire_cst_reverse_swap_fees {
@@ -397,7 +391,8 @@ impl NewWithNullPtr for wire_cst_decoded_invoice {
             is_expired: Default::default(),
             network: core::ptr::null_mut(),
             cltv_exp_delta: Default::default(),
-            route_hint: core::ptr::null_mut(),
+            mrh_address: core::ptr::null_mut(),
+            mrh_amount: core::ptr::null_mut(),
         }
     }
 }
@@ -506,19 +501,6 @@ impl NewWithNullPtr for wire_cst_pre_image {
     }
 }
 impl Default for wire_cst_pre_image {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-impl NewWithNullPtr for wire_cst_record_string_f_64 {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            field0: core::ptr::null_mut(),
-            field1: Default::default(),
-        }
-    }
-}
-impl Default for wire_cst_record_string_f_64 {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -1122,6 +1104,11 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_chain(value: i32) -> *mu
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_f_64(value: f64) -> *mut f64 {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_key_pair() -> *mut wire_cst_key_pair {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_key_pair::new_with_null_ptr())
 }
@@ -1153,14 +1140,6 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_v_2_swap(
 #[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_pre_image() -> *mut wire_cst_pre_image {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_pre_image::new_with_null_ptr())
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_record_string_f_64(
-) -> *mut wire_cst_record_string_f_64 {
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(
-        wire_cst_record_string_f_64::new_with_null_ptr(),
-    )
 }
 
 #[no_mangle]
@@ -1242,7 +1221,8 @@ pub struct wire_cst_decoded_invoice {
     is_expired: bool,
     network: *mut wire_cst_list_prim_u_8_strict,
     cltv_exp_delta: u64,
-    route_hint: *mut wire_cst_record_string_f_64,
+    mrh_address: *mut wire_cst_list_prim_u_8_strict,
+    mrh_amount: *mut f64,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -1311,12 +1291,6 @@ pub struct wire_cst_pre_image {
     value: *mut wire_cst_list_prim_u_8_strict,
     sha256: *mut wire_cst_list_prim_u_8_strict,
     hash160: *mut wire_cst_list_prim_u_8_strict,
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct wire_cst_record_string_f_64 {
-    field0: *mut wire_cst_list_prim_u_8_strict,
-    field1: f64,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

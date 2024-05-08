@@ -160,8 +160,8 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             .unwrap();
         assert_eq!(
             self_.length(),
-            8,
-            "Expected 8 elements, got {}",
+            9,
+            "Expected 9 elements, got {}",
             self_.length()
         );
         crate::api::types::DecodedInvoice {
@@ -172,7 +172,8 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             is_expired: self_.get(4).cst_decode(),
             network: self_.get(5).cst_decode(),
             cltv_exp_delta: self_.get(6).cst_decode(),
-            route_hint: self_.get(7).cst_decode(),
+            mrh_address: self_.get(7).cst_decode(),
+            mrh_amount: self_.get(8).cst_decode(),
         }
     }
 }
@@ -332,21 +333,6 @@ impl CstDecode<crate::api::types::PreImage>
             sha256: self_.get(1).cst_decode(),
             hash160: self_.get(2).cst_decode(),
         }
-    }
-}
-impl CstDecode<(String, f64)> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> (String, f64) {
-        let self_ = self
-            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
-            .unwrap();
-        assert_eq!(
-            self_.length(),
-            2,
-            "Expected 2 elements, got {}",
-            self_.length()
-        );
-        (self_.get(0).cst_decode(), self_.get(1).cst_decode())
     }
 }
 impl CstDecode<crate::api::types::ReverseSwapFees>

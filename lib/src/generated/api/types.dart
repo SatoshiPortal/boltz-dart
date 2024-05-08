@@ -73,7 +73,8 @@ class DecodedInvoice with _$DecodedInvoice {
     required bool isExpired,
     required String network,
     required int cltvExpDelta,
-    (String, double)? routeHint,
+    String? mrhAddress,
+    double? mrhAmount,
   }) = _DecodedInvoice;
 
   /// Add boltz_url & chain for route hint check

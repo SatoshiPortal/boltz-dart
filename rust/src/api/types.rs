@@ -282,7 +282,8 @@ pub struct DecodedInvoice {
     pub network: String,
     pub cltv_exp_delta: u64,
     /// (address, btc_amount)
-    pub route_hint: Option<(String, f64)>,
+    pub mrh_address: Option<String>,
+    pub mrh_amount: Option<f64>,
 }
 impl DecodedInvoice {
     /// Add boltz_url & chain for route hint check
@@ -314,7 +315,8 @@ impl DecodedInvoice {
             msats: invoice.amount_milli_satoshis().unwrap_or(0),
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
             network: invoice.network().to_string(),
-            route_hint: route_hint,
+            mrh_address: route_hint.as_ref().map(|r| r.0.clone()),
+            mrh_amount: route_hint.as_ref().map(|r| r.1),
         })
     }
 }
@@ -357,18 +359,30 @@ impl TryInto<BtcSwapScriptV2> for BtcSwapScriptV2Str {
 
     fn try_into(self) -> Result<BtcSwapScriptV2, Self::Error> {
         let address: Option<Address> = if self.funding_addrs.is_some() {
-            Some(
-                Address::from_str(&self.funding_addrs.unwrap())
-                    .unwrap()
-                    .assume_checked(),
-            )
+            let address = match  Address::from_str(&self.funding_addrs.unwrap()){
+                Ok(r)=>r.assume_checked(),
+                Err(e)=>return Err(BoltzError::new("Input".to_string(), "Could not parse elements address".to_string()))
+            };
+            Some(address)
         } else {
             None
         };
-        let hashlock = Hash::from_str(&self.hashlock).unwrap();
-        let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
-        let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();
-        let locktime = boltz_client::LockTime::from_height(self.locktime).unwrap();
+        let hashlock = match Hash::from_str(&self.hashlock){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not parse hash value".to_string()))
+        };
+        let receiver_pubkey = match PublicKey::from_str(&self.receiver_pubkey){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not receiver pubkey value".to_string()))
+        };
+        let sender_pubkey = match PublicKey::from_str(&self.sender_pubkey){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not sender pubkey value".to_string()))
+        };
+        let locktime = match boltz_client::LockTime::from_height(self.locktime){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not locktime value".to_string()))
+        };
         Ok(BtcSwapScriptV2 {
             swap_type: self.swap_type.clone().into(),
             funding_addrs: address,
@@ -431,16 +445,34 @@ impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
 
     fn try_into(self) -> Result<LBtcSwapScriptV2, Self::Error> {
         let address: Option<ElementsAddress> = if self.funding_addrs.is_some() {
-            Some(ElementsAddress::from_str(&self.funding_addrs.unwrap()).unwrap())
+            let address = match ElementsAddress::from_str(&self.funding_addrs.unwrap()){
+                Ok(r)=>r,
+                Err(e)=>return Err(BoltzError::new("Input".to_string(), "Could not parse elements address".to_string()))
+            };
+            Some(address)
         } else {
             None
         };
-        let hashlock = Hash::from_str(&self.hashlock).unwrap();
-        let receiver_pubkey = PublicKey::from_str(&self.receiver_pubkey).unwrap();
-        
-        let sender_pubkey = PublicKey::from_str(&self.sender_pubkey).unwrap();
-        let locktime = boltz_client::ElementsLockTime::from_height(self.locktime).unwrap();
-        let blinding_key = ZKKeyPair::from_str(&self.blinding_key).unwrap();
+        let hashlock = match Hash::from_str(&self.hashlock){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not parse hashlock value".to_string()))
+        };
+        let receiver_pubkey = match PublicKey::from_str(&self.receiver_pubkey){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not parse receiver pubkey value".to_string()))
+        };
+        let sender_pubkey = match PublicKey::from_str(&self.sender_pubkey){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not parse sender pubkey value".to_string()))
+        };
+        let locktime = match boltz_client::ElementsLockTime::from_height(self.locktime){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not parse locktime value".to_string()))
+        };
+        let blinding_key = match ZKKeyPair::from_str(&self.blinding_key){
+            Ok(r)=>r,
+            Err(_)=>return Err(BoltzError::new("Input".to_string(), "Could not parse blinding key value".to_string()))
+        };
 
         Ok(LBtcSwapScriptV2 {
             swap_type: self.swap_type.clone().into(),
