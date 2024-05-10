@@ -5,9 +5,9 @@ import 'dart:convert';
 // import 'package:boltz_dart/types/swap.dart';
 // import 'package:boltz_dart/types/swap_status_response.dart';
 import 'package:boltz_dart/boltz_dart.dart';
-import 'package:boltz_dart/src/types/swap.dart';
-import 'package:boltz_dart/src/types/swap_status_response.dart';
-import 'package:boltz_dart/src/utils/http.dart';
+// import 'package:boltz_dart/src/types/swap.dart';
+// import 'package:boltz_dart/src/types/swap_status_response.dart';
+// import 'package:boltz_dart/src/utils/http.dart';
 import 'package:test/test.dart';
 
 void main() {

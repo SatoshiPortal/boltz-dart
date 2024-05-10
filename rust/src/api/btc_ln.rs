@@ -477,9 +477,7 @@ impl BtcLnV2Swap {
                 claim_public_key,
                 referral_id: None,
                 address: Some(address.clone()),
-                address_signature: Some(
-                    magic_routing::sign_address(&address, &ckp)?.to_string(),
-                ),
+                address_signature: Some(magic_routing::sign_address(&address, &ckp)?.to_string()),
             }
         } else {
             boltz_client::swaps::boltzv2::CreateReverseRequest {

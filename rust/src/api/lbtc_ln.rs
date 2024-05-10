@@ -5,11 +5,15 @@ use super::{
     types::{Chain, KeyPair, LBtcSwapScriptV2Str, PreImage, SwapType},
 };
 use boltz_client::{
-    network::electrum::ElectrumConfig, swaps::{
+    network::electrum::ElectrumConfig,
+    swaps::{
         boltz::{BoltzApiClient, CreateSwapRequest},
         boltzv2::{BoltzApiClientV2, BOLTZ_MAINNET_URL_V2, BOLTZ_TESTNET_URL_V2},
-        liquid::{LBtcSwapScript, LBtcSwapTx}, magic_routing,
-    }, util::secrets::Preimage, Amount, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey, Serialize, ToHex
+        liquid::{LBtcSwapScript, LBtcSwapTx},
+        magic_routing,
+    },
+    util::secrets::Preimage,
+    Amount, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey, Serialize, ToHex,
 };
 use flutter_rust_bridge::frb;
 use serde_json::Value;
@@ -456,7 +460,7 @@ impl LbtcLnV2Swap {
 
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
         // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
-        
+
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltzv2::CreateReverseRequest {
@@ -467,9 +471,7 @@ impl LbtcLnV2Swap {
                 claim_public_key,
                 referral_id: None,
                 address: Some(address.clone()),
-                address_signature: Some(
-                    magic_routing::sign_address(&address, &ckp)?.to_string(),
-                ),
+                address_signature: Some(magic_routing::sign_address(&address, &ckp)?.to_string()),
             }
         } else {
             boltz_client::swaps::boltzv2::CreateReverseRequest {
@@ -546,7 +548,13 @@ impl LbtcLnV2Swap {
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
 
-        let tx = match LBtcSwapTxV2::new_claim(swap_script, out_address, &network_config) {
+        let tx = match LBtcSwapTxV2::new_claim(
+            swap_script,
+            out_address,
+            &network_config,
+            self.boltz_url.clone(),
+            self.id.clone(),
+        ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
@@ -645,6 +653,8 @@ impl LbtcLnV2Swap {
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
+            self.boltz_url.clone(),
+            self.id.clone(),
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -684,7 +694,15 @@ mod tests {
         let electrum_url = "blockstream.info:465".to_string();
         let boltz_url = "api.boltz.exchange/v2".to_string();
 
-        let _ = LbtcLnV2Swap::new_reverse(mnemonic, index, out_amount, out_address, network, electrum_url, boltz_url).unwrap();
-
+        let _ = LbtcLnV2Swap::new_reverse(
+            mnemonic,
+            index,
+            out_amount,
+            out_address,
+            network,
+            electrum_url,
+            boltz_url,
+        )
+        .unwrap();
     }
 }
