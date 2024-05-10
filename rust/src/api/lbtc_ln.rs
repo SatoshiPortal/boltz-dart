@@ -552,7 +552,7 @@ impl LbtcLnV2Swap {
             swap_script,
             out_address,
             &network_config,
-            self.boltz_url.clone(),
+            check_protocol(&self.boltz_url.clone()),
             self.id.clone(),
         ) {
             Ok(result) => result,
@@ -653,7 +653,7 @@ impl LbtcLnV2Swap {
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
-            self.boltz_url.clone(),
+            check_protocol(&self.boltz_url.clone()),
             self.id.clone(),
         ) {
             Ok(result) => result,
