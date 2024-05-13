@@ -343,6 +343,7 @@ pub struct BtcLnV2Swap {
     pub out_amount: u64,
     pub electrum_url: String,
     pub boltz_url: String,
+    pub referral_id: Option<String>,
 }
 impl BtcLnV2Swap {
     pub fn new(
@@ -357,6 +358,7 @@ impl BtcLnV2Swap {
         out_amount: u64,
         electrum_url: String,
         boltz_url: String,
+        referral_id: Option<String>,
     ) -> BtcLnV2Swap {
         BtcLnV2Swap {
             id,
@@ -370,6 +372,7 @@ impl BtcLnV2Swap {
             boltz_url,
             script_address,
             out_amount,
+            referral_id,
         }
     }
 
@@ -380,6 +383,7 @@ impl BtcLnV2Swap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        referral_id: Option<String>,
     ) -> Result<BtcLnV2Swap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let refund_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
@@ -396,7 +400,7 @@ impl BtcLnV2Swap {
             from: "BTC".to_string(),
             to: "BTC".to_string(),
             invoice: invoice.to_string(),
-            referral_id: None,
+            referral_id: referral_id.clone(),
             refund_public_key: refund_kps.public_key().into(),
         };
 
@@ -421,6 +425,7 @@ impl BtcLnV2Swap {
             create_swap_response.expected_amount,
             electrum_url,
             boltz_url,
+            referral_id,
         ))
     }
 
@@ -452,6 +457,7 @@ impl BtcLnV2Swap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        referral_id: Option<String>,
     ) -> Result<BtcLnV2Swap, BoltzError> {
         let swap_type = SwapType::Reverse;
         let claim_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
@@ -475,7 +481,7 @@ impl BtcLnV2Swap {
                 to: "BTC".to_string(),
                 preimage_hash: preimage.sha256,
                 claim_public_key,
-                referral_id: None,
+                referral_id: referral_id.clone(),
                 address: Some(address.clone()),
                 address_signature: Some(magic_routing::sign_address(&address, &ckp)?.to_string()),
             }
@@ -486,7 +492,7 @@ impl BtcLnV2Swap {
                 to: "BTC".to_string(),
                 preimage_hash: preimage.sha256,
                 claim_public_key,
-                referral_id: None,
+                referral_id: referral_id.clone(),
                 address: None,
                 address_signature: None,
             }
@@ -511,6 +517,7 @@ impl BtcLnV2Swap {
             out_amount,
             electrum_url,
             boltz_url,
+            referral_id,
         ))
     }
 

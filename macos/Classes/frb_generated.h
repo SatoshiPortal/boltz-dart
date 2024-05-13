@@ -65,6 +65,7 @@ typedef struct wire_cst_btc_ln_v_2_swap {
   uint64_t out_amount;
   struct wire_cst_list_prim_u_8_strict *electrum_url;
   struct wire_cst_list_prim_u_8_strict *boltz_url;
+  struct wire_cst_list_prim_u_8_strict *referral_id;
 } wire_cst_btc_ln_v_2_swap;
 
 typedef struct wire_cst_lbtc_ln_v_1_swap {
@@ -105,6 +106,7 @@ typedef struct wire_cst_lbtc_ln_v_2_swap {
   struct wire_cst_list_prim_u_8_strict *blinding_key;
   struct wire_cst_list_prim_u_8_strict *electrum_url;
   struct wire_cst_list_prim_u_8_strict *boltz_url;
+  struct wire_cst_list_prim_u_8_strict *referral_id;
 } wire_cst_lbtc_ln_v_2_swap;
 
 typedef struct wire_cst_limits {
@@ -216,7 +218,8 @@ void frbgen_boltz_dart_wire_btc_ln_v_2_swap_new(int64_t port_,
                                                 struct wire_cst_list_prim_u_8_strict *script_address,
                                                 uint64_t out_amount,
                                                 struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                struct wire_cst_list_prim_u_8_strict *boltz_url);
+                                                struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse(int64_t port_,
                                                         struct wire_cst_list_prim_u_8_strict *mnemonic,
@@ -225,7 +228,8 @@ void frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse(int64_t port_,
                                                         struct wire_cst_list_prim_u_8_strict *out_address,
                                                         int32_t network,
                                                         struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                        struct wire_cst_list_prim_u_8_strict *boltz_url);
+                                                        struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                        struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine(int64_t port_,
                                                           struct wire_cst_list_prim_u_8_strict *mnemonic,
@@ -233,7 +237,8 @@ void frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine(int64_t port_,
                                                           struct wire_cst_list_prim_u_8_strict *invoice,
                                                           int32_t network,
                                                           struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                          struct wire_cst_list_prim_u_8_strict *boltz_url);
+                                                          struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                          struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_dart_wire_btc_ln_v_2_swap_refund(int64_t port_,
                                                    struct wire_cst_btc_ln_v_2_swap *that,
@@ -314,7 +319,8 @@ void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new(int64_t port_,
                                                  struct wire_cst_list_prim_u_8_strict *out_address,
                                                  struct wire_cst_list_prim_u_8_strict *blinding_key,
                                                  struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                 struct wire_cst_list_prim_u_8_strict *boltz_url);
+                                                 struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                 struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(int64_t port_,
                                                          struct wire_cst_list_prim_u_8_strict *mnemonic,
@@ -323,7 +329,8 @@ void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(int64_t port_,
                                                          struct wire_cst_list_prim_u_8_strict *out_address,
                                                          int32_t network,
                                                          struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                         struct wire_cst_list_prim_u_8_strict *boltz_url);
+                                                         struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                         struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(int64_t port_,
                                                            struct wire_cst_list_prim_u_8_strict *mnemonic,
@@ -331,7 +338,8 @@ void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(int64_t port_,
                                                            struct wire_cst_list_prim_u_8_strict *invoice,
                                                            int32_t network,
                                                            struct wire_cst_list_prim_u_8_strict *electrum_url,
-                                                           struct wire_cst_list_prim_u_8_strict *boltz_url);
+                                                           struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                           struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_refund(int64_t port_,
                                                     struct wire_cst_lbtc_ln_v_2_swap *that,

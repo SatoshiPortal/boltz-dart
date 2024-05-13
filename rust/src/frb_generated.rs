@@ -302,6 +302,7 @@ fn wire_btc_ln_v_2_swap_new_impl(
     out_amount: impl CstDecode<u64>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -321,6 +322,7 @@ fn wire_btc_ln_v_2_swap_new_impl(
             let api_out_amount = out_amount.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     Result::<_, ()>::Ok(crate::api::btc_ln::BtcLnV2Swap::new(
@@ -335,6 +337,7 @@ fn wire_btc_ln_v_2_swap_new_impl(
                         api_out_amount,
                         api_electrum_url,
                         api_boltz_url,
+                        api_referral_id,
                     ))
                 })())
             }
@@ -350,6 +353,7 @@ fn wire_btc_ln_v_2_swap_new_reverse_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -365,6 +369,7 @@ fn wire_btc_ln_v_2_swap_new_reverse_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     crate::api::btc_ln::BtcLnV2Swap::new_reverse(
@@ -375,6 +380,7 @@ fn wire_btc_ln_v_2_swap_new_reverse_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
+                        api_referral_id,
                     )
                 })())
             }
@@ -389,6 +395,7 @@ fn wire_btc_ln_v_2_swap_new_submarine_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -403,6 +410,7 @@ fn wire_btc_ln_v_2_swap_new_submarine_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     crate::api::btc_ln::BtcLnV2Swap::new_submarine(
@@ -412,6 +420,7 @@ fn wire_btc_ln_v_2_swap_new_submarine_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
+                        api_referral_id,
                     )
                 })())
             }
@@ -767,6 +776,7 @@ fn wire_lbtc_ln_v_2_swap_new_impl(
     blinding_key: impl CstDecode<String>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -787,6 +797,7 @@ fn wire_lbtc_ln_v_2_swap_new_impl(
             let api_blinding_key = blinding_key.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     Result::<_, ()>::Ok(crate::api::lbtc_ln::LbtcLnV2Swap::new(
@@ -802,6 +813,7 @@ fn wire_lbtc_ln_v_2_swap_new_impl(
                         api_blinding_key,
                         api_electrum_url,
                         api_boltz_url,
+                        api_referral_id,
                     ))
                 })())
             }
@@ -817,6 +829,7 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -832,6 +845,7 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     crate::api::lbtc_ln::LbtcLnV2Swap::new_reverse(
@@ -842,6 +856,7 @@ fn wire_lbtc_ln_v_2_swap_new_reverse_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
+                        api_referral_id,
                     )
                 })())
             }
@@ -856,6 +871,7 @@ fn wire_lbtc_ln_v_2_swap_new_submarine_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -870,6 +886,7 @@ fn wire_lbtc_ln_v_2_swap_new_submarine_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     crate::api::lbtc_ln::LbtcLnV2Swap::new_submarine(
@@ -879,6 +896,7 @@ fn wire_lbtc_ln_v_2_swap_new_submarine_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
+                        api_referral_id,
                     )
                 })())
             }
@@ -1306,6 +1324,7 @@ impl SseDecode for crate::api::btc_ln::BtcLnV2Swap {
         let mut var_outAmount = <u64>::sse_decode(deserializer);
         let mut var_electrumUrl = <String>::sse_decode(deserializer);
         let mut var_boltzUrl = <String>::sse_decode(deserializer);
+        let mut var_referralId = <Option<String>>::sse_decode(deserializer);
         return crate::api::btc_ln::BtcLnV2Swap {
             id: var_id,
             kind: var_kind,
@@ -1318,6 +1337,7 @@ impl SseDecode for crate::api::btc_ln::BtcLnV2Swap {
             out_amount: var_outAmount,
             electrum_url: var_electrumUrl,
             boltz_url: var_boltzUrl,
+            referral_id: var_referralId,
         };
     }
 }
@@ -1477,6 +1497,7 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnV2Swap {
         let mut var_blindingKey = <String>::sse_decode(deserializer);
         let mut var_electrumUrl = <String>::sse_decode(deserializer);
         let mut var_boltzUrl = <String>::sse_decode(deserializer);
+        let mut var_referralId = <Option<String>>::sse_decode(deserializer);
         return crate::api::lbtc_ln::LbtcLnV2Swap {
             id: var_id,
             kind: var_kind,
@@ -1490,6 +1511,7 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnV2Swap {
             blinding_key: var_blindingKey,
             electrum_url: var_electrumUrl,
             boltz_url: var_boltzUrl,
+            referral_id: var_referralId,
         };
     }
 }
@@ -1750,6 +1772,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::btc_ln::BtcLnV2Swap {
             self.out_amount.into_into_dart().into_dart(),
             self.electrum_url.into_into_dart().into_dart(),
             self.boltz_url.into_into_dart().into_dart(),
+            self.referral_id.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1924,6 +1947,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::lbtc_ln::LbtcLnV2Swap {
             self.blinding_key.into_into_dart().into_dart(),
             self.electrum_url.into_into_dart().into_dart(),
             self.boltz_url.into_into_dart().into_dart(),
+            self.referral_id.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2103,6 +2127,7 @@ impl SseEncode for crate::api::btc_ln::BtcLnV2Swap {
         <u64>::sse_encode(self.out_amount, serializer);
         <String>::sse_encode(self.electrum_url, serializer);
         <String>::sse_encode(self.boltz_url, serializer);
+        <Option<String>>::sse_encode(self.referral_id, serializer);
     }
 }
 
@@ -2219,6 +2244,7 @@ impl SseEncode for crate::api::lbtc_ln::LbtcLnV2Swap {
         <String>::sse_encode(self.blinding_key, serializer);
         <String>::sse_encode(self.electrum_url, serializer);
         <String>::sse_encode(self.boltz_url, serializer);
+        <Option<String>>::sse_encode(self.referral_id, serializer);
     }
 }
 

@@ -12,7 +12,7 @@ part of 'lbtc_ln.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$LbtcLnV1Swap {
@@ -415,6 +415,7 @@ mixin _$LbtcLnV2Swap {
   String get blindingKey => throw _privateConstructorUsedError;
   String get electrumUrl => throw _privateConstructorUsedError;
   String get boltzUrl => throw _privateConstructorUsedError;
+  String? get referralId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LbtcLnV2SwapCopyWith<LbtcLnV2Swap> get copyWith =>
@@ -439,7 +440,8 @@ abstract class $LbtcLnV2SwapCopyWith<$Res> {
       String scriptAddress,
       String blindingKey,
       String electrumUrl,
-      String boltzUrl});
+      String boltzUrl,
+      String? referralId});
 
   $KeyPairCopyWith<$Res> get keys;
   $PreImageCopyWith<$Res> get preimage;
@@ -471,6 +473,7 @@ class _$LbtcLnV2SwapCopyWithImpl<$Res, $Val extends LbtcLnV2Swap>
     Object? blindingKey = null,
     Object? electrumUrl = null,
     Object? boltzUrl = null,
+    Object? referralId = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -521,6 +524,10 @@ class _$LbtcLnV2SwapCopyWithImpl<$Res, $Val extends LbtcLnV2Swap>
           ? _value.boltzUrl
           : boltzUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      referralId: freezed == referralId
+          ? _value.referralId
+          : referralId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -569,7 +576,8 @@ abstract class _$$LbtcLnV2SwapImplCopyWith<$Res>
       String scriptAddress,
       String blindingKey,
       String electrumUrl,
-      String boltzUrl});
+      String boltzUrl,
+      String? referralId});
 
   @override
   $KeyPairCopyWith<$Res> get keys;
@@ -602,6 +610,7 @@ class __$$LbtcLnV2SwapImplCopyWithImpl<$Res>
     Object? blindingKey = null,
     Object? electrumUrl = null,
     Object? boltzUrl = null,
+    Object? referralId = freezed,
   }) {
     return _then(_$LbtcLnV2SwapImpl(
       id: null == id
@@ -652,6 +661,10 @@ class __$$LbtcLnV2SwapImplCopyWithImpl<$Res>
           ? _value.boltzUrl
           : boltzUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      referralId: freezed == referralId
+          ? _value.referralId
+          : referralId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -671,7 +684,8 @@ class _$LbtcLnV2SwapImpl extends _LbtcLnV2Swap {
       required this.scriptAddress,
       required this.blindingKey,
       required this.electrumUrl,
-      required this.boltzUrl})
+      required this.boltzUrl,
+      this.referralId})
       : super._();
 
   @override
@@ -698,10 +712,12 @@ class _$LbtcLnV2SwapImpl extends _LbtcLnV2Swap {
   final String electrumUrl;
   @override
   final String boltzUrl;
+  @override
+  final String? referralId;
 
   @override
   String toString() {
-    return 'LbtcLnV2Swap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, outAmount: $outAmount, scriptAddress: $scriptAddress, blindingKey: $blindingKey, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl)';
+    return 'LbtcLnV2Swap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, outAmount: $outAmount, scriptAddress: $scriptAddress, blindingKey: $blindingKey, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
   }
 
   @override
@@ -727,7 +743,9 @@ class _$LbtcLnV2SwapImpl extends _LbtcLnV2Swap {
             (identical(other.electrumUrl, electrumUrl) ||
                 other.electrumUrl == electrumUrl) &&
             (identical(other.boltzUrl, boltzUrl) ||
-                other.boltzUrl == boltzUrl));
+                other.boltzUrl == boltzUrl) &&
+            (identical(other.referralId, referralId) ||
+                other.referralId == referralId));
   }
 
   @override
@@ -744,7 +762,8 @@ class _$LbtcLnV2SwapImpl extends _LbtcLnV2Swap {
       scriptAddress,
       blindingKey,
       electrumUrl,
-      boltzUrl);
+      boltzUrl,
+      referralId);
 
   @JsonKey(ignore: true)
   @override
@@ -766,7 +785,8 @@ abstract class _LbtcLnV2Swap extends LbtcLnV2Swap {
       required final String scriptAddress,
       required final String blindingKey,
       required final String electrumUrl,
-      required final String boltzUrl}) = _$LbtcLnV2SwapImpl;
+      required final String boltzUrl,
+      final String? referralId}) = _$LbtcLnV2SwapImpl;
   const _LbtcLnV2Swap._() : super._();
 
   @override
@@ -793,6 +813,8 @@ abstract class _LbtcLnV2Swap extends LbtcLnV2Swap {
   String get electrumUrl;
   @override
   String get boltzUrl;
+  @override
+  String? get referralId;
   @override
   @JsonKey(ignore: true)
   _$$LbtcLnV2SwapImplCopyWith<_$LbtcLnV2SwapImpl> get copyWith =>

@@ -147,6 +147,7 @@ impl CstDecode<crate::api::btc_ln::BtcLnV2Swap> for wire_cst_btc_ln_v_2_swap {
             out_amount: self.out_amount.cst_decode(),
             electrum_url: self.electrum_url.cst_decode(),
             boltz_url: self.boltz_url.cst_decode(),
+            referral_id: self.referral_id.cst_decode(),
         }
     }
 }
@@ -237,6 +238,7 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap> for wire_cst_lbtc_ln_v_2_swap 
             blinding_key: self.blinding_key.cst_decode(),
             electrum_url: self.electrum_url.cst_decode(),
             boltz_url: self.boltz_url.cst_decode(),
+            referral_id: self.referral_id.cst_decode(),
         }
     }
 }
@@ -356,6 +358,7 @@ impl NewWithNullPtr for wire_cst_btc_ln_v_2_swap {
             out_amount: Default::default(),
             electrum_url: core::ptr::null_mut(),
             boltz_url: core::ptr::null_mut(),
+            referral_id: core::ptr::null_mut(),
         }
     }
 }
@@ -470,6 +473,7 @@ impl NewWithNullPtr for wire_cst_lbtc_ln_v_2_swap {
             blinding_key: core::ptr::null_mut(),
             electrum_url: core::ptr::null_mut(),
             boltz_url: core::ptr::null_mut(),
+            referral_id: core::ptr::null_mut(),
         }
     }
 }
@@ -672,6 +676,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new(
     out_amount: u64,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_btc_ln_v_2_swap_new_impl(
         port_,
@@ -686,6 +691,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new(
         out_amount,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -699,6 +705,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_btc_ln_v_2_swap_new_reverse_impl(
         port_,
@@ -709,6 +716,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -721,6 +729,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_btc_ln_v_2_swap_new_submarine_impl(
         port_,
@@ -730,6 +739,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -902,6 +912,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new(
     blinding_key: *mut wire_cst_list_prim_u_8_strict,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_lbtc_ln_v_2_swap_new_impl(
         port_,
@@ -917,6 +928,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new(
         blinding_key,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -930,6 +942,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_lbtc_ln_v_2_swap_new_reverse_impl(
         port_,
@@ -940,6 +953,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -952,6 +966,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_lbtc_ln_v_2_swap_new_submarine_impl(
         port_,
@@ -961,6 +976,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -1200,6 +1216,7 @@ pub struct wire_cst_btc_ln_v_2_swap {
     out_amount: u64,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -1272,6 +1289,7 @@ pub struct wire_cst_lbtc_ln_v_2_swap {
     blinding_key: *mut wire_cst_list_prim_u_8_strict,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

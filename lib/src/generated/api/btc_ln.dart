@@ -121,6 +121,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
     required int outAmount,
     required String electrumUrl,
     required String boltzUrl,
+    String? referralId,
   }) = _BtcLnV2Swap;
   Future<String> claim(
           {required String outAddress,
@@ -150,6 +151,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           required int outAmount,
           required String electrumUrl,
           required String boltzUrl,
+          String? referralId,
           dynamic hint}) =>
       BoltzCore.instance.api.btcLnV2SwapNew(
           id: id,
@@ -163,6 +165,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           outAmount: outAmount,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          referralId: referralId,
           hint: hint);
 
   static Future<BtcLnV2Swap> newReverse(
@@ -173,6 +176,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           required Chain network,
           required String electrumUrl,
           required String boltzUrl,
+          String? referralId,
           dynamic hint}) =>
       BoltzCore.instance.api.btcLnV2SwapNewReverse(
           mnemonic: mnemonic,
@@ -182,6 +186,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          referralId: referralId,
           hint: hint);
 
   static Future<BtcLnV2Swap> newSubmarine(
@@ -191,6 +196,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           required Chain network,
           required String electrumUrl,
           required String boltzUrl,
+          String? referralId,
           dynamic hint}) =>
       BoltzCore.instance.api.btcLnV2SwapNewSubmarine(
           mnemonic: mnemonic,
@@ -199,6 +205,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          referralId: referralId,
           hint: hint);
 
   Future<String> refund(
