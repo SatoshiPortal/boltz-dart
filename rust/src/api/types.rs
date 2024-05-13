@@ -561,12 +561,12 @@ impl From<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
 
 #[cfg(test)]
 mod tests {
-    use boltz_client::swaps::boltz::BOLTZ_TESTNET_URL;
+    use boltz_client::swaps::boltz::BOLTZ_MAINNET_URL;
 
     use super::*;
     #[test]
     fn test_fetch_all_fees() {
-        let fees = AllFees::fetch(BOLTZ_TESTNET_URL.to_owned());
+        let fees = AllFees::fetch(BOLTZ_MAINNET_URL.to_owned());
         println!("{:#?}", fees);
     }
 }

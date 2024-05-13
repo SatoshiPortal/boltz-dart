@@ -10,7 +10,7 @@ doctest = false
 crate-type = ["cdylib"] 
 
 [dependencies]
-boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "a05731cc33030ada9ae14afcafe0cded22842ba6" }
+boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "32a40e00a36fd80489363de09df69a55440a7bc6" }
 flutter_rust_bridge = "=2.0.0-dev.31"
 anyhow = "1.0.68"
 serde = "1.0.89"
