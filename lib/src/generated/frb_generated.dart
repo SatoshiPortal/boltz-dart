@@ -218,6 +218,11 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<int> lbtcLnV1SwapTxSize({required LbtcLnV1Swap swap, dynamic hint});
 
+  Future<String> lbtcLnV2SwapBroadcastTx(
+      {required LbtcLnV2Swap that,
+      required List<int> signedBytes,
+      dynamic hint});
+
   Future<String> lbtcLnV2SwapClaim(
       {required LbtcLnV2Swap that,
       required String outAddress,
@@ -283,7 +288,7 @@ abstract class BoltzCoreApi extends BaseApi {
       dynamic hint});
 
   Future<DecodedInvoice> decodedInvoiceFromString(
-      {required String s, String? boltzUrl, Chain? chain, dynamic hint});
+      {required String s, String? boltzUrl, dynamic hint});
 
   Future<KeyPair> keyPairGenerate(
       {required String mnemonic,
@@ -1148,6 +1153,33 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<String> lbtcLnV2SwapBroadcastTx(
+      {required LbtcLnV2Swap that,
+      required List<int> signedBytes,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_v_2_swap(that);
+        var arg1 = cst_encode_list_prim_u_8_loose(signedBytes);
+        return wire.wire_lbtc_ln_v_2_swap_broadcast_tx(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kLbtcLnV2SwapBroadcastTxConstMeta,
+      argValues: [that, signedBytes],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kLbtcLnV2SwapBroadcastTxConstMeta => const TaskConstMeta(
+        debugName: "lbtc_ln_v_2_swap_broadcast_tx",
+        argNames: ["that", "signedBytes"],
+      );
+
+  @override
   Future<String> lbtcLnV2SwapClaim(
       {required LbtcLnV2Swap that,
       required String outAddress,
@@ -1503,20 +1535,19 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @override
   Future<DecodedInvoice> decodedInvoiceFromString(
-      {required String s, String? boltzUrl, Chain? chain, dynamic hint}) {
+      {required String s, String? boltzUrl, dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(s);
         var arg1 = cst_encode_opt_String(boltzUrl);
-        var arg2 = cst_encode_opt_box_autoadd_chain(chain);
-        return wire.wire_decoded_invoice_from_string(port_, arg0, arg1, arg2);
+        return wire.wire_decoded_invoice_from_string(port_, arg0, arg1);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_decoded_invoice,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kDecodedInvoiceFromStringConstMeta,
-      argValues: [s, boltzUrl, chain],
+      argValues: [s, boltzUrl],
       apiImpl: this,
       hint: hint,
     ));
@@ -1524,7 +1555,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kDecodedInvoiceFromStringConstMeta => const TaskConstMeta(
         debugName: "decoded_invoice_from_string",
-        argNames: ["s", "boltzUrl", "chain"],
+        argNames: ["s", "boltzUrl"],
       );
 
   @override
@@ -1750,18 +1781,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  Chain dco_decode_box_autoadd_chain(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_chain(raw);
-  }
-
-  @protected
-  double dco_decode_box_autoadd_f_64(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw as double;
-  }
-
-  @protected
   KeyPair dco_decode_box_autoadd_key_pair(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_key_pair(raw);
@@ -1860,8 +1879,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   DecodedInvoice dco_decode_decoded_invoice(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 9)
-      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
     return DecodedInvoice(
       msats: dco_decode_u_64(arr[0]),
       expiry: dco_decode_u_64(arr[1]),
@@ -1870,8 +1889,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       isExpired: dco_decode_bool(arr[4]),
       network: dco_decode_String(arr[5]),
       cltvExpDelta: dco_decode_u_64(arr[6]),
-      mrhAddress: dco_decode_opt_String(arr[7]),
-      mrhAmount: dco_decode_opt_box_autoadd_f_64(arr[8]),
+      bip21: dco_decode_opt_String(arr[7]),
     );
   }
 
@@ -1973,6 +1991,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as List<int>;
+  }
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
@@ -1982,18 +2006,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   String? dco_decode_opt_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_String(raw);
-  }
-
-  @protected
-  Chain? dco_decode_opt_box_autoadd_chain(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_chain(raw);
-  }
-
-  @protected
-  double? dco_decode_opt_box_autoadd_f_64(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null ? null : dco_decode_box_autoadd_f_64(raw);
   }
 
   @protected
@@ -2136,18 +2148,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  Chain sse_decode_box_autoadd_chain(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_chain(deserializer));
-  }
-
-  @protected
-  double sse_decode_box_autoadd_f_64(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_f_64(deserializer));
-  }
-
-  @protected
   KeyPair sse_decode_box_autoadd_key_pair(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_key_pair(deserializer));
@@ -2272,8 +2272,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_isExpired = sse_decode_bool(deserializer);
     var var_network = sse_decode_String(deserializer);
     var var_cltvExpDelta = sse_decode_u_64(deserializer);
-    var var_mrhAddress = sse_decode_opt_String(deserializer);
-    var var_mrhAmount = sse_decode_opt_box_autoadd_f_64(deserializer);
+    var var_bip21 = sse_decode_opt_String(deserializer);
     return DecodedInvoice(
         msats: var_msats,
         expiry: var_expiry,
@@ -2282,8 +2281,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         isExpired: var_isExpired,
         network: var_network,
         cltvExpDelta: var_cltvExpDelta,
-        mrhAddress: var_mrhAddress,
-        mrhAmount: var_mrhAmount);
+        bip21: var_bip21);
   }
 
   @protected
@@ -2396,6 +2394,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var len_ = sse_decode_i_32(deserializer);
+    return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
@@ -2408,28 +2413,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_String(deserializer));
-    } else {
-      return null;
-    }
-  }
-
-  @protected
-  Chain? sse_decode_opt_box_autoadd_chain(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_chain(deserializer));
-    } else {
-      return null;
-    }
-  }
-
-  @protected
-  double? sse_decode_opt_box_autoadd_f_64(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_f_64(deserializer));
     } else {
       return null;
     }
@@ -2614,18 +2597,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_box_autoadd_chain(Chain self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_chain(self, serializer);
-  }
-
-  @protected
-  void sse_encode_box_autoadd_f_64(double self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_f_64(self, serializer);
-  }
-
-  @protected
   void sse_encode_box_autoadd_key_pair(KeyPair self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_key_pair(self, serializer);
@@ -2720,8 +2691,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_bool(self.isExpired, serializer);
     sse_encode_String(self.network, serializer);
     sse_encode_u_64(self.cltvExpDelta, serializer);
-    sse_encode_opt_String(self.mrhAddress, serializer);
-    sse_encode_opt_box_autoadd_f_64(self.mrhAmount, serializer);
+    sse_encode_opt_String(self.bip21, serializer);
   }
 
   @protected
@@ -2800,6 +2770,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_list_prim_u_8_loose(
+      List<int> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    serializer.buffer
+        .putUint8List(self is Uint8List ? self : Uint8List.fromList(self));
+  }
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2814,26 +2793,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_String(self, serializer);
-    }
-  }
-
-  @protected
-  void sse_encode_opt_box_autoadd_chain(Chain? self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_chain(self, serializer);
-    }
-  }
-
-  @protected
-  void sse_encode_opt_box_autoadd_f_64(double? self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_f_64(self, serializer);
     }
   }
 

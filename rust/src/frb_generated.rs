@@ -702,6 +702,28 @@ fn wire_lbtc_ln_v_1_swap_tx_size_impl(
         },
     )
 }
+fn wire_lbtc_ln_v_2_swap_broadcast_tx_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap>,
+    signed_bytes: impl CstDecode<Vec<u8>>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "lbtc_ln_v_2_swap_broadcast_tx",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_signed_bytes = signed_bytes.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::lbtc_ln::LbtcLnV2Swap::broadcast_tx(&api_that, api_signed_bytes)
+                })())
+            }
+        },
+    )
+}
 fn wire_lbtc_ln_v_2_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap>,
@@ -992,7 +1014,6 @@ fn wire_decoded_invoice_from_string_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: impl CstDecode<String>,
     boltz_url: impl CstDecode<Option<String>>,
-    chain: impl CstDecode<Option<crate::api::types::Chain>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1003,10 +1024,9 @@ fn wire_decoded_invoice_from_string_impl(
         move || {
             let api_s = s.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
-            let api_chain = chain.cst_decode();
             move |context| {
                 transform_result_dco((move || {
-                    crate::api::types::DecodedInvoice::from_string(api_s, api_boltz_url, api_chain)
+                    crate::api::types::DecodedInvoice::from_string(api_s, api_boltz_url)
                 })())
             }
         },
@@ -1366,8 +1386,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
         let mut var_isExpired = <bool>::sse_decode(deserializer);
         let mut var_network = <String>::sse_decode(deserializer);
         let mut var_cltvExpDelta = <u64>::sse_decode(deserializer);
-        let mut var_mrhAddress = <Option<String>>::sse_decode(deserializer);
-        let mut var_mrhAmount = <Option<f64>>::sse_decode(deserializer);
+        let mut var_bip21 = <Option<String>>::sse_decode(deserializer);
         return crate::api::types::DecodedInvoice {
             msats: var_msats,
             expiry: var_expiry,
@@ -1376,8 +1395,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
             is_expired: var_isExpired,
             network: var_network,
             cltv_exp_delta: var_cltvExpDelta,
-            mrh_address: var_mrhAddress,
-            mrh_amount: var_mrhAmount,
+            bip21: var_bip21,
         };
     }
 }
@@ -1523,28 +1541,6 @@ impl SseDecode for Option<String> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<String>::sse_decode(deserializer));
-        } else {
-            return None;
-        }
-    }
-}
-
-impl SseDecode for Option<crate::api::types::Chain> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        if (<bool>::sse_decode(deserializer)) {
-            return Some(<crate::api::types::Chain>::sse_decode(deserializer));
-        } else {
-            return None;
-        }
-    }
-}
-
-impl SseDecode for Option<f64> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        if (<bool>::sse_decode(deserializer)) {
-            return Some(<f64>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -1818,8 +1814,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::DecodedInvoice {
             self.is_expired.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
             self.cltv_exp_delta.into_into_dart().into_dart(),
-            self.mrh_address.into_into_dart().into_dart(),
-            self.mrh_amount.into_into_dart().into_dart(),
+            self.bip21.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2146,8 +2141,7 @@ impl SseEncode for crate::api::types::DecodedInvoice {
         <bool>::sse_encode(self.is_expired, serializer);
         <String>::sse_encode(self.network, serializer);
         <u64>::sse_encode(self.cltv_exp_delta, serializer);
-        <Option<String>>::sse_encode(self.mrh_address, serializer);
-        <Option<f64>>::sse_encode(self.mrh_amount, serializer);
+        <Option<String>>::sse_encode(self.bip21, serializer);
     }
 }
 
@@ -2246,26 +2240,6 @@ impl SseEncode for Option<String> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <String>::sse_encode(value, serializer);
-        }
-    }
-}
-
-impl SseEncode for Option<crate::api::types::Chain> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.is_some(), serializer);
-        if let Some(value) = self {
-            <crate::api::types::Chain>::sse_encode(value, serializer);
-        }
-    }
-}
-
-impl SseEncode for Option<f64> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.is_some(), serializer);
-        if let Some(value) = self {
-            <f64>::sse_encode(value, serializer);
         }
     }
 }

@@ -160,8 +160,8 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             .unwrap();
         assert_eq!(
             self_.length(),
-            9,
-            "Expected 9 elements, got {}",
+            8,
+            "Expected 8 elements, got {}",
             self_.length()
         );
         crate::api::types::DecodedInvoice {
@@ -172,8 +172,7 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             is_expired: self_.get(4).cst_decode(),
             network: self_.get(5).cst_decode(),
             cltv_exp_delta: self_.get(6).cst_decode(),
-            mrh_address: self_.get(7).cst_decode(),
-            mrh_amount: self_.get(8).cst_decode(),
+            bip21: self_.get(7).cst_decode(),
         }
     }
 }
@@ -789,6 +788,15 @@ pub fn wire_lbtc_ln_v_1_swap_tx_size(
 }
 
 #[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_broadcast_tx(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    signed_bytes: Box<[u8]>,
+) {
+    wire_lbtc_ln_v_2_swap_broadcast_tx_impl(port_, that, signed_bytes)
+}
+
+#[wasm_bindgen]
 pub fn wire_lbtc_ln_v_2_swap_claim(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
@@ -935,9 +943,8 @@ pub fn wire_decoded_invoice_from_string(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: String,
     boltz_url: Option<String>,
-    chain: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
-    wire_decoded_invoice_from_string_impl(port_, s, boltz_url, chain)
+    wire_decoded_invoice_from_string_impl(port_, s, boltz_url)
 }
 
 #[wasm_bindgen]

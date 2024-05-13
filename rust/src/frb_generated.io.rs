@@ -66,19 +66,6 @@ impl CstDecode<crate::api::types::BtcSwapScriptV2Str> for *mut wire_cst_btc_swap
         CstDecode::<crate::api::types::BtcSwapScriptV2Str>::cst_decode(*wrap).into()
     }
 }
-impl CstDecode<crate::api::types::Chain> for *mut i32 {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::Chain {
-        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::types::Chain>::cst_decode(*wrap).into()
-    }
-}
-impl CstDecode<f64> for *mut f64 {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> f64 {
-        unsafe { *flutter_rust_bridge::for_generated::box_from_leak_ptr(self) }
-    }
-}
 impl CstDecode<crate::api::types::KeyPair> for *mut wire_cst_key_pair {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::KeyPair {
@@ -174,8 +161,7 @@ impl CstDecode<crate::api::types::DecodedInvoice> for wire_cst_decoded_invoice {
             is_expired: self.is_expired.cst_decode(),
             network: self.network.cst_decode(),
             cltv_exp_delta: self.cltv_exp_delta.cst_decode(),
-            mrh_address: self.mrh_address.cst_decode(),
-            mrh_amount: self.mrh_amount.cst_decode(),
+            bip21: self.bip21.cst_decode(),
         }
     }
 }
@@ -246,6 +232,15 @@ impl CstDecode<crate::api::types::Limits> for wire_cst_limits {
         crate::api::types::Limits {
             minimal: self.minimal.cst_decode(),
             maximal: self.maximal.cst_decode(),
+        }
+    }
+}
+impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_loose {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> Vec<u8> {
+        unsafe {
+            let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+            flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
         }
     }
 }
@@ -391,8 +386,7 @@ impl NewWithNullPtr for wire_cst_decoded_invoice {
             is_expired: Default::default(),
             network: core::ptr::null_mut(),
             cltv_exp_delta: Default::default(),
-            mrh_address: core::ptr::null_mut(),
-            mrh_amount: core::ptr::null_mut(),
+            bip21: core::ptr::null_mut(),
         }
     }
 }
@@ -869,6 +863,15 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_tx_size(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_broadcast_tx(
+    port_: i64,
+    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    signed_bytes: *mut wire_cst_list_prim_u_8_loose,
+) {
+    wire_lbtc_ln_v_2_swap_broadcast_tx_impl(port_, that, signed_bytes)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_v_2_swap,
@@ -1015,9 +1018,8 @@ pub extern "C" fn frbgen_boltz_dart_wire_decoded_invoice_from_string(
     port_: i64,
     s: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
-    chain: *mut i32,
 ) {
-    wire_decoded_invoice_from_string_impl(port_, s, boltz_url, chain)
+    wire_decoded_invoice_from_string_impl(port_, s, boltz_url)
 }
 
 #[no_mangle]
@@ -1099,16 +1101,6 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_swap_script_v_2_str(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_chain(value: i32) -> *mut i32 {
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_f_64(value: f64) -> *mut f64 {
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
-}
-
-#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_key_pair() -> *mut wire_cst_key_pair {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_key_pair::new_with_null_ptr())
 }
@@ -1140,6 +1132,17 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_v_2_swap(
 #[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_pre_image() -> *mut wire_cst_pre_image {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_pre_image::new_with_null_ptr())
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_cst_new_list_prim_u_8_loose(
+    len: i32,
+) -> *mut wire_cst_list_prim_u_8_loose {
+    let ans = wire_cst_list_prim_u_8_loose {
+        ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(Default::default(), len),
+        len,
+    };
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(ans)
 }
 
 #[no_mangle]
@@ -1221,8 +1224,7 @@ pub struct wire_cst_decoded_invoice {
     is_expired: bool,
     network: *mut wire_cst_list_prim_u_8_strict,
     cltv_exp_delta: u64,
-    mrh_address: *mut wire_cst_list_prim_u_8_strict,
-    mrh_amount: *mut f64,
+    bip21: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -1278,6 +1280,12 @@ pub struct wire_cst_lbtc_ln_v_2_swap {
 pub struct wire_cst_limits {
     minimal: u64,
     maximal: u64,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_list_prim_u_8_loose {
+    ptr: *mut u8,
+    len: i32,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

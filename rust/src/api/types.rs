@@ -286,15 +286,13 @@ pub struct DecodedInvoice {
     pub network: String,
     pub cltv_exp_delta: u64,
     /// (address, btc_amount)
-    pub mrh_address: Option<String>,
-    pub mrh_amount: Option<f64>,
+    pub bip21: Option<String>,
 }
 impl DecodedInvoice {
     /// Add boltz_url & chain for route hint check
     pub fn from_string(
         s: String,
         boltz_url: Option<String>,
-        chain: Option<Chain>,
     ) -> Result<Self, BoltzError> {
         // Attempt to parse the string to a Bolt11Invoice
         let invoice = match Bolt11Invoice::from_str(&s) {
@@ -302,11 +300,11 @@ impl DecodedInvoice {
             Err(e) => return Err(BoltzError::new("Input".to_string(), e.to_string())),
         };
 
-        let route_hint = if boltz_url.is_some() && chain.is_some() {
+        let bip21 = if boltz_url.is_some() {
             let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url.unwrap()));
-            match magic_routing::check_for_mrh(&boltz_client, &s, chain.unwrap().into())? {
-                Some(r) => Some(r),
-                None => None,
+            match boltz_client.get_mrh_bip21(&s) {
+                Ok(r) => Some(r.bip21),
+                Err(_) => None,
             }
         } else {
             None
@@ -323,8 +321,7 @@ impl DecodedInvoice {
             msats: invoice.amount_milli_satoshis().unwrap_or(0),
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
             network: invoice.network().to_string(),
-            mrh_address: route_hint.as_ref().map(|r| r.0.clone()),
-            mrh_amount: route_hint.as_ref().map(|r| r.1),
+            bip21: bip21,
         })
     }
 }

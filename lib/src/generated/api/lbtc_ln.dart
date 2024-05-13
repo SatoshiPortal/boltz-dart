@@ -126,6 +126,10 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
     required String electrumUrl,
     required String boltzUrl,
   }) = _LbtcLnV2Swap;
+  Future<String> broadcastTx({required List<int> signedBytes, dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnV2SwapBroadcastTx(
+          that: this, signedBytes: signedBytes, hint: hint);
+
   Future<String> claim(
           {required String outAddress,
           required int absFee,
