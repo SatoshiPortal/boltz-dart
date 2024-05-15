@@ -630,14 +630,13 @@ impl LbtcLnV2Swap {
             };
         Ok(extract_id(txid)?)
     }
-    
-    pub fn broadcast_tx(&self, signed_bytes: Vec<u8>)->Result<String, BoltzError> {
+
+    pub fn broadcast_tx(&self, signed_bytes: Vec<u8>) -> Result<String, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
-        let txid =
-            match boltz_client.broadcast_tx(self.network.into(), &signed_bytes.serialize().to_hex()) {
-                Ok(result) => result,
-                Err(e) => return Err(e.into()),
-            };
+        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed_bytes.to_hex()) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
         Ok(extract_id(txid)?)
     }
     pub fn tx_size(&self) -> Result<usize, BoltzError> {

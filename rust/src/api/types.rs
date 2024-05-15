@@ -290,10 +290,7 @@ pub struct DecodedInvoice {
 }
 impl DecodedInvoice {
     /// Add boltz_url & chain for route hint check
-    pub fn from_string(
-        s: String,
-        boltz_url: Option<String>,
-    ) -> Result<Self, BoltzError> {
+    pub fn from_string(s: String, boltz_url: Option<String>) -> Result<Self, BoltzError> {
         // Attempt to parse the string to a Bolt11Invoice
         let invoice = match Bolt11Invoice::from_str(&s) {
             Ok(result) => result,
