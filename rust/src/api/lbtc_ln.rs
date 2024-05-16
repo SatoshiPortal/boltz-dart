@@ -515,8 +515,13 @@ impl LbtcLnV2Swap {
         let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
         // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
 
-        let tx = match LBtcSwapTxV2::new_refund(swap_script, &self.script_address, &network_config)
-        {
+        let tx = match LBtcSwapTxV2::new_refund(
+            swap_script,
+            &self.script_address,
+            &network_config,
+            check_protocol(&self.boltz_url.clone()),
+            self.id.clone(),
+        ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
@@ -605,8 +610,13 @@ impl LbtcLnV2Swap {
         //     Ok(result) => result,
         //     Err(e) => return Err(e.into()),
         // };
-        let tx = match LBtcSwapTxV2::new_refund(swap_script.clone(), &out_address, &network_config)
-        {
+        let tx = match LBtcSwapTxV2::new_refund(
+            swap_script.clone(),
+            &out_address,
+            &network_config,
+            check_protocol(&self.boltz_url.clone()),
+            self.id.clone(),
+        ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
