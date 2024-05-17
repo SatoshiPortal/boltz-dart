@@ -351,6 +351,7 @@ pub struct LbtcLnV2Swap {
     pub blinding_key: String,
     pub electrum_url: String,
     pub boltz_url: String,
+    pub referral_id: Option<String>,
 }
 
 impl LbtcLnV2Swap {
@@ -367,6 +368,7 @@ impl LbtcLnV2Swap {
         blinding_key: String,
         electrum_url: String,
         boltz_url: String,
+        referral_id: Option<String>,
     ) -> LbtcLnV2Swap {
         LbtcLnV2Swap {
             id,
@@ -381,6 +383,7 @@ impl LbtcLnV2Swap {
             out_amount,
             blinding_key,
             script_address: out_address,
+            referral_id,
         }
     }
     pub fn new_submarine(
@@ -390,6 +393,7 @@ impl LbtcLnV2Swap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        referral_id: Option<String>,
         // pair_hash: String,
     ) -> Result<LbtcLnV2Swap, BoltzError> {
         let swap_type = SwapType::Submarine;
@@ -409,7 +413,7 @@ impl LbtcLnV2Swap {
             from: "L-BTC".to_string(),
             to: "BTC".to_string(),
             invoice: invoice.to_string(),
-            referral_id: None,
+            referral_id: referral_id.clone(),
             refund_public_key: refund_kps.public_key().into(),
         };
 
@@ -433,6 +437,7 @@ impl LbtcLnV2Swap {
             swap_script.blinding_key.display_secret().to_string(),
             electrum_url,
             boltz_url,
+            referral_id,
         ))
     }
 
@@ -444,6 +449,7 @@ impl LbtcLnV2Swap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        referral_id: Option<String>,
         // pair_hash: String,
     ) -> Result<LbtcLnV2Swap, BoltzError> {
         let swap_type = SwapType::Reverse;
@@ -469,7 +475,7 @@ impl LbtcLnV2Swap {
                 to: "L-BTC".to_string(),
                 preimage_hash: preimage.sha256,
                 claim_public_key,
-                referral_id: None,
+                referral_id: referral_id.clone(),
                 address: Some(address.clone()),
                 address_signature: Some(magic_routing::sign_address(&address, &ckp)?.to_string()),
             }
@@ -480,7 +486,7 @@ impl LbtcLnV2Swap {
                 to: "L-BTC".to_string(),
                 preimage_hash: preimage.sha256,
                 claim_public_key,
-                referral_id: None,
+                referral_id: referral_id.clone(),
                 address: None,
                 address_signature: None,
             }
@@ -505,6 +511,7 @@ impl LbtcLnV2Swap {
             swap_script.blinding_key.display_secret().to_string(),
             electrum_url,
             boltz_url,
+            referral_id,
         ))
     }
     pub fn coop_close_submarine(&self) -> Result<(), BoltzError> {
@@ -720,6 +727,7 @@ mod tests {
             network,
             electrum_url,
             boltz_url,
+            None,
         )
         .unwrap();
     }

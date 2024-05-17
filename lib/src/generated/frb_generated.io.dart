@@ -462,6 +462,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.out_amount = cst_encode_u_64(apiObj.outAmount);
     wireObj.electrum_url = cst_encode_String(apiObj.electrumUrl);
     wireObj.boltz_url = cst_encode_String(apiObj.boltzUrl);
+    wireObj.referral_id = cst_encode_opt_String(apiObj.referralId);
   }
 
   @protected
@@ -541,6 +542,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.blinding_key = cst_encode_String(apiObj.blindingKey);
     wireObj.electrum_url = cst_encode_String(apiObj.electrumUrl);
     wireObj.boltz_url = cst_encode_String(apiObj.boltzUrl);
+    wireObj.referral_id = cst_encode_opt_String(apiObj.referralId);
   }
 
   @protected
@@ -1048,6 +1050,7 @@ class BoltzCoreWire implements BaseWire {
     int out_amount,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
   ) {
     return _wire_btc_ln_v_2_swap_new(
       port_,
@@ -1062,6 +1065,7 @@ class BoltzCoreWire implements BaseWire {
       out_amount,
       electrum_url,
       boltz_url,
+      referral_id,
     );
   }
 
@@ -1079,6 +1083,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Uint64,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
       'frbgen_boltz_dart_wire_btc_ln_v_2_swap_new');
   late final _wire_btc_ln_v_2_swap_new =
@@ -1095,6 +1100,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire_btc_ln_v_2_swap_new_reverse(
@@ -1106,6 +1112,7 @@ class BoltzCoreWire implements BaseWire {
     int network,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
   ) {
     return _wire_btc_ln_v_2_swap_new_reverse(
       port_,
@@ -1116,6 +1123,7 @@ class BoltzCoreWire implements BaseWire {
       network,
       electrum_url,
       boltz_url,
+      referral_id,
     );
   }
 
@@ -1129,6 +1137,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
       'frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse');
   late final _wire_btc_ln_v_2_swap_new_reverse =
@@ -1141,6 +1150,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire_btc_ln_v_2_swap_new_submarine(
@@ -1151,6 +1161,7 @@ class BoltzCoreWire implements BaseWire {
     int network,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
   ) {
     return _wire_btc_ln_v_2_swap_new_submarine(
       port_,
@@ -1160,6 +1171,7 @@ class BoltzCoreWire implements BaseWire {
       network,
       electrum_url,
       boltz_url,
+      referral_id,
     );
   }
 
@@ -1172,6 +1184,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
       'frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine');
   late final _wire_btc_ln_v_2_swap_new_submarine =
@@ -1182,6 +1195,7 @@ class BoltzCoreWire implements BaseWire {
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
@@ -1569,6 +1583,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> blinding_key,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
   ) {
     return _wire_lbtc_ln_v_2_swap_new(
       port_,
@@ -1584,6 +1599,7 @@ class BoltzCoreWire implements BaseWire {
       blinding_key,
       electrum_url,
       boltz_url,
+      referral_id,
     );
   }
 
@@ -1599,6 +1615,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_l_btc_swap_script_v_2_str>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Uint64,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -1619,6 +1636,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire_lbtc_ln_v_2_swap_new_reverse(
@@ -1630,6 +1648,7 @@ class BoltzCoreWire implements BaseWire {
     int network,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
   ) {
     return _wire_lbtc_ln_v_2_swap_new_reverse(
       port_,
@@ -1640,6 +1659,7 @@ class BoltzCoreWire implements BaseWire {
       network,
       electrum_url,
       boltz_url,
+      referral_id,
     );
   }
 
@@ -1653,6 +1673,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
       'frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse');
   late final _wire_lbtc_ln_v_2_swap_new_reverse =
@@ -1665,6 +1686,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire_lbtc_ln_v_2_swap_new_submarine(
@@ -1675,6 +1697,7 @@ class BoltzCoreWire implements BaseWire {
     int network,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
   ) {
     return _wire_lbtc_ln_v_2_swap_new_submarine(
       port_,
@@ -1684,6 +1707,7 @@ class BoltzCoreWire implements BaseWire {
       network,
       electrum_url,
       boltz_url,
+      referral_id,
     );
   }
 
@@ -1696,6 +1720,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
       'frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine');
   late final _wire_lbtc_ln_v_2_swap_new_submarine =
@@ -1706,6 +1731,7 @@ class BoltzCoreWire implements BaseWire {
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
@@ -2194,6 +2220,8 @@ final class wire_cst_btc_ln_v_2_swap extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id;
 }
 
 final class wire_cst_lbtc_ln_v_1_swap extends ffi.Struct {
@@ -2270,6 +2298,8 @@ final class wire_cst_lbtc_ln_v_2_swap extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id;
 }
 
 final class wire_cst_list_prim_u_8_loose extends ffi.Struct {

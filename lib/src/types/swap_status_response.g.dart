@@ -10,7 +10,7 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
     _$TransactionImpl(
       id: json['id'] as String,
       hex: json['hex'] as String,
-      eta: json['eta'] as int?,
+      eta: (json['eta'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>

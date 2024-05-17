@@ -356,7 +356,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.scriptAddress),
       cst_encode_u_64(raw.outAmount),
       cst_encode_String(raw.electrumUrl),
-      cst_encode_String(raw.boltzUrl)
+      cst_encode_String(raw.boltzUrl),
+      cst_encode_opt_String(raw.referralId)
     ];
   }
 
@@ -443,7 +444,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.scriptAddress),
       cst_encode_String(raw.blindingKey),
       cst_encode_String(raw.electrumUrl),
-      cst_encode_String(raw.boltzUrl)
+      cst_encode_String(raw.boltzUrl),
+      cst_encode_opt_String(raw.referralId)
     ];
   }
 
@@ -744,7 +746,8 @@ class BoltzCoreWire implements BaseWire {
           String script_address,
           Object out_amount,
           String electrum_url,
-          String boltz_url) =>
+          String boltz_url,
+          String? referral_id) =>
       wasmModule.wire_btc_ln_v_2_swap_new(
           port_,
           id,
@@ -757,7 +760,8 @@ class BoltzCoreWire implements BaseWire {
           script_address,
           out_amount,
           electrum_url,
-          boltz_url);
+          boltz_url,
+          referral_id);
 
   void wire_btc_ln_v_2_swap_new_reverse(
           NativePortType port_,
@@ -767,9 +771,18 @@ class BoltzCoreWire implements BaseWire {
           String? out_address,
           int network,
           String electrum_url,
-          String boltz_url) =>
-      wasmModule.wire_btc_ln_v_2_swap_new_reverse(port_, mnemonic, index,
-          out_amount, out_address, network, electrum_url, boltz_url);
+          String boltz_url,
+          String? referral_id) =>
+      wasmModule.wire_btc_ln_v_2_swap_new_reverse(
+          port_,
+          mnemonic,
+          index,
+          out_amount,
+          out_address,
+          network,
+          electrum_url,
+          boltz_url,
+          referral_id);
 
   void wire_btc_ln_v_2_swap_new_submarine(
           NativePortType port_,
@@ -778,9 +791,10 @@ class BoltzCoreWire implements BaseWire {
           String invoice,
           int network,
           String electrum_url,
-          String boltz_url) =>
-      wasmModule.wire_btc_ln_v_2_swap_new_submarine(
-          port_, mnemonic, index, invoice, network, electrum_url, boltz_url);
+          String boltz_url,
+          String? referral_id) =>
+      wasmModule.wire_btc_ln_v_2_swap_new_submarine(port_, mnemonic, index,
+          invoice, network, electrum_url, boltz_url, referral_id);
 
   void wire_btc_ln_v_2_swap_refund(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
@@ -886,7 +900,8 @@ class BoltzCoreWire implements BaseWire {
           String out_address,
           String blinding_key,
           String electrum_url,
-          String boltz_url) =>
+          String boltz_url,
+          String? referral_id) =>
       wasmModule.wire_lbtc_ln_v_2_swap_new(
           port_,
           id,
@@ -900,7 +915,8 @@ class BoltzCoreWire implements BaseWire {
           out_address,
           blinding_key,
           electrum_url,
-          boltz_url);
+          boltz_url,
+          referral_id);
 
   void wire_lbtc_ln_v_2_swap_new_reverse(
           NativePortType port_,
@@ -910,9 +926,18 @@ class BoltzCoreWire implements BaseWire {
           String? out_address,
           int network,
           String electrum_url,
-          String boltz_url) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_new_reverse(port_, mnemonic, index,
-          out_amount, out_address, network, electrum_url, boltz_url);
+          String boltz_url,
+          String? referral_id) =>
+      wasmModule.wire_lbtc_ln_v_2_swap_new_reverse(
+          port_,
+          mnemonic,
+          index,
+          out_amount,
+          out_address,
+          network,
+          electrum_url,
+          boltz_url,
+          referral_id);
 
   void wire_lbtc_ln_v_2_swap_new_submarine(
           NativePortType port_,
@@ -921,9 +946,10 @@ class BoltzCoreWire implements BaseWire {
           String invoice,
           int network,
           String electrum_url,
-          String boltz_url) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_new_submarine(
-          port_, mnemonic, index, invoice, network, electrum_url, boltz_url);
+          String boltz_url,
+          String? referral_id) =>
+      wasmModule.wire_lbtc_ln_v_2_swap_new_submarine(port_, mnemonic, index,
+          invoice, network, electrum_url, boltz_url, referral_id);
 
   void wire_lbtc_ln_v_2_swap_refund(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
@@ -1064,7 +1090,8 @@ class BoltzCoreWasmModule implements WasmModule {
       String script_address,
       Object out_amount,
       String electrum_url,
-      String boltz_url);
+      String boltz_url,
+      String? referral_id);
 
   external void wire_btc_ln_v_2_swap_new_reverse(
       NativePortType port_,
@@ -1074,7 +1101,8 @@ class BoltzCoreWasmModule implements WasmModule {
       String? out_address,
       int network,
       String electrum_url,
-      String boltz_url);
+      String boltz_url,
+      String? referral_id);
 
   external void wire_btc_ln_v_2_swap_new_submarine(
       NativePortType port_,
@@ -1083,7 +1111,8 @@ class BoltzCoreWasmModule implements WasmModule {
       String invoice,
       int network,
       String electrum_url,
-      String boltz_url);
+      String boltz_url,
+      String? referral_id);
 
   external void wire_btc_ln_v_2_swap_refund(
       NativePortType port_,
@@ -1168,7 +1197,8 @@ class BoltzCoreWasmModule implements WasmModule {
       String out_address,
       String blinding_key,
       String electrum_url,
-      String boltz_url);
+      String boltz_url,
+      String? referral_id);
 
   external void wire_lbtc_ln_v_2_swap_new_reverse(
       NativePortType port_,
@@ -1178,7 +1208,8 @@ class BoltzCoreWasmModule implements WasmModule {
       String? out_address,
       int network,
       String electrum_url,
-      String boltz_url);
+      String boltz_url,
+      String? referral_id);
 
   external void wire_lbtc_ln_v_2_swap_new_submarine(
       NativePortType port_,
@@ -1187,7 +1218,8 @@ class BoltzCoreWasmModule implements WasmModule {
       String invoice,
       int network,
       String electrum_url,
-      String boltz_url);
+      String boltz_url,
+      String? referral_id);
 
   external void wire_lbtc_ln_v_2_swap_refund(
       NativePortType port_,

@@ -107,8 +107,8 @@ impl CstDecode<crate::api::btc_ln::BtcLnV2Swap>
             .unwrap();
         assert_eq!(
             self_.length(),
-            11,
-            "Expected 11 elements, got {}",
+            12,
+            "Expected 12 elements, got {}",
             self_.length()
         );
         crate::api::btc_ln::BtcLnV2Swap {
@@ -123,6 +123,7 @@ impl CstDecode<crate::api::btc_ln::BtcLnV2Swap>
             out_amount: self_.get(8).cst_decode(),
             electrum_url: self_.get(9).cst_decode(),
             boltz_url: self_.get(10).cst_decode(),
+            referral_id: self_.get(11).cst_decode(),
         }
     }
 }
@@ -262,8 +263,8 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap>
             .unwrap();
         assert_eq!(
             self_.length(),
-            12,
-            "Expected 12 elements, got {}",
+            13,
+            "Expected 13 elements, got {}",
             self_.length()
         );
         crate::api::lbtc_ln::LbtcLnV2Swap {
@@ -279,6 +280,7 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap>
             blinding_key: self_.get(9).cst_decode(),
             electrum_url: self_.get(10).cst_decode(),
             boltz_url: self_.get(11).cst_decode(),
+            referral_id: self_.get(12).cst_decode(),
         }
     }
 }
@@ -592,6 +594,7 @@ pub fn wire_btc_ln_v_2_swap_new(
     out_amount: u64,
     electrum_url: String,
     boltz_url: String,
+    referral_id: Option<String>,
 ) {
     wire_btc_ln_v_2_swap_new_impl(
         port_,
@@ -606,6 +609,7 @@ pub fn wire_btc_ln_v_2_swap_new(
         out_amount,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -619,6 +623,7 @@ pub fn wire_btc_ln_v_2_swap_new_reverse(
     network: i32,
     electrum_url: String,
     boltz_url: String,
+    referral_id: Option<String>,
 ) {
     wire_btc_ln_v_2_swap_new_reverse_impl(
         port_,
@@ -629,6 +634,7 @@ pub fn wire_btc_ln_v_2_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -641,6 +647,7 @@ pub fn wire_btc_ln_v_2_swap_new_submarine(
     network: i32,
     electrum_url: String,
     boltz_url: String,
+    referral_id: Option<String>,
 ) {
     wire_btc_ln_v_2_swap_new_submarine_impl(
         port_,
@@ -650,6 +657,7 @@ pub fn wire_btc_ln_v_2_swap_new_submarine(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -831,6 +839,7 @@ pub fn wire_lbtc_ln_v_2_swap_new(
     blinding_key: String,
     electrum_url: String,
     boltz_url: String,
+    referral_id: Option<String>,
 ) {
     wire_lbtc_ln_v_2_swap_new_impl(
         port_,
@@ -846,6 +855,7 @@ pub fn wire_lbtc_ln_v_2_swap_new(
         blinding_key,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -859,6 +869,7 @@ pub fn wire_lbtc_ln_v_2_swap_new_reverse(
     network: i32,
     electrum_url: String,
     boltz_url: String,
+    referral_id: Option<String>,
 ) {
     wire_lbtc_ln_v_2_swap_new_reverse_impl(
         port_,
@@ -869,6 +880,7 @@ pub fn wire_lbtc_ln_v_2_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 
@@ -881,6 +893,7 @@ pub fn wire_lbtc_ln_v_2_swap_new_submarine(
     network: i32,
     electrum_url: String,
     boltz_url: String,
+    referral_id: Option<String>,
 ) {
     wire_lbtc_ln_v_2_swap_new_submarine_impl(
         port_,
@@ -890,6 +903,7 @@ pub fn wire_lbtc_ln_v_2_swap_new_submarine(
         network,
         electrum_url,
         boltz_url,
+        referral_id,
     )
 }
 

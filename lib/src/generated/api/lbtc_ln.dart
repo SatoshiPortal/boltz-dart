@@ -125,6 +125,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
     required String blindingKey,
     required String electrumUrl,
     required String boltzUrl,
+    String? referralId,
   }) = _LbtcLnV2Swap;
   Future<String> broadcastTx({required List<int> signedBytes, dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnV2SwapBroadcastTx(
@@ -159,6 +160,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           required String blindingKey,
           required String electrumUrl,
           required String boltzUrl,
+          String? referralId,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnV2SwapNew(
           id: id,
@@ -173,6 +175,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           blindingKey: blindingKey,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          referralId: referralId,
           hint: hint);
 
   static Future<LbtcLnV2Swap> newReverse(
@@ -183,6 +186,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           required Chain network,
           required String electrumUrl,
           required String boltzUrl,
+          String? referralId,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnV2SwapNewReverse(
           mnemonic: mnemonic,
@@ -192,6 +196,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          referralId: referralId,
           hint: hint);
 
   static Future<LbtcLnV2Swap> newSubmarine(
@@ -201,6 +206,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           required Chain network,
           required String electrumUrl,
           required String boltzUrl,
+          String? referralId,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnV2SwapNewSubmarine(
           mnemonic: mnemonic,
@@ -209,6 +215,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          referralId: referralId,
           hint: hint);
 
   Future<String> refund(
