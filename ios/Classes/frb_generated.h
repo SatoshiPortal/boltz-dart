@@ -154,6 +154,7 @@ typedef struct wire_cst_decoded_invoice {
   struct wire_cst_list_prim_u_8_strict *network;
   uint64_t cltv_exp_delta;
   struct wire_cst_list_prim_u_8_strict *bip21;
+  struct wire_cst_list_prim_u_8_strict *preimage_hash;
 } wire_cst_decoded_invoice;
 
 void frbgen_boltz_dart_wire_btc_ln_v_1_swap_claim(int64_t port_,

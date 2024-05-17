@@ -1387,6 +1387,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
         let mut var_network = <String>::sse_decode(deserializer);
         let mut var_cltvExpDelta = <u64>::sse_decode(deserializer);
         let mut var_bip21 = <Option<String>>::sse_decode(deserializer);
+        let mut var_preimageHash = <String>::sse_decode(deserializer);
         return crate::api::types::DecodedInvoice {
             msats: var_msats,
             expiry: var_expiry,
@@ -1396,6 +1397,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
             network: var_network,
             cltv_exp_delta: var_cltvExpDelta,
             bip21: var_bip21,
+            preimage_hash: var_preimageHash,
         };
     }
 }
@@ -1815,6 +1817,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::DecodedInvoice {
             self.network.into_into_dart().into_dart(),
             self.cltv_exp_delta.into_into_dart().into_dart(),
             self.bip21.into_into_dart().into_dart(),
+            self.preimage_hash.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2142,6 +2145,7 @@ impl SseEncode for crate::api::types::DecodedInvoice {
         <String>::sse_encode(self.network, serializer);
         <u64>::sse_encode(self.cltv_exp_delta, serializer);
         <Option<String>>::sse_encode(self.bip21, serializer);
+        <String>::sse_encode(self.preimage_hash, serializer);
     }
 }
 

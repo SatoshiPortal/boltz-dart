@@ -486,6 +486,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.network = cst_encode_String(apiObj.network);
     wireObj.cltv_exp_delta = cst_encode_u_64(apiObj.cltvExpDelta);
     wireObj.bip21 = cst_encode_opt_String(apiObj.bip21);
+    wireObj.preimage_hash = cst_encode_String(apiObj.preimageHash);
   }
 
   @protected
@@ -2354,4 +2355,6 @@ final class wire_cst_decoded_invoice extends ffi.Struct {
   external int cltv_exp_delta;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> bip21;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> preimage_hash;
 }

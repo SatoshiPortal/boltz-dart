@@ -384,7 +384,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_bool(raw.isExpired),
       cst_encode_String(raw.network),
       cst_encode_u_64(raw.cltvExpDelta),
-      cst_encode_opt_String(raw.bip21)
+      cst_encode_opt_String(raw.bip21),
+      cst_encode_String(raw.preimageHash)
     ];
   }
 

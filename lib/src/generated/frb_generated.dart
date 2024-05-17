@@ -1879,8 +1879,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   DecodedInvoice dco_decode_decoded_invoice(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 8)
-      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    if (arr.length != 9)
+      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
     return DecodedInvoice(
       msats: dco_decode_u_64(arr[0]),
       expiry: dco_decode_u_64(arr[1]),
@@ -1890,6 +1890,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       network: dco_decode_String(arr[5]),
       cltvExpDelta: dco_decode_u_64(arr[6]),
       bip21: dco_decode_opt_String(arr[7]),
+      preimageHash: dco_decode_String(arr[8]),
     );
   }
 
@@ -2273,6 +2274,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_network = sse_decode_String(deserializer);
     var var_cltvExpDelta = sse_decode_u_64(deserializer);
     var var_bip21 = sse_decode_opt_String(deserializer);
+    var var_preimageHash = sse_decode_String(deserializer);
     return DecodedInvoice(
         msats: var_msats,
         expiry: var_expiry,
@@ -2281,7 +2283,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         isExpired: var_isExpired,
         network: var_network,
         cltvExpDelta: var_cltvExpDelta,
-        bip21: var_bip21);
+        bip21: var_bip21,
+        preimageHash: var_preimageHash);
   }
 
   @protected
@@ -2692,6 +2695,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.network, serializer);
     sse_encode_u_64(self.cltvExpDelta, serializer);
     sse_encode_opt_String(self.bip21, serializer);
+    sse_encode_String(self.preimageHash, serializer);
   }
 
   @protected

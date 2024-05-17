@@ -285,8 +285,9 @@ pub struct DecodedInvoice {
     pub is_expired: bool,
     pub network: String,
     pub cltv_exp_delta: u64,
-    /// (address, btc_amount)
+    // / (address, btc_amount)
     pub bip21: Option<String>,
+    pub preimage_hash: String,
 }
 impl DecodedInvoice {
     /// Add boltz_url & chain for route hint check
@@ -298,10 +299,18 @@ impl DecodedInvoice {
         };
 
         let bip21 = if boltz_url.is_some() {
-            let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url.unwrap()));
-            match boltz_client.get_mrh_bip21(&s) {
-                Ok(r) => Some(r.bip21),
+            let mrh = match magic_routing::find_magic_routing_hint(&s) {
+                Ok(s) => s,
                 Err(_) => None,
+            };
+            if mrh.is_none() {
+                None
+            } else {
+                let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url.unwrap()));
+                match boltz_client.get_mrh_bip21(&s) {
+                    Ok(r) => Some(r.bip21),
+                    Err(_) => None,
+                }
             }
         } else {
             None
@@ -319,6 +328,7 @@ impl DecodedInvoice {
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
             network: invoice.network().to_string(),
             bip21: bip21,
+            preimage_hash: invoice.payment_hash().to_string(),
         })
     }
 }

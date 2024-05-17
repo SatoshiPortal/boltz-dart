@@ -74,6 +74,7 @@ class DecodedInvoice with _$DecodedInvoice {
     required String network,
     required int cltvExpDelta,
     String? bip21,
+    required String preimageHash,
   }) = _DecodedInvoice;
 
   /// Add boltz_url & chain for route hint check
