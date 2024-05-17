@@ -383,7 +383,7 @@ impl LbtcLnV2Swap {
             out_amount,
             blinding_key,
             script_address: out_address,
-            referral_id,
+            referral_id: Some(referral_id.unwrap_or_default()),
         }
     }
     pub fn new_submarine(

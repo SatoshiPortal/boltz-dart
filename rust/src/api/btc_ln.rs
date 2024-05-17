@@ -372,7 +372,7 @@ impl BtcLnV2Swap {
             boltz_url,
             script_address,
             out_amount,
-            referral_id,
+            referral_id: Some(referral_id.unwrap_or_default()),
         }
     }
 
