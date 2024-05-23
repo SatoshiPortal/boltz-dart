@@ -585,6 +585,7 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
+        
         let txid =
             match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
                 Ok(result) => result,
@@ -592,7 +593,54 @@ impl LbtcLnV2Swap {
             };
         Ok(extract_id(txid)?)
     }
+    pub fn claim_bytes(
+        &self,
+        out_address: String,
+        abs_fee: u64,
+        try_cooperate: bool,
+    ) -> Result<Vec<u8>, BoltzError> {
+        if self.kind == SwapType::Submarine {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Submarine swaps are not claimable".to_string(),
+            });
+        } else {
+            ()
+        }
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
 
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
+
+        let tx = match LBtcSwapTxV2::new_claim(
+            swap_script,
+            out_address,
+            &network_config,
+            check_protocol(&self.boltz_url.clone()),
+            self.id.clone(),
+        ) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().into();
+        let preimage = self.preimage.clone();
+        let signed = match tx.sign_claim(
+            &ckp,
+            &preimage.try_into()?,
+            Amount::from_sat(abs_fee),
+            if try_cooperate {
+                Some((&boltz_client, self.id.clone()))
+            } else {
+                None
+            },
+        ) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        
+        Ok(signed.serialize())
+    }
     pub fn refund(
         &self,
         out_address: String,

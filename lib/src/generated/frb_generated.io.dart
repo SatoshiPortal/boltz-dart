@@ -1550,6 +1550,36 @@ class BoltzCoreWire implements BaseWire {
           void Function(int, ffi.Pointer<wire_cst_lbtc_ln_v_2_swap>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, bool)>();
 
+  void wire_lbtc_ln_v_2_swap_claim_bytes(
+    int port_,
+    ffi.Pointer<wire_cst_lbtc_ln_v_2_swap> that,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
+    int abs_fee,
+    bool try_cooperate,
+  ) {
+    return _wire_lbtc_ln_v_2_swap_claim_bytes(
+      port_,
+      that,
+      out_address,
+      abs_fee,
+      try_cooperate,
+    );
+  }
+
+  late final _wire_lbtc_ln_v_2_swap_claim_bytesPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<wire_cst_lbtc_ln_v_2_swap>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Uint64,
+                  ffi.Bool)>>(
+      'frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim_bytes');
+  late final _wire_lbtc_ln_v_2_swap_claim_bytes =
+      _wire_lbtc_ln_v_2_swap_claim_bytesPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_lbtc_ln_v_2_swap>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, bool)>();
+
   void wire_lbtc_ln_v_2_swap_coop_close_submarine(
     int port_,
     ffi.Pointer<wire_cst_lbtc_ln_v_2_swap> that,

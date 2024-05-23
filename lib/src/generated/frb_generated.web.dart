@@ -883,6 +883,15 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire_lbtc_ln_v_2_swap_claim(
           port_, that, out_address, abs_fee, try_cooperate);
 
+  void wire_lbtc_ln_v_2_swap_claim_bytes(
+          NativePortType port_,
+          List<dynamic> that,
+          String out_address,
+          Object abs_fee,
+          bool try_cooperate) =>
+      wasmModule.wire_lbtc_ln_v_2_swap_claim_bytes(
+          port_, that, out_address, abs_fee, try_cooperate);
+
   void wire_lbtc_ln_v_2_swap_coop_close_submarine(
           NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_lbtc_ln_v_2_swap_coop_close_submarine(port_, that);
@@ -1175,6 +1184,13 @@ class BoltzCoreWasmModule implements WasmModule {
       NativePortType port_, List<dynamic> that, List<int> signed_bytes);
 
   external void wire_lbtc_ln_v_2_swap_claim(
+      NativePortType port_,
+      List<dynamic> that,
+      String out_address,
+      Object abs_fee,
+      bool try_cooperate);
+
+  external void wire_lbtc_ln_v_2_swap_claim_bytes(
       NativePortType port_,
       List<dynamic> that,
       String out_address,

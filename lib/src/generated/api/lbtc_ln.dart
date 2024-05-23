@@ -143,6 +143,18 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           tryCooperate: tryCooperate,
           hint: hint);
 
+  Future<Uint8List> claimBytes(
+          {required String outAddress,
+          required int absFee,
+          required bool tryCooperate,
+          dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnV2SwapClaimBytes(
+          that: this,
+          outAddress: outAddress,
+          absFee: absFee,
+          tryCooperate: tryCooperate,
+          hint: hint);
+
   Future<void> coopCloseSubmarine({dynamic hint}) => BoltzCore.instance.api
       .lbtcLnV2SwapCoopCloseSubmarine(that: this, hint: hint);
 
