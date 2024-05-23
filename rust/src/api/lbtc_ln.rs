@@ -585,7 +585,6 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        
         let txid =
             match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
                 Ok(result) => result,
@@ -638,7 +637,7 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        
+
         Ok(signed.serialize())
     }
     pub fn refund(
