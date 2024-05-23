@@ -1008,6 +1008,17 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_refund(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_refund_bytes(
+    port_: i64,
+    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    out_address: *mut wire_cst_list_prim_u_8_strict,
+    abs_fee: u64,
+    try_cooperate: bool,
+) {
+    wire_lbtc_ln_v_2_swap_refund_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_tx_size(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_v_2_swap,

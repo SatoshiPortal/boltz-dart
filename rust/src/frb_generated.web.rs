@@ -930,6 +930,17 @@ pub fn wire_lbtc_ln_v_2_swap_refund(
 }
 
 #[wasm_bindgen]
+pub fn wire_lbtc_ln_v_2_swap_refund_bytes(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    out_address: String,
+    abs_fee: u64,
+    try_cooperate: bool,
+) {
+    wire_lbtc_ln_v_2_swap_refund_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
+}
+
+#[wasm_bindgen]
 pub fn wire_lbtc_ln_v_2_swap_tx_size(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,

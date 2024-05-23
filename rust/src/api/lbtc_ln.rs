@@ -654,7 +654,6 @@ impl LbtcLnV2Swap {
         } else {
             ()
         }
-
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
@@ -693,6 +692,55 @@ impl LbtcLnV2Swap {
                 Err(e) => return Err(e.into()),
             };
         Ok(extract_id(txid)?)
+    }
+    pub fn refund_bytes(
+        &self,
+        out_address: String,
+        abs_fee: u64,
+        try_cooperate: bool,
+    ) -> Result<Vec<u8>, BoltzError> {
+        if self.kind == SwapType::Reverse {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Reverse swaps are not refundable".to_string(),
+            });
+        } else {
+            ()
+        }
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
+        let swap_script: LBtcSwapScriptV2 = self.swap_script.clone().try_into()?;
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let id = self.id.clone();
+        // let script_balance = match swap_script.get_balance(&network_config) {
+        //     Ok(result) => result,
+        //     Err(e) => return Err(e.into()),
+        // };
+        let tx = match LBtcSwapTxV2::new_refund(
+            swap_script.clone(),
+            &out_address,
+            &network_config,
+            check_protocol(&self.boltz_url.clone()),
+            self.id.clone(),
+        ) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().into();
+        let signed = match tx.sign_refund(
+            &ckp,
+            Amount::from_sat(abs_fee),
+            if try_cooperate {
+                Some((&boltz_client, &id))
+            } else {
+                None
+            },
+        ) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+
+        Ok(signed.serialize())
     }
 
     pub fn broadcast_tx(&self, signed_bytes: Vec<u8>) -> Result<String, BoltzError> {

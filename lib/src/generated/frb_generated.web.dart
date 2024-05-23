@@ -965,6 +965,15 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire_lbtc_ln_v_2_swap_refund(
           port_, that, out_address, abs_fee, try_cooperate);
 
+  void wire_lbtc_ln_v_2_swap_refund_bytes(
+          NativePortType port_,
+          List<dynamic> that,
+          String out_address,
+          Object abs_fee,
+          bool try_cooperate) =>
+      wasmModule.wire_lbtc_ln_v_2_swap_refund_bytes(
+          port_, that, out_address, abs_fee, try_cooperate);
+
   void wire_lbtc_ln_v_2_swap_tx_size(
           NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_lbtc_ln_v_2_swap_tx_size(port_, that);
@@ -1238,6 +1247,13 @@ class BoltzCoreWasmModule implements WasmModule {
       String? referral_id);
 
   external void wire_lbtc_ln_v_2_swap_refund(
+      NativePortType port_,
+      List<dynamic> that,
+      String out_address,
+      Object abs_fee,
+      bool try_cooperate);
+
+  external void wire_lbtc_ln_v_2_swap_refund_bytes(
       NativePortType port_,
       List<dynamic> that,
       String out_address,
