@@ -411,8 +411,6 @@ impl BtcLnV2Swap {
         let create_swap_response = boltz_client.post_swap_req(&create_swap_req)?;
         create_swap_response.validate(&invoice, &refund_pubkey, network.into())?;
 
-        let create_swap_response = boltz_client.post_swap_req(&create_swap_req)?;
-
         let swap_script = BtcSwapScriptV2::submarine_from_swap_resp(
             &create_swap_response,
             refund_kps.public_key().into(),
