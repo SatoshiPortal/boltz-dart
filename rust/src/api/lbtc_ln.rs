@@ -404,6 +404,7 @@ impl LbtcLnV2Swap {
         let swap_type = SwapType::Submarine;
 
         let refund_kps: Keypair = refund_keypair.clone().into();
+
         let preimage = match Preimage::from_invoice_str(&invoice) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -417,7 +418,12 @@ impl LbtcLnV2Swap {
             refund_public_key: refund_kps.public_key().into(),
         };
 
+        let refund_pubkey = PublicKey {
+            compressed: true,
+            inner: refund_kps.public_key(),
+        };
         let response = boltz_client.post_swap_req(&create_swap_req)?;
+        response.validate(&invoice, &refund_pubkey, network.into())?;
 
         let swap_script =
             LBtcSwapScriptV2::submarine_from_swap_resp(&response, refund_kps.public_key().into())?;
@@ -493,6 +499,7 @@ impl LbtcLnV2Swap {
         };
 
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
+        response.validate(&preimage, &claim_public_key, network.into())?;
 
         let swap_script = LBtcSwapScriptV2::reverse_from_swap_resp(&response, claim_public_key)?;
 

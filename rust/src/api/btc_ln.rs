@@ -391,6 +391,7 @@ impl BtcLnV2Swap {
             Err(err) => return Err(err.into()),
         };
         let refund_kps: Keypair = refund_keypair.clone().into();
+
         let preimage = match Preimage::from_invoice_str(&invoice) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -403,6 +404,12 @@ impl BtcLnV2Swap {
             referral_id: referral_id.clone(),
             refund_public_key: refund_kps.public_key().into(),
         };
+        let refund_pubkey = PublicKey {
+            compressed: true,
+            inner: refund_kps.public_key(),
+        };
+        let create_swap_response = boltz_client.post_swap_req(&create_swap_req)?;
+        create_swap_response.validate(&invoice, &refund_pubkey, network.into())?;
 
         let create_swap_response = boltz_client.post_swap_req(&create_swap_req)?;
 
@@ -470,7 +477,6 @@ impl BtcLnV2Swap {
             compressed: true,
             inner: ckp.public_key(),
         };
-
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
 
         let create_reverse_req = if out_address.is_some() {
@@ -499,7 +505,8 @@ impl BtcLnV2Swap {
         };
 
         let create_swap_response = boltz_client.post_reverse_req(create_reverse_req)?;
-
+        create_swap_response.validate(&preimage, &claim_public_key, network.into())?;
+        
         let swap_script =
             BtcSwapScriptV2::reverse_from_swap_resp(&create_swap_response, claim_public_key)?;
 
