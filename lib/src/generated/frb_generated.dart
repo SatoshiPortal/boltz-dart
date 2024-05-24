@@ -233,7 +233,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required bool tryCooperate,
       dynamic hint});
 
-  Future<Uint8List> lbtcLnV2SwapClaimBytes(
+  Future<String> lbtcLnV2SwapClaimBytes(
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
@@ -287,7 +287,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required bool tryCooperate,
       dynamic hint});
 
-  Future<Uint8List> lbtcLnV2SwapRefundBytes(
+  Future<String> lbtcLnV2SwapRefundBytes(
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
@@ -1250,7 +1250,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<Uint8List> lbtcLnV2SwapClaimBytes(
+  Future<String> lbtcLnV2SwapClaimBytes(
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
@@ -1266,7 +1266,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_list_prim_u_8_strict,
+        decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kLbtcLnV2SwapClaimBytesConstMeta,
@@ -1528,7 +1528,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<Uint8List> lbtcLnV2SwapRefundBytes(
+  Future<String> lbtcLnV2SwapRefundBytes(
       {required LbtcLnV2Swap that,
       required String outAddress,
       required int absFee,
@@ -1544,7 +1544,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_list_prim_u_8_strict,
+        decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kLbtcLnV2SwapRefundBytesConstMeta,

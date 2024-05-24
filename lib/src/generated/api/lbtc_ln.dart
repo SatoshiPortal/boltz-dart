@@ -143,7 +143,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           tryCooperate: tryCooperate,
           hint: hint);
 
-  Future<Uint8List> claimBytes(
+  Future<String> claimBytes(
           {required String outAddress,
           required int absFee,
           required bool tryCooperate,
@@ -242,7 +242,7 @@ class LbtcLnV2Swap with _$LbtcLnV2Swap {
           tryCooperate: tryCooperate,
           hint: hint);
 
-  Future<Uint8List> refundBytes(
+  Future<String> refundBytes(
           {required String outAddress,
           required int absFee,
           required bool tryCooperate,

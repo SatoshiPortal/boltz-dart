@@ -15,6 +15,7 @@ use boltz_client::{
     util::secrets::Preimage,
     Amount, Keypair, LBtcSwapScriptV2, LBtcSwapTxV2, PublicKey, Serialize, ToHex,
 };
+use elements::hashes::hex::DisplayHex;
 use flutter_rust_bridge::frb;
 use serde_json::Value;
 
@@ -604,7 +605,7 @@ impl LbtcLnV2Swap {
         out_address: String,
         abs_fee: u64,
         try_cooperate: bool,
-    ) -> Result<Vec<u8>, BoltzError> {
+    ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -644,8 +645,8 @@ impl LbtcLnV2Swap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-
-        Ok(signed.serialize())
+        
+        Ok(signed.serialize().to_lower_hex_string())
     }
     pub fn refund(
         &self,
@@ -705,7 +706,7 @@ impl LbtcLnV2Swap {
         out_address: String,
         abs_fee: u64,
         try_cooperate: bool,
-    ) -> Result<Vec<u8>, BoltzError> {
+    ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -747,7 +748,7 @@ impl LbtcLnV2Swap {
             Err(e) => return Err(e.into()),
         };
 
-        Ok(signed.serialize())
+        Ok(signed.serialize().to_lower_hex_string())
     }
 
     pub fn broadcast_tx(&self, signed_bytes: Vec<u8>) -> Result<String, BoltzError> {
