@@ -67,7 +67,6 @@ extension SwapStatusX on SwapStatus {
         return 'swap.refunded';
       case SwapStatus.swapError:
         return 'swap.error';
-
       case SwapStatus.txnMempool:
         return 'transaction.mempool';
       case SwapStatus.txnClaimPending:
@@ -92,7 +91,7 @@ extension SwapStatusX on SwapStatus {
       case SwapStatus.invoiceFailedToPay:
         return 'invoice.failedToPay';
       case SwapStatus.invoiceSettled:
-        return 'invoice.invoiceSettled';
+        return 'invoice.settled';
       case SwapStatus.invoiceExpired:
         return 'invoice.expired';
 
