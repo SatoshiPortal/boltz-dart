@@ -19,7 +19,7 @@ init:
 ## :
 
 ## all: Compile iOS, Android & Linux binaries
-all: init unit-test jniLibs zip
+all: init unit-test jniLibs xcframework zip
  
 linux:
 	@echo "[Creating linux binary ...] $@"
