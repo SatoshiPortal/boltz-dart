@@ -56,7 +56,7 @@ A boltz swap client
   s.swift_version = '5.0'
   s.public_header_files = 'Classes**/*.h'
   s.source_files = 'Classes/**/*'
-  s.static_framework = true
+  s.static_framework = false
   s.vendored_frameworks = "#{framework}"
 
   # # This will ensure the source files in Classes/ are included in the native
