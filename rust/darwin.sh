@@ -49,7 +49,6 @@ lipo -create -output $IOS_LIPO \
 #         target/aarch64-apple-darwin/release/$LIBNAME \
 #         target/x86_64-apple-darwin/release/$LIBNAME
 
-
 xcodebuild -create-xcframework \
         -library $IOS_LIPO \
         -library target/aarch64-apple-ios/release/$LIBNAME \
