@@ -36,10 +36,12 @@ for TARGET in \
 #     aarch64-apple-darwin
 do
     rustup target add $TARGET
-    cargo build -r --target=$TARGET
+    cargo build --release --target=$TARGET
 done
 
 cargo install cargo-lipo
+cargo lipo --release
+
 # Create XCFramework zip
 lipo -create -output $IOS_LIPO \
         target/aarch64-apple-ios-sim/release/$LIBNAME \
