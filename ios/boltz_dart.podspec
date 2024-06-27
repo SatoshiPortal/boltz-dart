@@ -37,15 +37,15 @@ fi
 #
 Pod::Spec.new do |s|
   s.name             = 'boltz_dart'
-  s.version          = '0.1.1'
+  s.version          = "#{tag_version}"
   s.summary          = 'A boltz swap client.'
   s.description      = <<-DESC
 A boltz swap client
                        DESC
-  s.homepage         = 'http://github.com/SatoshiPortal'
   s.license          = { :file => '../LICENSE' }
+  s.homepage         = 'https://github.com/SatoshiPortal'
   s.author           = { 'SatoshiPortal' => 'ishi@satoshiportal.com' }
-
+  s.source           = { :http => "#{url}" }
 
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
@@ -56,8 +56,8 @@ A boltz swap client
   s.swift_version = '5.0'
   s.public_header_files = 'Classes**/*.h'
   s.source_files = 'Classes/**/*'
-  s.static_framework = true
-  s.vendored_frameworks = "libboltz.xcframework"
+  s.static_framework = false
+  s.vendored_frameworks = "#{framework}"
 
   # # This will ensure the source files in Classes/ are included in the native
   # # builds of apps using this FFI plugin. Podspec does not support relative
