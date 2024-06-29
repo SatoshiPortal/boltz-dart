@@ -6,6 +6,7 @@
 import 'api/btc_ln.dart';
 import 'api/chain_swap.dart';
 import 'api/error.dart';
+import 'api/fees.dart';
 import 'api/lbtc_ln.dart';
 import 'api/types.dart';
 import 'dart:async';
@@ -21,6 +22,34 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ReverseFeesAndLimitsPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimitsPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_SubmarineFeesAndLimitsPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimitsPtr;
+
+  @protected
+  ReverseFeesAndLimits
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          dynamic raw);
+
+  @protected
+  SubmarineFeesAndLimits
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          dynamic raw);
+
+  @protected
+  ReverseFeesAndLimits
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          dynamic raw);
+
+  @protected
+  SubmarineFeesAndLimits
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          dynamic raw);
 
   @protected
   String dco_decode_String(dynamic raw);
@@ -39,6 +68,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   ChainSwap dco_decode_box_autoadd_chain_swap(dynamic raw);
+
+  @protected
+  Fees dco_decode_box_autoadd_fees(dynamic raw);
 
   @protected
   KeyPair dco_decode_box_autoadd_key_pair(dynamic raw);
@@ -62,6 +94,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain dco_decode_chain(dynamic raw);
 
   @protected
+  ChainFees dco_decode_chain_fees(dynamic raw);
+
+  @protected
+  ChainFeesAndLimits dco_decode_chain_fees_and_limits(dynamic raw);
+
+  @protected
   ChainSwap dco_decode_chain_swap(dynamic raw);
 
   @protected
@@ -69,6 +107,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   DecodedInvoice dco_decode_decoded_invoice(dynamic raw);
+
+  @protected
+  double dco_decode_f_64(dynamic raw);
+
+  @protected
+  Fees dco_decode_fees(dynamic raw);
 
   @protected
   int dco_decode_i_32(dynamic raw);
@@ -81,6 +125,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw);
+
+  @protected
+  Limits dco_decode_limits(dynamic raw);
 
   @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
@@ -113,6 +160,26 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   int dco_decode_usize(dynamic raw);
 
   @protected
+  ReverseFeesAndLimits
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          SseDeserializer deserializer);
+
+  @protected
+  SubmarineFeesAndLimits
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SseDeserializer deserializer);
+
+  @protected
+  ReverseFeesAndLimits
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          SseDeserializer deserializer);
+
+  @protected
+  SubmarineFeesAndLimits
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SseDeserializer deserializer);
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
@@ -130,6 +197,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   ChainSwap sse_decode_box_autoadd_chain_swap(SseDeserializer deserializer);
+
+  @protected
+  Fees sse_decode_box_autoadd_fees(SseDeserializer deserializer);
 
   @protected
   KeyPair sse_decode_box_autoadd_key_pair(SseDeserializer deserializer);
@@ -154,6 +224,13 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain sse_decode_chain(SseDeserializer deserializer);
 
   @protected
+  ChainFees sse_decode_chain_fees(SseDeserializer deserializer);
+
+  @protected
+  ChainFeesAndLimits sse_decode_chain_fees_and_limits(
+      SseDeserializer deserializer);
+
+  @protected
   ChainSwap sse_decode_chain_swap(SseDeserializer deserializer);
 
   @protected
@@ -162,6 +239,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   DecodedInvoice sse_decode_decoded_invoice(SseDeserializer deserializer);
+
+  @protected
+  double sse_decode_f_64(SseDeserializer deserializer);
+
+  @protected
+  Fees sse_decode_fees(SseDeserializer deserializer);
 
   @protected
   int sse_decode_i_32(SseDeserializer deserializer);
@@ -175,6 +258,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   LbtcLnSwap sse_decode_lbtc_ln_swap(SseDeserializer deserializer);
+
+  @protected
+  Limits sse_decode_limits(SseDeserializer deserializer);
 
   @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
@@ -236,6 +322,14 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     // Codec=Cst (C-struct based), see doc to use other codecs
     final ptr = wire.cst_new_box_autoadd_chain_swap();
     cst_api_fill_to_wire_chain_swap(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_fees> cst_encode_box_autoadd_fees(Fees raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_fees();
+    cst_api_fill_to_wire_fees(raw, ptr.ref);
     return ptr;
   }
 
@@ -332,6 +426,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_box_autoadd_fees(
+      Fees apiObj, ffi.Pointer<wire_cst_fees> wireObj) {
+    cst_api_fill_to_wire_fees(apiObj, wireObj.ref);
+  }
+
+  @protected
   void cst_api_fill_to_wire_box_autoadd_key_pair(
       KeyPair apiObj, ffi.Pointer<wire_cst_key_pair> wireObj) {
     cst_api_fill_to_wire_key_pair(apiObj, wireObj.ref);
@@ -386,6 +486,24 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_chain_fees(
+      ChainFees apiObj, wire_cst_chain_fees wireObj) {
+    wireObj.percentage = cst_encode_f_64(apiObj.percentage);
+    wireObj.user_lockup = cst_encode_u_64(apiObj.userLockup);
+    wireObj.user_claim = cst_encode_u_64(apiObj.userClaim);
+    wireObj.server = cst_encode_u_64(apiObj.server);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_chain_fees_and_limits(
+      ChainFeesAndLimits apiObj, wire_cst_chain_fees_and_limits wireObj) {
+    cst_api_fill_to_wire_limits(apiObj.btcLimits, wireObj.btc_limits);
+    cst_api_fill_to_wire_limits(apiObj.lbtcLimits, wireObj.lbtc_limits);
+    cst_api_fill_to_wire_chain_fees(apiObj.btcChain, wireObj.btc_chain);
+    cst_api_fill_to_wire_chain_fees(apiObj.lbtcChain, wireObj.lbtc_chain);
+  }
+
+  @protected
   void cst_api_fill_to_wire_chain_swap(
       ChainSwap apiObj, wire_cst_chain_swap wireObj) {
     wireObj.id = cst_encode_String(apiObj.id);
@@ -419,6 +537,11 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.cltv_exp_delta = cst_encode_u_64(apiObj.cltvExpDelta);
     wireObj.bip21 = cst_encode_opt_String(apiObj.bip21);
     wireObj.preimage_hash = cst_encode_String(apiObj.preimageHash);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_fees(Fees apiObj, wire_cst_fees wireObj) {
+    wireObj.boltz_url = cst_encode_String(apiObj.boltzUrl);
   }
 
   @protected
@@ -460,12 +583,34 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_limits(Limits apiObj, wire_cst_limits wireObj) {
+    wireObj.minimal = cst_encode_u_64(apiObj.minimal);
+    wireObj.maximal = cst_encode_u_64(apiObj.maximal);
+  }
+
+  @protected
   void cst_api_fill_to_wire_pre_image(
       PreImage apiObj, wire_cst_pre_image wireObj) {
     wireObj.value = cst_encode_String(apiObj.value);
     wireObj.sha256 = cst_encode_String(apiObj.sha256);
     wireObj.hash160 = cst_encode_String(apiObj.hash160);
   }
+
+  @protected
+  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+      ReverseFeesAndLimits raw);
+
+  @protected
+  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+      SubmarineFeesAndLimits raw);
+
+  @protected
+  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+      ReverseFeesAndLimits raw);
+
+  @protected
+  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+      SubmarineFeesAndLimits raw);
 
   @protected
   bool cst_encode_bool(bool raw);
@@ -475,6 +620,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_chain_swap_direction(ChainSwapDirection raw);
+
+  @protected
+  double cst_encode_f_64(double raw);
 
   @protected
   int cst_encode_i_32(int raw);
@@ -493,6 +641,26 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_usize(int raw);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          ReverseFeesAndLimits self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SubmarineFeesAndLimits self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          ReverseFeesAndLimits self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SubmarineFeesAndLimits self, SseSerializer serializer);
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
@@ -514,6 +682,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_box_autoadd_chain_swap(
       ChainSwap self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_fees(Fees self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_key_pair(KeyPair self, SseSerializer serializer);
@@ -541,6 +712,13 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_chain(Chain self, SseSerializer serializer);
 
   @protected
+  void sse_encode_chain_fees(ChainFees self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_chain_fees_and_limits(
+      ChainFeesAndLimits self, SseSerializer serializer);
+
+  @protected
   void sse_encode_chain_swap(ChainSwap self, SseSerializer serializer);
 
   @protected
@@ -550,6 +728,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_decoded_invoice(
       DecodedInvoice self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_f_64(double self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_fees(Fees self, SseSerializer serializer);
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);
@@ -563,6 +747,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_lbtc_ln_swap(LbtcLnSwap self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_limits(Limits self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
@@ -1107,6 +1294,74 @@ class BoltzCoreWire implements BaseWire {
       void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
+  void wire_fees_chain(
+    int port_,
+    ffi.Pointer<wire_cst_fees> that,
+  ) {
+    return _wire_fees_chain(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire_fees_chainPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_fees>)>>(
+      'frbgen_boltz_dart_wire_fees_chain');
+  late final _wire_fees_chain = _wire_fees_chainPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_cst_fees>)>();
+
+  WireSyncRust2DartDco wire_fees_new(
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+  ) {
+    return _wire_fees_new(
+      boltz_url,
+    );
+  }
+
+  late final _wire_fees_newPtr = _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_fees_new');
+  late final _wire_fees_new = _wire_fees_newPtr.asFunction<
+      WireSyncRust2DartDco Function(
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  void wire_fees_reverse(
+    int port_,
+    ffi.Pointer<wire_cst_fees> that,
+  ) {
+    return _wire_fees_reverse(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire_fees_reversePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_fees>)>>(
+      'frbgen_boltz_dart_wire_fees_reverse');
+  late final _wire_fees_reverse = _wire_fees_reversePtr
+      .asFunction<void Function(int, ffi.Pointer<wire_cst_fees>)>();
+
+  void wire_fees_submarine(
+    int port_,
+    ffi.Pointer<wire_cst_fees> that,
+  ) {
+    return _wire_fees_submarine(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire_fees_submarinePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_fees>)>>(
+      'frbgen_boltz_dart_wire_fees_submarine');
+  late final _wire_fees_submarine = _wire_fees_submarinePtr
+      .asFunction<void Function(int, ffi.Pointer<wire_cst_fees>)>();
+
   void wire_lbtc_ln_swap_broadcast_tx(
     int port_,
     ffi.Pointer<wire_cst_lbtc_ln_swap> that,
@@ -1637,6 +1892,70 @@ class BoltzCoreWire implements BaseWire {
           ffi.Pointer<wire_cst_list_prim_u_8_strict>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimitsPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimitsPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimitsPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimitsPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimitsPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimitsPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimitsPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimitsPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
   ffi.Pointer<wire_cst_btc_ln_swap> cst_new_box_autoadd_btc_ln_swap() {
     return _cst_new_box_autoadd_btc_ln_swap();
   }
@@ -1671,6 +1990,16 @@ class BoltzCoreWire implements BaseWire {
   late final _cst_new_box_autoadd_chain_swap =
       _cst_new_box_autoadd_chain_swapPtr
           .asFunction<ffi.Pointer<wire_cst_chain_swap> Function()>();
+
+  ffi.Pointer<wire_cst_fees> cst_new_box_autoadd_fees() {
+    return _cst_new_box_autoadd_fees();
+  }
+
+  late final _cst_new_box_autoadd_feesPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_cst_fees> Function()>>(
+          'frbgen_boltz_dart_cst_new_box_autoadd_fees');
+  late final _cst_new_box_autoadd_fees = _cst_new_box_autoadd_feesPtr
+      .asFunction<ffi.Pointer<wire_cst_fees> Function()>();
 
   ffi.Pointer<wire_cst_key_pair> cst_new_box_autoadd_key_pair() {
     return _cst_new_box_autoadd_key_pair();
@@ -1881,6 +2210,10 @@ final class wire_cst_chain_swap extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> blinding_key;
 }
 
+final class wire_cst_fees extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url;
+}
+
 final class wire_cst_lbtc_ln_swap extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> id;
 
@@ -1923,6 +2256,38 @@ final class wire_cst_boltz_error extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> kind;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> message;
+}
+
+final class wire_cst_chain_fees extends ffi.Struct {
+  @ffi.Double()
+  external double percentage;
+
+  @ffi.Uint64()
+  external int user_lockup;
+
+  @ffi.Uint64()
+  external int user_claim;
+
+  @ffi.Uint64()
+  external int server;
+}
+
+final class wire_cst_limits extends ffi.Struct {
+  @ffi.Uint64()
+  external int minimal;
+
+  @ffi.Uint64()
+  external int maximal;
+}
+
+final class wire_cst_chain_fees_and_limits extends ffi.Struct {
+  external wire_cst_limits btc_limits;
+
+  external wire_cst_limits lbtc_limits;
+
+  external wire_cst_chain_fees btc_chain;
+
+  external wire_cst_chain_fees lbtc_chain;
 }
 
 final class wire_cst_decoded_invoice extends ffi.Struct {

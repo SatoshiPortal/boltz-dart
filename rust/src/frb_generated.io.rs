@@ -4,6 +4,7 @@
 // Section: imports
 
 use super::*;
+use crate::api::types::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::transform_result_dco;
 use flutter_rust_bridge::{Handler, IntoIntoDart};
@@ -14,6 +15,56 @@ flutter_rust_bridge::frb_generated_boilerplate_io!();
 
 // Section: dart2rust
 
+impl CstDecode<ReverseFeesAndLimits> for usize {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> ReverseFeesAndLimits {
+        CstDecode::<
+            RustOpaqueNom<
+                flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>,
+            >,
+        >::cst_decode(self)
+        .rust_auto_opaque_decode_owned()
+    }
+}
+impl CstDecode<SubmarineFeesAndLimits> for usize {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> SubmarineFeesAndLimits {
+        CstDecode::<
+            RustOpaqueNom<
+                flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>,
+            >,
+        >::cst_decode(self)
+        .rust_auto_opaque_decode_owned()
+    }
+}
+impl
+    CstDecode<
+        RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>,
+    > for usize
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(
+        self,
+    ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>
+    {
+        unsafe { decode_rust_opaque_nom(self as _) }
+    }
+}
+impl
+    CstDecode<
+        RustOpaqueNom<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>,
+        >,
+    > for usize
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(
+        self,
+    ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>
+    {
+        unsafe { decode_rust_opaque_nom(self as _) }
+    }
+}
 impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> String {
@@ -49,6 +100,13 @@ impl CstDecode<crate::api::chain_swap::ChainSwap> for *mut wire_cst_chain_swap {
     fn cst_decode(self) -> crate::api::chain_swap::ChainSwap {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
         CstDecode::<crate::api::chain_swap::ChainSwap>::cst_decode(*wrap).into()
+    }
+}
+impl CstDecode<crate::api::fees::Fees> for *mut wire_cst_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::fees::Fees {
+        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+        CstDecode::<crate::api::fees::Fees>::cst_decode(*wrap).into()
     }
 }
 impl CstDecode<crate::api::types::KeyPair> for *mut wire_cst_key_pair {
@@ -111,6 +169,28 @@ impl CstDecode<crate::api::types::BtcSwapScriptStr> for wire_cst_btc_swap_script
         }
     }
 }
+impl CstDecode<crate::api::types::ChainFees> for wire_cst_chain_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::ChainFees {
+        crate::api::types::ChainFees {
+            percentage: self.percentage.cst_decode(),
+            user_lockup: self.user_lockup.cst_decode(),
+            user_claim: self.user_claim.cst_decode(),
+            server: self.server.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::types::ChainFeesAndLimits> for wire_cst_chain_fees_and_limits {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::ChainFeesAndLimits {
+        crate::api::types::ChainFeesAndLimits {
+            btc_limits: self.btc_limits.cst_decode(),
+            lbtc_limits: self.lbtc_limits.cst_decode(),
+            btc_chain: self.btc_chain.cst_decode(),
+            lbtc_chain: self.lbtc_chain.cst_decode(),
+        }
+    }
+}
 impl CstDecode<crate::api::chain_swap::ChainSwap> for wire_cst_chain_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::chain_swap::ChainSwap {
@@ -146,6 +226,14 @@ impl CstDecode<crate::api::types::DecodedInvoice> for wire_cst_decoded_invoice {
             cltv_exp_delta: self.cltv_exp_delta.cst_decode(),
             bip21: self.bip21.cst_decode(),
             preimage_hash: self.preimage_hash.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::fees::Fees> for wire_cst_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::fees::Fees {
+        crate::api::fees::Fees {
+            boltz_url: self.boltz_url.cst_decode(),
         }
     }
 }
@@ -189,6 +277,15 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap> for wire_cst_lbtc_ln_swap {
             electrum_url: self.electrum_url.cst_decode(),
             boltz_url: self.boltz_url.cst_decode(),
             referral_id: self.referral_id.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::types::Limits> for wire_cst_limits {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::Limits {
+        crate::api::types::Limits {
+            minimal: self.minimal.cst_decode(),
+            maximal: self.maximal.cst_decode(),
         }
     }
 }
@@ -273,6 +370,36 @@ impl Default for wire_cst_btc_swap_script_str {
         Self::new_with_null_ptr()
     }
 }
+impl NewWithNullPtr for wire_cst_chain_fees {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            percentage: Default::default(),
+            user_lockup: Default::default(),
+            user_claim: Default::default(),
+            server: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_chain_fees {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_chain_fees_and_limits {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            btc_limits: Default::default(),
+            lbtc_limits: Default::default(),
+            btc_chain: Default::default(),
+            lbtc_chain: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_chain_fees_and_limits {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
 impl NewWithNullPtr for wire_cst_chain_swap {
     fn new_with_null_ptr() -> Self {
         Self {
@@ -315,6 +442,18 @@ impl NewWithNullPtr for wire_cst_decoded_invoice {
     }
 }
 impl Default for wire_cst_decoded_invoice {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_fees {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            boltz_url: core::ptr::null_mut(),
+        }
+    }
+}
+impl Default for wire_cst_fees {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -370,6 +509,19 @@ impl NewWithNullPtr for wire_cst_lbtc_ln_swap {
     }
 }
 impl Default for wire_cst_lbtc_ln_swap {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_limits {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            minimal: Default::default(),
+            maximal: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_limits {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -614,6 +766,28 @@ pub extern "C" fn frbgen_boltz_dart_wire_boltz_error_new(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_fees_chain(port_: i64, that: *mut wire_cst_fees) {
+    wire_fees_chain_impl(port_, that)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_fees_new(
+    boltz_url: *mut wire_cst_list_prim_u_8_strict,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_fees_new_impl(boltz_url)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_fees_reverse(port_: i64, that: *mut wire_cst_fees) {
+    wire_fees_reverse_impl(port_, that)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_fees_submarine(port_: i64, that: *mut wire_cst_fees) {
+    wire_fees_submarine_impl(port_, that)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_tx(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
@@ -848,6 +1022,42 @@ pub extern "C" fn frbgen_boltz_dart_wire_pre_image_new(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>::increment_strong_count(ptr as _);
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>::decrement_strong_count(ptr as _);
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>::increment_strong_count(ptr as _);
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>::decrement_strong_count(ptr as _);
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_swap() -> *mut wire_cst_btc_ln_swap {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_btc_ln_swap::new_with_null_ptr())
 }
@@ -863,6 +1073,11 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_swap_script_str(
 #[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_chain_swap() -> *mut wire_cst_chain_swap {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_chain_swap::new_with_null_ptr())
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_fees() -> *mut wire_cst_fees {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_fees::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -945,6 +1160,22 @@ pub struct wire_cst_btc_swap_script_str {
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
+pub struct wire_cst_chain_fees {
+    percentage: f64,
+    user_lockup: u64,
+    user_claim: u64,
+    server: u64,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_chain_fees_and_limits {
+    btc_limits: wire_cst_limits,
+    lbtc_limits: wire_cst_limits,
+    btc_chain: wire_cst_chain_fees,
+    lbtc_chain: wire_cst_chain_fees,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
 pub struct wire_cst_chain_swap {
     id: *mut wire_cst_list_prim_u_8_strict,
     is_testnet: bool,
@@ -974,6 +1205,11 @@ pub struct wire_cst_decoded_invoice {
     cltv_exp_delta: u64,
     bip21: *mut wire_cst_list_prim_u_8_strict,
     preimage_hash: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_fees {
+    boltz_url: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -1008,6 +1244,12 @@ pub struct wire_cst_lbtc_ln_swap {
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_limits {
+    minimal: u64,
+    maximal: u64,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

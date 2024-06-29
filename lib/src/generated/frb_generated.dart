@@ -6,6 +6,7 @@
 import 'api/btc_ln.dart';
 import 'api/chain_swap.dart';
 import 'api/error.dart';
+import 'api/fees.dart';
 import 'api/lbtc_ln.dart';
 import 'api/types.dart';
 import 'dart:async';
@@ -170,6 +171,15 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<BoltzError> boltzErrorNew(
       {required String kind, required String message, dynamic hint});
 
+  Future<ChainFeesAndLimits> feesChain({required Fees that, dynamic hint});
+
+  Fees feesNew({required String boltzUrl, dynamic hint});
+
+  Future<ReverseFeesAndLimits> feesReverse({required Fees that, dynamic hint});
+
+  Future<SubmarineFeesAndLimits> feesSubmarine(
+      {required Fees that, dynamic hint});
+
   Future<String> lbtcLnSwapBroadcastTx(
       {required LbtcLnSwap that, required List<int> signedBytes, dynamic hint});
 
@@ -282,6 +292,24 @@ abstract class BoltzCoreApi extends BaseApi {
       required String sha256,
       required String hash160,
       dynamic hint});
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ReverseFeesAndLimits;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ReverseFeesAndLimits;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ReverseFeesAndLimitsPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SubmarineFeesAndLimits;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SubmarineFeesAndLimits;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_SubmarineFeesAndLimitsPtr;
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -830,6 +858,101 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kBoltzErrorNewConstMeta => const TaskConstMeta(
         debugName: "boltz_error_new",
         argNames: ["kind", "message"],
+      );
+
+  @override
+  Future<ChainFeesAndLimits> feesChain({required Fees that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_fees(that);
+        return wire.wire_fees_chain(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_chain_fees_and_limits,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kFeesChainConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kFeesChainConstMeta => const TaskConstMeta(
+        debugName: "fees_chain",
+        argNames: ["that"],
+      );
+
+  @override
+  Fees feesNew({required String boltzUrl, dynamic hint}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_String(boltzUrl);
+        return wire.wire_fees_new(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_fees,
+        decodeErrorData: dco_decode_unit,
+      ),
+      constMeta: kFeesNewConstMeta,
+      argValues: [boltzUrl],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kFeesNewConstMeta => const TaskConstMeta(
+        debugName: "fees_new",
+        argNames: ["boltzUrl"],
+      );
+
+  @override
+  Future<ReverseFeesAndLimits> feesReverse({required Fees that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_fees(that);
+        return wire.wire_fees_reverse(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData:
+            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kFeesReverseConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kFeesReverseConstMeta => const TaskConstMeta(
+        debugName: "fees_reverse",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<SubmarineFeesAndLimits> feesSubmarine(
+      {required Fees that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_fees(that);
+        return wire.wire_fees_submarine(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData:
+            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kFeesSubmarineConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kFeesSubmarineConstMeta => const TaskConstMeta(
+        debugName: "fees_submarine",
+        argNames: ["that"],
       );
 
   @override
@@ -1459,6 +1582,54 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         argNames: ["value", "sha256", "hash160"],
       );
 
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ReverseFeesAndLimits => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ReverseFeesAndLimits => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SubmarineFeesAndLimits => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SubmarineFeesAndLimits => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits;
+
+  @protected
+  ReverseFeesAndLimits
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ReverseFeesAndLimits.dcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SubmarineFeesAndLimits
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SubmarineFeesAndLimits.dcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ReverseFeesAndLimits
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ReverseFeesAndLimits.dcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SubmarineFeesAndLimits
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SubmarineFeesAndLimits.dcoDecode(raw as List<dynamic>);
+  }
+
   @protected
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -1499,6 +1670,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   ChainSwap dco_decode_box_autoadd_chain_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_chain_swap(raw);
+  }
+
+  @protected
+  Fees dco_decode_box_autoadd_fees(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_fees(raw);
   }
 
   @protected
@@ -1570,6 +1747,34 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainFees dco_decode_chain_fees(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return ChainFees(
+      percentage: dco_decode_f_64(arr[0]),
+      userLockup: dco_decode_u_64(arr[1]),
+      userClaim: dco_decode_u_64(arr[2]),
+      server: dco_decode_u_64(arr[3]),
+    );
+  }
+
+  @protected
+  ChainFeesAndLimits dco_decode_chain_fees_and_limits(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return ChainFeesAndLimits(
+      btcLimits: dco_decode_limits(arr[0]),
+      lbtcLimits: dco_decode_limits(arr[1]),
+      btcChain: dco_decode_chain_fees(arr[2]),
+      lbtcChain: dco_decode_chain_fees(arr[3]),
+    );
+  }
+
+  @protected
   ChainSwap dco_decode_chain_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1616,6 +1821,23 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       cltvExpDelta: dco_decode_u_64(arr[6]),
       bip21: dco_decode_opt_String(arr[7]),
       preimageHash: dco_decode_String(arr[8]),
+    );
+  }
+
+  @protected
+  double dco_decode_f_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as double;
+  }
+
+  @protected
+  Fees dco_decode_fees(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return Fees.raw(
+      boltzUrl: dco_decode_String(arr[0]),
     );
   }
 
@@ -1674,6 +1896,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       electrumUrl: dco_decode_String(arr[10]),
       boltzUrl: dco_decode_String(arr[11]),
       referralId: dco_decode_opt_String(arr[12]),
+    );
+  }
+
+  @protected
+  Limits dco_decode_limits(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return Limits(
+      minimal: dco_decode_u_64(arr[0]),
+      maximal: dco_decode_u_64(arr[1]),
     );
   }
 
@@ -1745,6 +1979,42 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ReverseFeesAndLimits
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ReverseFeesAndLimits.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SubmarineFeesAndLimits
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SubmarineFeesAndLimits.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ReverseFeesAndLimits
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ReverseFeesAndLimits.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SubmarineFeesAndLimits
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SubmarineFeesAndLimits.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
@@ -1782,6 +2052,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   ChainSwap sse_decode_box_autoadd_chain_swap(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_chain_swap(deserializer));
+  }
+
+  @protected
+  Fees sse_decode_box_autoadd_fees(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_fees(deserializer));
   }
 
   @protected
@@ -1866,6 +2142,35 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainFees sse_decode_chain_fees(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_percentage = sse_decode_f_64(deserializer);
+    var var_userLockup = sse_decode_u_64(deserializer);
+    var var_userClaim = sse_decode_u_64(deserializer);
+    var var_server = sse_decode_u_64(deserializer);
+    return ChainFees(
+        percentage: var_percentage,
+        userLockup: var_userLockup,
+        userClaim: var_userClaim,
+        server: var_server);
+  }
+
+  @protected
+  ChainFeesAndLimits sse_decode_chain_fees_and_limits(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_btcLimits = sse_decode_limits(deserializer);
+    var var_lbtcLimits = sse_decode_limits(deserializer);
+    var var_btcChain = sse_decode_chain_fees(deserializer);
+    var var_lbtcChain = sse_decode_chain_fees(deserializer);
+    return ChainFeesAndLimits(
+        btcLimits: var_btcLimits,
+        lbtcLimits: var_lbtcLimits,
+        btcChain: var_btcChain,
+        lbtcChain: var_lbtcChain);
+  }
+
+  @protected
   ChainSwap sse_decode_chain_swap(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_id = sse_decode_String(deserializer);
@@ -1934,6 +2239,19 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  double sse_decode_f_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getFloat64();
+  }
+
+  @protected
+  Fees sse_decode_fees(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_boltzUrl = sse_decode_String(deserializer);
+    return Fees.raw(boltzUrl: var_boltzUrl);
+  }
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
@@ -1998,6 +2316,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         electrumUrl: var_electrumUrl,
         boltzUrl: var_boltzUrl,
         referralId: var_referralId);
+  }
+
+  @protected
+  Limits sse_decode_limits(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_minimal = sse_decode_u_64(deserializer);
+    var var_maximal = sse_decode_u_64(deserializer);
+    return Limits(minimal: var_minimal, maximal: var_maximal);
   }
 
   @protected
@@ -2072,6 +2398,38 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+      ReverseFeesAndLimits raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+// ignore: invalid_use_of_internal_member
+    return raw.cstEncode(move: true);
+  }
+
+  @protected
+  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+      SubmarineFeesAndLimits raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+// ignore: invalid_use_of_internal_member
+    return raw.cstEncode(move: true);
+  }
+
+  @protected
+  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+      ReverseFeesAndLimits raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+// ignore: invalid_use_of_internal_member
+    return raw.cstEncode();
+  }
+
+  @protected
+  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+      SubmarineFeesAndLimits raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+// ignore: invalid_use_of_internal_member
+    return raw.cstEncode();
+  }
+
+  @protected
   bool cst_encode_bool(bool raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
@@ -2087,6 +2445,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   int cst_encode_chain_swap_direction(ChainSwapDirection raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_i_32(raw.index);
+  }
+
+  @protected
+  double cst_encode_f_64(double raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw;
   }
 
   @protected
@@ -2123,6 +2487,38 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   int cst_encode_usize(int raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          ReverseFeesAndLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(self.sseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SubmarineFeesAndLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(self.sseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+          ReverseFeesAndLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(self.sseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+          SubmarineFeesAndLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(self.sseEncode(move: null), serializer);
   }
 
   @protected
@@ -2163,6 +2559,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       ChainSwap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_chain_swap(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_fees(Fees self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_fees(self, serializer);
   }
 
   @protected
@@ -2228,6 +2630,25 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_chain_fees(ChainFees self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_f_64(self.percentage, serializer);
+    sse_encode_u_64(self.userLockup, serializer);
+    sse_encode_u_64(self.userClaim, serializer);
+    sse_encode_u_64(self.server, serializer);
+  }
+
+  @protected
+  void sse_encode_chain_fees_and_limits(
+      ChainFeesAndLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_limits(self.btcLimits, serializer);
+    sse_encode_limits(self.lbtcLimits, serializer);
+    sse_encode_chain_fees(self.btcChain, serializer);
+    sse_encode_chain_fees(self.lbtcChain, serializer);
+  }
+
+  @protected
   void sse_encode_chain_swap(ChainSwap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.id, serializer);
@@ -2267,6 +2688,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_u_64(self.cltvExpDelta, serializer);
     sse_encode_opt_String(self.bip21, serializer);
     sse_encode_String(self.preimageHash, serializer);
+  }
+
+  @protected
+  void sse_encode_f_64(double self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putFloat64(self);
+  }
+
+  @protected
+  void sse_encode_fees(Fees self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.boltzUrl, serializer);
   }
 
   @protected
@@ -2311,6 +2744,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.electrumUrl, serializer);
     sse_encode_String(self.boltzUrl, serializer);
     sse_encode_opt_String(self.referralId, serializer);
+  }
+
+  @protected
+  void sse_encode_limits(Limits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self.minimal, serializer);
+    sse_encode_u_64(self.maximal, serializer);
   }
 
   @protected

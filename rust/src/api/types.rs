@@ -6,7 +6,7 @@ use flutter_rust_bridge::frb;
 //
 use boltz_client::{
     boltz::{
-        ChainFees, GetChainPairsResponse, GetReversePairsResponse, GetSubmarinePairsResponse,
+        GetChainPairsResponse, GetReversePairsResponse, GetSubmarinePairsResponse, PairMinerFees,
         ReverseFees, SubmarineFees,
     },
     network::Chain as BChain,
@@ -186,12 +186,21 @@ impl Into<PreImage> for Preimage {
 }
 
 #[derive(Debug, Clone)]
+#[frb(mirror(SubmarineFees))]
+#[frb(dart_metadata=("freezed"))]
+
+pub struct _SubmarineFees {
+    pub percentage: f64,
+    pub miner_fees: u64,
+}
+
+#[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct SubmarineFeesAndLimits {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
-    pub btc_submarine: SubmarineFees,
-    pub lbtc_submarine: SubmarineFees,
+    pub btc_submarine: _SubmarineFees,
+    pub lbtc_submarine: _SubmarineFees,
 }
 impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
     type Error = BoltzError; // Use a more specific error type in a real application
@@ -211,7 +220,7 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
             minimal: btc_pair.limits.minimal as u64,
             maximal: btc_pair.limits.maximal as u64,
         };
-        let btc_submarine = SubmarineFees {
+        let btc_submarine = _SubmarineFees {
             percentage: btc_pair.fees.percentage,
             miner_fees: btc_pair.fees.miner_fees,
         };
@@ -229,7 +238,7 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
             minimal: lbtc_pair.limits.minimal as u64,
             maximal: lbtc_pair.limits.maximal as u64,
         };
-        let lbtc_submarine = SubmarineFees {
+        let lbtc_submarine = _SubmarineFees {
             percentage: lbtc_pair.fees.percentage,
             miner_fees: lbtc_pair.fees.miner_fees,
         };
@@ -243,13 +252,39 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
 }
 
 #[derive(Debug, Clone)]
+#[frb(mirror(PairMinerFees))]
+#[frb(dart_metadata=("freezed"))]
+
+pub struct _PairMinerFees {
+    pub lockup: u64,
+    pub claim: u64,
+}
+impl Into<_PairMinerFees> for PairMinerFees {
+    fn into(self) -> _PairMinerFees {
+        _PairMinerFees {
+            lockup: self.lockup,
+            claim: self.claim,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+#[frb(mirror(ReverseFees))]
+#[frb(dart_metadata=("freezed"))]
+pub struct _ReverseFees {
+    pub percentage: f64,
+    pub miner_fees: _PairMinerFees,
+}
+
+#[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct ReverseFeesAndLimits {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
-    pub btc_reverse: ReverseFees,
-    pub lbtc_reverse: ReverseFees,
+    pub btc_reverse: _ReverseFees,
+    pub lbtc_reverse: _ReverseFees,
 }
+
 impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
     type Error = BoltzError; // Use a more specific error type in a real application
 
@@ -268,9 +303,9 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
             minimal: btc_pair.limits.minimal as u64,
             maximal: btc_pair.limits.maximal as u64,
         };
-        let btc_reverse = ReverseFees {
+        let btc_reverse = _ReverseFees {
             percentage: btc_pair.fees.percentage,
-            miner_fees: btc_pair.fees.miner_fees,
+            miner_fees: btc_pair.fees.miner_fees.into(),
         };
 
         let lbtc_pair = match self.get_btc_to_lbtc_pair() {
@@ -286,9 +321,9 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
             minimal: lbtc_pair.limits.minimal as u64,
             maximal: lbtc_pair.limits.maximal as u64,
         };
-        let lbtc_reverse = ReverseFees {
+        let lbtc_reverse = _ReverseFees {
             percentage: lbtc_pair.fees.percentage,
-            miner_fees: lbtc_pair.fees.miner_fees,
+            miner_fees: lbtc_pair.fees.miner_fees.into(),
         };
         Ok(ReverseFeesAndLimits {
             btc_limits,
@@ -297,6 +332,15 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
             lbtc_reverse,
         })
     }
+}
+
+#[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
+pub struct ChainFees {
+    pub percentage: f64,
+    pub user_lockup: u64,
+    pub user_claim: u64,
+    pub server: u64,
 }
 
 #[derive(Debug, Clone)]
@@ -327,7 +371,9 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
         };
         let btc_chain = ChainFees {
             percentage: btc_pair.fees.percentage,
-            miner_fees: btc_pair.fees.miner_fees,
+            user_lockup: btc_pair.fees.lockup(),
+            user_claim: btc_pair.fees.claim_estimate(),
+            server: btc_pair.fees.server(),
         };
 
         let lbtc_pair = match self.get_btc_to_lbtc_pair() {
@@ -345,7 +391,9 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
         };
         let lbtc_chain = ChainFees {
             percentage: lbtc_pair.fees.percentage,
-            miner_fees: lbtc_pair.fees.miner_fees,
+            user_lockup: lbtc_pair.fees.lockup(),
+            user_claim: lbtc_pair.fees.claim_estimate(),
+            server: lbtc_pair.fees.server(),
         };
         Ok(ChainFeesAndLimits {
             btc_limits,

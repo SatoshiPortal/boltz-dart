@@ -359,6 +359,415 @@ abstract class _BtcSwapScriptStr extends BtcSwapScriptStr {
 }
 
 /// @nodoc
+mixin _$ChainFees {
+  double get percentage => throw _privateConstructorUsedError;
+  int get userLockup => throw _privateConstructorUsedError;
+  int get userClaim => throw _privateConstructorUsedError;
+  int get server => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ChainFeesCopyWith<ChainFees> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChainFeesCopyWith<$Res> {
+  factory $ChainFeesCopyWith(ChainFees value, $Res Function(ChainFees) then) =
+      _$ChainFeesCopyWithImpl<$Res, ChainFees>;
+  @useResult
+  $Res call({double percentage, int userLockup, int userClaim, int server});
+}
+
+/// @nodoc
+class _$ChainFeesCopyWithImpl<$Res, $Val extends ChainFees>
+    implements $ChainFeesCopyWith<$Res> {
+  _$ChainFeesCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? percentage = null,
+    Object? userLockup = null,
+    Object? userClaim = null,
+    Object? server = null,
+  }) {
+    return _then(_value.copyWith(
+      percentage: null == percentage
+          ? _value.percentage
+          : percentage // ignore: cast_nullable_to_non_nullable
+              as double,
+      userLockup: null == userLockup
+          ? _value.userLockup
+          : userLockup // ignore: cast_nullable_to_non_nullable
+              as int,
+      userClaim: null == userClaim
+          ? _value.userClaim
+          : userClaim // ignore: cast_nullable_to_non_nullable
+              as int,
+      server: null == server
+          ? _value.server
+          : server // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ChainFeesImplCopyWith<$Res>
+    implements $ChainFeesCopyWith<$Res> {
+  factory _$$ChainFeesImplCopyWith(
+          _$ChainFeesImpl value, $Res Function(_$ChainFeesImpl) then) =
+      __$$ChainFeesImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({double percentage, int userLockup, int userClaim, int server});
+}
+
+/// @nodoc
+class __$$ChainFeesImplCopyWithImpl<$Res>
+    extends _$ChainFeesCopyWithImpl<$Res, _$ChainFeesImpl>
+    implements _$$ChainFeesImplCopyWith<$Res> {
+  __$$ChainFeesImplCopyWithImpl(
+      _$ChainFeesImpl _value, $Res Function(_$ChainFeesImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? percentage = null,
+    Object? userLockup = null,
+    Object? userClaim = null,
+    Object? server = null,
+  }) {
+    return _then(_$ChainFeesImpl(
+      percentage: null == percentage
+          ? _value.percentage
+          : percentage // ignore: cast_nullable_to_non_nullable
+              as double,
+      userLockup: null == userLockup
+          ? _value.userLockup
+          : userLockup // ignore: cast_nullable_to_non_nullable
+              as int,
+      userClaim: null == userClaim
+          ? _value.userClaim
+          : userClaim // ignore: cast_nullable_to_non_nullable
+              as int,
+      server: null == server
+          ? _value.server
+          : server // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ChainFeesImpl implements _ChainFees {
+  const _$ChainFeesImpl(
+      {required this.percentage,
+      required this.userLockup,
+      required this.userClaim,
+      required this.server});
+
+  @override
+  final double percentage;
+  @override
+  final int userLockup;
+  @override
+  final int userClaim;
+  @override
+  final int server;
+
+  @override
+  String toString() {
+    return 'ChainFees(percentage: $percentage, userLockup: $userLockup, userClaim: $userClaim, server: $server)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChainFeesImpl &&
+            (identical(other.percentage, percentage) ||
+                other.percentage == percentage) &&
+            (identical(other.userLockup, userLockup) ||
+                other.userLockup == userLockup) &&
+            (identical(other.userClaim, userClaim) ||
+                other.userClaim == userClaim) &&
+            (identical(other.server, server) || other.server == server));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, percentage, userLockup, userClaim, server);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChainFeesImplCopyWith<_$ChainFeesImpl> get copyWith =>
+      __$$ChainFeesImplCopyWithImpl<_$ChainFeesImpl>(this, _$identity);
+}
+
+abstract class _ChainFees implements ChainFees {
+  const factory _ChainFees(
+      {required final double percentage,
+      required final int userLockup,
+      required final int userClaim,
+      required final int server}) = _$ChainFeesImpl;
+
+  @override
+  double get percentage;
+  @override
+  int get userLockup;
+  @override
+  int get userClaim;
+  @override
+  int get server;
+  @override
+  @JsonKey(ignore: true)
+  _$$ChainFeesImplCopyWith<_$ChainFeesImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$ChainFeesAndLimits {
+  Limits get btcLimits => throw _privateConstructorUsedError;
+  Limits get lbtcLimits => throw _privateConstructorUsedError;
+  ChainFees get btcChain => throw _privateConstructorUsedError;
+  ChainFees get lbtcChain => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ChainFeesAndLimitsCopyWith<ChainFeesAndLimits> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChainFeesAndLimitsCopyWith<$Res> {
+  factory $ChainFeesAndLimitsCopyWith(
+          ChainFeesAndLimits value, $Res Function(ChainFeesAndLimits) then) =
+      _$ChainFeesAndLimitsCopyWithImpl<$Res, ChainFeesAndLimits>;
+  @useResult
+  $Res call(
+      {Limits btcLimits,
+      Limits lbtcLimits,
+      ChainFees btcChain,
+      ChainFees lbtcChain});
+
+  $LimitsCopyWith<$Res> get btcLimits;
+  $LimitsCopyWith<$Res> get lbtcLimits;
+  $ChainFeesCopyWith<$Res> get btcChain;
+  $ChainFeesCopyWith<$Res> get lbtcChain;
+}
+
+/// @nodoc
+class _$ChainFeesAndLimitsCopyWithImpl<$Res, $Val extends ChainFeesAndLimits>
+    implements $ChainFeesAndLimitsCopyWith<$Res> {
+  _$ChainFeesAndLimitsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? btcLimits = null,
+    Object? lbtcLimits = null,
+    Object? btcChain = null,
+    Object? lbtcChain = null,
+  }) {
+    return _then(_value.copyWith(
+      btcLimits: null == btcLimits
+          ? _value.btcLimits
+          : btcLimits // ignore: cast_nullable_to_non_nullable
+              as Limits,
+      lbtcLimits: null == lbtcLimits
+          ? _value.lbtcLimits
+          : lbtcLimits // ignore: cast_nullable_to_non_nullable
+              as Limits,
+      btcChain: null == btcChain
+          ? _value.btcChain
+          : btcChain // ignore: cast_nullable_to_non_nullable
+              as ChainFees,
+      lbtcChain: null == lbtcChain
+          ? _value.lbtcChain
+          : lbtcChain // ignore: cast_nullable_to_non_nullable
+              as ChainFees,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $LimitsCopyWith<$Res> get btcLimits {
+    return $LimitsCopyWith<$Res>(_value.btcLimits, (value) {
+      return _then(_value.copyWith(btcLimits: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $LimitsCopyWith<$Res> get lbtcLimits {
+    return $LimitsCopyWith<$Res>(_value.lbtcLimits, (value) {
+      return _then(_value.copyWith(lbtcLimits: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ChainFeesCopyWith<$Res> get btcChain {
+    return $ChainFeesCopyWith<$Res>(_value.btcChain, (value) {
+      return _then(_value.copyWith(btcChain: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ChainFeesCopyWith<$Res> get lbtcChain {
+    return $ChainFeesCopyWith<$Res>(_value.lbtcChain, (value) {
+      return _then(_value.copyWith(lbtcChain: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ChainFeesAndLimitsImplCopyWith<$Res>
+    implements $ChainFeesAndLimitsCopyWith<$Res> {
+  factory _$$ChainFeesAndLimitsImplCopyWith(_$ChainFeesAndLimitsImpl value,
+          $Res Function(_$ChainFeesAndLimitsImpl) then) =
+      __$$ChainFeesAndLimitsImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Limits btcLimits,
+      Limits lbtcLimits,
+      ChainFees btcChain,
+      ChainFees lbtcChain});
+
+  @override
+  $LimitsCopyWith<$Res> get btcLimits;
+  @override
+  $LimitsCopyWith<$Res> get lbtcLimits;
+  @override
+  $ChainFeesCopyWith<$Res> get btcChain;
+  @override
+  $ChainFeesCopyWith<$Res> get lbtcChain;
+}
+
+/// @nodoc
+class __$$ChainFeesAndLimitsImplCopyWithImpl<$Res>
+    extends _$ChainFeesAndLimitsCopyWithImpl<$Res, _$ChainFeesAndLimitsImpl>
+    implements _$$ChainFeesAndLimitsImplCopyWith<$Res> {
+  __$$ChainFeesAndLimitsImplCopyWithImpl(_$ChainFeesAndLimitsImpl _value,
+      $Res Function(_$ChainFeesAndLimitsImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? btcLimits = null,
+    Object? lbtcLimits = null,
+    Object? btcChain = null,
+    Object? lbtcChain = null,
+  }) {
+    return _then(_$ChainFeesAndLimitsImpl(
+      btcLimits: null == btcLimits
+          ? _value.btcLimits
+          : btcLimits // ignore: cast_nullable_to_non_nullable
+              as Limits,
+      lbtcLimits: null == lbtcLimits
+          ? _value.lbtcLimits
+          : lbtcLimits // ignore: cast_nullable_to_non_nullable
+              as Limits,
+      btcChain: null == btcChain
+          ? _value.btcChain
+          : btcChain // ignore: cast_nullable_to_non_nullable
+              as ChainFees,
+      lbtcChain: null == lbtcChain
+          ? _value.lbtcChain
+          : lbtcChain // ignore: cast_nullable_to_non_nullable
+              as ChainFees,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ChainFeesAndLimitsImpl implements _ChainFeesAndLimits {
+  const _$ChainFeesAndLimitsImpl(
+      {required this.btcLimits,
+      required this.lbtcLimits,
+      required this.btcChain,
+      required this.lbtcChain});
+
+  @override
+  final Limits btcLimits;
+  @override
+  final Limits lbtcLimits;
+  @override
+  final ChainFees btcChain;
+  @override
+  final ChainFees lbtcChain;
+
+  @override
+  String toString() {
+    return 'ChainFeesAndLimits(btcLimits: $btcLimits, lbtcLimits: $lbtcLimits, btcChain: $btcChain, lbtcChain: $lbtcChain)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChainFeesAndLimitsImpl &&
+            (identical(other.btcLimits, btcLimits) ||
+                other.btcLimits == btcLimits) &&
+            (identical(other.lbtcLimits, lbtcLimits) ||
+                other.lbtcLimits == lbtcLimits) &&
+            (identical(other.btcChain, btcChain) ||
+                other.btcChain == btcChain) &&
+            (identical(other.lbtcChain, lbtcChain) ||
+                other.lbtcChain == lbtcChain));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, btcLimits, lbtcLimits, btcChain, lbtcChain);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChainFeesAndLimitsImplCopyWith<_$ChainFeesAndLimitsImpl> get copyWith =>
+      __$$ChainFeesAndLimitsImplCopyWithImpl<_$ChainFeesAndLimitsImpl>(
+          this, _$identity);
+}
+
+abstract class _ChainFeesAndLimits implements ChainFeesAndLimits {
+  const factory _ChainFeesAndLimits(
+      {required final Limits btcLimits,
+      required final Limits lbtcLimits,
+      required final ChainFees btcChain,
+      required final ChainFees lbtcChain}) = _$ChainFeesAndLimitsImpl;
+
+  @override
+  Limits get btcLimits;
+  @override
+  Limits get lbtcLimits;
+  @override
+  ChainFees get btcChain;
+  @override
+  ChainFees get lbtcChain;
+  @override
+  @JsonKey(ignore: true)
+  _$$ChainFeesAndLimitsImplCopyWith<_$ChainFeesAndLimitsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$DecodedInvoice {
   int get msats => throw _privateConstructorUsedError;
   int get expiry => throw _privateConstructorUsedError;
@@ -1260,6 +1669,137 @@ abstract class _LBtcSwapScriptStr extends LBtcSwapScriptStr {
   @override
   @JsonKey(ignore: true)
   _$$LBtcSwapScriptStrImplCopyWith<_$LBtcSwapScriptStrImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$Limits {
+  int get minimal => throw _privateConstructorUsedError;
+  int get maximal => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $LimitsCopyWith<Limits> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LimitsCopyWith<$Res> {
+  factory $LimitsCopyWith(Limits value, $Res Function(Limits) then) =
+      _$LimitsCopyWithImpl<$Res, Limits>;
+  @useResult
+  $Res call({int minimal, int maximal});
+}
+
+/// @nodoc
+class _$LimitsCopyWithImpl<$Res, $Val extends Limits>
+    implements $LimitsCopyWith<$Res> {
+  _$LimitsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? minimal = null,
+    Object? maximal = null,
+  }) {
+    return _then(_value.copyWith(
+      minimal: null == minimal
+          ? _value.minimal
+          : minimal // ignore: cast_nullable_to_non_nullable
+              as int,
+      maximal: null == maximal
+          ? _value.maximal
+          : maximal // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LimitsImplCopyWith<$Res> implements $LimitsCopyWith<$Res> {
+  factory _$$LimitsImplCopyWith(
+          _$LimitsImpl value, $Res Function(_$LimitsImpl) then) =
+      __$$LimitsImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int minimal, int maximal});
+}
+
+/// @nodoc
+class __$$LimitsImplCopyWithImpl<$Res>
+    extends _$LimitsCopyWithImpl<$Res, _$LimitsImpl>
+    implements _$$LimitsImplCopyWith<$Res> {
+  __$$LimitsImplCopyWithImpl(
+      _$LimitsImpl _value, $Res Function(_$LimitsImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? minimal = null,
+    Object? maximal = null,
+  }) {
+    return _then(_$LimitsImpl(
+      minimal: null == minimal
+          ? _value.minimal
+          : minimal // ignore: cast_nullable_to_non_nullable
+              as int,
+      maximal: null == maximal
+          ? _value.maximal
+          : maximal // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LimitsImpl implements _Limits {
+  const _$LimitsImpl({required this.minimal, required this.maximal});
+
+  @override
+  final int minimal;
+  @override
+  final int maximal;
+
+  @override
+  String toString() {
+    return 'Limits(minimal: $minimal, maximal: $maximal)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LimitsImpl &&
+            (identical(other.minimal, minimal) || other.minimal == minimal) &&
+            (identical(other.maximal, maximal) || other.maximal == maximal));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, minimal, maximal);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LimitsImplCopyWith<_$LimitsImpl> get copyWith =>
+      __$$LimitsImplCopyWithImpl<_$LimitsImpl>(this, _$identity);
+}
+
+abstract class _Limits implements Limits {
+  const factory _Limits(
+      {required final int minimal, required final int maximal}) = _$LimitsImpl;
+
+  @override
+  int get minimal;
+  @override
+  int get maximal;
+  @override
+  @JsonKey(ignore: true)
+  _$$LimitsImplCopyWith<_$LimitsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

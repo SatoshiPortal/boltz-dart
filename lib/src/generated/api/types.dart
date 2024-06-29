@@ -9,10 +9,47 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'types.freezed.dart';
 
-// The type `ChainFeesAndLimits` is not used by any `pub` functions, thus it is ignored.
-// The type `Limits` is not used by any `pub` functions, thus it is ignored.
-// The type `ReverseFeesAndLimits` is not used by any `pub` functions, thus it is ignored.
-// The type `SubmarineFeesAndLimits` is not used by any `pub` functions, thus it is ignored.
+// The type `PairMinerFees` is not used by any `pub` functions, thus it is ignored.
+// The type `ReverseFees` is not used by any `pub` functions, thus it is ignored.
+// The type `SubmarineFees` is not used by any `pub` functions, thus it is ignored.
+
+// Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>
+@sealed
+class ReverseFeesAndLimits extends RustOpaque {
+  ReverseFeesAndLimits.dcoDecode(List<dynamic> wire)
+      : super.dcoDecode(wire, _kStaticData);
+
+  ReverseFeesAndLimits.sseDecode(int ptr, int externalSizeOnNative)
+      : super.sseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: BoltzCore
+        .instance.api.rust_arc_increment_strong_count_ReverseFeesAndLimits,
+    rustArcDecrementStrongCount: BoltzCore
+        .instance.api.rust_arc_decrement_strong_count_ReverseFeesAndLimits,
+    rustArcDecrementStrongCountPtr: BoltzCore
+        .instance.api.rust_arc_decrement_strong_count_ReverseFeesAndLimitsPtr,
+  );
+}
+
+// Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>
+@sealed
+class SubmarineFeesAndLimits extends RustOpaque {
+  SubmarineFeesAndLimits.dcoDecode(List<dynamic> wire)
+      : super.dcoDecode(wire, _kStaticData);
+
+  SubmarineFeesAndLimits.sseDecode(int ptr, int externalSizeOnNative)
+      : super.sseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: BoltzCore
+        .instance.api.rust_arc_increment_strong_count_SubmarineFeesAndLimits,
+    rustArcDecrementStrongCount: BoltzCore
+        .instance.api.rust_arc_decrement_strong_count_SubmarineFeesAndLimits,
+    rustArcDecrementStrongCountPtr: BoltzCore
+        .instance.api.rust_arc_decrement_strong_count_SubmarineFeesAndLimitsPtr,
+  );
+}
 
 @freezed
 class BtcSwapScriptStr with _$BtcSwapScriptStr {
@@ -48,6 +85,26 @@ enum Chain {
   bitcoinTestnet,
   liquid,
   liquidTestnet,
+}
+
+@freezed
+class ChainFees with _$ChainFees {
+  const factory ChainFees({
+    required double percentage,
+    required int userLockup,
+    required int userClaim,
+    required int server,
+  }) = _ChainFees;
+}
+
+@freezed
+class ChainFeesAndLimits with _$ChainFeesAndLimits {
+  const factory ChainFeesAndLimits({
+    required Limits btcLimits,
+    required Limits lbtcLimits,
+    required ChainFees btcChain,
+    required ChainFees lbtcChain,
+  }) = _ChainFeesAndLimits;
 }
 
 enum ChainSwapDirection {
@@ -135,6 +192,14 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
           senderPubkey: senderPubkey,
           blindingKey: blindingKey,
           hint: hint);
+}
+
+@freezed
+class Limits with _$Limits {
+  const factory Limits({
+    required int minimal,
+    required int maximal,
+  }) = _Limits;
 }
 
 @freezed

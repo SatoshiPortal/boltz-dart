@@ -255,7 +255,6 @@ impl ChainSwap {
             }
         }
     }
-
     pub fn claim(
         &self,
         out_address: String,
@@ -382,7 +381,6 @@ impl ChainSwap {
             }
         }
     }
-
     pub fn refund(
         &self,
         refund_address: String,

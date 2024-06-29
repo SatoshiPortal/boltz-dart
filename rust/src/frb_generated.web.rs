@@ -4,6 +4,7 @@
 // Section: imports
 
 use super::*;
+use crate::api::types::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::transform_result_dco;
 use flutter_rust_bridge::for_generated::wasm_bindgen;
@@ -96,6 +97,50 @@ impl CstDecode<crate::api::types::BtcSwapScriptStr>
         }
     }
 }
+impl CstDecode<crate::api::types::ChainFees>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::ChainFees {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            4,
+            "Expected 4 elements, got {}",
+            self_.length()
+        );
+        crate::api::types::ChainFees {
+            percentage: self_.get(0).cst_decode(),
+            user_lockup: self_.get(1).cst_decode(),
+            user_claim: self_.get(2).cst_decode(),
+            server: self_.get(3).cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::types::ChainFeesAndLimits>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::ChainFeesAndLimits {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            4,
+            "Expected 4 elements, got {}",
+            self_.length()
+        );
+        crate::api::types::ChainFeesAndLimits {
+            btc_limits: self_.get(0).cst_decode(),
+            lbtc_limits: self_.get(1).cst_decode(),
+            btc_chain: self_.get(2).cst_decode(),
+            lbtc_chain: self_.get(3).cst_decode(),
+        }
+    }
+}
 impl CstDecode<crate::api::chain_swap::ChainSwap>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
@@ -153,6 +198,25 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             cltv_exp_delta: self_.get(6).cst_decode(),
             bip21: self_.get(7).cst_decode(),
             preimage_hash: self_.get(8).cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::fees::Fees>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::fees::Fees {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            1,
+            "Expected 1 elements, got {}",
+            self_.length()
+        );
+        crate::api::fees::Fees {
+            boltz_url: self_.get(0).cst_decode(),
         }
     }
 }
@@ -232,6 +296,26 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>
         }
     }
 }
+impl CstDecode<crate::api::types::Limits>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::Limits {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            2,
+            "Expected 2 elements, got {}",
+            self_.length()
+        );
+        crate::api::types::Limits {
+            minimal: self_.get(0).cst_decode(),
+            maximal: self_.get(1).cst_decode(),
+        }
+    }
+}
 impl CstDecode<Vec<u8>> for Box<[u8]> {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> Vec<u8> {
@@ -265,6 +349,66 @@ impl CstDecode<crate::api::types::PreImage>
         }
     }
 }
+impl CstDecode<ReverseFeesAndLimits> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> ReverseFeesAndLimits {
+        CstDecode::<
+            RustOpaqueNom<
+                flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>,
+            >,
+        >::cst_decode(self)
+        .rust_auto_opaque_decode_owned()
+    }
+}
+impl CstDecode<SubmarineFeesAndLimits>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> SubmarineFeesAndLimits {
+        CstDecode::<
+            RustOpaqueNom<
+                flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>,
+            >,
+        >::cst_decode(self)
+        .rust_auto_opaque_decode_owned()
+    }
+}
+impl
+    CstDecode<
+        RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>,
+    > for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(
+        self,
+    ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>
+    {
+        #[cfg(target_pointer_width = "64")]
+        {
+            compile_error!("64-bit pointers are not supported.");
+        }
+        unsafe { decode_rust_opaque_nom((self.as_f64().unwrap() as usize) as _) }
+    }
+}
+impl
+    CstDecode<
+        RustOpaqueNom<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>,
+        >,
+    > for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(
+        self,
+    ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>
+    {
+        #[cfg(target_pointer_width = "64")]
+        {
+            compile_error!("64-bit pointers are not supported.");
+        }
+        unsafe { decode_rust_opaque_nom((self.as_f64().unwrap() as usize) as _) }
+    }
+}
 impl CstDecode<String> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> String {
@@ -291,6 +435,12 @@ impl CstDecode<crate::api::types::ChainSwapDirection>
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::ChainSwapDirection {
         (self.unchecked_into_f64() as i32).cst_decode()
+    }
+}
+impl CstDecode<f64> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> f64 {
+        self.unchecked_into_f64() as _
     }
 }
 impl CstDecode<i32> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
@@ -569,6 +719,37 @@ pub fn wire_boltz_error_new(
 }
 
 #[wasm_bindgen]
+pub fn wire_fees_chain(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_fees_chain_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire_fees_new(
+    boltz_url: String,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    wire_fees_new_impl(boltz_url)
+}
+
+#[wasm_bindgen]
+pub fn wire_fees_reverse(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_fees_reverse_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire_fees_submarine(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_fees_submarine_impl(port_, that)
+}
+
+#[wasm_bindgen]
 pub fn wire_lbtc_ln_swap_broadcast_tx(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
@@ -800,4 +981,40 @@ pub fn wire_pre_image_new(
     hash160: String,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_pre_image_new_impl(value, sha256, hash160)
+}
+
+#[wasm_bindgen]
+pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>::increment_strong_count(ptr as _);
+    }
+}
+
+#[wasm_bindgen]
+pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>::decrement_strong_count(ptr as _);
+    }
+}
+
+#[wasm_bindgen]
+pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>::increment_strong_count(ptr as _);
+    }
+}
+
+#[wasm_bindgen]
+pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        StdArc::<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>::decrement_strong_count(ptr as _);
+    }
 }
