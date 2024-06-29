@@ -9,48 +9,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'types.freezed.dart';
 
-// The type `PairMinerFees` is not used by any `pub` functions, thus it is ignored.
-// The type `ReverseFees` is not used by any `pub` functions, thus it is ignored.
-// The type `SubmarineFees` is not used by any `pub` functions, thus it is ignored.
-
-// Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<ReverseFeesAndLimits>>
-@sealed
-class ReverseFeesAndLimits extends RustOpaque {
-  ReverseFeesAndLimits.dcoDecode(List<dynamic> wire)
-      : super.dcoDecode(wire, _kStaticData);
-
-  ReverseFeesAndLimits.sseDecode(int ptr, int externalSizeOnNative)
-      : super.sseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: BoltzCore
-        .instance.api.rust_arc_increment_strong_count_ReverseFeesAndLimits,
-    rustArcDecrementStrongCount: BoltzCore
-        .instance.api.rust_arc_decrement_strong_count_ReverseFeesAndLimits,
-    rustArcDecrementStrongCountPtr: BoltzCore
-        .instance.api.rust_arc_decrement_strong_count_ReverseFeesAndLimitsPtr,
-  );
-}
-
-// Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::rust_async::RwLock<SubmarineFeesAndLimits>>
-@sealed
-class SubmarineFeesAndLimits extends RustOpaque {
-  SubmarineFeesAndLimits.dcoDecode(List<dynamic> wire)
-      : super.dcoDecode(wire, _kStaticData);
-
-  SubmarineFeesAndLimits.sseDecode(int ptr, int externalSizeOnNative)
-      : super.sseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: BoltzCore
-        .instance.api.rust_arc_increment_strong_count_SubmarineFeesAndLimits,
-    rustArcDecrementStrongCount: BoltzCore
-        .instance.api.rust_arc_decrement_strong_count_SubmarineFeesAndLimits,
-    rustArcDecrementStrongCountPtr: BoltzCore
-        .instance.api.rust_arc_decrement_strong_count_SubmarineFeesAndLimitsPtr,
-  );
-}
-
 @freezed
 class BtcSwapScriptStr with _$BtcSwapScriptStr {
   const BtcSwapScriptStr._();
@@ -88,28 +46,28 @@ enum Chain {
 }
 
 @freezed
-class ChainFees with _$ChainFees {
-  const factory ChainFees({
-    required double percentage,
-    required int userLockup,
-    required int userClaim,
-    required int server,
-  }) = _ChainFees;
-}
-
-@freezed
 class ChainFeesAndLimits with _$ChainFeesAndLimits {
   const factory ChainFeesAndLimits({
-    required Limits btcLimits,
-    required Limits lbtcLimits,
-    required ChainFees btcFees,
-    required ChainFees lbtcFees,
+    required SwapLimits btcLimits,
+    required SwapLimits lbtcLimits,
+    required ChainSwapFees btcFees,
+    required ChainSwapFees lbtcFees,
   }) = _ChainFeesAndLimits;
 }
 
 enum ChainSwapDirection {
   btcToLbtc,
   lbtcToBtc,
+}
+
+@freezed
+class ChainSwapFees with _$ChainSwapFees {
+  const factory ChainSwapFees({
+    required double percentage,
+    required int userLockup,
+    required int userClaim,
+    required int server,
+  }) = _ChainSwapFees;
 }
 
 @freezed
@@ -195,11 +153,11 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
 }
 
 @freezed
-class Limits with _$Limits {
-  const factory Limits({
-    required int minimal,
-    required int maximal,
-  }) = _Limits;
+class MinerFees with _$MinerFees {
+  const factory MinerFees({
+    required int lockup,
+    required int claim,
+  }) = _MinerFees;
 }
 
 @freezed
@@ -220,6 +178,50 @@ class PreImage with _$PreImage {
           dynamic hint}) =>
       BoltzCore.instance.api.preImageNew(
           value: value, sha256: sha256, hash160: hash160, hint: hint);
+}
+
+@freezed
+class RevSwapFees with _$RevSwapFees {
+  const factory RevSwapFees({
+    required double percentage,
+    required MinerFees minerFees,
+  }) = _RevSwapFees;
+}
+
+@freezed
+class ReverseFeesAndLimits with _$ReverseFeesAndLimits {
+  const factory ReverseFeesAndLimits({
+    required SwapLimits btcLimits,
+    required SwapLimits lbtcLimits,
+    required RevSwapFees btcFees,
+    required RevSwapFees lbtcFees,
+  }) = _ReverseFeesAndLimits;
+}
+
+@freezed
+class SubSwapFees with _$SubSwapFees {
+  const factory SubSwapFees({
+    required double percentage,
+    required int minerFees,
+  }) = _SubSwapFees;
+}
+
+@freezed
+class SubmarineFeesAndLimits with _$SubmarineFeesAndLimits {
+  const factory SubmarineFeesAndLimits({
+    required SwapLimits btcLimits,
+    required SwapLimits lbtcLimits,
+    required SubSwapFees btcFees,
+    required SubSwapFees lbtcFees,
+  }) = _SubmarineFeesAndLimits;
+}
+
+@freezed
+class SwapLimits with _$SwapLimits {
+  const factory SwapLimits({
+    required int minimal,
+    required int maximal,
+  }) = _SwapLimits;
 }
 
 enum SwapType {

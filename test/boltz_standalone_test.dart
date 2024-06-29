@@ -264,7 +264,7 @@ void main() {
           const boltzUrl = 'https://api.testnet.boltz.exchange';
           final fees = Fees(boltzUrl: boltzUrl);
           final rev_fees = await fees.reverse();
-          final claimFeesEstimate = rev_fees.miner_fees.claim;
+          final claimFeesEstimate = rev_fees.btcFees.minerFees.claim;
 
           String txnId = await btcLnReverse.claim(
             outAddress: btcReceiveAddress,
@@ -356,7 +356,7 @@ void main() {
           final rev_fees = await fees.reverse();
           String txnId = await lbtcLnReverseSwap.claim(
             outAddress: outAddress,
-            absFee: rev_fees.miner_fees.claim,
+            absFee: rev_fees.lbtcFees.minerFees.claim,
             tryCooperate: true,
           );
           print(txnId);

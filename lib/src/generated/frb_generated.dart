@@ -173,7 +173,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<ChainFeesAndLimits> feesChain({required Fees that, dynamic hint});
 
-  Fees feesNew({required String boltzUrl, dynamic hint});
+  Future<Fees> feesNew({required String boltzUrl, dynamic hint});
 
   Future<ReverseFeesAndLimits> feesReverse({required Fees that, dynamic hint});
 
@@ -292,24 +292,6 @@ abstract class BoltzCoreApi extends BaseApi {
       required String sha256,
       required String hash160,
       dynamic hint});
-
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_ReverseFeesAndLimits;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_ReverseFeesAndLimits;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_ReverseFeesAndLimitsPtr;
-
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_SubmarineFeesAndLimits;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_SubmarineFeesAndLimits;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_SubmarineFeesAndLimitsPtr;
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -884,15 +866,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Fees feesNew({required String boltzUrl, dynamic hint}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
+  Future<Fees> feesNew({required String boltzUrl, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
         var arg0 = cst_encode_String(boltzUrl);
-        return wire.wire_fees_new(arg0);
+        return wire.wire_fees_new(port_, arg0);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_fees,
-        decodeErrorData: dco_decode_unit,
+        decodeErrorData: null,
       ),
       constMeta: kFeesNewConstMeta,
       argValues: [boltzUrl],
@@ -914,8 +896,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         return wire.wire_fees_reverse(port_, arg0);
       },
       codec: DcoCodec(
-        decodeSuccessData:
-            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits,
+        decodeSuccessData: dco_decode_reverse_fees_and_limits,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kFeesReverseConstMeta,
@@ -939,8 +920,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         return wire.wire_fees_submarine(port_, arg0);
       },
       codec: DcoCodec(
-        decodeSuccessData:
-            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits,
+        decodeSuccessData: dco_decode_submarine_fees_and_limits,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kFeesSubmarineConstMeta,
@@ -1582,54 +1562,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         argNames: ["value", "sha256", "hash160"],
       );
 
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_ReverseFeesAndLimits => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_ReverseFeesAndLimits => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits;
-
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_SubmarineFeesAndLimits => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_SubmarineFeesAndLimits => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits;
-
-  @protected
-  ReverseFeesAndLimits
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return ReverseFeesAndLimits.dcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  SubmarineFeesAndLimits
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SubmarineFeesAndLimits.dcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  ReverseFeesAndLimits
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return ReverseFeesAndLimits.dcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  SubmarineFeesAndLimits
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SubmarineFeesAndLimits.dcoDecode(raw as List<dynamic>);
-  }
-
   @protected
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -1747,30 +1679,16 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  ChainFees dco_decode_chain_fees(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
-    return ChainFees(
-      percentage: dco_decode_f_64(arr[0]),
-      userLockup: dco_decode_u_64(arr[1]),
-      userClaim: dco_decode_u_64(arr[2]),
-      server: dco_decode_u_64(arr[3]),
-    );
-  }
-
-  @protected
   ChainFeesAndLimits dco_decode_chain_fees_and_limits(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 4)
       throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return ChainFeesAndLimits(
-      btcLimits: dco_decode_limits(arr[0]),
-      lbtcLimits: dco_decode_limits(arr[1]),
-      btcFees: dco_decode_chain_fees(arr[2]),
-      lbtcFees: dco_decode_chain_fees(arr[3]),
+      btcLimits: dco_decode_swap_limits(arr[0]),
+      lbtcLimits: dco_decode_swap_limits(arr[1]),
+      btcFees: dco_decode_chain_swap_fees(arr[2]),
+      lbtcFees: dco_decode_chain_swap_fees(arr[3]),
     );
   }
 
@@ -1806,6 +1724,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainSwapFees dco_decode_chain_swap_fees(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return ChainSwapFees(
+      percentage: dco_decode_f_64(arr[0]),
+      userLockup: dco_decode_u_64(arr[1]),
+      userClaim: dco_decode_u_64(arr[2]),
+      server: dco_decode_u_64(arr[3]),
+    );
+  }
+
+  @protected
   DecodedInvoice dco_decode_decoded_invoice(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1836,7 +1768,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     final arr = raw as List<dynamic>;
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return Fees.raw(
+    return Fees(
       boltzUrl: dco_decode_String(arr[0]),
     );
   }
@@ -1900,18 +1832,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  Limits dco_decode_limits(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return Limits(
-      minimal: dco_decode_u_64(arr[0]),
-      maximal: dco_decode_u_64(arr[1]),
-    );
-  }
-
-  @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as List<int>;
@@ -1921,6 +1841,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  MinerFees dco_decode_miner_fees(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return MinerFees(
+      lockup: dco_decode_u_64(arr[0]),
+      claim: dco_decode_u_64(arr[1]),
+    );
   }
 
   @protected
@@ -1939,6 +1871,70 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       value: dco_decode_String(arr[0]),
       sha256: dco_decode_String(arr[1]),
       hash160: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  RevSwapFees dco_decode_rev_swap_fees(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return RevSwapFees(
+      percentage: dco_decode_f_64(arr[0]),
+      minerFees: dco_decode_miner_fees(arr[1]),
+    );
+  }
+
+  @protected
+  ReverseFeesAndLimits dco_decode_reverse_fees_and_limits(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return ReverseFeesAndLimits(
+      btcLimits: dco_decode_swap_limits(arr[0]),
+      lbtcLimits: dco_decode_swap_limits(arr[1]),
+      btcFees: dco_decode_rev_swap_fees(arr[2]),
+      lbtcFees: dco_decode_rev_swap_fees(arr[3]),
+    );
+  }
+
+  @protected
+  SubSwapFees dco_decode_sub_swap_fees(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return SubSwapFees(
+      percentage: dco_decode_f_64(arr[0]),
+      minerFees: dco_decode_u_64(arr[1]),
+    );
+  }
+
+  @protected
+  SubmarineFeesAndLimits dco_decode_submarine_fees_and_limits(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return SubmarineFeesAndLimits(
+      btcLimits: dco_decode_swap_limits(arr[0]),
+      lbtcLimits: dco_decode_swap_limits(arr[1]),
+      btcFees: dco_decode_sub_swap_fees(arr[2]),
+      lbtcFees: dco_decode_sub_swap_fees(arr[3]),
+    );
+  }
+
+  @protected
+  SwapLimits dco_decode_swap_limits(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return SwapLimits(
+      minimal: dco_decode_u_64(arr[0]),
+      maximal: dco_decode_u_64(arr[1]),
     );
   }
 
@@ -1976,42 +1972,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   int dco_decode_usize(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dcoDecodeI64OrU64(raw);
-  }
-
-  @protected
-  ReverseFeesAndLimits
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return ReverseFeesAndLimits.sseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  SubmarineFeesAndLimits
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return SubmarineFeesAndLimits.sseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  ReverseFeesAndLimits
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return ReverseFeesAndLimits.sseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  SubmarineFeesAndLimits
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return SubmarineFeesAndLimits.sseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
@@ -2142,27 +2102,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  ChainFees sse_decode_chain_fees(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_percentage = sse_decode_f_64(deserializer);
-    var var_userLockup = sse_decode_u_64(deserializer);
-    var var_userClaim = sse_decode_u_64(deserializer);
-    var var_server = sse_decode_u_64(deserializer);
-    return ChainFees(
-        percentage: var_percentage,
-        userLockup: var_userLockup,
-        userClaim: var_userClaim,
-        server: var_server);
-  }
-
-  @protected
   ChainFeesAndLimits sse_decode_chain_fees_and_limits(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_btcLimits = sse_decode_limits(deserializer);
-    var var_lbtcLimits = sse_decode_limits(deserializer);
-    var var_btcFees = sse_decode_chain_fees(deserializer);
-    var var_lbtcFees = sse_decode_chain_fees(deserializer);
+    var var_btcLimits = sse_decode_swap_limits(deserializer);
+    var var_lbtcLimits = sse_decode_swap_limits(deserializer);
+    var var_btcFees = sse_decode_chain_swap_fees(deserializer);
+    var var_lbtcFees = sse_decode_chain_swap_fees(deserializer);
     return ChainFeesAndLimits(
         btcLimits: var_btcLimits,
         lbtcLimits: var_lbtcLimits,
@@ -2215,6 +2161,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainSwapFees sse_decode_chain_swap_fees(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_percentage = sse_decode_f_64(deserializer);
+    var var_userLockup = sse_decode_u_64(deserializer);
+    var var_userClaim = sse_decode_u_64(deserializer);
+    var var_server = sse_decode_u_64(deserializer);
+    return ChainSwapFees(
+        percentage: var_percentage,
+        userLockup: var_userLockup,
+        userClaim: var_userClaim,
+        server: var_server);
+  }
+
+  @protected
   DecodedInvoice sse_decode_decoded_invoice(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_msats = sse_decode_u_64(deserializer);
@@ -2248,7 +2208,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Fees sse_decode_fees(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_boltzUrl = sse_decode_String(deserializer);
-    return Fees.raw(boltzUrl: var_boltzUrl);
+    return Fees(boltzUrl: var_boltzUrl);
   }
 
   @protected
@@ -2319,14 +2279,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  Limits sse_decode_limits(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_minimal = sse_decode_u_64(deserializer);
-    var var_maximal = sse_decode_u_64(deserializer);
-    return Limits(minimal: var_minimal, maximal: var_maximal);
-  }
-
-  @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
@@ -2338,6 +2290,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  MinerFees sse_decode_miner_fees(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_lockup = sse_decode_u_64(deserializer);
+    var var_claim = sse_decode_u_64(deserializer);
+    return MinerFees(lockup: var_lockup, claim: var_claim);
   }
 
   @protected
@@ -2359,6 +2319,60 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_hash160 = sse_decode_String(deserializer);
     return PreImage.raw(
         value: var_value, sha256: var_sha256, hash160: var_hash160);
+  }
+
+  @protected
+  RevSwapFees sse_decode_rev_swap_fees(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_percentage = sse_decode_f_64(deserializer);
+    var var_minerFees = sse_decode_miner_fees(deserializer);
+    return RevSwapFees(percentage: var_percentage, minerFees: var_minerFees);
+  }
+
+  @protected
+  ReverseFeesAndLimits sse_decode_reverse_fees_and_limits(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_btcLimits = sse_decode_swap_limits(deserializer);
+    var var_lbtcLimits = sse_decode_swap_limits(deserializer);
+    var var_btcFees = sse_decode_rev_swap_fees(deserializer);
+    var var_lbtcFees = sse_decode_rev_swap_fees(deserializer);
+    return ReverseFeesAndLimits(
+        btcLimits: var_btcLimits,
+        lbtcLimits: var_lbtcLimits,
+        btcFees: var_btcFees,
+        lbtcFees: var_lbtcFees);
+  }
+
+  @protected
+  SubSwapFees sse_decode_sub_swap_fees(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_percentage = sse_decode_f_64(deserializer);
+    var var_minerFees = sse_decode_u_64(deserializer);
+    return SubSwapFees(percentage: var_percentage, minerFees: var_minerFees);
+  }
+
+  @protected
+  SubmarineFeesAndLimits sse_decode_submarine_fees_and_limits(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_btcLimits = sse_decode_swap_limits(deserializer);
+    var var_lbtcLimits = sse_decode_swap_limits(deserializer);
+    var var_btcFees = sse_decode_sub_swap_fees(deserializer);
+    var var_lbtcFees = sse_decode_sub_swap_fees(deserializer);
+    return SubmarineFeesAndLimits(
+        btcLimits: var_btcLimits,
+        lbtcLimits: var_lbtcLimits,
+        btcFees: var_btcFees,
+        lbtcFees: var_lbtcFees);
+  }
+
+  @protected
+  SwapLimits sse_decode_swap_limits(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_minimal = sse_decode_u_64(deserializer);
+    var var_maximal = sse_decode_u_64(deserializer);
+    return SwapLimits(minimal: var_minimal, maximal: var_maximal);
   }
 
   @protected
@@ -2395,38 +2409,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   int sse_decode_usize(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getUint64();
-  }
-
-  @protected
-  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-      ReverseFeesAndLimits raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-// ignore: invalid_use_of_internal_member
-    return raw.cstEncode(move: true);
-  }
-
-  @protected
-  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-      SubmarineFeesAndLimits raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-// ignore: invalid_use_of_internal_member
-    return raw.cstEncode(move: true);
-  }
-
-  @protected
-  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-      ReverseFeesAndLimits raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-// ignore: invalid_use_of_internal_member
-    return raw.cstEncode();
-  }
-
-  @protected
-  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-      SubmarineFeesAndLimits raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-// ignore: invalid_use_of_internal_member
-    return raw.cstEncode();
   }
 
   @protected
@@ -2487,38 +2469,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   int cst_encode_usize(int raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
-  }
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          ReverseFeesAndLimits self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(self.sseEncode(move: true), serializer);
-  }
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SubmarineFeesAndLimits self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(self.sseEncode(move: true), serializer);
-  }
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          ReverseFeesAndLimits self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(self.sseEncode(move: null), serializer);
-  }
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SubmarineFeesAndLimits self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(self.sseEncode(move: null), serializer);
   }
 
   @protected
@@ -2630,22 +2580,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_chain_fees(ChainFees self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_f_64(self.percentage, serializer);
-    sse_encode_u_64(self.userLockup, serializer);
-    sse_encode_u_64(self.userClaim, serializer);
-    sse_encode_u_64(self.server, serializer);
-  }
-
-  @protected
   void sse_encode_chain_fees_and_limits(
       ChainFeesAndLimits self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_limits(self.btcLimits, serializer);
-    sse_encode_limits(self.lbtcLimits, serializer);
-    sse_encode_chain_fees(self.btcFees, serializer);
-    sse_encode_chain_fees(self.lbtcFees, serializer);
+    sse_encode_swap_limits(self.btcLimits, serializer);
+    sse_encode_swap_limits(self.lbtcLimits, serializer);
+    sse_encode_chain_swap_fees(self.btcFees, serializer);
+    sse_encode_chain_swap_fees(self.lbtcFees, serializer);
   }
 
   @protected
@@ -2673,6 +2614,16 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       ChainSwapDirection self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_chain_swap_fees(
+      ChainSwapFees self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_f_64(self.percentage, serializer);
+    sse_encode_u_64(self.userLockup, serializer);
+    sse_encode_u_64(self.userClaim, serializer);
+    sse_encode_u_64(self.server, serializer);
   }
 
   @protected
@@ -2747,13 +2698,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_limits(Limits self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_u_64(self.minimal, serializer);
-    sse_encode_u_64(self.maximal, serializer);
-  }
-
-  @protected
   void sse_encode_list_prim_u_8_loose(
       List<int> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2768,6 +2712,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_miner_fees(MinerFees self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self.lockup, serializer);
+    sse_encode_u_64(self.claim, serializer);
   }
 
   @protected
@@ -2786,6 +2737,47 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.value, serializer);
     sse_encode_String(self.sha256, serializer);
     sse_encode_String(self.hash160, serializer);
+  }
+
+  @protected
+  void sse_encode_rev_swap_fees(RevSwapFees self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_f_64(self.percentage, serializer);
+    sse_encode_miner_fees(self.minerFees, serializer);
+  }
+
+  @protected
+  void sse_encode_reverse_fees_and_limits(
+      ReverseFeesAndLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_swap_limits(self.btcLimits, serializer);
+    sse_encode_swap_limits(self.lbtcLimits, serializer);
+    sse_encode_rev_swap_fees(self.btcFees, serializer);
+    sse_encode_rev_swap_fees(self.lbtcFees, serializer);
+  }
+
+  @protected
+  void sse_encode_sub_swap_fees(SubSwapFees self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_f_64(self.percentage, serializer);
+    sse_encode_u_64(self.minerFees, serializer);
+  }
+
+  @protected
+  void sse_encode_submarine_fees_and_limits(
+      SubmarineFeesAndLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_swap_limits(self.btcLimits, serializer);
+    sse_encode_swap_limits(self.lbtcLimits, serializer);
+    sse_encode_sub_swap_fees(self.btcFees, serializer);
+    sse_encode_sub_swap_fees(self.lbtcFees, serializer);
+  }
+
+  @protected
+  void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self.minimal, serializer);
+    sse_encode_u_64(self.maximal, serializer);
   }
 
   @protected

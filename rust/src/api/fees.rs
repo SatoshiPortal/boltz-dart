@@ -12,11 +12,11 @@ pub struct Fees {
 }
 
 impl Fees {
-    #[frb(sync)]
-    pub fn new(boltz_url: String) -> Result<Self, ()> {
-        Ok(Fees {
-            boltz_url: check_protocol(&boltz_url),
-        })
+    pub fn new(boltz_url: String) -> Fees {
+        let url = check_protocol(&boltz_url);
+        Fees {
+            boltz_url: url,
+        }
     }
     pub fn submarine(&self) -> Result<SubmarineFeesAndLimits, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&self.boltz_url);

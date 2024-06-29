@@ -112,23 +112,23 @@ typedef struct wire_cst_boltz_error {
   struct wire_cst_list_prim_u_8_strict *message;
 } wire_cst_boltz_error;
 
-typedef struct wire_cst_chain_fees {
+typedef struct wire_cst_swap_limits {
+  uint64_t minimal;
+  uint64_t maximal;
+} wire_cst_swap_limits;
+
+typedef struct wire_cst_chain_swap_fees {
   double percentage;
   uint64_t user_lockup;
   uint64_t user_claim;
   uint64_t server;
-} wire_cst_chain_fees;
-
-typedef struct wire_cst_limits {
-  uint64_t minimal;
-  uint64_t maximal;
-} wire_cst_limits;
+} wire_cst_chain_swap_fees;
 
 typedef struct wire_cst_chain_fees_and_limits {
-  struct wire_cst_limits btc_limits;
-  struct wire_cst_limits lbtc_limits;
-  struct wire_cst_chain_fees btc_fees;
-  struct wire_cst_chain_fees lbtc_fees;
+  struct wire_cst_swap_limits btc_limits;
+  struct wire_cst_swap_limits lbtc_limits;
+  struct wire_cst_chain_swap_fees btc_fees;
+  struct wire_cst_chain_swap_fees lbtc_fees;
 } wire_cst_chain_fees_and_limits;
 
 typedef struct wire_cst_decoded_invoice {
@@ -142,6 +142,35 @@ typedef struct wire_cst_decoded_invoice {
   struct wire_cst_list_prim_u_8_strict *bip21;
   struct wire_cst_list_prim_u_8_strict *preimage_hash;
 } wire_cst_decoded_invoice;
+
+typedef struct wire_cst_miner_fees {
+  uint64_t lockup;
+  uint64_t claim;
+} wire_cst_miner_fees;
+
+typedef struct wire_cst_rev_swap_fees {
+  double percentage;
+  struct wire_cst_miner_fees miner_fees;
+} wire_cst_rev_swap_fees;
+
+typedef struct wire_cst_reverse_fees_and_limits {
+  struct wire_cst_swap_limits btc_limits;
+  struct wire_cst_swap_limits lbtc_limits;
+  struct wire_cst_rev_swap_fees btc_fees;
+  struct wire_cst_rev_swap_fees lbtc_fees;
+} wire_cst_reverse_fees_and_limits;
+
+typedef struct wire_cst_sub_swap_fees {
+  double percentage;
+  uint64_t miner_fees;
+} wire_cst_sub_swap_fees;
+
+typedef struct wire_cst_submarine_fees_and_limits {
+  struct wire_cst_swap_limits btc_limits;
+  struct wire_cst_swap_limits lbtc_limits;
+  struct wire_cst_sub_swap_fees btc_fees;
+  struct wire_cst_sub_swap_fees lbtc_fees;
+} wire_cst_submarine_fees_and_limits;
 
 void frbgen_boltz_dart_wire_btc_ln_swap_claim(int64_t port_,
                                               struct wire_cst_btc_ln_swap *that,
@@ -240,7 +269,8 @@ void frbgen_boltz_dart_wire_boltz_error_new(int64_t port_,
 
 void frbgen_boltz_dart_wire_fees_chain(int64_t port_, struct wire_cst_fees *that);
 
-WireSyncRust2DartDco frbgen_boltz_dart_wire_fees_new(struct wire_cst_list_prim_u_8_strict *boltz_url);
+void frbgen_boltz_dart_wire_fees_new(int64_t port_,
+                                     struct wire_cst_list_prim_u_8_strict *boltz_url);
 
 void frbgen_boltz_dart_wire_fees_reverse(int64_t port_, struct wire_cst_fees *that);
 
@@ -347,14 +377,6 @@ WireSyncRust2DartDco frbgen_boltz_dart_wire_pre_image_new(struct wire_cst_list_p
                                                           struct wire_cst_list_prim_u_8_strict *sha256,
                                                           struct wire_cst_list_prim_u_8_strict *hash160);
 
-void frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(const void *ptr);
-
-void frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(const void *ptr);
-
-void frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(const void *ptr);
-
-void frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(const void *ptr);
-
 struct wire_cst_btc_ln_swap *frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_swap(void);
 
 struct wire_cst_btc_swap_script_str *frbgen_boltz_dart_cst_new_box_autoadd_btc_swap_script_str(void);
@@ -386,10 +408,6 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_box_autoadd_pre_image);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_list_prim_u_8_loose);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_list_prim_u_8_strict);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_boltz_error_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_claim);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_coop_close_submarine);

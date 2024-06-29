@@ -10,7 +10,7 @@ use boltz_client::{
     boltz::{ChainSwapDetails, Cooperative, Side},
     error::Error,
     network::electrum::ElectrumConfig,
-    swaps::{boltz::BoltzApiClientV2, magic_routing},
+    swaps::{boltz::BoltzApiClientV2},
     util::secrets::Preimage,
     Amount, BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
     ToHex,
@@ -139,15 +139,14 @@ impl ChainSwap {
                     compressed: true,
                     inner: refund_kps.public_key(),
                 };
-                let create_chain_response = boltz_client.post_chain_req(create_swap_req).unwrap();
+                let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
                 let swap_id = create_chain_response.clone().id;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = BtcSwapScript::chain_from_swap_resp(
                     Side::Lockup,
                     lockup_details.clone(),
                     refund_public_key,
-                )
-                .unwrap();
+                )?;
                 let lockup_chain = if is_testnet {
                     Chain::BitcoinTestnet
                 } else {
@@ -156,7 +155,7 @@ impl ChainSwap {
                 let lockup_address = lockup_script
                     .clone()
                     .to_address(lockup_chain.into())
-                    .unwrap();
+                    ?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {
@@ -204,15 +203,14 @@ impl ChainSwap {
                     compressed: true,
                     inner: refund_kps.public_key(),
                 };
-                let create_chain_response = boltz_client.post_chain_req(create_swap_req).unwrap();
+                let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
                 let swap_id = create_chain_response.clone().id;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = LBtcSwapScript::chain_from_swap_resp(
                     Side::Lockup,
                     lockup_details.clone(),
                     refund_public_key,
-                )
-                .unwrap();
+                )?;
                 let lockup_chain = if is_testnet {
                     Chain::LiquidTestnet
                 } else {
@@ -221,7 +219,7 @@ impl ChainSwap {
                 let lockup_address = lockup_script
                     .clone()
                     .to_address(lockup_chain.into())
-                    .unwrap();
+                    ?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {

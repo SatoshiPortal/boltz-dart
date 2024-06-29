@@ -13,13 +13,14 @@ part 'fees.freezed.dart';
 @freezed
 class Fees with _$Fees {
   const Fees._();
-  const factory Fees.raw({
+  const factory Fees({
     required String boltzUrl,
   }) = _Fees;
   Future<ChainFeesAndLimits> chain({dynamic hint}) =>
       BoltzCore.instance.api.feesChain(that: this, hint: hint);
 
-  factory Fees({required String boltzUrl, dynamic hint}) =>
+  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  static Future<Fees> newInstance({required String boltzUrl, dynamic hint}) =>
       BoltzCore.instance.api.feesNew(boltzUrl: boltzUrl, hint: hint);
 
   Future<ReverseFeesAndLimits> reverse({dynamic hint}) =>

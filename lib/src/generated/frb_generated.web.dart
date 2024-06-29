@@ -22,34 +22,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     required super.portManager,
   });
 
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_ReverseFeesAndLimitsPtr => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_SubmarineFeesAndLimitsPtr => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits;
-
-  @protected
-  ReverseFeesAndLimits
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic raw);
-
-  @protected
-  SubmarineFeesAndLimits
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic raw);
-
-  @protected
-  ReverseFeesAndLimits
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic raw);
-
-  @protected
-  SubmarineFeesAndLimits
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic raw);
-
   @protected
   String dco_decode_String(dynamic raw);
 
@@ -93,9 +65,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain dco_decode_chain(dynamic raw);
 
   @protected
-  ChainFees dco_decode_chain_fees(dynamic raw);
-
-  @protected
   ChainFeesAndLimits dco_decode_chain_fees_and_limits(dynamic raw);
 
   @protected
@@ -103,6 +72,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   ChainSwapDirection dco_decode_chain_swap_direction(dynamic raw);
+
+  @protected
+  ChainSwapFees dco_decode_chain_swap_fees(dynamic raw);
 
   @protected
   DecodedInvoice dco_decode_decoded_invoice(dynamic raw);
@@ -126,19 +98,34 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw);
 
   @protected
-  Limits dco_decode_limits(dynamic raw);
-
-  @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
+  MinerFees dco_decode_miner_fees(dynamic raw);
+
+  @protected
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
   PreImage dco_decode_pre_image(dynamic raw);
+
+  @protected
+  RevSwapFees dco_decode_rev_swap_fees(dynamic raw);
+
+  @protected
+  ReverseFeesAndLimits dco_decode_reverse_fees_and_limits(dynamic raw);
+
+  @protected
+  SubSwapFees dco_decode_sub_swap_fees(dynamic raw);
+
+  @protected
+  SubmarineFeesAndLimits dco_decode_submarine_fees_and_limits(dynamic raw);
+
+  @protected
+  SwapLimits dco_decode_swap_limits(dynamic raw);
 
   @protected
   SwapType dco_decode_swap_type(dynamic raw);
@@ -157,26 +144,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int dco_decode_usize(dynamic raw);
-
-  @protected
-  ReverseFeesAndLimits
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          SseDeserializer deserializer);
-
-  @protected
-  SubmarineFeesAndLimits
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SseDeserializer deserializer);
-
-  @protected
-  ReverseFeesAndLimits
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          SseDeserializer deserializer);
-
-  @protected
-  SubmarineFeesAndLimits
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SseDeserializer deserializer);
 
   @protected
   String sse_decode_String(SseDeserializer deserializer);
@@ -223,9 +190,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Chain sse_decode_chain(SseDeserializer deserializer);
 
   @protected
-  ChainFees sse_decode_chain_fees(SseDeserializer deserializer);
-
-  @protected
   ChainFeesAndLimits sse_decode_chain_fees_and_limits(
       SseDeserializer deserializer);
 
@@ -235,6 +199,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   ChainSwapDirection sse_decode_chain_swap_direction(
       SseDeserializer deserializer);
+
+  @protected
+  ChainSwapFees sse_decode_chain_swap_fees(SseDeserializer deserializer);
 
   @protected
   DecodedInvoice sse_decode_decoded_invoice(SseDeserializer deserializer);
@@ -259,19 +226,36 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   LbtcLnSwap sse_decode_lbtc_ln_swap(SseDeserializer deserializer);
 
   @protected
-  Limits sse_decode_limits(SseDeserializer deserializer);
-
-  @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
+  MinerFees sse_decode_miner_fees(SseDeserializer deserializer);
+
+  @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
+
+  @protected
+  RevSwapFees sse_decode_rev_swap_fees(SseDeserializer deserializer);
+
+  @protected
+  ReverseFeesAndLimits sse_decode_reverse_fees_and_limits(
+      SseDeserializer deserializer);
+
+  @protected
+  SubSwapFees sse_decode_sub_swap_fees(SseDeserializer deserializer);
+
+  @protected
+  SubmarineFeesAndLimits sse_decode_submarine_fees_and_limits(
+      SseDeserializer deserializer);
+
+  @protected
+  SwapLimits sse_decode_swap_limits(SseDeserializer deserializer);
 
   @protected
   SwapType sse_decode_swap_type(SseDeserializer deserializer);
@@ -386,24 +370,13 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_chain_fees(ChainFees raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [
-      cst_encode_f_64(raw.percentage),
-      cst_encode_u_64(raw.userLockup),
-      cst_encode_u_64(raw.userClaim),
-      cst_encode_u_64(raw.server)
-    ];
-  }
-
-  @protected
   List<dynamic> cst_encode_chain_fees_and_limits(ChainFeesAndLimits raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
-      cst_encode_limits(raw.btcLimits),
-      cst_encode_limits(raw.lbtcLimits),
-      cst_encode_chain_fees(raw.btcFees),
-      cst_encode_chain_fees(raw.lbtcFees)
+      cst_encode_swap_limits(raw.btcLimits),
+      cst_encode_swap_limits(raw.lbtcLimits),
+      cst_encode_chain_swap_fees(raw.btcFees),
+      cst_encode_chain_swap_fees(raw.lbtcFees)
     ];
   }
 
@@ -426,6 +399,17 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.boltzUrl),
       cst_encode_opt_String(raw.referralId),
       cst_encode_String(raw.blindingKey)
+    ];
+  }
+
+  @protected
+  List<dynamic> cst_encode_chain_swap_fees(ChainSwapFees raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [
+      cst_encode_f_64(raw.percentage),
+      cst_encode_u_64(raw.userLockup),
+      cst_encode_u_64(raw.userClaim),
+      cst_encode_u_64(raw.server)
     ];
   }
 
@@ -492,12 +476,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_limits(Limits raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [cst_encode_u_64(raw.minimal), cst_encode_u_64(raw.maximal)];
-  }
-
-  @protected
   List<int> cst_encode_list_prim_u_8_loose(List<int> raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
@@ -507,6 +485,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Uint8List cst_encode_list_prim_u_8_strict(Uint8List raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
+  }
+
+  @protected
+  List<dynamic> cst_encode_miner_fees(MinerFees raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [cst_encode_u_64(raw.lockup), cst_encode_u_64(raw.claim)];
   }
 
   @protected
@@ -526,26 +510,54 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  List<dynamic> cst_encode_rev_swap_fees(RevSwapFees raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [
+      cst_encode_f_64(raw.percentage),
+      cst_encode_miner_fees(raw.minerFees)
+    ];
+  }
+
+  @protected
+  List<dynamic> cst_encode_reverse_fees_and_limits(ReverseFeesAndLimits raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [
+      cst_encode_swap_limits(raw.btcLimits),
+      cst_encode_swap_limits(raw.lbtcLimits),
+      cst_encode_rev_swap_fees(raw.btcFees),
+      cst_encode_rev_swap_fees(raw.lbtcFees)
+    ];
+  }
+
+  @protected
+  List<dynamic> cst_encode_sub_swap_fees(SubSwapFees raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [cst_encode_f_64(raw.percentage), cst_encode_u_64(raw.minerFees)];
+  }
+
+  @protected
+  List<dynamic> cst_encode_submarine_fees_and_limits(
+      SubmarineFeesAndLimits raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [
+      cst_encode_swap_limits(raw.btcLimits),
+      cst_encode_swap_limits(raw.lbtcLimits),
+      cst_encode_sub_swap_fees(raw.btcFees),
+      cst_encode_sub_swap_fees(raw.lbtcFees)
+    ];
+  }
+
+  @protected
+  List<dynamic> cst_encode_swap_limits(SwapLimits raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [cst_encode_u_64(raw.minimal), cst_encode_u_64(raw.maximal)];
+  }
+
+  @protected
   Object cst_encode_u_64(int raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return castNativeBigInt(raw);
   }
-
-  @protected
-  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-      ReverseFeesAndLimits raw);
-
-  @protected
-  int cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-      SubmarineFeesAndLimits raw);
-
-  @protected
-  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-      ReverseFeesAndLimits raw);
-
-  @protected
-  int cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-      SubmarineFeesAndLimits raw);
 
   @protected
   bool cst_encode_bool(bool raw);
@@ -576,26 +588,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_usize(int raw);
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          ReverseFeesAndLimits self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SubmarineFeesAndLimits self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          ReverseFeesAndLimits self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          SubmarineFeesAndLimits self, SseSerializer serializer);
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
@@ -647,9 +639,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_chain(Chain self, SseSerializer serializer);
 
   @protected
-  void sse_encode_chain_fees(ChainFees self, SseSerializer serializer);
-
-  @protected
   void sse_encode_chain_fees_and_limits(
       ChainFeesAndLimits self, SseSerializer serializer);
 
@@ -659,6 +648,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_chain_swap_direction(
       ChainSwapDirection self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_chain_swap_fees(ChainSwapFees self, SseSerializer serializer);
 
   @protected
   void sse_encode_decoded_invoice(
@@ -684,9 +676,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_lbtc_ln_swap(LbtcLnSwap self, SseSerializer serializer);
 
   @protected
-  void sse_encode_limits(Limits self, SseSerializer serializer);
-
-  @protected
   void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
 
   @protected
@@ -694,10 +683,30 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       Uint8List self, SseSerializer serializer);
 
   @protected
+  void sse_encode_miner_fees(MinerFees self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_rev_swap_fees(RevSwapFees self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_reverse_fees_and_limits(
+      ReverseFeesAndLimits self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_sub_swap_fees(SubSwapFees self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_submarine_fees_and_limits(
+      SubmarineFeesAndLimits self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer);
 
   @protected
   void sse_encode_swap_type(SwapType self, SseSerializer serializer);
@@ -882,8 +891,8 @@ class BoltzCoreWire implements BaseWire {
   void wire_fees_chain(NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_fees_chain(port_, that);
 
-  dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_fees_new(String boltz_url) => wasmModule.wire_fees_new(boltz_url);
+  void wire_fees_new(NativePortType port_, String boltz_url) =>
+      wasmModule.wire_fees_new(port_, boltz_url);
 
   void wire_fees_reverse(NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_fees_reverse(port_, that);
@@ -1028,30 +1037,6 @@ class BoltzCoreWire implements BaseWire {
   dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_pre_image_new(String value, String sha256, String hash160) =>
           wasmModule.wire_pre_image_new(value, sha256, hash160);
-
-  void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic ptr) =>
-      wasmModule
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-              ptr);
-
-  void rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic ptr) =>
-      wasmModule
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-              ptr);
-
-  void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic ptr) =>
-      wasmModule
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-              ptr);
-
-  void rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic ptr) =>
-      wasmModule
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-              ptr);
 }
 
 @JS('wasm_bindgen')
@@ -1164,8 +1149,7 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external void wire_fees_chain(NativePortType port_, List<dynamic> that);
 
-  external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_fees_new(String boltz_url);
+  external void wire_fees_new(NativePortType port_, String boltz_url);
 
   external void wire_fees_reverse(NativePortType port_, List<dynamic> that);
 
@@ -1277,20 +1261,4 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_pre_image_new(String value, String sha256, String hash160);
-
-  external void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic ptr);
-
-  external void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockReverseFeesAndLimits(
-          dynamic ptr);
-
-  external void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic ptr);
-
-  external void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockSubmarineFeesAndLimits(
-          dynamic ptr);
 }
