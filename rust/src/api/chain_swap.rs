@@ -10,7 +10,7 @@ use boltz_client::{
     boltz::{ChainSwapDetails, Cooperative, Side},
     error::Error,
     network::electrum::ElectrumConfig,
-    swaps::{boltz::BoltzApiClientV2},
+    swaps::boltz::BoltzApiClientV2,
     util::secrets::Preimage,
     Amount, BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
     ToHex,
@@ -102,7 +102,7 @@ impl ChainSwap {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
-        let refund_kps: Keypair = refund_keypair.clone().into();
+        let refund_kps: Keypair = refund_keypair.clone().try_into()?;
         let refund_public_key = PublicKey {
             inner: refund_kps.public_key(),
             compressed: true,
@@ -112,7 +112,7 @@ impl ChainSwap {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
-        let claim_kps: Keypair = claim_keypair.clone().into();
+        let claim_kps: Keypair = claim_keypair.clone().try_into()?;
 
         let claim_public_key = PublicKey {
             compressed: true,
@@ -135,12 +135,8 @@ impl ChainSwap {
                     server_lock_amount: None,
                     pair_hash: None, // Add address signature here.
                 };
-                let refund_pubkey = PublicKey {
-                    compressed: true,
-                    inner: refund_kps.public_key(),
-                };
+
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
-                let swap_id = create_chain_response.clone().id;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = BtcSwapScript::chain_from_swap_resp(
                     Side::Lockup,
@@ -199,12 +195,8 @@ impl ChainSwap {
                     server_lock_amount: None,
                     pair_hash: None, // Add address signature here.
                 };
-                let refund_pubkey = PublicKey {
-                    compressed: true,
-                    inner: refund_kps.public_key(),
-                };
+
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
-                let swap_id = create_chain_response.clone().id;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = LBtcSwapScript::chain_from_swap_resp(
                     Side::Lockup,
@@ -293,13 +285,13 @@ impl ChainSwap {
                     &btc_network_config,
                 )?;
                 let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
-                let rkp: Keypair = self.refund_keys.clone().into();
+                let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let (partial_sig, pub_nonce) = refund_tx.partial_sign(
                     &rkp,
                     &claim_tx_response.pub_nonce,
                     &claim_tx_response.transaction_hash,
                 )?;
-                let ckp: Keypair = self.claim_keys.clone().into();
+                let ckp: Keypair = self.claim_keys.clone().try_into()?;
                 let preimage = self.preimage.clone();
                 let signed = match claim_tx.sign_claim(
                     &ckp,
@@ -343,13 +335,13 @@ impl ChainSwap {
                     id.clone(),
                 )?;
                 let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
-                let rkp: Keypair = self.refund_keys.clone().into();
+                let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let (partial_sig, pub_nonce) = refund_tx.partial_sign(
                     &rkp,
                     &claim_tx_response.pub_nonce,
                     &claim_tx_response.transaction_hash,
                 )?;
-                let ckp: Keypair = self.claim_keys.clone().into();
+                let ckp: Keypair = self.claim_keys.clone().try_into()?;
                 let preimage = self.preimage.clone();
                 let signed = match claim_tx.sign_claim(
                     &ckp,
@@ -410,7 +402,7 @@ impl ChainSwap {
                     &btc_network_config,
                 )?;
 
-                let rkp: Keypair = self.refund_keys.clone().into();
+                let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
                     &rkp,
                     abs_fee,
@@ -445,7 +437,7 @@ impl ChainSwap {
                     check_protocol(&self.boltz_url),
                     id.clone(),
                 )?;
-                let rkp: Keypair = self.refund_keys.clone().into();
+                let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
                     &rkp,
                     Amount::from_sat(abs_fee),

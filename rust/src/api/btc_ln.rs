@@ -73,7 +73,7 @@ impl BtcLnSwap {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };
-        let refund_kps: Keypair = refund_keypair.clone().into();
+        let refund_kps: Keypair = refund_keypair.clone().try_into()?;
 
         let preimage = match Preimage::from_invoice_str(&invoice) {
             Ok(result) => result,
@@ -130,7 +130,7 @@ impl BtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let ckp: Keypair = self.keys.clone().into();
+        let ckp: Keypair = self.keys.clone().try_into()?;
 
         let claim_tx_response = boltz_client.get_submarine_claim_tx_details(&self.id)?;
 
@@ -158,7 +158,7 @@ impl BtcLnSwap {
             Err(err) => return Err(err.into()),
         };
         let preimage = Preimage::new();
-        let ckp: Keypair = claim_keypair.clone().into();
+        let ckp: Keypair = claim_keypair.clone().try_into()?;
         let claim_public_key = PublicKey {
             compressed: true,
             inner: ckp.public_key(),
@@ -245,7 +245,7 @@ impl BtcLnSwap {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
-            let ckp: Keypair = self.keys.clone().into();
+            let ckp: Keypair = self.keys.clone().try_into()?;
             let preimage = self.preimage.clone();
 
             let signed = match tx.sign_claim(
@@ -310,7 +310,7 @@ impl BtcLnSwap {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
-            let ckp: Keypair = self.keys.clone().into();
+            let ckp: Keypair = self.keys.clone().try_into()?;
 
             let signed = match tx.sign_refund(
                 &ckp,
@@ -369,7 +369,7 @@ impl BtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let ckp: Keypair = self.keys.clone().into();
+        let ckp: Keypair = self.keys.clone().try_into()?;
 
         let size = match tx.size(&ckp, &self.preimage.clone().try_into()?) {
             Ok(result) => result,

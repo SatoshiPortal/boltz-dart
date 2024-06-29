@@ -1,4 +1,4 @@
-use std::{ops::Sub, str::FromStr, time::Duration};
+use std::{ str::FromStr, time::Duration};
 
 use flutter_rust_bridge::frb;
 // network
@@ -6,7 +6,7 @@ use flutter_rust_bridge::frb;
 //
 use boltz_client::{
     boltz::{
-        GetChainPairsResponse, GetReversePairsResponse, GetSubmarinePairsResponse, PairMinerFees,
+        ChainFees, GetChainPairsResponse, GetReversePairsResponse, GetSubmarinePairsResponse, PairMinerFees, ReverseFees, SubmarineFees
     },
     network::Chain as BChain,
     swaps::{
@@ -83,10 +83,14 @@ pub struct KeyPair {
     pub public_key: String,
 }
 
-impl Into<Keypair> for KeyPair {
-    fn into(self) -> Keypair {
+impl TryInto<Keypair> for KeyPair {
+    type Error = BoltzError;
+    fn try_into(self) -> Result<Keypair, Self::Error> {
         let secp = Secp256k1::new();
-        Keypair::from_seckey_str(&secp, &self.secret_key).unwrap()
+        match Keypair::from_seckey_str(&secp, &self.secret_key) {
+            Ok(keypair) => Ok(keypair),
+            Err(e) => Err(boltz_client::error::Error::Key(e.into()).into()),
+        }
     }
 }
 
@@ -186,11 +190,43 @@ impl Into<PreImage> for Preimage {
 
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
+
+pub struct SwapLimits {
+    pub minimal: u64,
+    pub maximal: u64,
+}
+
+impl Into<SwapLimits> for boltz_client::swaps::boltz::PairLimits {
+    fn into(self) -> SwapLimits {
+        SwapLimits {
+            minimal: self.minimal as u64,
+            maximal: self.maximal as u64,
+        }
+    }
+}
+impl Into<SwapLimits> for boltz_client::swaps::boltz::ReverseLimits {
+    fn into(self) -> SwapLimits {
+        SwapLimits {
+            minimal: self.minimal as u64,
+            maximal: self.maximal as u64,
+        }
+    }
+}
+#[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
 pub struct SubSwapFees {
     pub percentage: f64,
     pub miner_fees: u64,
 }
 
+impl Into<SubSwapFees> for SubmarineFees {
+    fn into(self) -> SubSwapFees {
+        SubSwapFees {
+            percentage: self.percentage,
+            miner_fees: self.miner_fees as u64,
+        }
+    }
+}
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct SubmarineFeesAndLimits {
@@ -213,14 +249,8 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
             }
         };
 
-        let btc_limits = SwapLimits {
-            minimal: btc_pair.limits.minimal as u64,
-            maximal: btc_pair.limits.maximal as u64,
-        };
-        let btc_submarine = SubSwapFees {
-            percentage: btc_pair.fees.percentage,
-            miner_fees: btc_pair.fees.miner_fees,
-        };
+        let btc_limits: SwapLimits = btc_pair.limits.into();
+        let btc_fees = btc_pair.fees.into();
 
         let lbtc_pair = match self.get_lbtc_to_btc_pair() {
             Some(result) => result,
@@ -231,19 +261,14 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
                 ))
             }
         };
-        let lbtc_limits = SwapLimits {
-            minimal: lbtc_pair.limits.minimal as u64,
-            maximal: lbtc_pair.limits.maximal as u64,
-        };
-        let lbtc_submarine = SubSwapFees {
-            percentage: lbtc_pair.fees.percentage,
-            miner_fees: lbtc_pair.fees.miner_fees,
-        };
+        let lbtc_limits = lbtc_pair.limits.into();
+        let lbtc_fees = lbtc_pair.fees.into();
+        
         Ok(SubmarineFeesAndLimits {
             btc_limits,
             lbtc_limits,
-            btc_fees: btc_submarine,
-            lbtc_fees: lbtc_submarine,
+            btc_fees,
+            lbtc_fees,
         })
     }
 }
@@ -271,6 +296,15 @@ pub struct RevSwapFees {
     pub miner_fees: MinerFees,
 }
 
+impl Into<RevSwapFees> for ReverseFees {
+    fn into(self) -> RevSwapFees {
+        RevSwapFees {
+            percentage: self.percentage,
+            miner_fees: self.miner_fees.into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct ReverseFeesAndLimits {
@@ -294,14 +328,8 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
             }
         };
 
-        let btc_limits = SwapLimits {
-            minimal: btc_pair.limits.minimal as u64,
-            maximal: btc_pair.limits.maximal as u64,
-        };
-        let btc_reverse = RevSwapFees {
-            percentage: btc_pair.fees.percentage,
-            miner_fees: btc_pair.fees.miner_fees.into(),
-        };
+        let btc_limits = btc_pair.limits.into();
+        let btc_reverse = btc_pair.fees.into();
 
         let lbtc_pair = match self.get_btc_to_lbtc_pair() {
             Some(result) => result,
@@ -312,14 +340,8 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
                 ))
             }
         };
-        let lbtc_limits = SwapLimits {
-            minimal: lbtc_pair.limits.minimal as u64,
-            maximal: lbtc_pair.limits.maximal as u64,
-        };
-        let lbtc_reverse = RevSwapFees {
-            percentage: lbtc_pair.fees.percentage,
-            miner_fees: lbtc_pair.fees.miner_fees.into(),
-        };
+        let lbtc_limits = lbtc_pair.limits.into();
+        let lbtc_reverse = lbtc_pair.fees.into();
         Ok(ReverseFeesAndLimits {
             btc_limits,
             lbtc_limits,
@@ -336,6 +358,17 @@ pub struct ChainSwapFees {
     pub user_lockup: u64,
     pub user_claim: u64,
     pub server: u64,
+}
+
+impl From<ChainFees> for ChainSwapFees {
+    fn from(cf: ChainFees) -> Self {
+        Self {
+            percentage: cf.percentage,
+            user_lockup: cf.lockup(),
+            user_claim: cf.claim_estimate(),
+            server: cf.server(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -360,16 +393,8 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
             }
         };
 
-        let btc_limits = SwapLimits {
-            minimal: btc_pair.limits.minimal as u64,
-            maximal: btc_pair.limits.maximal as u64,
-        };
-        let btc_chain = ChainSwapFees {
-            percentage: btc_pair.fees.percentage,
-            user_lockup: btc_pair.fees.lockup(),
-            user_claim: btc_pair.fees.claim_estimate(),
-            server: btc_pair.fees.server(),
-        };
+        let btc_limits = btc_pair.limits.into();
+        let btc_chain = btc_pair.fees.into();
 
         let lbtc_pair = match self.get_btc_to_lbtc_pair() {
             Some(result) => result,
@@ -380,16 +405,9 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
                 ))
             }
         };
-        let lbtc_limits = SwapLimits {
-            minimal: lbtc_pair.limits.minimal as u64,
-            maximal: lbtc_pair.limits.maximal as u64,
-        };
-        let lbtc_chain = ChainSwapFees {
-            percentage: lbtc_pair.fees.percentage,
-            user_lockup: lbtc_pair.fees.lockup(),
-            user_claim: lbtc_pair.fees.claim_estimate(),
-            server: lbtc_pair.fees.server(),
-        };
+        let lbtc_limits = lbtc_pair.limits.into();
+        let lbtc_chain = lbtc_pair.fees.into();
+
         Ok(ChainFeesAndLimits {
             btc_limits,
             lbtc_limits,
@@ -399,12 +417,6 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
     }
 }
 
-#[derive(Debug, Clone)]
-#[frb(dart_metadata=("freezed"))]
-pub struct SwapLimits {
-    pub minimal: u64,
-    pub maximal: u64,
-}
 
 #[frb(dart_metadata=("freezed"))]
 #[derive(Debug, Clone)]
