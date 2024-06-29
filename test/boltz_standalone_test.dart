@@ -395,7 +395,6 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
 }
 
 Future<BtcLnSwap> setupReverse(int outAmount) async {
-  final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
   final btcLnReverseSwap = await BtcLnSwap.newReverse(
     mnemonic: mnemonic,
@@ -404,7 +403,6 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
-    // pairHash: fees.btcPairHash,
   );
 
   return btcLnReverseSwap;
@@ -412,7 +410,6 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
 
 Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
   // final amount = 100000;
-  final fees = await AllFees.fetch(boltzUrl: boltzUrl);
 
   final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
     mnemonic: mnemonic,
@@ -421,7 +418,6 @@ Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
     network: lnetwork,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
-    // pairHash: fees.lbtcPairHash,
   );
 
   return lbtcLnSubmarineSwap;
@@ -435,7 +431,6 @@ Future<LbtcLnSwap> setupLReverse(int amount) async {
     network: lnetwork,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
-    // pairHash: fees.lbtcPairHash,
   );
 
   return lbtcLnSubmarineSwap;
