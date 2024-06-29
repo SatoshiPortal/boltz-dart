@@ -4,6 +4,7 @@
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
 import 'api/btc_ln.dart';
+import 'api/chain_swap.dart';
 import 'api/error.dart';
 import 'api/lbtc_ln.dart';
 import 'api/types.dart';
@@ -24,57 +25,49 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
-  AllFees dco_decode_all_fees(dynamic raw);
-
-  @protected
   BoltzError dco_decode_boltz_error(dynamic raw);
 
   @protected
   bool dco_decode_bool(dynamic raw);
 
   @protected
-  BtcLnV1Swap dco_decode_box_autoadd_btc_ln_v_1_swap(dynamic raw);
+  BtcLnSwap dco_decode_box_autoadd_btc_ln_swap(dynamic raw);
 
   @protected
-  BtcLnV2Swap dco_decode_box_autoadd_btc_ln_v_2_swap(dynamic raw);
+  BtcSwapScriptStr dco_decode_box_autoadd_btc_swap_script_str(dynamic raw);
 
   @protected
-  BtcSwapScriptV2Str dco_decode_box_autoadd_btc_swap_script_v_2_str(
-      dynamic raw);
+  ChainSwap dco_decode_box_autoadd_chain_swap(dynamic raw);
 
   @protected
   KeyPair dco_decode_box_autoadd_key_pair(dynamic raw);
 
   @protected
-  LBtcSwapScriptV2Str dco_decode_box_autoadd_l_btc_swap_script_v_2_str(
-      dynamic raw);
+  LBtcSwapScriptStr dco_decode_box_autoadd_l_btc_swap_script_str(dynamic raw);
 
   @protected
-  LbtcLnV1Swap dco_decode_box_autoadd_lbtc_ln_v_1_swap(dynamic raw);
-
-  @protected
-  LbtcLnV2Swap dco_decode_box_autoadd_lbtc_ln_v_2_swap(dynamic raw);
+  LbtcLnSwap dco_decode_box_autoadd_lbtc_ln_swap(dynamic raw);
 
   @protected
   PreImage dco_decode_box_autoadd_pre_image(dynamic raw);
 
   @protected
-  BtcLnV1Swap dco_decode_btc_ln_v_1_swap(dynamic raw);
+  BtcLnSwap dco_decode_btc_ln_swap(dynamic raw);
 
   @protected
-  BtcLnV2Swap dco_decode_btc_ln_v_2_swap(dynamic raw);
-
-  @protected
-  BtcSwapScriptV2Str dco_decode_btc_swap_script_v_2_str(dynamic raw);
+  BtcSwapScriptStr dco_decode_btc_swap_script_str(dynamic raw);
 
   @protected
   Chain dco_decode_chain(dynamic raw);
 
   @protected
-  DecodedInvoice dco_decode_decoded_invoice(dynamic raw);
+  ChainSwap dco_decode_chain_swap(dynamic raw);
 
   @protected
-  double dco_decode_f_64(dynamic raw);
+  ChainSwapDirection dco_decode_chain_swap_direction(dynamic raw);
+
+  @protected
+  DecodedInvoice dco_decode_decoded_invoice(dynamic raw);
 
   @protected
   int dco_decode_i_32(dynamic raw);
@@ -83,16 +76,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   KeyPair dco_decode_key_pair(dynamic raw);
 
   @protected
-  LBtcSwapScriptV2Str dco_decode_l_btc_swap_script_v_2_str(dynamic raw);
+  LBtcSwapScriptStr dco_decode_l_btc_swap_script_str(dynamic raw);
 
   @protected
-  LbtcLnV1Swap dco_decode_lbtc_ln_v_1_swap(dynamic raw);
-
-  @protected
-  LbtcLnV2Swap dco_decode_lbtc_ln_v_2_swap(dynamic raw);
-
-  @protected
-  Limits dco_decode_limits(dynamic raw);
+  LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw);
 
   @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
@@ -105,12 +92,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   PreImage dco_decode_pre_image(dynamic raw);
-
-  @protected
-  ReverseSwapFees dco_decode_reverse_swap_fees(dynamic raw);
-
-  @protected
-  SubmarineSwapFees dco_decode_submarine_swap_fees(dynamic raw);
 
   @protected
   SwapType dco_decode_swap_type(dynamic raw);
@@ -134,62 +115,52 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
-  AllFees sse_decode_all_fees(SseDeserializer deserializer);
-
-  @protected
   BoltzError sse_decode_boltz_error(SseDeserializer deserializer);
 
   @protected
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
-  BtcLnV1Swap sse_decode_box_autoadd_btc_ln_v_1_swap(
+  BtcLnSwap sse_decode_box_autoadd_btc_ln_swap(SseDeserializer deserializer);
+
+  @protected
+  BtcSwapScriptStr sse_decode_box_autoadd_btc_swap_script_str(
       SseDeserializer deserializer);
 
   @protected
-  BtcLnV2Swap sse_decode_box_autoadd_btc_ln_v_2_swap(
-      SseDeserializer deserializer);
-
-  @protected
-  BtcSwapScriptV2Str sse_decode_box_autoadd_btc_swap_script_v_2_str(
-      SseDeserializer deserializer);
+  ChainSwap sse_decode_box_autoadd_chain_swap(SseDeserializer deserializer);
 
   @protected
   KeyPair sse_decode_box_autoadd_key_pair(SseDeserializer deserializer);
 
   @protected
-  LBtcSwapScriptV2Str sse_decode_box_autoadd_l_btc_swap_script_v_2_str(
+  LBtcSwapScriptStr sse_decode_box_autoadd_l_btc_swap_script_str(
       SseDeserializer deserializer);
 
   @protected
-  LbtcLnV1Swap sse_decode_box_autoadd_lbtc_ln_v_1_swap(
-      SseDeserializer deserializer);
-
-  @protected
-  LbtcLnV2Swap sse_decode_box_autoadd_lbtc_ln_v_2_swap(
-      SseDeserializer deserializer);
+  LbtcLnSwap sse_decode_box_autoadd_lbtc_ln_swap(SseDeserializer deserializer);
 
   @protected
   PreImage sse_decode_box_autoadd_pre_image(SseDeserializer deserializer);
 
   @protected
-  BtcLnV1Swap sse_decode_btc_ln_v_1_swap(SseDeserializer deserializer);
+  BtcLnSwap sse_decode_btc_ln_swap(SseDeserializer deserializer);
 
   @protected
-  BtcLnV2Swap sse_decode_btc_ln_v_2_swap(SseDeserializer deserializer);
-
-  @protected
-  BtcSwapScriptV2Str sse_decode_btc_swap_script_v_2_str(
-      SseDeserializer deserializer);
+  BtcSwapScriptStr sse_decode_btc_swap_script_str(SseDeserializer deserializer);
 
   @protected
   Chain sse_decode_chain(SseDeserializer deserializer);
 
   @protected
-  DecodedInvoice sse_decode_decoded_invoice(SseDeserializer deserializer);
+  ChainSwap sse_decode_chain_swap(SseDeserializer deserializer);
 
   @protected
-  double sse_decode_f_64(SseDeserializer deserializer);
+  ChainSwapDirection sse_decode_chain_swap_direction(
+      SseDeserializer deserializer);
+
+  @protected
+  DecodedInvoice sse_decode_decoded_invoice(SseDeserializer deserializer);
 
   @protected
   int sse_decode_i_32(SseDeserializer deserializer);
@@ -198,17 +169,11 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   KeyPair sse_decode_key_pair(SseDeserializer deserializer);
 
   @protected
-  LBtcSwapScriptV2Str sse_decode_l_btc_swap_script_v_2_str(
+  LBtcSwapScriptStr sse_decode_l_btc_swap_script_str(
       SseDeserializer deserializer);
 
   @protected
-  LbtcLnV1Swap sse_decode_lbtc_ln_v_1_swap(SseDeserializer deserializer);
-
-  @protected
-  LbtcLnV2Swap sse_decode_lbtc_ln_v_2_swap(SseDeserializer deserializer);
-
-  @protected
-  Limits sse_decode_limits(SseDeserializer deserializer);
+  LbtcLnSwap sse_decode_lbtc_ln_swap(SseDeserializer deserializer);
 
   @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
@@ -221,13 +186,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
-
-  @protected
-  ReverseSwapFees sse_decode_reverse_swap_fees(SseDeserializer deserializer);
-
-  @protected
-  SubmarineSwapFees sse_decode_submarine_swap_fees(
-      SseDeserializer deserializer);
 
   @protected
   SwapType sse_decode_swap_type(SseDeserializer deserializer);
@@ -254,43 +212,28 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_all_fees(AllFees raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [
-      cst_encode_limits(raw.btcLimits),
-      cst_encode_limits(raw.lbtcLimits),
-      cst_encode_submarine_swap_fees(raw.btcSubmarine),
-      cst_encode_reverse_swap_fees(raw.btcReverse),
-      cst_encode_submarine_swap_fees(raw.lbtcSubmarine),
-      cst_encode_reverse_swap_fees(raw.lbtcReverse),
-      cst_encode_String(raw.btcPairHash),
-      cst_encode_String(raw.lbtcPairHash)
-    ];
-  }
-
-  @protected
   List<dynamic> cst_encode_boltz_error(BoltzError raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [cst_encode_String(raw.kind), cst_encode_String(raw.message)];
   }
 
   @protected
-  List<dynamic> cst_encode_box_autoadd_btc_ln_v_1_swap(BtcLnV1Swap raw) {
+  List<dynamic> cst_encode_box_autoadd_btc_ln_swap(BtcLnSwap raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_btc_ln_v_1_swap(raw);
+    return cst_encode_btc_ln_swap(raw);
   }
 
   @protected
-  List<dynamic> cst_encode_box_autoadd_btc_ln_v_2_swap(BtcLnV2Swap raw) {
+  List<dynamic> cst_encode_box_autoadd_btc_swap_script_str(
+      BtcSwapScriptStr raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_btc_ln_v_2_swap(raw);
+    return cst_encode_btc_swap_script_str(raw);
   }
 
   @protected
-  List<dynamic> cst_encode_box_autoadd_btc_swap_script_v_2_str(
-      BtcSwapScriptV2Str raw) {
+  List<dynamic> cst_encode_box_autoadd_chain_swap(ChainSwap raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_btc_swap_script_v_2_str(raw);
+    return cst_encode_chain_swap(raw);
   }
 
   @protected
@@ -300,22 +243,16 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_box_autoadd_l_btc_swap_script_v_2_str(
-      LBtcSwapScriptV2Str raw) {
+  List<dynamic> cst_encode_box_autoadd_l_btc_swap_script_str(
+      LBtcSwapScriptStr raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_l_btc_swap_script_v_2_str(raw);
+    return cst_encode_l_btc_swap_script_str(raw);
   }
 
   @protected
-  List<dynamic> cst_encode_box_autoadd_lbtc_ln_v_1_swap(LbtcLnV1Swap raw) {
+  List<dynamic> cst_encode_box_autoadd_lbtc_ln_swap(LbtcLnSwap raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_lbtc_ln_v_1_swap(raw);
-  }
-
-  @protected
-  List<dynamic> cst_encode_box_autoadd_lbtc_ln_v_2_swap(LbtcLnV2Swap raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_lbtc_ln_v_2_swap(raw);
+    return cst_encode_lbtc_ln_swap(raw);
   }
 
   @protected
@@ -325,7 +262,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_btc_ln_v_1_swap(BtcLnV1Swap raw) {
+  List<dynamic> cst_encode_btc_ln_swap(BtcLnSwap raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
       cst_encode_String(raw.id),
@@ -333,25 +270,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_chain(raw.network),
       cst_encode_key_pair(raw.keys),
       cst_encode_pre_image(raw.preimage),
-      cst_encode_String(raw.redeemScript),
-      cst_encode_String(raw.invoice),
-      cst_encode_String(raw.scriptAddress),
-      cst_encode_u_64(raw.outAmount),
-      cst_encode_String(raw.electrumUrl),
-      cst_encode_String(raw.boltzUrl)
-    ];
-  }
-
-  @protected
-  List<dynamic> cst_encode_btc_ln_v_2_swap(BtcLnV2Swap raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [
-      cst_encode_String(raw.id),
-      cst_encode_swap_type(raw.kind),
-      cst_encode_chain(raw.network),
-      cst_encode_key_pair(raw.keys),
-      cst_encode_pre_image(raw.preimage),
-      cst_encode_btc_swap_script_v_2_str(raw.swapScript),
+      cst_encode_btc_swap_script_str(raw.swapScript),
       cst_encode_String(raw.invoice),
       cst_encode_String(raw.scriptAddress),
       cst_encode_u_64(raw.outAmount),
@@ -362,7 +281,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_btc_swap_script_v_2_str(BtcSwapScriptV2Str raw) {
+  List<dynamic> cst_encode_btc_swap_script_str(BtcSwapScriptStr raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
       cst_encode_swap_type(raw.swapType),
@@ -371,6 +290,28 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.receiverPubkey),
       cst_encode_u_32(raw.locktime),
       cst_encode_String(raw.senderPubkey)
+    ];
+  }
+
+  @protected
+  List<dynamic> cst_encode_chain_swap(ChainSwap raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [
+      cst_encode_String(raw.id),
+      cst_encode_bool(raw.isTestnet),
+      cst_encode_chain_swap_direction(raw.direction),
+      cst_encode_key_pair(raw.refundKeys),
+      cst_encode_key_pair(raw.claimKeys),
+      cst_encode_pre_image(raw.preimage),
+      cst_encode_btc_swap_script_str(raw.btcScriptStr),
+      cst_encode_l_btc_swap_script_str(raw.lbtcScriptStr),
+      cst_encode_String(raw.scriptAddress),
+      cst_encode_u_64(raw.outAmount),
+      cst_encode_String(raw.btcElectrumUrl),
+      cst_encode_String(raw.lbtcElectrumUrl),
+      cst_encode_String(raw.boltzUrl),
+      cst_encode_opt_String(raw.referralId),
+      cst_encode_String(raw.blindingKey)
     ];
   }
 
@@ -397,7 +338,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_l_btc_swap_script_v_2_str(LBtcSwapScriptV2Str raw) {
+  List<dynamic> cst_encode_l_btc_swap_script_str(LBtcSwapScriptStr raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
       cst_encode_swap_type(raw.swapType),
@@ -411,7 +352,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_lbtc_ln_v_1_swap(LbtcLnV1Swap raw) {
+  List<dynamic> cst_encode_lbtc_ln_swap(LbtcLnSwap raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
       cst_encode_String(raw.id),
@@ -419,26 +360,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_chain(raw.network),
       cst_encode_key_pair(raw.keys),
       cst_encode_pre_image(raw.preimage),
-      cst_encode_String(raw.redeemScript),
-      cst_encode_String(raw.invoice),
-      cst_encode_u_64(raw.outAmount),
-      cst_encode_String(raw.scriptAddress),
-      cst_encode_String(raw.blindingKey),
-      cst_encode_String(raw.electrumUrl),
-      cst_encode_String(raw.boltzUrl)
-    ];
-  }
-
-  @protected
-  List<dynamic> cst_encode_lbtc_ln_v_2_swap(LbtcLnV2Swap raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [
-      cst_encode_String(raw.id),
-      cst_encode_swap_type(raw.kind),
-      cst_encode_chain(raw.network),
-      cst_encode_key_pair(raw.keys),
-      cst_encode_pre_image(raw.preimage),
-      cst_encode_l_btc_swap_script_v_2_str(raw.swapScript),
+      cst_encode_l_btc_swap_script_str(raw.swapScript),
       cst_encode_String(raw.invoice),
       cst_encode_u_64(raw.outAmount),
       cst_encode_String(raw.scriptAddress),
@@ -447,12 +369,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.boltzUrl),
       cst_encode_opt_String(raw.referralId)
     ];
-  }
-
-  @protected
-  List<dynamic> cst_encode_limits(Limits raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [cst_encode_u_64(raw.minimal), cst_encode_u_64(raw.maximal)];
   }
 
   @protected
@@ -484,26 +400,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<dynamic> cst_encode_reverse_swap_fees(ReverseSwapFees raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [
-      cst_encode_f_64(raw.boltzFeesRate),
-      cst_encode_u_64(raw.lockupFees),
-      cst_encode_u_64(raw.claimFeesEstimate)
-    ];
-  }
-
-  @protected
-  List<dynamic> cst_encode_submarine_swap_fees(SubmarineSwapFees raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [
-      cst_encode_f_64(raw.boltzFeesRate),
-      cst_encode_u_64(raw.claimFees),
-      cst_encode_u_64(raw.lockupFeesEstimate)
-    ];
-  }
-
-  @protected
   Object cst_encode_u_64(int raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return castNativeBigInt(raw);
@@ -516,7 +412,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   int cst_encode_chain(Chain raw);
 
   @protected
-  double cst_encode_f_64(double raw);
+  int cst_encode_chain_swap_direction(ChainSwapDirection raw);
 
   @protected
   int cst_encode_i_32(int raw);
@@ -540,64 +436,58 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
-  void sse_encode_all_fees(AllFees self, SseSerializer serializer);
-
-  @protected
   void sse_encode_boltz_error(BoltzError self, SseSerializer serializer);
 
   @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_btc_ln_v_1_swap(
-      BtcLnV1Swap self, SseSerializer serializer);
+  void sse_encode_box_autoadd_btc_ln_swap(
+      BtcLnSwap self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_btc_ln_v_2_swap(
-      BtcLnV2Swap self, SseSerializer serializer);
+  void sse_encode_box_autoadd_btc_swap_script_str(
+      BtcSwapScriptStr self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_btc_swap_script_v_2_str(
-      BtcSwapScriptV2Str self, SseSerializer serializer);
+  void sse_encode_box_autoadd_chain_swap(
+      ChainSwap self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_key_pair(KeyPair self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_l_btc_swap_script_v_2_str(
-      LBtcSwapScriptV2Str self, SseSerializer serializer);
+  void sse_encode_box_autoadd_l_btc_swap_script_str(
+      LBtcSwapScriptStr self, SseSerializer serializer);
 
   @protected
-  void sse_encode_box_autoadd_lbtc_ln_v_1_swap(
-      LbtcLnV1Swap self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_box_autoadd_lbtc_ln_v_2_swap(
-      LbtcLnV2Swap self, SseSerializer serializer);
+  void sse_encode_box_autoadd_lbtc_ln_swap(
+      LbtcLnSwap self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_pre_image(
       PreImage self, SseSerializer serializer);
 
   @protected
-  void sse_encode_btc_ln_v_1_swap(BtcLnV1Swap self, SseSerializer serializer);
+  void sse_encode_btc_ln_swap(BtcLnSwap self, SseSerializer serializer);
 
   @protected
-  void sse_encode_btc_ln_v_2_swap(BtcLnV2Swap self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_btc_swap_script_v_2_str(
-      BtcSwapScriptV2Str self, SseSerializer serializer);
+  void sse_encode_btc_swap_script_str(
+      BtcSwapScriptStr self, SseSerializer serializer);
 
   @protected
   void sse_encode_chain(Chain self, SseSerializer serializer);
 
   @protected
-  void sse_encode_decoded_invoice(
-      DecodedInvoice self, SseSerializer serializer);
+  void sse_encode_chain_swap(ChainSwap self, SseSerializer serializer);
 
   @protected
-  void sse_encode_f_64(double self, SseSerializer serializer);
+  void sse_encode_chain_swap_direction(
+      ChainSwapDirection self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_decoded_invoice(
+      DecodedInvoice self, SseSerializer serializer);
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);
@@ -606,17 +496,11 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_key_pair(KeyPair self, SseSerializer serializer);
 
   @protected
-  void sse_encode_l_btc_swap_script_v_2_str(
-      LBtcSwapScriptV2Str self, SseSerializer serializer);
+  void sse_encode_l_btc_swap_script_str(
+      LBtcSwapScriptStr self, SseSerializer serializer);
 
   @protected
-  void sse_encode_lbtc_ln_v_1_swap(LbtcLnV1Swap self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_lbtc_ln_v_2_swap(LbtcLnV2Swap self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_limits(Limits self, SseSerializer serializer);
+  void sse_encode_lbtc_ln_swap(LbtcLnSwap self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
@@ -630,14 +514,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_reverse_swap_fees(
-      ReverseSwapFees self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_submarine_swap_fees(
-      SubmarineSwapFees self, SseSerializer serializer);
 
   @protected
   void sse_encode_swap_type(SwapType self, SseSerializer serializer);
@@ -663,78 +539,16 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 class BoltzCoreWire implements BaseWire {
   BoltzCoreWire.fromExternalLibrary(ExternalLibrary lib);
 
-  void wire_btc_ln_v_1_swap_claim(NativePortType port_, List<dynamic> that,
-          String out_address, Object abs_fee) =>
-      wasmModule.wire_btc_ln_v_1_swap_claim(port_, that, out_address, abs_fee);
-
-  void wire_btc_ln_v_1_swap_new(
-          NativePortType port_,
-          String id,
-          int kind,
-          int network,
-          List<dynamic> keys,
-          List<dynamic> preimage,
-          String redeem_script,
-          String invoice,
-          String script_address,
-          Object out_amount,
-          String electrum_url,
-          String boltz_url) =>
-      wasmModule.wire_btc_ln_v_1_swap_new(
-          port_,
-          id,
-          kind,
-          network,
-          keys,
-          preimage,
-          redeem_script,
-          invoice,
-          script_address,
-          out_amount,
-          electrum_url,
-          boltz_url);
-
-  void wire_btc_ln_v_1_swap_new_reverse(
-          NativePortType port_,
-          String mnemonic,
-          Object index,
-          Object out_amount,
-          int network,
-          String electrum_url,
-          String boltz_url,
-          String pair_hash) =>
-      wasmModule.wire_btc_ln_v_1_swap_new_reverse(port_, mnemonic, index,
-          out_amount, network, electrum_url, boltz_url, pair_hash);
-
-  void wire_btc_ln_v_1_swap_new_submarine(
-          NativePortType port_,
-          String mnemonic,
-          Object index,
-          String invoice,
-          int network,
-          String electrum_url,
-          String boltz_url,
-          String pair_hash) =>
-      wasmModule.wire_btc_ln_v_1_swap_new_submarine(port_, mnemonic, index,
-          invoice, network, electrum_url, boltz_url, pair_hash);
-
-  void wire_btc_ln_v_1_swap_refund(NativePortType port_, List<dynamic> that,
-          String out_address, Object abs_fee) =>
-      wasmModule.wire_btc_ln_v_1_swap_refund(port_, that, out_address, abs_fee);
-
-  void wire_btc_ln_v_1_swap_tx_size(NativePortType port_, List<dynamic> that) =>
-      wasmModule.wire_btc_ln_v_1_swap_tx_size(port_, that);
-
-  void wire_btc_ln_v_2_swap_claim(NativePortType port_, List<dynamic> that,
+  void wire_btc_ln_swap_claim(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
-      wasmModule.wire_btc_ln_v_2_swap_claim(
+      wasmModule.wire_btc_ln_swap_claim(
           port_, that, out_address, abs_fee, try_cooperate);
 
-  void wire_btc_ln_v_2_swap_coop_close_submarine(
+  void wire_btc_ln_swap_coop_close_submarine(
           NativePortType port_, List<dynamic> that) =>
-      wasmModule.wire_btc_ln_v_2_swap_coop_close_submarine(port_, that);
+      wasmModule.wire_btc_ln_swap_coop_close_submarine(port_, that);
 
-  void wire_btc_ln_v_2_swap_new(
+  void wire_btc_ln_swap_new(
           NativePortType port_,
           String id,
           int kind,
@@ -748,7 +562,7 @@ class BoltzCoreWire implements BaseWire {
           String electrum_url,
           String boltz_url,
           String? referral_id) =>
-      wasmModule.wire_btc_ln_v_2_swap_new(
+      wasmModule.wire_btc_ln_swap_new(
           port_,
           id,
           kind,
@@ -763,7 +577,7 @@ class BoltzCoreWire implements BaseWire {
           boltz_url,
           referral_id);
 
-  void wire_btc_ln_v_2_swap_new_reverse(
+  void wire_btc_ln_swap_new_reverse(
           NativePortType port_,
           String mnemonic,
           Object index,
@@ -773,7 +587,7 @@ class BoltzCoreWire implements BaseWire {
           String electrum_url,
           String boltz_url,
           String? referral_id) =>
-      wasmModule.wire_btc_ln_v_2_swap_new_reverse(
+      wasmModule.wire_btc_ln_swap_new_reverse(
           port_,
           mnemonic,
           index,
@@ -784,7 +598,7 @@ class BoltzCoreWire implements BaseWire {
           boltz_url,
           referral_id);
 
-  void wire_btc_ln_v_2_swap_new_submarine(
+  void wire_btc_ln_swap_new_submarine(
           NativePortType port_,
           String mnemonic,
           Object index,
@@ -793,110 +607,113 @@ class BoltzCoreWire implements BaseWire {
           String electrum_url,
           String boltz_url,
           String? referral_id) =>
-      wasmModule.wire_btc_ln_v_2_swap_new_submarine(port_, mnemonic, index,
-          invoice, network, electrum_url, boltz_url, referral_id);
+      wasmModule.wire_btc_ln_swap_new_submarine(port_, mnemonic, index, invoice,
+          network, electrum_url, boltz_url, referral_id);
 
-  void wire_btc_ln_v_2_swap_refund(NativePortType port_, List<dynamic> that,
+  void wire_btc_ln_swap_refund(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
-      wasmModule.wire_btc_ln_v_2_swap_refund(
+      wasmModule.wire_btc_ln_swap_refund(
           port_, that, out_address, abs_fee, try_cooperate);
 
-  void wire_btc_ln_v_2_swap_tx_size(NativePortType port_, List<dynamic> that) =>
-      wasmModule.wire_btc_ln_v_2_swap_tx_size(port_, that);
+  void wire_btc_ln_swap_tx_size(NativePortType port_, List<dynamic> that) =>
+      wasmModule.wire_btc_ln_swap_tx_size(port_, that);
+
+  void wire_chain_swap_claim(
+          NativePortType port_,
+          List<dynamic> that,
+          String out_address,
+          String refund_address,
+          Object abs_fee,
+          bool try_cooperate) =>
+      wasmModule.wire_chain_swap_claim(
+          port_, that, out_address, refund_address, abs_fee, try_cooperate);
+
+  void wire_chain_swap_new(
+          NativePortType port_,
+          String id,
+          bool is_testnet,
+          int direction,
+          List<dynamic> refund_keys,
+          List<dynamic> claim_keys,
+          List<dynamic> preimage,
+          List<dynamic> btc_script_str,
+          List<dynamic> lbtc_script_str,
+          String script_address,
+          Object out_amount,
+          String btc_electrum_url,
+          String lbtc_electrum_url,
+          String boltz_url,
+          String? referral_id,
+          String blinding_key) =>
+      wasmModule.wire_chain_swap_new(
+          port_,
+          id,
+          is_testnet,
+          direction,
+          refund_keys,
+          claim_keys,
+          preimage,
+          btc_script_str,
+          lbtc_script_str,
+          script_address,
+          out_amount,
+          btc_electrum_url,
+          lbtc_electrum_url,
+          boltz_url,
+          referral_id,
+          blinding_key);
+
+  void wire_chain_swap_new_swap(
+          NativePortType port_,
+          int direction,
+          String mnemonic,
+          Object index,
+          int amount,
+          bool is_testnet,
+          String btc_electrum_url,
+          String lbtc_electrum_url,
+          String boltz_url,
+          String? referral_id) =>
+      wasmModule.wire_chain_swap_new_swap(
+          port_,
+          direction,
+          mnemonic,
+          index,
+          amount,
+          is_testnet,
+          btc_electrum_url,
+          lbtc_electrum_url,
+          boltz_url,
+          referral_id);
+
+  void wire_chain_swap_refund(NativePortType port_, List<dynamic> that,
+          String refund_address, Object abs_fee, bool try_cooperate) =>
+      wasmModule.wire_chain_swap_refund(
+          port_, that, refund_address, abs_fee, try_cooperate);
 
   void wire_boltz_error_new(
           NativePortType port_, String kind, String message) =>
       wasmModule.wire_boltz_error_new(port_, kind, message);
 
-  void wire_lbtc_ln_v_1_swap_claim(NativePortType port_, List<dynamic> that,
-          String out_address, Object abs_fee) =>
-      wasmModule.wire_lbtc_ln_v_1_swap_claim(port_, that, out_address, abs_fee);
-
-  void wire_lbtc_ln_v_1_swap_new(
-          NativePortType port_,
-          String id,
-          int kind,
-          int network,
-          List<dynamic> keys,
-          List<dynamic> preimage,
-          String redeem_script,
-          String invoice,
-          Object out_amount,
-          String out_address,
-          String blinding_key,
-          String electrum_url,
-          String boltz_url) =>
-      wasmModule.wire_lbtc_ln_v_1_swap_new(
-          port_,
-          id,
-          kind,
-          network,
-          keys,
-          preimage,
-          redeem_script,
-          invoice,
-          out_amount,
-          out_address,
-          blinding_key,
-          electrum_url,
-          boltz_url);
-
-  void wire_lbtc_ln_v_1_swap_new_reverse(
-          NativePortType port_,
-          String mnemonic,
-          Object index,
-          Object out_amount,
-          int network,
-          String electrum_url,
-          String boltz_url,
-          String pair_hash) =>
-      wasmModule.wire_lbtc_ln_v_1_swap_new_reverse(port_, mnemonic, index,
-          out_amount, network, electrum_url, boltz_url, pair_hash);
-
-  void wire_lbtc_ln_v_1_swap_new_submarine(
-          NativePortType port_,
-          String mnemonic,
-          Object index,
-          String invoice,
-          int network,
-          String electrum_url,
-          String boltz_url,
-          String pair_hash) =>
-      wasmModule.wire_lbtc_ln_v_1_swap_new_submarine(port_, mnemonic, index,
-          invoice, network, electrum_url, boltz_url, pair_hash);
-
-  void wire_lbtc_ln_v_1_swap_refund(NativePortType port_, List<dynamic> that,
-          String out_address, Object abs_fee) =>
-      wasmModule.wire_lbtc_ln_v_1_swap_refund(
-          port_, that, out_address, abs_fee);
-
-  void wire_lbtc_ln_v_1_swap_tx_size(
-          NativePortType port_, List<dynamic> swap) =>
-      wasmModule.wire_lbtc_ln_v_1_swap_tx_size(port_, swap);
-
-  void wire_lbtc_ln_v_2_swap_broadcast_tx(
+  void wire_lbtc_ln_swap_broadcast_tx(
           NativePortType port_, List<dynamic> that, List<int> signed_bytes) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_broadcast_tx(port_, that, signed_bytes);
+      wasmModule.wire_lbtc_ln_swap_broadcast_tx(port_, that, signed_bytes);
 
-  void wire_lbtc_ln_v_2_swap_claim(NativePortType port_, List<dynamic> that,
+  void wire_lbtc_ln_swap_claim(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_claim(
+      wasmModule.wire_lbtc_ln_swap_claim(
           port_, that, out_address, abs_fee, try_cooperate);
 
-  void wire_lbtc_ln_v_2_swap_claim_bytes(
-          NativePortType port_,
-          List<dynamic> that,
-          String out_address,
-          Object abs_fee,
-          bool try_cooperate) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_claim_bytes(
+  void wire_lbtc_ln_swap_claim_bytes(NativePortType port_, List<dynamic> that,
+          String out_address, Object abs_fee, bool try_cooperate) =>
+      wasmModule.wire_lbtc_ln_swap_claim_bytes(
           port_, that, out_address, abs_fee, try_cooperate);
 
-  void wire_lbtc_ln_v_2_swap_coop_close_submarine(
+  void wire_lbtc_ln_swap_coop_close_submarine(
           NativePortType port_, List<dynamic> that) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_coop_close_submarine(port_, that);
+      wasmModule.wire_lbtc_ln_swap_coop_close_submarine(port_, that);
 
-  void wire_lbtc_ln_v_2_swap_new(
+  void wire_lbtc_ln_swap_new(
           NativePortType port_,
           String id,
           int kind,
@@ -911,7 +728,7 @@ class BoltzCoreWire implements BaseWire {
           String electrum_url,
           String boltz_url,
           String? referral_id) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_new(
+      wasmModule.wire_lbtc_ln_swap_new(
           port_,
           id,
           kind,
@@ -927,7 +744,7 @@ class BoltzCoreWire implements BaseWire {
           boltz_url,
           referral_id);
 
-  void wire_lbtc_ln_v_2_swap_new_reverse(
+  void wire_lbtc_ln_swap_new_reverse(
           NativePortType port_,
           String mnemonic,
           Object index,
@@ -937,7 +754,7 @@ class BoltzCoreWire implements BaseWire {
           String electrum_url,
           String boltz_url,
           String? referral_id) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_new_reverse(
+      wasmModule.wire_lbtc_ln_swap_new_reverse(
           port_,
           mnemonic,
           index,
@@ -948,7 +765,7 @@ class BoltzCoreWire implements BaseWire {
           boltz_url,
           referral_id);
 
-  void wire_lbtc_ln_v_2_swap_new_submarine(
+  void wire_lbtc_ln_swap_new_submarine(
           NativePortType port_,
           String mnemonic,
           Object index,
@@ -957,39 +774,31 @@ class BoltzCoreWire implements BaseWire {
           String electrum_url,
           String boltz_url,
           String? referral_id) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_new_submarine(port_, mnemonic, index,
+      wasmModule.wire_lbtc_ln_swap_new_submarine(port_, mnemonic, index,
           invoice, network, electrum_url, boltz_url, referral_id);
 
-  void wire_lbtc_ln_v_2_swap_refund(NativePortType port_, List<dynamic> that,
+  void wire_lbtc_ln_swap_refund(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_refund(
+      wasmModule.wire_lbtc_ln_swap_refund(
           port_, that, out_address, abs_fee, try_cooperate);
 
-  void wire_lbtc_ln_v_2_swap_refund_bytes(
-          NativePortType port_,
-          List<dynamic> that,
-          String out_address,
-          Object abs_fee,
-          bool try_cooperate) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_refund_bytes(
+  void wire_lbtc_ln_swap_refund_bytes(NativePortType port_, List<dynamic> that,
+          String out_address, Object abs_fee, bool try_cooperate) =>
+      wasmModule.wire_lbtc_ln_swap_refund_bytes(
           port_, that, out_address, abs_fee, try_cooperate);
 
-  void wire_lbtc_ln_v_2_swap_tx_size(
-          NativePortType port_, List<dynamic> that) =>
-      wasmModule.wire_lbtc_ln_v_2_swap_tx_size(port_, that);
-
-  void wire_all_fees_fetch(NativePortType port_, String boltz_url) =>
-      wasmModule.wire_all_fees_fetch(port_, boltz_url);
+  void wire_lbtc_ln_swap_tx_size(NativePortType port_, List<dynamic> that) =>
+      wasmModule.wire_lbtc_ln_swap_tx_size(port_, that);
 
   dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_btc_swap_script_v_2_str_new(
+      wire_btc_swap_script_str_new(
               int swap_type,
               String? funding_addrs,
               String hashlock,
               String receiver_pubkey,
               int locktime,
               String sender_pubkey) =>
-          wasmModule.wire_btc_swap_script_v_2_str_new(swap_type, funding_addrs,
+          wasmModule.wire_btc_swap_script_str_new(swap_type, funding_addrs,
               hashlock, receiver_pubkey, locktime, sender_pubkey);
 
   void wire_decoded_invoice_from_string(
@@ -1006,7 +815,7 @@ class BoltzCoreWire implements BaseWire {
           wasmModule.wire_key_pair_new(secret_key, public_key);
 
   dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_l_btc_swap_script_v_2_str_new(
+      wire_l_btc_swap_script_str_new(
               int swap_type,
               String? funding_addrs,
               String hashlock,
@@ -1014,14 +823,8 @@ class BoltzCoreWire implements BaseWire {
               int locktime,
               String sender_pubkey,
               String blinding_key) =>
-          wasmModule.wire_l_btc_swap_script_v_2_str_new(
-              swap_type,
-              funding_addrs,
-              hashlock,
-              receiver_pubkey,
-              locktime,
-              sender_pubkey,
-              blinding_key);
+          wasmModule.wire_l_btc_swap_script_str_new(swap_type, funding_addrs,
+              hashlock, receiver_pubkey, locktime, sender_pubkey, blinding_key);
 
   void wire_pre_image_generate(NativePortType port_) =>
       wasmModule.wire_pre_image_generate(port_);
@@ -1043,60 +846,13 @@ class BoltzCoreWasmModule implements WasmModule {
   @override
   external BoltzCoreWasmModule bind(dynamic thisArg, String moduleName);
 
-  external void wire_btc_ln_v_1_swap_claim(NativePortType port_,
-      List<dynamic> that, String out_address, Object abs_fee);
+  external void wire_btc_ln_swap_claim(NativePortType port_, List<dynamic> that,
+      String out_address, Object abs_fee, bool try_cooperate);
 
-  external void wire_btc_ln_v_1_swap_new(
-      NativePortType port_,
-      String id,
-      int kind,
-      int network,
-      List<dynamic> keys,
-      List<dynamic> preimage,
-      String redeem_script,
-      String invoice,
-      String script_address,
-      Object out_amount,
-      String electrum_url,
-      String boltz_url);
-
-  external void wire_btc_ln_v_1_swap_new_reverse(
-      NativePortType port_,
-      String mnemonic,
-      Object index,
-      Object out_amount,
-      int network,
-      String electrum_url,
-      String boltz_url,
-      String pair_hash);
-
-  external void wire_btc_ln_v_1_swap_new_submarine(
-      NativePortType port_,
-      String mnemonic,
-      Object index,
-      String invoice,
-      int network,
-      String electrum_url,
-      String boltz_url,
-      String pair_hash);
-
-  external void wire_btc_ln_v_1_swap_refund(NativePortType port_,
-      List<dynamic> that, String out_address, Object abs_fee);
-
-  external void wire_btc_ln_v_1_swap_tx_size(
+  external void wire_btc_ln_swap_coop_close_submarine(
       NativePortType port_, List<dynamic> that);
 
-  external void wire_btc_ln_v_2_swap_claim(
-      NativePortType port_,
-      List<dynamic> that,
-      String out_address,
-      Object abs_fee,
-      bool try_cooperate);
-
-  external void wire_btc_ln_v_2_swap_coop_close_submarine(
-      NativePortType port_, List<dynamic> that);
-
-  external void wire_btc_ln_v_2_swap_new(
+  external void wire_btc_ln_swap_new(
       NativePortType port_,
       String id,
       int kind,
@@ -1111,7 +867,7 @@ class BoltzCoreWasmModule implements WasmModule {
       String boltz_url,
       String? referral_id);
 
-  external void wire_btc_ln_v_2_swap_new_reverse(
+  external void wire_btc_ln_swap_new_reverse(
       NativePortType port_,
       String mnemonic,
       Object index,
@@ -1122,7 +878,7 @@ class BoltzCoreWasmModule implements WasmModule {
       String boltz_url,
       String? referral_id);
 
-  external void wire_btc_ln_v_2_swap_new_submarine(
+  external void wire_btc_ln_swap_new_submarine(
       NativePortType port_,
       String mnemonic,
       Object index,
@@ -1132,84 +888,81 @@ class BoltzCoreWasmModule implements WasmModule {
       String boltz_url,
       String? referral_id);
 
-  external void wire_btc_ln_v_2_swap_refund(
+  external void wire_btc_ln_swap_refund(
       NativePortType port_,
       List<dynamic> that,
       String out_address,
       Object abs_fee,
       bool try_cooperate);
 
-  external void wire_btc_ln_v_2_swap_tx_size(
+  external void wire_btc_ln_swap_tx_size(
       NativePortType port_, List<dynamic> that);
+
+  external void wire_chain_swap_claim(
+      NativePortType port_,
+      List<dynamic> that,
+      String out_address,
+      String refund_address,
+      Object abs_fee,
+      bool try_cooperate);
+
+  external void wire_chain_swap_new(
+      NativePortType port_,
+      String id,
+      bool is_testnet,
+      int direction,
+      List<dynamic> refund_keys,
+      List<dynamic> claim_keys,
+      List<dynamic> preimage,
+      List<dynamic> btc_script_str,
+      List<dynamic> lbtc_script_str,
+      String script_address,
+      Object out_amount,
+      String btc_electrum_url,
+      String lbtc_electrum_url,
+      String boltz_url,
+      String? referral_id,
+      String blinding_key);
+
+  external void wire_chain_swap_new_swap(
+      NativePortType port_,
+      int direction,
+      String mnemonic,
+      Object index,
+      int amount,
+      bool is_testnet,
+      String btc_electrum_url,
+      String lbtc_electrum_url,
+      String boltz_url,
+      String? referral_id);
+
+  external void wire_chain_swap_refund(NativePortType port_, List<dynamic> that,
+      String refund_address, Object abs_fee, bool try_cooperate);
 
   external void wire_boltz_error_new(
       NativePortType port_, String kind, String message);
 
-  external void wire_lbtc_ln_v_1_swap_claim(NativePortType port_,
-      List<dynamic> that, String out_address, Object abs_fee);
-
-  external void wire_lbtc_ln_v_1_swap_new(
-      NativePortType port_,
-      String id,
-      int kind,
-      int network,
-      List<dynamic> keys,
-      List<dynamic> preimage,
-      String redeem_script,
-      String invoice,
-      Object out_amount,
-      String out_address,
-      String blinding_key,
-      String electrum_url,
-      String boltz_url);
-
-  external void wire_lbtc_ln_v_1_swap_new_reverse(
-      NativePortType port_,
-      String mnemonic,
-      Object index,
-      Object out_amount,
-      int network,
-      String electrum_url,
-      String boltz_url,
-      String pair_hash);
-
-  external void wire_lbtc_ln_v_1_swap_new_submarine(
-      NativePortType port_,
-      String mnemonic,
-      Object index,
-      String invoice,
-      int network,
-      String electrum_url,
-      String boltz_url,
-      String pair_hash);
-
-  external void wire_lbtc_ln_v_1_swap_refund(NativePortType port_,
-      List<dynamic> that, String out_address, Object abs_fee);
-
-  external void wire_lbtc_ln_v_1_swap_tx_size(
-      NativePortType port_, List<dynamic> swap);
-
-  external void wire_lbtc_ln_v_2_swap_broadcast_tx(
+  external void wire_lbtc_ln_swap_broadcast_tx(
       NativePortType port_, List<dynamic> that, List<int> signed_bytes);
 
-  external void wire_lbtc_ln_v_2_swap_claim(
+  external void wire_lbtc_ln_swap_claim(
       NativePortType port_,
       List<dynamic> that,
       String out_address,
       Object abs_fee,
       bool try_cooperate);
 
-  external void wire_lbtc_ln_v_2_swap_claim_bytes(
+  external void wire_lbtc_ln_swap_claim_bytes(
       NativePortType port_,
       List<dynamic> that,
       String out_address,
       Object abs_fee,
       bool try_cooperate);
 
-  external void wire_lbtc_ln_v_2_swap_coop_close_submarine(
+  external void wire_lbtc_ln_swap_coop_close_submarine(
       NativePortType port_, List<dynamic> that);
 
-  external void wire_lbtc_ln_v_2_swap_new(
+  external void wire_lbtc_ln_swap_new(
       NativePortType port_,
       String id,
       int kind,
@@ -1225,7 +978,7 @@ class BoltzCoreWasmModule implements WasmModule {
       String boltz_url,
       String? referral_id);
 
-  external void wire_lbtc_ln_v_2_swap_new_reverse(
+  external void wire_lbtc_ln_swap_new_reverse(
       NativePortType port_,
       String mnemonic,
       Object index,
@@ -1236,7 +989,7 @@ class BoltzCoreWasmModule implements WasmModule {
       String boltz_url,
       String? referral_id);
 
-  external void wire_lbtc_ln_v_2_swap_new_submarine(
+  external void wire_lbtc_ln_swap_new_submarine(
       NativePortType port_,
       String mnemonic,
       Object index,
@@ -1246,27 +999,25 @@ class BoltzCoreWasmModule implements WasmModule {
       String boltz_url,
       String? referral_id);
 
-  external void wire_lbtc_ln_v_2_swap_refund(
+  external void wire_lbtc_ln_swap_refund(
       NativePortType port_,
       List<dynamic> that,
       String out_address,
       Object abs_fee,
       bool try_cooperate);
 
-  external void wire_lbtc_ln_v_2_swap_refund_bytes(
+  external void wire_lbtc_ln_swap_refund_bytes(
       NativePortType port_,
       List<dynamic> that,
       String out_address,
       Object abs_fee,
       bool try_cooperate);
 
-  external void wire_lbtc_ln_v_2_swap_tx_size(
+  external void wire_lbtc_ln_swap_tx_size(
       NativePortType port_, List<dynamic> that);
 
-  external void wire_all_fees_fetch(NativePortType port_, String boltz_url);
-
   external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_btc_swap_script_v_2_str_new(
+      wire_btc_swap_script_str_new(
           int swap_type,
           String? funding_addrs,
           String hashlock,
@@ -1284,7 +1035,7 @@ class BoltzCoreWasmModule implements WasmModule {
       wire_key_pair_new(String secret_key, String public_key);
 
   external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_l_btc_swap_script_v_2_str_new(
+      wire_l_btc_swap_script_str_new(
           int swap_type,
           String? funding_addrs,
           String hashlock,

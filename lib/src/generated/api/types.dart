@@ -9,35 +9,23 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'types.freezed.dart';
 
-@freezed
-class AllFees with _$AllFees {
-  const AllFees._();
-  const factory AllFees({
-    required Limits btcLimits,
-    required Limits lbtcLimits,
-    required SubmarineSwapFees btcSubmarine,
-    required ReverseSwapFees btcReverse,
-    required SubmarineSwapFees lbtcSubmarine,
-    required ReverseSwapFees lbtcReverse,
-    required String btcPairHash,
-    required String lbtcPairHash,
-  }) = _AllFees;
-  static Future<AllFees> fetch({required String boltzUrl, dynamic hint}) =>
-      BoltzCore.instance.api.allFeesFetch(boltzUrl: boltzUrl, hint: hint);
-}
+// The type `ChainFeesAndLimits` is not used by any `pub` functions, thus it is ignored.
+// The type `Limits` is not used by any `pub` functions, thus it is ignored.
+// The type `ReverseFeesAndLimits` is not used by any `pub` functions, thus it is ignored.
+// The type `SubmarineFeesAndLimits` is not used by any `pub` functions, thus it is ignored.
 
 @freezed
-class BtcSwapScriptV2Str with _$BtcSwapScriptV2Str {
-  const BtcSwapScriptV2Str._();
-  const factory BtcSwapScriptV2Str.raw({
+class BtcSwapScriptStr with _$BtcSwapScriptStr {
+  const BtcSwapScriptStr._();
+  const factory BtcSwapScriptStr.raw({
     required SwapType swapType,
     String? fundingAddrs,
     required String hashlock,
     required String receiverPubkey,
     required int locktime,
     required String senderPubkey,
-  }) = _BtcSwapScriptV2Str;
-  factory BtcSwapScriptV2Str(
+  }) = _BtcSwapScriptStr;
+  factory BtcSwapScriptStr(
           {required SwapType swapType,
           String? fundingAddrs,
           required String hashlock,
@@ -45,7 +33,7 @@ class BtcSwapScriptV2Str with _$BtcSwapScriptV2Str {
           required int locktime,
           required String senderPubkey,
           dynamic hint}) =>
-      BoltzCore.instance.api.btcSwapScriptV2StrNew(
+      BoltzCore.instance.api.btcSwapScriptStrNew(
           swapType: swapType,
           fundingAddrs: fundingAddrs,
           hashlock: hashlock,
@@ -60,6 +48,11 @@ enum Chain {
   bitcoinTestnet,
   liquid,
   liquidTestnet,
+}
+
+enum ChainSwapDirection {
+  btcToLbtc,
+  lbtcToBtc,
 }
 
 @freezed
@@ -113,9 +106,9 @@ class KeyPair with _$KeyPair {
 }
 
 @freezed
-class LBtcSwapScriptV2Str with _$LBtcSwapScriptV2Str {
-  const LBtcSwapScriptV2Str._();
-  const factory LBtcSwapScriptV2Str.raw({
+class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
+  const LBtcSwapScriptStr._();
+  const factory LBtcSwapScriptStr.raw({
     required SwapType swapType,
     String? fundingAddrs,
     required String hashlock,
@@ -123,8 +116,8 @@ class LBtcSwapScriptV2Str with _$LBtcSwapScriptV2Str {
     required int locktime,
     required String senderPubkey,
     required String blindingKey,
-  }) = _LBtcSwapScriptV2Str;
-  factory LBtcSwapScriptV2Str(
+  }) = _LBtcSwapScriptStr;
+  factory LBtcSwapScriptStr(
           {required SwapType swapType,
           String? fundingAddrs,
           required String hashlock,
@@ -133,7 +126,7 @@ class LBtcSwapScriptV2Str with _$LBtcSwapScriptV2Str {
           required String senderPubkey,
           required String blindingKey,
           dynamic hint}) =>
-      BoltzCore.instance.api.lBtcSwapScriptV2StrNew(
+      BoltzCore.instance.api.lBtcSwapScriptStrNew(
           swapType: swapType,
           fundingAddrs: fundingAddrs,
           hashlock: hashlock,
@@ -142,14 +135,6 @@ class LBtcSwapScriptV2Str with _$LBtcSwapScriptV2Str {
           senderPubkey: senderPubkey,
           blindingKey: blindingKey,
           hint: hint);
-}
-
-@freezed
-class Limits with _$Limits {
-  const factory Limits({
-    required int minimal,
-    required int maximal,
-  }) = _Limits;
 }
 
 @freezed
@@ -172,25 +157,8 @@ class PreImage with _$PreImage {
           value: value, sha256: sha256, hash160: hash160, hint: hint);
 }
 
-@freezed
-class ReverseSwapFees with _$ReverseSwapFees {
-  const factory ReverseSwapFees({
-    required double boltzFeesRate,
-    required int lockupFees,
-    required int claimFeesEstimate,
-  }) = _ReverseSwapFees;
-}
-
-@freezed
-class SubmarineSwapFees with _$SubmarineSwapFees {
-  const factory SubmarineSwapFees({
-    required double boltzFeesRate,
-    required int claimFees,
-    required int lockupFeesEstimate,
-  }) = _SubmarineSwapFees;
-}
-
 enum SwapType {
   submarine,
   reverse,
+  chain,
 }
