@@ -538,8 +538,8 @@ abstract class _ChainFees implements ChainFees {
 mixin _$ChainFeesAndLimits {
   Limits get btcLimits => throw _privateConstructorUsedError;
   Limits get lbtcLimits => throw _privateConstructorUsedError;
-  ChainFees get btcChain => throw _privateConstructorUsedError;
-  ChainFees get lbtcChain => throw _privateConstructorUsedError;
+  ChainFees get btcFees => throw _privateConstructorUsedError;
+  ChainFees get lbtcFees => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ChainFeesAndLimitsCopyWith<ChainFeesAndLimits> get copyWith =>
@@ -555,13 +555,13 @@ abstract class $ChainFeesAndLimitsCopyWith<$Res> {
   $Res call(
       {Limits btcLimits,
       Limits lbtcLimits,
-      ChainFees btcChain,
-      ChainFees lbtcChain});
+      ChainFees btcFees,
+      ChainFees lbtcFees});
 
   $LimitsCopyWith<$Res> get btcLimits;
   $LimitsCopyWith<$Res> get lbtcLimits;
-  $ChainFeesCopyWith<$Res> get btcChain;
-  $ChainFeesCopyWith<$Res> get lbtcChain;
+  $ChainFeesCopyWith<$Res> get btcFees;
+  $ChainFeesCopyWith<$Res> get lbtcFees;
 }
 
 /// @nodoc
@@ -579,8 +579,8 @@ class _$ChainFeesAndLimitsCopyWithImpl<$Res, $Val extends ChainFeesAndLimits>
   $Res call({
     Object? btcLimits = null,
     Object? lbtcLimits = null,
-    Object? btcChain = null,
-    Object? lbtcChain = null,
+    Object? btcFees = null,
+    Object? lbtcFees = null,
   }) {
     return _then(_value.copyWith(
       btcLimits: null == btcLimits
@@ -591,13 +591,13 @@ class _$ChainFeesAndLimitsCopyWithImpl<$Res, $Val extends ChainFeesAndLimits>
           ? _value.lbtcLimits
           : lbtcLimits // ignore: cast_nullable_to_non_nullable
               as Limits,
-      btcChain: null == btcChain
-          ? _value.btcChain
-          : btcChain // ignore: cast_nullable_to_non_nullable
+      btcFees: null == btcFees
+          ? _value.btcFees
+          : btcFees // ignore: cast_nullable_to_non_nullable
               as ChainFees,
-      lbtcChain: null == lbtcChain
-          ? _value.lbtcChain
-          : lbtcChain // ignore: cast_nullable_to_non_nullable
+      lbtcFees: null == lbtcFees
+          ? _value.lbtcFees
+          : lbtcFees // ignore: cast_nullable_to_non_nullable
               as ChainFees,
     ) as $Val);
   }
@@ -620,17 +620,17 @@ class _$ChainFeesAndLimitsCopyWithImpl<$Res, $Val extends ChainFeesAndLimits>
 
   @override
   @pragma('vm:prefer-inline')
-  $ChainFeesCopyWith<$Res> get btcChain {
-    return $ChainFeesCopyWith<$Res>(_value.btcChain, (value) {
-      return _then(_value.copyWith(btcChain: value) as $Val);
+  $ChainFeesCopyWith<$Res> get btcFees {
+    return $ChainFeesCopyWith<$Res>(_value.btcFees, (value) {
+      return _then(_value.copyWith(btcFees: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $ChainFeesCopyWith<$Res> get lbtcChain {
-    return $ChainFeesCopyWith<$Res>(_value.lbtcChain, (value) {
-      return _then(_value.copyWith(lbtcChain: value) as $Val);
+  $ChainFeesCopyWith<$Res> get lbtcFees {
+    return $ChainFeesCopyWith<$Res>(_value.lbtcFees, (value) {
+      return _then(_value.copyWith(lbtcFees: value) as $Val);
     });
   }
 }
@@ -646,17 +646,17 @@ abstract class _$$ChainFeesAndLimitsImplCopyWith<$Res>
   $Res call(
       {Limits btcLimits,
       Limits lbtcLimits,
-      ChainFees btcChain,
-      ChainFees lbtcChain});
+      ChainFees btcFees,
+      ChainFees lbtcFees});
 
   @override
   $LimitsCopyWith<$Res> get btcLimits;
   @override
   $LimitsCopyWith<$Res> get lbtcLimits;
   @override
-  $ChainFeesCopyWith<$Res> get btcChain;
+  $ChainFeesCopyWith<$Res> get btcFees;
   @override
-  $ChainFeesCopyWith<$Res> get lbtcChain;
+  $ChainFeesCopyWith<$Res> get lbtcFees;
 }
 
 /// @nodoc
@@ -672,8 +672,8 @@ class __$$ChainFeesAndLimitsImplCopyWithImpl<$Res>
   $Res call({
     Object? btcLimits = null,
     Object? lbtcLimits = null,
-    Object? btcChain = null,
-    Object? lbtcChain = null,
+    Object? btcFees = null,
+    Object? lbtcFees = null,
   }) {
     return _then(_$ChainFeesAndLimitsImpl(
       btcLimits: null == btcLimits
@@ -684,13 +684,13 @@ class __$$ChainFeesAndLimitsImplCopyWithImpl<$Res>
           ? _value.lbtcLimits
           : lbtcLimits // ignore: cast_nullable_to_non_nullable
               as Limits,
-      btcChain: null == btcChain
-          ? _value.btcChain
-          : btcChain // ignore: cast_nullable_to_non_nullable
+      btcFees: null == btcFees
+          ? _value.btcFees
+          : btcFees // ignore: cast_nullable_to_non_nullable
               as ChainFees,
-      lbtcChain: null == lbtcChain
-          ? _value.lbtcChain
-          : lbtcChain // ignore: cast_nullable_to_non_nullable
+      lbtcFees: null == lbtcFees
+          ? _value.lbtcFees
+          : lbtcFees // ignore: cast_nullable_to_non_nullable
               as ChainFees,
     ));
   }
@@ -702,21 +702,21 @@ class _$ChainFeesAndLimitsImpl implements _ChainFeesAndLimits {
   const _$ChainFeesAndLimitsImpl(
       {required this.btcLimits,
       required this.lbtcLimits,
-      required this.btcChain,
-      required this.lbtcChain});
+      required this.btcFees,
+      required this.lbtcFees});
 
   @override
   final Limits btcLimits;
   @override
   final Limits lbtcLimits;
   @override
-  final ChainFees btcChain;
+  final ChainFees btcFees;
   @override
-  final ChainFees lbtcChain;
+  final ChainFees lbtcFees;
 
   @override
   String toString() {
-    return 'ChainFeesAndLimits(btcLimits: $btcLimits, lbtcLimits: $lbtcLimits, btcChain: $btcChain, lbtcChain: $lbtcChain)';
+    return 'ChainFeesAndLimits(btcLimits: $btcLimits, lbtcLimits: $lbtcLimits, btcFees: $btcFees, lbtcFees: $lbtcFees)';
   }
 
   @override
@@ -728,15 +728,14 @@ class _$ChainFeesAndLimitsImpl implements _ChainFeesAndLimits {
                 other.btcLimits == btcLimits) &&
             (identical(other.lbtcLimits, lbtcLimits) ||
                 other.lbtcLimits == lbtcLimits) &&
-            (identical(other.btcChain, btcChain) ||
-                other.btcChain == btcChain) &&
-            (identical(other.lbtcChain, lbtcChain) ||
-                other.lbtcChain == lbtcChain));
+            (identical(other.btcFees, btcFees) || other.btcFees == btcFees) &&
+            (identical(other.lbtcFees, lbtcFees) ||
+                other.lbtcFees == lbtcFees));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, btcLimits, lbtcLimits, btcChain, lbtcChain);
+      Object.hash(runtimeType, btcLimits, lbtcLimits, btcFees, lbtcFees);
 
   @JsonKey(ignore: true)
   @override
@@ -750,17 +749,17 @@ abstract class _ChainFeesAndLimits implements ChainFeesAndLimits {
   const factory _ChainFeesAndLimits(
       {required final Limits btcLimits,
       required final Limits lbtcLimits,
-      required final ChainFees btcChain,
-      required final ChainFees lbtcChain}) = _$ChainFeesAndLimitsImpl;
+      required final ChainFees btcFees,
+      required final ChainFees lbtcFees}) = _$ChainFeesAndLimitsImpl;
 
   @override
   Limits get btcLimits;
   @override
   Limits get lbtcLimits;
   @override
-  ChainFees get btcChain;
+  ChainFees get btcFees;
   @override
-  ChainFees get lbtcChain;
+  ChainFees get lbtcFees;
   @override
   @JsonKey(ignore: true)
   _$$ChainFeesAndLimitsImplCopyWith<_$ChainFeesAndLimitsImpl> get copyWith =>

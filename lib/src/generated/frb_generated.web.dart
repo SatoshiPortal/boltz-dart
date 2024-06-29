@@ -402,8 +402,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     return [
       cst_encode_limits(raw.btcLimits),
       cst_encode_limits(raw.lbtcLimits),
-      cst_encode_chain_fees(raw.btcChain),
-      cst_encode_chain_fees(raw.lbtcChain)
+      cst_encode_chain_fees(raw.btcFees),
+      cst_encode_chain_fees(raw.lbtcFees)
     ];
   }
 

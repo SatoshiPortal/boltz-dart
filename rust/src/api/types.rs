@@ -348,8 +348,8 @@ pub struct ChainFees {
 pub struct ChainFeesAndLimits {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
-    pub btc_chain: ChainFees,  // we lockup (send) btc, we claim lbtc
-    pub lbtc_chain: ChainFees, // we lockup (send) lbtc, we claim btc
+    pub btc_fees: ChainFees,  // we lockup (send) btc, we claim lbtc
+    pub lbtc_fees: ChainFees, // we lockup (send) lbtc, we claim btc
 }
 impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
     type Error = BoltzError; // Use a more specific error type in a real application
@@ -398,8 +398,8 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
         Ok(ChainFeesAndLimits {
             btc_limits,
             lbtc_limits,
-            btc_chain,
-            lbtc_chain,
+            btc_fees: btc_chain,
+            lbtc_fees: lbtc_chain,
         })
     }
 }

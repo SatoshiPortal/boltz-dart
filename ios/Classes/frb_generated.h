@@ -127,8 +127,8 @@ typedef struct wire_cst_limits {
 typedef struct wire_cst_chain_fees_and_limits {
   struct wire_cst_limits btc_limits;
   struct wire_cst_limits lbtc_limits;
-  struct wire_cst_chain_fees btc_chain;
-  struct wire_cst_chain_fees lbtc_chain;
+  struct wire_cst_chain_fees btc_fees;
+  struct wire_cst_chain_fees lbtc_fees;
 } wire_cst_chain_fees_and_limits;
 
 typedef struct wire_cst_decoded_invoice {

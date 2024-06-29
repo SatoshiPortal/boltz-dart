@@ -1283,13 +1283,13 @@ impl SseDecode for crate::api::types::ChainFeesAndLimits {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_btcLimits = <crate::api::types::Limits>::sse_decode(deserializer);
         let mut var_lbtcLimits = <crate::api::types::Limits>::sse_decode(deserializer);
-        let mut var_btcChain = <crate::api::types::ChainFees>::sse_decode(deserializer);
-        let mut var_lbtcChain = <crate::api::types::ChainFees>::sse_decode(deserializer);
+        let mut var_btcFees = <crate::api::types::ChainFees>::sse_decode(deserializer);
+        let mut var_lbtcFees = <crate::api::types::ChainFees>::sse_decode(deserializer);
         return crate::api::types::ChainFeesAndLimits {
             btc_limits: var_btcLimits,
             lbtc_limits: var_lbtcLimits,
-            btc_chain: var_btcChain,
-            lbtc_chain: var_lbtcChain,
+            btc_fees: var_btcFees,
+            lbtc_fees: var_lbtcFees,
         };
     }
 }
@@ -1737,8 +1737,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::ChainFeesAndLimits {
         [
             self.btc_limits.into_into_dart().into_dart(),
             self.lbtc_limits.into_into_dart().into_dart(),
-            self.btc_chain.into_into_dart().into_dart(),
-            self.lbtc_chain.into_into_dart().into_dart(),
+            self.btc_fees.into_into_dart().into_dart(),
+            self.lbtc_fees.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2104,8 +2104,8 @@ impl SseEncode for crate::api::types::ChainFeesAndLimits {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <crate::api::types::Limits>::sse_encode(self.btc_limits, serializer);
         <crate::api::types::Limits>::sse_encode(self.lbtc_limits, serializer);
-        <crate::api::types::ChainFees>::sse_encode(self.btc_chain, serializer);
-        <crate::api::types::ChainFees>::sse_encode(self.lbtc_chain, serializer);
+        <crate::api::types::ChainFees>::sse_encode(self.btc_fees, serializer);
+        <crate::api::types::ChainFees>::sse_encode(self.lbtc_fees, serializer);
     }
 }
 

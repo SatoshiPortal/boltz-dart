@@ -1769,8 +1769,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return ChainFeesAndLimits(
       btcLimits: dco_decode_limits(arr[0]),
       lbtcLimits: dco_decode_limits(arr[1]),
-      btcChain: dco_decode_chain_fees(arr[2]),
-      lbtcChain: dco_decode_chain_fees(arr[3]),
+      btcFees: dco_decode_chain_fees(arr[2]),
+      lbtcFees: dco_decode_chain_fees(arr[3]),
     );
   }
 
@@ -2161,13 +2161,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_btcLimits = sse_decode_limits(deserializer);
     var var_lbtcLimits = sse_decode_limits(deserializer);
-    var var_btcChain = sse_decode_chain_fees(deserializer);
-    var var_lbtcChain = sse_decode_chain_fees(deserializer);
+    var var_btcFees = sse_decode_chain_fees(deserializer);
+    var var_lbtcFees = sse_decode_chain_fees(deserializer);
     return ChainFeesAndLimits(
         btcLimits: var_btcLimits,
         lbtcLimits: var_lbtcLimits,
-        btcChain: var_btcChain,
-        lbtcChain: var_lbtcChain);
+        btcFees: var_btcFees,
+        lbtcFees: var_lbtcFees);
   }
 
   @protected
@@ -2644,8 +2644,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_limits(self.btcLimits, serializer);
     sse_encode_limits(self.lbtcLimits, serializer);
-    sse_encode_chain_fees(self.btcChain, serializer);
-    sse_encode_chain_fees(self.lbtcChain, serializer);
+    sse_encode_chain_fees(self.btcFees, serializer);
+    sse_encode_chain_fees(self.lbtcFees, serializer);
   }
 
   @protected

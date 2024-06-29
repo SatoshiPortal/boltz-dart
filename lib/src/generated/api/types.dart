@@ -102,8 +102,8 @@ class ChainFeesAndLimits with _$ChainFeesAndLimits {
   const factory ChainFeesAndLimits({
     required Limits btcLimits,
     required Limits lbtcLimits,
-    required ChainFees btcChain,
-    required ChainFees lbtcChain,
+    required ChainFees btcFees,
+    required ChainFees lbtcFees,
   }) = _ChainFeesAndLimits;
 }
 

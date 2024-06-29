@@ -186,8 +186,8 @@ impl CstDecode<crate::api::types::ChainFeesAndLimits> for wire_cst_chain_fees_an
         crate::api::types::ChainFeesAndLimits {
             btc_limits: self.btc_limits.cst_decode(),
             lbtc_limits: self.lbtc_limits.cst_decode(),
-            btc_chain: self.btc_chain.cst_decode(),
-            lbtc_chain: self.lbtc_chain.cst_decode(),
+            btc_fees: self.btc_fees.cst_decode(),
+            lbtc_fees: self.lbtc_fees.cst_decode(),
         }
     }
 }
@@ -390,8 +390,8 @@ impl NewWithNullPtr for wire_cst_chain_fees_and_limits {
         Self {
             btc_limits: Default::default(),
             lbtc_limits: Default::default(),
-            btc_chain: Default::default(),
-            lbtc_chain: Default::default(),
+            btc_fees: Default::default(),
+            lbtc_fees: Default::default(),
         }
     }
 }
@@ -1171,8 +1171,8 @@ pub struct wire_cst_chain_fees {
 pub struct wire_cst_chain_fees_and_limits {
     btc_limits: wire_cst_limits,
     lbtc_limits: wire_cst_limits,
-    btc_chain: wire_cst_chain_fees,
-    lbtc_chain: wire_cst_chain_fees,
+    btc_fees: wire_cst_chain_fees,
+    lbtc_fees: wire_cst_chain_fees,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

@@ -136,8 +136,8 @@ impl CstDecode<crate::api::types::ChainFeesAndLimits>
         crate::api::types::ChainFeesAndLimits {
             btc_limits: self_.get(0).cst_decode(),
             lbtc_limits: self_.get(1).cst_decode(),
-            btc_chain: self_.get(2).cst_decode(),
-            lbtc_chain: self_.get(3).cst_decode(),
+            btc_fees: self_.get(2).cst_decode(),
+            lbtc_fees: self_.get(3).cst_decode(),
         }
     }
 }

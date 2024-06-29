@@ -499,8 +499,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       ChainFeesAndLimits apiObj, wire_cst_chain_fees_and_limits wireObj) {
     cst_api_fill_to_wire_limits(apiObj.btcLimits, wireObj.btc_limits);
     cst_api_fill_to_wire_limits(apiObj.lbtcLimits, wireObj.lbtc_limits);
-    cst_api_fill_to_wire_chain_fees(apiObj.btcChain, wireObj.btc_chain);
-    cst_api_fill_to_wire_chain_fees(apiObj.lbtcChain, wireObj.lbtc_chain);
+    cst_api_fill_to_wire_chain_fees(apiObj.btcFees, wireObj.btc_fees);
+    cst_api_fill_to_wire_chain_fees(apiObj.lbtcFees, wireObj.lbtc_fees);
   }
 
   @protected
@@ -2285,9 +2285,9 @@ final class wire_cst_chain_fees_and_limits extends ffi.Struct {
 
   external wire_cst_limits lbtc_limits;
 
-  external wire_cst_chain_fees btc_chain;
+  external wire_cst_chain_fees btc_fees;
 
-  external wire_cst_chain_fees lbtc_chain;
+  external wire_cst_chain_fees lbtc_fees;
 }
 
 final class wire_cst_decoded_invoice extends ffi.Struct {

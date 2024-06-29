@@ -51,9 +51,9 @@ void main() {
     final sub_fees = await fees.submarine();
     final rev_fees = await fees.reverse();
     final chain_fees = await fees.chain();
-    expect((sub_fees.fees.btcSubmarine.percentage > 0.0), true);
-    expect((rev_fees.fees.btcReverse.percentage > 0.0), true);
-    expect((chain_fees.fees.btcChain.percentage > 0.0), true);
+    expect((sub_fees.btcFees.percentage > 0.0), true);
+    expect((rev_fees.btcFees.percentage > 0.0), true);
+    expect((chain_fees.btcFees.percentage > 0.0), true);
   });
 
   test('DECODE EXPIRED BOLT11', () async {
