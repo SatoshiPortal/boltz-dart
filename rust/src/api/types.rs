@@ -199,8 +199,8 @@ pub struct _SubmarineFees {
 pub struct SubmarineFeesAndLimits {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
-    pub btc_submarine: _SubmarineFees,
-    pub lbtc_submarine: _SubmarineFees,
+    pub btc_fees: _SubmarineFees,
+    pub lbtc_fees: _SubmarineFees,
 }
 impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
     type Error = BoltzError; // Use a more specific error type in a real application
@@ -245,8 +245,8 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
         Ok(SubmarineFeesAndLimits {
             btc_limits,
             lbtc_limits,
-            btc_submarine,
-            lbtc_submarine,
+            btc_fees: btc_submarine,
+            lbtc_fees: lbtc_submarine,
         })
     }
 }
@@ -281,8 +281,8 @@ pub struct _ReverseFees {
 pub struct ReverseFeesAndLimits {
     pub btc_limits: Limits,
     pub lbtc_limits: Limits,
-    pub btc_reverse: _ReverseFees,
-    pub lbtc_reverse: _ReverseFees,
+    pub btc_fees: _ReverseFees,
+    pub lbtc_fees: _ReverseFees,
 }
 
 impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
@@ -328,8 +328,8 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
         Ok(ReverseFeesAndLimits {
             btc_limits,
             lbtc_limits,
-            btc_reverse,
-            lbtc_reverse,
+            btc_fees: btc_reverse,
+            lbtc_fees: lbtc_reverse,
         })
     }
 }
