@@ -7,10 +7,7 @@ use super::{
 use boltz_client::{
     boltz::Cooperative,
     network::electrum::ElectrumConfig,
-    swaps::{
-        boltz::{BoltzApiClientV2},
-        magic_routing,
-    },
+    swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
     Amount, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };

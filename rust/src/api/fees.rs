@@ -14,9 +14,7 @@ pub struct Fees {
 impl Fees {
     pub fn new(boltz_url: String) -> Fees {
         let url = check_protocol(&boltz_url);
-        Fees {
-            boltz_url: url,
-        }
+        Fees { boltz_url: url }
     }
     pub fn submarine(&self) -> Result<SubmarineFeesAndLimits, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&self.boltz_url);

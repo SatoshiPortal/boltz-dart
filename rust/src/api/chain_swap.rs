@@ -118,10 +118,8 @@ impl ChainSwap {
             compressed: true,
             inner: claim_kps.public_key(),
         };
-
         let preimage = Preimage::new();
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
-
         match direction {
             ChainSwapDirection::BtcToLbtc => {
                 let create_swap_req = boltz_client::swaps::boltz::CreateChainRequest {
@@ -135,7 +133,6 @@ impl ChainSwap {
                     server_lock_amount: None,
                     pair_hash: None, // Add address signature here.
                 };
-
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = BtcSwapScript::chain_from_swap_resp(
@@ -148,23 +145,18 @@ impl ChainSwap {
                 } else {
                     Chain::Bitcoin
                 };
-                let lockup_address = lockup_script
-                    .clone()
-                    .to_address(lockup_chain.into())
-                    ?;
+                let lockup_address = lockup_script.clone().to_address(lockup_chain.into())?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {
                     return Err(Error::Address("Lockup Address Mismatch".to_owned()).into());
                 }
-
                 let claim_details: ChainSwapDetails = create_chain_response.claim_details;
                 let claim_script = LBtcSwapScript::chain_from_swap_resp(
                     Side::Claim,
                     claim_details.clone(),
                     claim_public_key,
                 )?;
-
                 Ok(ChainSwap::new(
                     create_chain_response.id,
                     is_testnet,
@@ -208,10 +200,7 @@ impl ChainSwap {
                 } else {
                     Chain::Liquid
                 };
-                let lockup_address = lockup_script
-                    .clone()
-                    .to_address(lockup_chain.into())
-                    ?;
+                let lockup_address = lockup_script.clone().to_address(lockup_chain.into())?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {

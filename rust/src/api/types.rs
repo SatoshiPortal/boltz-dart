@@ -1,17 +1,16 @@
-use std::{ str::FromStr, time::Duration};
+use std::{str::FromStr, time::Duration};
 
 use flutter_rust_bridge::frb;
 // network
 // preimage
 //
 use boltz_client::{
-    boltz::{
-        ChainFees, GetChainPairsResponse, GetReversePairsResponse, GetSubmarinePairsResponse, PairMinerFees, ReverseFees, SubmarineFees
-    },
+    error::Error as LibError,
     network::Chain as BChain,
-    swaps::{
-        boltz::{BoltzApiClientV2, SwapType as BoltzSwapType},
-        magic_routing,
+    swaps::boltz::{
+        BoltzApiClientV2, ChainFees, GetChainPairsResponse, GetReversePairsResponse,
+        GetSubmarinePairsResponse, PairMinerFees, ReverseFees, SubmarineFees,
+        SwapType as BoltzSwapType,
     },
     util::secrets::SwapKey,
     Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
@@ -241,29 +240,16 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
     fn try_into(self) -> Result<SubmarineFeesAndLimits, Self::Error> {
         let btc_pair = match self.get_btc_to_btc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
         };
-
         let btc_limits: SwapLimits = btc_pair.limits.into();
         let btc_fees = btc_pair.fees.into();
-
         let lbtc_pair = match self.get_lbtc_to_btc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get L-BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find L-BTC Pair".to_string()).into()),
         };
         let lbtc_limits = lbtc_pair.limits.into();
         let lbtc_fees = lbtc_pair.fees.into();
-        
         Ok(SubmarineFeesAndLimits {
             btc_limits,
             lbtc_limits,
@@ -320,25 +306,13 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
     fn try_into(self) -> Result<ReverseFeesAndLimits, Self::Error> {
         let btc_pair = match self.get_btc_to_btc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
         };
-
         let btc_limits = btc_pair.limits.into();
         let btc_reverse = btc_pair.fees.into();
-
         let lbtc_pair = match self.get_btc_to_lbtc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get L-BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find L-BTC Pair".to_string()).into()),
         };
         let lbtc_limits = lbtc_pair.limits.into();
         let lbtc_reverse = lbtc_pair.fees.into();
@@ -385,29 +359,16 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
     fn try_into(self) -> Result<ChainFeesAndLimits, Self::Error> {
         let btc_pair = match self.get_lbtc_to_btc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get BTC-L-BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
         };
-
         let btc_limits = btc_pair.limits.into();
         let btc_chain = btc_pair.fees.into();
-
         let lbtc_pair = match self.get_btc_to_lbtc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get L-BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
         };
         let lbtc_limits = lbtc_pair.limits.into();
         let lbtc_chain = lbtc_pair.fees.into();
-
         Ok(ChainFeesAndLimits {
             btc_limits,
             lbtc_limits,
@@ -416,7 +377,6 @@ impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
         })
     }
 }
-
 
 #[frb(dart_metadata=("freezed"))]
 #[derive(Debug, Clone)]
@@ -440,9 +400,8 @@ impl DecodedInvoice {
             Ok(result) => result,
             Err(e) => return Err(BoltzError::new("Input".to_string(), e.to_string())),
         };
-
         let bip21 = if boltz_url.is_some() {
-            let mrh = match magic_routing::find_magic_routing_hint(&s) {
+            let mrh = match boltz_client::swaps::magic_routing::find_magic_routing_hint(&s) {
                 Ok(s) => s,
                 Err(_) => None,
             };
@@ -458,7 +417,6 @@ impl DecodedInvoice {
         } else {
             None
         };
-
         Ok(DecodedInvoice {
             expiry: invoice.expiry_time().as_secs(),
             expires_in: invoice.duration_until_expiry().as_secs(),
@@ -683,7 +641,6 @@ impl TryInto<LBtcSwapScript> for LBtcSwapScriptStr {
                 ))
             }
         };
-
         Ok(LBtcSwapScript {
             swap_type: self.swap_type.clone().into(),
             funding_addrs: address,
