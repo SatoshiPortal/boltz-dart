@@ -21,7 +21,7 @@ class BoltzApi {
 
   void initialize(String baseUrl) {
     // print('initialize');
-    channel = IOWebSocketChannel.connect(wssProtocolCheck('$baseUrl/v2/ws'));
+    channel = IOWebSocketChannel.connect(wssProtocolCheck('$baseUrl/ws'));
     // Initialize the broadcast controller
     _broadcastController = StreamController<SwapStreamStatus>.broadcast();
 
