@@ -513,7 +513,29 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
 
 #[cfg(test)]
 mod tests {
+    use boltz_client::boltz::BOLTZ_TESTNET_URL_V2;
+
     use super::*;
+    #[test]
+    fn test_v2_submarine() {
+        let mnemonic = "bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon".to_string();
+        let index = 1;
+        let invoice = "lntb2500u1pnggxykpp5dqvqlxrw2fe929cmtx36jqcy2ljeeq8hj8udmga4dzhtxm2lkg0scqpjsp5p0zf2vhsv2x558t964a9la4vtk3fapgdljjmwgxp5u8m62kmh2zs9q7sqqqqqqqqqqqqqqqqqqqsqqqqqysgqdpyxysysctvvcsxzgz5dahzqmmxyppk7enxv4jsmqz9grzjqwfn3p9278ttzzpe0e00uhyxhned3j5d9acqak5emwfpflp8z2cnfl6h8msfh3505gqqqqlgqqqqqeqqjqa8ndprc9w7u6wnmcdnhrszqah4lepymn925sz5yh6wrdvenqexsqse3wrpgz0m5x8f69uzq3e642uxjp6ru0ytqm3gvh86nx6jpsfjgqg2amm9".to_string();
+        let network = Chain::LiquidTestnet;
+        let electrum_url = "blockstream.info:465".to_string();
+        let boltz_url = BOLTZ_TESTNET_URL_V2.to_string();
+
+        let result = LbtcLnSwap::new_submarine(
+            mnemonic,
+            index,
+            invoice,
+            network,
+            electrum_url,
+            boltz_url,
+            None,
+        )
+        .unwrap();
+    }
 
     #[test]
     fn test_v2_reverse() {
