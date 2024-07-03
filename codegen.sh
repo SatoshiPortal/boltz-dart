@@ -3,7 +3,7 @@
 read -r -p "Do you want to set CPATH? (y/N): " response
 
 # Convert response to lowercase to handle Y or y
-response=${response,,}
+response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$response" == "y" ]]; then
     export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"

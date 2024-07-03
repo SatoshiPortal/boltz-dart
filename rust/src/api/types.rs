@@ -5,14 +5,15 @@ use flutter_rust_bridge::frb;
 // preimage
 //
 use boltz_client::{
+    error::Error as LibError,
     network::Chain as BChain,
-    swaps::{
-        boltz::{BoltzApiClient, SwapType as BoltzSwapType},
-        boltzv2::BoltzApiClientV2,
-        magic_routing,
+    swaps::boltz::{
+        BoltzApiClientV2, ChainFees, GetChainPairsResponse, GetReversePairsResponse,
+        GetSubmarinePairsResponse, PairMinerFees, ReverseFees, SubmarineFees,
+        SwapType as BoltzSwapType,
     },
     util::secrets::SwapKey,
-    Address, Bolt11Invoice, BtcSwapScriptV2, ElementsAddress, Hash, Keypair, LBtcSwapScriptV2,
+    Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
     PublicKey, Secp256k1, ZKKeyPair,
 };
 use serde::{Deserialize, Serialize};
@@ -26,6 +27,7 @@ use super::error::BoltzError;
 pub enum SwapType {
     Submarine,
     Reverse,
+    Chain,
 }
 
 impl Into<BoltzSwapType> for SwapType {
@@ -33,6 +35,7 @@ impl Into<BoltzSwapType> for SwapType {
         match self {
             SwapType::Submarine => BoltzSwapType::Submarine,
             SwapType::Reverse => BoltzSwapType::ReverseSubmarine,
+            SwapType::Chain => BoltzSwapType::Chain,
         }
     }
 }
@@ -41,6 +44,7 @@ impl From<BoltzSwapType> for SwapType {
         match boltz_swap_type {
             BoltzSwapType::Submarine => SwapType::Submarine,
             BoltzSwapType::ReverseSubmarine => SwapType::Reverse,
+            BoltzSwapType::Chain => SwapType::Chain,
         }
     }
 }
@@ -65,6 +69,12 @@ impl Into<BChain> for Chain {
     }
 }
 
+#[derive(Clone, Copy, Serialize, Deserialize, PartialEq)]
+pub enum ChainSwapDirection {
+    BtcToLbtc,
+    LbtcToBtc,
+}
+
 #[derive(Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct KeyPair {
@@ -72,10 +82,14 @@ pub struct KeyPair {
     pub public_key: String,
 }
 
-impl Into<Keypair> for KeyPair {
-    fn into(self) -> Keypair {
+impl TryInto<Keypair> for KeyPair {
+    type Error = BoltzError;
+    fn try_into(self) -> Result<Keypair, Self::Error> {
         let secp = Secp256k1::new();
-        Keypair::from_seckey_str(&secp, &self.secret_key).unwrap()
+        match Keypair::from_seckey_str(&secp, &self.secret_key) {
+            Ok(keypair) => Ok(keypair),
+            Err(e) => Err(boltz_client::error::Error::Key(e.into()).into()),
+        }
     }
 }
 
@@ -106,6 +120,13 @@ impl KeyPair {
             SwapType::Reverse => {
                 let child_keys =
                     SwapKey::from_reverse_account(&mnemonic, "", network.into(), index)?;
+                Ok(KeyPair {
+                    secret_key: child_keys.keypair.display_secret().to_string(),
+                    public_key: child_keys.keypair.public_key().to_string(),
+                })
+            }
+            SwapType::Chain => {
+                let child_keys = SwapKey::from_chain_account(&mnemonic, "", network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
@@ -168,111 +189,193 @@ impl Into<PreImage> for Preimage {
 
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
-pub struct AllFees {
-    pub btc_limits: Limits,
-    pub lbtc_limits: Limits,
-    pub btc_submarine: SubmarineSwapFees,
-    pub btc_reverse: ReverseSwapFees,
-    pub lbtc_submarine: SubmarineSwapFees,
-    pub lbtc_reverse: ReverseSwapFees,
-    pub btc_pair_hash: String,
-    pub lbtc_pair_hash: String,
+
+pub struct SwapLimits {
+    pub minimal: u64,
+    pub maximal: u64,
 }
 
-impl AllFees {
-    pub fn fetch(boltz_url: String) -> Result<Self, BoltzError> {
-        let boltz_client = BoltzApiClient::new(&check_protocol(&boltz_url));
-        let boltz_pairs = match boltz_client.get_pairs() {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
+impl Into<SwapLimits> for boltz_client::swaps::boltz::PairLimits {
+    fn into(self) -> SwapLimits {
+        SwapLimits {
+            minimal: self.minimal as u64,
+            maximal: self.maximal as u64,
+        }
+    }
+}
+impl Into<SwapLimits> for boltz_client::swaps::boltz::ReverseLimits {
+    fn into(self) -> SwapLimits {
+        SwapLimits {
+            minimal: self.minimal as u64,
+            maximal: self.maximal as u64,
+        }
+    }
+}
+#[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
+pub struct SubSwapFees {
+    pub percentage: f64,
+    pub miner_fees: u64,
+}
 
-        let btc_pair = match boltz_pairs.get_btc_pair() {
+impl Into<SubSwapFees> for SubmarineFees {
+    fn into(self) -> SubSwapFees {
+        SubSwapFees {
+            percentage: self.percentage,
+            miner_fees: self.miner_fees as u64,
+        }
+    }
+}
+#[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
+pub struct SubmarineFeesAndLimits {
+    pub btc_limits: SwapLimits,
+    pub lbtc_limits: SwapLimits,
+    pub btc_fees: SubSwapFees,
+    pub lbtc_fees: SubSwapFees,
+}
+impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
+    type Error = BoltzError; // Use a more specific error type in a real application
+
+    fn try_into(self) -> Result<SubmarineFeesAndLimits, Self::Error> {
+        let btc_pair = match self.get_btc_to_btc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
         };
-        let btc_limits = Limits {
-            minimal: btc_pair.limits.minimal as u64,
-            maximal: btc_pair.limits.maximal as u64,
-        };
-        let btc_submarine = SubmarineSwapFees {
-            boltz_fees_rate: btc_pair.fees.percentage_swap_in,
-            lockup_fees_estimate: btc_pair.fees.submarine_lockup_estimate(),
-            claim_fees: btc_pair.fees.submarine_claim(),
-        };
-        let btc_reverse = ReverseSwapFees {
-            boltz_fees_rate: btc_pair.fees.percentage,
-            lockup_fees: btc_pair.fees.reverse_lockup(),
-            claim_fees_estimate: btc_pair.fees.reverse_claim_estimate(),
-        };
-
-        let lbtc_pair = match boltz_pairs.get_lbtc_pair() {
+        let btc_limits: SwapLimits = btc_pair.limits.into();
+        let btc_fees = btc_pair.fees.into();
+        let lbtc_pair = match self.get_lbtc_to_btc_pair() {
             Some(result) => result,
-            None => {
-                return Err(BoltzError::new(
-                    "BoltzApi".to_owned(),
-                    "Could not get L-BTC pair".to_owned(),
-                ))
-            }
+            None => return Err(LibError::Protocol("Could Not find L-BTC Pair".to_string()).into()),
         };
-        let lbtc_limits = Limits {
-            minimal: lbtc_pair.limits.minimal as u64,
-            maximal: lbtc_pair.limits.maximal as u64,
-        };
-        let lbtc_submarine = SubmarineSwapFees {
-            boltz_fees_rate: lbtc_pair.fees.percentage_swap_in,
-            lockup_fees_estimate: lbtc_pair.fees.submarine_lockup_estimate(),
-            claim_fees: lbtc_pair.fees.submarine_claim(),
-        };
-        let lbtc_reverse = ReverseSwapFees {
-            boltz_fees_rate: lbtc_pair.fees.percentage,
-            lockup_fees: lbtc_pair.fees.reverse_lockup(),
-            claim_fees_estimate: lbtc_pair.fees.reverse_claim_estimate(),
-        };
-        let btc_pair_hash = btc_pair.hash;
-        let lbtc_pair_hash = lbtc_pair.hash;
-
-        Ok(AllFees {
+        let lbtc_limits = lbtc_pair.limits.into();
+        let lbtc_fees = lbtc_pair.fees.into();
+        Ok(SubmarineFeesAndLimits {
             btc_limits,
             lbtc_limits,
-            btc_submarine,
-            btc_reverse,
-            lbtc_submarine,
-            lbtc_reverse,
-            btc_pair_hash,
-            lbtc_pair_hash,
+            btc_fees,
+            lbtc_fees,
         })
     }
 }
 
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
-pub struct Limits {
-    pub minimal: u64,
-    pub maximal: u64,
+
+pub struct MinerFees {
+    pub lockup: u64,
+    pub claim: u64,
+}
+impl Into<MinerFees> for PairMinerFees {
+    fn into(self) -> MinerFees {
+        MinerFees {
+            lockup: self.lockup,
+            claim: self.claim,
+        }
+    }
 }
 
-// 1. lockup (client) 2. [claim (boltz) | refund (client)]
-#[frb(dart_metadata=("freezed"))]
 #[derive(Debug, Clone)]
-pub struct SubmarineSwapFees {
-    pub boltz_fees_rate: f64,
-    pub claim_fees: u64,
-    pub lockup_fees_estimate: u64,
+#[frb(dart_metadata=("freezed"))]
+pub struct RevSwapFees {
+    pub percentage: f64,
+    pub miner_fees: MinerFees,
 }
 
-// 1. lockup (boltz) 2. [claim (client) | refund (boltz)]
-#[frb(dart_metadata=("freezed"))]
+impl Into<RevSwapFees> for ReverseFees {
+    fn into(self) -> RevSwapFees {
+        RevSwapFees {
+            percentage: self.percentage,
+            miner_fees: self.miner_fees.into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
-pub struct ReverseSwapFees {
-    pub boltz_fees_rate: f64,
-    pub lockup_fees: u64,
-    pub claim_fees_estimate: u64,
+#[frb(dart_metadata=("freezed"))]
+pub struct ReverseFeesAndLimits {
+    pub btc_limits: SwapLimits,
+    pub lbtc_limits: SwapLimits,
+    pub btc_fees: RevSwapFees,
+    pub lbtc_fees: RevSwapFees,
+}
+
+impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
+    type Error = BoltzError; // Use a more specific error type in a real application
+
+    fn try_into(self) -> Result<ReverseFeesAndLimits, Self::Error> {
+        let btc_pair = match self.get_btc_to_btc_pair() {
+            Some(result) => result,
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
+        };
+        let btc_limits = btc_pair.limits.into();
+        let btc_reverse = btc_pair.fees.into();
+        let lbtc_pair = match self.get_btc_to_lbtc_pair() {
+            Some(result) => result,
+            None => return Err(LibError::Protocol("Could Not find L-BTC Pair".to_string()).into()),
+        };
+        let lbtc_limits = lbtc_pair.limits.into();
+        let lbtc_reverse = lbtc_pair.fees.into();
+        Ok(ReverseFeesAndLimits {
+            btc_limits,
+            lbtc_limits,
+            btc_fees: btc_reverse,
+            lbtc_fees: lbtc_reverse,
+        })
+    }
+}
+
+#[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
+pub struct ChainSwapFees {
+    pub percentage: f64,
+    pub user_lockup: u64,
+    pub user_claim: u64,
+    pub server: u64,
+}
+
+impl From<ChainFees> for ChainSwapFees {
+    fn from(cf: ChainFees) -> Self {
+        Self {
+            percentage: cf.percentage,
+            user_lockup: cf.lockup(),
+            user_claim: cf.claim_estimate(),
+            server: cf.server(),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
+pub struct ChainFeesAndLimits {
+    pub btc_limits: SwapLimits,
+    pub lbtc_limits: SwapLimits,
+    pub btc_fees: ChainSwapFees,  // we lockup (send) btc, we claim lbtc
+    pub lbtc_fees: ChainSwapFees, // we lockup (send) lbtc, we claim btc
+}
+impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
+    type Error = BoltzError; // Use a more specific error type in a real application
+
+    fn try_into(self) -> Result<ChainFeesAndLimits, Self::Error> {
+        let btc_pair = match self.get_lbtc_to_btc_pair() {
+            Some(result) => result,
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
+        };
+        let btc_limits = btc_pair.limits.into();
+        let btc_chain = btc_pair.fees.into();
+        let lbtc_pair = match self.get_btc_to_lbtc_pair() {
+            Some(result) => result,
+            None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
+        };
+        let lbtc_limits = lbtc_pair.limits.into();
+        let lbtc_chain = lbtc_pair.fees.into();
+        Ok(ChainFeesAndLimits {
+            btc_limits,
+            lbtc_limits,
+            btc_fees: btc_chain,
+            lbtc_fees: lbtc_chain,
+        })
+    }
 }
 
 #[frb(dart_metadata=("freezed"))]
@@ -297,9 +400,8 @@ impl DecodedInvoice {
             Ok(result) => result,
             Err(e) => return Err(BoltzError::new("Input".to_string(), e.to_string())),
         };
-
         let bip21 = if boltz_url.is_some() {
-            let mrh = match magic_routing::find_magic_routing_hint(&s) {
+            let mrh = match boltz_client::swaps::magic_routing::find_magic_routing_hint(&s) {
                 Ok(s) => s,
                 Err(_) => None,
             };
@@ -315,7 +417,6 @@ impl DecodedInvoice {
         } else {
             None
         };
-
         Ok(DecodedInvoice {
             expiry: invoice.expiry_time().as_secs(),
             expires_in: invoice.duration_until_expiry().as_secs(),
@@ -335,7 +436,7 @@ impl DecodedInvoice {
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
-pub struct BtcSwapScriptV2Str {
+pub struct BtcSwapScriptStr {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,
     pub hashlock: String,
@@ -344,7 +445,7 @@ pub struct BtcSwapScriptV2Str {
     pub sender_pubkey: String,
 }
 
-impl BtcSwapScriptV2Str {
+impl BtcSwapScriptStr {
     #[frb(sync)]
     pub fn new(
         swap_type: SwapType,
@@ -354,7 +455,7 @@ impl BtcSwapScriptV2Str {
         locktime: u32,
         sender_pubkey: String,
     ) -> Self {
-        BtcSwapScriptV2Str {
+        BtcSwapScriptStr {
             swap_type,
             funding_addrs,
             hashlock,
@@ -365,10 +466,10 @@ impl BtcSwapScriptV2Str {
     }
 }
 
-impl TryInto<BtcSwapScriptV2> for BtcSwapScriptV2Str {
+impl TryInto<BtcSwapScript> for BtcSwapScriptStr {
     type Error = BoltzError; // Use a more specific error type in a real application
 
-    fn try_into(self) -> Result<BtcSwapScriptV2, Self::Error> {
+    fn try_into(self) -> Result<BtcSwapScript, Self::Error> {
         let address: Option<Address> = if self.funding_addrs.is_some() {
             let address = match Address::from_str(&self.funding_addrs.unwrap()) {
                 Ok(r) => r.assume_checked(),
@@ -419,20 +520,21 @@ impl TryInto<BtcSwapScriptV2> for BtcSwapScriptV2Str {
                 ))
             }
         };
-        Ok(BtcSwapScriptV2 {
+        Ok(BtcSwapScript {
             swap_type: self.swap_type.clone().into(),
             funding_addrs: address,
             hashlock: hashlock,
             receiver_pubkey: receiver_pubkey,
             locktime: locktime,
             sender_pubkey: sender_pubkey,
+            side: None,
         })
     }
 }
 
-impl From<BtcSwapScriptV2> for BtcSwapScriptV2Str {
-    fn from(swap: BtcSwapScriptV2) -> Self {
-        BtcSwapScriptV2Str {
+impl From<BtcSwapScript> for BtcSwapScriptStr {
+    fn from(swap: BtcSwapScript) -> Self {
+        BtcSwapScriptStr {
             swap_type: swap.swap_type.into(),
             funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()),
             hashlock: swap.hashlock.to_string(),
@@ -445,7 +547,7 @@ impl From<BtcSwapScriptV2> for BtcSwapScriptV2Str {
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
-pub struct LBtcSwapScriptV2Str {
+pub struct LBtcSwapScriptStr {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,
     pub hashlock: String,
@@ -454,7 +556,7 @@ pub struct LBtcSwapScriptV2Str {
     pub sender_pubkey: String,
     pub blinding_key: String,
 }
-impl LBtcSwapScriptV2Str {
+impl LBtcSwapScriptStr {
     #[frb(sync)]
     pub fn new(
         swap_type: SwapType,
@@ -465,7 +567,7 @@ impl LBtcSwapScriptV2Str {
         sender_pubkey: String,
         blinding_key: String,
     ) -> Self {
-        LBtcSwapScriptV2Str {
+        LBtcSwapScriptStr {
             swap_type,
             funding_addrs,
             hashlock,
@@ -476,10 +578,10 @@ impl LBtcSwapScriptV2Str {
         }
     }
 }
-impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
+impl TryInto<LBtcSwapScript> for LBtcSwapScriptStr {
     type Error = BoltzError; // Use a more specific error type in a real application
 
-    fn try_into(self) -> Result<LBtcSwapScriptV2, Self::Error> {
+    fn try_into(self) -> Result<LBtcSwapScript, Self::Error> {
         let address: Option<ElementsAddress> = if self.funding_addrs.is_some() {
             let address = match ElementsAddress::from_str(&self.funding_addrs.unwrap()) {
                 Ok(r) => r,
@@ -539,8 +641,7 @@ impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
                 ))
             }
         };
-
-        Ok(LBtcSwapScriptV2 {
+        Ok(LBtcSwapScript {
             swap_type: self.swap_type.clone().into(),
             funding_addrs: address,
             hashlock: hashlock,
@@ -548,13 +649,14 @@ impl TryInto<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
             locktime: locktime,
             sender_pubkey: sender_pubkey,
             blinding_key: blinding_key,
+            side: None,
         })
     }
 }
 
-impl From<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
-    fn from(swap: LBtcSwapScriptV2) -> Self {
-        LBtcSwapScriptV2Str {
+impl From<LBtcSwapScript> for LBtcSwapScriptStr {
+    fn from(swap: LBtcSwapScript) -> Self {
+        LBtcSwapScriptStr {
             swap_type: swap.swap_type.into(),
             funding_addrs: swap.funding_addrs.map(|addr| addr.to_string()),
             hashlock: swap.hashlock.to_string(),
@@ -566,14 +668,14 @@ impl From<LBtcSwapScriptV2> for LBtcSwapScriptV2Str {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use boltz_client::swaps::boltz::BOLTZ_MAINNET_URL;
+// #[cfg(test)]
+// mod tests {
+//     use boltz_client::swaps::boltz::BOLTZ_MAINNET_URL_V2;
 
-    use super::*;
-    #[test]
-    fn test_fetch_all_fees() {
-        let fees = AllFees::fetch(BOLTZ_MAINNET_URL.to_owned());
-        println!("{:#?}", fees);
-    }
-}
+//     use super::*;
+//     #[test]
+//     fn test_fetch_all_fees() {
+//         let fees = AllFees::fetch(BOLTZ_MAINNET_URL_V2.to_owned());
+//         println!("{:#?}", fees);
+//     }
+// }

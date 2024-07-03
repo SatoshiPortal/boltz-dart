@@ -1,7 +1,7 @@
 [package]
 name = "boltz-dart"
 authors = ["i5hi <ishi@satoshiportal.com>, mocodesmo <morteza@satoshiportal.com>"]
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 
 [lib]
@@ -10,7 +10,7 @@ doctest = false
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "9c3fd15c741749206735ff57d55e75dcd6f2d5d2" }
+boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "6ba4f48bebfe5bc05ce65fa5f44c1cfd9c42ffce" }
 flutter_rust_bridge = "=2.0.0-dev.31"
 anyhow = "1.0.68"
 serde = "1.0.89"

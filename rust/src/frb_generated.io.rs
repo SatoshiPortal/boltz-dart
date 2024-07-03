@@ -21,21 +21,6 @@ impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
         String::from_utf8(vec).unwrap()
     }
 }
-impl CstDecode<crate::api::types::AllFees> for wire_cst_all_fees {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::AllFees {
-        crate::api::types::AllFees {
-            btc_limits: self.btc_limits.cst_decode(),
-            lbtc_limits: self.lbtc_limits.cst_decode(),
-            btc_submarine: self.btc_submarine.cst_decode(),
-            btc_reverse: self.btc_reverse.cst_decode(),
-            lbtc_submarine: self.lbtc_submarine.cst_decode(),
-            lbtc_reverse: self.lbtc_reverse.cst_decode(),
-            btc_pair_hash: self.btc_pair_hash.cst_decode(),
-            lbtc_pair_hash: self.lbtc_pair_hash.cst_decode(),
-        }
-    }
-}
 impl CstDecode<crate::api::error::BoltzError> for wire_cst_boltz_error {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::error::BoltzError {
@@ -45,25 +30,32 @@ impl CstDecode<crate::api::error::BoltzError> for wire_cst_boltz_error {
         }
     }
 }
-impl CstDecode<crate::api::btc_ln::BtcLnV1Swap> for *mut wire_cst_btc_ln_v_1_swap {
+impl CstDecode<crate::api::btc_ln::BtcLnSwap> for *mut wire_cst_btc_ln_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::btc_ln::BtcLnV1Swap {
+    fn cst_decode(self) -> crate::api::btc_ln::BtcLnSwap {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::btc_ln::BtcLnV1Swap>::cst_decode(*wrap).into()
+        CstDecode::<crate::api::btc_ln::BtcLnSwap>::cst_decode(*wrap).into()
     }
 }
-impl CstDecode<crate::api::btc_ln::BtcLnV2Swap> for *mut wire_cst_btc_ln_v_2_swap {
+impl CstDecode<crate::api::types::BtcSwapScriptStr> for *mut wire_cst_btc_swap_script_str {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::btc_ln::BtcLnV2Swap {
+    fn cst_decode(self) -> crate::api::types::BtcSwapScriptStr {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::btc_ln::BtcLnV2Swap>::cst_decode(*wrap).into()
+        CstDecode::<crate::api::types::BtcSwapScriptStr>::cst_decode(*wrap).into()
     }
 }
-impl CstDecode<crate::api::types::BtcSwapScriptV2Str> for *mut wire_cst_btc_swap_script_v_2_str {
+impl CstDecode<crate::api::chain_swap::ChainSwap> for *mut wire_cst_chain_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::BtcSwapScriptV2Str {
+    fn cst_decode(self) -> crate::api::chain_swap::ChainSwap {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::types::BtcSwapScriptV2Str>::cst_decode(*wrap).into()
+        CstDecode::<crate::api::chain_swap::ChainSwap>::cst_decode(*wrap).into()
+    }
+}
+impl CstDecode<crate::api::fees::Fees> for *mut wire_cst_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::fees::Fees {
+        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+        CstDecode::<crate::api::fees::Fees>::cst_decode(*wrap).into()
     }
 }
 impl CstDecode<crate::api::types::KeyPair> for *mut wire_cst_key_pair {
@@ -73,25 +65,18 @@ impl CstDecode<crate::api::types::KeyPair> for *mut wire_cst_key_pair {
         CstDecode::<crate::api::types::KeyPair>::cst_decode(*wrap).into()
     }
 }
-impl CstDecode<crate::api::types::LBtcSwapScriptV2Str> for *mut wire_cst_l_btc_swap_script_v_2_str {
+impl CstDecode<crate::api::types::LBtcSwapScriptStr> for *mut wire_cst_l_btc_swap_script_str {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::LBtcSwapScriptV2Str {
+    fn cst_decode(self) -> crate::api::types::LBtcSwapScriptStr {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::types::LBtcSwapScriptV2Str>::cst_decode(*wrap).into()
+        CstDecode::<crate::api::types::LBtcSwapScriptStr>::cst_decode(*wrap).into()
     }
 }
-impl CstDecode<crate::api::lbtc_ln::LbtcLnV1Swap> for *mut wire_cst_lbtc_ln_v_1_swap {
+impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap> for *mut wire_cst_lbtc_ln_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnV1Swap {
+    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnSwap {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::lbtc_ln::LbtcLnV1Swap>::cst_decode(*wrap).into()
-    }
-}
-impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap> for *mut wire_cst_lbtc_ln_v_2_swap {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnV2Swap {
-        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::lbtc_ln::LbtcLnV2Swap>::cst_decode(*wrap).into()
+        CstDecode::<crate::api::lbtc_ln::LbtcLnSwap>::cst_decode(*wrap).into()
     }
 }
 impl CstDecode<crate::api::types::PreImage> for *mut wire_cst_pre_image {
@@ -101,28 +86,10 @@ impl CstDecode<crate::api::types::PreImage> for *mut wire_cst_pre_image {
         CstDecode::<crate::api::types::PreImage>::cst_decode(*wrap).into()
     }
 }
-impl CstDecode<crate::api::btc_ln::BtcLnV1Swap> for wire_cst_btc_ln_v_1_swap {
+impl CstDecode<crate::api::btc_ln::BtcLnSwap> for wire_cst_btc_ln_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::btc_ln::BtcLnV1Swap {
-        crate::api::btc_ln::BtcLnV1Swap {
-            id: self.id.cst_decode(),
-            kind: self.kind.cst_decode(),
-            network: self.network.cst_decode(),
-            keys: self.keys.cst_decode(),
-            preimage: self.preimage.cst_decode(),
-            redeem_script: self.redeem_script.cst_decode(),
-            invoice: self.invoice.cst_decode(),
-            script_address: self.script_address.cst_decode(),
-            out_amount: self.out_amount.cst_decode(),
-            electrum_url: self.electrum_url.cst_decode(),
-            boltz_url: self.boltz_url.cst_decode(),
-        }
-    }
-}
-impl CstDecode<crate::api::btc_ln::BtcLnV2Swap> for wire_cst_btc_ln_v_2_swap {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::btc_ln::BtcLnV2Swap {
-        crate::api::btc_ln::BtcLnV2Swap {
+    fn cst_decode(self) -> crate::api::btc_ln::BtcLnSwap {
+        crate::api::btc_ln::BtcLnSwap {
             id: self.id.cst_decode(),
             kind: self.kind.cst_decode(),
             network: self.network.cst_decode(),
@@ -138,16 +105,60 @@ impl CstDecode<crate::api::btc_ln::BtcLnV2Swap> for wire_cst_btc_ln_v_2_swap {
         }
     }
 }
-impl CstDecode<crate::api::types::BtcSwapScriptV2Str> for wire_cst_btc_swap_script_v_2_str {
+impl CstDecode<crate::api::types::BtcSwapScriptStr> for wire_cst_btc_swap_script_str {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::BtcSwapScriptV2Str {
-        crate::api::types::BtcSwapScriptV2Str {
+    fn cst_decode(self) -> crate::api::types::BtcSwapScriptStr {
+        crate::api::types::BtcSwapScriptStr {
             swap_type: self.swap_type.cst_decode(),
             funding_addrs: self.funding_addrs.cst_decode(),
             hashlock: self.hashlock.cst_decode(),
             receiver_pubkey: self.receiver_pubkey.cst_decode(),
             locktime: self.locktime.cst_decode(),
             sender_pubkey: self.sender_pubkey.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::types::ChainFeesAndLimits> for wire_cst_chain_fees_and_limits {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::ChainFeesAndLimits {
+        crate::api::types::ChainFeesAndLimits {
+            btc_limits: self.btc_limits.cst_decode(),
+            lbtc_limits: self.lbtc_limits.cst_decode(),
+            btc_fees: self.btc_fees.cst_decode(),
+            lbtc_fees: self.lbtc_fees.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::chain_swap::ChainSwap> for wire_cst_chain_swap {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::chain_swap::ChainSwap {
+        crate::api::chain_swap::ChainSwap {
+            id: self.id.cst_decode(),
+            is_testnet: self.is_testnet.cst_decode(),
+            direction: self.direction.cst_decode(),
+            refund_keys: self.refund_keys.cst_decode(),
+            claim_keys: self.claim_keys.cst_decode(),
+            preimage: self.preimage.cst_decode(),
+            btc_script_str: self.btc_script_str.cst_decode(),
+            lbtc_script_str: self.lbtc_script_str.cst_decode(),
+            script_address: self.script_address.cst_decode(),
+            out_amount: self.out_amount.cst_decode(),
+            btc_electrum_url: self.btc_electrum_url.cst_decode(),
+            lbtc_electrum_url: self.lbtc_electrum_url.cst_decode(),
+            boltz_url: self.boltz_url.cst_decode(),
+            referral_id: self.referral_id.cst_decode(),
+            blinding_key: self.blinding_key.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::types::ChainSwapFees> for wire_cst_chain_swap_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::ChainSwapFees {
+        crate::api::types::ChainSwapFees {
+            percentage: self.percentage.cst_decode(),
+            user_lockup: self.user_lockup.cst_decode(),
+            user_claim: self.user_claim.cst_decode(),
+            server: self.server.cst_decode(),
         }
     }
 }
@@ -167,6 +178,14 @@ impl CstDecode<crate::api::types::DecodedInvoice> for wire_cst_decoded_invoice {
         }
     }
 }
+impl CstDecode<crate::api::fees::Fees> for wire_cst_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::fees::Fees {
+        crate::api::fees::Fees {
+            boltz_url: self.boltz_url.cst_decode(),
+        }
+    }
+}
 impl CstDecode<crate::api::types::KeyPair> for wire_cst_key_pair {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::KeyPair {
@@ -176,10 +195,10 @@ impl CstDecode<crate::api::types::KeyPair> for wire_cst_key_pair {
         }
     }
 }
-impl CstDecode<crate::api::types::LBtcSwapScriptV2Str> for wire_cst_l_btc_swap_script_v_2_str {
+impl CstDecode<crate::api::types::LBtcSwapScriptStr> for wire_cst_l_btc_swap_script_str {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::LBtcSwapScriptV2Str {
-        crate::api::types::LBtcSwapScriptV2Str {
+    fn cst_decode(self) -> crate::api::types::LBtcSwapScriptStr {
+        crate::api::types::LBtcSwapScriptStr {
             swap_type: self.swap_type.cst_decode(),
             funding_addrs: self.funding_addrs.cst_decode(),
             hashlock: self.hashlock.cst_decode(),
@@ -190,29 +209,10 @@ impl CstDecode<crate::api::types::LBtcSwapScriptV2Str> for wire_cst_l_btc_swap_s
         }
     }
 }
-impl CstDecode<crate::api::lbtc_ln::LbtcLnV1Swap> for wire_cst_lbtc_ln_v_1_swap {
+impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap> for wire_cst_lbtc_ln_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnV1Swap {
-        crate::api::lbtc_ln::LbtcLnV1Swap {
-            id: self.id.cst_decode(),
-            kind: self.kind.cst_decode(),
-            network: self.network.cst_decode(),
-            keys: self.keys.cst_decode(),
-            preimage: self.preimage.cst_decode(),
-            redeem_script: self.redeem_script.cst_decode(),
-            invoice: self.invoice.cst_decode(),
-            out_amount: self.out_amount.cst_decode(),
-            script_address: self.script_address.cst_decode(),
-            blinding_key: self.blinding_key.cst_decode(),
-            electrum_url: self.electrum_url.cst_decode(),
-            boltz_url: self.boltz_url.cst_decode(),
-        }
-    }
-}
-impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap> for wire_cst_lbtc_ln_v_2_swap {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnV2Swap {
-        crate::api::lbtc_ln::LbtcLnV2Swap {
+    fn cst_decode(self) -> crate::api::lbtc_ln::LbtcLnSwap {
+        crate::api::lbtc_ln::LbtcLnSwap {
             id: self.id.cst_decode(),
             kind: self.kind.cst_decode(),
             network: self.network.cst_decode(),
@@ -226,15 +226,6 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnV2Swap> for wire_cst_lbtc_ln_v_2_swap 
             electrum_url: self.electrum_url.cst_decode(),
             boltz_url: self.boltz_url.cst_decode(),
             referral_id: self.referral_id.cst_decode(),
-        }
-    }
-}
-impl CstDecode<crate::api::types::Limits> for wire_cst_limits {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::Limits {
-        crate::api::types::Limits {
-            minimal: self.minimal.cst_decode(),
-            maximal: self.maximal.cst_decode(),
         }
     }
 }
@@ -256,6 +247,15 @@ impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_strict {
         }
     }
 }
+impl CstDecode<crate::api::types::MinerFees> for wire_cst_miner_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::MinerFees {
+        crate::api::types::MinerFees {
+            lockup: self.lockup.cst_decode(),
+            claim: self.claim.cst_decode(),
+        }
+    }
+}
 impl CstDecode<crate::api::types::PreImage> for wire_cst_pre_image {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::PreImage {
@@ -266,43 +266,53 @@ impl CstDecode<crate::api::types::PreImage> for wire_cst_pre_image {
         }
     }
 }
-impl CstDecode<crate::api::types::ReverseSwapFees> for wire_cst_reverse_swap_fees {
+impl CstDecode<crate::api::types::RevSwapFees> for wire_cst_rev_swap_fees {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::ReverseSwapFees {
-        crate::api::types::ReverseSwapFees {
-            boltz_fees_rate: self.boltz_fees_rate.cst_decode(),
-            lockup_fees: self.lockup_fees.cst_decode(),
-            claim_fees_estimate: self.claim_fees_estimate.cst_decode(),
+    fn cst_decode(self) -> crate::api::types::RevSwapFees {
+        crate::api::types::RevSwapFees {
+            percentage: self.percentage.cst_decode(),
+            miner_fees: self.miner_fees.cst_decode(),
         }
     }
 }
-impl CstDecode<crate::api::types::SubmarineSwapFees> for wire_cst_submarine_swap_fees {
+impl CstDecode<crate::api::types::ReverseFeesAndLimits> for wire_cst_reverse_fees_and_limits {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::SubmarineSwapFees {
-        crate::api::types::SubmarineSwapFees {
-            boltz_fees_rate: self.boltz_fees_rate.cst_decode(),
-            claim_fees: self.claim_fees.cst_decode(),
-            lockup_fees_estimate: self.lockup_fees_estimate.cst_decode(),
+    fn cst_decode(self) -> crate::api::types::ReverseFeesAndLimits {
+        crate::api::types::ReverseFeesAndLimits {
+            btc_limits: self.btc_limits.cst_decode(),
+            lbtc_limits: self.lbtc_limits.cst_decode(),
+            btc_fees: self.btc_fees.cst_decode(),
+            lbtc_fees: self.lbtc_fees.cst_decode(),
         }
     }
 }
-impl NewWithNullPtr for wire_cst_all_fees {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            btc_limits: Default::default(),
-            lbtc_limits: Default::default(),
-            btc_submarine: Default::default(),
-            btc_reverse: Default::default(),
-            lbtc_submarine: Default::default(),
-            lbtc_reverse: Default::default(),
-            btc_pair_hash: core::ptr::null_mut(),
-            lbtc_pair_hash: core::ptr::null_mut(),
+impl CstDecode<crate::api::types::SubSwapFees> for wire_cst_sub_swap_fees {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::SubSwapFees {
+        crate::api::types::SubSwapFees {
+            percentage: self.percentage.cst_decode(),
+            miner_fees: self.miner_fees.cst_decode(),
         }
     }
 }
-impl Default for wire_cst_all_fees {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
+impl CstDecode<crate::api::types::SubmarineFeesAndLimits> for wire_cst_submarine_fees_and_limits {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::SubmarineFeesAndLimits {
+        crate::api::types::SubmarineFeesAndLimits {
+            btc_limits: self.btc_limits.cst_decode(),
+            lbtc_limits: self.lbtc_limits.cst_decode(),
+            btc_fees: self.btc_fees.cst_decode(),
+            lbtc_fees: self.lbtc_fees.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::types::SwapLimits> for wire_cst_swap_limits {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::SwapLimits {
+        crate::api::types::SwapLimits {
+            minimal: self.minimal.cst_decode(),
+            maximal: self.maximal.cst_decode(),
+        }
     }
 }
 impl NewWithNullPtr for wire_cst_boltz_error {
@@ -318,29 +328,7 @@ impl Default for wire_cst_boltz_error {
         Self::new_with_null_ptr()
     }
 }
-impl NewWithNullPtr for wire_cst_btc_ln_v_1_swap {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            id: core::ptr::null_mut(),
-            kind: Default::default(),
-            network: Default::default(),
-            keys: Default::default(),
-            preimage: Default::default(),
-            redeem_script: core::ptr::null_mut(),
-            invoice: core::ptr::null_mut(),
-            script_address: core::ptr::null_mut(),
-            out_amount: Default::default(),
-            electrum_url: core::ptr::null_mut(),
-            boltz_url: core::ptr::null_mut(),
-        }
-    }
-}
-impl Default for wire_cst_btc_ln_v_1_swap {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-impl NewWithNullPtr for wire_cst_btc_ln_v_2_swap {
+impl NewWithNullPtr for wire_cst_btc_ln_swap {
     fn new_with_null_ptr() -> Self {
         Self {
             id: core::ptr::null_mut(),
@@ -358,12 +346,12 @@ impl NewWithNullPtr for wire_cst_btc_ln_v_2_swap {
         }
     }
 }
-impl Default for wire_cst_btc_ln_v_2_swap {
+impl Default for wire_cst_btc_ln_swap {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
 }
-impl NewWithNullPtr for wire_cst_btc_swap_script_v_2_str {
+impl NewWithNullPtr for wire_cst_btc_swap_script_str {
     fn new_with_null_ptr() -> Self {
         Self {
             swap_type: Default::default(),
@@ -375,7 +363,63 @@ impl NewWithNullPtr for wire_cst_btc_swap_script_v_2_str {
         }
     }
 }
-impl Default for wire_cst_btc_swap_script_v_2_str {
+impl Default for wire_cst_btc_swap_script_str {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_chain_fees_and_limits {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            btc_limits: Default::default(),
+            lbtc_limits: Default::default(),
+            btc_fees: Default::default(),
+            lbtc_fees: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_chain_fees_and_limits {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_chain_swap {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            id: core::ptr::null_mut(),
+            is_testnet: Default::default(),
+            direction: Default::default(),
+            refund_keys: Default::default(),
+            claim_keys: Default::default(),
+            preimage: Default::default(),
+            btc_script_str: Default::default(),
+            lbtc_script_str: Default::default(),
+            script_address: core::ptr::null_mut(),
+            out_amount: Default::default(),
+            btc_electrum_url: core::ptr::null_mut(),
+            lbtc_electrum_url: core::ptr::null_mut(),
+            boltz_url: core::ptr::null_mut(),
+            referral_id: core::ptr::null_mut(),
+            blinding_key: core::ptr::null_mut(),
+        }
+    }
+}
+impl Default for wire_cst_chain_swap {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_chain_swap_fees {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            percentage: Default::default(),
+            user_lockup: Default::default(),
+            user_claim: Default::default(),
+            server: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_chain_swap_fees {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -400,6 +444,18 @@ impl Default for wire_cst_decoded_invoice {
         Self::new_with_null_ptr()
     }
 }
+impl NewWithNullPtr for wire_cst_fees {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            boltz_url: core::ptr::null_mut(),
+        }
+    }
+}
+impl Default for wire_cst_fees {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
 impl NewWithNullPtr for wire_cst_key_pair {
     fn new_with_null_ptr() -> Self {
         Self {
@@ -413,7 +469,7 @@ impl Default for wire_cst_key_pair {
         Self::new_with_null_ptr()
     }
 }
-impl NewWithNullPtr for wire_cst_l_btc_swap_script_v_2_str {
+impl NewWithNullPtr for wire_cst_l_btc_swap_script_str {
     fn new_with_null_ptr() -> Self {
         Self {
             swap_type: Default::default(),
@@ -426,35 +482,12 @@ impl NewWithNullPtr for wire_cst_l_btc_swap_script_v_2_str {
         }
     }
 }
-impl Default for wire_cst_l_btc_swap_script_v_2_str {
+impl Default for wire_cst_l_btc_swap_script_str {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
 }
-impl NewWithNullPtr for wire_cst_lbtc_ln_v_1_swap {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            id: core::ptr::null_mut(),
-            kind: Default::default(),
-            network: Default::default(),
-            keys: Default::default(),
-            preimage: Default::default(),
-            redeem_script: core::ptr::null_mut(),
-            invoice: core::ptr::null_mut(),
-            out_amount: Default::default(),
-            script_address: core::ptr::null_mut(),
-            blinding_key: core::ptr::null_mut(),
-            electrum_url: core::ptr::null_mut(),
-            boltz_url: core::ptr::null_mut(),
-        }
-    }
-}
-impl Default for wire_cst_lbtc_ln_v_1_swap {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-impl NewWithNullPtr for wire_cst_lbtc_ln_v_2_swap {
+impl NewWithNullPtr for wire_cst_lbtc_ln_swap {
     fn new_with_null_ptr() -> Self {
         Self {
             id: core::ptr::null_mut(),
@@ -473,20 +506,20 @@ impl NewWithNullPtr for wire_cst_lbtc_ln_v_2_swap {
         }
     }
 }
-impl Default for wire_cst_lbtc_ln_v_2_swap {
+impl Default for wire_cst_lbtc_ln_swap {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
 }
-impl NewWithNullPtr for wire_cst_limits {
+impl NewWithNullPtr for wire_cst_miner_fees {
     fn new_with_null_ptr() -> Self {
         Self {
-            minimal: Default::default(),
-            maximal: Default::default(),
+            lockup: Default::default(),
+            claim: Default::default(),
         }
     }
 }
-impl Default for wire_cst_limits {
+impl Default for wire_cst_miner_fees {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -505,168 +538,104 @@ impl Default for wire_cst_pre_image {
         Self::new_with_null_ptr()
     }
 }
-impl NewWithNullPtr for wire_cst_reverse_swap_fees {
+impl NewWithNullPtr for wire_cst_rev_swap_fees {
     fn new_with_null_ptr() -> Self {
         Self {
-            boltz_fees_rate: Default::default(),
-            lockup_fees: Default::default(),
-            claim_fees_estimate: Default::default(),
+            percentage: Default::default(),
+            miner_fees: Default::default(),
         }
     }
 }
-impl Default for wire_cst_reverse_swap_fees {
+impl Default for wire_cst_rev_swap_fees {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
 }
-impl NewWithNullPtr for wire_cst_submarine_swap_fees {
+impl NewWithNullPtr for wire_cst_reverse_fees_and_limits {
     fn new_with_null_ptr() -> Self {
         Self {
-            boltz_fees_rate: Default::default(),
-            claim_fees: Default::default(),
-            lockup_fees_estimate: Default::default(),
+            btc_limits: Default::default(),
+            lbtc_limits: Default::default(),
+            btc_fees: Default::default(),
+            lbtc_fees: Default::default(),
         }
     }
 }
-impl Default for wire_cst_submarine_swap_fees {
+impl Default for wire_cst_reverse_fees_and_limits {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_sub_swap_fees {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            percentage: Default::default(),
+            miner_fees: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_sub_swap_fees {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_submarine_fees_and_limits {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            btc_limits: Default::default(),
+            lbtc_limits: Default::default(),
+            btc_fees: Default::default(),
+            lbtc_fees: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_submarine_fees_and_limits {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_swap_limits {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            minimal: Default::default(),
+            maximal: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_swap_limits {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_1_swap_claim(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_claim(
     port_: i64,
-    that: *mut wire_cst_btc_ln_v_1_swap,
-    out_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
-) {
-    wire_btc_ln_v_1_swap_claim_impl(port_, that, out_address, abs_fee)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_1_swap_new(
-    port_: i64,
-    id: *mut wire_cst_list_prim_u_8_strict,
-    kind: i32,
-    network: i32,
-    keys: *mut wire_cst_key_pair,
-    preimage: *mut wire_cst_pre_image,
-    redeem_script: *mut wire_cst_list_prim_u_8_strict,
-    invoice: *mut wire_cst_list_prim_u_8_strict,
-    script_address: *mut wire_cst_list_prim_u_8_strict,
-    out_amount: u64,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-) {
-    wire_btc_ln_v_1_swap_new_impl(
-        port_,
-        id,
-        kind,
-        network,
-        keys,
-        preimage,
-        redeem_script,
-        invoice,
-        script_address,
-        out_amount,
-        electrum_url,
-        boltz_url,
-    )
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_1_swap_new_reverse(
-    port_: i64,
-    mnemonic: *mut wire_cst_list_prim_u_8_strict,
-    index: u64,
-    out_amount: u64,
-    network: i32,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-    pair_hash: *mut wire_cst_list_prim_u_8_strict,
-) {
-    wire_btc_ln_v_1_swap_new_reverse_impl(
-        port_,
-        mnemonic,
-        index,
-        out_amount,
-        network,
-        electrum_url,
-        boltz_url,
-        pair_hash,
-    )
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_1_swap_new_submarine(
-    port_: i64,
-    mnemonic: *mut wire_cst_list_prim_u_8_strict,
-    index: u64,
-    invoice: *mut wire_cst_list_prim_u_8_strict,
-    network: i32,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-    pair_hash: *mut wire_cst_list_prim_u_8_strict,
-) {
-    wire_btc_ln_v_1_swap_new_submarine_impl(
-        port_,
-        mnemonic,
-        index,
-        invoice,
-        network,
-        electrum_url,
-        boltz_url,
-        pair_hash,
-    )
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_1_swap_refund(
-    port_: i64,
-    that: *mut wire_cst_btc_ln_v_1_swap,
-    out_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
-) {
-    wire_btc_ln_v_1_swap_refund_impl(port_, that, out_address, abs_fee)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_1_swap_tx_size(
-    port_: i64,
-    that: *mut wire_cst_btc_ln_v_1_swap,
-) {
-    wire_btc_ln_v_1_swap_tx_size_impl(port_, that)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_claim(
-    port_: i64,
-    that: *mut wire_cst_btc_ln_v_2_swap,
+    that: *mut wire_cst_btc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
     try_cooperate: bool,
 ) {
-    wire_btc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, try_cooperate)
+    wire_btc_ln_swap_claim_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_coop_close_submarine(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_coop_close_submarine(
     port_: i64,
-    that: *mut wire_cst_btc_ln_v_2_swap,
+    that: *mut wire_cst_btc_ln_swap,
 ) {
-    wire_btc_ln_v_2_swap_coop_close_submarine_impl(port_, that)
+    wire_btc_ln_swap_coop_close_submarine_impl(port_, that)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
     kind: i32,
     network: i32,
     keys: *mut wire_cst_key_pair,
     preimage: *mut wire_cst_pre_image,
-    swap_script: *mut wire_cst_btc_swap_script_v_2_str,
+    swap_script: *mut wire_cst_btc_swap_script_str,
     invoice: *mut wire_cst_list_prim_u_8_strict,
     script_address: *mut wire_cst_list_prim_u_8_strict,
     out_amount: u64,
@@ -674,7 +643,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new(
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_btc_ln_v_2_swap_new_impl(
+    wire_btc_ln_swap_new_impl(
         port_,
         id,
         kind,
@@ -692,7 +661,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_new_reverse(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -703,7 +672,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse(
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_btc_ln_v_2_swap_new_reverse_impl(
+    wire_btc_ln_swap_new_reverse_impl(
         port_,
         mnemonic,
         index,
@@ -717,7 +686,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_reverse(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_new_submarine(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -727,7 +696,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine(
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_btc_ln_v_2_swap_new_submarine_impl(
+    wire_btc_ln_swap_new_submarine_impl(
         port_,
         mnemonic,
         index,
@@ -740,22 +709,118 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_new_submarine(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_refund(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_refund(
     port_: i64,
-    that: *mut wire_cst_btc_ln_v_2_swap,
+    that: *mut wire_cst_btc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
     try_cooperate: bool,
 ) {
-    wire_btc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee, try_cooperate)
+    wire_btc_ln_swap_refund_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_v_2_swap_tx_size(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_tx_size(
     port_: i64,
-    that: *mut wire_cst_btc_ln_v_2_swap,
+    that: *mut wire_cst_btc_ln_swap,
 ) {
-    wire_btc_ln_v_2_swap_tx_size_impl(port_, that)
+    wire_btc_ln_swap_tx_size_impl(port_, that)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_claim(
+    port_: i64,
+    that: *mut wire_cst_chain_swap,
+    out_address: *mut wire_cst_list_prim_u_8_strict,
+    refund_address: *mut wire_cst_list_prim_u_8_strict,
+    abs_fee: u64,
+    try_cooperate: bool,
+) {
+    wire_chain_swap_claim_impl(
+        port_,
+        that,
+        out_address,
+        refund_address,
+        abs_fee,
+        try_cooperate,
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_new(
+    port_: i64,
+    id: *mut wire_cst_list_prim_u_8_strict,
+    is_testnet: bool,
+    direction: i32,
+    refund_keys: *mut wire_cst_key_pair,
+    claim_keys: *mut wire_cst_key_pair,
+    preimage: *mut wire_cst_pre_image,
+    btc_script_str: *mut wire_cst_btc_swap_script_str,
+    lbtc_script_str: *mut wire_cst_l_btc_swap_script_str,
+    script_address: *mut wire_cst_list_prim_u_8_strict,
+    out_amount: u64,
+    btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+    lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+    boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
+    blinding_key: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_chain_swap_new_impl(
+        port_,
+        id,
+        is_testnet,
+        direction,
+        refund_keys,
+        claim_keys,
+        preimage,
+        btc_script_str,
+        lbtc_script_str,
+        script_address,
+        out_amount,
+        btc_electrum_url,
+        lbtc_electrum_url,
+        boltz_url,
+        referral_id,
+        blinding_key,
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_new_swap(
+    port_: i64,
+    direction: i32,
+    mnemonic: *mut wire_cst_list_prim_u_8_strict,
+    index: u64,
+    amount: u32,
+    is_testnet: bool,
+    btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+    lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+    boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_chain_swap_new_swap_impl(
+        port_,
+        direction,
+        mnemonic,
+        index,
+        amount,
+        is_testnet,
+        btc_electrum_url,
+        lbtc_electrum_url,
+        boltz_url,
+        referral_id,
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_refund(
+    port_: i64,
+    that: *mut wire_cst_chain_swap,
+    refund_address: *mut wire_cst_list_prim_u_8_strict,
+    abs_fee: u64,
+    try_cooperate: bool,
+) {
+    wire_chain_swap_refund_impl(port_, that, refund_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
@@ -768,160 +833,76 @@ pub extern "C" fn frbgen_boltz_dart_wire_boltz_error_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_claim(
-    port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_1_swap,
-    out_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
-) {
-    wire_lbtc_ln_v_1_swap_claim_impl(port_, that, out_address, abs_fee)
+pub extern "C" fn frbgen_boltz_dart_wire_fees_chain(port_: i64, that: *mut wire_cst_fees) {
+    wire_fees_chain_impl(port_, that)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new(
+pub extern "C" fn frbgen_boltz_dart_wire_fees_new(
     port_: i64,
-    id: *mut wire_cst_list_prim_u_8_strict,
-    kind: i32,
-    network: i32,
-    keys: *mut wire_cst_key_pair,
-    preimage: *mut wire_cst_pre_image,
-    redeem_script: *mut wire_cst_list_prim_u_8_strict,
-    invoice: *mut wire_cst_list_prim_u_8_strict,
-    out_amount: u64,
-    out_address: *mut wire_cst_list_prim_u_8_strict,
-    blinding_key: *mut wire_cst_list_prim_u_8_strict,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_lbtc_ln_v_1_swap_new_impl(
-        port_,
-        id,
-        kind,
-        network,
-        keys,
-        preimage,
-        redeem_script,
-        invoice,
-        out_amount,
-        out_address,
-        blinding_key,
-        electrum_url,
-        boltz_url,
-    )
+    wire_fees_new_impl(port_, boltz_url)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new_reverse(
-    port_: i64,
-    mnemonic: *mut wire_cst_list_prim_u_8_strict,
-    index: u64,
-    out_amount: u64,
-    network: i32,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-    pair_hash: *mut wire_cst_list_prim_u_8_strict,
-) {
-    wire_lbtc_ln_v_1_swap_new_reverse_impl(
-        port_,
-        mnemonic,
-        index,
-        out_amount,
-        network,
-        electrum_url,
-        boltz_url,
-        pair_hash,
-    )
+pub extern "C" fn frbgen_boltz_dart_wire_fees_reverse(port_: i64, that: *mut wire_cst_fees) {
+    wire_fees_reverse_impl(port_, that)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_new_submarine(
-    port_: i64,
-    mnemonic: *mut wire_cst_list_prim_u_8_strict,
-    index: u64,
-    invoice: *mut wire_cst_list_prim_u_8_strict,
-    network: i32,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-    pair_hash: *mut wire_cst_list_prim_u_8_strict,
-) {
-    wire_lbtc_ln_v_1_swap_new_submarine_impl(
-        port_,
-        mnemonic,
-        index,
-        invoice,
-        network,
-        electrum_url,
-        boltz_url,
-        pair_hash,
-    )
+pub extern "C" fn frbgen_boltz_dart_wire_fees_submarine(port_: i64, that: *mut wire_cst_fees) {
+    wire_fees_submarine_impl(port_, that)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_refund(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_tx(
     port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_1_swap,
-    out_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
-) {
-    wire_lbtc_ln_v_1_swap_refund_impl(port_, that, out_address, abs_fee)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_1_swap_tx_size(
-    port_: i64,
-    swap: *mut wire_cst_lbtc_ln_v_1_swap,
-) {
-    wire_lbtc_ln_v_1_swap_tx_size_impl(port_, swap)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_broadcast_tx(
-    port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    that: *mut wire_cst_lbtc_ln_swap,
     signed_bytes: *mut wire_cst_list_prim_u_8_loose,
 ) {
-    wire_lbtc_ln_v_2_swap_broadcast_tx_impl(port_, that, signed_bytes)
+    wire_lbtc_ln_swap_broadcast_tx_impl(port_, that, signed_bytes)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_claim(
     port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    that: *mut wire_cst_lbtc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
     try_cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_claim_impl(port_, that, out_address, abs_fee, try_cooperate)
+    wire_lbtc_ln_swap_claim_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_claim_bytes(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_claim_bytes(
     port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    that: *mut wire_cst_lbtc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
     try_cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_claim_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
+    wire_lbtc_ln_swap_claim_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_coop_close_submarine(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_coop_close_submarine(
     port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    that: *mut wire_cst_lbtc_ln_swap,
 ) {
-    wire_lbtc_ln_v_2_swap_coop_close_submarine_impl(port_, that)
+    wire_lbtc_ln_swap_coop_close_submarine_impl(port_, that)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
     kind: i32,
     network: i32,
     keys: *mut wire_cst_key_pair,
     preimage: *mut wire_cst_pre_image,
-    swap_script: *mut wire_cst_l_btc_swap_script_v_2_str,
+    swap_script: *mut wire_cst_l_btc_swap_script_str,
     invoice: *mut wire_cst_list_prim_u_8_strict,
     out_amount: u64,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -930,7 +911,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new(
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_lbtc_ln_v_2_swap_new_impl(
+    wire_lbtc_ln_swap_new_impl(
         port_,
         id,
         kind,
@@ -949,7 +930,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_new_reverse(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -960,7 +941,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_lbtc_ln_v_2_swap_new_reverse_impl(
+    wire_lbtc_ln_swap_new_reverse_impl(
         port_,
         mnemonic,
         index,
@@ -974,7 +955,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_reverse(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_new_submarine(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -984,7 +965,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_lbtc_ln_v_2_swap_new_submarine_impl(
+    wire_lbtc_ln_swap_new_submarine_impl(
         port_,
         mnemonic,
         index,
@@ -997,45 +978,37 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_new_submarine(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_refund(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_refund(
     port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    that: *mut wire_cst_lbtc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
     try_cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_refund_impl(port_, that, out_address, abs_fee, try_cooperate)
+    wire_lbtc_ln_swap_refund_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_refund_bytes(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_refund_bytes(
     port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    that: *mut wire_cst_lbtc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     abs_fee: u64,
     try_cooperate: bool,
 ) {
-    wire_lbtc_ln_v_2_swap_refund_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
+    wire_lbtc_ln_swap_refund_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_v_2_swap_tx_size(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_tx_size(
     port_: i64,
-    that: *mut wire_cst_lbtc_ln_v_2_swap,
+    that: *mut wire_cst_lbtc_ln_swap,
 ) {
-    wire_lbtc_ln_v_2_swap_tx_size_impl(port_, that)
+    wire_lbtc_ln_swap_tx_size_impl(port_, that)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_all_fees_fetch(
-    port_: i64,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-) {
-    wire_all_fees_fetch_impl(port_, boltz_url)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_btc_swap_script_v_2_str_new(
+pub extern "C" fn frbgen_boltz_dart_wire_btc_swap_script_str_new(
     swap_type: i32,
     funding_addrs: *mut wire_cst_list_prim_u_8_strict,
     hashlock: *mut wire_cst_list_prim_u_8_strict,
@@ -1043,7 +1016,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_swap_script_v_2_str_new(
     locktime: u32,
     sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_btc_swap_script_v_2_str_new_impl(
+    wire_btc_swap_script_str_new_impl(
         swap_type,
         funding_addrs,
         hashlock,
@@ -1082,7 +1055,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_key_pair_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_l_btc_swap_script_v_2_str_new(
+pub extern "C" fn frbgen_boltz_dart_wire_l_btc_swap_script_str_new(
     swap_type: i32,
     funding_addrs: *mut wire_cst_list_prim_u_8_strict,
     hashlock: *mut wire_cst_list_prim_u_8_strict,
@@ -1091,7 +1064,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_l_btc_swap_script_v_2_str_new(
     sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
     blinding_key: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_l_btc_swap_script_v_2_str_new_impl(
+    wire_l_btc_swap_script_str_new_impl(
         swap_type,
         funding_addrs,
         hashlock,
@@ -1117,27 +1090,26 @@ pub extern "C" fn frbgen_boltz_dart_wire_pre_image_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_v_1_swap(
-) -> *mut wire_cst_btc_ln_v_1_swap {
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_swap() -> *mut wire_cst_btc_ln_swap {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_btc_ln_swap::new_with_null_ptr())
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_swap_script_str(
+) -> *mut wire_cst_btc_swap_script_str {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(
-        wire_cst_btc_ln_v_1_swap::new_with_null_ptr(),
+        wire_cst_btc_swap_script_str::new_with_null_ptr(),
     )
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_v_2_swap(
-) -> *mut wire_cst_btc_ln_v_2_swap {
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(
-        wire_cst_btc_ln_v_2_swap::new_with_null_ptr(),
-    )
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_chain_swap() -> *mut wire_cst_chain_swap {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_chain_swap::new_with_null_ptr())
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_swap_script_v_2_str(
-) -> *mut wire_cst_btc_swap_script_v_2_str {
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(
-        wire_cst_btc_swap_script_v_2_str::new_with_null_ptr(),
-    )
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_fees() -> *mut wire_cst_fees {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_fees::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -1146,27 +1118,17 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_key_pair() -> *mut wire_
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_l_btc_swap_script_v_2_str(
-) -> *mut wire_cst_l_btc_swap_script_v_2_str {
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_l_btc_swap_script_str(
+) -> *mut wire_cst_l_btc_swap_script_str {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(
-        wire_cst_l_btc_swap_script_v_2_str::new_with_null_ptr(),
+        wire_cst_l_btc_swap_script_str::new_with_null_ptr(),
     )
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_v_1_swap(
-) -> *mut wire_cst_lbtc_ln_v_1_swap {
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(
-        wire_cst_lbtc_ln_v_1_swap::new_with_null_ptr(),
-    )
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_v_2_swap(
-) -> *mut wire_cst_lbtc_ln_v_2_swap {
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(
-        wire_cst_lbtc_ln_v_2_swap::new_with_null_ptr(),
-    )
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_swap() -> *mut wire_cst_lbtc_ln_swap
+{
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_lbtc_ln_swap::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -1198,46 +1160,19 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_list_prim_u_8_strict(
 
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct wire_cst_all_fees {
-    btc_limits: wire_cst_limits,
-    lbtc_limits: wire_cst_limits,
-    btc_submarine: wire_cst_submarine_swap_fees,
-    btc_reverse: wire_cst_reverse_swap_fees,
-    lbtc_submarine: wire_cst_submarine_swap_fees,
-    lbtc_reverse: wire_cst_reverse_swap_fees,
-    btc_pair_hash: *mut wire_cst_list_prim_u_8_strict,
-    lbtc_pair_hash: *mut wire_cst_list_prim_u_8_strict,
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
 pub struct wire_cst_boltz_error {
     kind: *mut wire_cst_list_prim_u_8_strict,
     message: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct wire_cst_btc_ln_v_1_swap {
+pub struct wire_cst_btc_ln_swap {
     id: *mut wire_cst_list_prim_u_8_strict,
     kind: i32,
     network: i32,
     keys: wire_cst_key_pair,
     preimage: wire_cst_pre_image,
-    redeem_script: *mut wire_cst_list_prim_u_8_strict,
-    invoice: *mut wire_cst_list_prim_u_8_strict,
-    script_address: *mut wire_cst_list_prim_u_8_strict,
-    out_amount: u64,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct wire_cst_btc_ln_v_2_swap {
-    id: *mut wire_cst_list_prim_u_8_strict,
-    kind: i32,
-    network: i32,
-    keys: wire_cst_key_pair,
-    preimage: wire_cst_pre_image,
-    swap_script: wire_cst_btc_swap_script_v_2_str,
+    swap_script: wire_cst_btc_swap_script_str,
     invoice: *mut wire_cst_list_prim_u_8_strict,
     script_address: *mut wire_cst_list_prim_u_8_strict,
     out_amount: u64,
@@ -1247,13 +1182,48 @@ pub struct wire_cst_btc_ln_v_2_swap {
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct wire_cst_btc_swap_script_v_2_str {
+pub struct wire_cst_btc_swap_script_str {
     swap_type: i32,
     funding_addrs: *mut wire_cst_list_prim_u_8_strict,
     hashlock: *mut wire_cst_list_prim_u_8_strict,
     receiver_pubkey: *mut wire_cst_list_prim_u_8_strict,
     locktime: u32,
     sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_chain_fees_and_limits {
+    btc_limits: wire_cst_swap_limits,
+    lbtc_limits: wire_cst_swap_limits,
+    btc_fees: wire_cst_chain_swap_fees,
+    lbtc_fees: wire_cst_chain_swap_fees,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_chain_swap {
+    id: *mut wire_cst_list_prim_u_8_strict,
+    is_testnet: bool,
+    direction: i32,
+    refund_keys: wire_cst_key_pair,
+    claim_keys: wire_cst_key_pair,
+    preimage: wire_cst_pre_image,
+    btc_script_str: wire_cst_btc_swap_script_str,
+    lbtc_script_str: wire_cst_l_btc_swap_script_str,
+    script_address: *mut wire_cst_list_prim_u_8_strict,
+    out_amount: u64,
+    btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+    lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+    boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    referral_id: *mut wire_cst_list_prim_u_8_strict,
+    blinding_key: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_chain_swap_fees {
+    percentage: f64,
+    user_lockup: u64,
+    user_claim: u64,
+    server: u64,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -1270,13 +1240,18 @@ pub struct wire_cst_decoded_invoice {
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
+pub struct wire_cst_fees {
+    boltz_url: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
 pub struct wire_cst_key_pair {
     secret_key: *mut wire_cst_list_prim_u_8_strict,
     public_key: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct wire_cst_l_btc_swap_script_v_2_str {
+pub struct wire_cst_l_btc_swap_script_str {
     swap_type: i32,
     funding_addrs: *mut wire_cst_list_prim_u_8_strict,
     hashlock: *mut wire_cst_list_prim_u_8_strict,
@@ -1287,29 +1262,13 @@ pub struct wire_cst_l_btc_swap_script_v_2_str {
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct wire_cst_lbtc_ln_v_1_swap {
+pub struct wire_cst_lbtc_ln_swap {
     id: *mut wire_cst_list_prim_u_8_strict,
     kind: i32,
     network: i32,
     keys: wire_cst_key_pair,
     preimage: wire_cst_pre_image,
-    redeem_script: *mut wire_cst_list_prim_u_8_strict,
-    invoice: *mut wire_cst_list_prim_u_8_strict,
-    out_amount: u64,
-    script_address: *mut wire_cst_list_prim_u_8_strict,
-    blinding_key: *mut wire_cst_list_prim_u_8_strict,
-    electrum_url: *mut wire_cst_list_prim_u_8_strict,
-    boltz_url: *mut wire_cst_list_prim_u_8_strict,
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct wire_cst_lbtc_ln_v_2_swap {
-    id: *mut wire_cst_list_prim_u_8_strict,
-    kind: i32,
-    network: i32,
-    keys: wire_cst_key_pair,
-    preimage: wire_cst_pre_image,
-    swap_script: wire_cst_l_btc_swap_script_v_2_str,
+    swap_script: wire_cst_l_btc_swap_script_str,
     invoice: *mut wire_cst_list_prim_u_8_strict,
     out_amount: u64,
     script_address: *mut wire_cst_list_prim_u_8_strict,
@@ -1317,12 +1276,6 @@ pub struct wire_cst_lbtc_ln_v_2_swap {
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct wire_cst_limits {
-    minimal: u64,
-    maximal: u64,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -1338,6 +1291,12 @@ pub struct wire_cst_list_prim_u_8_strict {
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
+pub struct wire_cst_miner_fees {
+    lockup: u64,
+    claim: u64,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
 pub struct wire_cst_pre_image {
     value: *mut wire_cst_list_prim_u_8_strict,
     sha256: *mut wire_cst_list_prim_u_8_strict,
@@ -1345,15 +1304,35 @@ pub struct wire_cst_pre_image {
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct wire_cst_reverse_swap_fees {
-    boltz_fees_rate: f64,
-    lockup_fees: u64,
-    claim_fees_estimate: u64,
+pub struct wire_cst_rev_swap_fees {
+    percentage: f64,
+    miner_fees: wire_cst_miner_fees,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
-pub struct wire_cst_submarine_swap_fees {
-    boltz_fees_rate: f64,
-    claim_fees: u64,
-    lockup_fees_estimate: u64,
+pub struct wire_cst_reverse_fees_and_limits {
+    btc_limits: wire_cst_swap_limits,
+    lbtc_limits: wire_cst_swap_limits,
+    btc_fees: wire_cst_rev_swap_fees,
+    lbtc_fees: wire_cst_rev_swap_fees,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_sub_swap_fees {
+    percentage: f64,
+    miner_fees: u64,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_submarine_fees_and_limits {
+    btc_limits: wire_cst_swap_limits,
+    lbtc_limits: wire_cst_swap_limits,
+    btc_fees: wire_cst_sub_swap_fees,
+    lbtc_fees: wire_cst_sub_swap_fees,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_swap_limits {
+    minimal: u64,
+    maximal: u64,
 }

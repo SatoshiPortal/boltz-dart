@@ -11,124 +11,28 @@ import 'types.dart';
 part 'btc_ln.freezed.dart';
 
 @freezed
-class BtcLnV1Swap with _$BtcLnV1Swap {
-  const BtcLnV1Swap._();
-  const factory BtcLnV1Swap({
+class BtcLnSwap with _$BtcLnSwap {
+  const BtcLnSwap._();
+  const factory BtcLnSwap({
     required String id,
     required SwapType kind,
     required Chain network,
     required KeyPair keys,
     required PreImage preimage,
-    required String redeemScript,
-    required String invoice,
-    required String scriptAddress,
-    required int outAmount,
-    required String electrumUrl,
-    required String boltzUrl,
-  }) = _BtcLnV1Swap;
-  Future<String> claim(
-          {required String outAddress, required int absFee, dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV1SwapClaim(
-          that: this, outAddress: outAddress, absFee: absFee, hint: hint);
-
-  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<BtcLnV1Swap> newInstance(
-          {required String id,
-          required SwapType kind,
-          required Chain network,
-          required KeyPair keys,
-          required PreImage preimage,
-          required String redeemScript,
-          required String invoice,
-          required String scriptAddress,
-          required int outAmount,
-          required String electrumUrl,
-          required String boltzUrl,
-          dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV1SwapNew(
-          id: id,
-          kind: kind,
-          network: network,
-          keys: keys,
-          preimage: preimage,
-          redeemScript: redeemScript,
-          invoice: invoice,
-          scriptAddress: scriptAddress,
-          outAmount: outAmount,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          hint: hint);
-
-  static Future<BtcLnV1Swap> newReverse(
-          {required String mnemonic,
-          required int index,
-          required int outAmount,
-          required Chain network,
-          required String electrumUrl,
-          required String boltzUrl,
-          required String pairHash,
-          dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV1SwapNewReverse(
-          mnemonic: mnemonic,
-          index: index,
-          outAmount: outAmount,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: pairHash,
-          hint: hint);
-
-  static Future<BtcLnV1Swap> newSubmarine(
-          {required String mnemonic,
-          required int index,
-          required String invoice,
-          required Chain network,
-          required String electrumUrl,
-          required String boltzUrl,
-          required String pairHash,
-          dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV1SwapNewSubmarine(
-          mnemonic: mnemonic,
-          index: index,
-          invoice: invoice,
-          network: network,
-          electrumUrl: electrumUrl,
-          boltzUrl: boltzUrl,
-          pairHash: pairHash,
-          hint: hint);
-
-  Future<String> refund(
-          {required String outAddress, required int absFee, dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV1SwapRefund(
-          that: this, outAddress: outAddress, absFee: absFee, hint: hint);
-
-  Future<int> txSize({dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV1SwapTxSize(that: this, hint: hint);
-}
-
-@freezed
-class BtcLnV2Swap with _$BtcLnV2Swap {
-  const BtcLnV2Swap._();
-  const factory BtcLnV2Swap({
-    required String id,
-    required SwapType kind,
-    required Chain network,
-    required KeyPair keys,
-    required PreImage preimage,
-    required BtcSwapScriptV2Str swapScript,
+    required BtcSwapScriptStr swapScript,
     required String invoice,
     required String scriptAddress,
     required int outAmount,
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
-  }) = _BtcLnV2Swap;
+  }) = _BtcLnSwap;
   Future<String> claim(
           {required String outAddress,
           required int absFee,
           required bool tryCooperate,
           dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV2SwapClaim(
+      BoltzCore.instance.api.btcLnSwapClaim(
           that: this,
           outAddress: outAddress,
           absFee: absFee,
@@ -136,16 +40,16 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           hint: hint);
 
   Future<void> coopCloseSubmarine({dynamic hint}) => BoltzCore.instance.api
-      .btcLnV2SwapCoopCloseSubmarine(that: this, hint: hint);
+      .btcLnSwapCoopCloseSubmarine(that: this, hint: hint);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<BtcLnV2Swap> newInstance(
+  static Future<BtcLnSwap> newInstance(
           {required String id,
           required SwapType kind,
           required Chain network,
           required KeyPair keys,
           required PreImage preimage,
-          required BtcSwapScriptV2Str swapScript,
+          required BtcSwapScriptStr swapScript,
           required String invoice,
           required String scriptAddress,
           required int outAmount,
@@ -153,7 +57,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           required String boltzUrl,
           String? referralId,
           dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV2SwapNew(
+      BoltzCore.instance.api.btcLnSwapNew(
           id: id,
           kind: kind,
           network: network,
@@ -168,7 +72,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           referralId: referralId,
           hint: hint);
 
-  static Future<BtcLnV2Swap> newReverse(
+  static Future<BtcLnSwap> newReverse(
           {required String mnemonic,
           required int index,
           required int outAmount,
@@ -178,7 +82,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           required String boltzUrl,
           String? referralId,
           dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV2SwapNewReverse(
+      BoltzCore.instance.api.btcLnSwapNewReverse(
           mnemonic: mnemonic,
           index: index,
           outAmount: outAmount,
@@ -189,7 +93,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           referralId: referralId,
           hint: hint);
 
-  static Future<BtcLnV2Swap> newSubmarine(
+  static Future<BtcLnSwap> newSubmarine(
           {required String mnemonic,
           required int index,
           required String invoice,
@@ -198,7 +102,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           required String boltzUrl,
           String? referralId,
           dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV2SwapNewSubmarine(
+      BoltzCore.instance.api.btcLnSwapNewSubmarine(
           mnemonic: mnemonic,
           index: index,
           invoice: invoice,
@@ -213,7 +117,7 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           required int absFee,
           required bool tryCooperate,
           dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV2SwapRefund(
+      BoltzCore.instance.api.btcLnSwapRefund(
           that: this,
           outAddress: outAddress,
           absFee: absFee,
@@ -221,5 +125,5 @@ class BtcLnV2Swap with _$BtcLnV2Swap {
           hint: hint);
 
   Future<int> txSize({dynamic hint}) =>
-      BoltzCore.instance.api.btcLnV2SwapTxSize(that: this, hint: hint);
+      BoltzCore.instance.api.btcLnSwapTxSize(that: this, hint: hint);
 }
