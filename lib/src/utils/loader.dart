@@ -63,7 +63,7 @@ class Dylib {
 
     if (Platform.isMacOS) {
       // return "$assetsDir/$libName/macos/libboltzclient.dylib";
-      return "$assetsDir/$name.dylib";
+      return "$assetsDir/$name.a";
     } else if (Platform.isLinux) {
       return "$assetsDir/$name.so";
     } else {
@@ -80,7 +80,7 @@ class Dylib {
       }
     }
     if (Platform.isIOS || Platform.isMacOS) {
-      return ExternalLibrary.open("$name.dylib");
+      return ExternalLibrary.open("$name.a");
     } else if (Platform.isAndroid) {
       return ExternalLibrary.open("$name.so");
     } else if (Platform.isLinux) {
@@ -92,8 +92,6 @@ class Dylib {
 }
 
 class LibBoltz {
-  static String get libName => "libboltzclient.so";
-
   static Future<void> init() async {
     try {
       if (!BoltzCore.instance.initialized) {
