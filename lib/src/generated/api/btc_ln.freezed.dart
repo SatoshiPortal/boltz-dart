@@ -20,6 +20,7 @@ mixin _$BtcLnSwap {
   SwapType get kind => throw _privateConstructorUsedError;
   Chain get network => throw _privateConstructorUsedError;
   KeyPair get keys => throw _privateConstructorUsedError;
+  int get keyIndex => throw _privateConstructorUsedError;
   PreImage get preimage => throw _privateConstructorUsedError;
   BtcSwapScriptStr get swapScript => throw _privateConstructorUsedError;
   String get invoice => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ abstract class $BtcLnSwapCopyWith<$Res> {
       SwapType kind,
       Chain network,
       KeyPair keys,
+      int keyIndex,
       PreImage preimage,
       BtcSwapScriptStr swapScript,
       String invoice,
@@ -75,6 +77,7 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
     Object? kind = null,
     Object? network = null,
     Object? keys = null,
+    Object? keyIndex = null,
     Object? preimage = null,
     Object? swapScript = null,
     Object? invoice = null,
@@ -101,6 +104,10 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
           ? _value.keys
           : keys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      keyIndex: null == keyIndex
+          ? _value.keyIndex
+          : keyIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -174,6 +181,7 @@ abstract class _$$BtcLnSwapImplCopyWith<$Res>
       SwapType kind,
       Chain network,
       KeyPair keys,
+      int keyIndex,
       PreImage preimage,
       BtcSwapScriptStr swapScript,
       String invoice,
@@ -206,6 +214,7 @@ class __$$BtcLnSwapImplCopyWithImpl<$Res>
     Object? kind = null,
     Object? network = null,
     Object? keys = null,
+    Object? keyIndex = null,
     Object? preimage = null,
     Object? swapScript = null,
     Object? invoice = null,
@@ -232,6 +241,10 @@ class __$$BtcLnSwapImplCopyWithImpl<$Res>
           ? _value.keys
           : keys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      keyIndex: null == keyIndex
+          ? _value.keyIndex
+          : keyIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -276,6 +289,7 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
       required this.kind,
       required this.network,
       required this.keys,
+      required this.keyIndex,
       required this.preimage,
       required this.swapScript,
       required this.invoice,
@@ -295,6 +309,8 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
   @override
   final KeyPair keys;
   @override
+  final int keyIndex;
+  @override
   final PreImage preimage;
   @override
   final BtcSwapScriptStr swapScript;
@@ -313,7 +329,7 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
 
   @override
   String toString() {
-    return 'BtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, scriptAddress: $scriptAddress, outAmount: $outAmount, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
+    return 'BtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, keyIndex: $keyIndex, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, scriptAddress: $scriptAddress, outAmount: $outAmount, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
   }
 
   @override
@@ -325,6 +341,8 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
             (identical(other.kind, kind) || other.kind == kind) &&
             (identical(other.network, network) || other.network == network) &&
             (identical(other.keys, keys) || other.keys == keys) &&
+            (identical(other.keyIndex, keyIndex) ||
+                other.keyIndex == keyIndex) &&
             (identical(other.preimage, preimage) ||
                 other.preimage == preimage) &&
             (identical(other.swapScript, swapScript) ||
@@ -349,6 +367,7 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
       kind,
       network,
       keys,
+      keyIndex,
       preimage,
       swapScript,
       invoice,
@@ -371,6 +390,7 @@ abstract class _BtcLnSwap extends BtcLnSwap {
       required final SwapType kind,
       required final Chain network,
       required final KeyPair keys,
+      required final int keyIndex,
       required final PreImage preimage,
       required final BtcSwapScriptStr swapScript,
       required final String invoice,
@@ -389,6 +409,8 @@ abstract class _BtcLnSwap extends BtcLnSwap {
   Chain get network;
   @override
   KeyPair get keys;
+  @override
+  int get keyIndex;
   @override
   PreImage get preimage;
   @override

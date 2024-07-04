@@ -52,8 +52,8 @@ impl CstDecode<crate::api::btc_ln::BtcLnSwap>
             .unwrap();
         assert_eq!(
             self_.length(),
-            12,
-            "Expected 12 elements, got {}",
+            13,
+            "Expected 13 elements, got {}",
             self_.length()
         );
         crate::api::btc_ln::BtcLnSwap {
@@ -61,14 +61,15 @@ impl CstDecode<crate::api::btc_ln::BtcLnSwap>
             kind: self_.get(1).cst_decode(),
             network: self_.get(2).cst_decode(),
             keys: self_.get(3).cst_decode(),
-            preimage: self_.get(4).cst_decode(),
-            swap_script: self_.get(5).cst_decode(),
-            invoice: self_.get(6).cst_decode(),
-            script_address: self_.get(7).cst_decode(),
-            out_amount: self_.get(8).cst_decode(),
-            electrum_url: self_.get(9).cst_decode(),
-            boltz_url: self_.get(10).cst_decode(),
-            referral_id: self_.get(11).cst_decode(),
+            key_index: self_.get(4).cst_decode(),
+            preimage: self_.get(5).cst_decode(),
+            swap_script: self_.get(6).cst_decode(),
+            invoice: self_.get(7).cst_decode(),
+            script_address: self_.get(8).cst_decode(),
+            out_amount: self_.get(9).cst_decode(),
+            electrum_url: self_.get(10).cst_decode(),
+            boltz_url: self_.get(11).cst_decode(),
+            referral_id: self_.get(12).cst_decode(),
         }
     }
 }
@@ -128,8 +129,8 @@ impl CstDecode<crate::api::chain_swap::ChainSwap>
             .unwrap();
         assert_eq!(
             self_.length(),
-            15,
-            "Expected 15 elements, got {}",
+            17,
+            "Expected 17 elements, got {}",
             self_.length()
         );
         crate::api::chain_swap::ChainSwap {
@@ -137,17 +138,19 @@ impl CstDecode<crate::api::chain_swap::ChainSwap>
             is_testnet: self_.get(1).cst_decode(),
             direction: self_.get(2).cst_decode(),
             refund_keys: self_.get(3).cst_decode(),
-            claim_keys: self_.get(4).cst_decode(),
-            preimage: self_.get(5).cst_decode(),
-            btc_script_str: self_.get(6).cst_decode(),
-            lbtc_script_str: self_.get(7).cst_decode(),
-            script_address: self_.get(8).cst_decode(),
-            out_amount: self_.get(9).cst_decode(),
-            btc_electrum_url: self_.get(10).cst_decode(),
-            lbtc_electrum_url: self_.get(11).cst_decode(),
-            boltz_url: self_.get(12).cst_decode(),
-            referral_id: self_.get(13).cst_decode(),
-            blinding_key: self_.get(14).cst_decode(),
+            refund_index: self_.get(4).cst_decode(),
+            claim_keys: self_.get(5).cst_decode(),
+            claim_index: self_.get(6).cst_decode(),
+            preimage: self_.get(7).cst_decode(),
+            btc_script_str: self_.get(8).cst_decode(),
+            lbtc_script_str: self_.get(9).cst_decode(),
+            script_address: self_.get(10).cst_decode(),
+            out_amount: self_.get(11).cst_decode(),
+            btc_electrum_url: self_.get(12).cst_decode(),
+            lbtc_electrum_url: self_.get(13).cst_decode(),
+            boltz_url: self_.get(14).cst_decode(),
+            referral_id: self_.get(15).cst_decode(),
+            blinding_key: self_.get(16).cst_decode(),
         }
     }
 }
@@ -274,8 +277,8 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>
             .unwrap();
         assert_eq!(
             self_.length(),
-            13,
-            "Expected 13 elements, got {}",
+            14,
+            "Expected 14 elements, got {}",
             self_.length()
         );
         crate::api::lbtc_ln::LbtcLnSwap {
@@ -283,15 +286,16 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>
             kind: self_.get(1).cst_decode(),
             network: self_.get(2).cst_decode(),
             keys: self_.get(3).cst_decode(),
-            preimage: self_.get(4).cst_decode(),
-            swap_script: self_.get(5).cst_decode(),
-            invoice: self_.get(6).cst_decode(),
-            out_amount: self_.get(7).cst_decode(),
-            script_address: self_.get(8).cst_decode(),
-            blinding_key: self_.get(9).cst_decode(),
-            electrum_url: self_.get(10).cst_decode(),
-            boltz_url: self_.get(11).cst_decode(),
-            referral_id: self_.get(12).cst_decode(),
+            key_index: self_.get(4).cst_decode(),
+            preimage: self_.get(5).cst_decode(),
+            swap_script: self_.get(6).cst_decode(),
+            invoice: self_.get(7).cst_decode(),
+            out_amount: self_.get(8).cst_decode(),
+            script_address: self_.get(9).cst_decode(),
+            blinding_key: self_.get(10).cst_decode(),
+            electrum_url: self_.get(11).cst_decode(),
+            boltz_url: self_.get(12).cst_decode(),
+            referral_id: self_.get(13).cst_decode(),
         }
     }
 }
@@ -563,6 +567,7 @@ pub fn wire_btc_ln_swap_new(
     kind: i32,
     network: i32,
     keys: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    key_index: u64,
     preimage: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     swap_script: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     invoice: String,
@@ -578,6 +583,7 @@ pub fn wire_btc_ln_swap_new(
         kind,
         network,
         keys,
+        key_index,
         preimage,
         swap_script,
         invoice,
@@ -682,7 +688,9 @@ pub fn wire_chain_swap_new(
     is_testnet: bool,
     direction: i32,
     refund_keys: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    refund_index: u64,
     claim_keys: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    claim_index: u64,
     preimage: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     btc_script_str: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     lbtc_script_str: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
@@ -700,7 +708,9 @@ pub fn wire_chain_swap_new(
         is_testnet,
         direction,
         refund_keys,
+        refund_index,
         claim_keys,
+        claim_index,
         preimage,
         btc_script_str,
         lbtc_script_str,
@@ -836,6 +846,7 @@ pub fn wire_lbtc_ln_swap_new(
     kind: i32,
     network: i32,
     keys: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    key_index: u64,
     preimage: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     swap_script: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     invoice: String,
@@ -852,6 +863,7 @@ pub fn wire_lbtc_ln_swap_new(
         kind,
         network,
         keys,
+        key_index,
         preimage,
         swap_script,
         invoice,

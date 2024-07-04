@@ -447,6 +447,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.kind = cst_encode_swap_type(apiObj.kind);
     wireObj.network = cst_encode_chain(apiObj.network);
     cst_api_fill_to_wire_key_pair(apiObj.keys, wireObj.keys);
+    wireObj.key_index = cst_encode_u_64(apiObj.keyIndex);
     cst_api_fill_to_wire_pre_image(apiObj.preimage, wireObj.preimage);
     cst_api_fill_to_wire_btc_swap_script_str(
         apiObj.swapScript, wireObj.swap_script);
@@ -485,7 +486,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.is_testnet = cst_encode_bool(apiObj.isTestnet);
     wireObj.direction = cst_encode_chain_swap_direction(apiObj.direction);
     cst_api_fill_to_wire_key_pair(apiObj.refundKeys, wireObj.refund_keys);
+    wireObj.refund_index = cst_encode_u_64(apiObj.refundIndex);
     cst_api_fill_to_wire_key_pair(apiObj.claimKeys, wireObj.claim_keys);
+    wireObj.claim_index = cst_encode_u_64(apiObj.claimIndex);
     cst_api_fill_to_wire_pre_image(apiObj.preimage, wireObj.preimage);
     cst_api_fill_to_wire_btc_swap_script_str(
         apiObj.btcScriptStr, wireObj.btc_script_str);
@@ -554,6 +557,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.kind = cst_encode_swap_type(apiObj.kind);
     wireObj.network = cst_encode_chain(apiObj.network);
     cst_api_fill_to_wire_key_pair(apiObj.keys, wireObj.keys);
+    wireObj.key_index = cst_encode_u_64(apiObj.keyIndex);
     cst_api_fill_to_wire_pre_image(apiObj.preimage, wireObj.preimage);
     cst_api_fill_to_wire_l_btc_swap_script_str(
         apiObj.swapScript, wireObj.swap_script);
@@ -882,6 +886,7 @@ class BoltzCoreWire implements BaseWire {
     int kind,
     int network,
     ffi.Pointer<wire_cst_key_pair> keys,
+    int key_index,
     ffi.Pointer<wire_cst_pre_image> preimage,
     ffi.Pointer<wire_cst_btc_swap_script_str> swap_script,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
@@ -897,6 +902,7 @@ class BoltzCoreWire implements BaseWire {
       kind,
       network,
       keys,
+      key_index,
       preimage,
       swap_script,
       invoice,
@@ -916,6 +922,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Int32,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_key_pair>,
+                  ffi.Uint64,
                   ffi.Pointer<wire_cst_pre_image>,
                   ffi.Pointer<wire_cst_btc_swap_script_str>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -932,6 +939,7 @@ class BoltzCoreWire implements BaseWire {
           int,
           int,
           ffi.Pointer<wire_cst_key_pair>,
+          int,
           ffi.Pointer<wire_cst_pre_image>,
           ffi.Pointer<wire_cst_btc_swap_script_str>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -1124,7 +1132,9 @@ class BoltzCoreWire implements BaseWire {
     bool is_testnet,
     int direction,
     ffi.Pointer<wire_cst_key_pair> refund_keys,
+    int refund_index,
     ffi.Pointer<wire_cst_key_pair> claim_keys,
+    int claim_index,
     ffi.Pointer<wire_cst_pre_image> preimage,
     ffi.Pointer<wire_cst_btc_swap_script_str> btc_script_str,
     ffi.Pointer<wire_cst_l_btc_swap_script_str> lbtc_script_str,
@@ -1142,7 +1152,9 @@ class BoltzCoreWire implements BaseWire {
       is_testnet,
       direction,
       refund_keys,
+      refund_index,
       claim_keys,
+      claim_index,
       preimage,
       btc_script_str,
       lbtc_script_str,
@@ -1164,7 +1176,9 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Bool,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_key_pair>,
+                  ffi.Uint64,
                   ffi.Pointer<wire_cst_key_pair>,
+                  ffi.Uint64,
                   ffi.Pointer<wire_cst_pre_image>,
                   ffi.Pointer<wire_cst_btc_swap_script_str>,
                   ffi.Pointer<wire_cst_l_btc_swap_script_str>,
@@ -1183,7 +1197,9 @@ class BoltzCoreWire implements BaseWire {
           bool,
           int,
           ffi.Pointer<wire_cst_key_pair>,
+          int,
           ffi.Pointer<wire_cst_key_pair>,
+          int,
           ffi.Pointer<wire_cst_pre_image>,
           ffi.Pointer<wire_cst_btc_swap_script_str>,
           ffi.Pointer<wire_cst_l_btc_swap_script_str>,
@@ -1473,6 +1489,7 @@ class BoltzCoreWire implements BaseWire {
     int kind,
     int network,
     ffi.Pointer<wire_cst_key_pair> keys,
+    int key_index,
     ffi.Pointer<wire_cst_pre_image> preimage,
     ffi.Pointer<wire_cst_l_btc_swap_script_str> swap_script,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
@@ -1489,6 +1506,7 @@ class BoltzCoreWire implements BaseWire {
       kind,
       network,
       keys,
+      key_index,
       preimage,
       swap_script,
       invoice,
@@ -1509,6 +1527,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Int32,
                   ffi.Int32,
                   ffi.Pointer<wire_cst_key_pair>,
+                  ffi.Uint64,
                   ffi.Pointer<wire_cst_pre_image>,
                   ffi.Pointer<wire_cst_l_btc_swap_script_str>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -1526,6 +1545,7 @@ class BoltzCoreWire implements BaseWire {
           int,
           int,
           ffi.Pointer<wire_cst_key_pair>,
+          int,
           ffi.Pointer<wire_cst_pre_image>,
           ffi.Pointer<wire_cst_l_btc_swap_script_str>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -2082,6 +2102,9 @@ final class wire_cst_btc_ln_swap extends ffi.Struct {
 
   external wire_cst_key_pair keys;
 
+  @ffi.Uint64()
+  external int key_index;
+
   external wire_cst_pre_image preimage;
 
   external wire_cst_btc_swap_script_str swap_script;
@@ -2129,7 +2152,13 @@ final class wire_cst_chain_swap extends ffi.Struct {
 
   external wire_cst_key_pair refund_keys;
 
+  @ffi.Uint64()
+  external int refund_index;
+
   external wire_cst_key_pair claim_keys;
+
+  @ffi.Uint64()
+  external int claim_index;
 
   external wire_cst_pre_image preimage;
 
@@ -2167,6 +2196,9 @@ final class wire_cst_lbtc_ln_swap extends ffi.Struct {
   external int network;
 
   external wire_cst_key_pair keys;
+
+  @ffi.Uint64()
+  external int key_index;
 
   external wire_cst_pre_image preimage;
 

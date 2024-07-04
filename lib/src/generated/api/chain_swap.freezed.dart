@@ -20,7 +20,9 @@ mixin _$ChainSwap {
   bool get isTestnet => throw _privateConstructorUsedError;
   ChainSwapDirection get direction => throw _privateConstructorUsedError;
   KeyPair get refundKeys => throw _privateConstructorUsedError;
+  int get refundIndex => throw _privateConstructorUsedError;
   KeyPair get claimKeys => throw _privateConstructorUsedError;
+  int get claimIndex => throw _privateConstructorUsedError;
   PreImage get preimage => throw _privateConstructorUsedError;
   BtcSwapScriptStr get btcScriptStr => throw _privateConstructorUsedError;
   LBtcSwapScriptStr get lbtcScriptStr => throw _privateConstructorUsedError;
@@ -47,7 +49,9 @@ abstract class $ChainSwapCopyWith<$Res> {
       bool isTestnet,
       ChainSwapDirection direction,
       KeyPair refundKeys,
+      int refundIndex,
       KeyPair claimKeys,
+      int claimIndex,
       PreImage preimage,
       BtcSwapScriptStr btcScriptStr,
       LBtcSwapScriptStr lbtcScriptStr,
@@ -83,7 +87,9 @@ class _$ChainSwapCopyWithImpl<$Res, $Val extends ChainSwap>
     Object? isTestnet = null,
     Object? direction = null,
     Object? refundKeys = null,
+    Object? refundIndex = null,
     Object? claimKeys = null,
+    Object? claimIndex = null,
     Object? preimage = null,
     Object? btcScriptStr = null,
     Object? lbtcScriptStr = null,
@@ -112,10 +118,18 @@ class _$ChainSwapCopyWithImpl<$Res, $Val extends ChainSwap>
           ? _value.refundKeys
           : refundKeys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      refundIndex: null == refundIndex
+          ? _value.refundIndex
+          : refundIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       claimKeys: null == claimKeys
           ? _value.claimKeys
           : claimKeys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      claimIndex: null == claimIndex
+          ? _value.claimIndex
+          : claimIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -213,7 +227,9 @@ abstract class _$$ChainSwapImplCopyWith<$Res>
       bool isTestnet,
       ChainSwapDirection direction,
       KeyPair refundKeys,
+      int refundIndex,
       KeyPair claimKeys,
+      int claimIndex,
       PreImage preimage,
       BtcSwapScriptStr btcScriptStr,
       LBtcSwapScriptStr lbtcScriptStr,
@@ -252,7 +268,9 @@ class __$$ChainSwapImplCopyWithImpl<$Res>
     Object? isTestnet = null,
     Object? direction = null,
     Object? refundKeys = null,
+    Object? refundIndex = null,
     Object? claimKeys = null,
+    Object? claimIndex = null,
     Object? preimage = null,
     Object? btcScriptStr = null,
     Object? lbtcScriptStr = null,
@@ -281,10 +299,18 @@ class __$$ChainSwapImplCopyWithImpl<$Res>
           ? _value.refundKeys
           : refundKeys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      refundIndex: null == refundIndex
+          ? _value.refundIndex
+          : refundIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       claimKeys: null == claimKeys
           ? _value.claimKeys
           : claimKeys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      claimIndex: null == claimIndex
+          ? _value.claimIndex
+          : claimIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -337,7 +363,9 @@ class _$ChainSwapImpl extends _ChainSwap {
       required this.isTestnet,
       required this.direction,
       required this.refundKeys,
+      required this.refundIndex,
       required this.claimKeys,
+      required this.claimIndex,
       required this.preimage,
       required this.btcScriptStr,
       required this.lbtcScriptStr,
@@ -359,7 +387,11 @@ class _$ChainSwapImpl extends _ChainSwap {
   @override
   final KeyPair refundKeys;
   @override
+  final int refundIndex;
+  @override
   final KeyPair claimKeys;
+  @override
+  final int claimIndex;
   @override
   final PreImage preimage;
   @override
@@ -383,7 +415,7 @@ class _$ChainSwapImpl extends _ChainSwap {
 
   @override
   String toString() {
-    return 'ChainSwap(id: $id, isTestnet: $isTestnet, direction: $direction, refundKeys: $refundKeys, claimKeys: $claimKeys, preimage: $preimage, btcScriptStr: $btcScriptStr, lbtcScriptStr: $lbtcScriptStr, scriptAddress: $scriptAddress, outAmount: $outAmount, btcElectrumUrl: $btcElectrumUrl, lbtcElectrumUrl: $lbtcElectrumUrl, boltzUrl: $boltzUrl, referralId: $referralId, blindingKey: $blindingKey)';
+    return 'ChainSwap(id: $id, isTestnet: $isTestnet, direction: $direction, refundKeys: $refundKeys, refundIndex: $refundIndex, claimKeys: $claimKeys, claimIndex: $claimIndex, preimage: $preimage, btcScriptStr: $btcScriptStr, lbtcScriptStr: $lbtcScriptStr, scriptAddress: $scriptAddress, outAmount: $outAmount, btcElectrumUrl: $btcElectrumUrl, lbtcElectrumUrl: $lbtcElectrumUrl, boltzUrl: $boltzUrl, referralId: $referralId, blindingKey: $blindingKey)';
   }
 
   @override
@@ -398,8 +430,12 @@ class _$ChainSwapImpl extends _ChainSwap {
                 other.direction == direction) &&
             (identical(other.refundKeys, refundKeys) ||
                 other.refundKeys == refundKeys) &&
+            (identical(other.refundIndex, refundIndex) ||
+                other.refundIndex == refundIndex) &&
             (identical(other.claimKeys, claimKeys) ||
                 other.claimKeys == claimKeys) &&
+            (identical(other.claimIndex, claimIndex) ||
+                other.claimIndex == claimIndex) &&
             (identical(other.preimage, preimage) ||
                 other.preimage == preimage) &&
             (identical(other.btcScriptStr, btcScriptStr) ||
@@ -429,7 +465,9 @@ class _$ChainSwapImpl extends _ChainSwap {
       isTestnet,
       direction,
       refundKeys,
+      refundIndex,
       claimKeys,
+      claimIndex,
       preimage,
       btcScriptStr,
       lbtcScriptStr,
@@ -454,7 +492,9 @@ abstract class _ChainSwap extends ChainSwap {
       required final bool isTestnet,
       required final ChainSwapDirection direction,
       required final KeyPair refundKeys,
+      required final int refundIndex,
       required final KeyPair claimKeys,
+      required final int claimIndex,
       required final PreImage preimage,
       required final BtcSwapScriptStr btcScriptStr,
       required final LBtcSwapScriptStr lbtcScriptStr,
@@ -476,7 +516,11 @@ abstract class _ChainSwap extends ChainSwap {
   @override
   KeyPair get refundKeys;
   @override
+  int get refundIndex;
+  @override
   KeyPair get claimKeys;
+  @override
+  int get claimIndex;
   @override
   PreImage get preimage;
   @override

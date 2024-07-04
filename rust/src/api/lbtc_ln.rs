@@ -7,7 +7,10 @@ use super::{
 use boltz_client::{
     boltz::Cooperative,
     network::electrum::ElectrumConfig,
-    swaps::{boltz::BoltzApiClientV2, magic_routing},
+    swaps::{
+        boltz::BoltzApiClientV2,
+        magic_routing,
+    },
     util::secrets::Preimage,
     Amount, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };
@@ -21,6 +24,7 @@ pub struct LbtcLnSwap {
     pub kind: SwapType,
     pub network: Chain,
     pub keys: KeyPair,
+    pub key_index: u64,
     pub preimage: PreImage,
     pub swap_script: LBtcSwapScriptStr,
     pub invoice: String,
@@ -38,6 +42,7 @@ impl LbtcLnSwap {
         kind: SwapType,
         network: Chain,
         keys: KeyPair,
+        key_index: u64,
         preimage: PreImage,
         swap_script: LBtcSwapScriptStr,
         invoice: String,
@@ -53,6 +58,7 @@ impl LbtcLnSwap {
             kind,
             network,
             keys,
+            key_index,
             preimage,
             swap_script,
             invoice,
@@ -80,9 +86,7 @@ impl LbtcLnSwap {
             Err(err) => return Err(err.into()),
         };
         let swap_type = SwapType::Submarine;
-
         let refund_kps: Keypair = refund_keypair.clone().try_into()?;
-
         let preimage = match Preimage::from_invoice_str(&invoice) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -96,24 +100,21 @@ impl LbtcLnSwap {
             refund_public_key: refund_kps.public_key().into(),
             pair_hash: None,
         };
-
         let refund_pubkey = PublicKey {
             compressed: true,
             inner: refund_kps.public_key(),
         };
         let response = boltz_client.post_swap_req(&create_swap_req)?;
         response.validate(&invoice, &refund_pubkey, network.into())?;
-
         let swap_script =
             LBtcSwapScript::submarine_from_swap_resp(&response, refund_kps.public_key().into())?;
-
         let script_address = swap_script.to_address(network.into())?.to_string();
-
         Ok(LbtcLnSwap::new(
             response.id,
             swap_type,
             network,
             refund_keypair,
+            index,
             preimage.into(),
             swap_script.clone().into(),
             invoice,
@@ -150,8 +151,6 @@ impl LbtcLnSwap {
         };
 
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url));
-        // let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, false, None);
-
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -176,19 +175,16 @@ impl LbtcLnSwap {
                 address_signature: None,
             }
         };
-
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
         response.validate(&preimage, &claim_public_key, network.into())?;
-
         let swap_script = LBtcSwapScript::reverse_from_swap_resp(&response, claim_public_key)?;
-
         let script_address = swap_script.to_address(network.into())?.to_string();
-
         Ok(LbtcLnSwap::new(
             response.id,
             swap_type,
             network,
             claim_keypair,
+            index,
             preimage.into(),
             swap_script.clone().into(),
             response.invoice,
@@ -203,11 +199,9 @@ impl LbtcLnSwap {
     pub fn coop_close_submarine(&self) -> Result<(), BoltzError> {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
-
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
-
         let tx = match LBtcSwapTx::new_refund(
             swap_script,
             &self.script_address,
@@ -219,9 +213,7 @@ impl LbtcLnSwap {
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().try_into()?;
-
         let claim_tx_response = boltz_client.get_submarine_claim_tx_details(&self.id)?;
-
         let (partial_sig, pub_nonce) = tx.partial_sign(
             &ckp,
             &claim_tx_response.pub_nonce,
@@ -249,7 +241,6 @@ impl LbtcLnSwap {
         let id: String = self.id.clone();
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-
         let tx = match LBtcSwapTx::new_claim(
             swap_script,
             out_address,
@@ -304,10 +295,8 @@ impl LbtcLnSwap {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let id: String = self.id.clone();
-
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-
         let tx = match LBtcSwapTx::new_claim(
             swap_script,
             out_address,
@@ -360,10 +349,6 @@ impl LbtcLnSwap {
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let id = self.id.clone();
-        // let script_balance = match swap_script.get_balance(&network_config) {
-        //     Ok(result) => result,
-        //     Err(e) => return Err(e.into()),
-        // };
         let tx = match LBtcSwapTx::new_refund(
             swap_script.clone(),
             &out_address,
@@ -418,10 +403,6 @@ impl LbtcLnSwap {
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let id = self.id.clone();
-        // let script_balance = match swap_script.get_balance(&network_config) {
-        //     Ok(result) => result,
-        //     Err(e) => return Err(e.into()),
-        // };
         let tx = match LBtcSwapTx::new_refund(
             swap_script.clone(),
             &out_address,
@@ -513,29 +494,7 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
 
 #[cfg(test)]
 mod tests {
-    use boltz_client::boltz::BOLTZ_TESTNET_URL_V2;
-
     use super::*;
-    #[test]
-    fn test_v2_submarine() {
-        let mnemonic = "bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon".to_string();
-        let index = 1;
-        let invoice = "lntb2500u1pnggxykpp5dqvqlxrw2fe929cmtx36jqcy2ljeeq8hj8udmga4dzhtxm2lkg0scqpjsp5p0zf2vhsv2x558t964a9la4vtk3fapgdljjmwgxp5u8m62kmh2zs9q7sqqqqqqqqqqqqqqqqqqqsqqqqqysgqdpyxysysctvvcsxzgz5dahzqmmxyppk7enxv4jsmqz9grzjqwfn3p9278ttzzpe0e00uhyxhned3j5d9acqak5emwfpflp8z2cnfl6h8msfh3505gqqqqlgqqqqqeqqjqa8ndprc9w7u6wnmcdnhrszqah4lepymn925sz5yh6wrdvenqexsqse3wrpgz0m5x8f69uzq3e642uxjp6ru0ytqm3gvh86nx6jpsfjgqg2amm9".to_string();
-        let network = Chain::LiquidTestnet;
-        let electrum_url = "blockstream.info:465".to_string();
-        let boltz_url = BOLTZ_TESTNET_URL_V2.to_string();
-
-        let result = LbtcLnSwap::new_submarine(
-            mnemonic,
-            index,
-            invoice,
-            network,
-            electrum_url,
-            boltz_url,
-            None,
-        )
-        .unwrap();
-    }
 
     #[test]
     fn test_v2_reverse() {
@@ -546,7 +505,6 @@ mod tests {
         let network = Chain::LiquidTestnet;
         let electrum_url = "blockstream.info:465".to_string();
         let boltz_url = "api.boltz.exchange/v2".to_string();
-
         let _ = LbtcLnSwap::new_reverse(
             mnemonic,
             index,

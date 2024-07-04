@@ -20,6 +20,7 @@ mixin _$LbtcLnSwap {
   SwapType get kind => throw _privateConstructorUsedError;
   Chain get network => throw _privateConstructorUsedError;
   KeyPair get keys => throw _privateConstructorUsedError;
+  int get keyIndex => throw _privateConstructorUsedError;
   PreImage get preimage => throw _privateConstructorUsedError;
   LBtcSwapScriptStr get swapScript => throw _privateConstructorUsedError;
   String get invoice => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $LbtcLnSwapCopyWith<$Res> {
       SwapType kind,
       Chain network,
       KeyPair keys,
+      int keyIndex,
       PreImage preimage,
       LBtcSwapScriptStr swapScript,
       String invoice,
@@ -78,6 +80,7 @@ class _$LbtcLnSwapCopyWithImpl<$Res, $Val extends LbtcLnSwap>
     Object? kind = null,
     Object? network = null,
     Object? keys = null,
+    Object? keyIndex = null,
     Object? preimage = null,
     Object? swapScript = null,
     Object? invoice = null,
@@ -105,6 +108,10 @@ class _$LbtcLnSwapCopyWithImpl<$Res, $Val extends LbtcLnSwap>
           ? _value.keys
           : keys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      keyIndex: null == keyIndex
+          ? _value.keyIndex
+          : keyIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -182,6 +189,7 @@ abstract class _$$LbtcLnSwapImplCopyWith<$Res>
       SwapType kind,
       Chain network,
       KeyPair keys,
+      int keyIndex,
       PreImage preimage,
       LBtcSwapScriptStr swapScript,
       String invoice,
@@ -215,6 +223,7 @@ class __$$LbtcLnSwapImplCopyWithImpl<$Res>
     Object? kind = null,
     Object? network = null,
     Object? keys = null,
+    Object? keyIndex = null,
     Object? preimage = null,
     Object? swapScript = null,
     Object? invoice = null,
@@ -242,6 +251,10 @@ class __$$LbtcLnSwapImplCopyWithImpl<$Res>
           ? _value.keys
           : keys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
+      keyIndex: null == keyIndex
+          ? _value.keyIndex
+          : keyIndex // ignore: cast_nullable_to_non_nullable
+              as int,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -290,6 +303,7 @@ class _$LbtcLnSwapImpl extends _LbtcLnSwap {
       required this.kind,
       required this.network,
       required this.keys,
+      required this.keyIndex,
       required this.preimage,
       required this.swapScript,
       required this.invoice,
@@ -309,6 +323,8 @@ class _$LbtcLnSwapImpl extends _LbtcLnSwap {
   final Chain network;
   @override
   final KeyPair keys;
+  @override
+  final int keyIndex;
   @override
   final PreImage preimage;
   @override
@@ -330,7 +346,7 @@ class _$LbtcLnSwapImpl extends _LbtcLnSwap {
 
   @override
   String toString() {
-    return 'LbtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, outAmount: $outAmount, scriptAddress: $scriptAddress, blindingKey: $blindingKey, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
+    return 'LbtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, keyIndex: $keyIndex, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, outAmount: $outAmount, scriptAddress: $scriptAddress, blindingKey: $blindingKey, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
   }
 
   @override
@@ -342,6 +358,8 @@ class _$LbtcLnSwapImpl extends _LbtcLnSwap {
             (identical(other.kind, kind) || other.kind == kind) &&
             (identical(other.network, network) || other.network == network) &&
             (identical(other.keys, keys) || other.keys == keys) &&
+            (identical(other.keyIndex, keyIndex) ||
+                other.keyIndex == keyIndex) &&
             (identical(other.preimage, preimage) ||
                 other.preimage == preimage) &&
             (identical(other.swapScript, swapScript) ||
@@ -368,6 +386,7 @@ class _$LbtcLnSwapImpl extends _LbtcLnSwap {
       kind,
       network,
       keys,
+      keyIndex,
       preimage,
       swapScript,
       invoice,
@@ -391,6 +410,7 @@ abstract class _LbtcLnSwap extends LbtcLnSwap {
       required final SwapType kind,
       required final Chain network,
       required final KeyPair keys,
+      required final int keyIndex,
       required final PreImage preimage,
       required final LBtcSwapScriptStr swapScript,
       required final String invoice,
@@ -410,6 +430,8 @@ abstract class _LbtcLnSwap extends LbtcLnSwap {
   Chain get network;
   @override
   KeyPair get keys;
+  @override
+  int get keyIndex;
   @override
   PreImage get preimage;
   @override

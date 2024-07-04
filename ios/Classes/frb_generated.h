@@ -44,6 +44,7 @@ typedef struct wire_cst_btc_ln_swap {
   int32_t kind;
   int32_t network;
   struct wire_cst_key_pair keys;
+  uint64_t key_index;
   struct wire_cst_pre_image preimage;
   struct wire_cst_btc_swap_script_str swap_script;
   struct wire_cst_list_prim_u_8_strict *invoice;
@@ -69,7 +70,9 @@ typedef struct wire_cst_chain_swap {
   bool is_testnet;
   int32_t direction;
   struct wire_cst_key_pair refund_keys;
+  uint64_t refund_index;
   struct wire_cst_key_pair claim_keys;
+  uint64_t claim_index;
   struct wire_cst_pre_image preimage;
   struct wire_cst_btc_swap_script_str btc_script_str;
   struct wire_cst_l_btc_swap_script_str lbtc_script_str;
@@ -91,6 +94,7 @@ typedef struct wire_cst_lbtc_ln_swap {
   int32_t kind;
   int32_t network;
   struct wire_cst_key_pair keys;
+  uint64_t key_index;
   struct wire_cst_pre_image preimage;
   struct wire_cst_l_btc_swap_script_str swap_script;
   struct wire_cst_list_prim_u_8_strict *invoice;
@@ -186,6 +190,7 @@ void frbgen_boltz_dart_wire_btc_ln_swap_new(int64_t port_,
                                             int32_t kind,
                                             int32_t network,
                                             struct wire_cst_key_pair *keys,
+                                            uint64_t key_index,
                                             struct wire_cst_pre_image *preimage,
                                             struct wire_cst_btc_swap_script_str *swap_script,
                                             struct wire_cst_list_prim_u_8_strict *invoice,
@@ -234,7 +239,9 @@ void frbgen_boltz_dart_wire_chain_swap_new(int64_t port_,
                                            bool is_testnet,
                                            int32_t direction,
                                            struct wire_cst_key_pair *refund_keys,
+                                           uint64_t refund_index,
                                            struct wire_cst_key_pair *claim_keys,
+                                           uint64_t claim_index,
                                            struct wire_cst_pre_image *preimage,
                                            struct wire_cst_btc_swap_script_str *btc_script_str,
                                            struct wire_cst_l_btc_swap_script_str *lbtc_script_str,
@@ -300,6 +307,7 @@ void frbgen_boltz_dart_wire_lbtc_ln_swap_new(int64_t port_,
                                              int32_t kind,
                                              int32_t network,
                                              struct wire_cst_key_pair *keys,
+                                             uint64_t key_index,
                                              struct wire_cst_pre_image *preimage,
                                              struct wire_cst_l_btc_swap_script_str *swap_script,
                                              struct wire_cst_list_prim_u_8_strict *invoice,

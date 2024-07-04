@@ -95,6 +95,7 @@ fn wire_btc_ln_swap_new_impl(
     kind: impl CstDecode<crate::api::types::SwapType>,
     network: impl CstDecode<crate::api::types::Chain>,
     keys: impl CstDecode<crate::api::types::KeyPair>,
+    key_index: impl CstDecode<u64>,
     preimage: impl CstDecode<crate::api::types::PreImage>,
     swap_script: impl CstDecode<crate::api::types::BtcSwapScriptStr>,
     invoice: impl CstDecode<String>,
@@ -115,6 +116,7 @@ fn wire_btc_ln_swap_new_impl(
             let api_kind = kind.cst_decode();
             let api_network = network.cst_decode();
             let api_keys = keys.cst_decode();
+            let api_key_index = key_index.cst_decode();
             let api_preimage = preimage.cst_decode();
             let api_swap_script = swap_script.cst_decode();
             let api_invoice = invoice.cst_decode();
@@ -130,6 +132,7 @@ fn wire_btc_ln_swap_new_impl(
                         api_kind,
                         api_network,
                         api_keys,
+                        api_key_index,
                         api_preimage,
                         api_swap_script,
                         api_invoice,
@@ -316,7 +319,9 @@ fn wire_chain_swap_new_impl(
     is_testnet: impl CstDecode<bool>,
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
     refund_keys: impl CstDecode<crate::api::types::KeyPair>,
+    refund_index: impl CstDecode<u64>,
     claim_keys: impl CstDecode<crate::api::types::KeyPair>,
+    claim_index: impl CstDecode<u64>,
     preimage: impl CstDecode<crate::api::types::PreImage>,
     btc_script_str: impl CstDecode<crate::api::types::BtcSwapScriptStr>,
     lbtc_script_str: impl CstDecode<crate::api::types::LBtcSwapScriptStr>,
@@ -339,7 +344,9 @@ fn wire_chain_swap_new_impl(
             let api_is_testnet = is_testnet.cst_decode();
             let api_direction = direction.cst_decode();
             let api_refund_keys = refund_keys.cst_decode();
+            let api_refund_index = refund_index.cst_decode();
             let api_claim_keys = claim_keys.cst_decode();
+            let api_claim_index = claim_index.cst_decode();
             let api_preimage = preimage.cst_decode();
             let api_btc_script_str = btc_script_str.cst_decode();
             let api_lbtc_script_str = lbtc_script_str.cst_decode();
@@ -357,7 +364,9 @@ fn wire_chain_swap_new_impl(
                         api_is_testnet,
                         api_direction,
                         api_refund_keys,
+                        api_refund_index,
                         api_claim_keys,
+                        api_claim_index,
                         api_preimage,
                         api_btc_script_str,
                         api_lbtc_script_str,
@@ -649,6 +658,7 @@ fn wire_lbtc_ln_swap_new_impl(
     kind: impl CstDecode<crate::api::types::SwapType>,
     network: impl CstDecode<crate::api::types::Chain>,
     keys: impl CstDecode<crate::api::types::KeyPair>,
+    key_index: impl CstDecode<u64>,
     preimage: impl CstDecode<crate::api::types::PreImage>,
     swap_script: impl CstDecode<crate::api::types::LBtcSwapScriptStr>,
     invoice: impl CstDecode<String>,
@@ -670,6 +680,7 @@ fn wire_lbtc_ln_swap_new_impl(
             let api_kind = kind.cst_decode();
             let api_network = network.cst_decode();
             let api_keys = keys.cst_decode();
+            let api_key_index = key_index.cst_decode();
             let api_preimage = preimage.cst_decode();
             let api_swap_script = swap_script.cst_decode();
             let api_invoice = invoice.cst_decode();
@@ -686,6 +697,7 @@ fn wire_lbtc_ln_swap_new_impl(
                         api_kind,
                         api_network,
                         api_keys,
+                        api_key_index,
                         api_preimage,
                         api_swap_script,
                         api_invoice,
@@ -1165,6 +1177,7 @@ impl SseDecode for crate::api::btc_ln::BtcLnSwap {
         let mut var_kind = <crate::api::types::SwapType>::sse_decode(deserializer);
         let mut var_network = <crate::api::types::Chain>::sse_decode(deserializer);
         let mut var_keys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_keyIndex = <u64>::sse_decode(deserializer);
         let mut var_preimage = <crate::api::types::PreImage>::sse_decode(deserializer);
         let mut var_swapScript = <crate::api::types::BtcSwapScriptStr>::sse_decode(deserializer);
         let mut var_invoice = <String>::sse_decode(deserializer);
@@ -1178,6 +1191,7 @@ impl SseDecode for crate::api::btc_ln::BtcLnSwap {
             kind: var_kind,
             network: var_network,
             keys: var_keys,
+            key_index: var_keyIndex,
             preimage: var_preimage,
             swap_script: var_swapScript,
             invoice: var_invoice,
@@ -1247,7 +1261,9 @@ impl SseDecode for crate::api::chain_swap::ChainSwap {
         let mut var_isTestnet = <bool>::sse_decode(deserializer);
         let mut var_direction = <crate::api::types::ChainSwapDirection>::sse_decode(deserializer);
         let mut var_refundKeys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_refundIndex = <u64>::sse_decode(deserializer);
         let mut var_claimKeys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_claimIndex = <u64>::sse_decode(deserializer);
         let mut var_preimage = <crate::api::types::PreImage>::sse_decode(deserializer);
         let mut var_btcScriptStr = <crate::api::types::BtcSwapScriptStr>::sse_decode(deserializer);
         let mut var_lbtcScriptStr =
@@ -1264,7 +1280,9 @@ impl SseDecode for crate::api::chain_swap::ChainSwap {
             is_testnet: var_isTestnet,
             direction: var_direction,
             refund_keys: var_refundKeys,
+            refund_index: var_refundIndex,
             claim_keys: var_claimKeys,
+            claim_index: var_claimIndex,
             preimage: var_preimage,
             btc_script_str: var_btcScriptStr,
             lbtc_script_str: var_lbtcScriptStr,
@@ -1398,6 +1416,7 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnSwap {
         let mut var_kind = <crate::api::types::SwapType>::sse_decode(deserializer);
         let mut var_network = <crate::api::types::Chain>::sse_decode(deserializer);
         let mut var_keys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_keyIndex = <u64>::sse_decode(deserializer);
         let mut var_preimage = <crate::api::types::PreImage>::sse_decode(deserializer);
         let mut var_swapScript = <crate::api::types::LBtcSwapScriptStr>::sse_decode(deserializer);
         let mut var_invoice = <String>::sse_decode(deserializer);
@@ -1412,6 +1431,7 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnSwap {
             kind: var_kind,
             network: var_network,
             keys: var_keys,
+            key_index: var_keyIndex,
             preimage: var_preimage,
             swap_script: var_swapScript,
             invoice: var_invoice,
@@ -1641,6 +1661,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::btc_ln::BtcLnSwap {
             self.kind.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
             self.keys.into_into_dart().into_dart(),
+            self.key_index.into_into_dart().into_dart(),
             self.preimage.into_into_dart().into_dart(),
             self.swap_script.into_into_dart().into_dart(),
             self.invoice.into_into_dart().into_dart(),
@@ -1734,7 +1755,9 @@ impl flutter_rust_bridge::IntoDart for crate::api::chain_swap::ChainSwap {
             self.is_testnet.into_into_dart().into_dart(),
             self.direction.into_into_dart().into_dart(),
             self.refund_keys.into_into_dart().into_dart(),
+            self.refund_index.into_into_dart().into_dart(),
             self.claim_keys.into_into_dart().into_dart(),
+            self.claim_index.into_into_dart().into_dart(),
             self.preimage.into_into_dart().into_dart(),
             self.btc_script_str.into_into_dart().into_dart(),
             self.lbtc_script_str.into_into_dart().into_dart(),
@@ -1893,6 +1916,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::lbtc_ln::LbtcLnSwap {
             self.kind.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
             self.keys.into_into_dart().into_dart(),
+            self.key_index.into_into_dart().into_dart(),
             self.preimage.into_into_dart().into_dart(),
             self.swap_script.into_into_dart().into_dart(),
             self.invoice.into_into_dart().into_dart(),
@@ -2108,6 +2132,7 @@ impl SseEncode for crate::api::btc_ln::BtcLnSwap {
         <crate::api::types::SwapType>::sse_encode(self.kind, serializer);
         <crate::api::types::Chain>::sse_encode(self.network, serializer);
         <crate::api::types::KeyPair>::sse_encode(self.keys, serializer);
+        <u64>::sse_encode(self.key_index, serializer);
         <crate::api::types::PreImage>::sse_encode(self.preimage, serializer);
         <crate::api::types::BtcSwapScriptStr>::sse_encode(self.swap_script, serializer);
         <String>::sse_encode(self.invoice, serializer);
@@ -2166,7 +2191,9 @@ impl SseEncode for crate::api::chain_swap::ChainSwap {
         <bool>::sse_encode(self.is_testnet, serializer);
         <crate::api::types::ChainSwapDirection>::sse_encode(self.direction, serializer);
         <crate::api::types::KeyPair>::sse_encode(self.refund_keys, serializer);
+        <u64>::sse_encode(self.refund_index, serializer);
         <crate::api::types::KeyPair>::sse_encode(self.claim_keys, serializer);
+        <u64>::sse_encode(self.claim_index, serializer);
         <crate::api::types::PreImage>::sse_encode(self.preimage, serializer);
         <crate::api::types::BtcSwapScriptStr>::sse_encode(self.btc_script_str, serializer);
         <crate::api::types::LBtcSwapScriptStr>::sse_encode(self.lbtc_script_str, serializer);
@@ -2270,6 +2297,7 @@ impl SseEncode for crate::api::lbtc_ln::LbtcLnSwap {
         <crate::api::types::SwapType>::sse_encode(self.kind, serializer);
         <crate::api::types::Chain>::sse_encode(self.network, serializer);
         <crate::api::types::KeyPair>::sse_encode(self.keys, serializer);
+        <u64>::sse_encode(self.key_index, serializer);
         <crate::api::types::PreImage>::sse_encode(self.preimage, serializer);
         <crate::api::types::LBtcSwapScriptStr>::sse_encode(self.swap_script, serializer);
         <String>::sse_encode(self.invoice, serializer);

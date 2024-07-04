@@ -83,6 +83,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required SwapType kind,
       required Chain network,
       required KeyPair keys,
+      required int keyIndex,
       required PreImage preimage,
       required BtcSwapScriptStr swapScript,
       required String invoice,
@@ -136,7 +137,9 @@ abstract class BoltzCoreApi extends BaseApi {
       required bool isTestnet,
       required ChainSwapDirection direction,
       required KeyPair refundKeys,
+      required int refundIndex,
       required KeyPair claimKeys,
+      required int claimIndex,
       required PreImage preimage,
       required BtcSwapScriptStr btcScriptStr,
       required LBtcSwapScriptStr lbtcScriptStr,
@@ -205,6 +208,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required SwapType kind,
       required Chain network,
       required KeyPair keys,
+      required int keyIndex,
       required PreImage preimage,
       required LBtcSwapScriptStr swapScript,
       required String invoice,
@@ -365,6 +369,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required SwapType kind,
       required Chain network,
       required KeyPair keys,
+      required int keyIndex,
       required PreImage preimage,
       required BtcSwapScriptStr swapScript,
       required String invoice,
@@ -380,16 +385,17 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg1 = cst_encode_swap_type(kind);
         var arg2 = cst_encode_chain(network);
         var arg3 = cst_encode_box_autoadd_key_pair(keys);
-        var arg4 = cst_encode_box_autoadd_pre_image(preimage);
-        var arg5 = cst_encode_box_autoadd_btc_swap_script_str(swapScript);
-        var arg6 = cst_encode_String(invoice);
-        var arg7 = cst_encode_String(scriptAddress);
-        var arg8 = cst_encode_u_64(outAmount);
-        var arg9 = cst_encode_String(electrumUrl);
-        var arg10 = cst_encode_String(boltzUrl);
-        var arg11 = cst_encode_opt_String(referralId);
+        var arg4 = cst_encode_u_64(keyIndex);
+        var arg5 = cst_encode_box_autoadd_pre_image(preimage);
+        var arg6 = cst_encode_box_autoadd_btc_swap_script_str(swapScript);
+        var arg7 = cst_encode_String(invoice);
+        var arg8 = cst_encode_String(scriptAddress);
+        var arg9 = cst_encode_u_64(outAmount);
+        var arg10 = cst_encode_String(electrumUrl);
+        var arg11 = cst_encode_String(boltzUrl);
+        var arg12 = cst_encode_opt_String(referralId);
         return wire.wire_btc_ln_swap_new(port_, arg0, arg1, arg2, arg3, arg4,
-            arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+            arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_btc_ln_swap,
@@ -401,6 +407,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         kind,
         network,
         keys,
+        keyIndex,
         preimage,
         swapScript,
         invoice,
@@ -422,6 +429,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "kind",
           "network",
           "keys",
+          "keyIndex",
           "preimage",
           "swapScript",
           "invoice",
@@ -644,7 +652,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required bool isTestnet,
       required ChainSwapDirection direction,
       required KeyPair refundKeys,
+      required int refundIndex,
       required KeyPair claimKeys,
+      required int claimIndex,
       required PreImage preimage,
       required BtcSwapScriptStr btcScriptStr,
       required LBtcSwapScriptStr lbtcScriptStr,
@@ -662,19 +672,38 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg1 = cst_encode_bool(isTestnet);
         var arg2 = cst_encode_chain_swap_direction(direction);
         var arg3 = cst_encode_box_autoadd_key_pair(refundKeys);
-        var arg4 = cst_encode_box_autoadd_key_pair(claimKeys);
-        var arg5 = cst_encode_box_autoadd_pre_image(preimage);
-        var arg6 = cst_encode_box_autoadd_btc_swap_script_str(btcScriptStr);
-        var arg7 = cst_encode_box_autoadd_l_btc_swap_script_str(lbtcScriptStr);
-        var arg8 = cst_encode_String(scriptAddress);
-        var arg9 = cst_encode_u_64(outAmount);
-        var arg10 = cst_encode_String(btcElectrumUrl);
-        var arg11 = cst_encode_String(lbtcElectrumUrl);
-        var arg12 = cst_encode_String(boltzUrl);
-        var arg13 = cst_encode_opt_String(referralId);
-        var arg14 = cst_encode_String(blindingKey);
-        return wire.wire_chain_swap_new(port_, arg0, arg1, arg2, arg3, arg4,
-            arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+        var arg4 = cst_encode_u_64(refundIndex);
+        var arg5 = cst_encode_box_autoadd_key_pair(claimKeys);
+        var arg6 = cst_encode_u_64(claimIndex);
+        var arg7 = cst_encode_box_autoadd_pre_image(preimage);
+        var arg8 = cst_encode_box_autoadd_btc_swap_script_str(btcScriptStr);
+        var arg9 = cst_encode_box_autoadd_l_btc_swap_script_str(lbtcScriptStr);
+        var arg10 = cst_encode_String(scriptAddress);
+        var arg11 = cst_encode_u_64(outAmount);
+        var arg12 = cst_encode_String(btcElectrumUrl);
+        var arg13 = cst_encode_String(lbtcElectrumUrl);
+        var arg14 = cst_encode_String(boltzUrl);
+        var arg15 = cst_encode_opt_String(referralId);
+        var arg16 = cst_encode_String(blindingKey);
+        return wire.wire_chain_swap_new(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+            arg6,
+            arg7,
+            arg8,
+            arg9,
+            arg10,
+            arg11,
+            arg12,
+            arg13,
+            arg14,
+            arg15,
+            arg16);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_chain_swap,
@@ -686,7 +715,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         isTestnet,
         direction,
         refundKeys,
+        refundIndex,
         claimKeys,
+        claimIndex,
         preimage,
         btcScriptStr,
         lbtcScriptStr,
@@ -710,7 +741,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "isTestnet",
           "direction",
           "refundKeys",
+          "refundIndex",
           "claimKeys",
+          "claimIndex",
           "preimage",
           "btcScriptStr",
           "lbtcScriptStr",
@@ -1056,6 +1089,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required SwapType kind,
       required Chain network,
       required KeyPair keys,
+      required int keyIndex,
       required PreImage preimage,
       required LBtcSwapScriptStr swapScript,
       required String invoice,
@@ -1072,17 +1106,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg1 = cst_encode_swap_type(kind);
         var arg2 = cst_encode_chain(network);
         var arg3 = cst_encode_box_autoadd_key_pair(keys);
-        var arg4 = cst_encode_box_autoadd_pre_image(preimage);
-        var arg5 = cst_encode_box_autoadd_l_btc_swap_script_str(swapScript);
-        var arg6 = cst_encode_String(invoice);
-        var arg7 = cst_encode_u_64(outAmount);
-        var arg8 = cst_encode_String(outAddress);
-        var arg9 = cst_encode_String(blindingKey);
-        var arg10 = cst_encode_String(electrumUrl);
-        var arg11 = cst_encode_String(boltzUrl);
-        var arg12 = cst_encode_opt_String(referralId);
+        var arg4 = cst_encode_u_64(keyIndex);
+        var arg5 = cst_encode_box_autoadd_pre_image(preimage);
+        var arg6 = cst_encode_box_autoadd_l_btc_swap_script_str(swapScript);
+        var arg7 = cst_encode_String(invoice);
+        var arg8 = cst_encode_u_64(outAmount);
+        var arg9 = cst_encode_String(outAddress);
+        var arg10 = cst_encode_String(blindingKey);
+        var arg11 = cst_encode_String(electrumUrl);
+        var arg12 = cst_encode_String(boltzUrl);
+        var arg13 = cst_encode_opt_String(referralId);
         return wire.wire_lbtc_ln_swap_new(port_, arg0, arg1, arg2, arg3, arg4,
-            arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+            arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_lbtc_ln_swap,
@@ -1094,6 +1129,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         kind,
         network,
         keys,
+        keyIndex,
         preimage,
         swapScript,
         invoice,
@@ -1116,6 +1152,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "kind",
           "network",
           "keys",
+          "keyIndex",
           "preimage",
           "swapScript",
           "invoice",
@@ -1638,21 +1675,22 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   BtcLnSwap dco_decode_btc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 12)
-      throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
+    if (arr.length != 13)
+      throw Exception('unexpected arr length: expect 13 but see ${arr.length}');
     return BtcLnSwap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
       network: dco_decode_chain(arr[2]),
       keys: dco_decode_key_pair(arr[3]),
-      preimage: dco_decode_pre_image(arr[4]),
-      swapScript: dco_decode_btc_swap_script_str(arr[5]),
-      invoice: dco_decode_String(arr[6]),
-      scriptAddress: dco_decode_String(arr[7]),
-      outAmount: dco_decode_u_64(arr[8]),
-      electrumUrl: dco_decode_String(arr[9]),
-      boltzUrl: dco_decode_String(arr[10]),
-      referralId: dco_decode_opt_String(arr[11]),
+      keyIndex: dco_decode_u_64(arr[4]),
+      preimage: dco_decode_pre_image(arr[5]),
+      swapScript: dco_decode_btc_swap_script_str(arr[6]),
+      invoice: dco_decode_String(arr[7]),
+      scriptAddress: dco_decode_String(arr[8]),
+      outAmount: dco_decode_u_64(arr[9]),
+      electrumUrl: dco_decode_String(arr[10]),
+      boltzUrl: dco_decode_String(arr[11]),
+      referralId: dco_decode_opt_String(arr[12]),
     );
   }
 
@@ -1696,24 +1734,26 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   ChainSwap dco_decode_chain_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 15)
-      throw Exception('unexpected arr length: expect 15 but see ${arr.length}');
+    if (arr.length != 17)
+      throw Exception('unexpected arr length: expect 17 but see ${arr.length}');
     return ChainSwap(
       id: dco_decode_String(arr[0]),
       isTestnet: dco_decode_bool(arr[1]),
       direction: dco_decode_chain_swap_direction(arr[2]),
       refundKeys: dco_decode_key_pair(arr[3]),
-      claimKeys: dco_decode_key_pair(arr[4]),
-      preimage: dco_decode_pre_image(arr[5]),
-      btcScriptStr: dco_decode_btc_swap_script_str(arr[6]),
-      lbtcScriptStr: dco_decode_l_btc_swap_script_str(arr[7]),
-      scriptAddress: dco_decode_String(arr[8]),
-      outAmount: dco_decode_u_64(arr[9]),
-      btcElectrumUrl: dco_decode_String(arr[10]),
-      lbtcElectrumUrl: dco_decode_String(arr[11]),
-      boltzUrl: dco_decode_String(arr[12]),
-      referralId: dco_decode_opt_String(arr[13]),
-      blindingKey: dco_decode_String(arr[14]),
+      refundIndex: dco_decode_u_64(arr[4]),
+      claimKeys: dco_decode_key_pair(arr[5]),
+      claimIndex: dco_decode_u_64(arr[6]),
+      preimage: dco_decode_pre_image(arr[7]),
+      btcScriptStr: dco_decode_btc_swap_script_str(arr[8]),
+      lbtcScriptStr: dco_decode_l_btc_swap_script_str(arr[9]),
+      scriptAddress: dco_decode_String(arr[10]),
+      outAmount: dco_decode_u_64(arr[11]),
+      btcElectrumUrl: dco_decode_String(arr[12]),
+      lbtcElectrumUrl: dco_decode_String(arr[13]),
+      boltzUrl: dco_decode_String(arr[14]),
+      referralId: dco_decode_opt_String(arr[15]),
+      blindingKey: dco_decode_String(arr[16]),
     );
   }
 
@@ -1812,22 +1852,23 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 13)
-      throw Exception('unexpected arr length: expect 13 but see ${arr.length}');
+    if (arr.length != 14)
+      throw Exception('unexpected arr length: expect 14 but see ${arr.length}');
     return LbtcLnSwap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
       network: dco_decode_chain(arr[2]),
       keys: dco_decode_key_pair(arr[3]),
-      preimage: dco_decode_pre_image(arr[4]),
-      swapScript: dco_decode_l_btc_swap_script_str(arr[5]),
-      invoice: dco_decode_String(arr[6]),
-      outAmount: dco_decode_u_64(arr[7]),
-      scriptAddress: dco_decode_String(arr[8]),
-      blindingKey: dco_decode_String(arr[9]),
-      electrumUrl: dco_decode_String(arr[10]),
-      boltzUrl: dco_decode_String(arr[11]),
-      referralId: dco_decode_opt_String(arr[12]),
+      keyIndex: dco_decode_u_64(arr[4]),
+      preimage: dco_decode_pre_image(arr[5]),
+      swapScript: dco_decode_l_btc_swap_script_str(arr[6]),
+      invoice: dco_decode_String(arr[7]),
+      outAmount: dco_decode_u_64(arr[8]),
+      scriptAddress: dco_decode_String(arr[9]),
+      blindingKey: dco_decode_String(arr[10]),
+      electrumUrl: dco_decode_String(arr[11]),
+      boltzUrl: dco_decode_String(arr[12]),
+      referralId: dco_decode_opt_String(arr[13]),
     );
   }
 
@@ -2052,6 +2093,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_kind = sse_decode_swap_type(deserializer);
     var var_network = sse_decode_chain(deserializer);
     var var_keys = sse_decode_key_pair(deserializer);
+    var var_keyIndex = sse_decode_u_64(deserializer);
     var var_preimage = sse_decode_pre_image(deserializer);
     var var_swapScript = sse_decode_btc_swap_script_str(deserializer);
     var var_invoice = sse_decode_String(deserializer);
@@ -2065,6 +2107,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         kind: var_kind,
         network: var_network,
         keys: var_keys,
+        keyIndex: var_keyIndex,
         preimage: var_preimage,
         swapScript: var_swapScript,
         invoice: var_invoice,
@@ -2123,7 +2166,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_isTestnet = sse_decode_bool(deserializer);
     var var_direction = sse_decode_chain_swap_direction(deserializer);
     var var_refundKeys = sse_decode_key_pair(deserializer);
+    var var_refundIndex = sse_decode_u_64(deserializer);
     var var_claimKeys = sse_decode_key_pair(deserializer);
+    var var_claimIndex = sse_decode_u_64(deserializer);
     var var_preimage = sse_decode_pre_image(deserializer);
     var var_btcScriptStr = sse_decode_btc_swap_script_str(deserializer);
     var var_lbtcScriptStr = sse_decode_l_btc_swap_script_str(deserializer);
@@ -2139,7 +2184,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         isTestnet: var_isTestnet,
         direction: var_direction,
         refundKeys: var_refundKeys,
+        refundIndex: var_refundIndex,
         claimKeys: var_claimKeys,
+        claimIndex: var_claimIndex,
         preimage: var_preimage,
         btcScriptStr: var_btcScriptStr,
         lbtcScriptStr: var_lbtcScriptStr,
@@ -2253,6 +2300,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_kind = sse_decode_swap_type(deserializer);
     var var_network = sse_decode_chain(deserializer);
     var var_keys = sse_decode_key_pair(deserializer);
+    var var_keyIndex = sse_decode_u_64(deserializer);
     var var_preimage = sse_decode_pre_image(deserializer);
     var var_swapScript = sse_decode_l_btc_swap_script_str(deserializer);
     var var_invoice = sse_decode_String(deserializer);
@@ -2267,6 +2315,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         kind: var_kind,
         network: var_network,
         keys: var_keys,
+        keyIndex: var_keyIndex,
         preimage: var_preimage,
         swapScript: var_swapScript,
         invoice: var_invoice,
@@ -2551,6 +2600,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_swap_type(self.kind, serializer);
     sse_encode_chain(self.network, serializer);
     sse_encode_key_pair(self.keys, serializer);
+    sse_encode_u_64(self.keyIndex, serializer);
     sse_encode_pre_image(self.preimage, serializer);
     sse_encode_btc_swap_script_str(self.swapScript, serializer);
     sse_encode_String(self.invoice, serializer);
@@ -2596,7 +2646,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_bool(self.isTestnet, serializer);
     sse_encode_chain_swap_direction(self.direction, serializer);
     sse_encode_key_pair(self.refundKeys, serializer);
+    sse_encode_u_64(self.refundIndex, serializer);
     sse_encode_key_pair(self.claimKeys, serializer);
+    sse_encode_u_64(self.claimIndex, serializer);
     sse_encode_pre_image(self.preimage, serializer);
     sse_encode_btc_swap_script_str(self.btcScriptStr, serializer);
     sse_encode_l_btc_swap_script_str(self.lbtcScriptStr, serializer);
@@ -2686,6 +2738,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_swap_type(self.kind, serializer);
     sse_encode_chain(self.network, serializer);
     sse_encode_key_pair(self.keys, serializer);
+    sse_encode_u_64(self.keyIndex, serializer);
     sse_encode_pre_image(self.preimage, serializer);
     sse_encode_l_btc_swap_script_str(self.swapScript, serializer);
     sse_encode_String(self.invoice, serializer);

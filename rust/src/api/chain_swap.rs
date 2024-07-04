@@ -24,7 +24,9 @@ pub struct ChainSwap {
     pub is_testnet: bool,
     pub direction: ChainSwapDirection,
     pub refund_keys: KeyPair,
+    pub refund_index: u64,
     pub claim_keys: KeyPair,
+    pub claim_index: u64,
     pub preimage: PreImage,
     pub btc_script_str: BtcSwapScriptStr,
     pub lbtc_script_str: LBtcSwapScriptStr,
@@ -42,7 +44,9 @@ impl ChainSwap {
         is_testnet: bool,
         direction: ChainSwapDirection,
         refund_keys: KeyPair,
+        refund_index: u64,
         claim_keys: KeyPair,
+        claim_index: u64,
         preimage: PreImage,
         btc_script_str: BtcSwapScriptStr,
         lbtc_script_str: LBtcSwapScriptStr,
@@ -59,7 +63,9 @@ impl ChainSwap {
             direction,
             is_testnet,
             refund_keys,
+            refund_index,
             claim_keys,
+            claim_index,
             preimage,
             btc_script_str,
             lbtc_script_str,
@@ -145,7 +151,10 @@ impl ChainSwap {
                 } else {
                     Chain::Bitcoin
                 };
-                let lockup_address = lockup_script.clone().to_address(lockup_chain.into())?;
+                let lockup_address = lockup_script
+                    .clone()
+                    .to_address(lockup_chain.into())
+                    ?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {
@@ -162,7 +171,9 @@ impl ChainSwap {
                     is_testnet,
                     direction,
                     refund_keypair,
+                    index,
                     claim_keypair,
+                    index + 1,
                     preimage.into(),
                     lockup_script.into(),
                     claim_script.clone().into(),
@@ -187,7 +198,6 @@ impl ChainSwap {
                     server_lock_amount: None,
                     pair_hash: None, // Add address signature here.
                 };
-
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = LBtcSwapScript::chain_from_swap_resp(
@@ -200,26 +210,29 @@ impl ChainSwap {
                 } else {
                     Chain::Liquid
                 };
-                let lockup_address = lockup_script.clone().to_address(lockup_chain.into())?;
+                let lockup_address = lockup_script
+                    .clone()
+                    .to_address(lockup_chain.into())
+                    ?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {
                     return Err(Error::Address("Lockup Address Mismatch".to_owned()).into());
                 }
-
                 let claim_details: ChainSwapDetails = create_chain_response.claim_details;
                 let claim_script = BtcSwapScript::chain_from_swap_resp(
                     Side::Claim,
                     claim_details.clone(),
                     claim_public_key,
                 )?;
-
                 Ok(ChainSwap::new(
                     create_chain_response.id,
                     is_testnet,
                     direction,
                     refund_keypair,
+                    index,
                     claim_keypair,
+                    index + 1,
                     preimage.into(),
                     claim_script.into(),
                     lockup_script.clone().into(),
@@ -390,7 +403,6 @@ impl ChainSwap {
                     &refund_address,
                     &btc_network_config,
                 )?;
-
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
                     &rkp,
