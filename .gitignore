@@ -55,5 +55,6 @@ macos/libboltz_dart.xcframework
 rust/target/
 rust/builds/
 pubspec.lock
-test/libboltz_dart.dylib
-test/libboltz_dart.so
+*.dylib
+*.so
+*.a
