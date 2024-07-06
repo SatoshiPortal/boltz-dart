@@ -34,6 +34,12 @@ enum SwapStatus {
   @JsonValue('transaction.lockupFailed')
   txnLockupFailed,
 
+  @JsonValue('transaction.server.mempool')
+  txnServerMempool,
+
+  @JsonValue('transaction.server.confirmed')
+  txnServerConfirmed,
+
   @JsonValue('invoice.set')
   invoiceSet,
 
@@ -81,6 +87,10 @@ extension SwapStatusX on SwapStatus {
         return 'transaction.failed';
       case SwapStatus.txnLockupFailed:
         return 'transaction.lockupFailed';
+      case SwapStatus.txnServerMempool:
+        return 'transaction.server.mempool';
+      case SwapStatus.txnServerConfirmed:
+        return 'transaction.server.confirmed';
 
       case SwapStatus.invoiceSet:
         return 'invoice.set';
@@ -127,6 +137,10 @@ extension SwapStatusX on SwapStatus {
         return 'Transaction failed';
       case SwapStatus.txnLockupFailed:
         return 'Transaction lockup failed';
+      case SwapStatus.txnServerMempool:
+        return 'Transaction server mempool';
+      case SwapStatus.txnServerConfirmed:
+        return 'Transaction server confirmed';
 
       case SwapStatus.invoiceSet:
         return 'Invoice set';

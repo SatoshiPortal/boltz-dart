@@ -52,6 +52,8 @@ const _$SwapStatusEnumMap = {
   SwapStatus.txnRefunded: 'transaction.refunded',
   SwapStatus.txnFailed: 'transaction.failed',
   SwapStatus.txnLockupFailed: 'transaction.lockupFailed',
+  SwapStatus.txnServerMempool: 'transaction.server.mempool',
+  SwapStatus.txnServerConfirmed: 'transaction.server.confirmed',
   SwapStatus.invoiceSet: 'invoice.set',
   SwapStatus.invoicePending: 'invoice.pending',
   SwapStatus.invoicePaid: 'invoice.paid',
