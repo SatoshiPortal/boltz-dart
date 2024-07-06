@@ -885,6 +885,7 @@ fn wire_btc_swap_script_str_new_impl(
     receiver_pubkey: impl CstDecode<String>,
     locktime: impl CstDecode<u32>,
     sender_pubkey: impl CstDecode<String>,
+    side: impl CstDecode<Option<crate::api::types::Side>>,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -899,6 +900,7 @@ fn wire_btc_swap_script_str_new_impl(
             let api_receiver_pubkey = receiver_pubkey.cst_decode();
             let api_locktime = locktime.cst_decode();
             let api_sender_pubkey = sender_pubkey.cst_decode();
+            let api_side = side.cst_decode();
             transform_result_dco((move || {
                 Result::<_, ()>::Ok(crate::api::types::BtcSwapScriptStr::new(
                     api_swap_type,
@@ -907,6 +909,7 @@ fn wire_btc_swap_script_str_new_impl(
                     api_receiver_pubkey,
                     api_locktime,
                     api_sender_pubkey,
+                    api_side,
                 ))
             })())
         },
@@ -995,6 +998,7 @@ fn wire_l_btc_swap_script_str_new_impl(
     locktime: impl CstDecode<u32>,
     sender_pubkey: impl CstDecode<String>,
     blinding_key: impl CstDecode<String>,
+    side: impl CstDecode<Option<crate::api::types::Side>>,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1010,6 +1014,7 @@ fn wire_l_btc_swap_script_str_new_impl(
             let api_locktime = locktime.cst_decode();
             let api_sender_pubkey = sender_pubkey.cst_decode();
             let api_blinding_key = blinding_key.cst_decode();
+            let api_side = side.cst_decode();
             transform_result_dco((move || {
                 Result::<_, ()>::Ok(crate::api::types::LBtcSwapScriptStr::new(
                     api_swap_type,
@@ -1019,6 +1024,7 @@ fn wire_l_btc_swap_script_str_new_impl(
                     api_locktime,
                     api_sender_pubkey,
                     api_blinding_key,
+                    api_side,
                 ))
             })())
         },
@@ -1106,6 +1112,16 @@ impl CstDecode<i32> for i32 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> i32 {
         self
+    }
+}
+impl CstDecode<crate::api::types::Side> for i32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::Side {
+        match self {
+            0 => crate::api::types::Side::Lockup,
+            1 => crate::api::types::Side::Claim,
+            _ => unreachable!("Invalid variant for Side: {}", self),
+        }
     }
 }
 impl CstDecode<crate::api::types::SwapType> for i32 {
@@ -1213,6 +1229,7 @@ impl SseDecode for crate::api::types::BtcSwapScriptStr {
         let mut var_receiverPubkey = <String>::sse_decode(deserializer);
         let mut var_locktime = <u32>::sse_decode(deserializer);
         let mut var_senderPubkey = <String>::sse_decode(deserializer);
+        let mut var_side = <Option<crate::api::types::Side>>::sse_decode(deserializer);
         return crate::api::types::BtcSwapScriptStr {
             swap_type: var_swapType,
             funding_addrs: var_fundingAddrs,
@@ -1220,6 +1237,7 @@ impl SseDecode for crate::api::types::BtcSwapScriptStr {
             receiver_pubkey: var_receiverPubkey,
             locktime: var_locktime,
             sender_pubkey: var_senderPubkey,
+            side: var_side,
         };
     }
 }
@@ -1397,6 +1415,7 @@ impl SseDecode for crate::api::types::LBtcSwapScriptStr {
         let mut var_locktime = <u32>::sse_decode(deserializer);
         let mut var_senderPubkey = <String>::sse_decode(deserializer);
         let mut var_blindingKey = <String>::sse_decode(deserializer);
+        let mut var_side = <Option<crate::api::types::Side>>::sse_decode(deserializer);
         return crate::api::types::LBtcSwapScriptStr {
             swap_type: var_swapType,
             funding_addrs: var_fundingAddrs,
@@ -1405,6 +1424,7 @@ impl SseDecode for crate::api::types::LBtcSwapScriptStr {
             locktime: var_locktime,
             sender_pubkey: var_senderPubkey,
             blinding_key: var_blindingKey,
+            side: var_side,
         };
     }
 }
@@ -1480,6 +1500,17 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<crate::api::types::Side> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::types::Side>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for crate::api::types::PreImage {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1518,6 +1549,18 @@ impl SseDecode for crate::api::types::ReverseFeesAndLimits {
             lbtc_limits: var_lbtcLimits,
             btc_fees: var_btcFees,
             lbtc_fees: var_lbtcFees,
+        };
+    }
+}
+
+impl SseDecode for crate::api::types::Side {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::types::Side::Lockup,
+            1 => crate::api::types::Side::Claim,
+            _ => unreachable!("Invalid variant for Side: {}", inner),
         };
     }
 }
@@ -1692,6 +1735,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::BtcSwapScriptStr {
             self.receiver_pubkey.into_into_dart().into_dart(),
             self.locktime.into_into_dart().into_dart(),
             self.sender_pubkey.into_into_dart().into_dart(),
+            self.side.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -1893,6 +1937,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::LBtcSwapScriptStr {
             self.locktime.into_into_dart().into_dart(),
             self.sender_pubkey.into_into_dart().into_dart(),
             self.blinding_key.into_into_dart().into_dart(),
+            self.side.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2019,6 +2064,21 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::ReverseFeesAndLimits>
     for crate::api::types::ReverseFeesAndLimits
 {
     fn into_into_dart(self) -> crate::api::types::ReverseFeesAndLimits {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::types::Side {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Lockup => 0.into_dart(),
+            Self::Claim => 1.into_dart(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::Side {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::Side> for crate::api::types::Side {
+    fn into_into_dart(self) -> crate::api::types::Side {
         self
     }
 }
@@ -2153,6 +2213,7 @@ impl SseEncode for crate::api::types::BtcSwapScriptStr {
         <String>::sse_encode(self.receiver_pubkey, serializer);
         <u32>::sse_encode(self.locktime, serializer);
         <String>::sse_encode(self.sender_pubkey, serializer);
+        <Option<crate::api::types::Side>>::sse_encode(self.side, serializer);
     }
 }
 
@@ -2287,6 +2348,7 @@ impl SseEncode for crate::api::types::LBtcSwapScriptStr {
         <u32>::sse_encode(self.locktime, serializer);
         <String>::sse_encode(self.sender_pubkey, serializer);
         <String>::sse_encode(self.blinding_key, serializer);
+        <Option<crate::api::types::Side>>::sse_encode(self.side, serializer);
     }
 }
 
@@ -2338,6 +2400,16 @@ impl SseEncode for Option<String> {
     }
 }
 
+impl SseEncode for Option<crate::api::types::Side> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::types::Side>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for crate::api::types::PreImage {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -2362,6 +2434,22 @@ impl SseEncode for crate::api::types::ReverseFeesAndLimits {
         <crate::api::types::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
         <crate::api::types::RevSwapFees>::sse_encode(self.btc_fees, serializer);
         <crate::api::types::RevSwapFees>::sse_encode(self.lbtc_fees, serializer);
+    }
+}
+
+impl SseEncode for crate::api::types::Side {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::types::Side::Lockup => 0,
+                crate::api::types::Side::Claim => 1,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 

@@ -22,6 +22,7 @@ mixin _$BtcSwapScriptStr {
   String get receiverPubkey => throw _privateConstructorUsedError;
   int get locktime => throw _privateConstructorUsedError;
   String get senderPubkey => throw _privateConstructorUsedError;
+  Side? get side => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -30,21 +31,34 @@ mixin _$BtcSwapScriptStr {
             String hashlock,
             String receiverPubkey,
             int locktime,
-            String senderPubkey)
+            String senderPubkey,
+            Side? side)
         raw,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(SwapType swapType, String? fundingAddrs, String hashlock,
-            String receiverPubkey, int locktime, String senderPubkey)?
+    TResult? Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            Side? side)?
         raw,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SwapType swapType, String? fundingAddrs, String hashlock,
-            String receiverPubkey, int locktime, String senderPubkey)?
+    TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            Side? side)?
         raw,
     required TResult orElse(),
   }) =>
@@ -83,7 +97,8 @@ abstract class $BtcSwapScriptStrCopyWith<$Res> {
       String hashlock,
       String receiverPubkey,
       int locktime,
-      String senderPubkey});
+      String senderPubkey,
+      Side? side});
 }
 
 /// @nodoc
@@ -105,6 +120,7 @@ class _$BtcSwapScriptStrCopyWithImpl<$Res, $Val extends BtcSwapScriptStr>
     Object? receiverPubkey = null,
     Object? locktime = null,
     Object? senderPubkey = null,
+    Object? side = freezed,
   }) {
     return _then(_value.copyWith(
       swapType: null == swapType
@@ -131,6 +147,10 @@ class _$BtcSwapScriptStrCopyWithImpl<$Res, $Val extends BtcSwapScriptStr>
           ? _value.senderPubkey
           : senderPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      side: freezed == side
+          ? _value.side
+          : side // ignore: cast_nullable_to_non_nullable
+              as Side?,
     ) as $Val);
   }
 }
@@ -149,7 +169,8 @@ abstract class _$$BtcSwapScriptStrImplCopyWith<$Res>
       String hashlock,
       String receiverPubkey,
       int locktime,
-      String senderPubkey});
+      String senderPubkey,
+      Side? side});
 }
 
 /// @nodoc
@@ -169,6 +190,7 @@ class __$$BtcSwapScriptStrImplCopyWithImpl<$Res>
     Object? receiverPubkey = null,
     Object? locktime = null,
     Object? senderPubkey = null,
+    Object? side = freezed,
   }) {
     return _then(_$BtcSwapScriptStrImpl(
       swapType: null == swapType
@@ -195,6 +217,10 @@ class __$$BtcSwapScriptStrImplCopyWithImpl<$Res>
           ? _value.senderPubkey
           : senderPubkey // ignore: cast_nullable_to_non_nullable
               as String,
+      side: freezed == side
+          ? _value.side
+          : side // ignore: cast_nullable_to_non_nullable
+              as Side?,
     ));
   }
 }
@@ -208,7 +234,8 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
       required this.hashlock,
       required this.receiverPubkey,
       required this.locktime,
-      required this.senderPubkey})
+      required this.senderPubkey,
+      this.side})
       : super._();
 
   @override
@@ -223,10 +250,12 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
   final int locktime;
   @override
   final String senderPubkey;
+  @override
+  final Side? side;
 
   @override
   String toString() {
-    return 'BtcSwapScriptStr.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey)';
+    return 'BtcSwapScriptStr.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, side: $side)';
   }
 
   @override
@@ -245,12 +274,13 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
             (identical(other.locktime, locktime) ||
                 other.locktime == locktime) &&
             (identical(other.senderPubkey, senderPubkey) ||
-                other.senderPubkey == senderPubkey));
+                other.senderPubkey == senderPubkey) &&
+            (identical(other.side, side) || other.side == side));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
-      receiverPubkey, locktime, senderPubkey);
+      receiverPubkey, locktime, senderPubkey, side);
 
   @JsonKey(ignore: true)
   @override
@@ -268,35 +298,48 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
             String hashlock,
             String receiverPubkey,
             int locktime,
-            String senderPubkey)
+            String senderPubkey,
+            Side? side)
         raw,
   }) {
     return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey);
+        senderPubkey, side);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(SwapType swapType, String? fundingAddrs, String hashlock,
-            String receiverPubkey, int locktime, String senderPubkey)?
+    TResult? Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            Side? side)?
         raw,
   }) {
     return raw?.call(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey);
+        senderPubkey, side);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(SwapType swapType, String? fundingAddrs, String hashlock,
-            String receiverPubkey, int locktime, String senderPubkey)?
+    TResult Function(
+            SwapType swapType,
+            String? fundingAddrs,
+            String hashlock,
+            String receiverPubkey,
+            int locktime,
+            String senderPubkey,
+            Side? side)?
         raw,
     required TResult orElse(),
   }) {
     if (raw != null) {
       return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-          senderPubkey);
+          senderPubkey, side);
     }
     return orElse();
   }
@@ -337,7 +380,8 @@ abstract class _BtcSwapScriptStr extends BtcSwapScriptStr {
       required final String hashlock,
       required final String receiverPubkey,
       required final int locktime,
-      required final String senderPubkey}) = _$BtcSwapScriptStrImpl;
+      required final String senderPubkey,
+      final Side? side}) = _$BtcSwapScriptStrImpl;
   const _BtcSwapScriptStr._() : super._();
 
   @override
@@ -352,6 +396,8 @@ abstract class _BtcSwapScriptStr extends BtcSwapScriptStr {
   int get locktime;
   @override
   String get senderPubkey;
+  @override
+  Side? get side;
   @override
   @JsonKey(ignore: true)
   _$$BtcSwapScriptStrImplCopyWith<_$BtcSwapScriptStrImpl> get copyWith =>
@@ -1290,6 +1336,7 @@ mixin _$LBtcSwapScriptStr {
   int get locktime => throw _privateConstructorUsedError;
   String get senderPubkey => throw _privateConstructorUsedError;
   String get blindingKey => throw _privateConstructorUsedError;
+  Side? get side => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -1299,7 +1346,8 @@ mixin _$LBtcSwapScriptStr {
             String receiverPubkey,
             int locktime,
             String senderPubkey,
-            String blindingKey)
+            String blindingKey,
+            Side? side)
         raw,
   }) =>
       throw _privateConstructorUsedError;
@@ -1312,7 +1360,8 @@ mixin _$LBtcSwapScriptStr {
             String receiverPubkey,
             int locktime,
             String senderPubkey,
-            String blindingKey)?
+            String blindingKey,
+            Side? side)?
         raw,
   }) =>
       throw _privateConstructorUsedError;
@@ -1325,7 +1374,8 @@ mixin _$LBtcSwapScriptStr {
             String receiverPubkey,
             int locktime,
             String senderPubkey,
-            String blindingKey)?
+            String blindingKey,
+            Side? side)?
         raw,
     required TResult orElse(),
   }) =>
@@ -1365,7 +1415,8 @@ abstract class $LBtcSwapScriptStrCopyWith<$Res> {
       String receiverPubkey,
       int locktime,
       String senderPubkey,
-      String blindingKey});
+      String blindingKey,
+      Side? side});
 }
 
 /// @nodoc
@@ -1388,6 +1439,7 @@ class _$LBtcSwapScriptStrCopyWithImpl<$Res, $Val extends LBtcSwapScriptStr>
     Object? locktime = null,
     Object? senderPubkey = null,
     Object? blindingKey = null,
+    Object? side = freezed,
   }) {
     return _then(_value.copyWith(
       swapType: null == swapType
@@ -1418,6 +1470,10 @@ class _$LBtcSwapScriptStrCopyWithImpl<$Res, $Val extends LBtcSwapScriptStr>
           ? _value.blindingKey
           : blindingKey // ignore: cast_nullable_to_non_nullable
               as String,
+      side: freezed == side
+          ? _value.side
+          : side // ignore: cast_nullable_to_non_nullable
+              as Side?,
     ) as $Val);
   }
 }
@@ -1437,7 +1493,8 @@ abstract class _$$LBtcSwapScriptStrImplCopyWith<$Res>
       String receiverPubkey,
       int locktime,
       String senderPubkey,
-      String blindingKey});
+      String blindingKey,
+      Side? side});
 }
 
 /// @nodoc
@@ -1458,6 +1515,7 @@ class __$$LBtcSwapScriptStrImplCopyWithImpl<$Res>
     Object? locktime = null,
     Object? senderPubkey = null,
     Object? blindingKey = null,
+    Object? side = freezed,
   }) {
     return _then(_$LBtcSwapScriptStrImpl(
       swapType: null == swapType
@@ -1488,6 +1546,10 @@ class __$$LBtcSwapScriptStrImplCopyWithImpl<$Res>
           ? _value.blindingKey
           : blindingKey // ignore: cast_nullable_to_non_nullable
               as String,
+      side: freezed == side
+          ? _value.side
+          : side // ignore: cast_nullable_to_non_nullable
+              as Side?,
     ));
   }
 }
@@ -1502,7 +1564,8 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
       required this.receiverPubkey,
       required this.locktime,
       required this.senderPubkey,
-      required this.blindingKey})
+      required this.blindingKey,
+      this.side})
       : super._();
 
   @override
@@ -1519,10 +1582,12 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
   final String senderPubkey;
   @override
   final String blindingKey;
+  @override
+  final Side? side;
 
   @override
   String toString() {
-    return 'LBtcSwapScriptStr.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey)';
+    return 'LBtcSwapScriptStr.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey, side: $side)';
   }
 
   @override
@@ -1543,12 +1608,13 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
             (identical(other.senderPubkey, senderPubkey) ||
                 other.senderPubkey == senderPubkey) &&
             (identical(other.blindingKey, blindingKey) ||
-                other.blindingKey == blindingKey));
+                other.blindingKey == blindingKey) &&
+            (identical(other.side, side) || other.side == side));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
-      receiverPubkey, locktime, senderPubkey, blindingKey);
+      receiverPubkey, locktime, senderPubkey, blindingKey, side);
 
   @JsonKey(ignore: true)
   @override
@@ -1567,11 +1633,12 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
             String receiverPubkey,
             int locktime,
             String senderPubkey,
-            String blindingKey)
+            String blindingKey,
+            Side? side)
         raw,
   }) {
     return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey, blindingKey);
+        senderPubkey, blindingKey, side);
   }
 
   @override
@@ -1584,11 +1651,12 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
             String receiverPubkey,
             int locktime,
             String senderPubkey,
-            String blindingKey)?
+            String blindingKey,
+            Side? side)?
         raw,
   }) {
     return raw?.call(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey, blindingKey);
+        senderPubkey, blindingKey, side);
   }
 
   @override
@@ -1601,13 +1669,14 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
             String receiverPubkey,
             int locktime,
             String senderPubkey,
-            String blindingKey)?
+            String blindingKey,
+            Side? side)?
         raw,
     required TResult orElse(),
   }) {
     if (raw != null) {
       return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-          senderPubkey, blindingKey);
+          senderPubkey, blindingKey, side);
     }
     return orElse();
   }
@@ -1649,7 +1718,8 @@ abstract class _LBtcSwapScriptStr extends LBtcSwapScriptStr {
       required final String receiverPubkey,
       required final int locktime,
       required final String senderPubkey,
-      required final String blindingKey}) = _$LBtcSwapScriptStrImpl;
+      required final String blindingKey,
+      final Side? side}) = _$LBtcSwapScriptStrImpl;
   const _LBtcSwapScriptStr._() : super._();
 
   @override
@@ -1666,6 +1736,8 @@ abstract class _LBtcSwapScriptStr extends LBtcSwapScriptStr {
   String get senderPubkey;
   @override
   String get blindingKey;
+  @override
+  Side? get side;
   @override
   @JsonKey(ignore: true)
   _$$LBtcSwapScriptStrImplCopyWith<_$LBtcSwapScriptStrImpl> get copyWith =>

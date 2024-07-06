@@ -7,6 +7,7 @@ OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then
     cp target/release/libboltzclient.so ../build/unit_test_assets
 elif [ "$OS" = "Darwin" ]; then
+    cp target/release/libboltzclient.a ../build/unit_test_assets
     cp target/release/libboltzclient.dylib ../build/unit_test_assets
 else
     echo "Unsupported OS: $OS"

@@ -264,6 +264,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required String receiverPubkey,
       required int locktime,
       required String senderPubkey,
+      Side? side,
       dynamic hint});
 
   Future<DecodedInvoice> decodedInvoiceFromString(
@@ -287,6 +288,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required int locktime,
       required String senderPubkey,
       required String blindingKey,
+      Side? side,
       dynamic hint});
 
   Future<PreImage> preImageGenerate({dynamic hint});
@@ -1371,6 +1373,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required String receiverPubkey,
       required int locktime,
       required String senderPubkey,
+      Side? side,
       dynamic hint}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -1380,8 +1383,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg3 = cst_encode_String(receiverPubkey);
         var arg4 = cst_encode_u_32(locktime);
         var arg5 = cst_encode_String(senderPubkey);
+        var arg6 = cst_encode_opt_box_autoadd_side(side);
         return wire.wire_btc_swap_script_str_new(
-            arg0, arg1, arg2, arg3, arg4, arg5);
+            arg0, arg1, arg2, arg3, arg4, arg5, arg6);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_btc_swap_script_str,
@@ -1394,7 +1398,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         hashlock,
         receiverPubkey,
         locktime,
-        senderPubkey
+        senderPubkey,
+        side
       ],
       apiImpl: this,
       hint: hint,
@@ -1409,7 +1414,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "hashlock",
           "receiverPubkey",
           "locktime",
-          "senderPubkey"
+          "senderPubkey",
+          "side"
         ],
       );
 
@@ -1503,6 +1509,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required int locktime,
       required String senderPubkey,
       required String blindingKey,
+      Side? side,
       dynamic hint}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -1513,8 +1520,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg4 = cst_encode_u_32(locktime);
         var arg5 = cst_encode_String(senderPubkey);
         var arg6 = cst_encode_String(blindingKey);
+        var arg7 = cst_encode_opt_box_autoadd_side(side);
         return wire.wire_l_btc_swap_script_str_new(
-            arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_l_btc_swap_script_str,
@@ -1528,7 +1536,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         receiverPubkey,
         locktime,
         senderPubkey,
-        blindingKey
+        blindingKey,
+        side
       ],
       apiImpl: this,
       hint: hint,
@@ -1544,7 +1553,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "receiverPubkey",
           "locktime",
           "senderPubkey",
-          "blindingKey"
+          "blindingKey",
+          "side"
         ],
       );
 
@@ -1672,6 +1682,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Side dco_decode_box_autoadd_side(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_side(raw);
+  }
+
+  @protected
   BtcLnSwap dco_decode_btc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1698,8 +1714,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   BtcSwapScriptStr dco_decode_btc_swap_script_str(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 6)
-      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
     return BtcSwapScriptStr.raw(
       swapType: dco_decode_swap_type(arr[0]),
       fundingAddrs: dco_decode_opt_String(arr[1]),
@@ -1707,6 +1723,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       receiverPubkey: dco_decode_String(arr[3]),
       locktime: dco_decode_u_32(arr[4]),
       senderPubkey: dco_decode_String(arr[5]),
+      side: dco_decode_opt_box_autoadd_side(arr[6]),
     );
   }
 
@@ -1835,8 +1852,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   LBtcSwapScriptStr dco_decode_l_btc_swap_script_str(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 7)
-      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
     return LBtcSwapScriptStr.raw(
       swapType: dco_decode_swap_type(arr[0]),
       fundingAddrs: dco_decode_opt_String(arr[1]),
@@ -1845,6 +1862,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       locktime: dco_decode_u_32(arr[4]),
       senderPubkey: dco_decode_String(arr[5]),
       blindingKey: dco_decode_String(arr[6]),
+      side: dco_decode_opt_box_autoadd_side(arr[7]),
     );
   }
 
@@ -1903,6 +1921,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Side? dco_decode_opt_box_autoadd_side(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_side(raw);
+  }
+
+  @protected
   PreImage dco_decode_pre_image(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1939,6 +1963,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       btcFees: dco_decode_rev_swap_fees(arr[2]),
       lbtcFees: dco_decode_rev_swap_fees(arr[3]),
     );
+  }
+
+  @protected
+  Side dco_decode_side(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return Side.values[raw as int];
   }
 
   @protected
@@ -2087,6 +2117,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Side sse_decode_box_autoadd_side(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_side(deserializer));
+  }
+
+  @protected
   BtcLnSwap sse_decode_btc_ln_swap(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_id = sse_decode_String(deserializer);
@@ -2128,13 +2164,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_receiverPubkey = sse_decode_String(deserializer);
     var var_locktime = sse_decode_u_32(deserializer);
     var var_senderPubkey = sse_decode_String(deserializer);
+    var var_side = sse_decode_opt_box_autoadd_side(deserializer);
     return BtcSwapScriptStr.raw(
         swapType: var_swapType,
         fundingAddrs: var_fundingAddrs,
         hashlock: var_hashlock,
         receiverPubkey: var_receiverPubkey,
         locktime: var_locktime,
-        senderPubkey: var_senderPubkey);
+        senderPubkey: var_senderPubkey,
+        side: var_side);
   }
 
   @protected
@@ -2283,6 +2321,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_locktime = sse_decode_u_32(deserializer);
     var var_senderPubkey = sse_decode_String(deserializer);
     var var_blindingKey = sse_decode_String(deserializer);
+    var var_side = sse_decode_opt_box_autoadd_side(deserializer);
     return LBtcSwapScriptStr.raw(
         swapType: var_swapType,
         fundingAddrs: var_fundingAddrs,
@@ -2290,7 +2329,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         receiverPubkey: var_receiverPubkey,
         locktime: var_locktime,
         senderPubkey: var_senderPubkey,
-        blindingKey: var_blindingKey);
+        blindingKey: var_blindingKey,
+        side: var_side);
   }
 
   @protected
@@ -2361,6 +2401,17 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Side? sse_decode_opt_box_autoadd_side(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_side(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   PreImage sse_decode_pre_image(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_value = sse_decode_String(deserializer);
@@ -2391,6 +2442,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         lbtcLimits: var_lbtcLimits,
         btcFees: var_btcFees,
         lbtcFees: var_lbtcFees);
+  }
+
+  @protected
+  Side sse_decode_side(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return Side.values[inner];
   }
 
   @protected
@@ -2488,6 +2546,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   int cst_encode_i_32(int raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
+  }
+
+  @protected
+  int cst_encode_side(Side raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_i_32(raw.index);
   }
 
   @protected
@@ -2594,6 +2658,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_box_autoadd_side(Side self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_side(self, serializer);
+  }
+
+  @protected
   void sse_encode_btc_ln_swap(BtcLnSwap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.id, serializer);
@@ -2621,6 +2691,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.receiverPubkey, serializer);
     sse_encode_u_32(self.locktime, serializer);
     sse_encode_String(self.senderPubkey, serializer);
+    sse_encode_opt_box_autoadd_side(self.side, serializer);
   }
 
   @protected
@@ -2729,6 +2800,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_u_32(self.locktime, serializer);
     sse_encode_String(self.senderPubkey, serializer);
     sse_encode_String(self.blindingKey, serializer);
+    sse_encode_opt_box_autoadd_side(self.side, serializer);
   }
 
   @protected
@@ -2785,6 +2857,16 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_side(Side? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_side(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_pre_image(PreImage self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.value, serializer);
@@ -2807,6 +2889,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_swap_limits(self.lbtcLimits, serializer);
     sse_encode_rev_swap_fees(self.btcFees, serializer);
     sse_encode_rev_swap_fees(self.lbtcFees, serializer);
+  }
+
+  @protected
+  void sse_encode_side(Side self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
   }
 
   @protected

@@ -63,7 +63,8 @@ class Dylib {
 
     if (Platform.isMacOS) {
       // return "$assetsDir/$libName/macos/libboltzclient.dylib";
-      return "$assetsDir/$name.a";
+      // return "$assetsDir/$name.a";
+      return "$assetsDir/$name.dylib";
     } else if (Platform.isLinux) {
       return "$assetsDir/$name.so";
     } else {

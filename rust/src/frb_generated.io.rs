@@ -86,6 +86,13 @@ impl CstDecode<crate::api::types::PreImage> for *mut wire_cst_pre_image {
         CstDecode::<crate::api::types::PreImage>::cst_decode(*wrap).into()
     }
 }
+impl CstDecode<crate::api::types::Side> for *mut i32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::Side {
+        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+        CstDecode::<crate::api::types::Side>::cst_decode(*wrap).into()
+    }
+}
 impl CstDecode<crate::api::btc_ln::BtcLnSwap> for wire_cst_btc_ln_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::btc_ln::BtcLnSwap {
@@ -116,6 +123,7 @@ impl CstDecode<crate::api::types::BtcSwapScriptStr> for wire_cst_btc_swap_script
             receiver_pubkey: self.receiver_pubkey.cst_decode(),
             locktime: self.locktime.cst_decode(),
             sender_pubkey: self.sender_pubkey.cst_decode(),
+            side: self.side.cst_decode(),
         }
     }
 }
@@ -209,6 +217,7 @@ impl CstDecode<crate::api::types::LBtcSwapScriptStr> for wire_cst_l_btc_swap_scr
             locktime: self.locktime.cst_decode(),
             sender_pubkey: self.sender_pubkey.cst_decode(),
             blinding_key: self.blinding_key.cst_decode(),
+            side: self.side.cst_decode(),
         }
     }
 }
@@ -365,6 +374,7 @@ impl NewWithNullPtr for wire_cst_btc_swap_script_str {
             receiver_pubkey: core::ptr::null_mut(),
             locktime: Default::default(),
             sender_pubkey: core::ptr::null_mut(),
+            side: core::ptr::null_mut(),
         }
     }
 }
@@ -486,6 +496,7 @@ impl NewWithNullPtr for wire_cst_l_btc_swap_script_str {
             locktime: Default::default(),
             sender_pubkey: core::ptr::null_mut(),
             blinding_key: core::ptr::null_mut(),
+            side: core::ptr::null_mut(),
         }
     }
 }
@@ -1031,6 +1042,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_swap_script_str_new(
     receiver_pubkey: *mut wire_cst_list_prim_u_8_strict,
     locktime: u32,
     sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
+    side: *mut i32,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_btc_swap_script_str_new_impl(
         swap_type,
@@ -1039,6 +1051,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_swap_script_str_new(
         receiver_pubkey,
         locktime,
         sender_pubkey,
+        side,
     )
 }
 
@@ -1079,6 +1092,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_l_btc_swap_script_str_new(
     locktime: u32,
     sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
     blinding_key: *mut wire_cst_list_prim_u_8_strict,
+    side: *mut i32,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_l_btc_swap_script_str_new_impl(
         swap_type,
@@ -1088,6 +1102,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_l_btc_swap_script_str_new(
         locktime,
         sender_pubkey,
         blinding_key,
+        side,
     )
 }
 
@@ -1153,6 +1168,11 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_pre_image() -> *mut wire
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_side(value: i32) -> *mut i32 {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_list_prim_u_8_loose(
     len: i32,
 ) -> *mut wire_cst_list_prim_u_8_loose {
@@ -1206,6 +1226,7 @@ pub struct wire_cst_btc_swap_script_str {
     receiver_pubkey: *mut wire_cst_list_prim_u_8_strict,
     locktime: u32,
     sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
+    side: *mut i32,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -1278,6 +1299,7 @@ pub struct wire_cst_l_btc_swap_script_str {
     locktime: u32,
     sender_pubkey: *mut wire_cst_list_prim_u_8_strict,
     blinding_key: *mut wire_cst_list_prim_u_8_strict,
+    side: *mut i32,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

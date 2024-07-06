@@ -83,8 +83,8 @@ impl CstDecode<crate::api::types::BtcSwapScriptStr>
             .unwrap();
         assert_eq!(
             self_.length(),
-            6,
-            "Expected 6 elements, got {}",
+            7,
+            "Expected 7 elements, got {}",
             self_.length()
         );
         crate::api::types::BtcSwapScriptStr {
@@ -94,6 +94,7 @@ impl CstDecode<crate::api::types::BtcSwapScriptStr>
             receiver_pubkey: self_.get(3).cst_decode(),
             locktime: self_.get(4).cst_decode(),
             sender_pubkey: self_.get(5).cst_decode(),
+            side: self_.get(6).cst_decode(),
         }
     }
 }
@@ -252,8 +253,8 @@ impl CstDecode<crate::api::types::LBtcSwapScriptStr>
             .unwrap();
         assert_eq!(
             self_.length(),
-            7,
-            "Expected 7 elements, got {}",
+            8,
+            "Expected 8 elements, got {}",
             self_.length()
         );
         crate::api::types::LBtcSwapScriptStr {
@@ -264,6 +265,7 @@ impl CstDecode<crate::api::types::LBtcSwapScriptStr>
             locktime: self_.get(4).cst_decode(),
             sender_pubkey: self_.get(5).cst_decode(),
             blinding_key: self_.get(6).cst_decode(),
+            side: self_.get(7).cst_decode(),
         }
     }
 }
@@ -502,6 +504,14 @@ impl CstDecode<Vec<u8>> for flutter_rust_bridge::for_generated::wasm_bindgen::Js
         self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Uint8Array>()
             .to_vec()
             .into()
+    }
+}
+impl CstDecode<crate::api::types::Side>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::Side {
+        (self.unchecked_into_f64() as i32).cst_decode()
     }
 }
 impl CstDecode<crate::api::types::SwapType>
@@ -962,6 +972,7 @@ pub fn wire_btc_swap_script_str_new(
     receiver_pubkey: String,
     locktime: u32,
     sender_pubkey: String,
+    side: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_btc_swap_script_str_new_impl(
         swap_type,
@@ -970,6 +981,7 @@ pub fn wire_btc_swap_script_str_new(
         receiver_pubkey,
         locktime,
         sender_pubkey,
+        side,
     )
 }
 
@@ -1010,6 +1022,7 @@ pub fn wire_l_btc_swap_script_str_new(
     locktime: u32,
     sender_pubkey: String,
     blinding_key: String,
+    side: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_l_btc_swap_script_str_new_impl(
         swap_type,
@@ -1019,6 +1032,7 @@ pub fn wire_l_btc_swap_script_str_new(
         locktime,
         sender_pubkey,
         blinding_key,
+        side,
     )
 }
 

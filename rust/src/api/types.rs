@@ -5,22 +5,39 @@ use flutter_rust_bridge::frb;
 // preimage
 //
 use boltz_client::{
-    error::Error as LibError,
-    network::Chain as BChain,
-    swaps::boltz::{
-        BoltzApiClientV2, ChainFees, GetChainPairsResponse, GetReversePairsResponse,
-        GetSubmarinePairsResponse, PairMinerFees, ReverseFees, SubmarineFees,
-        SwapType as BoltzSwapType,
-    },
-    util::secrets::SwapKey,
-    Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
-    PublicKey, Secp256k1, ZKKeyPair,
+    boltz, error::Error as LibError, network::Chain as BChain, swaps::boltz::{
+        BoltzApiClientV2, ChainFees, GetChainPairsResponse, GetReversePairsResponse, GetSubmarinePairsResponse, PairMinerFees, ReverseFees, Side as BoltzSide, SubmarineFees, SwapType as BoltzSwapType
+    }, util::secrets::SwapKey, Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript, PublicKey, Secp256k1, ZKKeyPair
 };
 use serde::{Deserialize, Serialize};
 
 use crate::util::check_protocol;
 
 use super::error::BoltzError;
+
+#[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
+pub enum Side {
+    Lockup,
+    Claim,
+}
+
+impl Into<BoltzSide> for Side {
+    fn into(self) -> BoltzSide {
+        match self {
+            Side::Lockup => BoltzSide::Lockup,
+            Side::Claim => BoltzSide::Claim
+        }
+    }
+}
+impl From<BoltzSide> for Side {
+    fn from(boltz_side: BoltzSide) -> Self {
+        match boltz_side {
+            BoltzSide::Lockup => Side::Lockup,
+            BoltzSide::Claim => Side::Claim,
+        }
+    }
+}
 
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
@@ -443,6 +460,7 @@ pub struct BtcSwapScriptStr {
     pub receiver_pubkey: String,
     pub locktime: u32,
     pub sender_pubkey: String,
+    pub side: Option<Side>
 }
 
 impl BtcSwapScriptStr {
@@ -454,6 +472,7 @@ impl BtcSwapScriptStr {
         receiver_pubkey: String,
         locktime: u32,
         sender_pubkey: String,
+        side: Option<Side>
     ) -> Self {
         BtcSwapScriptStr {
             swap_type,
@@ -462,6 +481,7 @@ impl BtcSwapScriptStr {
             receiver_pubkey,
             locktime,
             sender_pubkey,
+            side
         }
     }
 }
@@ -527,7 +547,7 @@ impl TryInto<BtcSwapScript> for BtcSwapScriptStr {
             receiver_pubkey: receiver_pubkey,
             locktime: locktime,
             sender_pubkey: sender_pubkey,
-            side: None,
+            side: if self.side.is_some() {Some(self.side.unwrap().into())} else {None}
         })
     }
 }
@@ -541,6 +561,7 @@ impl From<BtcSwapScript> for BtcSwapScriptStr {
             receiver_pubkey: swap.receiver_pubkey.to_string(),
             locktime: swap.locktime.to_consensus_u32(),
             sender_pubkey: swap.sender_pubkey.to_string(),
+            side: if swap.side.is_some() {Some(swap.side.unwrap().into())} else {None}
         }
     }
 }
@@ -555,6 +576,7 @@ pub struct LBtcSwapScriptStr {
     pub locktime: u32,
     pub sender_pubkey: String,
     pub blinding_key: String,
+    pub side: Option<Side>
 }
 impl LBtcSwapScriptStr {
     #[frb(sync)]
@@ -566,6 +588,7 @@ impl LBtcSwapScriptStr {
         locktime: u32,
         sender_pubkey: String,
         blinding_key: String,
+        side: Option<Side>
     ) -> Self {
         LBtcSwapScriptStr {
             swap_type,
@@ -575,6 +598,7 @@ impl LBtcSwapScriptStr {
             locktime,
             sender_pubkey,
             blinding_key,
+            side,
         }
     }
 }
@@ -649,7 +673,7 @@ impl TryInto<LBtcSwapScript> for LBtcSwapScriptStr {
             locktime: locktime,
             sender_pubkey: sender_pubkey,
             blinding_key: blinding_key,
-            side: None,
+            side: if self.side.is_some() {Some(self.side.unwrap().into())} else {None}
         })
     }
 }
@@ -664,6 +688,7 @@ impl From<LBtcSwapScript> for LBtcSwapScriptStr {
             locktime: swap.locktime.to_consensus_u32(),
             sender_pubkey: swap.sender_pubkey.inner.to_string(),
             blinding_key: swap.blinding_key.display_secret().to_string(),
+            side: if swap.side.is_some() {Some(swap.side.unwrap().into())} else {None}
         }
     }
 }

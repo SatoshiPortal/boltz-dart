@@ -56,6 +56,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage dco_decode_box_autoadd_pre_image(dynamic raw);
 
   @protected
+  Side dco_decode_box_autoadd_side(dynamic raw);
+
+  @protected
   BtcLnSwap dco_decode_btc_ln_swap(dynamic raw);
 
   @protected
@@ -110,6 +113,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
+  Side? dco_decode_opt_box_autoadd_side(dynamic raw);
+
+  @protected
   PreImage dco_decode_pre_image(dynamic raw);
 
   @protected
@@ -117,6 +123,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   ReverseFeesAndLimits dco_decode_reverse_fees_and_limits(dynamic raw);
+
+  @protected
+  Side dco_decode_side(dynamic raw);
 
   @protected
   SubSwapFees dco_decode_sub_swap_fees(dynamic raw);
@@ -181,6 +190,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage sse_decode_box_autoadd_pre_image(SseDeserializer deserializer);
 
   @protected
+  Side sse_decode_box_autoadd_side(SseDeserializer deserializer);
+
+  @protected
   BtcLnSwap sse_decode_btc_ln_swap(SseDeserializer deserializer);
 
   @protected
@@ -238,6 +250,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
+  Side? sse_decode_opt_box_autoadd_side(SseDeserializer deserializer);
+
+  @protected
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
 
   @protected
@@ -246,6 +261,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   ReverseFeesAndLimits sse_decode_reverse_fees_and_limits(
       SseDeserializer deserializer);
+
+  @protected
+  Side sse_decode_side(SseDeserializer deserializer);
 
   @protected
   SubSwapFees sse_decode_sub_swap_fees(SseDeserializer deserializer);
@@ -338,6 +356,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  int cst_encode_box_autoadd_side(Side raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_side(raw);
+  }
+
+  @protected
   List<dynamic> cst_encode_btc_ln_swap(BtcLnSwap raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
@@ -366,7 +390,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.hashlock),
       cst_encode_String(raw.receiverPubkey),
       cst_encode_u_32(raw.locktime),
-      cst_encode_String(raw.senderPubkey)
+      cst_encode_String(raw.senderPubkey),
+      cst_encode_opt_box_autoadd_side(raw.side)
     ];
   }
 
@@ -454,7 +479,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.receiverPubkey),
       cst_encode_u_32(raw.locktime),
       cst_encode_String(raw.senderPubkey),
-      cst_encode_String(raw.blindingKey)
+      cst_encode_String(raw.blindingKey),
+      cst_encode_opt_box_autoadd_side(raw.side)
     ];
   }
 
@@ -501,6 +527,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   String? cst_encode_opt_String(String? raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw == null ? null : cst_encode_String(raw);
+  }
+
+  @protected
+  int? cst_encode_opt_box_autoadd_side(Side? raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw == null ? null : cst_encode_box_autoadd_side(raw);
   }
 
   @protected
@@ -579,6 +611,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   int cst_encode_i_32(int raw);
 
   @protected
+  int cst_encode_side(Side raw);
+
+  @protected
   int cst_encode_swap_type(SwapType raw);
 
   @protected
@@ -631,6 +666,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_box_autoadd_pre_image(
       PreImage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_side(Side self, SseSerializer serializer);
 
   @protected
   void sse_encode_btc_ln_swap(BtcLnSwap self, SseSerializer serializer);
@@ -693,6 +731,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_side(Side? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
 
   @protected
@@ -701,6 +742,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_reverse_fees_and_limits(
       ReverseFeesAndLimits self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_side(Side self, SseSerializer serializer);
 
   @protected
   void sse_encode_sub_swap_fees(SubSwapFees self, SseSerializer serializer);
@@ -1014,9 +1058,10 @@ class BoltzCoreWire implements BaseWire {
               String hashlock,
               String receiver_pubkey,
               int locktime,
-              String sender_pubkey) =>
+              String sender_pubkey,
+              int? side) =>
           wasmModule.wire_btc_swap_script_str_new(swap_type, funding_addrs,
-              hashlock, receiver_pubkey, locktime, sender_pubkey);
+              hashlock, receiver_pubkey, locktime, sender_pubkey, side);
 
   void wire_decoded_invoice_from_string(
           NativePortType port_, String s, String? boltz_url) =>
@@ -1039,9 +1084,17 @@ class BoltzCoreWire implements BaseWire {
               String receiver_pubkey,
               int locktime,
               String sender_pubkey,
-              String blinding_key) =>
-          wasmModule.wire_l_btc_swap_script_str_new(swap_type, funding_addrs,
-              hashlock, receiver_pubkey, locktime, sender_pubkey, blinding_key);
+              String blinding_key,
+              int? side) =>
+          wasmModule.wire_l_btc_swap_script_str_new(
+              swap_type,
+              funding_addrs,
+              hashlock,
+              receiver_pubkey,
+              locktime,
+              sender_pubkey,
+              blinding_key,
+              side);
 
   void wire_pre_image_generate(NativePortType port_) =>
       wasmModule.wire_pre_image_generate(port_);
@@ -1252,7 +1305,8 @@ class BoltzCoreWasmModule implements WasmModule {
           String hashlock,
           String receiver_pubkey,
           int locktime,
-          String sender_pubkey);
+          String sender_pubkey,
+          int? side);
 
   external void wire_decoded_invoice_from_string(
       NativePortType port_, String s, String? boltz_url);
@@ -1271,7 +1325,8 @@ class BoltzCoreWasmModule implements WasmModule {
           String receiver_pubkey,
           int locktime,
           String sender_pubkey,
-          String blinding_key);
+          String blinding_key,
+          int? side);
 
   external void wire_pre_image_generate(NativePortType port_);
 

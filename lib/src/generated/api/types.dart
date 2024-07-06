@@ -19,6 +19,7 @@ class BtcSwapScriptStr with _$BtcSwapScriptStr {
     required String receiverPubkey,
     required int locktime,
     required String senderPubkey,
+    Side? side,
   }) = _BtcSwapScriptStr;
   factory BtcSwapScriptStr(
           {required SwapType swapType,
@@ -27,6 +28,7 @@ class BtcSwapScriptStr with _$BtcSwapScriptStr {
           required String receiverPubkey,
           required int locktime,
           required String senderPubkey,
+          Side? side,
           dynamic hint}) =>
       BoltzCore.instance.api.btcSwapScriptStrNew(
           swapType: swapType,
@@ -35,6 +37,7 @@ class BtcSwapScriptStr with _$BtcSwapScriptStr {
           receiverPubkey: receiverPubkey,
           locktime: locktime,
           senderPubkey: senderPubkey,
+          side: side,
           hint: hint);
 }
 
@@ -131,6 +134,7 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
     required int locktime,
     required String senderPubkey,
     required String blindingKey,
+    Side? side,
   }) = _LBtcSwapScriptStr;
   factory LBtcSwapScriptStr(
           {required SwapType swapType,
@@ -140,6 +144,7 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
           required int locktime,
           required String senderPubkey,
           required String blindingKey,
+          Side? side,
           dynamic hint}) =>
       BoltzCore.instance.api.lBtcSwapScriptStrNew(
           swapType: swapType,
@@ -149,6 +154,7 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
           locktime: locktime,
           senderPubkey: senderPubkey,
           blindingKey: blindingKey,
+          side: side,
           hint: hint);
 }
 
@@ -196,6 +202,11 @@ class ReverseFeesAndLimits with _$ReverseFeesAndLimits {
     required RevSwapFees btcFees,
     required RevSwapFees lbtcFees,
   }) = _ReverseFeesAndLimits;
+}
+
+enum Side {
+  lockup,
+  claim,
 }
 
 @freezed
