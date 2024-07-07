@@ -364,7 +364,7 @@ impl ChainSwap {
                     Err(e) => return Err(e.into()),
                 };
                 let txid = match boltz_client
-                    .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
+                    .broadcast_tx(btc_chain.into(), &signed.serialize().to_hex())
                 {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
