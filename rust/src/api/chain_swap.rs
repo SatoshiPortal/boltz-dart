@@ -151,10 +151,7 @@ impl ChainSwap {
                 } else {
                     Chain::Bitcoin
                 };
-                let lockup_address = lockup_script
-                    .clone()
-                    .to_address(lockup_chain.into())
-                    ?;
+                let lockup_address = lockup_script.clone().to_address(lockup_chain.into())?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {
@@ -210,10 +207,7 @@ impl ChainSwap {
                 } else {
                     Chain::Liquid
                 };
-                let lockup_address = lockup_script
-                    .clone()
-                    .to_address(lockup_chain.into())
-                    ?;
+                let lockup_address = lockup_script.clone().to_address(lockup_chain.into())?;
                 if lockup_address.clone().to_string()
                     != lockup_details.clone().lockup_address.to_string()
                 {
@@ -363,13 +357,11 @@ impl ChainSwap {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
                 };
-                let txid = match boltz_client
-                    .broadcast_tx(btc_chain.into(), &signed.serialize().to_hex())
-                {
+                let txid = match claim_tx.broadcast(&signed, &btc_network_config) {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
                 };
-                Ok(extract_id(txid)?)
+                Ok(txid.to_string())
             }
         }
     }
@@ -421,13 +413,11 @@ impl ChainSwap {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
                 };
-                let txid = match boltz_client
-                    .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
-                {
+                let txid = match refund_tx.broadcast(&signed, &btc_network_config) {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
                 };
-                Ok(extract_id(txid)?)
+                Ok(txid.to_string())
             }
             ChainSwapDirection::LbtcToBtc => {
                 let lbtc_lockup_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;
