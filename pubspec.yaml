@@ -1,6 +1,6 @@
 name: boltz_dart
 description: A dart/flutter library for boltz swaps
-version: 0.1.5
+version: 0.1.6
 homepage: https://github.com/SatoshiPortal/boltz-dart
 
 environment:

@@ -32,7 +32,7 @@ const mnemonic =
 const index = 0;
 const network = Chain.bitcoinTestnet;
 const electrumUrl = 'electrum.bullbitcoin.com:60002';
-const boltzUrl = 'https://api.testnet.boltz.exchange';
+const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
 // const boltzUrl = 'https://testnet.boltz.exchange/api';
 
 const lnetwork = Chain.liquidTestnet;
@@ -46,7 +46,7 @@ void main() {
   });
 
   test('ALL FEES & LIMITS', () async {
-    const boltzUrl = 'https://api.testnet.boltz.exchange';
+    const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
     final fees = Fees(boltzUrl: boltzUrl);
     final sub_fees = await fees.submarine();
     final rev_fees = await fees.reverse();
