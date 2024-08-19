@@ -5,17 +5,17 @@ use super::{
     types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapType},
 };
 use boltz_client::{
+    bitcoin::{consensus::deserialize, Transaction, Txid},
     boltz::Cooperative,
+    electrum_client::ElectrumApi,
+    elements::{hashes::hex::DisplayHex, Transaction as ETransaction},
     network::electrum::ElectrumConfig,
-    swaps::{
-        boltz::BoltzApiClientV2,
-        magic_routing,
-    },
+    swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
     Amount, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };
-use elements::hashes::hex::DisplayHex;
 use flutter_rust_bridge::frb;
+use hex::FromHex;
 use serde_json::Value;
 
 #[frb(dart_metadata=("freezed"))]
@@ -99,6 +99,7 @@ impl LbtcLnSwap {
             referral_id: referral_id.clone(),
             refund_public_key: refund_kps.public_key().into(),
             pair_hash: None,
+            webhook: None,
         };
         let refund_pubkey = PublicKey {
             compressed: true,
@@ -162,6 +163,9 @@ impl LbtcLnSwap {
                 referral_id: referral_id.clone(),
                 address: Some(address.clone()),
                 address_signature: Some(magic_routing::sign_address(&address, &ckp)?.to_string()),
+                description: None,
+                description_hash: None,
+                webhook: None,
             }
         } else {
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -173,6 +177,9 @@ impl LbtcLnSwap {
                 referral_id: referral_id.clone(),
                 address: None,
                 address_signature: None,
+                description: None,
+                description_hash: None,
+                webhook: None,
             }
         };
         let response = boltz_client.post_reverse_req(create_reverse_req)?;
@@ -222,63 +229,8 @@ impl LbtcLnSwap {
         boltz_client.post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
         Ok(())
     }
+
     pub fn claim(
-        &self,
-        out_address: String,
-        abs_fee: u64,
-        try_cooperate: bool,
-    ) -> Result<String, BoltzError> {
-        if self.kind == SwapType::Submarine {
-            return Err(BoltzError {
-                kind: "Input".to_string(),
-                message: "Submarine swaps are not claimable".to_string(),
-            });
-        } else {
-            ()
-        }
-        let network_config =
-            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
-        let id: String = self.id.clone();
-        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
-        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        let tx = match LBtcSwapTx::new_claim(
-            swap_script,
-            out_address,
-            &network_config,
-            check_protocol(&self.boltz_url.clone()),
-            self.id.clone(),
-        ) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
-        let ckp: Keypair = self.keys.clone().try_into()?;
-        let preimage = self.preimage.clone();
-        let signed = match tx.sign_claim(
-            &ckp,
-            &preimage.try_into()?,
-            Amount::from_sat(abs_fee),
-            if try_cooperate {
-                Some(Cooperative {
-                    boltz_api: &boltz_client,
-                    swap_id: id,
-                    pub_nonce: None,
-                    partial_sig: None,
-                })
-            } else {
-                None
-            },
-        ) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
-        let txid =
-            match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
-                Ok(result) => result,
-                Err(e) => return Err(e.into()),
-            };
-        Ok(extract_id(txid)?)
-    }
-    pub fn claim_bytes(
         &self,
         out_address: String,
         abs_fee: u64,
@@ -377,67 +329,29 @@ impl LbtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let txid =
-            match boltz_client.broadcast_tx(self.network.into(), &signed.serialize().to_hex()) {
-                Ok(result) => result,
-                Err(e) => return Err(e.into()),
-            };
-        Ok(extract_id(txid)?)
-    }
-    pub fn refund_bytes(
-        &self,
-        out_address: String,
-        abs_fee: u64,
-        try_cooperate: bool,
-    ) -> Result<String, BoltzError> {
-        if self.kind == SwapType::Reverse {
-            return Err(BoltzError {
-                kind: "Input".to_string(),
-                message: "Reverse swaps are not refundable".to_string(),
-            });
-        } else {
-            ()
-        }
-        let network_config =
-            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
-        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
-        let id = self.id.clone();
-        let tx = match LBtcSwapTx::new_refund(
-            swap_script.clone(),
-            &out_address,
-            &network_config,
-            check_protocol(&self.boltz_url.clone()),
-            self.id.clone(),
-        ) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
-        let ckp: Keypair = self.keys.clone().try_into()?;
-        let signed = match tx.sign_refund(
-            &ckp,
-            Amount::from_sat(abs_fee),
-            if try_cooperate {
-                Some(Cooperative {
-                    boltz_api: &boltz_client,
-                    swap_id: id,
-                    pub_nonce: None,
-                    partial_sig: None,
-                })
-            } else {
-                None
-            },
-        ) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
 
         Ok(signed.serialize().to_lower_hex_string())
     }
 
-    pub fn broadcast_tx(&self, signed_bytes: Vec<u8>) -> Result<String, BoltzError> {
+    pub fn broadcast_local(&self, signed_hex: String) -> Result<String, BoltzError> {
+        let signed_bytes = Vec::from_hex(&signed_hex)
+            .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
+        let signed_tx: Transaction = deserialize(&signed_bytes).unwrap();
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
+        let txid: Txid = match network_config
+            .build_client()?
+            .transaction_broadcast(&signed_tx)
+        {
+            Ok(r) => r,
+            Err(e) => return Err(BoltzError::new("Electrum".to_string(), e.to_string())),
+        };
+        Ok(txid.to_string())
+    }
+
+    pub fn broadcast_boltz(&self, signed_hex: String) -> Result<String, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
-        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed_bytes.to_hex()) {
+        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed_hex) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };

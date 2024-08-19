@@ -28,6 +28,14 @@ class BtcLnSwap with _$BtcLnSwap {
     required String boltzUrl,
     String? referralId,
   }) = _BtcLnSwap;
+  Future<String> broadcastBoltz({required String signedHex, dynamic hint}) =>
+      BoltzCore.instance.api.btcLnSwapBroadcastBoltz(
+          that: this, signedHex: signedHex, hint: hint);
+
+  Future<String> broadcastLocal({required String signedHex, dynamic hint}) =>
+      BoltzCore.instance.api.btcLnSwapBroadcastLocal(
+          that: this, signedHex: signedHex, hint: hint);
+
   Future<String> claim(
           {required String outAddress,
           required int absFee,

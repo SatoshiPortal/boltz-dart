@@ -137,7 +137,8 @@ impl ChainSwap {
                     referral_id: None,
                     user_lock_amount: Some(amount),
                     server_lock_amount: None,
-                    pair_hash: None, // Add address signature here.
+                    pair_hash: None,
+                    webhook: None, // Add address signature here.
                 };
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
@@ -194,6 +195,7 @@ impl ChainSwap {
                     user_lock_amount: Some(amount),
                     server_lock_amount: None,
                     pair_hash: None, // Add address signature here.
+                    webhook: None,
                 };
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req)?;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
@@ -241,6 +243,20 @@ impl ChainSwap {
             }
         }
     }
+
+    pub fn get_server_lockup(&self) -> Result<String, BoltzError> {
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let txs = boltz_client.get_chain_txs(&self.id.clone())?;
+        if txs.server_lock.is_none() {
+            Err(BoltzError::new(
+                "Not Found".to_string(),
+                "No Server Lockup Tx Detected.".to_string(),
+            ))
+        } else {
+            Ok(txs.server_lock.unwrap().transaction.id)
+        }
+    }
+
     pub fn claim(
         &self,
         out_address: String,

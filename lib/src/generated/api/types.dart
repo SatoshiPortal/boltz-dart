@@ -48,29 +48,9 @@ enum Chain {
   liquidTestnet,
 }
 
-@freezed
-class ChainFeesAndLimits with _$ChainFeesAndLimits {
-  const factory ChainFeesAndLimits({
-    required SwapLimits btcLimits,
-    required SwapLimits lbtcLimits,
-    required ChainSwapFees btcFees,
-    required ChainSwapFees lbtcFees,
-  }) = _ChainFeesAndLimits;
-}
-
 enum ChainSwapDirection {
   btcToLbtc,
   lbtcToBtc,
-}
-
-@freezed
-class ChainSwapFees with _$ChainSwapFees {
-  const factory ChainSwapFees({
-    required double percentage,
-    required int userLockup,
-    required int userClaim,
-    required int server,
-  }) = _ChainSwapFees;
 }
 
 @freezed
@@ -159,14 +139,6 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
 }
 
 @freezed
-class MinerFees with _$MinerFees {
-  const factory MinerFees({
-    required int lockup,
-    required int claim,
-  }) = _MinerFees;
-}
-
-@freezed
 class PreImage with _$PreImage {
   const PreImage._();
   const factory PreImage.raw({
@@ -186,53 +158,9 @@ class PreImage with _$PreImage {
           value: value, sha256: sha256, hash160: hash160, hint: hint);
 }
 
-@freezed
-class RevSwapFees with _$RevSwapFees {
-  const factory RevSwapFees({
-    required double percentage,
-    required MinerFees minerFees,
-  }) = _RevSwapFees;
-}
-
-@freezed
-class ReverseFeesAndLimits with _$ReverseFeesAndLimits {
-  const factory ReverseFeesAndLimits({
-    required SwapLimits btcLimits,
-    required SwapLimits lbtcLimits,
-    required RevSwapFees btcFees,
-    required RevSwapFees lbtcFees,
-  }) = _ReverseFeesAndLimits;
-}
-
 enum Side {
   lockup,
   claim,
-}
-
-@freezed
-class SubSwapFees with _$SubSwapFees {
-  const factory SubSwapFees({
-    required double percentage,
-    required int minerFees,
-  }) = _SubSwapFees;
-}
-
-@freezed
-class SubmarineFeesAndLimits with _$SubmarineFeesAndLimits {
-  const factory SubmarineFeesAndLimits({
-    required SwapLimits btcLimits,
-    required SwapLimits lbtcLimits,
-    required SubSwapFees btcFees,
-    required SubSwapFees lbtcFees,
-  }) = _SubmarineFeesAndLimits;
-}
-
-@freezed
-class SwapLimits with _$SwapLimits {
-  const factory SwapLimits({
-    required int minimal,
-    required int maximal,
-  }) = _SwapLimits;
 }
 
 enum SwapType {

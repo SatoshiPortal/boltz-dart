@@ -68,6 +68,12 @@ class BoltzCore
 }
 
 abstract class BoltzCoreApi extends BaseApi {
+  Future<String> btcLnSwapBroadcastBoltz(
+      {required BtcLnSwap that, required String signedHex, dynamic hint});
+
+  Future<String> btcLnSwapBroadcastLocal(
+      {required BtcLnSwap that, required String signedHex, dynamic hint});
+
   Future<String> btcLnSwapClaim(
       {required BtcLnSwap that,
       required String outAddress,
@@ -132,6 +138,9 @@ abstract class BoltzCoreApi extends BaseApi {
       required bool tryCooperate,
       dynamic hint});
 
+  Future<String> chainSwapGetServerLockup(
+      {required ChainSwap that, dynamic hint});
+
   Future<ChainSwap> chainSwapNew(
       {required String id,
       required bool isTestnet,
@@ -183,17 +192,13 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<SubmarineFeesAndLimits> feesSubmarine(
       {required Fees that, dynamic hint});
 
-  Future<String> lbtcLnSwapBroadcastTx(
-      {required LbtcLnSwap that, required List<int> signedBytes, dynamic hint});
+  Future<String> lbtcLnSwapBroadcastBoltz(
+      {required LbtcLnSwap that, required String signedHex, dynamic hint});
+
+  Future<String> lbtcLnSwapBroadcastLocal(
+      {required LbtcLnSwap that, required String signedHex, dynamic hint});
 
   Future<String> lbtcLnSwapClaim(
-      {required LbtcLnSwap that,
-      required String outAddress,
-      required int absFee,
-      required bool tryCooperate,
-      dynamic hint});
-
-  Future<String> lbtcLnSwapClaimBytes(
       {required LbtcLnSwap that,
       required String outAddress,
       required int absFee,
@@ -242,13 +247,6 @@ abstract class BoltzCoreApi extends BaseApi {
       dynamic hint});
 
   Future<String> lbtcLnSwapRefund(
-      {required LbtcLnSwap that,
-      required String outAddress,
-      required int absFee,
-      required bool tryCooperate,
-      dynamic hint});
-
-  Future<String> lbtcLnSwapRefundBytes(
       {required LbtcLnSwap that,
       required String outAddress,
       required int absFee,
@@ -308,6 +306,56 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
+
+  @override
+  Future<String> btcLnSwapBroadcastBoltz(
+      {required BtcLnSwap that, required String signedHex, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        var arg1 = cst_encode_String(signedHex);
+        return wire.wire_btc_ln_swap_broadcast_boltz(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kBtcLnSwapBroadcastBoltzConstMeta,
+      argValues: [that, signedHex],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kBtcLnSwapBroadcastBoltzConstMeta => const TaskConstMeta(
+        debugName: "btc_ln_swap_broadcast_boltz",
+        argNames: ["that", "signedHex"],
+      );
+
+  @override
+  Future<String> btcLnSwapBroadcastLocal(
+      {required BtcLnSwap that, required String signedHex, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        var arg1 = cst_encode_String(signedHex);
+        return wire.wire_btc_ln_swap_broadcast_local(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kBtcLnSwapBroadcastLocalConstMeta,
+      argValues: [that, signedHex],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kBtcLnSwapBroadcastLocalConstMeta => const TaskConstMeta(
+        debugName: "btc_ln_swap_broadcast_local",
+        argNames: ["that", "signedHex"],
+      );
 
   @override
   Future<String> btcLnSwapClaim(
@@ -649,6 +697,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<String> chainSwapGetServerLockup(
+      {required ChainSwap that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        return wire.wire_chain_swap_get_server_lockup(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kChainSwapGetServerLockupConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kChainSwapGetServerLockupConstMeta => const TaskConstMeta(
+        debugName: "chain_swap_get_server_lockup",
+        argNames: ["that"],
+      );
+
+  @override
   Future<ChainSwap> chainSwapNew(
       {required String id,
       required bool isTestnet,
@@ -971,30 +1043,53 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<String> lbtcLnSwapBroadcastTx(
-      {required LbtcLnSwap that,
-      required List<int> signedBytes,
-      dynamic hint}) {
+  Future<String> lbtcLnSwapBroadcastBoltz(
+      {required LbtcLnSwap that, required String signedHex, dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
-        var arg1 = cst_encode_list_prim_u_8_loose(signedBytes);
-        return wire.wire_lbtc_ln_swap_broadcast_tx(port_, arg0, arg1);
+        var arg1 = cst_encode_String(signedHex);
+        return wire.wire_lbtc_ln_swap_broadcast_boltz(port_, arg0, arg1);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kLbtcLnSwapBroadcastTxConstMeta,
-      argValues: [that, signedBytes],
+      constMeta: kLbtcLnSwapBroadcastBoltzConstMeta,
+      argValues: [that, signedHex],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kLbtcLnSwapBroadcastTxConstMeta => const TaskConstMeta(
-        debugName: "lbtc_ln_swap_broadcast_tx",
-        argNames: ["that", "signedBytes"],
+  TaskConstMeta get kLbtcLnSwapBroadcastBoltzConstMeta => const TaskConstMeta(
+        debugName: "lbtc_ln_swap_broadcast_boltz",
+        argNames: ["that", "signedHex"],
+      );
+
+  @override
+  Future<String> lbtcLnSwapBroadcastLocal(
+      {required LbtcLnSwap that, required String signedHex, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        var arg1 = cst_encode_String(signedHex);
+        return wire.wire_lbtc_ln_swap_broadcast_local(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kLbtcLnSwapBroadcastLocalConstMeta,
+      argValues: [that, signedHex],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kLbtcLnSwapBroadcastLocalConstMeta => const TaskConstMeta(
+        debugName: "lbtc_ln_swap_broadcast_local",
+        argNames: ["that", "signedHex"],
       );
 
   @override
@@ -1025,38 +1120,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kLbtcLnSwapClaimConstMeta => const TaskConstMeta(
         debugName: "lbtc_ln_swap_claim",
-        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
-      );
-
-  @override
-  Future<String> lbtcLnSwapClaimBytes(
-      {required LbtcLnSwap that,
-      required String outAddress,
-      required int absFee,
-      required bool tryCooperate,
-      dynamic hint}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
-        var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_u_64(absFee);
-        var arg3 = cst_encode_bool(tryCooperate);
-        return wire.wire_lbtc_ln_swap_claim_bytes(
-            port_, arg0, arg1, arg2, arg3);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_String,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kLbtcLnSwapClaimBytesConstMeta,
-      argValues: [that, outAddress, absFee, tryCooperate],
-      apiImpl: this,
-      hint: hint,
-    ));
-  }
-
-  TaskConstMeta get kLbtcLnSwapClaimBytesConstMeta => const TaskConstMeta(
-        debugName: "lbtc_ln_swap_claim_bytes",
         argNames: ["that", "outAddress", "absFee", "tryCooperate"],
       );
 
@@ -1307,38 +1370,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kLbtcLnSwapRefundConstMeta => const TaskConstMeta(
         debugName: "lbtc_ln_swap_refund",
-        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
-      );
-
-  @override
-  Future<String> lbtcLnSwapRefundBytes(
-      {required LbtcLnSwap that,
-      required String outAddress,
-      required int absFee,
-      required bool tryCooperate,
-      dynamic hint}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
-        var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_u_64(absFee);
-        var arg3 = cst_encode_bool(tryCooperate);
-        return wire.wire_lbtc_ln_swap_refund_bytes(
-            port_, arg0, arg1, arg2, arg3);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_String,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kLbtcLnSwapRefundBytesConstMeta,
-      argValues: [that, outAddress, absFee, tryCooperate],
-      apiImpl: this,
-      hint: hint,
-    ));
-  }
-
-  TaskConstMeta get kLbtcLnSwapRefundBytesConstMeta => const TaskConstMeta(
-        debugName: "lbtc_ln_swap_refund_bytes",
         argNames: ["that", "outAddress", "absFee", "tryCooperate"],
       );
 
@@ -1891,12 +1922,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw as List<int>;
-  }
-
-  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
@@ -2368,13 +2393,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var len_ = sse_decode_i_32(deserializer);
-    return deserializer.buffer.getUint8List(len_);
-  }
-
-  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
@@ -2820,15 +2838,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.electrumUrl, serializer);
     sse_encode_String(self.boltzUrl, serializer);
     sse_encode_opt_String(self.referralId, serializer);
-  }
-
-  @protected
-  void sse_encode_list_prim_u_8_loose(
-      List<int> self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.length, serializer);
-    serializer.buffer
-        .putUint8List(self is Uint8List ? self : Uint8List.fromList(self));
   }
 
   @protected

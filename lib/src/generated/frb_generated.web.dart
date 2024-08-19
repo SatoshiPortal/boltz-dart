@@ -101,9 +101,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw);
 
   @protected
-  List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
-
-  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
@@ -236,9 +233,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   LbtcLnSwap sse_decode_lbtc_ln_swap(SseDeserializer deserializer);
-
-  @protected
-  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
@@ -506,12 +500,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  List<int> cst_encode_list_prim_u_8_loose(List<int> raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return raw;
-  }
-
-  @protected
   Uint8List cst_encode_list_prim_u_8_strict(Uint8List raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return raw;
@@ -718,9 +706,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_lbtc_ln_swap(LbtcLnSwap self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
-
-  @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer);
 
@@ -779,6 +764,14 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
 class BoltzCoreWire implements BaseWire {
   BoltzCoreWire.fromExternalLibrary(ExternalLibrary lib);
+
+  void wire_btc_ln_swap_broadcast_boltz(
+          NativePortType port_, List<dynamic> that, String signed_hex) =>
+      wasmModule.wire_btc_ln_swap_broadcast_boltz(port_, that, signed_hex);
+
+  void wire_btc_ln_swap_broadcast_local(
+          NativePortType port_, List<dynamic> that, String signed_hex) =>
+      wasmModule.wire_btc_ln_swap_broadcast_local(port_, that, signed_hex);
 
   void wire_btc_ln_swap_claim(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
@@ -871,6 +864,10 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire_chain_swap_claim(
           port_, that, out_address, refund_address, abs_fee, try_cooperate);
 
+  void wire_chain_swap_get_server_lockup(
+          NativePortType port_, List<dynamic> that) =>
+      wasmModule.wire_chain_swap_get_server_lockup(port_, that);
+
   void wire_chain_swap_new(
           NativePortType port_,
           String id,
@@ -954,18 +951,17 @@ class BoltzCoreWire implements BaseWire {
   void wire_fees_submarine(NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_fees_submarine(port_, that);
 
-  void wire_lbtc_ln_swap_broadcast_tx(
-          NativePortType port_, List<dynamic> that, List<int> signed_bytes) =>
-      wasmModule.wire_lbtc_ln_swap_broadcast_tx(port_, that, signed_bytes);
+  void wire_lbtc_ln_swap_broadcast_boltz(
+          NativePortType port_, List<dynamic> that, String signed_hex) =>
+      wasmModule.wire_lbtc_ln_swap_broadcast_boltz(port_, that, signed_hex);
+
+  void wire_lbtc_ln_swap_broadcast_local(
+          NativePortType port_, List<dynamic> that, String signed_hex) =>
+      wasmModule.wire_lbtc_ln_swap_broadcast_local(port_, that, signed_hex);
 
   void wire_lbtc_ln_swap_claim(NativePortType port_, List<dynamic> that,
           String out_address, Object abs_fee, bool try_cooperate) =>
       wasmModule.wire_lbtc_ln_swap_claim(
-          port_, that, out_address, abs_fee, try_cooperate);
-
-  void wire_lbtc_ln_swap_claim_bytes(NativePortType port_, List<dynamic> that,
-          String out_address, Object abs_fee, bool try_cooperate) =>
-      wasmModule.wire_lbtc_ln_swap_claim_bytes(
           port_, that, out_address, abs_fee, try_cooperate);
 
   void wire_lbtc_ln_swap_coop_close_submarine(
@@ -1043,11 +1039,6 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire_lbtc_ln_swap_refund(
           port_, that, out_address, abs_fee, try_cooperate);
 
-  void wire_lbtc_ln_swap_refund_bytes(NativePortType port_, List<dynamic> that,
-          String out_address, Object abs_fee, bool try_cooperate) =>
-      wasmModule.wire_lbtc_ln_swap_refund_bytes(
-          port_, that, out_address, abs_fee, try_cooperate);
-
   void wire_lbtc_ln_swap_tx_size(NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_lbtc_ln_swap_tx_size(port_, that);
 
@@ -1116,6 +1107,12 @@ class BoltzCoreWasmModule implements WasmModule {
   @override
   external BoltzCoreWasmModule bind(dynamic thisArg, String moduleName);
 
+  external void wire_btc_ln_swap_broadcast_boltz(
+      NativePortType port_, List<dynamic> that, String signed_hex);
+
+  external void wire_btc_ln_swap_broadcast_local(
+      NativePortType port_, List<dynamic> that, String signed_hex);
+
   external void wire_btc_ln_swap_claim(NativePortType port_, List<dynamic> that,
       String out_address, Object abs_fee, bool try_cooperate);
 
@@ -1177,6 +1174,9 @@ class BoltzCoreWasmModule implements WasmModule {
       Object abs_fee,
       bool try_cooperate);
 
+  external void wire_chain_swap_get_server_lockup(
+      NativePortType port_, List<dynamic> that);
+
   external void wire_chain_swap_new(
       NativePortType port_,
       String id,
@@ -1223,17 +1223,13 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external void wire_fees_submarine(NativePortType port_, List<dynamic> that);
 
-  external void wire_lbtc_ln_swap_broadcast_tx(
-      NativePortType port_, List<dynamic> that, List<int> signed_bytes);
+  external void wire_lbtc_ln_swap_broadcast_boltz(
+      NativePortType port_, List<dynamic> that, String signed_hex);
+
+  external void wire_lbtc_ln_swap_broadcast_local(
+      NativePortType port_, List<dynamic> that, String signed_hex);
 
   external void wire_lbtc_ln_swap_claim(
-      NativePortType port_,
-      List<dynamic> that,
-      String out_address,
-      Object abs_fee,
-      bool try_cooperate);
-
-  external void wire_lbtc_ln_swap_claim_bytes(
       NativePortType port_,
       List<dynamic> that,
       String out_address,
@@ -1282,13 +1278,6 @@ class BoltzCoreWasmModule implements WasmModule {
       String? referral_id);
 
   external void wire_lbtc_ln_swap_refund(
-      NativePortType port_,
-      List<dynamic> that,
-      String out_address,
-      Object abs_fee,
-      bool try_cooperate);
-
-  external void wire_lbtc_ln_swap_refund_bytes(
       NativePortType port_,
       List<dynamic> that,
       String out_address,

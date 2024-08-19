@@ -108,11 +108,6 @@ typedef struct wire_cst_lbtc_ln_swap {
   struct wire_cst_list_prim_u_8_strict *referral_id;
 } wire_cst_lbtc_ln_swap;
 
-typedef struct wire_cst_list_prim_u_8_loose {
-  uint8_t *ptr;
-  int32_t len;
-} wire_cst_list_prim_u_8_loose;
-
 typedef struct wire_cst_boltz_error {
   struct wire_cst_list_prim_u_8_strict *kind;
   struct wire_cst_list_prim_u_8_strict *message;
@@ -178,6 +173,14 @@ typedef struct wire_cst_submarine_fees_and_limits {
   struct wire_cst_sub_swap_fees lbtc_fees;
 } wire_cst_submarine_fees_and_limits;
 
+void frbgen_boltz_dart_wire_btc_ln_swap_broadcast_boltz(int64_t port_,
+                                                        struct wire_cst_btc_ln_swap *that,
+                                                        struct wire_cst_list_prim_u_8_strict *signed_hex);
+
+void frbgen_boltz_dart_wire_btc_ln_swap_broadcast_local(int64_t port_,
+                                                        struct wire_cst_btc_ln_swap *that,
+                                                        struct wire_cst_list_prim_u_8_strict *signed_hex);
+
 void frbgen_boltz_dart_wire_btc_ln_swap_claim(int64_t port_,
                                               struct wire_cst_btc_ln_swap *that,
                                               struct wire_cst_list_prim_u_8_strict *out_address,
@@ -236,6 +239,9 @@ void frbgen_boltz_dart_wire_chain_swap_claim(int64_t port_,
                                              uint64_t abs_fee,
                                              bool try_cooperate);
 
+void frbgen_boltz_dart_wire_chain_swap_get_server_lockup(int64_t port_,
+                                                         struct wire_cst_chain_swap *that);
+
 void frbgen_boltz_dart_wire_chain_swap_new(int64_t port_,
                                            struct wire_cst_list_prim_u_8_strict *id,
                                            bool is_testnet,
@@ -285,21 +291,19 @@ void frbgen_boltz_dart_wire_fees_reverse(int64_t port_, struct wire_cst_fees *th
 
 void frbgen_boltz_dart_wire_fees_submarine(int64_t port_, struct wire_cst_fees *that);
 
-void frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_tx(int64_t port_,
-                                                      struct wire_cst_lbtc_ln_swap *that,
-                                                      struct wire_cst_list_prim_u_8_loose *signed_bytes);
+void frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_boltz(int64_t port_,
+                                                         struct wire_cst_lbtc_ln_swap *that,
+                                                         struct wire_cst_list_prim_u_8_strict *signed_hex);
+
+void frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_local(int64_t port_,
+                                                         struct wire_cst_lbtc_ln_swap *that,
+                                                         struct wire_cst_list_prim_u_8_strict *signed_hex);
 
 void frbgen_boltz_dart_wire_lbtc_ln_swap_claim(int64_t port_,
                                                struct wire_cst_lbtc_ln_swap *that,
                                                struct wire_cst_list_prim_u_8_strict *out_address,
                                                uint64_t abs_fee,
                                                bool try_cooperate);
-
-void frbgen_boltz_dart_wire_lbtc_ln_swap_claim_bytes(int64_t port_,
-                                                     struct wire_cst_lbtc_ln_swap *that,
-                                                     struct wire_cst_list_prim_u_8_strict *out_address,
-                                                     uint64_t abs_fee,
-                                                     bool try_cooperate);
 
 void frbgen_boltz_dart_wire_lbtc_ln_swap_coop_close_submarine(int64_t port_,
                                                               struct wire_cst_lbtc_ln_swap *that);
@@ -344,12 +348,6 @@ void frbgen_boltz_dart_wire_lbtc_ln_swap_refund(int64_t port_,
                                                 struct wire_cst_list_prim_u_8_strict *out_address,
                                                 uint64_t abs_fee,
                                                 bool try_cooperate);
-
-void frbgen_boltz_dart_wire_lbtc_ln_swap_refund_bytes(int64_t port_,
-                                                      struct wire_cst_lbtc_ln_swap *that,
-                                                      struct wire_cst_list_prim_u_8_strict *out_address,
-                                                      uint64_t abs_fee,
-                                                      bool try_cooperate);
 
 void frbgen_boltz_dart_wire_lbtc_ln_swap_tx_size(int64_t port_, struct wire_cst_lbtc_ln_swap *that);
 
@@ -407,8 +405,6 @@ struct wire_cst_pre_image *frbgen_boltz_dart_cst_new_box_autoadd_pre_image(void)
 
 int32_t *frbgen_boltz_dart_cst_new_box_autoadd_side(int32_t value);
 
-struct wire_cst_list_prim_u_8_loose *frbgen_boltz_dart_cst_new_list_prim_u_8_loose(int32_t len);
-
 struct wire_cst_list_prim_u_8_strict *frbgen_boltz_dart_cst_new_list_prim_u_8_strict(int32_t len);
 static int64_t dummy_method_to_enforce_bundling(void) {
     int64_t dummy_var = 0;
@@ -421,9 +417,10 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_box_autoadd_pre_image);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_box_autoadd_side);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_list_prim_u_8_loose);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_cst_new_list_prim_u_8_strict);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_boltz_error_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_broadcast_boltz);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_broadcast_local);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_claim);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_coop_close_submarine);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_new);
@@ -433,6 +430,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_tx_size);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_swap_script_str_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_claim);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_get_server_lockup);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_new_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_refund);
@@ -444,15 +442,14 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_generate);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_l_btc_swap_script_str_new);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_tx);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_boltz);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_local);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_claim);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_claim_bytes);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_coop_close_submarine);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_new_reverse);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_new_submarine);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_refund);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_refund_bytes);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_lbtc_ln_swap_tx_size);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_pre_image_generate);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_pre_image_new);

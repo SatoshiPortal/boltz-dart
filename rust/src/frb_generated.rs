@@ -38,6 +38,50 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
+fn wire_btc_ln_swap_broadcast_boltz_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
+    signed_hex: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "btc_ln_swap_broadcast_boltz",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_signed_hex = signed_hex.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::btc_ln::BtcLnSwap::broadcast_boltz(&api_that, api_signed_hex)
+                })())
+            }
+        },
+    )
+}
+fn wire_btc_ln_swap_broadcast_local_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
+    signed_hex: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "btc_ln_swap_broadcast_local",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_signed_hex = signed_hex.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::btc_ln::BtcLnSwap::broadcast_local(&api_that, api_signed_hex)
+                })())
+            }
+        },
+    )
+}
 fn wire_btc_ln_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
@@ -313,6 +357,26 @@ fn wire_chain_swap_claim_impl(
         },
     )
 }
+fn wire_chain_swap_get_server_lockup_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "chain_swap_get_server_lockup",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::chain_swap::ChainSwap::get_server_lockup(&api_that)
+                })())
+            }
+        },
+    )
+}
 fn wire_chain_swap_new_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: impl CstDecode<String>,
@@ -548,23 +612,45 @@ fn wire_fees_submarine_impl(
         },
     )
 }
-fn wire_lbtc_ln_swap_broadcast_tx_impl(
+fn wire_lbtc_ln_swap_broadcast_boltz_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
-    signed_bytes: impl CstDecode<Vec<u8>>,
+    signed_hex: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "lbtc_ln_swap_broadcast_tx",
+            debug_name: "lbtc_ln_swap_broadcast_boltz",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
             let api_that = that.cst_decode();
-            let api_signed_bytes = signed_bytes.cst_decode();
+            let api_signed_hex = signed_hex.cst_decode();
             move |context| {
                 transform_result_dco((move || {
-                    crate::api::lbtc_ln::LbtcLnSwap::broadcast_tx(&api_that, api_signed_bytes)
+                    crate::api::lbtc_ln::LbtcLnSwap::broadcast_boltz(&api_that, api_signed_hex)
+                })())
+            }
+        },
+    )
+}
+fn wire_lbtc_ln_swap_broadcast_local_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
+    signed_hex: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "lbtc_ln_swap_broadcast_local",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_signed_hex = signed_hex.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::lbtc_ln::LbtcLnSwap::broadcast_local(&api_that, api_signed_hex)
                 })())
             }
         },
@@ -591,37 +677,6 @@ fn wire_lbtc_ln_swap_claim_impl(
             move |context| {
                 transform_result_dco((move || {
                     crate::api::lbtc_ln::LbtcLnSwap::claim(
-                        &api_that,
-                        api_out_address,
-                        api_abs_fee,
-                        api_try_cooperate,
-                    )
-                })())
-            }
-        },
-    )
-}
-fn wire_lbtc_ln_swap_claim_bytes_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
-    out_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
-    try_cooperate: impl CstDecode<bool>,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "lbtc_ln_swap_claim_bytes",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.cst_decode();
-            let api_out_address = out_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
-            let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco((move || {
-                    crate::api::lbtc_ln::LbtcLnSwap::claim_bytes(
                         &api_that,
                         api_out_address,
                         api_abs_fee,
@@ -817,37 +872,6 @@ fn wire_lbtc_ln_swap_refund_impl(
             move |context| {
                 transform_result_dco((move || {
                     crate::api::lbtc_ln::LbtcLnSwap::refund(
-                        &api_that,
-                        api_out_address,
-                        api_abs_fee,
-                        api_try_cooperate,
-                    )
-                })())
-            }
-        },
-    )
-}
-fn wire_lbtc_ln_swap_refund_bytes_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
-    out_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
-    try_cooperate: impl CstDecode<bool>,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "lbtc_ln_swap_refund_bytes",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.cst_decode();
-            let api_out_address = out_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
-            let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco((move || {
-                    crate::api::lbtc_ln::LbtcLnSwap::refund_bytes(
                         &api_that,
                         api_out_address,
                         api_abs_fee,
@@ -1256,14 +1280,14 @@ impl SseDecode for crate::api::types::Chain {
     }
 }
 
-impl SseDecode for crate::api::types::ChainFeesAndLimits {
+impl SseDecode for crate::api::fees::ChainFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_btcLimits = <crate::api::types::SwapLimits>::sse_decode(deserializer);
-        let mut var_lbtcLimits = <crate::api::types::SwapLimits>::sse_decode(deserializer);
-        let mut var_btcFees = <crate::api::types::ChainSwapFees>::sse_decode(deserializer);
-        let mut var_lbtcFees = <crate::api::types::ChainSwapFees>::sse_decode(deserializer);
-        return crate::api::types::ChainFeesAndLimits {
+        let mut var_btcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_lbtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_btcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
+        let mut var_lbtcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
+        return crate::api::fees::ChainFeesAndLimits {
             btc_limits: var_btcLimits,
             lbtc_limits: var_lbtcLimits,
             btc_fees: var_btcFees,
@@ -1327,14 +1351,14 @@ impl SseDecode for crate::api::types::ChainSwapDirection {
     }
 }
 
-impl SseDecode for crate::api::types::ChainSwapFees {
+impl SseDecode for crate::api::fees::ChainSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_percentage = <f64>::sse_decode(deserializer);
         let mut var_userLockup = <u64>::sse_decode(deserializer);
         let mut var_userClaim = <u64>::sse_decode(deserializer);
         let mut var_server = <u64>::sse_decode(deserializer);
-        return crate::api::types::ChainSwapFees {
+        return crate::api::fees::ChainSwapFees {
             percentage: var_percentage,
             user_lockup: var_userLockup,
             user_claim: var_userClaim,
@@ -1477,12 +1501,12 @@ impl SseDecode for Vec<u8> {
     }
 }
 
-impl SseDecode for crate::api::types::MinerFees {
+impl SseDecode for crate::api::fees::MinerFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_lockup = <u64>::sse_decode(deserializer);
         let mut var_claim = <u64>::sse_decode(deserializer);
-        return crate::api::types::MinerFees {
+        return crate::api::fees::MinerFees {
             lockup: var_lockup,
             claim: var_claim,
         };
@@ -1525,26 +1549,26 @@ impl SseDecode for crate::api::types::PreImage {
     }
 }
 
-impl SseDecode for crate::api::types::RevSwapFees {
+impl SseDecode for crate::api::fees::RevSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_percentage = <f64>::sse_decode(deserializer);
-        let mut var_minerFees = <crate::api::types::MinerFees>::sse_decode(deserializer);
-        return crate::api::types::RevSwapFees {
+        let mut var_minerFees = <crate::api::fees::MinerFees>::sse_decode(deserializer);
+        return crate::api::fees::RevSwapFees {
             percentage: var_percentage,
             miner_fees: var_minerFees,
         };
     }
 }
 
-impl SseDecode for crate::api::types::ReverseFeesAndLimits {
+impl SseDecode for crate::api::fees::ReverseFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_btcLimits = <crate::api::types::SwapLimits>::sse_decode(deserializer);
-        let mut var_lbtcLimits = <crate::api::types::SwapLimits>::sse_decode(deserializer);
-        let mut var_btcFees = <crate::api::types::RevSwapFees>::sse_decode(deserializer);
-        let mut var_lbtcFees = <crate::api::types::RevSwapFees>::sse_decode(deserializer);
-        return crate::api::types::ReverseFeesAndLimits {
+        let mut var_btcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_lbtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_btcFees = <crate::api::fees::RevSwapFees>::sse_decode(deserializer);
+        let mut var_lbtcFees = <crate::api::fees::RevSwapFees>::sse_decode(deserializer);
+        return crate::api::fees::ReverseFeesAndLimits {
             btc_limits: var_btcLimits,
             lbtc_limits: var_lbtcLimits,
             btc_fees: var_btcFees,
@@ -1565,26 +1589,26 @@ impl SseDecode for crate::api::types::Side {
     }
 }
 
-impl SseDecode for crate::api::types::SubSwapFees {
+impl SseDecode for crate::api::fees::SubSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_percentage = <f64>::sse_decode(deserializer);
         let mut var_minerFees = <u64>::sse_decode(deserializer);
-        return crate::api::types::SubSwapFees {
+        return crate::api::fees::SubSwapFees {
             percentage: var_percentage,
             miner_fees: var_minerFees,
         };
     }
 }
 
-impl SseDecode for crate::api::types::SubmarineFeesAndLimits {
+impl SseDecode for crate::api::fees::SubmarineFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_btcLimits = <crate::api::types::SwapLimits>::sse_decode(deserializer);
-        let mut var_lbtcLimits = <crate::api::types::SwapLimits>::sse_decode(deserializer);
-        let mut var_btcFees = <crate::api::types::SubSwapFees>::sse_decode(deserializer);
-        let mut var_lbtcFees = <crate::api::types::SubSwapFees>::sse_decode(deserializer);
-        return crate::api::types::SubmarineFeesAndLimits {
+        let mut var_btcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_lbtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_btcFees = <crate::api::fees::SubSwapFees>::sse_decode(deserializer);
+        let mut var_lbtcFees = <crate::api::fees::SubSwapFees>::sse_decode(deserializer);
+        return crate::api::fees::SubmarineFeesAndLimits {
             btc_limits: var_btcLimits,
             lbtc_limits: var_lbtcLimits,
             btc_fees: var_btcFees,
@@ -1593,12 +1617,12 @@ impl SseDecode for crate::api::types::SubmarineFeesAndLimits {
     }
 }
 
-impl SseDecode for crate::api::types::SwapLimits {
+impl SseDecode for crate::api::fees::SwapLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_minimal = <u64>::sse_decode(deserializer);
         let mut var_maximal = <u64>::sse_decode(deserializer);
-        return crate::api::types::SwapLimits {
+        return crate::api::fees::SwapLimits {
             minimal: var_minimal,
             maximal: var_maximal,
         };
@@ -1769,7 +1793,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::Chain> for crate::api:
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::ChainFeesAndLimits {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::ChainFeesAndLimits {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.btc_limits.into_into_dart().into_dart(),
@@ -1781,13 +1805,13 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::ChainFeesAndLimits {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::types::ChainFeesAndLimits
+    for crate::api::fees::ChainFeesAndLimits
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::ChainFeesAndLimits>
-    for crate::api::types::ChainFeesAndLimits
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::ChainFeesAndLimits>
+    for crate::api::fees::ChainFeesAndLimits
 {
-    fn into_into_dart(self) -> crate::api::types::ChainFeesAndLimits {
+    fn into_into_dart(self) -> crate::api::fees::ChainFeesAndLimits {
         self
     }
 }
@@ -1848,7 +1872,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::ChainSwapDirection>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::ChainSwapFees {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::ChainSwapFees {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.percentage.into_into_dart().into_dart(),
@@ -1860,13 +1884,13 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::ChainSwapFees {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::types::ChainSwapFees
+    for crate::api::fees::ChainSwapFees
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::ChainSwapFees>
-    for crate::api::types::ChainSwapFees
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::ChainSwapFees>
+    for crate::api::fees::ChainSwapFees
 {
-    fn into_into_dart(self) -> crate::api::types::ChainSwapFees {
+    fn into_into_dart(self) -> crate::api::fees::ChainSwapFees {
         self
     }
 }
@@ -1987,7 +2011,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::lbtc_ln::LbtcLnSwap>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::MinerFees {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::MinerFees {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.lockup.into_into_dart().into_dart(),
@@ -1996,11 +2020,11 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::MinerFees {
         .into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::MinerFees {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::MinerFees>
-    for crate::api::types::MinerFees
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::fees::MinerFees {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::MinerFees>
+    for crate::api::fees::MinerFees
 {
-    fn into_into_dart(self) -> crate::api::types::MinerFees {
+    fn into_into_dart(self) -> crate::api::fees::MinerFees {
         self
     }
 }
@@ -2024,7 +2048,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::PreImage>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::RevSwapFees {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::RevSwapFees {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.percentage.into_into_dart().into_dart(),
@@ -2033,19 +2057,16 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::RevSwapFees {
         .into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::types::RevSwapFees
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::fees::RevSwapFees {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::RevSwapFees>
+    for crate::api::fees::RevSwapFees
 {
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::RevSwapFees>
-    for crate::api::types::RevSwapFees
-{
-    fn into_into_dart(self) -> crate::api::types::RevSwapFees {
+    fn into_into_dart(self) -> crate::api::fees::RevSwapFees {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::ReverseFeesAndLimits {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::ReverseFeesAndLimits {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.btc_limits.into_into_dart().into_dart(),
@@ -2057,13 +2078,13 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::ReverseFeesAndLimits {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::types::ReverseFeesAndLimits
+    for crate::api::fees::ReverseFeesAndLimits
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::ReverseFeesAndLimits>
-    for crate::api::types::ReverseFeesAndLimits
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::ReverseFeesAndLimits>
+    for crate::api::fees::ReverseFeesAndLimits
 {
-    fn into_into_dart(self) -> crate::api::types::ReverseFeesAndLimits {
+    fn into_into_dart(self) -> crate::api::fees::ReverseFeesAndLimits {
         self
     }
 }
@@ -2083,7 +2104,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::Side> for crate::api::
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::SubSwapFees {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::SubSwapFees {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.percentage.into_into_dart().into_dart(),
@@ -2092,19 +2113,16 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::SubSwapFees {
         .into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::types::SubSwapFees
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::fees::SubSwapFees {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SubSwapFees>
+    for crate::api::fees::SubSwapFees
 {
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SubSwapFees>
-    for crate::api::types::SubSwapFees
-{
-    fn into_into_dart(self) -> crate::api::types::SubSwapFees {
+    fn into_into_dart(self) -> crate::api::fees::SubSwapFees {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::SubmarineFeesAndLimits {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::SubmarineFeesAndLimits {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.btc_limits.into_into_dart().into_dart(),
@@ -2116,18 +2134,18 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::SubmarineFeesAndLimits
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::types::SubmarineFeesAndLimits
+    for crate::api::fees::SubmarineFeesAndLimits
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SubmarineFeesAndLimits>
-    for crate::api::types::SubmarineFeesAndLimits
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SubmarineFeesAndLimits>
+    for crate::api::fees::SubmarineFeesAndLimits
 {
-    fn into_into_dart(self) -> crate::api::types::SubmarineFeesAndLimits {
+    fn into_into_dart(self) -> crate::api::fees::SubmarineFeesAndLimits {
         self
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::SwapLimits {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::SwapLimits {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.minimal.into_into_dart().into_dart(),
@@ -2136,11 +2154,11 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::SwapLimits {
         .into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::SwapLimits {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapLimits>
-    for crate::api::types::SwapLimits
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::fees::SwapLimits {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SwapLimits>
+    for crate::api::fees::SwapLimits
 {
-    fn into_into_dart(self) -> crate::api::types::SwapLimits {
+    fn into_into_dart(self) -> crate::api::fees::SwapLimits {
         self
     }
 }
@@ -2235,13 +2253,13 @@ impl SseEncode for crate::api::types::Chain {
     }
 }
 
-impl SseEncode for crate::api::types::ChainFeesAndLimits {
+impl SseEncode for crate::api::fees::ChainFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::types::SwapLimits>::sse_encode(self.btc_limits, serializer);
-        <crate::api::types::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
-        <crate::api::types::ChainSwapFees>::sse_encode(self.btc_fees, serializer);
-        <crate::api::types::ChainSwapFees>::sse_encode(self.lbtc_fees, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.btc_limits, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
+        <crate::api::fees::ChainSwapFees>::sse_encode(self.btc_fees, serializer);
+        <crate::api::fees::ChainSwapFees>::sse_encode(self.lbtc_fees, serializer);
     }
 }
 
@@ -2284,7 +2302,7 @@ impl SseEncode for crate::api::types::ChainSwapDirection {
     }
 }
 
-impl SseEncode for crate::api::types::ChainSwapFees {
+impl SseEncode for crate::api::fees::ChainSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <f64>::sse_encode(self.percentage, serializer);
@@ -2382,7 +2400,7 @@ impl SseEncode for Vec<u8> {
     }
 }
 
-impl SseEncode for crate::api::types::MinerFees {
+impl SseEncode for crate::api::fees::MinerFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.lockup, serializer);
@@ -2419,21 +2437,21 @@ impl SseEncode for crate::api::types::PreImage {
     }
 }
 
-impl SseEncode for crate::api::types::RevSwapFees {
+impl SseEncode for crate::api::fees::RevSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <f64>::sse_encode(self.percentage, serializer);
-        <crate::api::types::MinerFees>::sse_encode(self.miner_fees, serializer);
+        <crate::api::fees::MinerFees>::sse_encode(self.miner_fees, serializer);
     }
 }
 
-impl SseEncode for crate::api::types::ReverseFeesAndLimits {
+impl SseEncode for crate::api::fees::ReverseFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::types::SwapLimits>::sse_encode(self.btc_limits, serializer);
-        <crate::api::types::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
-        <crate::api::types::RevSwapFees>::sse_encode(self.btc_fees, serializer);
-        <crate::api::types::RevSwapFees>::sse_encode(self.lbtc_fees, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.btc_limits, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
+        <crate::api::fees::RevSwapFees>::sse_encode(self.btc_fees, serializer);
+        <crate::api::fees::RevSwapFees>::sse_encode(self.lbtc_fees, serializer);
     }
 }
 
@@ -2453,7 +2471,7 @@ impl SseEncode for crate::api::types::Side {
     }
 }
 
-impl SseEncode for crate::api::types::SubSwapFees {
+impl SseEncode for crate::api::fees::SubSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <f64>::sse_encode(self.percentage, serializer);
@@ -2461,17 +2479,17 @@ impl SseEncode for crate::api::types::SubSwapFees {
     }
 }
 
-impl SseEncode for crate::api::types::SubmarineFeesAndLimits {
+impl SseEncode for crate::api::fees::SubmarineFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::types::SwapLimits>::sse_encode(self.btc_limits, serializer);
-        <crate::api::types::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
-        <crate::api::types::SubSwapFees>::sse_encode(self.btc_fees, serializer);
-        <crate::api::types::SubSwapFees>::sse_encode(self.lbtc_fees, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.btc_limits, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
+        <crate::api::fees::SubSwapFees>::sse_encode(self.btc_fees, serializer);
+        <crate::api::fees::SubSwapFees>::sse_encode(self.lbtc_fees, serializer);
     }
 }
 
-impl SseEncode for crate::api::types::SwapLimits {
+impl SseEncode for crate::api::fees::SwapLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.minimal, serializer);

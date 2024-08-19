@@ -127,10 +127,10 @@ impl CstDecode<crate::api::types::BtcSwapScriptStr> for wire_cst_btc_swap_script
         }
     }
 }
-impl CstDecode<crate::api::types::ChainFeesAndLimits> for wire_cst_chain_fees_and_limits {
+impl CstDecode<crate::api::fees::ChainFeesAndLimits> for wire_cst_chain_fees_and_limits {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::ChainFeesAndLimits {
-        crate::api::types::ChainFeesAndLimits {
+    fn cst_decode(self) -> crate::api::fees::ChainFeesAndLimits {
+        crate::api::fees::ChainFeesAndLimits {
             btc_limits: self.btc_limits.cst_decode(),
             lbtc_limits: self.lbtc_limits.cst_decode(),
             btc_fees: self.btc_fees.cst_decode(),
@@ -162,10 +162,10 @@ impl CstDecode<crate::api::chain_swap::ChainSwap> for wire_cst_chain_swap {
         }
     }
 }
-impl CstDecode<crate::api::types::ChainSwapFees> for wire_cst_chain_swap_fees {
+impl CstDecode<crate::api::fees::ChainSwapFees> for wire_cst_chain_swap_fees {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::ChainSwapFees {
-        crate::api::types::ChainSwapFees {
+    fn cst_decode(self) -> crate::api::fees::ChainSwapFees {
+        crate::api::fees::ChainSwapFees {
             percentage: self.percentage.cst_decode(),
             user_lockup: self.user_lockup.cst_decode(),
             user_claim: self.user_claim.cst_decode(),
@@ -242,15 +242,6 @@ impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap> for wire_cst_lbtc_ln_swap {
         }
     }
 }
-impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_loose {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> Vec<u8> {
-        unsafe {
-            let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
-            flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
-        }
-    }
-}
 impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_strict {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> Vec<u8> {
@@ -260,10 +251,10 @@ impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_strict {
         }
     }
 }
-impl CstDecode<crate::api::types::MinerFees> for wire_cst_miner_fees {
+impl CstDecode<crate::api::fees::MinerFees> for wire_cst_miner_fees {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::MinerFees {
-        crate::api::types::MinerFees {
+    fn cst_decode(self) -> crate::api::fees::MinerFees {
+        crate::api::fees::MinerFees {
             lockup: self.lockup.cst_decode(),
             claim: self.claim.cst_decode(),
         }
@@ -279,19 +270,19 @@ impl CstDecode<crate::api::types::PreImage> for wire_cst_pre_image {
         }
     }
 }
-impl CstDecode<crate::api::types::RevSwapFees> for wire_cst_rev_swap_fees {
+impl CstDecode<crate::api::fees::RevSwapFees> for wire_cst_rev_swap_fees {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::RevSwapFees {
-        crate::api::types::RevSwapFees {
+    fn cst_decode(self) -> crate::api::fees::RevSwapFees {
+        crate::api::fees::RevSwapFees {
             percentage: self.percentage.cst_decode(),
             miner_fees: self.miner_fees.cst_decode(),
         }
     }
 }
-impl CstDecode<crate::api::types::ReverseFeesAndLimits> for wire_cst_reverse_fees_and_limits {
+impl CstDecode<crate::api::fees::ReverseFeesAndLimits> for wire_cst_reverse_fees_and_limits {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::ReverseFeesAndLimits {
-        crate::api::types::ReverseFeesAndLimits {
+    fn cst_decode(self) -> crate::api::fees::ReverseFeesAndLimits {
+        crate::api::fees::ReverseFeesAndLimits {
             btc_limits: self.btc_limits.cst_decode(),
             lbtc_limits: self.lbtc_limits.cst_decode(),
             btc_fees: self.btc_fees.cst_decode(),
@@ -299,19 +290,19 @@ impl CstDecode<crate::api::types::ReverseFeesAndLimits> for wire_cst_reverse_fee
         }
     }
 }
-impl CstDecode<crate::api::types::SubSwapFees> for wire_cst_sub_swap_fees {
+impl CstDecode<crate::api::fees::SubSwapFees> for wire_cst_sub_swap_fees {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::SubSwapFees {
-        crate::api::types::SubSwapFees {
+    fn cst_decode(self) -> crate::api::fees::SubSwapFees {
+        crate::api::fees::SubSwapFees {
             percentage: self.percentage.cst_decode(),
             miner_fees: self.miner_fees.cst_decode(),
         }
     }
 }
-impl CstDecode<crate::api::types::SubmarineFeesAndLimits> for wire_cst_submarine_fees_and_limits {
+impl CstDecode<crate::api::fees::SubmarineFeesAndLimits> for wire_cst_submarine_fees_and_limits {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::SubmarineFeesAndLimits {
-        crate::api::types::SubmarineFeesAndLimits {
+    fn cst_decode(self) -> crate::api::fees::SubmarineFeesAndLimits {
+        crate::api::fees::SubmarineFeesAndLimits {
             btc_limits: self.btc_limits.cst_decode(),
             lbtc_limits: self.lbtc_limits.cst_decode(),
             btc_fees: self.btc_fees.cst_decode(),
@@ -319,10 +310,10 @@ impl CstDecode<crate::api::types::SubmarineFeesAndLimits> for wire_cst_submarine
         }
     }
 }
-impl CstDecode<crate::api::types::SwapLimits> for wire_cst_swap_limits {
+impl CstDecode<crate::api::fees::SwapLimits> for wire_cst_swap_limits {
     // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::SwapLimits {
-        crate::api::types::SwapLimits {
+    fn cst_decode(self) -> crate::api::fees::SwapLimits {
+        crate::api::fees::SwapLimits {
             minimal: self.minimal.cst_decode(),
             maximal: self.maximal.cst_decode(),
         }
@@ -628,6 +619,24 @@ impl Default for wire_cst_swap_limits {
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_broadcast_boltz(
+    port_: i64,
+    that: *mut wire_cst_btc_ln_swap,
+    signed_hex: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_btc_ln_swap_broadcast_boltz_impl(port_, that, signed_hex)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_broadcast_local(
+    port_: i64,
+    that: *mut wire_cst_btc_ln_swap,
+    signed_hex: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_btc_ln_swap_broadcast_local_impl(port_, that, signed_hex)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_claim(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
@@ -768,6 +777,14 @@ pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_claim(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_get_server_lockup(
+    port_: i64,
+    that: *mut wire_cst_chain_swap,
+) {
+    wire_chain_swap_get_server_lockup_impl(port_, that)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
@@ -881,12 +898,21 @@ pub extern "C" fn frbgen_boltz_dart_wire_fees_submarine(port_: i64, that: *mut w
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_tx(
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_boltz(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
-    signed_bytes: *mut wire_cst_list_prim_u_8_loose,
+    signed_hex: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_lbtc_ln_swap_broadcast_tx_impl(port_, that, signed_bytes)
+    wire_lbtc_ln_swap_broadcast_boltz_impl(port_, that, signed_hex)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_broadcast_local(
+    port_: i64,
+    that: *mut wire_cst_lbtc_ln_swap,
+    signed_hex: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_lbtc_ln_swap_broadcast_local_impl(port_, that, signed_hex)
 }
 
 #[no_mangle]
@@ -898,17 +924,6 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_claim(
     try_cooperate: bool,
 ) {
     wire_lbtc_ln_swap_claim_impl(port_, that, out_address, abs_fee, try_cooperate)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_claim_bytes(
-    port_: i64,
-    that: *mut wire_cst_lbtc_ln_swap,
-    out_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
-    try_cooperate: bool,
-) {
-    wire_lbtc_ln_swap_claim_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
@@ -1013,17 +1028,6 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_refund(
     try_cooperate: bool,
 ) {
     wire_lbtc_ln_swap_refund_impl(port_, that, out_address, abs_fee, try_cooperate)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_refund_bytes(
-    port_: i64,
-    that: *mut wire_cst_lbtc_ln_swap,
-    out_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
-    try_cooperate: bool,
-) {
-    wire_lbtc_ln_swap_refund_bytes_impl(port_, that, out_address, abs_fee, try_cooperate)
 }
 
 #[no_mangle]
@@ -1173,17 +1177,6 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_side(value: i32) -> *mut
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_list_prim_u_8_loose(
-    len: i32,
-) -> *mut wire_cst_list_prim_u_8_loose {
-    let ans = wire_cst_list_prim_u_8_loose {
-        ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(Default::default(), len),
-        len,
-    };
-    flutter_rust_bridge::for_generated::new_leak_box_ptr(ans)
-}
-
-#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_cst_new_list_prim_u_8_strict(
     len: i32,
 ) -> *mut wire_cst_list_prim_u_8_strict {
@@ -1318,12 +1311,6 @@ pub struct wire_cst_lbtc_ln_swap {
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
-}
-#[repr(C)]
-#[derive(Clone, Copy)]
-pub struct wire_cst_list_prim_u_8_loose {
-    ptr: *mut u8,
-    len: i32,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

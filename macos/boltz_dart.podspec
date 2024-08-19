@@ -38,7 +38,7 @@ fi
 #
 Pod::Spec.new do |s|
   s.name             = 'boltz_dart'
-  s.version          = '0.1.1'
+  s.version          = '0.1.6'
   s.summary          = 'A boltz swap client.'
   s.description      = <<-DESC
   A boltz swap client

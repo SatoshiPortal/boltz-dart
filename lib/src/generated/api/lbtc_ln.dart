@@ -29,9 +29,13 @@ class LbtcLnSwap with _$LbtcLnSwap {
     required String boltzUrl,
     String? referralId,
   }) = _LbtcLnSwap;
-  Future<String> broadcastTx({required List<int> signedBytes, dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapBroadcastTx(
-          that: this, signedBytes: signedBytes, hint: hint);
+  Future<String> broadcastBoltz({required String signedHex, dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnSwapBroadcastBoltz(
+          that: this, signedHex: signedHex, hint: hint);
+
+  Future<String> broadcastLocal({required String signedHex, dynamic hint}) =>
+      BoltzCore.instance.api.lbtcLnSwapBroadcastLocal(
+          that: this, signedHex: signedHex, hint: hint);
 
   Future<String> claim(
           {required String outAddress,
@@ -39,18 +43,6 @@ class LbtcLnSwap with _$LbtcLnSwap {
           required bool tryCooperate,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnSwapClaim(
-          that: this,
-          outAddress: outAddress,
-          absFee: absFee,
-          tryCooperate: tryCooperate,
-          hint: hint);
-
-  Future<String> claimBytes(
-          {required String outAddress,
-          required int absFee,
-          required bool tryCooperate,
-          dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapClaimBytes(
           that: this,
           outAddress: outAddress,
           absFee: absFee,
@@ -140,18 +132,6 @@ class LbtcLnSwap with _$LbtcLnSwap {
           required bool tryCooperate,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnSwapRefund(
-          that: this,
-          outAddress: outAddress,
-          absFee: absFee,
-          tryCooperate: tryCooperate,
-          hint: hint);
-
-  Future<String> refundBytes(
-          {required String outAddress,
-          required int absFee,
-          required bool tryCooperate,
-          dynamic hint}) =>
-      BoltzCore.instance.api.lbtcLnSwapRefundBytes(
           that: this,
           outAddress: outAddress,
           absFee: absFee,
