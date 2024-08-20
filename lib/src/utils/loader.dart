@@ -16,7 +16,7 @@ class Dylib {
       "${_config!['REPOSITORY_URL']}${_config!['TAG_VERSION']}/$libName.zip";
   static Future<void> _loadJsonAsset() async {
     final String content = await rootBundle
-        .loadString("packages/boltz_flutter/assets/release.config.txt");
+        .loadString("packages/boltz_dart/assets/release.config.txt");
     Map<String, dynamic> configMap = {};
     List<String> lines = content.split('\n');
 
@@ -62,8 +62,6 @@ class Dylib {
     final assetsDir = '${currentDirectory.path}/build/unit_test_assets';
 
     if (Platform.isMacOS) {
-      // return "$assetsDir/$libName/macos/libboltzclient.dylib";
-      // return "$assetsDir/$name.a";
       return "$assetsDir/$name.dylib";
     } else if (Platform.isLinux) {
       return "$assetsDir/$name.so";
@@ -99,7 +97,8 @@ class LibBoltz {
         await BoltzCore.init(externalLibrary: Dylib.getDylib());
       }
     } catch (e) {
-      throw Exception("Failed to initialize boltz-client");
+      // print(e);
+      throw Exception("Failed to initialize boltz-client: $e");
     }
   }
 }
