@@ -1,5 +1,5 @@
 PODS:
-  - boltz_dart (0.1.1):
+  - boltz_dart (0.1.6):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
 
@@ -14,9 +14,9 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral
 
 SPEC CHECKSUMS:
-  boltz_dart: 04d32b3695968a620ffdf4165da984fec5f7e1b7
+  boltz_dart: eb2201af028325d965a9569b8893d8204f0b9860
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.15.2
