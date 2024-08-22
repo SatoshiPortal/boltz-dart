@@ -31,7 +31,7 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
-		CA0078908A3FE97A49D56700 /* libboltzclient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libboltzclient.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA0078908A3FE97A49D56700 /* libboltz_dart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libboltz_dart.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAF945CCBA003EF4668187A5 /* Cargo.toml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Cargo.toml; path = Cargo.toml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -48,7 +48,7 @@
 		CAF145CCBA0022869D176AE5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CA0078908A3FE97A49D56700 /* libboltzclient.a */,
+				CA0078908A3FE97A49D56700 /* libboltz_dart.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,8 +75,8 @@
 			dependencies = (
 			);
 			name = "boltzclient.a (static library)";
-			productName = libboltzclient.a;
-			productReference = CA0078908A3FE97A49D56700 /* libboltzclient.a */;
+			productName = libboltz_dart.a;
+			productReference = CA0078908A3FE97A49D56700 /* libboltz_dart.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -127,8 +127,8 @@
 		CA00D9239E42DBE5284B953D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CARGO_XCODE_CARGO_DEP_FILE_NAME = libboltzclient.d;
-				CARGO_XCODE_CARGO_FILE_NAME = libboltzclient.a;
+				CARGO_XCODE_CARGO_DEP_FILE_NAME = libboltz_dart.d;
+				CARGO_XCODE_CARGO_FILE_NAME = libboltz_dart.a;
 				INSTALL_GROUP = "";
 				INSTALL_MODE_FLAG = "";
 				INSTALL_OWNER = "";
@@ -141,8 +141,8 @@
 		CA0077F0B3AADBE5284B953D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CARGO_XCODE_CARGO_DEP_FILE_NAME = libboltzclient.d;
-				CARGO_XCODE_CARGO_FILE_NAME = libboltzclient.a;
+				CARGO_XCODE_CARGO_DEP_FILE_NAME = libboltz_dart.d;
+				CARGO_XCODE_CARGO_FILE_NAME = libboltz_dart.a;
 				INSTALL_GROUP = "";
 				INSTALL_MODE_FLAG = "";
 				INSTALL_OWNER = "";
