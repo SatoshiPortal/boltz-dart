@@ -58,3 +58,4 @@ pubspec.lock
 *.dylib
 *.so
 *.a
+libboltz*
