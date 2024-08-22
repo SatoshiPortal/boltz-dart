@@ -61,7 +61,7 @@ class BoltzCore
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
-    stem: 'boltzclient',
+    stem: 'boltz_dart',
     ioDirectory: 'rust/target/release/',
     webPrefix: 'pkg/',
   );

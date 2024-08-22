@@ -7,12 +7,13 @@ import 'package:http/http.dart' as http;
 
 import '../generated/frb_generated.dart';
 
-const name = "libboltzclient";
+const name = "libboltz_dart";
 const iosName = "boltz_dart";
 
 class Dylib {
   static Map<String, dynamic>? _config;
-  static String get libName => "unittest.libboltz.${_config!['TAG_VERSION']}";
+  static String get libName =>
+      "unittest.libboltz_dart.${_config!['TAG_VERSION']}";
   static String get remoteUrl =>
       "${_config!['REPOSITORY_URL']}${_config!['TAG_VERSION']}/$libName.zip";
   static Future<void> _loadJsonAsset() async {
@@ -80,8 +81,7 @@ class Dylib {
       }
     }
     if (Platform.isIOS || Platform.isMacOS) {
-      // return ExternalLibrary.open("$name.a");
-      return ExternalLibrary.open("$iosName/$iosName.framework/$iosName");
+      return ExternalLibrary.open("$iosName.framework/$iosName");
     } else if (Platform.isAndroid) {
       return ExternalLibrary.open("$name.so");
     } else if (Platform.isLinux) {

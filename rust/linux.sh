@@ -1,7 +1,7 @@
 #!/bin/bash
 ROOT="target"
 VERSION=$1
-NAME="libboltz"
+NAME="libboltz_dart"
 LINUX_DIR=$ROOT/$NAME.$VERSION/linux # final binaries stored here
 # aarch64-unknown-linux-gnu \
 # arm-unknown-linux-gnueabi \
@@ -18,4 +18,4 @@ do
 done
 
 mkdir -p $LINUX_DIR/x86_64
-cp $ROOT/x86_64-unknown-linux-gnu/release/libboltzclient.so $LINUX_DIR/x86_64/
+cp $ROOT/x86_64-unknown-linux-gnu/release/libboltz_dart.so $LINUX_DIR/x86_64/

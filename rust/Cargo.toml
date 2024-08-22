@@ -1,13 +1,15 @@
 [package]
-name = "boltz-dart"
-authors = ["i5hi <ishi@satoshiportal.com>, mocodesmo <morteza@satoshiportal.com>"]
+name = "boltz_dart"
+authors = [
+    "i5hi <ishi@satoshiportal.com>, mocodesmo <morteza@satoshiportal.com>",
+]
 version = "0.1.6"
 edition = "2021"
 
 [lib]
-name = "boltzclient"
+name = "boltz_dart"
 doctest = false
-crate-type = ["lib", "staticlib"]
+crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
 boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "8c903e196fed7416893096f37ff2a7e620b2a8e7" }
@@ -19,10 +21,10 @@ openssl = { version = "0.10.64", features = ["vendored"] }
 hex = "0.4"
 
 [patch.crates-io]
-secp256k1-zkp = {git = "https://github.com/BlockstreamResearch/rust-secp256k1-zkp.git", rev = "60e631c24588a0c9e271badd61959294848c665d"}
+secp256k1-zkp = { git = "https://github.com/BlockstreamResearch/rust-secp256k1-zkp.git", rev = "60e631c24588a0c9e271badd61959294848c665d" }
 
 [build-dependencies]
-flutter_rust_bridge_codegen = { version = "=2.0.0-dev.31"  }
+flutter_rust_bridge_codegen = { version = "=2.0.0-dev.31" }
 
 [build]
 profiler = true

@@ -49,6 +49,8 @@ flutter:
       macos:
         ffiPlugin: true
 
+
+
 # flutter_rust_bridge:
 #   rust_input: rust/src/api.rs
 #   dart_output: lib/bridge_generated.dart
