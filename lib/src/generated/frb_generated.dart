@@ -141,6 +141,9 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<String> chainSwapGetServerLockup(
       {required ChainSwap that, dynamic hint});
 
+  Future<String> chainSwapGetUserLockup(
+      {required ChainSwap that, dynamic hint});
+
   Future<ChainSwap> chainSwapNew(
       {required String id,
       required bool isTestnet,
@@ -717,6 +720,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kChainSwapGetServerLockupConstMeta => const TaskConstMeta(
         debugName: "chain_swap_get_server_lockup",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<String> chainSwapGetUserLockup(
+      {required ChainSwap that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        return wire.wire_chain_swap_get_user_lockup(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kChainSwapGetUserLockupConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kChainSwapGetUserLockupConstMeta => const TaskConstMeta(
+        debugName: "chain_swap_get_user_lockup",
         argNames: ["that"],
       );
 

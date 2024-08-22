@@ -718,6 +718,14 @@ pub fn wire_chain_swap_get_server_lockup(
 }
 
 #[wasm_bindgen]
+pub fn wire_chain_swap_get_user_lockup(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_chain_swap_get_user_lockup_impl(port_, that)
+}
+
+#[wasm_bindgen]
 pub fn wire_chain_swap_new(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: String,

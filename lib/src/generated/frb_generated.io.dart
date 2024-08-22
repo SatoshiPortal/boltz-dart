@@ -1214,6 +1214,24 @@ class BoltzCoreWire implements BaseWire {
       _wire_chain_swap_get_server_lockupPtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_chain_swap>)>();
 
+  void wire_chain_swap_get_user_lockup(
+    int port_,
+    ffi.Pointer<wire_cst_chain_swap> that,
+  ) {
+    return _wire_chain_swap_get_user_lockup(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire_chain_swap_get_user_lockupPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_chain_swap>)>>(
+      'frbgen_boltz_dart_wire_chain_swap_get_user_lockup');
+  late final _wire_chain_swap_get_user_lockup =
+      _wire_chain_swap_get_user_lockupPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_cst_chain_swap>)>();
+
   void wire_chain_swap_new(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> id,

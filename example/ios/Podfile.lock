@@ -13,7 +13,11 @@ EXTERNAL SOURCES:
     :path: Flutter
 
 SPEC CHECKSUMS:
+<<<<<<< HEAD
   boltz_dart: bcf0b514037c50afbba8a67ea01317a6f34cd145
+=======
+  boltz_dart: 7b3ee29f7aa55c8e8ac434fa88fe033240574dd4
+>>>>>>> trunk
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796

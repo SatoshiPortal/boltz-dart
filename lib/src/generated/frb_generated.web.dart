@@ -868,6 +868,10 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_chain_swap_get_server_lockup(port_, that);
 
+  void wire_chain_swap_get_user_lockup(
+          NativePortType port_, List<dynamic> that) =>
+      wasmModule.wire_chain_swap_get_user_lockup(port_, that);
+
   void wire_chain_swap_new(
           NativePortType port_,
           String id,
@@ -1175,6 +1179,9 @@ class BoltzCoreWasmModule implements WasmModule {
       bool try_cooperate);
 
   external void wire_chain_swap_get_server_lockup(
+      NativePortType port_, List<dynamic> that);
+
+  external void wire_chain_swap_get_user_lockup(
       NativePortType port_, List<dynamic> that);
 
   external void wire_chain_swap_new(

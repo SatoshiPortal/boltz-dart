@@ -257,6 +257,19 @@ impl ChainSwap {
         }
     }
 
+    pub fn get_user_lockup(&self) -> Result<String, BoltzError> {
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let txs = boltz_client.get_chain_txs(&self.id.clone())?;
+        if txs.user_lock.is_none() {
+            Err(BoltzError::new(
+                "Not Found".to_string(),
+                "No User Lockup Tx Detected.".to_string(),
+            ))
+        } else {
+            Ok(txs.user_lock.unwrap().transaction.id)
+        }
+    }
+
     pub fn claim(
         &self,
         out_address: String,
