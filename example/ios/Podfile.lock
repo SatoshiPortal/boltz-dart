@@ -1,6 +1,5 @@
 PODS:
-  - boltz_dart (0.1.6):
-    - Flutter
+  - boltz_dart (0.0.1)
   - Flutter (1.0.0)
 
 DEPENDENCIES:
@@ -14,7 +13,7 @@ EXTERNAL SOURCES:
     :path: Flutter
 
 SPEC CHECKSUMS:
-  boltz_dart: 6c0f63b330776a01b6f4aa0a2bdc89cb9d575257
+  boltz_dart: bcf0b514037c50afbba8a67ea01317a6f34cd145
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
