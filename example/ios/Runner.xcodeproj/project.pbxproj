@@ -485,6 +485,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/.symlinks/plugins/boltz_dart/ios/libboltz.xcframework/ios-arm64_x86_64-simulator",
 					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator/boltz-dart",
+					"$(PROJECT_DIR)../build/ios/Debug-iphonesimulator/XCFrameworkIntermediates",
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.boltzDartExample;
@@ -689,6 +690,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/.symlinks/plugins/boltz_dart/ios/libboltz.xcframework/ios-arm64_x86_64-simulator",
 					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator/boltz-dart",
+					"$(PROJECT_DIR)../build/ios/Debug-iphonesimulator/XCFrameworkIntermediates",
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.boltzDartExample;
@@ -725,6 +727,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/.symlinks/plugins/boltz_dart/ios/libboltz.xcframework/ios-arm64_x86_64-simulator",
 					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator/boltz-dart",
+					"$(PROJECT_DIR)../build/ios/Debug-iphonesimulator/XCFrameworkIntermediates",
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.boltzDartExample;
