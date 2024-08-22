@@ -7,7 +7,7 @@ edition = "2021"
 [lib]
 name = "boltzclient"
 doctest = false
-crate-type = ["cdylib", "staticlib"]
+crate-type = ["lib", "staticlib"]
 
 [dependencies]
 boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "8c903e196fed7416893096f37ff2a7e620b2a8e7" }

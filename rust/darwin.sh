@@ -22,7 +22,7 @@ mkdir -p $IOS_LIPO_DIR $MAC_LIPO_DIR
 for TARGET in \
     aarch64-apple-ios \
     x86_64-apple-ios \
-    aarch64-apple-ios-sim
+    aarch64-apple-ios-sim 
 do
     echo "Building for $TARGET..."
     rustup target add $TARGET
