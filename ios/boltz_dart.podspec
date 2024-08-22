@@ -47,17 +47,13 @@ A boltz swap client
   s.public_header_files = 'Classes/**/*.h'
 
   s.dependency 'Flutter'
-  s.platform = :ios, '12'
-
+  s.platform = :ios, '13.0'
   s.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' 
+    'STRIP_STYLE' => 'non-global', 
+    'DEFINES_MODULE' => 'YES', 
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' 
   }
-  s.user_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
-  }  
   s.swift_version = '5.0'
   s.static_framework = true
-  s.vendored_frameworks = "#{frameworks_dir}/#{framework}"
+  s.vendored_frameworks = "#{framework}"
 end

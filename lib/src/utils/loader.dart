@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../generated/frb_generated.dart';
 
 const name = "libboltzclient";
+const iosName = "boltz_dart";
 
 class Dylib {
   static Map<String, dynamic>? _config;
@@ -79,7 +80,7 @@ class Dylib {
       }
     }
     if (Platform.isIOS || Platform.isMacOS) {
-      return ExternalLibrary.open("$name.a");
+      return ExternalLibrary.open("$iosName/$iosName.framework/$iosName");
     } else if (Platform.isAndroid) {
       return ExternalLibrary.open("$name.so");
     } else if (Platform.isLinux) {
