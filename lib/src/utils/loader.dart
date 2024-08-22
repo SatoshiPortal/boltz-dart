@@ -80,6 +80,7 @@ class Dylib {
       }
     }
     if (Platform.isIOS || Platform.isMacOS) {
+      // return ExternalLibrary.open("$name.a");
       return ExternalLibrary.open("$iosName/$iosName.framework/$iosName");
     } else if (Platform.isAndroid) {
       return ExternalLibrary.open("$name.so");

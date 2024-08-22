@@ -1,6 +1,8 @@
 import UIKit
 import Flutter
 
+// let dummy = dummy_method_to_enforce_bundling()
+// print(dummy)
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(

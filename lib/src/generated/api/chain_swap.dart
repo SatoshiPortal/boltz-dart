@@ -49,6 +49,9 @@ class ChainSwap with _$ChainSwap {
   Future<String> getServerLockup({dynamic hint}) =>
       BoltzCore.instance.api.chainSwapGetServerLockup(that: this, hint: hint);
 
+  Future<String> getUserLockup({dynamic hint}) =>
+      BoltzCore.instance.api.chainSwapGetUserLockup(that: this, hint: hint);
+
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<ChainSwap> newInstance(
           {required String id,

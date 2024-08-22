@@ -10,14 +10,16 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		525BD78A2C76EB130095F250 /* libboltz.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C4DFA82C76BFC700B885DD /* libboltz.xcframework */; };
 		525BD78E2C76FBCD0095F250 /* NSBundleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 525BD78D2C76FBCD0095F250 /* NSBundleHelper.m */; };
+		526150A22C7727FD007377E7 /* libboltzclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 526150A12C7727D9007377E7 /* libboltzclient.a */; };
+		526150A32C77284F007377E7 /* libboltz.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C4DFA82C76BFC700B885DD /* libboltz.xcframework */; };
+		526150A62C772853007377E7 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F59D4A043806F4B6DB1B800 /* Pods_Runner.framework */; };
+		526150AA2C772B0E007377E7 /* boltz_dart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526150A82C772B04007377E7 /* boltz_dart.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		C7503B8BB94F6F66987AE785 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0CD18A9217BA6A6BCC09066 /* Pods_RunnerTests.framework */; };
-		D093FD42DCA725F4BBA1FA6B /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F59D4A043806F4B6DB1B800 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,19 +31,6 @@
 			remoteInfo = Runner;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0DC0A7404E44D54FD132F8A0 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -56,6 +45,9 @@
 		522D2C160FAA7BB55905BA1C /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
 		525BD7882C76DF5C0095F250 /* boltz_dart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = boltz_dart.framework; path = "../build/ios/Debug-iphonesimulator/boltz_dart/boltz_dart.framework"; sourceTree = "<group>"; };
 		525BD78D2C76FBCD0095F250 /* NSBundleHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NSBundleHelper.m; path = Runner/NSBundleHelper.m; sourceTree = "<group>"; };
+		5261509E2C772441007377E7 /* boltz_dart */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = boltz_dart; path = "../build/ios/Debug-iphonesimulator/boltz_dart/boltz_dart.framework/boltz_dart"; sourceTree = "<group>"; };
+		526150A12C7727D9007377E7 /* libboltzclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboltzclient.a; path = "../build/ios/Debug-iphonesimulator/libboltzclient.a"; sourceTree = "<group>"; };
+		526150A82C772B04007377E7 /* boltz_dart.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = boltz_dart.framework; sourceTree = "<group>"; };
 		52C4DFA42C76B90500B885DD /* libboltzclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboltzclient.a; path = "../../libboltz.0.1.6/libboltz.xcframework/ios-arm64_x86_64-simulator/libboltzclient.a"; sourceTree = "<group>"; };
 		52C4DFA62C76BE2100B885DD /* libboltzclient.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboltzclient.a; path = "../../ios/libboltz.xcframework/ios-arm64_x86_64-simulator/libboltzclient.a"; sourceTree = "<group>"; };
 		52C4DFA82C76BFC700B885DD /* libboltz.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libboltz.xcframework; path = ../../ios/libboltz.xcframework; sourceTree = "<group>"; };
@@ -79,8 +71,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				525BD78A2C76EB130095F250 /* libboltz.xcframework in Frameworks */,
-				D093FD42DCA725F4BBA1FA6B /* Pods_Runner.framework in Frameworks */,
+				526150A22C7727FD007377E7 /* libboltzclient.a in Frameworks */,
+				526150AA2C772B0E007377E7 /* boltz_dart.framework in Frameworks */,
+				526150A32C77284F007377E7 /* libboltz.xcframework in Frameworks */,
+				526150A62C772853007377E7 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,9 +97,21 @@
 			path = RunnerTests;
 			sourceTree = "<group>";
 		};
+		526150A92C772B04007377E7 /* boltz_dart */ = {
+			isa = PBXGroup;
+			children = (
+				526150A82C772B04007377E7 /* boltz_dart.framework */,
+			);
+			name = boltz_dart;
+			path = "../build/ios/Debug-iphonesimulator/boltz_dart";
+			sourceTree = "<group>";
+		};
 		77D6DE672DFEC05D96CA4E06 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				526150A92C772B04007377E7 /* boltz_dart */,
+				526150A12C7727D9007377E7 /* libboltzclient.a */,
+				5261509E2C772441007377E7 /* boltz_dart */,
 				525BD7882C76DF5C0095F250 /* boltz_dart.framework */,
 				52C4DFA82C76BFC700B885DD /* libboltz.xcframework */,
 				52C4DFA42C76B90500B885DD /* libboltzclient.a */,
@@ -208,7 +214,6 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 			);
 			buildRules = (
@@ -486,6 +491,7 @@
 					"$(PROJECT_DIR)/.symlinks/plugins/boltz_dart/ios/libboltz.xcframework/ios-arm64_x86_64-simulator",
 					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator/boltz-dart",
 					"$(PROJECT_DIR)../build/ios/Debug-iphonesimulator/XCFrameworkIntermediates",
+					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator",
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.boltzDartExample;
@@ -691,6 +697,7 @@
 					"$(PROJECT_DIR)/.symlinks/plugins/boltz_dart/ios/libboltz.xcframework/ios-arm64_x86_64-simulator",
 					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator/boltz-dart",
 					"$(PROJECT_DIR)../build/ios/Debug-iphonesimulator/XCFrameworkIntermediates",
+					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator",
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.boltzDartExample;
@@ -728,6 +735,7 @@
 					"$(PROJECT_DIR)/.symlinks/plugins/boltz_dart/ios/libboltz.xcframework/ios-arm64_x86_64-simulator",
 					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator/boltz-dart",
 					"$(PROJECT_DIR)../build/ios/Debug-iphonesimulator/XCFrameworkIntermediates",
+					"$(PROJECT_DIR)/../build/ios/Debug-iphonesimulator",
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.boltzDartExample;

@@ -10,10 +10,10 @@ environment:
 
 dependencies:
   boltz_dart:
-    # path: ../ 
-    git:
-      url: https://github.com/SatoshiPortal/boltz-dart.git
-      ref: trunk
+    path: ../ 
+    # git:
+    #   url: https://github.com/SatoshiPortal/boltz-dart.git
+    #   ref: trunk
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

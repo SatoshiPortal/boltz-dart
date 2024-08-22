@@ -53,6 +53,11 @@ A boltz swap client
     'DEFINES_MODULE' => 'YES', 
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' 
   }
+  s.pod_target_xcconfig = {
+    'STRIP_STYLE' => 'non-global', 
+    'DEFINES_MODULE' => 'YES', 
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64' 
+  }
   s.swift_version = '5.0'
   s.static_framework = true
   s.vendored_frameworks = "#{framework}"

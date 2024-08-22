@@ -785,6 +785,14 @@ pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_get_server_lockup(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_get_user_lockup(
+    port_: i64,
+    that: *mut wire_cst_chain_swap,
+) {
+    wire_chain_swap_get_user_lockup_impl(port_, that)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
