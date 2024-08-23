@@ -30,16 +30,18 @@ Future main({bool fromTest = false}) async {
 ```
 
 ## Dependencies
-Docker is required for linux builds.
+Currently we do not use precompiled binaries with cargokit. So as the end user, you will require cargo and platform specific toolchains to compile the binaries locally.
 
 ```bash
+# install rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# install tools
 cargo install flutter_rust_bridge_codegen
-cargo install cargo-expand
 cargo install cargo-ndk
-@if [ $$(uname) == "Darwin" ] ; then cargo install cargo-lipo ; fi
+cargo install cargo-lipo
 ```
 
-For ios builds, make sure you have xcode installed.
+For ios builds, make sure you have xcode and cocoapods installed.
 
 ## Update & Build process
 
@@ -98,69 +100,7 @@ Once we have all our structs and functions in dart, we can organize them into cl
 
 You can now use the `test/boltz-test.dart` file to test whether the expected logic is being exposed correctly over ffi. 
 
-## NOTE
-
-The reverse swap test can be run without any updates to local variables.
-
-The submarine swap test requires using a new invoice for every test. You can generate test invoices here:
-
-https://starblocks.acinq.co
-
-Order half a ton of coffee, since minimum swap output is 50,000 sats
-
-These invoices will work for ruidentary tests, but the entire swap flow will not complete as boltz does not have a route to pay this channel since we last checked.
-
-When we reach testing the complete flow we will have to use our own local node and ensure we are directly connected to boltz's testnet node.
-
-For Invoices < 1m sats: (recommended for testing)
-
-https://1ml.com/testnet/node/029040945df331e634fba152ce6a21e3dfca87b68d275e078caeee4753f43e9acb
-
-Invoices > 1m sats: 
-
-https://1ml.com/testnet/node/03f060953bef5b777dc77e44afa3859d022fc1a77c55138deb232ad7255e869c00
-
-## project status
-
-This project is in extreme alpha and undergoing active development. Any support will be greatly appreciated.
-
-Each swap flow is abstracted into a class with similar methods:
-
-Constructors: 
-
-- newSubmarine
-- newReverse
-
-Info: 
-- paymentDetails
-- status
-
-Transaction(Sweep):
-- claim
-- refund
-
-
-The main classes and their methods are:
-
-- [x] BtcLnV1Swap
-  - [x] newSubmarine
-  - [x] newReverse
-  - [x] claim
-  - [x] refund
-- [x] LbtcLnV1Swap
-  - [x] newSubmarine
-  - [x] newReverse
-  - [x] claim
-  - [x] refund
-- [ ] BtcLbtcSwap
-- [x] BoltzApi
-## Dependencies
-
-To stay in sync with `boltz-rust` following updates, use: 
-
-```
-cargo update
-```
+Also try `flutter run` in the `example` directory.
 
 ### Resources:
 
