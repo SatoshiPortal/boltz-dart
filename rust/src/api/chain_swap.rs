@@ -293,9 +293,9 @@ impl ChainSwap {
         let lbtc_network_config =
             ElectrumConfig::new(lbtc_chain.into(), &self.lbtc_electrum_url, true, true, 10);
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
-                let btc_lockup_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
                 let lbtc_claim_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;
                 let claim_tx: LBtcSwapTx = LBtcSwapTx::new_claim(
                     lbtc_claim_script.clone(),
@@ -304,93 +304,122 @@ impl ChainSwap {
                     check_protocol(&self.boltz_url),
                     id.clone(),
                 )?;
-                let refund_tx = BtcSwapTx::new_refund(
-                    btc_lockup_script.clone(),
-                    &refund_address,
-                    &btc_network_config,
-                )?;
-                let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
-                let rkp: Keypair = self.refund_keys.clone().try_into()?;
-                let (partial_sig, pub_nonce) = refund_tx.partial_sign(
-                    &rkp,
-                    &claim_tx_response.pub_nonce,
-                    &claim_tx_response.transaction_hash,
-                )?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
                 let preimage = self.preimage.clone();
-                let signed = match claim_tx.sign_claim(
-                    &ckp,
-                    &preimage.try_into()?,
-                    Amount::from_sat(abs_fee),
-                    if try_cooperate {
+                if try_cooperate {
+                    let btc_lockup_script: BtcSwapScript =
+                        self.btc_script_str.clone().try_into()?;
+                    let refund_tx = BtcSwapTx::new_refund(
+                        btc_lockup_script.clone(),
+                        &refund_address,
+                        &btc_network_config,
+                    )?;
+                    let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
+                    let rkp: Keypair = self.refund_keys.clone().try_into()?;
+                    let (partial_sig, pub_nonce) = refund_tx.partial_sign(
+                        &rkp,
+                        &claim_tx_response.pub_nonce,
+                        &claim_tx_response.transaction_hash,
+                    )?;
+                    let signed = match claim_tx.sign_claim(
+                        &ckp,
+                        &preimage.try_into()?,
+                        Amount::from_sat(abs_fee),
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
                             pub_nonce: Some(pub_nonce),
                             partial_sig: Some(partial_sig),
-                        })
-                    } else {
-                        None
-                    },
-                ) {
-                    Ok(result) => result,
-                    Err(e) => return Err(e.into()),
-                };
-                let txid = match boltz_client
-                    .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
-                {
-                    Ok(result) => result,
-                    Err(e) => return Err(e.into()),
-                };
-                Ok(extract_id(txid)?)
+                        }),
+                    ) {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
+                    let txid = match boltz_client
+                        .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
+                    {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
+                    Ok(extract_id(txid)?)
+                } else {
+                    let signed = match claim_tx.sign_claim(
+                        &ckp,
+                        &preimage.try_into()?,
+                        Amount::from_sat(abs_fee),
+                        None,
+                    ) {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
+                    let txid = match boltz_client
+                        .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
+                    {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
+                    Ok(extract_id(txid)?)
+                }
             }
             ChainSwapDirection::LbtcToBtc => {
                 let btc_claim_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
-                let lbtc_lockup_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;
                 let claim_tx = BtcSwapTx::new_claim(
                     btc_claim_script.clone(),
                     out_address.clone(),
                     &btc_network_config,
                 )?;
-                let refund_tx = LBtcSwapTx::new_refund(
-                    lbtc_lockup_script.clone(),
-                    &refund_address,
-                    &lbtc_network_config,
-                    check_protocol(&self.boltz_url),
-                    id.clone(),
-                )?;
-                let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
-                let rkp: Keypair = self.refund_keys.clone().try_into()?;
-                let (partial_sig, pub_nonce) = refund_tx.partial_sign(
-                    &rkp,
-                    &claim_tx_response.pub_nonce,
-                    &claim_tx_response.transaction_hash,
-                )?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
                 let preimage = self.preimage.clone();
-                let signed = match claim_tx.sign_claim(
-                    &ckp,
-                    &preimage.try_into()?,
-                    abs_fee,
-                    if try_cooperate {
+
+                if try_cooperate {
+                    let lbtc_lockup_script: LBtcSwapScript =
+                        self.lbtc_script_str.clone().try_into()?;
+
+                    let refund_tx = LBtcSwapTx::new_refund(
+                        lbtc_lockup_script.clone(),
+                        &refund_address,
+                        &lbtc_network_config,
+                        check_protocol(&self.boltz_url),
+                        id.clone(),
+                    )?;
+                    let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
+                    let rkp: Keypair = self.refund_keys.clone().try_into()?;
+                    let (partial_sig, pub_nonce) = refund_tx.partial_sign(
+                        &rkp,
+                        &claim_tx_response.pub_nonce,
+                        &claim_tx_response.transaction_hash,
+                    )?;
+                    let signed = match claim_tx.sign_claim(
+                        &ckp,
+                        &preimage.try_into()?,
+                        abs_fee,
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
                             pub_nonce: Some(pub_nonce),
                             partial_sig: Some(partial_sig),
-                        })
-                    } else {
-                        None
-                    },
-                ) {
-                    Ok(result) => result,
-                    Err(e) => return Err(e.into()),
-                };
-                let txid = match claim_tx.broadcast(&signed, &btc_network_config) {
-                    Ok(result) => result,
-                    Err(e) => return Err(e.into()),
-                };
-                Ok(txid.to_string())
+                        }),
+                    ) {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
+                    let txid = match claim_tx.broadcast(&signed, &btc_network_config) {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
+                    Ok(txid.to_string())
+                } else {
+                    let signed =
+                        match claim_tx.sign_claim(&ckp, &preimage.try_into()?, abs_fee, None) {
+                            Ok(result) => result,
+                            Err(e) => return Err(e.into()),
+                        };
+                    let txid = match claim_tx.broadcast(&signed, &btc_network_config) {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
+                    Ok(txid.to_string())
+                }
             }
         }
     }
@@ -513,7 +542,7 @@ mod tests {
         //     )),
         //     hashlock: String::from(
         //         "63739262cff76c906fd6a81c8a6badc9e0160b98",
-        //     ), 
+        //     ),
         //     receiver_pubkey: String::from(
         //         "02c6f4fd10c706eb18a0842edd9d04a0e7151337aed207d9dd6fb8c0793ec4416b",
         //     ),
@@ -525,14 +554,14 @@ mod tests {
         // };
 
         let lbtc_swap_script_str = LBtcSwapScriptStr {
-            swap_type: SwapType::Chain, 
+            swap_type: SwapType::Chain,
             funding_addrs: Some(String::from("lq1pqfg0g8jg079pykuz7rucdcpxnk7drevrx5th2py4mlt3h497ztxc8mtz55elwx235dvhnh0uxpsca8t3asfzleun3ygzxjm6jc0xfv6rk2zmjd64cx0j")),
             hashlock: String::from("63739262cff76c906fd6a81c8a6badc9e0160b98"),
             receiver_pubkey: String::from("03cc3c3dc9d1178c0b77eab2520e886e4056ef3197c7a862948d48ba1ac811cae8"),
             locktime: 3018370,
             sender_pubkey: String::from("03269cdbc0dcc44c4d956d41ee89067568c437012caf9dcc660130af734533d2c1"),
             blinding_key: String::from("130fc6324eee3239556c6b3669503dd4a6a538a6e9f786b3436aeff0720024c2"),
-            side: Some(Side::Claim.into()), 
+            side: Some(Side::Claim.into()),
         };
 
         let lbtc_claim_script: LBtcSwapScript = lbtc_swap_script_str.clone().try_into().unwrap();
@@ -543,7 +572,7 @@ mod tests {
             check_protocol("api.boltz.exchange/v2"),
             "3BIJf8UqGaSC".to_string(),
         ).unwrap();
-        
+
         // let lbtc_claim_script = LB
     }
 }
