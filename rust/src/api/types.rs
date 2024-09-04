@@ -528,15 +528,3 @@ impl From<LBtcSwapScript> for LBtcSwapScriptStr {
         }
     }
 }
-
-// #[cfg(test)]
-// mod tests {
-//     use boltz_client::swaps::boltz::BOLTZ_MAINNET_URL_V2;
-
-//     use super::*;
-//     #[test]
-//     fn test_fetch_all_fees() {
-//         let fees = AllFees::fetch(BOLTZ_MAINNET_URL_V2.to_owned());
-//         println!("{:#?}", fees);
-//     }
-// }

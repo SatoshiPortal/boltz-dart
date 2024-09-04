@@ -297,7 +297,7 @@ impl ChainSwap {
             ChainSwapDirection::BtcToLbtc => {
                 let btc_lockup_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
                 let lbtc_claim_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;
-                let claim_tx = LBtcSwapTx::new_claim(
+                let claim_tx: LBtcSwapTx = LBtcSwapTx::new_claim(
                     lbtc_claim_script.clone(),
                     out_address.clone(),
                     &lbtc_network_config,
@@ -394,6 +394,7 @@ impl ChainSwap {
             }
         }
     }
+
     pub fn refund(
         &self,
         refund_address: String,
@@ -495,5 +496,54 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
             "BoltzApi".to_string(),
             "TxId not found in boltz response".to_string(),
         )),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use boltz_client::swaps::boltz::BOLTZ_MAINNET_URL_V2;
+
+    use super::*;
+    #[test]
+    fn test_recover_swap() {
+        // let btc_swap_script_str = BtcSwapScriptStr {
+        //     swap_type: SwapType::Chain,
+        //     funding_addrs: Some(String::from(
+        //         "bc1p2yzcehpgk92lgvkn2cccr099ehqwtxd5668r8lvywmv33pnxhl4qfxp8j7",
+        //     )),
+        //     hashlock: String::from(
+        //         "63739262cff76c906fd6a81c8a6badc9e0160b98",
+        //     ), 
+        //     receiver_pubkey: String::from(
+        //         "02c6f4fd10c706eb18a0842edd9d04a0e7151337aed207d9dd6fb8c0793ec4416b",
+        //     ),
+        //     locktime: 3018370,
+        //     sender_pubkey: String::from(
+        //         "0286af8eb29d42d335786fd2e67ae67b3087c66b481c2328bfbfb8cfd282aaeae7",
+        //     ),
+        //     side: Some(Side::Claim.into()),
+        // };
+
+        let lbtc_swap_script_str = LBtcSwapScriptStr {
+            swap_type: SwapType::Chain, 
+            funding_addrs: Some(String::from("lq1pqfg0g8jg079pykuz7rucdcpxnk7drevrx5th2py4mlt3h497ztxc8mtz55elwx235dvhnh0uxpsca8t3asfzleun3ygzxjm6jc0xfv6rk2zmjd64cx0j")),
+            hashlock: String::from("63739262cff76c906fd6a81c8a6badc9e0160b98"),
+            receiver_pubkey: String::from("03cc3c3dc9d1178c0b77eab2520e886e4056ef3197c7a862948d48ba1ac811cae8"),
+            locktime: 3018370,
+            sender_pubkey: String::from("03269cdbc0dcc44c4d956d41ee89067568c437012caf9dcc660130af734533d2c1"),
+            blinding_key: String::from("130fc6324eee3239556c6b3669503dd4a6a538a6e9f786b3436aeff0720024c2"),
+            side: Some(Side::Claim.into()), 
+        };
+
+        let lbtc_claim_script: LBtcSwapScript = lbtc_swap_script_str.clone().try_into().unwrap();
+        let claim_tx: LBtcSwapTx = LBtcSwapTx::new_claim(
+            lbtc_claim_script.clone(),
+            "lq1qq2mxq26ugwsuq3zpqapledq5kjjpwk39teq4f0d0faqvqumsnjlakl78gkeakhtdey84ltjassdejzvq9h6pzet9z54rd2urh".to_string(),
+            &ElectrumConfig::default(Chain::Liquid.into(), None).unwrap(),
+            check_protocol("api.boltz.exchange/v2"),
+            "3BIJf8UqGaSC".to_string(),
+        ).unwrap();
+        
+        // let lbtc_claim_script = LB
     }
 }
