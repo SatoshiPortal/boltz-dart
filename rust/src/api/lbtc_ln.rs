@@ -8,7 +8,7 @@ use boltz_client::{
     bitcoin::{consensus::deserialize, Transaction, Txid},
     boltz::Cooperative,
     electrum_client::ElectrumApi,
-    elements::hashes::hex::DisplayHex,
+    elements::{self, encode::Decodable, hashes::hex::DisplayHex},
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
@@ -328,22 +328,23 @@ impl LbtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-
         Ok(signed.serialize().to_lower_hex_string())
     }
 
     pub fn broadcast_local(&self, signed_hex: String) -> Result<String, BoltzError> {
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
-        let signed_tx: Transaction = match deserialize(&signed_bytes) {
-            Ok(r) => r,
-            Err(e) => return Err(BoltzError::new("Deserialize Tx".to_string(), e.to_string())),
-        };
+        // let signed_tx: elements::Transaction =
+        //     match elements::Transaction::consensus_decode(&*signed_bytes) {
+        //         Ok(r) => r,
+        //         Err(e) => return Err(BoltzError::new("Deserialize Tx".to_string(), e.to_string())),
+        //     };
+
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let txid: Txid = match network_config
             .build_client()?
-            .transaction_broadcast(&signed_tx)
+            .transaction_broadcast_raw(&signed_bytes)
         {
             Ok(r) => r,
             Err(e) => return Err(BoltzError::new("Electrum".to_string(), e.to_string())),
