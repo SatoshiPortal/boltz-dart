@@ -367,6 +367,7 @@ impl BtcLnSwap {
         };
         Ok(extract_id(txid)?)
     }
+
     pub fn tx_size(&self) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
