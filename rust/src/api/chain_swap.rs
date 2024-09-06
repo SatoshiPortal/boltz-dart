@@ -7,7 +7,6 @@ use super::{
         SwapTxKind, SwapType,
     },
 };
-use hex::FromHex;
 
 use boltz_client::{
     bitcoin::{
@@ -546,10 +545,10 @@ impl ChainSwap {
         signed_hex: String,
         kind: SwapTxKind,
     ) -> Result<String, BoltzError> {
-        let signed_hex = Vec::from_hex(&signed_hex)
+        let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
         let (network, electrum_url) = self.get_network(kind);
-        let signed_tx: Transaction = match deserialize(&signed_hex) {
+        let signed_tx: Transaction = match deserialize(&signed_bytes) {
             Ok(r) => r,
             Err(e) => return Err(BoltzError::new("Deserialize Tx".to_string(), e.to_string())),
         };

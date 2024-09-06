@@ -17,7 +17,6 @@ use boltz_client::{
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
 use flutter_rust_bridge::frb;
-use hex::FromHex;
 use serde_json::Value;
 
 #[frb(dart_metadata=("freezed"))]
@@ -360,10 +359,10 @@ impl BtcLnSwap {
     }
 
     pub fn broadcast_local(&self, signed_hex: String) -> Result<String, BoltzError> {
-        let signed_hex = Vec::from_hex(&signed_hex)
+        let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
 
-        let signed_tx: Transaction = match deserialize(&signed_hex) {
+        let signed_tx: Transaction = match deserialize(&signed_bytes) {
             Ok(r) => r,
             Err(e) => return Err(BoltzError::new("Deserialize Tx".to_string(), e.to_string())),
         };
