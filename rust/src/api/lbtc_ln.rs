@@ -8,11 +8,11 @@ use boltz_client::{
     bitcoin::{consensus::deserialize, Transaction, Txid},
     boltz::Cooperative,
     electrum_client::ElectrumApi,
-    elements::{hashes::hex::DisplayHex, Transaction as ETransaction},
+    elements::hashes::hex::DisplayHex,
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
-    Amount, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
+    Amount, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
 use flutter_rust_bridge::frb;
 use hex::FromHex;

@@ -7,7 +7,10 @@ use flutter_rust_bridge::frb;
 use boltz_client::{
     // boltz,
     network::Chain as BChain,
-    swaps::boltz::{BoltzApiClientV2, Side as BoltzSide, SwapType as BoltzSwapType},
+    swaps::boltz::{
+        BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
+        SwapType as BoltzSwapType,
+    },
     util::secrets::SwapKey,
     Address,
     Bolt11Invoice,
@@ -46,6 +49,30 @@ impl From<BoltzSide> for Side {
         match boltz_side {
             BoltzSide::Lockup => Side::Lockup,
             BoltzSide::Claim => Side::Claim,
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
+pub enum SwapTxKind {
+    Claim,
+    Refund,
+}
+
+impl Into<BoltzSwapTxKind> for SwapTxKind {
+    fn into(self) -> BoltzSwapTxKind {
+        match self {
+            SwapTxKind::Refund => BoltzSwapTxKind::Refund,
+            SwapTxKind::Claim => BoltzSwapTxKind::Claim,
+        }
+    }
+}
+impl From<BoltzSwapTxKind> for SwapTxKind {
+    fn from(kind: BoltzSwapTxKind) -> Self {
+        match kind {
+            BoltzSwapTxKind::Refund => SwapTxKind::Refund,
+            BoltzSwapTxKind::Claim => SwapTxKind::Claim,
         }
     }
 }

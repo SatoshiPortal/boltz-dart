@@ -3,11 +3,20 @@ use crate::util::check_protocol;
 use super::{
     error::BoltzError,
     types::{
-        BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage, SwapType,
+        BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage,
+        SwapTxKind, SwapType,
     },
 };
+use hex::FromHex;
+
 use boltz_client::{
+    bitcoin::{
+        consensus::{deserialize, serialize},
+        hex::DisplayHex,
+        Transaction, Txid,
+    },
     boltz::{ChainSwapDetails, Cooperative, Side},
+    electrum_client::ElectrumApi,
     error::Error,
     network::electrum::ElectrumConfig,
     swaps::boltz::BoltzApiClientV2,
@@ -335,13 +344,7 @@ impl ChainSwap {
                         Ok(result) => result,
                         Err(e) => return Err(e.into()),
                     };
-                    let txid = match boltz_client
-                        .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
-                    {
-                        Ok(result) => result,
-                        Err(e) => return Err(e.into()),
-                    };
-                    Ok(extract_id(txid)?)
+                    Ok(signed.serialize().to_lower_hex_string())
                 } else {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
@@ -352,13 +355,7 @@ impl ChainSwap {
                         Ok(result) => result,
                         Err(e) => return Err(e.into()),
                     };
-                    let txid = match boltz_client
-                        .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
-                    {
-                        Ok(result) => result,
-                        Err(e) => return Err(e.into()),
-                    };
-                    Ok(extract_id(txid)?)
+                    Ok(signed.serialize().to_lower_hex_string())
                 }
             }
             ChainSwapDirection::LbtcToBtc => {
@@ -403,22 +400,16 @@ impl ChainSwap {
                         Ok(result) => result,
                         Err(e) => return Err(e.into()),
                     };
-                    let txid = match claim_tx.broadcast(&signed, &btc_network_config) {
-                        Ok(result) => result,
-                        Err(e) => return Err(e.into()),
-                    };
-                    Ok(txid.to_string())
+                    let serialized_tx: Vec<u8> = serialize(&signed);
+                    Ok(serialized_tx.to_hex())
                 } else {
                     let signed =
                         match claim_tx.sign_claim(&ckp, &preimage.try_into()?, abs_fee, None) {
                             Ok(result) => result,
                             Err(e) => return Err(e.into()),
                         };
-                    let txid = match claim_tx.broadcast(&signed, &btc_network_config) {
-                        Ok(result) => result,
-                        Err(e) => return Err(e.into()),
-                    };
-                    Ok(txid.to_string())
+                    let serialized_tx: Vec<u8> = serialize(&signed);
+                    Ok(serialized_tx.to_hex())
                 }
             }
         }
@@ -514,6 +505,78 @@ impl ChainSwap {
                 Ok(extract_id(txid)?)
             }
         }
+    }
+
+    fn get_network(&self, kind: SwapTxKind) -> (Chain, String) {
+        match self.direction {
+            ChainSwapDirection::BtcToLbtc => match kind {
+                SwapTxKind::Claim => {
+                    if self.is_testnet {
+                        (Chain::LiquidTestnet, self.lbtc_electrum_url.to_owned())
+                    } else {
+                        (Chain::Liquid, self.lbtc_electrum_url.to_owned())
+                    }
+                }
+                SwapTxKind::Refund => {
+                    if self.is_testnet {
+                        (Chain::BitcoinTestnet, self.btc_electrum_url.to_owned())
+                    } else {
+                        (Chain::Bitcoin, self.btc_electrum_url.to_owned())
+                    }
+                }
+            },
+            ChainSwapDirection::LbtcToBtc => match kind {
+                SwapTxKind::Claim => {
+                    if self.is_testnet {
+                        (Chain::BitcoinTestnet, self.btc_electrum_url.to_owned())
+                    } else {
+                        (Chain::Bitcoin, self.btc_electrum_url.to_owned())
+                    }
+                }
+                SwapTxKind::Refund => {
+                    if self.is_testnet {
+                        (Chain::LiquidTestnet, self.lbtc_electrum_url.to_owned())
+                    } else {
+                        (Chain::Liquid, self.lbtc_electrum_url.to_owned())
+                    }
+                }
+            },
+        }
+    }
+
+    pub fn broadcast_local(
+        &self,
+        signed_hex: String,
+        kind: SwapTxKind,
+    ) -> Result<String, BoltzError> {
+        let signed_hex = Vec::from_hex(&signed_hex)
+            .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
+        let (network, electrum_url) = self.get_network(kind);
+
+        let signed_tx: Transaction = deserialize(&signed_hex).unwrap();
+        let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, 10);
+        let txid: Txid = match network_config
+            .build_client()?
+            .transaction_broadcast(&signed_tx)
+        {
+            Ok(r) => r,
+            Err(e) => return Err(BoltzError::new("Electrum".to_string(), e.to_string())),
+        };
+        Ok(txid.to_string())
+    }
+
+    pub fn broadcast_boltz(
+        &self,
+        signed_hex: String,
+        kind: SwapTxKind,
+    ) -> Result<String, BoltzError> {
+        let (network, _) = self.get_network(kind);
+        let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
+        let txid = match boltz_client.broadcast_tx(network.into(), &signed_hex) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        Ok(extract_id(txid)?)
     }
 }
 
