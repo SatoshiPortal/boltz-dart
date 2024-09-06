@@ -1,4 +1,4 @@
-use crate::util::{ensure_http_protocol_prefix, strip_tcp_protocol_prefix};
+use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
@@ -77,8 +77,8 @@ impl ChainSwap {
             preimage,
             btc_script_str,
             lbtc_script_str,
-            btc_electrum_url: strip_tcp_protocol_prefix(&btc_electrum_url),
-            lbtc_electrum_url: strip_tcp_protocol_prefix(&lbtc_electrum_url),
+            btc_electrum_url: strip_tcp_prefix(&btc_electrum_url),
+            lbtc_electrum_url: strip_tcp_prefix(&lbtc_electrum_url),
             boltz_url,
             script_address,
             out_amount,
@@ -133,7 +133,7 @@ impl ChainSwap {
             inner: claim_kps.public_key(),
         };
         let preimage = Preimage::new();
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
         match direction {
             ChainSwapDirection::BtcToLbtc => {
                 let create_swap_req = boltz_client::swaps::boltz::CreateChainRequest {
@@ -185,8 +185,8 @@ impl ChainSwap {
                     claim_script.clone().into(),
                     lockup_address.to_string(),
                     create_chain_response.lockup_details.amount as u64,
-                    strip_tcp_protocol_prefix(&btc_electrum_url),
-                    strip_tcp_protocol_prefix(&lbtc_electrum_url),
+                    strip_tcp_prefix(&btc_electrum_url),
+                    strip_tcp_prefix(&lbtc_electrum_url),
                     boltz_url,
                     referral_id,
                     claim_script.blinding_key.display_secret().to_string(),
@@ -242,8 +242,8 @@ impl ChainSwap {
                     lockup_script.clone().into(),
                     lockup_address.to_string(),
                     create_chain_response.lockup_details.amount as u64,
-                    strip_tcp_protocol_prefix(&btc_electrum_url),
-                    strip_tcp_protocol_prefix(&lbtc_electrum_url),
+                    strip_tcp_prefix(&btc_electrum_url),
+                    strip_tcp_prefix(&lbtc_electrum_url),
                     boltz_url,
                     referral_id,
                     lockup_script.blinding_key.display_secret().to_string(),
@@ -253,7 +253,7 @@ impl ChainSwap {
     }
 
     pub fn get_server_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let txs = boltz_client.get_chain_txs(&self.id.clone())?;
         if txs.server_lock.is_none() {
             Err(BoltzError::new(
@@ -266,7 +266,7 @@ impl ChainSwap {
     }
 
     pub fn get_user_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let txs = boltz_client.get_chain_txs(&self.id.clone())?;
         if txs.user_lock.is_none() {
             Err(BoltzError::new(
@@ -300,7 +300,7 @@ impl ChainSwap {
             ElectrumConfig::new(btc_chain.into(), &self.btc_electrum_url, true, true, 10);
         let lbtc_network_config =
             ElectrumConfig::new(lbtc_chain.into(), &self.lbtc_electrum_url, true, true, 10);
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -309,7 +309,7 @@ impl ChainSwap {
                     lbtc_claim_script.clone(),
                     out_address.clone(),
                     &lbtc_network_config,
-                    ensure_http_protocol_prefix(&self.boltz_url),
+                    ensure_http_prefix(&self.boltz_url),
                     id.clone(),
                 )?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
@@ -379,7 +379,7 @@ impl ChainSwap {
                         lbtc_lockup_script.clone(),
                         &refund_address,
                         &lbtc_network_config,
-                        ensure_http_protocol_prefix(&self.boltz_url),
+                        ensure_http_prefix(&self.boltz_url),
                         id.clone(),
                     )?;
                     let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
@@ -439,7 +439,7 @@ impl ChainSwap {
             ElectrumConfig::new(btc_chain.into(), &self.btc_electrum_url, true, true, 10);
         let lbtc_network_config =
             ElectrumConfig::new(lbtc_chain.into(), &self.lbtc_electrum_url, true, true, 10);
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
                 let btc_lockup_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
@@ -477,7 +477,7 @@ impl ChainSwap {
                     lbtc_lockup_script.clone(),
                     &refund_address,
                     &lbtc_network_config,
-                    ensure_http_protocol_prefix(&self.boltz_url),
+                    ensure_http_prefix(&self.boltz_url),
                     id.clone(),
                 )?;
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;
@@ -566,7 +566,7 @@ impl ChainSwap {
         kind: SwapTxKind,
     ) -> Result<String, BoltzError> {
         let (network, _) = self.get_network(kind);
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let txid = match boltz_client.broadcast_tx(network.into(), &signed_hex) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),

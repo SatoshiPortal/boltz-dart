@@ -1,4 +1,4 @@
-pub fn ensure_http_protocol_prefix(url: &str) -> String {
+pub fn ensure_http_prefix(url: &str) -> String {
     let protocols = ["http://", "https://"];
     for protocol in protocols.iter() {
         if url.starts_with(protocol) {
@@ -8,7 +8,7 @@ pub fn ensure_http_protocol_prefix(url: &str) -> String {
     format!("https://{}", url)
 }
 
-pub fn strip_tcp_protocol_prefix(url: &str) -> String {
+pub fn strip_tcp_prefix(url: &str) -> String {
     let protocols = ["tcp://", "ssl://"];
     for protocol in protocols.iter() {
         if url.starts_with(protocol) {

@@ -1,4 +1,4 @@
-use crate::util::{ensure_http_protocol_prefix, strip_tcp_protocol_prefix};
+use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
@@ -61,7 +61,7 @@ impl LbtcLnSwap {
             preimage,
             swap_script,
             invoice,
-            electrum_url: strip_tcp_protocol_prefix(&electrum_url),
+            electrum_url: strip_tcp_prefix(&electrum_url),
             boltz_url,
             out_amount,
             blinding_key,
@@ -90,7 +90,7 @@ impl LbtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
             from: "L-BTC".to_string(),
             to: "BTC".to_string(),
@@ -121,7 +121,7 @@ impl LbtcLnSwap {
             response.expected_amount,
             script_address,
             swap_script.blinding_key.display_secret().to_string(),
-            strip_tcp_protocol_prefix(&electrum_url),
+            strip_tcp_prefix(&electrum_url),
             boltz_url,
             referral_id,
         ))
@@ -150,7 +150,7 @@ impl LbtcLnSwap {
             inner: ckp.public_key(),
         };
 
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -197,7 +197,7 @@ impl LbtcLnSwap {
             out_amount,
             script_address,
             swap_script.blinding_key.display_secret().to_string(),
-            strip_tcp_protocol_prefix(&electrum_url),
+            strip_tcp_prefix(&electrum_url),
             boltz_url,
             referral_id,
         ))
@@ -205,14 +205,14 @@ impl LbtcLnSwap {
     pub fn coop_close_submarine(&self) -> Result<(), BoltzError> {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
         let tx = match LBtcSwapTx::new_refund(
             swap_script,
             &self.script_address,
             &network_config,
-            ensure_http_protocol_prefix(&self.boltz_url.clone()),
+            ensure_http_prefix(&self.boltz_url.clone()),
             self.id.clone(),
         ) {
             Ok(result) => result,
@@ -246,13 +246,13 @@ impl LbtcLnSwap {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let id: String = self.id.clone();
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let tx = match LBtcSwapTx::new_claim(
             swap_script,
             out_address,
             &network_config,
-            ensure_http_protocol_prefix(&self.boltz_url.clone()),
+            ensure_http_prefix(&self.boltz_url.clone()),
             self.id.clone(),
         ) {
             Ok(result) => result,
@@ -298,13 +298,13 @@ impl LbtcLnSwap {
         let network_config =
             ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let id = self.id.clone();
         let tx = match LBtcSwapTx::new_refund(
             swap_script.clone(),
             &out_address,
             &network_config,
-            ensure_http_protocol_prefix(&self.boltz_url.clone()),
+            ensure_http_prefix(&self.boltz_url.clone()),
             self.id.clone(),
         ) {
             Ok(result) => result,
@@ -353,7 +353,7 @@ impl LbtcLnSwap {
     }
 
     pub fn broadcast_boltz(&self, signed_hex: String) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_protocol_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let txid = match boltz_client.broadcast_tx(self.network.into(), &signed_hex) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -382,7 +382,7 @@ impl LbtcLnSwap {
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
-            ensure_http_protocol_prefix(&self.boltz_url.clone()),
+            ensure_http_prefix(&self.boltz_url.clone()),
             self.id.clone(),
         ) {
             Ok(result) => result,
