@@ -32,6 +32,20 @@ class ChainSwap with _$ChainSwap {
     String? referralId,
     required String blindingKey,
   }) = _ChainSwap;
+  Future<String> broadcastBoltz(
+          {required String signedHex,
+          required SwapTxKind kind,
+          dynamic hint}) =>
+      BoltzCore.instance.api.chainSwapBroadcastBoltz(
+          that: this, signedHex: signedHex, kind: kind, hint: hint);
+
+  Future<String> broadcastLocal(
+          {required String signedHex,
+          required SwapTxKind kind,
+          dynamic hint}) =>
+      BoltzCore.instance.api.chainSwapBroadcastLocal(
+          that: this, signedHex: signedHex, kind: kind, hint: hint);
+
   Future<String> claim(
           {required String outAddress,
           required String refundAddress,

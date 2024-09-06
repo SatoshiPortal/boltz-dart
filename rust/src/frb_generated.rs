@@ -323,6 +323,62 @@ fn wire_btc_ln_swap_tx_size_impl(
         },
     )
 }
+fn wire_chain_swap_broadcast_boltz_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
+    signed_hex: impl CstDecode<String>,
+    kind: impl CstDecode<crate::api::types::SwapTxKind>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "chain_swap_broadcast_boltz",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_signed_hex = signed_hex.cst_decode();
+            let api_kind = kind.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::chain_swap::ChainSwap::broadcast_boltz(
+                        &api_that,
+                        api_signed_hex,
+                        api_kind,
+                    )
+                })())
+            }
+        },
+    )
+}
+fn wire_chain_swap_broadcast_local_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
+    signed_hex: impl CstDecode<String>,
+    kind: impl CstDecode<crate::api::types::SwapTxKind>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "chain_swap_broadcast_local",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_signed_hex = signed_hex.cst_decode();
+            let api_kind = kind.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::chain_swap::ChainSwap::broadcast_local(
+                        &api_that,
+                        api_signed_hex,
+                        api_kind,
+                    )
+                })())
+            }
+        },
+    )
+}
 fn wire_chain_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
@@ -1168,6 +1224,16 @@ impl CstDecode<crate::api::types::Side> for i32 {
         }
     }
 }
+impl CstDecode<crate::api::types::SwapTxKind> for i32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::SwapTxKind {
+        match self {
+            0 => crate::api::types::SwapTxKind::Claim,
+            1 => crate::api::types::SwapTxKind::Refund,
+            _ => unreachable!("Invalid variant for SwapTxKind: {}", self),
+        }
+    }
+}
 impl CstDecode<crate::api::types::SwapType> for i32 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::SwapType {
@@ -1645,6 +1711,18 @@ impl SseDecode for crate::api::fees::SwapLimits {
         return crate::api::fees::SwapLimits {
             minimal: var_minimal,
             maximal: var_maximal,
+        };
+    }
+}
+
+impl SseDecode for crate::api::types::SwapTxKind {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::types::SwapTxKind::Claim,
+            1 => crate::api::types::SwapTxKind::Refund,
+            _ => unreachable!("Invalid variant for SwapTxKind: {}", inner),
         };
     }
 }
@@ -2183,6 +2261,23 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SwapLimits>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::types::SwapTxKind {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Claim => 0.into_dart(),
+            Self::Refund => 1.into_dart(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::SwapTxKind {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapTxKind>
+    for crate::api::types::SwapTxKind
+{
+    fn into_into_dart(self) -> crate::api::types::SwapTxKind {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::types::SwapType {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -2514,6 +2609,22 @@ impl SseEncode for crate::api::fees::SwapLimits {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.minimal, serializer);
         <u64>::sse_encode(self.maximal, serializer);
+    }
+}
+
+impl SseEncode for crate::api::types::SwapTxKind {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::types::SwapTxKind::Claim => 0,
+                crate::api::types::SwapTxKind::Refund => 1,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 

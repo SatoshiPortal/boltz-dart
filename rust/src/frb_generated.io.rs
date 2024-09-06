@@ -758,6 +758,26 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_tx_size(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_broadcast_boltz(
+    port_: i64,
+    that: *mut wire_cst_chain_swap,
+    signed_hex: *mut wire_cst_list_prim_u_8_strict,
+    kind: i32,
+) {
+    wire_chain_swap_broadcast_boltz_impl(port_, that, signed_hex, kind)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_broadcast_local(
+    port_: i64,
+    that: *mut wire_cst_chain_swap,
+    signed_hex: *mut wire_cst_list_prim_u_8_strict,
+    kind: i32,
+) {
+    wire_chain_swap_broadcast_local_impl(port_, that, signed_hex, kind)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_chain_swap_claim(
     port_: i64,
     that: *mut wire_cst_chain_swap,

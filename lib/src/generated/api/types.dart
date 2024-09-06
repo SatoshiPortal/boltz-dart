@@ -163,6 +163,11 @@ enum Side {
   claim,
 }
 
+enum SwapTxKind {
+  claim,
+  refund,
+}
+
 enum SwapType {
   submarine,
   reverse,

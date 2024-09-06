@@ -232,6 +232,16 @@ void frbgen_boltz_dart_wire_btc_ln_swap_refund(int64_t port_,
 
 void frbgen_boltz_dart_wire_btc_ln_swap_tx_size(int64_t port_, struct wire_cst_btc_ln_swap *that);
 
+void frbgen_boltz_dart_wire_chain_swap_broadcast_boltz(int64_t port_,
+                                                       struct wire_cst_chain_swap *that,
+                                                       struct wire_cst_list_prim_u_8_strict *signed_hex,
+                                                       int32_t kind);
+
+void frbgen_boltz_dart_wire_chain_swap_broadcast_local(int64_t port_,
+                                                       struct wire_cst_chain_swap *that,
+                                                       struct wire_cst_list_prim_u_8_strict *signed_hex,
+                                                       int32_t kind);
+
 void frbgen_boltz_dart_wire_chain_swap_claim(int64_t port_,
                                              struct wire_cst_chain_swap *that,
                                              struct wire_cst_list_prim_u_8_strict *out_address,
@@ -432,6 +442,8 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_refund);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_ln_swap_tx_size);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_btc_swap_script_str_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_broadcast_boltz);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_broadcast_local);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_claim);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_get_server_lockup);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_chain_swap_get_user_lockup);

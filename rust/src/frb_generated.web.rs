@@ -514,6 +514,14 @@ impl CstDecode<crate::api::types::Side>
         (self.unchecked_into_f64() as i32).cst_decode()
     }
 }
+impl CstDecode<crate::api::types::SwapTxKind>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::SwapTxKind {
+        (self.unchecked_into_f64() as i32).cst_decode()
+    }
+}
 impl CstDecode<crate::api::types::SwapType>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
@@ -688,6 +696,26 @@ pub fn wire_btc_ln_swap_tx_size(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
     wire_btc_ln_swap_tx_size_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire_chain_swap_broadcast_boltz(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    signed_hex: String,
+    kind: i32,
+) {
+    wire_chain_swap_broadcast_boltz_impl(port_, that, signed_hex, kind)
+}
+
+#[wasm_bindgen]
+pub fn wire_chain_swap_broadcast_local(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    signed_hex: String,
+    kind: i32,
+) {
+    wire_chain_swap_broadcast_local_impl(port_, that, signed_hex, kind)
 }
 
 #[wasm_bindgen]

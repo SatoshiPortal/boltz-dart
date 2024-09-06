@@ -134,6 +134,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   SwapLimits dco_decode_swap_limits(dynamic raw);
 
   @protected
+  SwapTxKind dco_decode_swap_tx_kind(dynamic raw);
+
+  @protected
   SwapType dco_decode_swap_type(dynamic raw);
 
   @protected
@@ -268,6 +271,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   SwapLimits sse_decode_swap_limits(SseDeserializer deserializer);
+
+  @protected
+  SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer);
 
   @protected
   SwapType sse_decode_swap_type(SseDeserializer deserializer);
@@ -602,6 +608,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   int cst_encode_side(Side raw);
 
   @protected
+  int cst_encode_swap_tx_kind(SwapTxKind raw);
+
+  @protected
   int cst_encode_swap_type(SwapType raw);
 
   @protected
@@ -742,6 +751,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer);
 
   @protected
+  void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer);
+
+  @protected
   void sse_encode_swap_type(SwapType self, SseSerializer serializer);
 
   @protected
@@ -853,6 +865,14 @@ class BoltzCoreWire implements BaseWire {
 
   void wire_btc_ln_swap_tx_size(NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_btc_ln_swap_tx_size(port_, that);
+
+  void wire_chain_swap_broadcast_boltz(NativePortType port_, List<dynamic> that,
+          String signed_hex, int kind) =>
+      wasmModule.wire_chain_swap_broadcast_boltz(port_, that, signed_hex, kind);
+
+  void wire_chain_swap_broadcast_local(NativePortType port_, List<dynamic> that,
+          String signed_hex, int kind) =>
+      wasmModule.wire_chain_swap_broadcast_local(port_, that, signed_hex, kind);
 
   void wire_chain_swap_claim(
           NativePortType port_,
@@ -1169,6 +1189,12 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external void wire_btc_ln_swap_tx_size(
       NativePortType port_, List<dynamic> that);
+
+  external void wire_chain_swap_broadcast_boltz(
+      NativePortType port_, List<dynamic> that, String signed_hex, int kind);
+
+  external void wire_chain_swap_broadcast_local(
+      NativePortType port_, List<dynamic> that, String signed_hex, int kind);
 
   external void wire_chain_swap_claim(
       NativePortType port_,

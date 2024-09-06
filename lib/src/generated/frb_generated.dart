@@ -130,6 +130,18 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<int> btcLnSwapTxSize({required BtcLnSwap that, dynamic hint});
 
+  Future<String> chainSwapBroadcastBoltz(
+      {required ChainSwap that,
+      required String signedHex,
+      required SwapTxKind kind,
+      dynamic hint});
+
+  Future<String> chainSwapBroadcastLocal(
+      {required ChainSwap that,
+      required String signedHex,
+      required SwapTxKind kind,
+      dynamic hint});
+
   Future<String> chainSwapClaim(
       {required ChainSwap that,
       required String outAddress,
@@ -658,6 +670,64 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kBtcLnSwapTxSizeConstMeta => const TaskConstMeta(
         debugName: "btc_ln_swap_tx_size",
         argNames: ["that"],
+      );
+
+  @override
+  Future<String> chainSwapBroadcastBoltz(
+      {required ChainSwap that,
+      required String signedHex,
+      required SwapTxKind kind,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        var arg1 = cst_encode_String(signedHex);
+        var arg2 = cst_encode_swap_tx_kind(kind);
+        return wire.wire_chain_swap_broadcast_boltz(port_, arg0, arg1, arg2);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kChainSwapBroadcastBoltzConstMeta,
+      argValues: [that, signedHex, kind],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kChainSwapBroadcastBoltzConstMeta => const TaskConstMeta(
+        debugName: "chain_swap_broadcast_boltz",
+        argNames: ["that", "signedHex", "kind"],
+      );
+
+  @override
+  Future<String> chainSwapBroadcastLocal(
+      {required ChainSwap that,
+      required String signedHex,
+      required SwapTxKind kind,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        var arg1 = cst_encode_String(signedHex);
+        var arg2 = cst_encode_swap_tx_kind(kind);
+        return wire.wire_chain_swap_broadcast_local(port_, arg0, arg1, arg2);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kChainSwapBroadcastLocalConstMeta,
+      argValues: [that, signedHex, kind],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kChainSwapBroadcastLocalConstMeta => const TaskConstMeta(
+        debugName: "chain_swap_broadcast_local",
+        argNames: ["that", "signedHex", "kind"],
       );
 
   @override
@@ -2062,6 +2132,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  SwapTxKind dco_decode_swap_tx_kind(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SwapTxKind.values[raw as int];
+  }
+
+  @protected
   SwapType dco_decode_swap_type(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SwapType.values[raw as int];
@@ -2528,6 +2604,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return SwapTxKind.values[inner];
+  }
+
+  @protected
   SwapType sse_decode_swap_type(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_i_32(deserializer);
@@ -2595,6 +2678,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @protected
   int cst_encode_side(Side raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_i_32(raw.index);
+  }
+
+  @protected
+  int cst_encode_swap_tx_kind(SwapTxKind raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_i_32(raw.index);
   }
@@ -2955,6 +3044,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self.minimal, serializer);
     sse_encode_u_64(self.maximal, serializer);
+  }
+
+  @protected
+  void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
   }
 
   @protected
