@@ -322,6 +322,8 @@ impl ChainSwap {
                         btc_lockup_script.clone(),
                         &refund_address,
                         &btc_network_config,
+                        self.boltz_url.clone(),
+                        self.id.clone(),
                     )?;
                     let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
                     let rkp: Keypair = self.refund_keys.clone().try_into()?;
@@ -364,6 +366,8 @@ impl ChainSwap {
                     btc_claim_script.clone(),
                     out_address.clone(),
                     &btc_network_config,
+                    self.boltz_url.clone(),
+                    self.id.clone(),
                 )?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
                 let preimage = self.preimage.clone();
@@ -444,6 +448,8 @@ impl ChainSwap {
                     btc_lockup_script.clone(),
                     &refund_address,
                     &btc_network_config,
+                    self.boltz_url.clone(),
+                    self.id.clone(),
                 )?;
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
@@ -593,8 +599,6 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
 
 #[cfg(test)]
 mod tests {
-    use boltz_client::swaps::boltz::BOLTZ_MAINNET_URL_V2;
-
     use super::*;
     #[test]
     fn test_recover_swap() {
@@ -628,7 +632,7 @@ mod tests {
         };
 
         let lbtc_claim_script: LBtcSwapScript = lbtc_swap_script_str.clone().try_into().unwrap();
-        let claim_tx: LBtcSwapTx = LBtcSwapTx::new_claim(
+        let _claim_tx: LBtcSwapTx = LBtcSwapTx::new_claim(
             lbtc_claim_script.clone(),
             "lq1qq2mxq26ugwsuq3zpqapledq5kjjpwk39teq4f0d0faqvqumsnjlakl78gkeakhtdey84ltjassdejzvq9h6pzet9z54rd2urh".to_string(),
             &ElectrumConfig::default(Chain::Liquid.into(), None).unwrap(),

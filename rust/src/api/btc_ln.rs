@@ -133,7 +133,13 @@ impl BtcLnSwap {
         let boltz_client = BoltzApiClientV2::new(&check_protocol(&self.boltz_url));
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
-        let tx = match BtcSwapTx::new_refund(swap_script, &self.script_address, &network_config) {
+        let tx = match BtcSwapTx::new_refund(
+            swap_script,
+            &self.script_address,
+            &network_config,
+            self.boltz_url.clone(),
+            self.id.clone(),
+        ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
@@ -247,7 +253,13 @@ impl BtcLnSwap {
             Err(e) => return Err(e.into()),
         };
         if script_balance.0 > 0 || script_balance.1 > 0 {
-            let tx = match BtcSwapTx::new_claim(swap_script, out_address, &network_config) {
+            let tx = match BtcSwapTx::new_claim(
+                swap_script,
+                out_address,
+                &network_config,
+                self.boltz_url.clone(),
+                self.id.clone(),
+            ) {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
@@ -309,8 +321,13 @@ impl BtcLnSwap {
             Err(e) => return Err(e.into()),
         };
         if script_balance.0 > 0 || script_balance.1 > 0 {
-            let tx = match BtcSwapTx::new_refund(swap_script.clone(), &out_address, &network_config)
-            {
+            let tx = match BtcSwapTx::new_refund(
+                swap_script.clone(),
+                &out_address,
+                &network_config,
+                self.boltz_url.clone(),
+                self.id.clone(),
+            ) {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
@@ -390,6 +407,8 @@ impl BtcLnSwap {
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
+            self.boltz_url.clone(),
+            self.id.clone(),
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
