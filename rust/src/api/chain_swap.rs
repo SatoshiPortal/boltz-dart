@@ -469,11 +469,8 @@ impl ChainSwap {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
                 };
-                let txid = match refund_tx.broadcast(&signed, &btc_network_config) {
-                    Ok(result) => result,
-                    Err(e) => return Err(e.into()),
-                };
-                Ok(txid.to_string())
+                let serialized_tx: Vec<u8> = serialize(&signed);
+                Ok(serialized_tx.to_hex())
             }
             ChainSwapDirection::LbtcToBtc => {
                 let lbtc_lockup_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;
@@ -502,13 +499,7 @@ impl ChainSwap {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
                 };
-                let txid = match boltz_client
-                    .broadcast_tx(lbtc_chain.into(), &signed.serialize().to_hex())
-                {
-                    Ok(result) => result,
-                    Err(e) => return Err(e.into()),
-                };
-                Ok(extract_id(txid)?)
+                Ok(signed.serialize().to_lower_hex_string())
             }
         }
     }
@@ -558,8 +549,10 @@ impl ChainSwap {
         let signed_hex = Vec::from_hex(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
         let (network, electrum_url) = self.get_network(kind);
-
-        let signed_tx: Transaction = deserialize(&signed_hex).unwrap();
+        let signed_tx: Transaction = match deserialize(&signed_hex) {
+            Ok(r) => r,
+            Err(e) => return Err(BoltzError::new("Deserialize Tx".to_string(), e.to_string())),
+        };
         let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, 10);
         let txid: Txid = match network_config
             .build_client()?
