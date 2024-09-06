@@ -549,7 +549,13 @@ impl ChainSwap {
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
         let (network, electrum_url) = self.get_network(kind);
 
-        let network_config = ElectrumConfig::new(network.into(), &electrum_url, true, true, 10);
+        let network_config = ElectrumConfig::new(
+            network.into(),
+            &strip_tcp_prefix(&electrum_url),
+            true,
+            true,
+            10,
+        );
         let txid: Txid = match network_config
             .build_client()?
             .transaction_broadcast_raw(&signed_bytes)

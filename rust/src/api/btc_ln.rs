@@ -363,8 +363,13 @@ impl BtcLnSwap {
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
 
-        let network_config =
-            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
+        let network_config = ElectrumConfig::new(
+            self.network.into(),
+            &strip_tcp_prefix(&self.electrum_url),
+            true,
+            true,
+            10,
+        );
         let txid: Txid = match network_config
             .build_client()?
             .transaction_broadcast_raw(&signed_bytes)
