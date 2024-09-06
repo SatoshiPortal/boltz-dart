@@ -25,7 +25,7 @@ use boltz_client::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::util::check_protocol;
+use crate::util::ensure_http_protocol_prefix;
 
 use super::error::BoltzError;
 
@@ -272,7 +272,8 @@ impl DecodedInvoice {
             if mrh.is_none() {
                 None
             } else {
-                let boltz_client = BoltzApiClientV2::new(&check_protocol(&boltz_url.unwrap()));
+                let boltz_client =
+                    BoltzApiClientV2::new(&ensure_http_protocol_prefix(&boltz_url.unwrap()));
                 match boltz_client.get_mrh_bip21(&s) {
                     Ok(r) => Some(r.bip21),
                     Err(_) => None,

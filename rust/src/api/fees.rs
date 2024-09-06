@@ -1,4 +1,4 @@
-use crate::util::check_protocol;
+use crate::util::ensure_http_protocol_prefix;
 use boltz_client::{
     boltz::{
         ChainFees, GetChainPairsResponse, GetReversePairsResponse, GetSubmarinePairsResponse,
@@ -18,7 +18,7 @@ pub struct Fees {
 
 impl Fees {
     pub fn new(boltz_url: String) -> Fees {
-        let url = check_protocol(&boltz_url);
+        let url = ensure_http_protocol_prefix(&boltz_url);
         Fees { boltz_url: url }
     }
     pub fn submarine(&self) -> Result<SubmarineFeesAndLimits, BoltzError> {
