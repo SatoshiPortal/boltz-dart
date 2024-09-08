@@ -62,7 +62,7 @@ impl LbtcLnSwap {
             swap_script,
             invoice,
             electrum_url: strip_tcp_prefix(&electrum_url),
-            boltz_url,
+            boltz_url: ensure_http_prefix(&boltz_url),
             out_amount,
             blinding_key,
             script_address: out_address,
@@ -122,7 +122,7 @@ impl LbtcLnSwap {
             script_address,
             swap_script.blinding_key.display_secret().to_string(),
             strip_tcp_prefix(&electrum_url),
-            boltz_url,
+             ensure_http_prefix(&boltz_url),
             referral_id,
         ))
     }
@@ -198,7 +198,7 @@ impl LbtcLnSwap {
             script_address,
             swap_script.blinding_key.display_secret().to_string(),
             strip_tcp_prefix(&electrum_url),
-            boltz_url,
+            ensure_http_prefix(&boltz_url),
             referral_id,
         ))
     }
@@ -434,7 +434,7 @@ mod tests {
             out_address,
             network,
             electrum_url,
-            boltz_url,
+            ensure_http_prefix(&boltz_url),
             None,
         )
         .unwrap();

@@ -79,7 +79,7 @@ impl ChainSwap {
             lbtc_script_str,
             btc_electrum_url: strip_tcp_prefix(&btc_electrum_url),
             lbtc_electrum_url: strip_tcp_prefix(&lbtc_electrum_url),
-            boltz_url,
+            boltz_url: ensure_http_prefix(&boltz_url.clone()),
             script_address,
             out_amount,
             referral_id: Some(referral_id.unwrap_or_default()),
@@ -187,7 +187,7 @@ impl ChainSwap {
                     create_chain_response.lockup_details.amount as u64,
                     strip_tcp_prefix(&btc_electrum_url),
                     strip_tcp_prefix(&lbtc_electrum_url),
-                    boltz_url,
+                    ensure_http_prefix(&boltz_url),
                     referral_id,
                     claim_script.blinding_key.display_secret().to_string(),
                 ))
@@ -244,7 +244,7 @@ impl ChainSwap {
                     create_chain_response.lockup_details.amount as u64,
                     strip_tcp_prefix(&btc_electrum_url),
                     strip_tcp_prefix(&lbtc_electrum_url),
-                    boltz_url,
+                    ensure_http_prefix(&boltz_url),
                     referral_id,
                     lockup_script.blinding_key.display_secret().to_string(),
                 ))
@@ -321,7 +321,7 @@ impl ChainSwap {
                         btc_lockup_script.clone(),
                         &refund_address,
                         &btc_network_config,
-                        self.boltz_url.clone(),
+                        ensure_http_prefix(&self.boltz_url),
                         self.id.clone(),
                     )?;
                     let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id)?;
@@ -365,7 +365,7 @@ impl ChainSwap {
                     btc_claim_script.clone(),
                     out_address.clone(),
                     &btc_network_config,
-                    self.boltz_url.clone(),
+                    ensure_http_prefix(&self.boltz_url),
                     self.id.clone(),
                 )?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
@@ -447,7 +447,7 @@ impl ChainSwap {
                     btc_lockup_script.clone(),
                     &refund_address,
                     &btc_network_config,
-                    self.boltz_url.clone(),
+                    ensure_http_prefix(&self.boltz_url),
                     self.id.clone(),
                 )?;
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;

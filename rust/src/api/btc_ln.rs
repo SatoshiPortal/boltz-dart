@@ -62,7 +62,7 @@ impl BtcLnSwap {
             swap_script,
             invoice,
             electrum_url: strip_tcp_prefix(&electrum_url),
-            boltz_url,
+            boltz_url: ensure_http_prefix(&boltz_url),
             script_address,
             out_amount,
             referral_id: Some(referral_id.unwrap_or_default()),
@@ -122,7 +122,7 @@ impl BtcLnSwap {
             script_address,
             create_swap_response.expected_amount,
             strip_tcp_prefix(&electrum_url),
-            boltz_url,
+            ensure_http_prefix(&boltz_url),
             referral_id,
         ))
     }
@@ -137,7 +137,7 @@ impl BtcLnSwap {
             swap_script,
             &self.script_address,
             &network_config,
-            self.boltz_url.clone(),
+            ensure_http_prefix(&self.boltz_url),
             self.id.clone(),
         ) {
             Ok(result) => result,
@@ -223,7 +223,7 @@ impl BtcLnSwap {
             script_address,
             out_amount,
             strip_tcp_prefix(&electrum_url),
-            boltz_url,
+            ensure_http_prefix(&boltz_url),
             referral_id,
         ))
     }
@@ -257,7 +257,7 @@ impl BtcLnSwap {
                 swap_script,
                 out_address,
                 &network_config,
-                self.boltz_url.clone(),
+                ensure_http_prefix(&self.boltz_url),
                 self.id.clone(),
             ) {
                 Ok(result) => result,
@@ -325,7 +325,7 @@ impl BtcLnSwap {
                 swap_script.clone(),
                 &out_address,
                 &network_config,
-                self.boltz_url.clone(),
+                ensure_http_prefix(&self.boltz_url),
                 self.id.clone(),
             ) {
                 Ok(result) => result,
@@ -411,7 +411,7 @@ impl BtcLnSwap {
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
-            self.boltz_url.clone(),
+            ensure_http_prefix(&self.boltz_url),
             self.id.clone(),
         ) {
             Ok(result) => result,
