@@ -108,6 +108,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      String? description,
       String? referralId,
       dynamic hint});
 
@@ -248,6 +249,7 @@ abstract class BoltzCoreApi extends BaseApi {
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      String? description,
       String? referralId,
       dynamic hint});
 
@@ -515,6 +517,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      String? description,
       String? referralId,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
@@ -526,9 +529,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg4 = cst_encode_chain(network);
         var arg5 = cst_encode_String(electrumUrl);
         var arg6 = cst_encode_String(boltzUrl);
-        var arg7 = cst_encode_opt_String(referralId);
+        var arg7 = cst_encode_opt_String(description);
+        var arg8 = cst_encode_opt_String(referralId);
         return wire.wire_btc_ln_swap_new_reverse(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_btc_ln_swap,
@@ -543,6 +547,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         network,
         electrumUrl,
         boltzUrl,
+        description,
         referralId
       ],
       apiImpl: this,
@@ -560,6 +565,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "network",
           "electrumUrl",
           "boltzUrl",
+          "description",
           "referralId"
         ],
       );
@@ -1336,6 +1342,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required Chain network,
       required String electrumUrl,
       required String boltzUrl,
+      String? description,
       String? referralId,
       dynamic hint}) {
     return handler.executeNormal(NormalTask(
@@ -1347,9 +1354,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg4 = cst_encode_chain(network);
         var arg5 = cst_encode_String(electrumUrl);
         var arg6 = cst_encode_String(boltzUrl);
-        var arg7 = cst_encode_opt_String(referralId);
+        var arg7 = cst_encode_opt_String(description);
+        var arg8 = cst_encode_opt_String(referralId);
         return wire.wire_lbtc_ln_swap_new_reverse(
-            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_lbtc_ln_swap,
@@ -1364,6 +1372,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         network,
         electrumUrl,
         boltzUrl,
+        description,
         referralId
       ],
       apiImpl: this,
@@ -1381,6 +1390,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "network",
           "electrumUrl",
           "boltzUrl",
+          "description",
           "referralId"
         ],
       );

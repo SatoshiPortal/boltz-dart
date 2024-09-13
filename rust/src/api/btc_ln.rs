@@ -162,6 +162,7 @@ impl BtcLnSwap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        description: Option<String>,
         referral_id: Option<String>,
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
@@ -188,7 +189,7 @@ impl BtcLnSwap {
                 address: Some(address.clone()),
                 address_signature: Some(magic_routing::sign_address(&address, &ckp)?.to_string()),
                 webhook: None,
-                description: None,
+                description: description,
                 description_hash: None,
             }
         } else {

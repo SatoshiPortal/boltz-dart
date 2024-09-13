@@ -94,6 +94,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
           required Chain network,
           required String electrumUrl,
           required String boltzUrl,
+          String? description,
           String? referralId,
           dynamic hint}) =>
       BoltzCore.instance.api.lbtcLnSwapNewReverse(
@@ -104,6 +105,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
           network: network,
           electrumUrl: electrumUrl,
           boltzUrl: boltzUrl,
+          description: description,
           referralId: referralId,
           hint: hint);
 

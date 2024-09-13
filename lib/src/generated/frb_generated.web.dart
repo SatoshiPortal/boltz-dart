@@ -834,6 +834,7 @@ class BoltzCoreWire implements BaseWire {
           int network,
           String electrum_url,
           String boltz_url,
+          String? description,
           String? referral_id) =>
       wasmModule.wire_btc_ln_swap_new_reverse(
           port_,
@@ -844,6 +845,7 @@ class BoltzCoreWire implements BaseWire {
           network,
           electrum_url,
           boltz_url,
+          description,
           referral_id);
 
   void wire_btc_ln_swap_new_submarine(
@@ -1034,6 +1036,7 @@ class BoltzCoreWire implements BaseWire {
           int network,
           String electrum_url,
           String boltz_url,
+          String? description,
           String? referral_id) =>
       wasmModule.wire_lbtc_ln_swap_new_reverse(
           port_,
@@ -1044,6 +1047,7 @@ class BoltzCoreWire implements BaseWire {
           network,
           electrum_url,
           boltz_url,
+          description,
           referral_id);
 
   void wire_lbtc_ln_swap_new_submarine(
@@ -1168,6 +1172,7 @@ class BoltzCoreWasmModule implements WasmModule {
       int network,
       String electrum_url,
       String boltz_url,
+      String? description,
       String? referral_id);
 
   external void wire_btc_ln_swap_new_submarine(
@@ -1298,6 +1303,7 @@ class BoltzCoreWasmModule implements WasmModule {
       int network,
       String electrum_url,
       String boltz_url,
+      String? description,
       String? referral_id);
 
   external void wire_lbtc_ln_swap_new_submarine(

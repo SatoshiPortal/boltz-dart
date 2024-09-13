@@ -700,6 +700,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_new_reverse(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    description: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_btc_ln_swap_new_reverse_impl(
@@ -711,6 +712,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_btc_ln_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        description,
         referral_id,
     )
 }
@@ -1009,6 +1011,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_new_reverse(
     network: i32,
     electrum_url: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    description: *mut wire_cst_list_prim_u_8_strict,
     referral_id: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_lbtc_ln_swap_new_reverse_impl(
@@ -1020,6 +1023,7 @@ pub extern "C" fn frbgen_boltz_dart_wire_lbtc_ln_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        description,
         referral_id,
     )
 }

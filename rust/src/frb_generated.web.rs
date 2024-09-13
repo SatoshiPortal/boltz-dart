@@ -641,6 +641,7 @@ pub fn wire_btc_ln_swap_new_reverse(
     network: i32,
     electrum_url: String,
     boltz_url: String,
+    description: Option<String>,
     referral_id: Option<String>,
 ) {
     wire_btc_ln_swap_new_reverse_impl(
@@ -652,6 +653,7 @@ pub fn wire_btc_ln_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        description,
         referral_id,
     )
 }
@@ -956,6 +958,7 @@ pub fn wire_lbtc_ln_swap_new_reverse(
     network: i32,
     electrum_url: String,
     boltz_url: String,
+    description: Option<String>,
     referral_id: Option<String>,
 ) {
     wire_lbtc_ln_swap_new_reverse_impl(
@@ -967,6 +970,7 @@ pub fn wire_lbtc_ln_swap_new_reverse(
         network,
         electrum_url,
         boltz_url,
+        description,
         referral_id,
     )
 }

@@ -200,6 +200,7 @@ fn wire_btc_ln_swap_new_reverse_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -216,6 +217,7 @@ fn wire_btc_ln_swap_new_reverse_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
@@ -227,6 +229,7 @@ fn wire_btc_ln_swap_new_reverse_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
+                        api_description,
                         api_referral_id,
                     )
                 })())
@@ -853,6 +856,7 @@ fn wire_lbtc_ln_swap_new_reverse_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -869,6 +873,7 @@ fn wire_lbtc_ln_swap_new_reverse_impl(
             let api_network = network.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
             move |context| {
                 transform_result_dco((move || {
@@ -880,6 +885,7 @@ fn wire_lbtc_ln_swap_new_reverse_impl(
                         api_network,
                         api_electrum_url,
                         api_boltz_url,
+                        api_description,
                         api_referral_id,
                     )
                 })())

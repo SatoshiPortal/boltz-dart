@@ -122,7 +122,7 @@ impl LbtcLnSwap {
             script_address,
             swap_script.blinding_key.display_secret().to_string(),
             strip_tcp_prefix(&electrum_url),
-             ensure_http_prefix(&boltz_url),
+            ensure_http_prefix(&boltz_url),
             referral_id,
         ))
     }
@@ -135,6 +135,7 @@ impl LbtcLnSwap {
         network: Chain,
         electrum_url: String,
         boltz_url: String,
+        description: Option<String>,
         referral_id: Option<String>,
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
@@ -162,7 +163,7 @@ impl LbtcLnSwap {
                 referral_id: referral_id.clone(),
                 address: Some(address.clone()),
                 address_signature: Some(magic_routing::sign_address(&address, &ckp)?.to_string()),
-                description: None,
+                description: description,
                 description_hash: None,
                 webhook: None,
             }
@@ -435,6 +436,7 @@ mod tests {
             network,
             electrum_url,
             ensure_http_prefix(&boltz_url),
+            None,
             None,
         )
         .unwrap();
