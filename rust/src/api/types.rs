@@ -11,7 +11,7 @@ use boltz_client::{
         BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
         SwapType as BoltzSwapType,
     },
-    util::secrets::SwapKey,
+    util::{lnurl, secrets::SwapKey},
     Address,
     Bolt11Invoice,
     BtcSwapScript,
@@ -296,6 +296,15 @@ impl DecodedInvoice {
             preimage_hash: invoice.payment_hash().to_string(),
         })
     }
+}
+
+pub fn validate_lnurl(lnurl: String) -> bool {
+    lnurl::validate_lnurl(&lnurl)
+}
+
+pub fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
+    let invoice = lnurl::fetch_invoice(&lnurl, msats)?.into();
+    Ok(invoice)
 }
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]

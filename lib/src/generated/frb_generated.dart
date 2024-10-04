@@ -285,6 +285,9 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<DecodedInvoice> decodedInvoiceFromString(
       {required String s, String? boltzUrl, dynamic hint});
 
+  Future<String> invoiceFromLnurl(
+      {required String lnurl, required int msats, dynamic hint});
+
   Future<KeyPair> keyPairGenerate(
       {required String mnemonic,
       required Chain network,
@@ -313,6 +316,8 @@ abstract class BoltzCoreApi extends BaseApi {
       required String sha256,
       required String hash160,
       dynamic hint});
+
+  Future<bool> validateLnurl({required String lnurl, dynamic hint});
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -1583,6 +1588,31 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<String> invoiceFromLnurl(
+      {required String lnurl, required int msats, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(lnurl);
+        var arg1 = cst_encode_u_64(msats);
+        return wire.wire_invoice_from_lnurl(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kInvoiceFromLnurlConstMeta,
+      argValues: [lnurl, msats],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kInvoiceFromLnurlConstMeta => const TaskConstMeta(
+        debugName: "invoice_from_lnurl",
+        argNames: ["lnurl", "msats"],
+      );
+
+  @override
   Future<KeyPair> keyPairGenerate(
       {required String mnemonic,
       required Chain network,
@@ -1745,6 +1775,29 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kPreImageNewConstMeta => const TaskConstMeta(
         debugName: "pre_image_new",
         argNames: ["value", "sha256", "hash160"],
+      );
+
+  @override
+  Future<bool> validateLnurl({required String lnurl, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(lnurl);
+        return wire.wire_validate_lnurl(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_bool,
+        decodeErrorData: null,
+      ),
+      constMeta: kValidateLnurlConstMeta,
+      argValues: [lnurl],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kValidateLnurlConstMeta => const TaskConstMeta(
+        debugName: "validate_lnurl",
+        argNames: ["lnurl"],
       );
 
   @protected

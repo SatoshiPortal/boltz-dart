@@ -9,6 +9,14 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'types.freezed.dart';
 
+Future<bool> validateLnurl({required String lnurl, dynamic hint}) =>
+    BoltzCore.instance.api.validateLnurl(lnurl: lnurl, hint: hint);
+
+Future<String> invoiceFromLnurl(
+        {required String lnurl, required int msats, dynamic hint}) =>
+    BoltzCore.instance.api
+        .invoiceFromLnurl(lnurl: lnurl, msats: msats, hint: hint);
+
 @freezed
 class BtcSwapScriptStr with _$BtcSwapScriptStr {
   const BtcSwapScriptStr._();

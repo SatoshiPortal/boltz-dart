@@ -1043,6 +1043,28 @@ fn wire_decoded_invoice_from_string_impl(
         },
     )
 }
+fn wire_invoice_from_lnurl_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+    msats: impl CstDecode<u64>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "invoice_from_lnurl",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            let api_msats = msats.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::types::invoice_from_lnurl(api_lnurl, api_msats)
+                })())
+            }
+        },
+    )
+}
 fn wire_key_pair_generate_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
@@ -1174,6 +1196,26 @@ fn wire_pre_image_new_impl(
                     api_hash160,
                 ))
             })())
+        },
+    )
+}
+fn wire_validate_lnurl_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "validate_lnurl",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    Result::<_, ()>::Ok(crate::api::types::validate_lnurl(api_lnurl))
+                })())
+            }
         },
     )
 }

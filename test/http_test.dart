@@ -20,7 +20,7 @@ void main() {
   test('Version', () async {
     final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
     final version = await api.getBackendVersion();
-
+    // final lnurl = await invoiceFromLnurl();
     expect(version, startsWith('3.4.0'));
   }, skip: true);
 

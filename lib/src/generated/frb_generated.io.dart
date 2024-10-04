@@ -1936,6 +1936,27 @@ class BoltzCoreWire implements BaseWire {
           void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
+  void wire_invoice_from_lnurl(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
+    int msats,
+  ) {
+    return _wire_invoice_from_lnurl(
+      port_,
+      lnurl,
+      msats,
+    );
+  }
+
+  late final _wire_invoice_from_lnurlPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Int64,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Uint64)>>('frbgen_boltz_dart_wire_invoice_from_lnurl');
+  late final _wire_invoice_from_lnurl = _wire_invoice_from_lnurlPtr.asFunction<
+      void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)>();
+
   void wire_key_pair_generate(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
@@ -2068,6 +2089,24 @@ class BoltzCoreWire implements BaseWire {
           ffi.Pointer<wire_cst_list_prim_u_8_strict>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  void wire_validate_lnurl(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
+  ) {
+    return _wire_validate_lnurl(
+      port_,
+      lnurl,
+    );
+  }
+
+  late final _wire_validate_lnurlPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_validate_lnurl');
+  late final _wire_validate_lnurl = _wire_validate_lnurlPtr.asFunction<
+      void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   ffi.Pointer<wire_cst_btc_ln_swap> cst_new_box_autoadd_btc_ln_swap() {
     return _cst_new_box_autoadd_btc_ln_swap();

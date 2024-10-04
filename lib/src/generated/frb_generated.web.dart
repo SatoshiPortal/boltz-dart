@@ -1086,6 +1086,10 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, String s, String? boltz_url) =>
       wasmModule.wire_decoded_invoice_from_string(port_, s, boltz_url);
 
+  void wire_invoice_from_lnurl(
+          NativePortType port_, String lnurl, Object msats) =>
+      wasmModule.wire_invoice_from_lnurl(port_, lnurl, msats);
+
   void wire_key_pair_generate(NativePortType port_, String mnemonic,
           int network, Object index, int swap_type) =>
       wasmModule.wire_key_pair_generate(
@@ -1121,6 +1125,9 @@ class BoltzCoreWire implements BaseWire {
   dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_pre_image_new(String value, String sha256, String hash160) =>
           wasmModule.wire_pre_image_new(value, sha256, hash160);
+
+  void wire_validate_lnurl(NativePortType port_, String lnurl) =>
+      wasmModule.wire_validate_lnurl(port_, lnurl);
 }
 
 @JS('wasm_bindgen')
@@ -1339,6 +1346,9 @@ class BoltzCoreWasmModule implements WasmModule {
   external void wire_decoded_invoice_from_string(
       NativePortType port_, String s, String? boltz_url);
 
+  external void wire_invoice_from_lnurl(
+      NativePortType port_, String lnurl, Object msats);
+
   external void wire_key_pair_generate(NativePortType port_, String mnemonic,
       int network, Object index, int swap_type);
 
@@ -1360,4 +1370,6 @@ class BoltzCoreWasmModule implements WasmModule {
 
   external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_pre_image_new(String value, String sha256, String hash160);
+
+  external void wire_validate_lnurl(NativePortType port_, String lnurl);
 }

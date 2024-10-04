@@ -1101,6 +1101,15 @@ pub extern "C" fn frbgen_boltz_dart_wire_decoded_invoice_from_string(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_invoice_from_lnurl(
+    port_: i64,
+    lnurl: *mut wire_cst_list_prim_u_8_strict,
+    msats: u64,
+) {
+    wire_invoice_from_lnurl_impl(port_, lnurl, msats)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_key_pair_generate(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
@@ -1154,6 +1163,14 @@ pub extern "C" fn frbgen_boltz_dart_wire_pre_image_new(
     hash160: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_pre_image_new_impl(value, sha256, hash160)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_validate_lnurl(
+    port_: i64,
+    lnurl: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_validate_lnurl_impl(port_, lnurl)
 }
 
 #[no_mangle]

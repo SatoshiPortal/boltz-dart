@@ -1048,6 +1048,15 @@ pub fn wire_decoded_invoice_from_string(
 }
 
 #[wasm_bindgen]
+pub fn wire_invoice_from_lnurl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: String,
+    msats: u64,
+) {
+    wire_invoice_from_lnurl_impl(port_, lnurl, msats)
+}
+
+#[wasm_bindgen]
 pub fn wire_key_pair_generate(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
@@ -1101,4 +1110,9 @@ pub fn wire_pre_image_new(
     hash160: String,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_pre_image_new_impl(value, sha256, hash160)
+}
+
+#[wasm_bindgen]
+pub fn wire_validate_lnurl(port_: flutter_rust_bridge::for_generated::MessagePort, lnurl: String) {
+    wire_validate_lnurl_impl(port_, lnurl)
 }

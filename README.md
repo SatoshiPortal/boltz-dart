@@ -36,7 +36,7 @@ Currently we do not use precompiled binaries with cargokit. So as the end user, 
 # install rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # install tools
-cargo install flutter_rust_bridge_codegen
+cargo install flutter_rust_bridge_codegen --version 2.0.0-dev.31
 cargo install cargo-ndk
 cargo install cargo-lipo
 ```
