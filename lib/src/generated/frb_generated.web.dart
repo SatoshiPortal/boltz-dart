@@ -1086,6 +1086,9 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, String s, String? boltz_url) =>
       wasmModule.wire_decoded_invoice_from_string(port_, s, boltz_url);
 
+  void wire_get_voucher_max_amount(NativePortType port_, String lnurl) =>
+      wasmModule.wire_get_voucher_max_amount(port_, lnurl);
+
   void wire_invoice_from_lnurl(
           NativePortType port_, String lnurl, Object msats) =>
       wasmModule.wire_invoice_from_lnurl(port_, lnurl, msats);
@@ -1128,6 +1131,9 @@ class BoltzCoreWire implements BaseWire {
 
   void wire_validate_lnurl(NativePortType port_, String lnurl) =>
       wasmModule.wire_validate_lnurl(port_, lnurl);
+
+  void wire_withdraw(NativePortType port_, String lnurl, String invoice) =>
+      wasmModule.wire_withdraw(port_, lnurl, invoice);
 }
 
 @JS('wasm_bindgen')
@@ -1346,6 +1352,8 @@ class BoltzCoreWasmModule implements WasmModule {
   external void wire_decoded_invoice_from_string(
       NativePortType port_, String s, String? boltz_url);
 
+  external void wire_get_voucher_max_amount(NativePortType port_, String lnurl);
+
   external void wire_invoice_from_lnurl(
       NativePortType port_, String lnurl, Object msats);
 
@@ -1372,4 +1380,7 @@ class BoltzCoreWasmModule implements WasmModule {
       wire_pre_image_new(String value, String sha256, String hash160);
 
   external void wire_validate_lnurl(NativePortType port_, String lnurl);
+
+  external void wire_withdraw(
+      NativePortType port_, String lnurl, String invoice);
 }

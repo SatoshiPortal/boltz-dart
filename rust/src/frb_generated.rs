@@ -1043,6 +1043,26 @@ fn wire_decoded_invoice_from_string_impl(
         },
     )
 }
+fn wire_get_voucher_max_amount_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_voucher_max_amount",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::types::get_voucher_max_amount(api_lnurl)
+                })())
+            }
+        },
+    )
+}
 fn wire_invoice_from_lnurl_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     lnurl: impl CstDecode<String>,
@@ -1214,6 +1234,28 @@ fn wire_validate_lnurl_impl(
             move |context| {
                 transform_result_dco((move || {
                     Result::<_, ()>::Ok(crate::api::types::validate_lnurl(api_lnurl))
+                })())
+            }
+        },
+    )
+}
+fn wire_withdraw_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+    invoice: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "withdraw",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            let api_invoice = invoice.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::types::withdraw(api_lnurl, api_invoice)
                 })())
             }
         },

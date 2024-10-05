@@ -378,6 +378,9 @@ void frbgen_boltz_dart_wire_decoded_invoice_from_string(int64_t port_,
                                                         struct wire_cst_list_prim_u_8_strict *s,
                                                         struct wire_cst_list_prim_u_8_strict *boltz_url);
 
+void frbgen_boltz_dart_wire_get_voucher_max_amount(int64_t port_,
+                                                   struct wire_cst_list_prim_u_8_strict *lnurl);
+
 void frbgen_boltz_dart_wire_invoice_from_lnurl(int64_t port_,
                                                struct wire_cst_list_prim_u_8_strict *lnurl,
                                                uint64_t msats);
@@ -408,6 +411,10 @@ WireSyncRust2DartDco frbgen_boltz_dart_wire_pre_image_new(struct wire_cst_list_p
 
 void frbgen_boltz_dart_wire_validate_lnurl(int64_t port_,
                                            struct wire_cst_list_prim_u_8_strict *lnurl);
+
+void frbgen_boltz_dart_wire_withdraw(int64_t port_,
+                                     struct wire_cst_list_prim_u_8_strict *lnurl,
+                                     struct wire_cst_list_prim_u_8_strict *invoice);
 
 struct wire_cst_btc_ln_swap *frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_swap(void);
 
@@ -464,6 +471,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_fees_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_fees_reverse);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_fees_submarine);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_get_voucher_max_amount);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_invoice_from_lnurl);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_generate);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_key_pair_new);
@@ -480,6 +488,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_pre_image_generate);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_pre_image_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_validate_lnurl);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_dart_wire_withdraw);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);
     return dummy_var;
 }

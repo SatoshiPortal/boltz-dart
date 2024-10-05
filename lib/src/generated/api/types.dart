@@ -17,6 +17,13 @@ Future<String> invoiceFromLnurl(
     BoltzCore.instance.api
         .invoiceFromLnurl(lnurl: lnurl, msats: msats, hint: hint);
 
+Future<int> getVoucherMaxAmount({required String lnurl, dynamic hint}) =>
+    BoltzCore.instance.api.getVoucherMaxAmount(lnurl: lnurl, hint: hint);
+
+Future<void> withdraw(
+        {required String lnurl, required String invoice, dynamic hint}) =>
+    BoltzCore.instance.api.withdraw(lnurl: lnurl, invoice: invoice, hint: hint);
+
 @freezed
 class BtcSwapScriptStr with _$BtcSwapScriptStr {
   const BtcSwapScriptStr._();

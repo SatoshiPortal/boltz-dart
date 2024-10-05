@@ -1936,6 +1936,25 @@ class BoltzCoreWire implements BaseWire {
           void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
+  void wire_get_voucher_max_amount(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
+  ) {
+    return _wire_get_voucher_max_amount(
+      port_,
+      lnurl,
+    );
+  }
+
+  late final _wire_get_voucher_max_amountPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_get_voucher_max_amount');
+  late final _wire_get_voucher_max_amount =
+      _wire_get_voucher_max_amountPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
   void wire_invoice_from_lnurl(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
@@ -2107,6 +2126,29 @@ class BoltzCoreWire implements BaseWire {
       'frbgen_boltz_dart_wire_validate_lnurl');
   late final _wire_validate_lnurl = _wire_validate_lnurlPtr.asFunction<
       void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  void wire_withdraw(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
+  ) {
+    return _wire_withdraw(
+      port_,
+      lnurl,
+      invoice,
+    );
+  }
+
+  late final _wire_withdrawPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_dart_wire_withdraw');
+  late final _wire_withdraw = _wire_withdrawPtr.asFunction<
+      void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   ffi.Pointer<wire_cst_btc_ln_swap> cst_new_box_autoadd_btc_ln_swap() {
     return _cst_new_box_autoadd_btc_ln_swap();

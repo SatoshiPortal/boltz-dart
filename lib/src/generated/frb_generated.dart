@@ -285,6 +285,8 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<DecodedInvoice> decodedInvoiceFromString(
       {required String s, String? boltzUrl, dynamic hint});
 
+  Future<int> getVoucherMaxAmount({required String lnurl, dynamic hint});
+
   Future<String> invoiceFromLnurl(
       {required String lnurl, required int msats, dynamic hint});
 
@@ -318,6 +320,9 @@ abstract class BoltzCoreApi extends BaseApi {
       dynamic hint});
 
   Future<bool> validateLnurl({required String lnurl, dynamic hint});
+
+  Future<void> withdraw(
+      {required String lnurl, required String invoice, dynamic hint});
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -1588,6 +1593,29 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<int> getVoucherMaxAmount({required String lnurl, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(lnurl);
+        return wire.wire_get_voucher_max_amount(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_u_64,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kGetVoucherMaxAmountConstMeta,
+      argValues: [lnurl],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kGetVoucherMaxAmountConstMeta => const TaskConstMeta(
+        debugName: "get_voucher_max_amount",
+        argNames: ["lnurl"],
+      );
+
+  @override
   Future<String> invoiceFromLnurl(
       {required String lnurl, required int msats, dynamic hint}) {
     return handler.executeNormal(NormalTask(
@@ -1798,6 +1826,31 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kValidateLnurlConstMeta => const TaskConstMeta(
         debugName: "validate_lnurl",
         argNames: ["lnurl"],
+      );
+
+  @override
+  Future<void> withdraw(
+      {required String lnurl, required String invoice, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(lnurl);
+        var arg1 = cst_encode_String(invoice);
+        return wire.wire_withdraw(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kWithdrawConstMeta,
+      argValues: [lnurl, invoice],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kWithdrawConstMeta => const TaskConstMeta(
+        debugName: "withdraw",
+        argNames: ["lnurl", "invoice"],
       );
 
   @protected

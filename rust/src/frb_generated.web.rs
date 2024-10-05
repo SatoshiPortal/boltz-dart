@@ -1048,6 +1048,14 @@ pub fn wire_decoded_invoice_from_string(
 }
 
 #[wasm_bindgen]
+pub fn wire_get_voucher_max_amount(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: String,
+) {
+    wire_get_voucher_max_amount_impl(port_, lnurl)
+}
+
+#[wasm_bindgen]
 pub fn wire_invoice_from_lnurl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     lnurl: String,
@@ -1115,4 +1123,13 @@ pub fn wire_pre_image_new(
 #[wasm_bindgen]
 pub fn wire_validate_lnurl(port_: flutter_rust_bridge::for_generated::MessagePort, lnurl: String) {
     wire_validate_lnurl_impl(port_, lnurl)
+}
+
+#[wasm_bindgen]
+pub fn wire_withdraw(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: String,
+    invoice: String,
+) {
+    wire_withdraw_impl(port_, lnurl, invoice)
 }

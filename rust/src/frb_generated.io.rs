@@ -1101,6 +1101,14 @@ pub extern "C" fn frbgen_boltz_dart_wire_decoded_invoice_from_string(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_get_voucher_max_amount(
+    port_: i64,
+    lnurl: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_get_voucher_max_amount_impl(port_, lnurl)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_dart_wire_invoice_from_lnurl(
     port_: i64,
     lnurl: *mut wire_cst_list_prim_u_8_strict,
@@ -1171,6 +1179,15 @@ pub extern "C" fn frbgen_boltz_dart_wire_validate_lnurl(
     lnurl: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire_validate_lnurl_impl(port_, lnurl)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_dart_wire_withdraw(
+    port_: i64,
+    lnurl: *mut wire_cst_list_prim_u_8_strict,
+    invoice: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_withdraw_impl(port_, lnurl, invoice)
 }
 
 #[no_mangle]

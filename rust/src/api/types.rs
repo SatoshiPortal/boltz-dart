@@ -308,7 +308,8 @@ pub fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzErro
 }
 
 pub fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
-    Ok(lnurl::create_withdraw_response(&lnurl)?.max_withdrawable)
+    let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl)?.max_withdrawable;
+    Ok(max_withdrawable_msat / 1000)
 }
 
 pub fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
