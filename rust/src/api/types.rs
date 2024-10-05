@@ -6,6 +6,7 @@ use flutter_rust_bridge::frb;
 //
 use boltz_client::{
     // boltz,
+    lnurl::withdraw::WithdrawalResponse,
     network::Chain as BChain,
     swaps::boltz::{
         BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
@@ -303,8 +304,18 @@ pub fn validate_lnurl(lnurl: String) -> bool {
 }
 
 pub fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
-    let invoice = lnurl::fetch_invoice(&lnurl, msats)?.into();
-    Ok(invoice)
+    Ok(lnurl::fetch_invoice(&lnurl, msats)?)
+}
+
+pub fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
+    Ok(lnurl::create_withdraw_response(&lnurl)?.max_withdrawable)
+}
+
+pub fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
+    Ok(lnurl::process_withdrawal(
+        &lnurl::create_withdraw_response(&lnurl)?,
+        &invoice,
+    )?)
 }
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
