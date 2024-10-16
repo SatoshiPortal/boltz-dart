@@ -268,9 +268,9 @@ abstract class _ChainFeesAndLimits implements ChainFeesAndLimits {
 /// @nodoc
 mixin _$ChainSwapFees {
   double get percentage => throw _privateConstructorUsedError;
-  int get userLockup => throw _privateConstructorUsedError;
-  int get userClaim => throw _privateConstructorUsedError;
-  int get server => throw _privateConstructorUsedError;
+  BigInt get userLockup => throw _privateConstructorUsedError;
+  BigInt get userClaim => throw _privateConstructorUsedError;
+  BigInt get server => throw _privateConstructorUsedError;
 
   /// Create a copy of ChainSwapFees
   /// with the given fields replaced by the non-null parameter values.
@@ -285,7 +285,8 @@ abstract class $ChainSwapFeesCopyWith<$Res> {
           ChainSwapFees value, $Res Function(ChainSwapFees) then) =
       _$ChainSwapFeesCopyWithImpl<$Res, ChainSwapFees>;
   @useResult
-  $Res call({double percentage, int userLockup, int userClaim, int server});
+  $Res call(
+      {double percentage, BigInt userLockup, BigInt userClaim, BigInt server});
 }
 
 /// @nodoc
@@ -316,15 +317,15 @@ class _$ChainSwapFeesCopyWithImpl<$Res, $Val extends ChainSwapFees>
       userLockup: null == userLockup
           ? _value.userLockup
           : userLockup // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       userClaim: null == userClaim
           ? _value.userClaim
           : userClaim // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       server: null == server
           ? _value.server
           : server // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ) as $Val);
   }
 }
@@ -337,7 +338,8 @@ abstract class _$$ChainSwapFeesImplCopyWith<$Res>
       __$$ChainSwapFeesImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double percentage, int userLockup, int userClaim, int server});
+  $Res call(
+      {double percentage, BigInt userLockup, BigInt userClaim, BigInt server});
 }
 
 /// @nodoc
@@ -366,15 +368,15 @@ class __$$ChainSwapFeesImplCopyWithImpl<$Res>
       userLockup: null == userLockup
           ? _value.userLockup
           : userLockup // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       userClaim: null == userClaim
           ? _value.userClaim
           : userClaim // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       server: null == server
           ? _value.server
           : server // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ));
   }
 }
@@ -391,11 +393,11 @@ class _$ChainSwapFeesImpl implements _ChainSwapFees {
   @override
   final double percentage;
   @override
-  final int userLockup;
+  final BigInt userLockup;
   @override
-  final int userClaim;
+  final BigInt userClaim;
   @override
-  final int server;
+  final BigInt server;
 
   @override
   String toString() {
@@ -432,18 +434,18 @@ class _$ChainSwapFeesImpl implements _ChainSwapFees {
 abstract class _ChainSwapFees implements ChainSwapFees {
   const factory _ChainSwapFees(
       {required final double percentage,
-      required final int userLockup,
-      required final int userClaim,
-      required final int server}) = _$ChainSwapFeesImpl;
+      required final BigInt userLockup,
+      required final BigInt userClaim,
+      required final BigInt server}) = _$ChainSwapFeesImpl;
 
   @override
   double get percentage;
   @override
-  int get userLockup;
+  BigInt get userLockup;
   @override
-  int get userClaim;
+  BigInt get userClaim;
   @override
-  int get server;
+  BigInt get server;
 
   /// Create a copy of ChainSwapFees
   /// with the given fields replaced by the non-null parameter values.
@@ -581,8 +583,8 @@ abstract class _Fees extends Fees {
 
 /// @nodoc
 mixin _$MinerFees {
-  int get lockup => throw _privateConstructorUsedError;
-  int get claim => throw _privateConstructorUsedError;
+  BigInt get lockup => throw _privateConstructorUsedError;
+  BigInt get claim => throw _privateConstructorUsedError;
 
   /// Create a copy of MinerFees
   /// with the given fields replaced by the non-null parameter values.
@@ -596,7 +598,7 @@ abstract class $MinerFeesCopyWith<$Res> {
   factory $MinerFeesCopyWith(MinerFees value, $Res Function(MinerFees) then) =
       _$MinerFeesCopyWithImpl<$Res, MinerFees>;
   @useResult
-  $Res call({int lockup, int claim});
+  $Res call({BigInt lockup, BigInt claim});
 }
 
 /// @nodoc
@@ -621,11 +623,11 @@ class _$MinerFeesCopyWithImpl<$Res, $Val extends MinerFees>
       lockup: null == lockup
           ? _value.lockup
           : lockup // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       claim: null == claim
           ? _value.claim
           : claim // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ) as $Val);
   }
 }
@@ -638,7 +640,7 @@ abstract class _$$MinerFeesImplCopyWith<$Res>
       __$$MinerFeesImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int lockup, int claim});
+  $Res call({BigInt lockup, BigInt claim});
 }
 
 /// @nodoc
@@ -661,11 +663,11 @@ class __$$MinerFeesImplCopyWithImpl<$Res>
       lockup: null == lockup
           ? _value.lockup
           : lockup // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       claim: null == claim
           ? _value.claim
           : claim // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ));
   }
 }
@@ -676,9 +678,9 @@ class _$MinerFeesImpl implements _MinerFees {
   const _$MinerFeesImpl({required this.lockup, required this.claim});
 
   @override
-  final int lockup;
+  final BigInt lockup;
   @override
-  final int claim;
+  final BigInt claim;
 
   @override
   String toString() {
@@ -708,12 +710,13 @@ class _$MinerFeesImpl implements _MinerFees {
 
 abstract class _MinerFees implements MinerFees {
   const factory _MinerFees(
-      {required final int lockup, required final int claim}) = _$MinerFeesImpl;
+      {required final BigInt lockup,
+      required final BigInt claim}) = _$MinerFeesImpl;
 
   @override
-  int get lockup;
+  BigInt get lockup;
   @override
-  int get claim;
+  BigInt get claim;
 
   /// Create a copy of MinerFees
   /// with the given fields replaced by the non-null parameter values.
@@ -1142,7 +1145,7 @@ abstract class _ReverseFeesAndLimits implements ReverseFeesAndLimits {
 /// @nodoc
 mixin _$SubSwapFees {
   double get percentage => throw _privateConstructorUsedError;
-  int get minerFees => throw _privateConstructorUsedError;
+  BigInt get minerFees => throw _privateConstructorUsedError;
 
   /// Create a copy of SubSwapFees
   /// with the given fields replaced by the non-null parameter values.
@@ -1157,7 +1160,7 @@ abstract class $SubSwapFeesCopyWith<$Res> {
           SubSwapFees value, $Res Function(SubSwapFees) then) =
       _$SubSwapFeesCopyWithImpl<$Res, SubSwapFees>;
   @useResult
-  $Res call({double percentage, int minerFees});
+  $Res call({double percentage, BigInt minerFees});
 }
 
 /// @nodoc
@@ -1186,7 +1189,7 @@ class _$SubSwapFeesCopyWithImpl<$Res, $Val extends SubSwapFees>
       minerFees: null == minerFees
           ? _value.minerFees
           : minerFees // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ) as $Val);
   }
 }
@@ -1199,7 +1202,7 @@ abstract class _$$SubSwapFeesImplCopyWith<$Res>
       __$$SubSwapFeesImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double percentage, int minerFees});
+  $Res call({double percentage, BigInt minerFees});
 }
 
 /// @nodoc
@@ -1226,7 +1229,7 @@ class __$$SubSwapFeesImplCopyWithImpl<$Res>
       minerFees: null == minerFees
           ? _value.minerFees
           : minerFees // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ));
   }
 }
@@ -1239,7 +1242,7 @@ class _$SubSwapFeesImpl implements _SubSwapFees {
   @override
   final double percentage;
   @override
-  final int minerFees;
+  final BigInt minerFees;
 
   @override
   String toString() {
@@ -1272,12 +1275,12 @@ class _$SubSwapFeesImpl implements _SubSwapFees {
 abstract class _SubSwapFees implements SubSwapFees {
   const factory _SubSwapFees(
       {required final double percentage,
-      required final int minerFees}) = _$SubSwapFeesImpl;
+      required final BigInt minerFees}) = _$SubSwapFeesImpl;
 
   @override
   double get percentage;
   @override
-  int get minerFees;
+  BigInt get minerFees;
 
   /// Create a copy of SubSwapFees
   /// with the given fields replaced by the non-null parameter values.
@@ -1544,8 +1547,8 @@ abstract class _SubmarineFeesAndLimits implements SubmarineFeesAndLimits {
 
 /// @nodoc
 mixin _$SwapLimits {
-  int get minimal => throw _privateConstructorUsedError;
-  int get maximal => throw _privateConstructorUsedError;
+  BigInt get minimal => throw _privateConstructorUsedError;
+  BigInt get maximal => throw _privateConstructorUsedError;
 
   /// Create a copy of SwapLimits
   /// with the given fields replaced by the non-null parameter values.
@@ -1560,7 +1563,7 @@ abstract class $SwapLimitsCopyWith<$Res> {
           SwapLimits value, $Res Function(SwapLimits) then) =
       _$SwapLimitsCopyWithImpl<$Res, SwapLimits>;
   @useResult
-  $Res call({int minimal, int maximal});
+  $Res call({BigInt minimal, BigInt maximal});
 }
 
 /// @nodoc
@@ -1585,11 +1588,11 @@ class _$SwapLimitsCopyWithImpl<$Res, $Val extends SwapLimits>
       minimal: null == minimal
           ? _value.minimal
           : minimal // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       maximal: null == maximal
           ? _value.maximal
           : maximal // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ) as $Val);
   }
 }
@@ -1602,7 +1605,7 @@ abstract class _$$SwapLimitsImplCopyWith<$Res>
       __$$SwapLimitsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int minimal, int maximal});
+  $Res call({BigInt minimal, BigInt maximal});
 }
 
 /// @nodoc
@@ -1625,11 +1628,11 @@ class __$$SwapLimitsImplCopyWithImpl<$Res>
       minimal: null == minimal
           ? _value.minimal
           : minimal // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       maximal: null == maximal
           ? _value.maximal
           : maximal // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ));
   }
 }
@@ -1640,9 +1643,9 @@ class _$SwapLimitsImpl implements _SwapLimits {
   const _$SwapLimitsImpl({required this.minimal, required this.maximal});
 
   @override
-  final int minimal;
+  final BigInt minimal;
   @override
-  final int maximal;
+  final BigInt maximal;
 
   @override
   String toString() {
@@ -1672,13 +1675,13 @@ class _$SwapLimitsImpl implements _SwapLimits {
 
 abstract class _SwapLimits implements SwapLimits {
   const factory _SwapLimits(
-      {required final int minimal,
-      required final int maximal}) = _$SwapLimitsImpl;
+      {required final BigInt minimal,
+      required final BigInt maximal}) = _$SwapLimitsImpl;
 
   @override
-  int get minimal;
+  BigInt get minimal;
   @override
-  int get maximal;
+  BigInt get maximal;
 
   /// Create a copy of SwapLimits
   /// with the given fields replaced by the non-null parameter values.

@@ -20,14 +20,14 @@ mixin _$ChainSwap {
   bool get isTestnet => throw _privateConstructorUsedError;
   ChainSwapDirection get direction => throw _privateConstructorUsedError;
   KeyPair get refundKeys => throw _privateConstructorUsedError;
-  int get refundIndex => throw _privateConstructorUsedError;
+  BigInt get refundIndex => throw _privateConstructorUsedError;
   KeyPair get claimKeys => throw _privateConstructorUsedError;
-  int get claimIndex => throw _privateConstructorUsedError;
+  BigInt get claimIndex => throw _privateConstructorUsedError;
   PreImage get preimage => throw _privateConstructorUsedError;
   BtcSwapScriptStr get btcScriptStr => throw _privateConstructorUsedError;
   LBtcSwapScriptStr get lbtcScriptStr => throw _privateConstructorUsedError;
   String get scriptAddress => throw _privateConstructorUsedError;
-  int get outAmount => throw _privateConstructorUsedError;
+  BigInt get outAmount => throw _privateConstructorUsedError;
   String get btcElectrumUrl => throw _privateConstructorUsedError;
   String get lbtcElectrumUrl => throw _privateConstructorUsedError;
   String get boltzUrl => throw _privateConstructorUsedError;
@@ -51,14 +51,14 @@ abstract class $ChainSwapCopyWith<$Res> {
       bool isTestnet,
       ChainSwapDirection direction,
       KeyPair refundKeys,
-      int refundIndex,
+      BigInt refundIndex,
       KeyPair claimKeys,
-      int claimIndex,
+      BigInt claimIndex,
       PreImage preimage,
       BtcSwapScriptStr btcScriptStr,
       LBtcSwapScriptStr lbtcScriptStr,
       String scriptAddress,
-      int outAmount,
+      BigInt outAmount,
       String btcElectrumUrl,
       String lbtcElectrumUrl,
       String boltzUrl,
@@ -125,7 +125,7 @@ class _$ChainSwapCopyWithImpl<$Res, $Val extends ChainSwap>
       refundIndex: null == refundIndex
           ? _value.refundIndex
           : refundIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       claimKeys: null == claimKeys
           ? _value.claimKeys
           : claimKeys // ignore: cast_nullable_to_non_nullable
@@ -133,7 +133,7 @@ class _$ChainSwapCopyWithImpl<$Res, $Val extends ChainSwap>
       claimIndex: null == claimIndex
           ? _value.claimIndex
           : claimIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -153,7 +153,7 @@ class _$ChainSwapCopyWithImpl<$Res, $Val extends ChainSwap>
       outAmount: null == outAmount
           ? _value.outAmount
           : outAmount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       btcElectrumUrl: null == btcElectrumUrl
           ? _value.btcElectrumUrl
           : btcElectrumUrl // ignore: cast_nullable_to_non_nullable
@@ -241,14 +241,14 @@ abstract class _$$ChainSwapImplCopyWith<$Res>
       bool isTestnet,
       ChainSwapDirection direction,
       KeyPair refundKeys,
-      int refundIndex,
+      BigInt refundIndex,
       KeyPair claimKeys,
-      int claimIndex,
+      BigInt claimIndex,
       PreImage preimage,
       BtcSwapScriptStr btcScriptStr,
       LBtcSwapScriptStr lbtcScriptStr,
       String scriptAddress,
-      int outAmount,
+      BigInt outAmount,
       String btcElectrumUrl,
       String lbtcElectrumUrl,
       String boltzUrl,
@@ -318,7 +318,7 @@ class __$$ChainSwapImplCopyWithImpl<$Res>
       refundIndex: null == refundIndex
           ? _value.refundIndex
           : refundIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       claimKeys: null == claimKeys
           ? _value.claimKeys
           : claimKeys // ignore: cast_nullable_to_non_nullable
@@ -326,7 +326,7 @@ class __$$ChainSwapImplCopyWithImpl<$Res>
       claimIndex: null == claimIndex
           ? _value.claimIndex
           : claimIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -346,7 +346,7 @@ class __$$ChainSwapImplCopyWithImpl<$Res>
       outAmount: null == outAmount
           ? _value.outAmount
           : outAmount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       btcElectrumUrl: null == btcElectrumUrl
           ? _value.btcElectrumUrl
           : btcElectrumUrl // ignore: cast_nullable_to_non_nullable
@@ -403,11 +403,11 @@ class _$ChainSwapImpl extends _ChainSwap {
   @override
   final KeyPair refundKeys;
   @override
-  final int refundIndex;
+  final BigInt refundIndex;
   @override
   final KeyPair claimKeys;
   @override
-  final int claimIndex;
+  final BigInt claimIndex;
   @override
   final PreImage preimage;
   @override
@@ -417,7 +417,7 @@ class _$ChainSwapImpl extends _ChainSwap {
   @override
   final String scriptAddress;
   @override
-  final int outAmount;
+  final BigInt outAmount;
   @override
   final String btcElectrumUrl;
   @override
@@ -510,14 +510,14 @@ abstract class _ChainSwap extends ChainSwap {
       required final bool isTestnet,
       required final ChainSwapDirection direction,
       required final KeyPair refundKeys,
-      required final int refundIndex,
+      required final BigInt refundIndex,
       required final KeyPair claimKeys,
-      required final int claimIndex,
+      required final BigInt claimIndex,
       required final PreImage preimage,
       required final BtcSwapScriptStr btcScriptStr,
       required final LBtcSwapScriptStr lbtcScriptStr,
       required final String scriptAddress,
-      required final int outAmount,
+      required final BigInt outAmount,
       required final String btcElectrumUrl,
       required final String lbtcElectrumUrl,
       required final String boltzUrl,
@@ -534,11 +534,11 @@ abstract class _ChainSwap extends ChainSwap {
   @override
   KeyPair get refundKeys;
   @override
-  int get refundIndex;
+  BigInt get refundIndex;
   @override
   KeyPair get claimKeys;
   @override
-  int get claimIndex;
+  BigInt get claimIndex;
   @override
   PreImage get preimage;
   @override
@@ -548,7 +548,7 @@ abstract class _ChainSwap extends ChainSwap {
   @override
   String get scriptAddress;
   @override
-  int get outAmount;
+  BigInt get outAmount;
   @override
   String get btcElectrumUrl;
   @override

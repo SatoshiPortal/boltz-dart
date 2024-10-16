@@ -417,13 +417,13 @@ abstract class _BtcSwapScriptStr extends BtcSwapScriptStr {
 
 /// @nodoc
 mixin _$DecodedInvoice {
-  int get msats => throw _privateConstructorUsedError;
-  int get expiry => throw _privateConstructorUsedError;
-  int get expiresIn => throw _privateConstructorUsedError;
-  int get expiresAt => throw _privateConstructorUsedError;
+  BigInt get msats => throw _privateConstructorUsedError;
+  BigInt get expiry => throw _privateConstructorUsedError;
+  BigInt get expiresIn => throw _privateConstructorUsedError;
+  BigInt get expiresAt => throw _privateConstructorUsedError;
   bool get isExpired => throw _privateConstructorUsedError;
   String get network => throw _privateConstructorUsedError;
-  int get cltvExpDelta => throw _privateConstructorUsedError;
+  BigInt get cltvExpDelta => throw _privateConstructorUsedError;
   String? get bip21 => throw _privateConstructorUsedError;
   String get preimageHash => throw _privateConstructorUsedError;
 
@@ -441,13 +441,13 @@ abstract class $DecodedInvoiceCopyWith<$Res> {
       _$DecodedInvoiceCopyWithImpl<$Res, DecodedInvoice>;
   @useResult
   $Res call(
-      {int msats,
-      int expiry,
-      int expiresIn,
-      int expiresAt,
+      {BigInt msats,
+      BigInt expiry,
+      BigInt expiresIn,
+      BigInt expiresAt,
       bool isExpired,
       String network,
-      int cltvExpDelta,
+      BigInt cltvExpDelta,
       String? bip21,
       String preimageHash});
 }
@@ -481,19 +481,19 @@ class _$DecodedInvoiceCopyWithImpl<$Res, $Val extends DecodedInvoice>
       msats: null == msats
           ? _value.msats
           : msats // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       expiry: null == expiry
           ? _value.expiry
           : expiry // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       expiresIn: null == expiresIn
           ? _value.expiresIn
           : expiresIn // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       expiresAt: null == expiresAt
           ? _value.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       isExpired: null == isExpired
           ? _value.isExpired
           : isExpired // ignore: cast_nullable_to_non_nullable
@@ -505,7 +505,7 @@ class _$DecodedInvoiceCopyWithImpl<$Res, $Val extends DecodedInvoice>
       cltvExpDelta: null == cltvExpDelta
           ? _value.cltvExpDelta
           : cltvExpDelta // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       bip21: freezed == bip21
           ? _value.bip21
           : bip21 // ignore: cast_nullable_to_non_nullable
@@ -527,13 +527,13 @@ abstract class _$$DecodedInvoiceImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int msats,
-      int expiry,
-      int expiresIn,
-      int expiresAt,
+      {BigInt msats,
+      BigInt expiry,
+      BigInt expiresIn,
+      BigInt expiresAt,
       bool isExpired,
       String network,
-      int cltvExpDelta,
+      BigInt cltvExpDelta,
       String? bip21,
       String preimageHash});
 }
@@ -565,19 +565,19 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
       msats: null == msats
           ? _value.msats
           : msats // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       expiry: null == expiry
           ? _value.expiry
           : expiry // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       expiresIn: null == expiresIn
           ? _value.expiresIn
           : expiresIn // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       expiresAt: null == expiresAt
           ? _value.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       isExpired: null == isExpired
           ? _value.isExpired
           : isExpired // ignore: cast_nullable_to_non_nullable
@@ -589,7 +589,7 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
       cltvExpDelta: null == cltvExpDelta
           ? _value.cltvExpDelta
           : cltvExpDelta // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       bip21: freezed == bip21
           ? _value.bip21
           : bip21 // ignore: cast_nullable_to_non_nullable
@@ -618,19 +618,19 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
       : super._();
 
   @override
-  final int msats;
+  final BigInt msats;
   @override
-  final int expiry;
+  final BigInt expiry;
   @override
-  final int expiresIn;
+  final BigInt expiresIn;
   @override
-  final int expiresAt;
+  final BigInt expiresAt;
   @override
   final bool isExpired;
   @override
   final String network;
   @override
-  final int cltvExpDelta;
+  final BigInt cltvExpDelta;
   @override
   final String? bip21;
   @override
@@ -678,31 +678,31 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
 
 abstract class _DecodedInvoice extends DecodedInvoice {
   const factory _DecodedInvoice(
-      {required final int msats,
-      required final int expiry,
-      required final int expiresIn,
-      required final int expiresAt,
+      {required final BigInt msats,
+      required final BigInt expiry,
+      required final BigInt expiresIn,
+      required final BigInt expiresAt,
       required final bool isExpired,
       required final String network,
-      required final int cltvExpDelta,
+      required final BigInt cltvExpDelta,
       final String? bip21,
       required final String preimageHash}) = _$DecodedInvoiceImpl;
   const _DecodedInvoice._() : super._();
 
   @override
-  int get msats;
+  BigInt get msats;
   @override
-  int get expiry;
+  BigInt get expiry;
   @override
-  int get expiresIn;
+  BigInt get expiresIn;
   @override
-  int get expiresAt;
+  BigInt get expiresAt;
   @override
   bool get isExpired;
   @override
   String get network;
   @override
-  int get cltvExpDelta;
+  BigInt get cltvExpDelta;
   @override
   String? get bip21;
   @override

@@ -4,14 +4,14 @@ version: 0.1.6
 homepage: https://github.com/SatoshiPortal/boltz-dart
 
 environment:
-  sdk: ">=3.1.5 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
   flutter: ">=3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  flutter_rust_bridge: 2.0.0-dev.31
+  flutter_rust_bridge: 2.0.0
   ffi: ^2.0.1
   meta: ^1.8.0
   uuid: ^4.1.0
@@ -48,10 +48,3 @@ flutter:
         ffiPlugin: true
       macos:
         ffiPlugin: true
-
-
-
-# flutter_rust_bridge:
-#   rust_input: rust/src/api.rs
-#   dart_output: lib/bridge_generated.dart
-# dart_decl_output: lib/bridge_generated.dart

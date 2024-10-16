@@ -3,10 +3,13 @@
 The top level directory of this project is a dart/flutter pub library.
 
 The `rust` folder containers the core code which uses the `boltz-rust` crate internally to expose an abstracted API to manage boltz swaps.
+
 ## Usage
+
 Init the library in your apps main()
 
 Eg:
+
 ```dart
 
 Future main({bool fromTest = false}) async {
@@ -30,13 +33,14 @@ Future main({bool fromTest = false}) async {
 ```
 
 ## Dependencies
+
 Currently we do not use precompiled binaries with cargokit. So as the end user, you will require cargo and platform specific toolchains to compile the binaries locally.
 
 ```bash
 # install rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # install tools
-cargo install flutter_rust_bridge_codegen --version 2.0.0-dev.31
+cargo install flutter_rust_bridge_codegen --version 2.0.0
 cargo install cargo-ndk
 cargo install cargo-lipo
 ```
@@ -60,22 +64,23 @@ types.rs structures and enums are also re-exported via api.rs
 
 ## MacOS as host
 
-macos as the host machine can build binaries for all platforms using: 
+macos as the host machine can build binaries for all platforms using:
 
 ```bash
 # requires dockerd running
 ./compile.all.sh
 ```
 
-Compile will first build native binaries of the rust code and move them to the dart test folder. 
+Compile will first build native binaries of the rust code and move them to the dart test folder.
 
-It will then run flutter_rust_bridge_codegen and generate ffi code in rust and dart. 
+It will then run flutter_rust_bridge_codegen and generate ffi code in rust and dart.
 
 ### Non-debian linux users
 
 On non-debian systems you will get some errors with the `bridge_generated.dart` files.
 
 Error would be related to:
+
 ```rust
   void store_dart_post_cobject(
     int ptr,
@@ -88,6 +93,7 @@ Error would be related to:
 
 You may need to set the path the clang in CPATH manually.
 Run the following:
+
 ```bash
 export CPATH="$(clang -v 2>&1 | grep "Selected GCC installation" | rev | cut -d' ' -f1 | rev)/include"
 ```
@@ -98,7 +104,7 @@ Once we have all our structs and functions in dart, we can organize them into cl
 
 ## test
 
-You can now use the `test/boltz-test.dart` file to test whether the expected logic is being exposed correctly over ffi. 
+You can now use the `test/boltz-test.dart` file to test whether the expected logic is being exposed correctly over ffi.
 
 Also try `flutter run` in the `example` directory.
 

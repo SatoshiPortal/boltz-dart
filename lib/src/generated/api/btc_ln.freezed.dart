@@ -20,12 +20,12 @@ mixin _$BtcLnSwap {
   SwapType get kind => throw _privateConstructorUsedError;
   Chain get network => throw _privateConstructorUsedError;
   KeyPair get keys => throw _privateConstructorUsedError;
-  int get keyIndex => throw _privateConstructorUsedError;
+  BigInt get keyIndex => throw _privateConstructorUsedError;
   PreImage get preimage => throw _privateConstructorUsedError;
   BtcSwapScriptStr get swapScript => throw _privateConstructorUsedError;
   String get invoice => throw _privateConstructorUsedError;
   String get scriptAddress => throw _privateConstructorUsedError;
-  int get outAmount => throw _privateConstructorUsedError;
+  BigInt get outAmount => throw _privateConstructorUsedError;
   String get electrumUrl => throw _privateConstructorUsedError;
   String get boltzUrl => throw _privateConstructorUsedError;
   String? get referralId => throw _privateConstructorUsedError;
@@ -47,12 +47,12 @@ abstract class $BtcLnSwapCopyWith<$Res> {
       SwapType kind,
       Chain network,
       KeyPair keys,
-      int keyIndex,
+      BigInt keyIndex,
       PreImage preimage,
       BtcSwapScriptStr swapScript,
       String invoice,
       String scriptAddress,
-      int outAmount,
+      BigInt outAmount,
       String electrumUrl,
       String boltzUrl,
       String? referralId});
@@ -111,7 +111,7 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
       keyIndex: null == keyIndex
           ? _value.keyIndex
           : keyIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -131,7 +131,7 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
       outAmount: null == outAmount
           ? _value.outAmount
           : outAmount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       electrumUrl: null == electrumUrl
           ? _value.electrumUrl
           : electrumUrl // ignore: cast_nullable_to_non_nullable
@@ -191,12 +191,12 @@ abstract class _$$BtcLnSwapImplCopyWith<$Res>
       SwapType kind,
       Chain network,
       KeyPair keys,
-      int keyIndex,
+      BigInt keyIndex,
       PreImage preimage,
       BtcSwapScriptStr swapScript,
       String invoice,
       String scriptAddress,
-      int outAmount,
+      BigInt outAmount,
       String electrumUrl,
       String boltzUrl,
       String? referralId});
@@ -256,7 +256,7 @@ class __$$BtcLnSwapImplCopyWithImpl<$Res>
       keyIndex: null == keyIndex
           ? _value.keyIndex
           : keyIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       preimage: null == preimage
           ? _value.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
@@ -276,7 +276,7 @@ class __$$BtcLnSwapImplCopyWithImpl<$Res>
       outAmount: null == outAmount
           ? _value.outAmount
           : outAmount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       electrumUrl: null == electrumUrl
           ? _value.electrumUrl
           : electrumUrl // ignore: cast_nullable_to_non_nullable
@@ -321,7 +321,7 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
   @override
   final KeyPair keys;
   @override
-  final int keyIndex;
+  final BigInt keyIndex;
   @override
   final PreImage preimage;
   @override
@@ -331,7 +331,7 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
   @override
   final String scriptAddress;
   @override
-  final int outAmount;
+  final BigInt outAmount;
   @override
   final String electrumUrl;
   @override
@@ -404,12 +404,12 @@ abstract class _BtcLnSwap extends BtcLnSwap {
       required final SwapType kind,
       required final Chain network,
       required final KeyPair keys,
-      required final int keyIndex,
+      required final BigInt keyIndex,
       required final PreImage preimage,
       required final BtcSwapScriptStr swapScript,
       required final String invoice,
       required final String scriptAddress,
-      required final int outAmount,
+      required final BigInt outAmount,
       required final String electrumUrl,
       required final String boltzUrl,
       final String? referralId}) = _$BtcLnSwapImpl;
@@ -424,7 +424,7 @@ abstract class _BtcLnSwap extends BtcLnSwap {
   @override
   KeyPair get keys;
   @override
-  int get keyIndex;
+  BigInt get keyIndex;
   @override
   PreImage get preimage;
   @override
@@ -434,7 +434,7 @@ abstract class _BtcLnSwap extends BtcLnSwap {
   @override
   String get scriptAddress;
   @override
-  int get outAmount;
+  BigInt get outAmount;
   @override
   String get electrumUrl;
   @override
