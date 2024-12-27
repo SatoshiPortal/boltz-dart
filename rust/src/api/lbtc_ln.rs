@@ -155,7 +155,7 @@ impl LbtcLnSwap {
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
-                invoice_amount: out_amount as u32,
+                invoice_amount: out_amount,
                 from: "BTC".to_string(),
                 to: "L-BTC".to_string(),
                 preimage_hash: preimage.sha256,
@@ -169,7 +169,7 @@ impl LbtcLnSwap {
             }
         } else {
             boltz_client::swaps::boltz::CreateReverseRequest {
-                invoice_amount: out_amount as u32,
+                invoice_amount: out_amount,
                 from: "BTC".to_string(),
                 to: "L-BTC".to_string(),
                 preimage_hash: preimage.sha256,

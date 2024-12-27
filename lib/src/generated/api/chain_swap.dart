@@ -108,7 +108,7 @@ class ChainSwap with _$ChainSwap {
           {required ChainSwapDirection direction,
           required String mnemonic,
           required BigInt index,
-          required int amount,
+          required BigInt amount,
           required bool isTestnet,
           required String btcElectrumUrl,
           required String lbtcElectrumUrl,

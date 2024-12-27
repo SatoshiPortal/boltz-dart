@@ -812,7 +812,7 @@ pub fn wire__crate__api__chain_swap__chain_swap_new_swap(
     direction: i32,
     mnemonic: String,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
-    amount: u32,
+    amount: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     is_testnet: bool,
     btc_electrum_url: String,
     lbtc_electrum_url: String,

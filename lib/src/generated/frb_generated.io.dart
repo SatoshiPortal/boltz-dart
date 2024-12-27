@@ -1430,7 +1430,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Int32,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Uint64,
-                  ffi.Uint32,
+                  ffi.Uint64,
                   ffi.Bool,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,

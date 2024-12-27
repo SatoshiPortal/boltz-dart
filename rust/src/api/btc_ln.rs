@@ -194,7 +194,7 @@ impl BtcLnSwap {
             }
         } else {
             boltz_client::swaps::boltz::CreateReverseRequest {
-                invoice_amount: out_amount as u32,
+                invoice_amount: out_amount,
                 from: "BTC".to_string(),
                 to: "BTC".to_string(),
                 preimage_hash: preimage.sha256,

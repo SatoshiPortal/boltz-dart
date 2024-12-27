@@ -177,7 +177,7 @@ abstract class BoltzCoreApi extends BaseApi {
       {required ChainSwapDirection direction,
       required String mnemonic,
       required BigInt index,
-      required int amount,
+      required BigInt amount,
       required bool isTestnet,
       required String btcElectrumUrl,
       required String lbtcElectrumUrl,
@@ -944,7 +944,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       {required ChainSwapDirection direction,
       required String mnemonic,
       required BigInt index,
-      required int amount,
+      required BigInt amount,
       required bool isTestnet,
       required String btcElectrumUrl,
       required String lbtcElectrumUrl,
@@ -955,7 +955,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg0 = cst_encode_chain_swap_direction(direction);
         var arg1 = cst_encode_String(mnemonic);
         var arg2 = cst_encode_u_64(index);
-        var arg3 = cst_encode_u_32(amount);
+        var arg3 = cst_encode_u_64(amount);
         var arg4 = cst_encode_bool(isTestnet);
         var arg5 = cst_encode_String(btcElectrumUrl);
         var arg6 = cst_encode_String(lbtcElectrumUrl);

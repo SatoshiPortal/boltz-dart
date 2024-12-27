@@ -280,7 +280,7 @@ void frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_new_swap(int64_t
                                                                          int32_t direction,
                                                                          struct wire_cst_list_prim_u_8_strict *mnemonic,
                                                                          uint64_t index,
-                                                                         uint32_t amount,
+                                                                         uint64_t amount,
                                                                          bool is_testnet,
                                                                          struct wire_cst_list_prim_u_8_strict *btc_electrum_url,
                                                                          struct wire_cst_list_prim_u_8_strict *lbtc_electrum_url,

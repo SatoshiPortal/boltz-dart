@@ -558,7 +558,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
     mnemonic: impl CstDecode<String>,
     index: impl CstDecode<u64>,
-    amount: impl CstDecode<u32>,
+    amount: impl CstDecode<u64>,
     is_testnet: impl CstDecode<bool>,
     btc_electrum_url: impl CstDecode<String>,
     lbtc_electrum_url: impl CstDecode<String>,

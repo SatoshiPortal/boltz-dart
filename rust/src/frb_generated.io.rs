@@ -875,7 +875,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_new
     direction: i32,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
-    amount: u32,
+    amount: u64,
     is_testnet: bool,
     btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
     lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,

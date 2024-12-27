@@ -90,7 +90,7 @@ impl ChainSwap {
         direction: ChainSwapDirection,
         mnemonic: String,
         index: u64,
-        amount: u32,
+        amount: u64,
         is_testnet: bool,
         btc_electrum_url: String,
         lbtc_electrum_url: String,
