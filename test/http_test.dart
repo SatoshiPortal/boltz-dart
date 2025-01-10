@@ -4,7 +4,7 @@ import 'dart:convert';
 // import 'package:boltz/http.dart';
 // import 'package:boltz/types/swap.dart';
 // import 'package:boltz/types/swap_status_response.dart';
-import 'package:boltz/boltz_dart.dart';
+import 'package:boltz/boltz.dart';
 // import 'package:boltz/src/types/swap.dart';
 // import 'package:boltz/src/types/swap_status_response.dart';
 // import 'package:boltz/src/utils/http.dart';

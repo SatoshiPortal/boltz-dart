@@ -1,4 +1,4 @@
-import 'package:boltz/boltz_dart.dart' as bltz;
+import 'package:boltz/boltz.dart' as bltz;
 import 'package:flutter/material.dart';
 
 void main() async {
