@@ -26,6 +26,7 @@ use boltz_client::{
 use flutter_rust_bridge::frb;
 use serde_json::Value;
 
+/// Bitcoin-Liquid Swap Class
 #[frb(dart_metadata=("freezed"))]
 pub struct ChainSwap {
     pub id: String,
@@ -47,6 +48,7 @@ pub struct ChainSwap {
     pub blinding_key: String,
 }
 impl ChainSwap {
+    /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
         is_testnet: bool,
@@ -86,6 +88,9 @@ impl ChainSwap {
             blinding_key,
         }
     }
+    /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
+    /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+    /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_swap(
         direction: ChainSwapDirection,
         mnemonic: String,
@@ -251,7 +256,7 @@ impl ChainSwap {
             }
         }
     }
-
+    /// Get the transaction id of the server's lockup transaction
     pub fn get_server_lockup(&self) -> Result<String, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let txs = boltz_client.get_chain_txs(&self.id.clone())?;
@@ -264,7 +269,7 @@ impl ChainSwap {
             Ok(txs.server_lock.unwrap().transaction.id)
         }
     }
-
+    /// Get the transaction id of the user's lockup transaction
     pub fn get_user_lockup(&self) -> Result<String, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let txs = boltz_client.get_chain_txs(&self.id.clone())?;
@@ -277,7 +282,7 @@ impl ChainSwap {
             Ok(txs.user_lock.unwrap().transaction.id)
         }
     }
-
+    /// Claim a successful swap
     pub fn claim(
         &self,
         out_address: String,
@@ -417,7 +422,7 @@ impl ChainSwap {
             }
         }
     }
-
+    /// Refund a failed swap
     pub fn refund(
         &self,
         refund_address: String,
@@ -502,7 +507,7 @@ impl ChainSwap {
             }
         }
     }
-
+    /// Get the network of the swap given a SwapTxKind
     fn get_network(&self, kind: SwapTxKind) -> (Chain, String) {
         match self.direction {
             ChainSwapDirection::BtcToLbtc => match kind {
@@ -539,7 +544,7 @@ impl ChainSwap {
             },
         }
     }
-
+    /// Broadcast a signed transaction via your own electrum server used when the swap was created.
     pub fn broadcast_local(
         &self,
         signed_hex: String,
@@ -565,7 +570,7 @@ impl ChainSwap {
         };
         Ok(txid.to_string())
     }
-
+    /// Broadcast a signed transaction using boltz's electrum server
     pub fn broadcast_boltz(
         &self,
         signed_hex: String,
@@ -580,7 +585,7 @@ impl ChainSwap {
         Ok(extract_id(txid)?)
     }
 }
-
+/// Helper method used to extract the txid from a JSON response
 fn extract_id(response: Value) -> Result<String, BoltzError> {
     // Attempt to access the `id` field directly
     match response.get("id") {

@@ -3,10 +3,10 @@
 # Setup
 ROOT="target"
 VERSION=$1
-NAME="libboltz_dart"
+NAME="libboltz"
 BUILD_DIR=$ROOT/$NAME.$VERSION
-FRAMEWORK="libboltz_dart.xcframework"
-LIBNAME=libboltz_dart.a
+FRAMEWORK="libboltz.xcframework"
+LIBNAME=libboltz.a
 
 IOS_LIPO_DIR=$BUILD_DIR/ios-sim-lipo
 IOS_LIPO=$IOS_LIPO_DIR/$LIBNAME

@@ -1,6 +1,6 @@
-# boltz_dart_example
+# boltz_example
 
-Demonstrates how to use the boltz_dart plugin.
+Demonstrates how to use the boltz plugin.
 
 ## Getting Started
 

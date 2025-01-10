@@ -1,15 +1,12 @@
 use std::{str::FromStr, time::Duration};
 
 use flutter_rust_bridge::frb;
-// network
-// preimage
-//
 use boltz_client::{
-    // boltz,
-    lnurl::withdraw::WithdrawalResponse,
     network::Chain as BChain,
     swaps::boltz::{
-        BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
+        BoltzApiClientV2, 
+        Side as BoltzSide, 
+        SwapTxKind as BoltzSwapTxKind,
         SwapType as BoltzSwapType,
     },
     util::{lnurl, secrets::SwapKey},
@@ -30,6 +27,9 @@ use crate::util::ensure_http_prefix;
 
 use super::error::BoltzError;
 
+/// Used for chain-swaps only. The side is based on which transaction is being made by the user.
+/// When a swap is created the user must first make a Lockup.
+/// Once the swap is completed, the user must make a Claim.
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub enum Side {
@@ -149,6 +149,7 @@ impl TryInto<Keypair> for KeyPair {
     }
 }
 
+/// Used internally to create a KeyPair for swaps
 impl KeyPair {
     #[frb(sync)]
     pub fn new(secret_key: String, public_key: String) -> Self {
@@ -194,6 +195,7 @@ impl KeyPair {
 
 use boltz_client::util::secrets::Preimage;
 
+/// Used internally to create a secret - PreImage for swaps
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct PreImage {
@@ -243,6 +245,7 @@ impl Into<PreImage> for Preimage {
     }
 }
 
+/// Helper to handle Lightning invoices
 #[frb(dart_metadata=("freezed"))]
 #[derive(Debug, Clone)]
 pub struct DecodedInvoice {
@@ -299,19 +302,25 @@ impl DecodedInvoice {
     }
 }
 
+/// LNURL helper to validate an lnurl string
 pub fn validate_lnurl(lnurl: String) -> bool {
     lnurl::validate_lnurl(&lnurl)
 }
 
+
+/// LNURL helper to get an invoice from an lnurl string
 pub fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
     Ok(lnurl::fetch_invoice(&lnurl, msats)?)
 }
 
+
+/// LNURL helper to get an lnurl-w voucher amount
 pub fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
     let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl)?.max_withdrawable;
     Ok(max_withdrawable_msat / 1000)
 }
 
+/// LNURL helper to claim an lnurl-w
 pub fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
     Ok(lnurl::process_withdrawal(
         &lnurl::create_withdraw_response(&lnurl)?,
@@ -319,6 +328,7 @@ pub fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
     )?)
 }
 
+/// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct BtcSwapScriptStr {
@@ -441,7 +451,7 @@ impl From<BtcSwapScript> for BtcSwapScriptStr {
         }
     }
 }
-
+/// Helper to store a LBtcSwapScript and convert to a LBtcSwapScript
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct LBtcSwapScriptStr {

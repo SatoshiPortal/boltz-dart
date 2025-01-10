@@ -1,7 +1,7 @@
 #!/bin/bash
 ROOT="target"
 VERSION=$1
-NAME="libboltz_dart"
+NAME="libboltz"
 # LIB=$ROOT/$NAME.$VERSION
 cd $ROOT || exit 1
 zip -r $NAME.$VERSION.zip $NAME.$VERSION

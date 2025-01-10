@@ -11,6 +11,7 @@ part 'fees.freezed.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`
 
+/// Complete fees and limits class for Chain swaps
 @freezed
 class ChainFeesAndLimits with _$ChainFeesAndLimits {
   const factory ChainFeesAndLimits({
@@ -21,6 +22,7 @@ class ChainFeesAndLimits with _$ChainFeesAndLimits {
   }) = _ChainFeesAndLimits;
 }
 
+/// Chain swap fee breakdown.
 @freezed
 class ChainSwapFees with _$ChainSwapFees {
   const factory ChainSwapFees({
@@ -31,32 +33,39 @@ class ChainSwapFees with _$ChainSwapFees {
   }) = _ChainSwapFees;
 }
 
+/// A Class that helps fetch both Fees and Limits for the various swap types
 @freezed
 class Fees with _$Fees {
   const Fees._();
   const factory Fees({
     required String boltzUrl,
   }) = _Fees;
+
+  /// Method to get the fees & limits for a chain swap
   Future<ChainFeesAndLimits> chain() =>
       BoltzCore.instance.api.crateApiFeesFeesChain(
         that: this,
       );
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  /// Constructor
   static Future<Fees> newInstance({required String boltzUrl}) =>
       BoltzCore.instance.api.crateApiFeesFeesNew(boltzUrl: boltzUrl);
 
+  /// Method to get the fees & limits for a reverse swap
   Future<ReverseFeesAndLimits> reverse() =>
       BoltzCore.instance.api.crateApiFeesFeesReverse(
         that: this,
       );
 
+  /// Method to get the fees & limits for a submarine swap
   Future<SubmarineFeesAndLimits> submarine() =>
       BoltzCore.instance.api.crateApiFeesFeesSubmarine(
         that: this,
       );
 }
 
+/// Breakdown of Miner Fees
 @freezed
 class MinerFees with _$MinerFees {
   const factory MinerFees({
@@ -65,6 +74,7 @@ class MinerFees with _$MinerFees {
   }) = _MinerFees;
 }
 
+/// Reverse swap fee breakdown.
 @freezed
 class RevSwapFees with _$RevSwapFees {
   const factory RevSwapFees({
@@ -73,6 +83,7 @@ class RevSwapFees with _$RevSwapFees {
   }) = _RevSwapFees;
 }
 
+/// Complete fees and limits class for Reverse swaps
 @freezed
 class ReverseFeesAndLimits with _$ReverseFeesAndLimits {
   const factory ReverseFeesAndLimits({
@@ -83,6 +94,7 @@ class ReverseFeesAndLimits with _$ReverseFeesAndLimits {
   }) = _ReverseFeesAndLimits;
 }
 
+/// Submarine swap fee breakdown.
 @freezed
 class SubSwapFees with _$SubSwapFees {
   const factory SubSwapFees({
@@ -91,6 +103,7 @@ class SubSwapFees with _$SubSwapFees {
   }) = _SubSwapFees;
 }
 
+/// Complete fees and limits class for Submarine swaps
 @freezed
 class SubmarineFeesAndLimits with _$SubmarineFeesAndLimits {
   const factory SubmarineFeesAndLimits({
@@ -101,6 +114,8 @@ class SubmarineFeesAndLimits with _$SubmarineFeesAndLimits {
   }) = _SubmarineFeesAndLimits;
 }
 
+/// Boltz limits for swaps.
+/// Internally used and returned by the Fees class methods.
 @freezed
 class SwapLimits with _$SwapLimits {
   const factory SwapLimits({

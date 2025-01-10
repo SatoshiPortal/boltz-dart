@@ -1,5 +1,5 @@
 // import 'dart:convert';
-import 'package:boltz_dart/src/types/swap.dart';
+import 'package:boltz/src/types/swap.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'swap_status_response.freezed.dart';

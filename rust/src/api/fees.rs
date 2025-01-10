@@ -11,26 +11,32 @@ use flutter_rust_bridge::frb;
 
 use super::error::BoltzError;
 
+/// A Class that helps fetch both Fees and Limits for the various swap types
 #[frb(dart_metadata=("freezed"))]
 pub struct Fees {
     pub boltz_url: String,
 }
 
 impl Fees {
+    /// Constructor
     pub fn new(boltz_url: String) -> Fees {
         let url = ensure_http_prefix(&boltz_url);
         Fees { boltz_url: url }
     }
+
+    /// Method to get the fees & limits for a submarine swap
     pub fn submarine(&self) -> Result<SubmarineFeesAndLimits, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
         let sub_fees: SubmarineFeesAndLimits = boltz_client.get_submarine_pairs()?.try_into()?;
         Ok(sub_fees)
     }
+    /// Method to get the fees & limits for a reverse swap
     pub fn reverse(&self) -> Result<ReverseFeesAndLimits, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
         let reverse_fees: ReverseFeesAndLimits = boltz_client.get_reverse_pairs()?.try_into()?;
         Ok(reverse_fees)
     }
+    /// Method to get the fees & limits for a chain swap
     pub fn chain(&self) -> Result<ChainFeesAndLimits, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
         let chain_fees: ChainFeesAndLimits = boltz_client.get_chain_pairs()?.try_into()?;
@@ -38,6 +44,8 @@ impl Fees {
     }
 }
 
+/// Boltz limits for swaps.
+/// Internally used and returned by the Fees class methods.
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 
@@ -62,10 +70,14 @@ impl Into<SwapLimits> for boltz_client::swaps::boltz::ReverseLimits {
         }
     }
 }
+
+/// Submarine swap fee breakdown. 
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct SubSwapFees {
+    /// Boltz fees as a percentage
     pub percentage: f64,
+    /// Fees going to Bitcoin miners/Liquid block validators
     pub miner_fees: u64,
 }
 
@@ -77,6 +89,8 @@ impl Into<SubSwapFees> for SubmarineFees {
         }
     }
 }
+
+/// Complete fees and limits class for Submarine swaps
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct SubmarineFeesAndLimits {
@@ -110,6 +124,7 @@ impl TryInto<SubmarineFeesAndLimits> for GetSubmarinePairsResponse {
     }
 }
 
+/// Breakdown of Miner Fees
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 
@@ -125,7 +140,7 @@ impl Into<MinerFees> for PairMinerFees {
         }
     }
 }
-
+/// Reverse swap fee breakdown. 
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct RevSwapFees {
@@ -141,6 +156,7 @@ impl Into<RevSwapFees> for ReverseFees {
         }
     }
 }
+/// Complete fees and limits class for Reverse swaps
 
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
@@ -176,6 +192,7 @@ impl TryInto<ReverseFeesAndLimits> for GetReversePairsResponse {
     }
 }
 
+/// Chain swap fee breakdown. 
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct ChainSwapFees {
@@ -195,7 +212,7 @@ impl From<ChainFees> for ChainSwapFees {
         }
     }
 }
-
+/// Complete fees and limits class for Chain swaps
 #[derive(Debug, Clone)]
 #[frb(dart_metadata=("freezed"))]
 pub struct ChainFeesAndLimits {

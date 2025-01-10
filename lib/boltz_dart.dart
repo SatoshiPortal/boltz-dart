@@ -1,4 +1,4 @@
-library boltz_dart;
+library boltz;
 
 export './src/generated/frb_generated.dart';
 export './src/generated/api/btc_ln.dart';

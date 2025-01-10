@@ -17,6 +17,7 @@ use boltz_client::{
 use flutter_rust_bridge::frb;
 use serde_json::Value;
 
+/// Liquid-Lightning Swap Class
 #[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnSwap {
     pub id: String,
@@ -36,6 +37,7 @@ pub struct LbtcLnSwap {
 }
 
 impl LbtcLnSwap {
+    /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
         kind: SwapType,
@@ -69,6 +71,9 @@ impl LbtcLnSwap {
             referral_id: Some(referral_id.unwrap_or_default()),
         }
     }
+    /// Used to create the class when starting a submarine swap to pay a lightning invoice with Liquid.
+    /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+    /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_submarine(
         mnemonic: String,
         index: u64,
@@ -127,6 +132,39 @@ impl LbtcLnSwap {
         ))
     }
 
+    /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
+    /// If this function is not called within ~1 hour, the swap will be closed via the script path.
+    /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
+    pub fn coop_close_submarine(&self) -> Result<(), BoltzError> {
+        let network_config =
+            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
+        // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
+        let tx = match LBtcSwapTx::new_refund(
+            swap_script,
+            &self.script_address,
+            &network_config,
+            ensure_http_prefix(&self.boltz_url.clone()),
+            self.id.clone(),
+        ) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().try_into()?;
+        let claim_tx_response = boltz_client.get_submarine_claim_tx_details(&self.id)?;
+        let (partial_sig, pub_nonce) = tx.partial_sign(
+            &ckp,
+            &claim_tx_response.pub_nonce,
+            &claim_tx_response.transaction_hash,
+        )?;
+        boltz_client.post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
+        Ok(())
+    }
+
+    /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.
+    /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+    /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_reverse(
         mnemonic: String,
         index: u64,
@@ -203,33 +241,7 @@ impl LbtcLnSwap {
             referral_id,
         ))
     }
-    pub fn coop_close_submarine(&self) -> Result<(), BoltzError> {
-        let network_config =
-            ElectrumConfig::new(self.network.into(), &self.electrum_url, true, true, 10);
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
-        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
-        let tx = match LBtcSwapTx::new_refund(
-            swap_script,
-            &self.script_address,
-            &network_config,
-            ensure_http_prefix(&self.boltz_url.clone()),
-            self.id.clone(),
-        ) {
-            Ok(result) => result,
-            Err(e) => return Err(e.into()),
-        };
-        let ckp: Keypair = self.keys.clone().try_into()?;
-        let claim_tx_response = boltz_client.get_submarine_claim_tx_details(&self.id)?;
-        let (partial_sig, pub_nonce) = tx.partial_sign(
-            &ckp,
-            &claim_tx_response.pub_nonce,
-            &claim_tx_response.transaction_hash,
-        )?;
-        boltz_client.post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
-        Ok(())
-    }
-
+    /// Used to claim a reverse swap.
     pub fn claim(
         &self,
         out_address: String,
@@ -282,6 +294,8 @@ impl LbtcLnSwap {
 
         Ok(signed.serialize().to_lower_hex_string())
     }
+
+    /// Used to refund a failed submarine swap.
     pub fn refund(
         &self,
         out_address: String,
@@ -331,15 +345,10 @@ impl LbtcLnSwap {
         };
         Ok(signed.serialize().to_lower_hex_string())
     }
-
+    /// Broadcast using your own electrum server that was used to create the swap
     pub fn broadcast_local(&self, signed_hex: String) -> Result<String, BoltzError> {
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
-        // let signed_tx: elements::Transaction =
-        //     match elements::Transaction::consensus_decode(&*signed_bytes) {
-        //         Ok(r) => r,
-        //         Err(e) => return Err(BoltzError::new("Deserialize Tx".to_string(), e.to_string())),
-        //     };
 
         let network_config = ElectrumConfig::new(
             self.network.into(),
@@ -357,7 +366,7 @@ impl LbtcLnSwap {
         };
         Ok(txid.to_string())
     }
-
+    /// Broadcast using boltz's electrum server
     pub fn broadcast_boltz(&self, signed_hex: String) -> Result<String, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
         let txid = match boltz_client.broadcast_tx(self.network.into(), &signed_hex) {
@@ -366,6 +375,7 @@ impl LbtcLnSwap {
         };
         Ok(extract_id(txid)?)
     }
+    /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
     pub fn tx_size(&self) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
@@ -403,7 +413,7 @@ impl LbtcLnSwap {
         Ok(size)
     }
 }
-
+/// Helper method used to extract the txid from a JSON response
 fn extract_id(response: Value) -> Result<String, BoltzError> {
     // Attempt to access the `id` field directly
     match response.get("id") {

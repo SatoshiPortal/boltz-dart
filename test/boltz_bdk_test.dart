@@ -1,10 +1,10 @@
 // import 'dart:async';
 // import 'dart:ffi';
 
-// import 'package:boltz_dart/boltz_dart.dart';
-// import 'package:boltz_dart/src/types/swap.dart';
-// import 'package:boltz_dart/src/types/swap_status_response.dart';
-// import 'package:boltz_dart/src/utils/http.dart';
+// import 'package:boltz/boltz.dart';
+// import 'package:boltz/src/types/swap.dart';
+// import 'package:boltz/src/types/swap_status_response.dart';
+// import 'package:boltz/src/utils/http.dart';
 // // import 'package:flutter_test/flutter_test.dart';
 // import 'package:test/test.dart';
 // import 'dart:io';

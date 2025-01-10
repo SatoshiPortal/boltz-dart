@@ -1,6 +1,6 @@
 // import 'dart:async';
 
-// import 'package:boltz_dart/boltz_dart.dart';
+// import 'package:boltz/boltz.dart';
 // import 'package:test/test.dart';
 
 // // const mnemonic =

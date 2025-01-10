@@ -11,21 +11,26 @@ part 'types.freezed.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
 
+/// LNURL helper to validate an lnurl string
 Future<bool> validateLnurl({required String lnurl}) =>
     BoltzCore.instance.api.crateApiTypesValidateLnurl(lnurl: lnurl);
 
+/// LNURL helper to get an invoice from an lnurl string
 Future<String> invoiceFromLnurl(
         {required String lnurl, required BigInt msats}) =>
     BoltzCore.instance.api
         .crateApiTypesInvoiceFromLnurl(lnurl: lnurl, msats: msats);
 
+/// LNURL helper to get an lnurl-w voucher amount
 Future<BigInt> getVoucherMaxAmount({required String lnurl}) =>
     BoltzCore.instance.api.crateApiTypesGetVoucherMaxAmount(lnurl: lnurl);
 
+/// LNURL helper to claim an lnurl-w
 Future<void> withdraw({required String lnurl, required String invoice}) =>
     BoltzCore.instance.api
         .crateApiTypesWithdraw(lnurl: lnurl, invoice: invoice);
 
+/// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 @freezed
 class BtcSwapScriptStr with _$BtcSwapScriptStr {
   const BtcSwapScriptStr._();
@@ -70,6 +75,7 @@ enum ChainSwapDirection {
   ;
 }
 
+/// Helper to handle Lightning invoices
 @freezed
 class DecodedInvoice with _$DecodedInvoice {
   const DecodedInvoice._();
@@ -99,6 +105,8 @@ class KeyPair with _$KeyPair {
     required String secretKey,
     required String publicKey,
   }) = _KeyPair;
+
+  /// Used internally to create a KeyPair for swaps
   static Future<KeyPair> generate(
           {required String mnemonic,
           required Chain network,
@@ -110,11 +118,13 @@ class KeyPair with _$KeyPair {
           index: index,
           swapType: swapType);
 
+  /// Used internally to create a KeyPair for swaps
   factory KeyPair({required String secretKey, required String publicKey}) =>
       BoltzCore.instance.api
           .crateApiTypesKeyPairNew(secretKey: secretKey, publicKey: publicKey);
 }
 
+/// Helper to store a LBtcSwapScript and convert to a LBtcSwapScript
 @freezed
 class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
   const LBtcSwapScriptStr._();
@@ -148,6 +158,7 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
           side: side);
 }
 
+/// Used internally to create a secret - PreImage for swaps
 @freezed
 class PreImage with _$PreImage {
   const PreImage._();
@@ -167,6 +178,9 @@ class PreImage with _$PreImage {
           value: value, sha256: sha256, hash160: hash160);
 }
 
+/// Used for chain-swaps only. The side is based on which transaction is being made by the user.
+/// When a swap is created the user must first make a Lockup.
+/// Once the swap is completed, the user must make a Claim.
 enum Side {
   lockup,
   claim,

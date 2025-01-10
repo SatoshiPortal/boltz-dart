@@ -1,19 +1,19 @@
 PODS:
-  - boltz_dart (0.0.1)
+  - boltz (0.0.1)
   - Flutter (1.0.0)
 
 DEPENDENCIES:
-  - boltz_dart (from `.symlinks/plugins/boltz_dart/ios`)
+  - boltz (from `.symlinks/plugins/boltz/ios`)
   - Flutter (from `Flutter`)
 
 EXTERNAL SOURCES:
-  boltz_dart:
-    :path: ".symlinks/plugins/boltz_dart/ios"
+  boltz:
+    :path: ".symlinks/plugins/boltz/ios"
   Flutter:
     :path: Flutter
 
 SPEC CHECKSUMS:
-  boltz_dart: bcf0b514037c50afbba8a67ea01317a6f34cd145
+  boltz: bcf0b514037c50afbba8a67ea01317a6f34cd145
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796

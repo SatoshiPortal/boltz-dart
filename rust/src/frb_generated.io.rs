@@ -619,7 +619,7 @@ impl Default for wire_cst_swap_limits {
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
     signed_hex: *mut wire_cst_list_prim_u_8_strict,
@@ -628,7 +628,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_broadc
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_broadcast_local(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_local(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
     signed_hex: *mut wire_cst_list_prim_u_8_strict,
@@ -637,7 +637,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_broadc
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_claim(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -654,7 +654,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_claim(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
 ) {
@@ -662,7 +662,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_coop_c
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
     kind: i32,
@@ -697,7 +697,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -724,7 +724,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_new_re
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -747,7 +747,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_new_su
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_refund(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -764,7 +764,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_refund
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_tx_size(
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_tx_size(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
 ) {
@@ -772,7 +772,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__btc_ln__btc_ln_swap_tx_siz
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_broadcast_boltz(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_boltz(
     port_: i64,
     that: *mut wire_cst_chain_swap,
     signed_hex: *mut wire_cst_list_prim_u_8_strict,
@@ -782,7 +782,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_bro
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_broadcast_local(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_local(
     port_: i64,
     that: *mut wire_cst_chain_swap,
     signed_hex: *mut wire_cst_list_prim_u_8_strict,
@@ -792,7 +792,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_bro
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_claim(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim(
     port_: i64,
     that: *mut wire_cst_chain_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -811,7 +811,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_cla
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_get_server_lockup(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_get_server_lockup(
     port_: i64,
     that: *mut wire_cst_chain_swap,
 ) {
@@ -819,7 +819,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_get
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_get_user_lockup(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_get_user_lockup(
     port_: i64,
     that: *mut wire_cst_chain_swap,
 ) {
@@ -827,7 +827,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_get
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
     is_testnet: bool,
@@ -870,7 +870,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_new
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_new_swap(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap(
     port_: i64,
     direction: i32,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
@@ -897,7 +897,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_new
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_refund(
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(
     port_: i64,
     that: *mut wire_cst_chain_swap,
     refund_address: *mut wire_cst_list_prim_u_8_strict,
@@ -914,7 +914,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__chain_swap__chain_swap_ref
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__error__boltz_error_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__error__boltz_error_new(
     port_: i64,
     kind: *mut wire_cst_list_prim_u_8_strict,
     message: *mut wire_cst_list_prim_u_8_strict,
@@ -923,7 +923,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__error__boltz_error_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_chain(
+pub extern "C" fn frbgen_boltz_wire__crate__api__fees__fees_chain(
     port_: i64,
     that: *mut wire_cst_fees,
 ) {
@@ -931,7 +931,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_chain(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__fees__fees_new(
     port_: i64,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
 ) {
@@ -939,7 +939,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_reverse(
+pub extern "C" fn frbgen_boltz_wire__crate__api__fees__fees_reverse(
     port_: i64,
     that: *mut wire_cst_fees,
 ) {
@@ -947,7 +947,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_reverse(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_submarine(
+pub extern "C" fn frbgen_boltz_wire__crate__api__fees__fees_submarine(
     port_: i64,
     that: *mut wire_cst_fees,
 ) {
@@ -955,7 +955,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__fees__fees_submarine(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_boltz(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_boltz(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
     signed_hex: *mut wire_cst_list_prim_u_8_strict,
@@ -964,7 +964,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_broa
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
     signed_hex: *mut wire_cst_list_prim_u_8_strict,
@@ -973,7 +973,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_broa
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -990,7 +990,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_clai
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
 ) {
@@ -998,7 +998,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_coop
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
     kind: i32,
@@ -1035,7 +1035,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -1062,7 +1062,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
@@ -1085,7 +1085,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -1102,7 +1102,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_refu
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
 ) {
@@ -1110,7 +1110,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_s
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__btc_swap_script_str_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new(
     swap_type: i32,
     funding_addrs: *mut wire_cst_list_prim_u_8_strict,
     hashlock: *mut wire_cst_list_prim_u_8_strict,
@@ -1131,7 +1131,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__btc_swap_script_str
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__decoded_invoice_from_string(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__decoded_invoice_from_string(
     port_: i64,
     s: *mut wire_cst_list_prim_u_8_strict,
     boltz_url: *mut wire_cst_list_prim_u_8_strict,
@@ -1140,7 +1140,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__decoded_invoice_fro
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__get_voucher_max_amount(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__get_voucher_max_amount(
     port_: i64,
     lnurl: *mut wire_cst_list_prim_u_8_strict,
 ) {
@@ -1148,7 +1148,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__get_voucher_max_amo
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__invoice_from_lnurl(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__invoice_from_lnurl(
     port_: i64,
     lnurl: *mut wire_cst_list_prim_u_8_strict,
     msats: u64,
@@ -1157,7 +1157,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__invoice_from_lnurl(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__key_pair_generate(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__key_pair_generate(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
     network: i32,
@@ -1168,7 +1168,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__key_pair_generate(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__key_pair_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__key_pair_new(
     secret_key: *mut wire_cst_list_prim_u_8_strict,
     public_key: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
@@ -1176,7 +1176,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__key_pair_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__l_btc_swap_script_str_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__l_btc_swap_script_str_new(
     swap_type: i32,
     funding_addrs: *mut wire_cst_list_prim_u_8_strict,
     hashlock: *mut wire_cst_list_prim_u_8_strict,
@@ -1199,12 +1199,12 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__l_btc_swap_script_s
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__pre_image_generate(port_: i64) {
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__pre_image_generate(port_: i64) {
     wire__crate__api__types__pre_image_generate_impl(port_)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__pre_image_new(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__pre_image_new(
     value: *mut wire_cst_list_prim_u_8_strict,
     sha256: *mut wire_cst_list_prim_u_8_strict,
     hash160: *mut wire_cst_list_prim_u_8_strict,
@@ -1213,7 +1213,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__pre_image_new(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__validate_lnurl(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__validate_lnurl(
     port_: i64,
     lnurl: *mut wire_cst_list_prim_u_8_strict,
 ) {
@@ -1221,7 +1221,7 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__validate_lnurl(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__withdraw(
+pub extern "C" fn frbgen_boltz_wire__crate__api__types__withdraw(
     port_: i64,
     lnurl: *mut wire_cst_list_prim_u_8_strict,
     invoice: *mut wire_cst_list_prim_u_8_strict,
@@ -1230,12 +1230,12 @@ pub extern "C" fn frbgen_boltz_dart_wire__crate__api__types__withdraw(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_ln_swap() -> *mut wire_cst_btc_ln_swap {
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_btc_ln_swap() -> *mut wire_cst_btc_ln_swap {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_btc_ln_swap::new_with_null_ptr())
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_swap_script_str(
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_btc_swap_script_str(
 ) -> *mut wire_cst_btc_swap_script_str {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(
         wire_cst_btc_swap_script_str::new_with_null_ptr(),
@@ -1243,22 +1243,22 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_btc_swap_script_str(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_chain_swap() -> *mut wire_cst_chain_swap {
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_chain_swap() -> *mut wire_cst_chain_swap {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_chain_swap::new_with_null_ptr())
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_fees() -> *mut wire_cst_fees {
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_fees() -> *mut wire_cst_fees {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_fees::new_with_null_ptr())
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_key_pair() -> *mut wire_cst_key_pair {
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_key_pair() -> *mut wire_cst_key_pair {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_key_pair::new_with_null_ptr())
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_l_btc_swap_script_str(
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_l_btc_swap_script_str(
 ) -> *mut wire_cst_l_btc_swap_script_str {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(
         wire_cst_l_btc_swap_script_str::new_with_null_ptr(),
@@ -1266,23 +1266,22 @@ pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_l_btc_swap_script_str(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_lbtc_ln_swap() -> *mut wire_cst_lbtc_ln_swap
-{
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_lbtc_ln_swap() -> *mut wire_cst_lbtc_ln_swap {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_lbtc_ln_swap::new_with_null_ptr())
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_pre_image() -> *mut wire_cst_pre_image {
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_pre_image() -> *mut wire_cst_pre_image {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_pre_image::new_with_null_ptr())
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_box_autoadd_side(value: i32) -> *mut i32 {
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_side(value: i32) -> *mut i32 {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_dart_cst_new_list_prim_u_8_strict(
+pub extern "C" fn frbgen_boltz_cst_new_list_prim_u_8_strict(
     len: i32,
 ) -> *mut wire_cst_list_prim_u_8_strict {
     let ans = wire_cst_list_prim_u_8_strict {

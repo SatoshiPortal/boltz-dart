@@ -7,18 +7,17 @@ import 'package:http/http.dart' as http;
 
 import '../generated/frb_generated.dart';
 
-const name = "libboltz_dart";
-const iosName = "boltz_dart";
+const name = "libboltz";
+const iosName = "boltz";
 
 class Dylib {
   static Map<String, dynamic>? _config;
-  static String get libName =>
-      "unittest.libboltz_dart.${_config!['TAG_VERSION']}";
+  static String get libName => "unittest.libboltz.${_config!['TAG_VERSION']}";
   static String get remoteUrl =>
       "${_config!['REPOSITORY_URL']}${_config!['TAG_VERSION']}/$libName.zip";
   static Future<void> _loadJsonAsset() async {
-    final String content = await rootBundle
-        .loadString("packages/boltz_dart/assets/release.config.txt");
+    final String content =
+        await rootBundle.loadString("packages/boltz/assets/release.config.txt");
     Map<String, dynamic> configMap = {};
     List<String> lines = content.split('\n');
 

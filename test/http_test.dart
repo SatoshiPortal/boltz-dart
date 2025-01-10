@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-// import 'package:boltz_dart/http.dart';
-// import 'package:boltz_dart/types/swap.dart';
-// import 'package:boltz_dart/types/swap_status_response.dart';
-import 'package:boltz_dart/boltz_dart.dart';
-// import 'package:boltz_dart/src/types/swap.dart';
-// import 'package:boltz_dart/src/types/swap_status_response.dart';
-// import 'package:boltz_dart/src/utils/http.dart';
+// import 'package:boltz/http.dart';
+// import 'package:boltz/types/swap.dart';
+// import 'package:boltz/types/swap_status_response.dart';
+import 'package:boltz/boltz_dart.dart';
+// import 'package:boltz/src/types/swap.dart';
+// import 'package:boltz/src/types/swap_status_response.dart';
+// import 'package:boltz/src/utils/http.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -25,6 +25,7 @@ void main() {
   }, skip: true);
 
   test('Get pairs', () async {
+    await BoltzCore.init();
     final api = await BoltzApi.newBoltzApi(testnetBaseUrl);
     final pairs = await api.getSupportedPairs();
     // print(pairs);

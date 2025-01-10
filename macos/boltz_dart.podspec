@@ -3,7 +3,7 @@
 # Run `pod lib lint hello_rust_ffi_plugin.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'boltz_dartt'
+  s.name             = 'boltzt'
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter FFI plugin project.'
   s.description      = <<-DESC
@@ -23,18 +23,18 @@ A new Flutter FFI plugin project.
   s.script_phase = {
     :name => 'Build Rust library',
     # First argument is relative path to the `rust` folder, second is name of rust library
-    :script => 'sh "$PODS_TARGET_SRCROOT/../cargokit/build_pod.sh" ../rust boltz_dartt',
+    :script => 'sh "$PODS_TARGET_SRCROOT/../cargokit/build_pod.sh" ../rust boltzt',
     :execution_position => :before_compile,
     :input_files => ['${BUILT_PRODUCTS_DIR}/cargokit_phony'],
     # Let XCode know that the static library referenced in -force_load below is
     # created by this build step.
-    :output_files => ["${BUILT_PRODUCTS_DIR}/libboltz_dartt.a"],
+    :output_files => ["${BUILT_PRODUCTS_DIR}/libboltzt.a"],
   }
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     # Flutter.framework does not contain a i386 slice.
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
-    'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/libboltz_dartt.a',
+    'OTHER_LDFLAGS' => '-force_load ${BUILT_PRODUCTS_DIR}/libboltzt.a',
   }
 end
 
@@ -52,8 +52,8 @@ end
 # config = read_key_value_pairs.call(config_file_path)
 
 # tag_version = "#{config['TAG_VERSION']}"
-# framework = 'libboltz_dart.xcframework'
-# lib_name = "libboltz_dart.#{tag_version}"
+# framework = 'libboltz.xcframework'
+# lib_name = "libboltz.#{tag_version}"
 # url = "#{config['REPOSITORY_URL']}/#{tag_version}/#{lib_name}.zip"
 # frameworks_dir = "ios"
 
@@ -73,7 +73,7 @@ end
 
 
 # Pod::Spec.new do |s|
-#   s.name             = 'boltz_dart'
+#   s.name             = 'boltz'
 #   s.version          = "#{tag_version}"
 #   s.summary          = 'A boltz swap client.'
 #   s.description      = <<-DESC

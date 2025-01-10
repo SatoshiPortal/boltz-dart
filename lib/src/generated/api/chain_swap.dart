@@ -12,6 +12,7 @@ part 'chain_swap.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`
 
+/// Bitcoin-Liquid Swap Class
 @freezed
 class ChainSwap with _$ChainSwap {
   const ChainSwap._();
@@ -34,16 +35,20 @@ class ChainSwap with _$ChainSwap {
     String? referralId,
     required String blindingKey,
   }) = _ChainSwap;
+
+  /// Broadcast a signed transaction using boltz's electrum server
   Future<String> broadcastBoltz(
           {required String signedHex, required SwapTxKind kind}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapBroadcastBoltz(
           that: this, signedHex: signedHex, kind: kind);
 
+  /// Broadcast a signed transaction via your own electrum server used when the swap was created.
   Future<String> broadcastLocal(
           {required String signedHex, required SwapTxKind kind}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapBroadcastLocal(
           that: this, signedHex: signedHex, kind: kind);
 
+  /// Claim a successful swap
   Future<String> claim(
           {required String outAddress,
           required String refundAddress,
@@ -56,17 +61,20 @@ class ChainSwap with _$ChainSwap {
           absFee: absFee,
           tryCooperate: tryCooperate);
 
+  /// Get the transaction id of the server's lockup transaction
   Future<String> getServerLockup() =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapGetServerLockup(
         that: this,
       );
 
+  /// Get the transaction id of the user's lockup transaction
   Future<String> getUserLockup() =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapGetUserLockup(
         that: this,
       );
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  /// Manually create the class. Primarily used when recovering a swap.
   static Future<ChainSwap> newInstance(
           {required String id,
           required bool isTestnet,
@@ -104,6 +112,9 @@ class ChainSwap with _$ChainSwap {
           referralId: referralId,
           blindingKey: blindingKey);
 
+  /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
+  /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+  /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<ChainSwap> newSwap(
           {required ChainSwapDirection direction,
           required String mnemonic,
@@ -125,6 +136,7 @@ class ChainSwap with _$ChainSwap {
           boltzUrl: boltzUrl,
           referralId: referralId);
 
+  /// Refund a failed swap
   Future<String> refund(
           {required String refundAddress,
           required BigInt absFee,

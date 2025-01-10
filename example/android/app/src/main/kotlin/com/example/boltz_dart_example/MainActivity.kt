@@ -1,4 +1,4 @@
-package com.example.boltz_dart_example
+package com.example.boltz_example
 
 import io.flutter.embedding.android.FlutterActivity
 

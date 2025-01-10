@@ -1,10 +1,11 @@
+#!/bin/bash
 ROOT="target"
 VERSION=$1
-NAME="libboltz_dart"
+NAME="libboltz"
 BUILD_DIR=$ROOT/$NAME.$VERSION
 # MACOS_DIR="../macos" # final binaries stored here
 # IOS_DIR="../ios" # final binaries stored here
-FRAMEWORK="libboltz_dart.xcframework"
+FRAMEWORK="libboltz.xcframework"
     
     #    if [ -d "../android/src/main/jniLibs" ]; then rm -r ../android/src/main/jniLibs
     #     fi

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:boltz_dart/src/types/supported_pair.dart';
-import 'package:boltz_dart/src/types/swap.dart';
-import 'package:boltz_dart/src/types/swap_status_response.dart';
+import 'package:boltz/src/types/supported_pair.dart';
+import 'package:boltz/src/types/swap.dart';
+import 'package:boltz/src/types/swap_status_response.dart';
 import 'package:dio/dio.dart';
 import 'package:web_socket_channel/io.dart';
 

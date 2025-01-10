@@ -12,6 +12,7 @@ part 'btc_ln.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`
 
+/// Bitcoin-Lightning Swap Class
 @freezed
 class BtcLnSwap with _$BtcLnSwap {
   const BtcLnSwap._();
@@ -30,14 +31,18 @@ class BtcLnSwap with _$BtcLnSwap {
     required String boltzUrl,
     String? referralId,
   }) = _BtcLnSwap;
+
+  /// Broadcast using boltz's electrum server
   Future<String> broadcastBoltz({required String signedHex}) => BoltzCore
       .instance.api
       .crateApiBtcLnBtcLnSwapBroadcastBoltz(that: this, signedHex: signedHex);
 
+  /// Broadcast using your own electrum server that was used to create the swap
   Future<String> broadcastLocal({required String signedHex}) => BoltzCore
       .instance.api
       .crateApiBtcLnBtcLnSwapBroadcastLocal(that: this, signedHex: signedHex);
 
+  /// Used to claim a reverse swap.
   Future<String> claim(
           {required String outAddress,
           required BigInt absFee,
@@ -48,12 +53,16 @@ class BtcLnSwap with _$BtcLnSwap {
           absFee: absFee,
           tryCooperate: tryCooperate);
 
+  /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
+  /// If this function is not called within ~1 hour, the swap will be closed via the script path.
+  /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
   Future<void> coopCloseSubmarine() =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapCoopCloseSubmarine(
         that: this,
       );
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  /// Manually create the class. Primarily used when recovering a swap.
   static Future<BtcLnSwap> newInstance(
           {required String id,
           required SwapType kind,
@@ -83,6 +92,9 @@ class BtcLnSwap with _$BtcLnSwap {
           boltzUrl: boltzUrl,
           referralId: referralId);
 
+  /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
+  /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+  /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<BtcLnSwap> newReverse(
           {required String mnemonic,
           required BigInt index,
@@ -104,6 +116,9 @@ class BtcLnSwap with _$BtcLnSwap {
           description: description,
           referralId: referralId);
 
+  /// Used to create the class when starting a submarine swap to pay a lightning invoice with Bitcoin.
+  /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+  /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<BtcLnSwap> newSubmarine(
           {required String mnemonic,
           required BigInt index,
@@ -121,6 +136,7 @@ class BtcLnSwap with _$BtcLnSwap {
           boltzUrl: boltzUrl,
           referralId: referralId);
 
+  /// Used to refund a failed submarine swap.
   Future<String> refund(
           {required String outAddress,
           required BigInt absFee,
@@ -131,6 +147,7 @@ class BtcLnSwap with _$BtcLnSwap {
           absFee: absFee,
           tryCooperate: tryCooperate);
 
+  /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
   Future<BigInt> txSize() =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapTxSize(
         that: this,
