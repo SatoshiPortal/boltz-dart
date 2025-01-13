@@ -113,3 +113,4 @@ Also try `flutter run` in the `example` directory.
 - [FRB-Docs](https://cjycode.com/flutter_rust_bridge/v1/index.html)
 - [FRB-Codebase](https://github.com/fzyzcjy/flutter_rust_bridge/)
 - [Article](https://blog.logrocket.com/using-flutter-rust-bridge-cross-platform-development/)
+
