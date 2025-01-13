@@ -12,8 +12,8 @@ Future test() async {
     const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
     // const amount = 100000;
     final fees = await const bltz.Fees(boltzUrl: boltzUrl).chain();
-    print('FEES:${fees}');
+    print('FEES:$fees');
   } catch (e) {
-    print('\n\nERRRR: ' + e.toString() + '\n\n');
+    print('\n\nERRRR: $e\n\n');
   }
 }

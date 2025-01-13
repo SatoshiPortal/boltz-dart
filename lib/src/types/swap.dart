@@ -107,9 +107,6 @@ extension SwapStatusX on SwapStatus {
 
       case SwapStatus.minerfeePaid:
         return 'minerfee.paid';
-
-      default:
-        throw ArgumentError('Invalid SwapStatus: $this');
     }
   }
 
@@ -157,9 +154,6 @@ extension SwapStatusX on SwapStatus {
 
       case SwapStatus.minerfeePaid:
         return 'Minerfee paid';
-
-      default:
-        throw ArgumentError('Invalid SwapStatus: $this');
     }
   }
 }
