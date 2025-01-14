@@ -1,5 +1,5 @@
 [package]
-name = "boltz_dart"
+name = "boltz"
 authors = [
     "i5hi <ishi@satoshiportal.com>, mocodesmo <morteza@satoshiportal.com>",
 ]
@@ -7,7 +7,7 @@ version = "0.1.6"
 edition = "2021"
 
 [lib]
-name = "boltz_dart"
+name = "boltz"
 doctest = false
 crate-type = ["staticlib", "cdylib"]
 
