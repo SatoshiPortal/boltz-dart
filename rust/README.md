@@ -10,7 +10,7 @@ m/purpose/network/21/0/*
 
 ```dart
 
-import 'package:boltz_client_flutter/boltz_client_flutter.dart';
+import 'package:boltz/boltz.dart';
 
 final network = BitcoinNetwork.Mainnet;
 final electrumUrl = 'electrum.bullbitcoin.com:50002'
