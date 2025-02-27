@@ -695,8 +695,9 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
 pub fn wire__crate__api__btc_ln__btc_ln_swap_process(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    status: String,
 ) {
-    wire__crate__api__btc_ln__btc_ln_swap_process_impl(port_, that)
+    wire__crate__api__btc_ln__btc_ln_swap_process_impl(port_, that, status)
 }
 
 #[wasm_bindgen]
@@ -854,8 +855,9 @@ pub fn wire__crate__api__chain_swap__chain_swap_new_swap(
 pub fn wire__crate__api__chain_swap__chain_swap_process(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    status: String,
 ) {
-    wire__crate__api__chain_swap__chain_swap_process_impl(port_, that)
+    wire__crate__api__chain_swap__chain_swap_process_impl(port_, that, status)
 }
 
 #[wasm_bindgen]
@@ -1050,8 +1052,9 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
 pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    status: String,
 ) {
-    wire__crate__api__lbtc_ln__lbtc_ln_swap_process_impl(port_, that)
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_process_impl(port_, that, status)
 }
 
 #[wasm_bindgen]

@@ -296,6 +296,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
 fn wire__crate__api__btc_ln__btc_ln_swap_process_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
+    status: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -305,9 +306,10 @@ fn wire__crate__api__btc_ln__btc_ln_swap_process_impl(
         },
         move || {
             let api_that = that.cst_decode();
+            let api_status = status.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::btc_ln::BtcLnSwap::process(&api_that)?;
+                    let output_ok = crate::api::btc_ln::BtcLnSwap::process(&api_that, api_status)?;
                     Ok(output_ok)
                 })())
             }
@@ -627,6 +629,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
 fn wire__crate__api__chain_swap__chain_swap_process_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
+    status: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -636,9 +639,11 @@ fn wire__crate__api__chain_swap__chain_swap_process_impl(
         },
         move || {
             let api_that = that.cst_decode();
+            let api_status = status.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::process(&api_that)?;
+                    let output_ok =
+                        crate::api::chain_swap::ChainSwap::process(&api_that, api_status)?;
                     Ok(output_ok)
                 })())
             }
@@ -1047,6 +1052,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_process_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
+    status: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1056,9 +1062,11 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_process_impl(
         },
         move || {
             let api_that = that.cst_decode();
+            let api_status = status.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::lbtc_ln::LbtcLnSwap::process(&api_that)?;
+                    let output_ok =
+                        crate::api::lbtc_ln::LbtcLnSwap::process(&api_that, api_status)?;
                     Ok(output_ok)
                 })())
             }

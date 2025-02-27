@@ -140,10 +140,9 @@ class LbtcLnSwap with _$LbtcLnSwap {
           referralId: referralId);
 
   /// Process swap based on status
-  Future<SwapAction> process() =>
-      BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapProcess(
-        that: this,
-      );
+  /// To be used with WebSocket Notification Stream
+  Future<SwapAction> process({required String status}) => BoltzCore.instance.api
+      .crateApiLbtcLnLbtcLnSwapProcess(that: this, status: status);
 
   /// Used to refund a failed submarine swap.
   Future<String> refund(

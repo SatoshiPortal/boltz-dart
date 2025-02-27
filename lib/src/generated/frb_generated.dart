@@ -123,7 +123,8 @@ abstract class BoltzCoreApi extends BaseApi {
       required String boltzUrl,
       String? referralId});
 
-  Future<SwapAction> crateApiBtcLnBtcLnSwapProcess({required BtcLnSwap that});
+  Future<SwapAction> crateApiBtcLnBtcLnSwapProcess(
+      {required BtcLnSwap that, required String status});
 
   Future<String> crateApiBtcLnBtcLnSwapRefund(
       {required BtcLnSwap that,
@@ -188,7 +189,7 @@ abstract class BoltzCoreApi extends BaseApi {
       String? referralId});
 
   Future<SwapAction> crateApiChainSwapChainSwapProcess(
-      {required ChainSwap that});
+      {required ChainSwap that, required String status});
 
   Future<String> crateApiChainSwapChainSwapRefund(
       {required ChainSwap that,
@@ -260,7 +261,7 @@ abstract class BoltzCoreApi extends BaseApi {
       String? referralId});
 
   Future<SwapAction> crateApiLbtcLnLbtcLnSwapProcess(
-      {required LbtcLnSwap that});
+      {required LbtcLnSwap that, required String status});
 
   Future<String> crateApiLbtcLnLbtcLnSwapRefund(
       {required LbtcLnSwap that,
@@ -639,18 +640,21 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<SwapAction> crateApiBtcLnBtcLnSwapProcess({required BtcLnSwap that}) {
+  Future<SwapAction> crateApiBtcLnBtcLnSwapProcess(
+      {required BtcLnSwap that, required String status}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
-        return wire.wire__crate__api__btc_ln__btc_ln_swap_process(port_, arg0);
+        var arg1 = cst_encode_String(status);
+        return wire.wire__crate__api__btc_ln__btc_ln_swap_process(
+            port_, arg0, arg1);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_swap_action,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiBtcLnBtcLnSwapProcessConstMeta,
-      argValues: [that],
+      argValues: [that, status],
       apiImpl: this,
     ));
   }
@@ -658,7 +662,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiBtcLnBtcLnSwapProcessConstMeta =>
       const TaskConstMeta(
         debugName: "btc_ln_swap_process",
-        argNames: ["that"],
+        argNames: ["that", "status"],
       );
 
   @override
@@ -1038,19 +1042,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @override
   Future<SwapAction> crateApiChainSwapChainSwapProcess(
-      {required ChainSwap that}) {
+      {required ChainSwap that, required String status}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        var arg1 = cst_encode_String(status);
         return wire.wire__crate__api__chain_swap__chain_swap_process(
-            port_, arg0);
+            port_, arg0, arg1);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_swap_action,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiChainSwapChainSwapProcessConstMeta,
-      argValues: [that],
+      argValues: [that, status],
       apiImpl: this,
     ));
   }
@@ -1058,7 +1063,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiChainSwapChainSwapProcessConstMeta =>
       const TaskConstMeta(
         debugName: "chain_swap_process",
-        argNames: ["that"],
+        argNames: ["that", "status"],
       );
 
   @override
@@ -1525,19 +1530,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @override
   Future<SwapAction> crateApiLbtcLnLbtcLnSwapProcess(
-      {required LbtcLnSwap that}) {
+      {required LbtcLnSwap that, required String status}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        var arg1 = cst_encode_String(status);
         return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
-            port_, arg0);
+            port_, arg0, arg1);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_swap_action,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiLbtcLnLbtcLnSwapProcessConstMeta,
-      argValues: [that],
+      argValues: [that, status],
       apiImpl: this,
     ));
   }
@@ -1545,7 +1551,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapProcessConstMeta =>
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_process",
-        argNames: ["that"],
+        argNames: ["that", "status"],
       );
 
   @override
