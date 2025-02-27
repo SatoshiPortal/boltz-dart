@@ -1,26 +1,19 @@
-use std::{str::FromStr, time::Duration};
+use std::{
+    str::FromStr,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
-use flutter_rust_bridge::frb;
 use boltz_client::{
     network::Chain as BChain,
     swaps::boltz::{
-        BoltzApiClientV2, 
-        Side as BoltzSide, 
-        SwapTxKind as BoltzSwapTxKind,
+        BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
         SwapType as BoltzSwapType,
     },
     util::{lnurl, secrets::SwapKey},
-    Address,
-    Bolt11Invoice,
-    BtcSwapScript,
-    ElementsAddress,
-    Hash,
-    Keypair,
-    LBtcSwapScript,
-    PublicKey,
-    Secp256k1,
-    ZKKeyPair,
+    Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
+    PublicKey, Secp256k1, ZKKeyPair,
 };
+use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::util::ensure_http_prefix;
@@ -144,7 +137,7 @@ impl TryInto<Keypair> for KeyPair {
         let secp = Secp256k1::new();
         match Keypair::from_seckey_str(&secp, &self.secret_key) {
             Ok(keypair) => Ok(keypair),
-            Err(e) => Err(boltz_client::error::Error::Key(e.into()).into()),
+            Err(e) => Err(BoltzError::new("Key".to_string(), e.to_string())),
         }
     }
 }
@@ -285,14 +278,25 @@ impl DecodedInvoice {
         } else {
             None
         };
+        let now = SystemTime::now();
+        let duration_since_epoch = now.duration_since(UNIX_EPOCH).expect("Time went backwards");
+        let current_secs = duration_since_epoch.as_secs();
+        let expires_at = invoice
+            .expires_at()
+            .unwrap_or(Duration::from_secs(0))
+            .as_secs();
+
         Ok(DecodedInvoice {
             expiry: invoice.expiry_time().as_secs(),
-            expires_in: invoice.duration_until_expiry().as_secs(),
-            expires_at: invoice
-                .expires_at()
-                .unwrap_or(Duration::from_secs(0))
+            expires_in: invoice
+                .expiration_remaining_from_epoch(duration_since_epoch)
                 .as_secs(),
-            is_expired: invoice.is_expired(),
+            expires_at: expires_at,
+            is_expired: if current_secs >= expires_at {
+                true
+            } else {
+                false
+            },
             msats: invoice.amount_milli_satoshis().unwrap_or(0),
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
             network: invoice.network().to_string(),
@@ -307,12 +311,10 @@ pub fn validate_lnurl(lnurl: String) -> bool {
     lnurl::validate_lnurl(&lnurl)
 }
 
-
 /// LNURL helper to get an invoice from an lnurl string
 pub fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
     Ok(lnurl::fetch_invoice(&lnurl, msats)?)
 }
-
 
 /// LNURL helper to get an lnurl-w voucher amount
 pub fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
@@ -585,4 +587,20 @@ impl From<LBtcSwapScript> for LBtcSwapScriptStr {
             },
         }
     }
+}
+
+pub enum SwapAction {
+    Wait,
+    CoopSign,
+    Claim,
+    Refund,
+    Close,
+}
+
+pub enum SwapState {
+    Paid,
+    Claimed,
+    Refunded,
+    Expired,
+    Failed,
 }

@@ -225,6 +225,9 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(int64_t po
                                                                       struct wire_cst_list_prim_u_8_strict *boltz_url,
                                                                       struct wire_cst_list_prim_u_8_strict *referral_id);
 
+void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_process(int64_t port_,
+                                                                struct wire_cst_btc_ln_swap *that);
+
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund(int64_t port_,
                                                                struct wire_cst_btc_ln_swap *that,
                                                                struct wire_cst_list_prim_u_8_strict *out_address,
@@ -232,7 +235,8 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund(int64_t port_,
                                                                bool try_cooperate);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_tx_size(int64_t port_,
-                                                                struct wire_cst_btc_ln_swap *that);
+                                                                struct wire_cst_btc_ln_swap *that,
+                                                                bool is_cooperative);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_boltz(int64_t port_,
                                                                            struct wire_cst_chain_swap *that,
@@ -286,6 +290,9 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap(int64_t port
                                                                     struct wire_cst_list_prim_u_8_strict *lbtc_electrum_url,
                                                                     struct wire_cst_list_prim_u_8_strict *boltz_url,
                                                                     struct wire_cst_list_prim_u_8_strict *referral_id);
+
+void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_process(int64_t port_,
+                                                                   struct wire_cst_chain_swap *that);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(int64_t port_,
                                                                   struct wire_cst_chain_swap *that,
@@ -359,6 +366,9 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(int64_t 
                                                                         struct wire_cst_list_prim_u_8_strict *boltz_url,
                                                                         struct wire_cst_list_prim_u_8_strict *referral_id);
 
+void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_process(int64_t port_,
+                                                                  struct wire_cst_lbtc_ln_swap *that);
+
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(int64_t port_,
                                                                  struct wire_cst_lbtc_ln_swap *that,
                                                                  struct wire_cst_list_prim_u_8_strict *out_address,
@@ -366,7 +376,8 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(int64_t port_,
                                                                  bool try_cooperate);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(int64_t port_,
-                                                                  struct wire_cst_lbtc_ln_swap *that);
+                                                                  struct wire_cst_lbtc_ln_swap *that,
+                                                                  bool is_cooperative);
 
 WireSyncRust2DartDco frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new(int32_t swap_type,
                                                                                    struct wire_cst_list_prim_u_8_strict *funding_addrs,
@@ -456,6 +467,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_process);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_tx_size);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_boltz);
@@ -465,6 +477,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_get_user_lockup);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_process);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__error__boltz_error_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__fees__fees_chain);
@@ -478,6 +491,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_process);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new);

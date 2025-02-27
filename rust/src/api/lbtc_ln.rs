@@ -1,14 +1,18 @@
+use std::str::FromStr;
+
 use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
-    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapType},
+    fees::Fees,
+    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapType},
 };
 use boltz_client::{
     bitcoin::{consensus::deserialize, Transaction, Txid},
-    boltz::Cooperative,
+    boltz::{Cooperative, RevSwapStates, SubSwapStates, SwapTxKind},
     electrum_client::ElectrumApi,
     elements::{self, encode::Decodable, hashes::hex::DisplayHex},
+    fees::Fee,
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
@@ -276,7 +280,7 @@ impl LbtcLnSwap {
         let signed = match tx.sign_claim(
             &ckp,
             &preimage.try_into()?,
-            Amount::from_sat(abs_fee),
+            Fee::Absolute(abs_fee),
             if try_cooperate {
                 Some(Cooperative {
                     boltz_api: &boltz_client,
@@ -287,6 +291,7 @@ impl LbtcLnSwap {
             } else {
                 None
             },
+            false,
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -328,7 +333,7 @@ impl LbtcLnSwap {
         let ckp: Keypair = self.keys.clone().try_into()?;
         let signed = match tx.sign_refund(
             &ckp,
-            Amount::from_sat(abs_fee),
+            Fee::Absolute(abs_fee),
             if try_cooperate {
                 Some(Cooperative {
                     boltz_api: &boltz_client,
@@ -339,6 +344,7 @@ impl LbtcLnSwap {
             } else {
                 None
             },
+            false,
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -376,7 +382,7 @@ impl LbtcLnSwap {
         Ok(extract_id(txid)?)
     }
     /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-    pub fn tx_size(&self) -> Result<usize, BoltzError> {
+    pub fn tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -406,11 +412,100 @@ impl LbtcLnSwap {
         };
         let ckp: Keypair = self.keys.clone().try_into()?;
 
-        let size = match tx.size(&ckp, &self.preimage.clone().try_into()?) {
+        let size = match tx.size(&ckp, is_cooperative, false) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
         Ok(size)
+    }
+    /// Process swap based on status
+    pub fn process(&self) -> Result<SwapAction, BoltzError> {
+        let client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let swap_response = client.get_swap(&self.id)?;
+        match self.kind {
+            SwapType::Submarine => {
+                let status = SubSwapStates::from_str(&swap_response.status);
+                if status.is_err() {
+                    return Err(BoltzError::new(
+                        "Parse".to_string(),
+                        "Could not parse string status to SubSwapState".to_string(),
+                    ));
+                }
+                let status = status.unwrap();
+                match status {
+                    SubSwapStates::Created => return Ok(SwapAction::Wait),
+                    SubSwapStates::TransactionMempool => return Ok(SwapAction::Wait),
+                    SubSwapStates::TransactionConfirmed => return Ok(SwapAction::Wait),
+                    SubSwapStates::InvoiceSet => return Ok(SwapAction::Wait),
+                    SubSwapStates::InvoicePending => return Ok(SwapAction::Wait),
+                    SubSwapStates::InvoicePaid => return Ok(SwapAction::CoopSign),
+                    SubSwapStates::TransactionClaimPending => return Ok(SwapAction::CoopSign),
+                    SubSwapStates::SwapExpired => {
+                        // save the claim_txid as part of the struct to avoid a network call
+                        let network_config = ElectrumConfig::new(
+                            self.network.clone().into(),
+                            &self.electrum_url,
+                            true,
+                            false,
+                            10,
+                        );
+                        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
+                        let utxo = swap_script.fetch_utxo(&network_config)?;
+                        if utxo.is_none() {
+                            return Ok(SwapAction::Close);
+                        } else {
+                            return Ok(SwapAction::Refund);
+                        }
+                    }
+                    SubSwapStates::InvoiceFailedToPay => return Ok(SwapAction::Refund),
+                    SubSwapStates::TransactionLockupFailed => return Ok(SwapAction::Refund),
+                    SubSwapStates::TransactionClaimed => return Ok(SwapAction::Close),
+                }
+            }
+            SwapType::Reverse => {
+                let status = RevSwapStates::from_str(&swap_response.status);
+                if status.is_err() {
+                    return Err(BoltzError::new(
+                        "Parse".to_string(),
+                        "Could not parse string status to RevSwapState".to_string(),
+                    ));
+                }
+                let status = status.unwrap();
+                match status {
+                    RevSwapStates::Created => return Ok(SwapAction::Wait),
+                    RevSwapStates::MinerFeePaid => return Ok(SwapAction::Wait),
+                    RevSwapStates::TransactionMempool => return Ok(SwapAction::Claim),
+                    RevSwapStates::TransactionConfirmed => return Ok(SwapAction::Claim),
+                    RevSwapStates::InvoiceSettled => {
+                        // save the claim_txid as part of the struct to avoid a network call
+                        let network_config = ElectrumConfig::new(
+                            self.network.clone().into(),
+                            &self.electrum_url,
+                            true,
+                            false,
+                            10,
+                        );
+                        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
+                        let utxo = swap_script.fetch_utxo(&network_config)?;
+                        if utxo.is_none() {
+                            return Ok(SwapAction::Close);
+                        } else {
+                            return Ok(SwapAction::Claim);
+                        }
+                    }
+                    RevSwapStates::InvoiceExpired => return Ok(SwapAction::Close),
+                    RevSwapStates::SwapExpired => return Ok(SwapAction::Close),
+                    RevSwapStates::TransactionFailed => return Ok(SwapAction::Close),
+                    RevSwapStates::TransactionRefunded => return Ok(SwapAction::Close),
+                }
+            }
+            SwapType::Chain => {
+                return Err(BoltzError::new(
+                    "Unexpected".to_string(),
+                    "This swap cannot possibly be a chain swap".to_string(),
+                ))
+            }
+        }
     }
 }
 /// Helper method used to extract the txid from a JSON response
