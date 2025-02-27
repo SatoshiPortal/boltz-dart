@@ -4,25 +4,22 @@ use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
-    fees::Fees,
     types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapType},
 };
 use boltz_client::{
-    bitcoin::{consensus::deserialize, Transaction, Txid},
-    boltz::{Cooperative, RevSwapStates, SubSwapStates, SwapTxKind},
+    bitcoin::Txid,
+    boltz::{Cooperative, RevSwapStates, SubSwapStates},
     electrum_client::ElectrumApi,
-    elements::{self, encode::Decodable, hashes::hex::DisplayHex},
+    elements::hashes::hex::DisplayHex,
     fees::Fee,
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
-    Amount, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
+    Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
-use flutter_rust_bridge::frb;
 use serde_json::Value;
 
 /// Liquid-Lightning Swap Class
-#[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnSwap {
     pub id: String,
     pub kind: SwapType,
