@@ -1,75 +1,75 @@
-// import 'dart:async';
+import 'dart:async';
 
-// import 'package:boltz/boltz.dart';
-// import 'package:boltz/src/generated/api/fees.dart';
-// // import 'package:boltz/src/generated/api/btc_ln.dart';
-// // import 'package:boltz/src/generated/api/error.dart';
-// // import 'package:boltz/src/generated/api/lbtc_ln.dart';
-// // import 'package:boltz/src/generated/api/types.dart';
-// // import 'package:boltz/src/types/swap.dart';
-// // import 'package:boltz/src/types/swap_status_response.dart';
-// // import 'package:boltz/src/utils/http.dart';
-// // import 'package:boltz/src/utils/loader.dart';
-// import 'package:test/test.dart';
+import 'package:boltz/boltz.dart';
+import 'package:boltz/src/generated/api/fees.dart';
+// import 'package:boltz/src/generated/api/btc_ln.dart';
+// import 'package:boltz/src/generated/api/error.dart';
+// import 'package:boltz/src/generated/api/lbtc_ln.dart';
+// import 'package:boltz/src/generated/api/types.dart';
+// import 'package:boltz/src/types/swap.dart';
+// import 'package:boltz/src/types/swap_status_response.dart';
+// import 'package:boltz/src/utils/http.dart';
+// import 'package:boltz/src/utils/loader.dart';
+import 'package:test/test.dart';
 
-// import 'test_data.dart';
+import 'test_data.dart';
 
-// // void countdown(int totalSeconds) {
-// //   for (var i = totalSeconds; i >= 0; i--) {
-// //     // Constructing the countdown message
-// //     var message = 'Pay invoice within $i seconds';
+// void countdown(int totalSeconds) {
+//   for (var i = totalSeconds; i >= 0; i--) {
+//     // Constructing the countdown message
+//     var message = 'Pay invoice within $i seconds';
 
-// //     // Print the message, overwriting the previous line
-// //     stdout.write('\r$message');
-// //     stdout.flush(); // Ensure the output is written to the terminal immediately
-// //     sleep(Duration(seconds: totalSeconds));
-// //   }
-// //   stdout.writeln('\nInvoice payment period expired.');
-// // }
+//     // Print the message, overwriting the previous line
+//     stdout.write('\r$message');
+//     stdout.flush(); // Ensure the output is written to the terminal immediately
+//     sleep(Duration(seconds: totalSeconds));
+//   }
+//   stdout.writeln('\nInvoice payment period expired.');
+// }
 
-// const mnemonic =
-//     'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
-// const index = 0;
-// const network = Chain.bitcoinTestnet;
-// const electrumUrl = 'electrum.bullbitcoin.com:60002';
-// const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
+const mnemonic =
+    'bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon';
+const index = 0;
+const network = Chain.bitcoinTestnet;
+const electrumUrl = 'electrum.bullbitcoin.com:60002';
+const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
 // // const boltzUrl = 'https://testnet.boltz.exchange/api';
 
-// const lnetwork = Chain.liquidTestnet;
-// const testTimeout = Timeout(Duration(minutes: 30));
+const lnetwork = Chain.liquidTestnet;
+const testTimeout = Timeout(Duration(minutes: 30));
 
-// void main() {
-//   setUp(() async => await LibBoltz.init());
-//   test('Swap status string', () {
-//     final status = SwapStatus.invoiceFailedToPay;
-//     expect(status.asString, 'Invoice failed to pay');
-//   });
+void main() {
+  setUp(() async => await LibBoltz.init());
+  test('Swap status string', () {
+    final status = SwapStatus.invoiceFailedToPay;
+    expect(status.asString, 'Invoice failed to pay');
+  });
 
-//   test('ALL FEES & LIMITS', () async {
-//     const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
-//     final fees = Fees(boltzUrl: boltzUrl);
-//     final sub_fees = await fees.submarine();
-//     final rev_fees = await fees.reverse();
-//     final chain_fees = await fees.chain();
-//     expect((sub_fees.btcFees.percentage > 0.0), true);
-//     expect((rev_fees.btcFees.percentage > 0.0), true);
-//     expect((chain_fees.btcFees.percentage > 0.0), true);
-//   });
+  test('ALL FEES & LIMITS', () async {
+    const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
+    final fees = Fees(boltzUrl: boltzUrl);
+    final sub_fees = await fees.submarine();
+    final rev_fees = await fees.reverse();
+    final chain_fees = await fees.chain();
+    expect((sub_fees.btcFees.percentage > 0.0), true);
+    expect((rev_fees.btcFees.percentage > 0.0), true);
+    expect((chain_fees.btcFees.percentage > 0.0), true);
+  });
 
-//   test('DECODE EXPIRED BOLT11', () async {
-//     final decoded = await DecodedInvoice.fromString(s: expiredBolt11Invoice);
-//     assert(decoded.isExpired);
-//     print('$decoded');
-//   });
-//   group('BTC-LN Submarince', () {
-//     test('Neg: Minimum limit (50k sats)', () async {
-//       // An invoice with <50k sats
-//       await expectLater(() async => await setupSubmarine(invoice123),
-//           throwsA(predicate((e) {
-//         print(e);
-//         return e is BoltzError && e.kind == 'HTTP';
-//       })));
-//     });
+  test('DECODE EXPIRED BOLT11', () async {
+    final decoded = await DecodedInvoice.fromString(s: expiredBolt11Invoice);
+    assert(decoded.isExpired);
+    print('$decoded');
+  });
+  // group('BTC-LN Submarince', () {
+  //   test('Neg: Minimum limit (50k sats)', () async {
+  //     // An invoice with <50k sats
+  //     await expectLater(() async => await setupSubmarine(invoice123),
+  //         throwsA(predicate((e) {
+  //       print(e);
+  //       return e is BoltzError && e.kind == 'HTTP';
+  //     })));
+  //   });
 
 //     test('Neg: Maximum limit (25m sats)', () async {
 //       // An invoice with >25m sats
@@ -376,61 +376,61 @@
 //       expect(receivedEvents[2].status, equals(SwapStatus.txnConfirmed));
 //     }, skip: true, timeout: testTimeout);
 //   });
-// }
+}
 
-// Future<BtcLnSwap> setupSubmarine(String invoice) async {
-//   // final amount = 100000;
+Future<BtcLnSwap> setupSubmarine(String invoice) async {
+  // final amount = 100000;
 
-//   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
-//     mnemonic: mnemonic,
-//     index: index,
-//     invoice: invoice,
-//     network: network,
-//     electrumUrl: electrumUrl,
-//     boltzUrl: boltzUrl,
-//     // pairHash: fees.btcPairHash,
-//   );
+  final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
+    mnemonic: mnemonic,
+    index: BigInt.from(index),
+    invoice: invoice,
+    network: network,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+    // pairHash: fees.btcPairHash,
+  );
 
-//   return btcLnSubmarineSwap;
-// }
+  return btcLnSubmarineSwap;
+}
 
-// Future<BtcLnSwap> setupReverse(int outAmount) async {
-//   final btcLnReverseSwap = await BtcLnSwap.newReverse(
-//     mnemonic: mnemonic,
-//     index: index,
-//     outAmount: outAmount,
-//     network: network,
-//     electrumUrl: electrumUrl,
-//     boltzUrl: boltzUrl,
-//   );
+Future<BtcLnSwap> setupReverse(int outAmount) async {
+  final btcLnReverseSwap = await BtcLnSwap.newReverse(
+    mnemonic: mnemonic,
+    index: BigInt.from(index),
+    outAmount: BigInt.from(outAmount),
+    network: network,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+  );
 
-//   return btcLnReverseSwap;
-// }
+  return btcLnReverseSwap;
+}
 
-// Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
-//   // final amount = 100000;
+Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
+  // final amount = 100000;
 
-//   final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
-//     mnemonic: mnemonic,
-//     index: index,
-//     invoice: invoice,
-//     network: lnetwork,
-//     electrumUrl: electrumUrl,
-//     boltzUrl: boltzUrl,
-//   );
+  final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
+    mnemonic: mnemonic,
+    index: BigInt.from(index),
+    invoice: invoice,
+    network: lnetwork,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+  );
 
-//   return lbtcLnSubmarineSwap;
-// }
+  return lbtcLnSubmarineSwap;
+}
 
-// Future<LbtcLnSwap> setupLReverse(int amount) async {
-//   final lbtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
-//     mnemonic: mnemonic,
-//     index: index,
-//     outAmount: amount,
-//     network: lnetwork,
-//     electrumUrl: electrumUrl,
-//     boltzUrl: boltzUrl,
-//   );
+Future<LbtcLnSwap> setupLReverse(int amount) async {
+  final lbtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
+    mnemonic: mnemonic,
+    index: BigInt.from(index),
+    outAmount: BigInt.from(amount),
+    network: lnetwork,
+    electrumUrl: electrumUrl,
+    boltzUrl: boltzUrl,
+  );
 
-//   return lbtcLnSubmarineSwap;
-// }
+  return lbtcLnSubmarineSwap;
+}

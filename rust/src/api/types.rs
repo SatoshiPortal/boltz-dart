@@ -467,7 +467,6 @@ pub struct LBtcSwapScriptStr {
     pub side: Option<Side>,
 }
 impl LBtcSwapScriptStr {
-    #[frb(sync)]
     pub fn new(
         swap_type: SwapType,
         funding_addrs: Option<String>,
