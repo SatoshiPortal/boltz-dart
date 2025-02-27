@@ -136,6 +136,13 @@ class BtcLnSwap with _$BtcLnSwap {
           boltzUrl: boltzUrl,
           referralId: referralId);
 
+  /// Process swap based on status
+  /// https://docs.boltz.exchange/api/lifecycle
+  Future<SwapAction> process() =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapProcess(
+        that: this,
+      );
+
   /// Used to refund a failed submarine swap.
   Future<String> refund(
           {required String outAddress,
@@ -148,8 +155,6 @@ class BtcLnSwap with _$BtcLnSwap {
           tryCooperate: tryCooperate);
 
   /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-  Future<BigInt> txSize() =>
-      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapTxSize(
-        that: this,
-      );
+  Future<BigInt> txSize({required bool isCooperative}) => BoltzCore.instance.api
+      .crateApiBtcLnBtcLnSwapTxSize(that: this, isCooperative: isCooperative);
 }

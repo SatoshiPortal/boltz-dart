@@ -136,6 +136,12 @@ class ChainSwap with _$ChainSwap {
           boltzUrl: boltzUrl,
           referralId: referralId);
 
+  /// Process swap based on status
+  Future<SwapAction> process() =>
+      BoltzCore.instance.api.crateApiChainSwapChainSwapProcess(
+        that: this,
+      );
+
   /// Refund a failed swap
   Future<String> refund(
           {required String refundAddress,

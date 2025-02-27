@@ -747,6 +747,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submari
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_process(
+    port_: i64,
+    that: *mut wire_cst_btc_ln_swap,
+) {
+    wire__crate__api__btc_ln__btc_ln_swap_process_impl(port_, that)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
@@ -767,8 +775,9 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund(
 pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_tx_size(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
+    is_cooperative: bool,
 ) {
-    wire__crate__api__btc_ln__btc_ln_swap_tx_size_impl(port_, that)
+    wire__crate__api__btc_ln__btc_ln_swap_tx_size_impl(port_, that, is_cooperative)
 }
 
 #[no_mangle]
@@ -894,6 +903,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap
         boltz_url,
         referral_id,
     )
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_process(
+    port_: i64,
+    that: *mut wire_cst_chain_swap,
+) {
+    wire__crate__api__chain_swap__chain_swap_process_impl(port_, that)
 }
 
 #[no_mangle]
@@ -1085,6 +1102,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_subma
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
+    port_: i64,
+    that: *mut wire_cst_lbtc_ln_swap,
+) {
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_process_impl(port_, that)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
@@ -1105,8 +1130,9 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
 pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
+    is_cooperative: bool,
 ) {
-    wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size_impl(port_, that)
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size_impl(port_, that, is_cooperative)
 }
 
 #[no_mangle]
