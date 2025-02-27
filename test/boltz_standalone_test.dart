@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:boltz/boltz.dart';
-import 'package:boltz/src/generated/api/fees.dart';
+// import 'package:boltz/src/generated/api/fees.dart';
 // import 'package:boltz/src/generated/api/btc_ln.dart';
 // import 'package:boltz/src/generated/api/error.dart';
 // import 'package:boltz/src/generated/api/lbtc_ln.dart';
@@ -61,7 +61,7 @@ void main() {
     assert(decoded.isExpired);
     print('$decoded');
   });
-  // group('BTC-LN Submarince', () {
+  // group('BTC-LN Submarine', () {
   //   test('Neg: Minimum limit (50k sats)', () async {
   //     // An invoice with <50k sats
   //     await expectLater(() async => await setupSubmarine(invoice123),

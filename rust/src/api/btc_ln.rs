@@ -1,4 +1,4 @@
-use std::{os::macos::raw::stat, str::FromStr};
+use std::str::FromStr;
 
 use super::{
     error::BoltzError,
@@ -7,23 +7,18 @@ use super::{
 use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use boltz_client::{
-    bitcoin::{
-        consensus::encode::{deserialize, serialize},
-        Transaction, Txid,
-    },
+    bitcoin::{consensus::encode::serialize, Transaction, Txid},
     boltz::{Cooperative, RevSwapStates, SubSwapStates},
     electrum_client::ElectrumApi,
     fees::Fee,
-    network::electrum::{self, ElectrumConfig},
+    network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
-use flutter_rust_bridge::frb;
 use serde_json::Value;
 
 /// Bitcoin-Lightning Swap Class
-#[frb(dart_metadata=("freezed"))]
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,

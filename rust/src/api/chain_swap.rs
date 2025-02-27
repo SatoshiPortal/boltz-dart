@@ -11,11 +11,7 @@ use super::{
 };
 
 use boltz_client::{
-    bitcoin::{
-        consensus::{deserialize, serialize},
-        hex::DisplayHex,
-        Transaction, Txid,
-    },
+    bitcoin::{consensus::serialize, hex::DisplayHex, Txid},
     boltz::{ChainSwapDetails, ChainSwapStates, Cooperative, Side},
     electrum_client::ElectrumApi,
     error::Error,
@@ -23,14 +19,11 @@ use boltz_client::{
     network::electrum::ElectrumConfig,
     swaps::boltz::BoltzApiClientV2,
     util::secrets::Preimage,
-    Amount, BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
-    ToHex,
+    BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };
-use flutter_rust_bridge::frb;
 use serde_json::Value;
 
 /// Bitcoin-Liquid Swap Class
-#[frb(dart_metadata=("freezed"))]
 pub struct ChainSwap {
     pub id: String,
     pub is_testnet: bool,
@@ -730,7 +723,7 @@ mod tests {
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))
             .unwrap();
-        let signed_tx: elements::Transaction =
+        let _signed_tx: elements::Transaction =
             elements::Transaction::consensus_decode(&*signed_bytes).unwrap();
     }
 }
