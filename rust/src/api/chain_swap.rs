@@ -595,114 +595,115 @@ impl ChainSwap {
         Ok(extract_id(txid)?)
     }
     /// Process swap based on status
-    pub fn process(&self) -> Result<SwapAction, BoltzError> {
-        let client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
-        let swap_response = client.get_swap(&self.id)?;
-
-        let status = ChainSwapStates::from_str(&swap_response.status);
+    /// To be used with WebSocket Notification Stream
+    pub fn process(&self, status: String) -> Result<SwapAction, BoltzError> {
+        let status = ChainSwapStates::from_str(&status);
         if status.is_err() {
             return Err(BoltzError::new(
                 "Parse".to_string(),
                 "Could not parse string status to ChainSwapState".to_string(),
             ));
-        }
-        let status = status.unwrap();
-        match status {
-            ChainSwapStates::Created => return Ok(SwapAction::Wait),
-            ChainSwapStates::TransactionZeroConfRejected => return Ok(SwapAction::Wait),
-            ChainSwapStates::TransactionMempool => return Ok(SwapAction::Wait),
-            ChainSwapStates::TransactionConfirmed => return Ok(SwapAction::Wait),
-            ChainSwapStates::TransactionServerMempool => return Ok(SwapAction::Wait),
-            ChainSwapStates::TransactionServerConfirmed => return Ok(SwapAction::Claim),
-            ChainSwapStates::TransactionClaimed => match self.direction {
-                ChainSwapDirection::BtcToLbtc => {
-                    // we are looking for claimed LBTC
-                    let network_config = ElectrumConfig::new(
-                        if self.is_testnet {
-                            Chain::LiquidTestnet.into()
+        } else {
+            let status = status.unwrap();
+            match status {
+                ChainSwapStates::Created => return Ok(SwapAction::Wait),
+                ChainSwapStates::TransactionZeroConfRejected => return Ok(SwapAction::Wait),
+                ChainSwapStates::TransactionMempool => return Ok(SwapAction::Wait),
+                ChainSwapStates::TransactionConfirmed => return Ok(SwapAction::Wait),
+                ChainSwapStates::TransactionServerMempool => return Ok(SwapAction::Wait),
+                ChainSwapStates::TransactionServerConfirmed => return Ok(SwapAction::Claim),
+                ChainSwapStates::TransactionClaimed => match self.direction {
+                    ChainSwapDirection::BtcToLbtc => {
+                        // we are looking for claimed LBTC
+                        let network_config = ElectrumConfig::new(
+                            if self.is_testnet {
+                                Chain::LiquidTestnet.into()
+                            } else {
+                                Chain::Liquid.into()
+                            },
+                            &self.lbtc_electrum_url,
+                            true,
+                            false,
+                            10,
+                        );
+                        let swap_script: LBtcSwapScript =
+                            self.lbtc_script_str.clone().try_into()?;
+                        let utxo = swap_script.fetch_utxo(&network_config)?;
+                        if utxo.is_none() {
+                            return Ok(SwapAction::Close);
                         } else {
-                            Chain::Liquid.into()
-                        },
-                        &self.lbtc_electrum_url,
-                        true,
-                        false,
-                        10,
-                    );
-                    let swap_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;
-                    let utxo = swap_script.fetch_utxo(&network_config)?;
-                    if utxo.is_none() {
-                        return Ok(SwapAction::Close);
-                    } else {
-                        return Ok(SwapAction::Claim);
+                            return Ok(SwapAction::Claim);
+                        }
                     }
-                }
-                ChainSwapDirection::LbtcToBtc => {
-                    // we are looking for claimed BTC
-                    let network_config = ElectrumConfig::new(
-                        if self.is_testnet {
-                            Chain::BitcoinTestnet.into()
+                    ChainSwapDirection::LbtcToBtc => {
+                        // we are looking for claimed BTC
+                        let network_config = ElectrumConfig::new(
+                            if self.is_testnet {
+                                Chain::BitcoinTestnet.into()
+                            } else {
+                                Chain::Bitcoin.into()
+                            },
+                            &self.btc_electrum_url,
+                            true,
+                            true,
+                            10,
+                        );
+                        let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
+                        let balance = swap_script.get_balance(&network_config)?;
+                        if balance.0 == 0 {
+                            return Ok(SwapAction::Close);
                         } else {
-                            Chain::Bitcoin.into()
-                        },
-                        &self.btc_electrum_url,
-                        true,
-                        true,
-                        10,
-                    );
-                    let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
-                    let balance = swap_script.get_balance(&network_config)?;
-                    if balance.0 == 0 {
-                        return Ok(SwapAction::Close);
-                    } else {
-                        return Ok(SwapAction::Claim);
+                            return Ok(SwapAction::Claim);
+                        }
                     }
-                }
-            },
-            ChainSwapStates::TransactionLockupFailed => return Ok(SwapAction::Refund),
-            ChainSwapStates::SwapExpired
-            | ChainSwapStates::TransactionFailed
-            | ChainSwapStates::TransactionRefunded => match self.direction {
-                ChainSwapDirection::BtcToLbtc => {
-                    let network_config = ElectrumConfig::new(
-                        if self.is_testnet {
-                            Chain::BitcoinTestnet.into()
+                },
+                ChainSwapStates::TransactionLockupFailed => return Ok(SwapAction::Refund),
+                ChainSwapStates::SwapExpired
+                | ChainSwapStates::TransactionFailed
+                | ChainSwapStates::TransactionRefunded => match self.direction {
+                    ChainSwapDirection::BtcToLbtc => {
+                        let network_config = ElectrumConfig::new(
+                            if self.is_testnet {
+                                Chain::BitcoinTestnet.into()
+                            } else {
+                                Chain::Bitcoin.into()
+                            },
+                            &self.btc_electrum_url,
+                            true,
+                            true,
+                            10,
+                        );
+                        let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
+                        let balance = swap_script.get_balance(&network_config)?;
+                        if balance.0 == 0 {
+                            return Ok(SwapAction::Close);
                         } else {
-                            Chain::Bitcoin.into()
-                        },
-                        &self.btc_electrum_url,
-                        true,
-                        true,
-                        10,
-                    );
-                    let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
-                    let balance = swap_script.get_balance(&network_config)?;
-                    if balance.0 == 0 {
-                        return Ok(SwapAction::Close);
-                    } else {
-                        return Ok(SwapAction::Refund);
+                            return Ok(SwapAction::Refund);
+                        }
                     }
-                }
-                ChainSwapDirection::LbtcToBtc => {
-                    let network_config = ElectrumConfig::new(
-                        if self.is_testnet {
-                            Chain::LiquidTestnet.into()
+                    ChainSwapDirection::LbtcToBtc => {
+                        let network_config = ElectrumConfig::new(
+                            if self.is_testnet {
+                                Chain::LiquidTestnet.into()
+                            } else {
+                                Chain::Liquid.into()
+                            },
+                            &self.lbtc_electrum_url,
+                            true,
+                            false,
+                            10,
+                        );
+                        let swap_script: LBtcSwapScript =
+                            self.lbtc_script_str.clone().try_into()?;
+                        let utxo = swap_script.fetch_utxo(&network_config)?;
+                        if utxo.is_none() {
+                            return Ok(SwapAction::Close);
                         } else {
-                            Chain::Liquid.into()
-                        },
-                        &self.lbtc_electrum_url,
-                        true,
-                        false,
-                        10,
-                    );
-                    let swap_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;
-                    let utxo = swap_script.fetch_utxo(&network_config)?;
-                    if utxo.is_none() {
-                        return Ok(SwapAction::Close);
-                    } else {
-                        return Ok(SwapAction::Refund);
+                            return Ok(SwapAction::Refund);
+                        }
                     }
-                }
-            },
+                },
+            }
         }
     }
 }

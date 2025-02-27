@@ -137,10 +137,9 @@ class ChainSwap with _$ChainSwap {
           referralId: referralId);
 
   /// Process swap based on status
-  Future<SwapAction> process() =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapProcess(
-        that: this,
-      );
+  /// To be used with WebSocket Notification Stream
+  Future<SwapAction> process({required String status}) => BoltzCore.instance.api
+      .crateApiChainSwapChainSwapProcess(that: this, status: status);
 
   /// Refund a failed swap
   Future<String> refund(

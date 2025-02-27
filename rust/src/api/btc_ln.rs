@@ -433,13 +433,11 @@ impl BtcLnSwap {
         Ok(size)
     }
     /// Process swap based on status
-    /// https://docs.boltz.exchange/api/lifecycle
-    pub fn process(&self) -> Result<SwapAction, BoltzError> {
-        let client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
-        let swap_response = client.get_swap(&self.id)?;
+    /// To be used with WebSocket Notification Stream
+    pub fn process(&self, status: String) -> Result<SwapAction, BoltzError> {
         match self.kind {
             SwapType::Submarine => {
-                let status = SubSwapStates::from_str(&swap_response.status);
+                let status = SubSwapStates::from_str(&status);
                 if status.is_err() {
                     return Err(BoltzError::new(
                         "Parse".to_string(),
@@ -477,7 +475,7 @@ impl BtcLnSwap {
                 }
             }
             SwapType::Reverse => {
-                let status = RevSwapStates::from_str(&swap_response.status);
+                let status = RevSwapStates::from_str(&status);
                 if status.is_err() {
                     return Err(BoltzError::new(
                         "Parse".to_string(),

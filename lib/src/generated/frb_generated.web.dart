@@ -890,8 +890,9 @@ class BoltzCoreWire implements BaseWire {
           referral_id);
 
   void wire__crate__api__btc_ln__btc_ln_swap_process(
-          NativePortType port_, JSAny that) =>
-      wasmModule.wire__crate__api__btc_ln__btc_ln_swap_process(port_, that);
+          NativePortType port_, JSAny that, String status) =>
+      wasmModule.wire__crate__api__btc_ln__btc_ln_swap_process(
+          port_, that, status);
 
   void wire__crate__api__btc_ln__btc_ln_swap_refund(NativePortType port_,
           JSAny that, String out_address, JSAny abs_fee, bool try_cooperate) =>
@@ -996,8 +997,9 @@ class BoltzCoreWire implements BaseWire {
           referral_id);
 
   void wire__crate__api__chain_swap__chain_swap_process(
-          NativePortType port_, JSAny that) =>
-      wasmModule.wire__crate__api__chain_swap__chain_swap_process(port_, that);
+          NativePortType port_, JSAny that, String status) =>
+      wasmModule.wire__crate__api__chain_swap__chain_swap_process(
+          port_, that, status);
 
   void wire__crate__api__chain_swap__chain_swap_refund(
           NativePortType port_,
@@ -1122,8 +1124,9 @@ class BoltzCoreWire implements BaseWire {
           referral_id);
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
-          NativePortType port_, JSAny that) =>
-      wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_process(port_, that);
+          NativePortType port_, JSAny that, String status) =>
+      wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
+          port_, that, status);
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(NativePortType port_,
           JSAny that, String out_address, JSAny abs_fee, bool try_cooperate) =>
@@ -1277,7 +1280,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       String? referral_id);
 
   external void wire__crate__api__btc_ln__btc_ln_swap_process(
-      NativePortType port_, JSAny that);
+      NativePortType port_, JSAny that, String status);
 
   external void wire__crate__api__btc_ln__btc_ln_swap_refund(
       NativePortType port_,
@@ -1342,7 +1345,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       String? referral_id);
 
   external void wire__crate__api__chain_swap__chain_swap_process(
-      NativePortType port_, JSAny that);
+      NativePortType port_, JSAny that, String status);
 
   external void wire__crate__api__chain_swap__chain_swap_refund(
       NativePortType port_,
@@ -1422,7 +1425,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       String? referral_id);
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
-      NativePortType port_, JSAny that);
+      NativePortType port_, JSAny that, String status);
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
       NativePortType port_,

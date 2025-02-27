@@ -226,7 +226,8 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(int64_t po
                                                                       struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_process(int64_t port_,
-                                                                struct wire_cst_btc_ln_swap *that);
+                                                                struct wire_cst_btc_ln_swap *that,
+                                                                struct wire_cst_list_prim_u_8_strict *status);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund(int64_t port_,
                                                                struct wire_cst_btc_ln_swap *that,
@@ -292,7 +293,8 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap(int64_t port
                                                                     struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_process(int64_t port_,
-                                                                   struct wire_cst_chain_swap *that);
+                                                                   struct wire_cst_chain_swap *that,
+                                                                   struct wire_cst_list_prim_u_8_strict *status);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(int64_t port_,
                                                                   struct wire_cst_chain_swap *that,
@@ -367,7 +369,8 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(int64_t 
                                                                         struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_process(int64_t port_,
-                                                                  struct wire_cst_lbtc_ln_swap *that);
+                                                                  struct wire_cst_lbtc_ln_swap *that,
+                                                                  struct wire_cst_list_prim_u_8_strict *status);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(int64_t port_,
                                                                  struct wire_cst_lbtc_ln_swap *that,

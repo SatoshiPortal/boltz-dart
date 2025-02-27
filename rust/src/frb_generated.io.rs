@@ -750,8 +750,9 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submari
 pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_process(
     port_: i64,
     that: *mut wire_cst_btc_ln_swap,
+    status: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire__crate__api__btc_ln__btc_ln_swap_process_impl(port_, that)
+    wire__crate__api__btc_ln__btc_ln_swap_process_impl(port_, that, status)
 }
 
 #[no_mangle]
@@ -909,8 +910,9 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap
 pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_process(
     port_: i64,
     that: *mut wire_cst_chain_swap,
+    status: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire__crate__api__chain_swap__chain_swap_process_impl(port_, that)
+    wire__crate__api__chain_swap__chain_swap_process_impl(port_, that, status)
 }
 
 #[no_mangle]
@@ -1105,8 +1107,9 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_subma
 pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
     port_: i64,
     that: *mut wire_cst_lbtc_ln_swap,
+    status: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire__crate__api__lbtc_ln__lbtc_ln_swap_process_impl(port_, that)
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_process_impl(port_, that, status)
 }
 
 #[no_mangle]
