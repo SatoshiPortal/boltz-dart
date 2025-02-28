@@ -16,9 +16,12 @@ use boltz_client::{
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
+use openssl::derive;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// Bitcoin-Lightning Swap Class
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,
@@ -36,6 +39,20 @@ pub struct BtcLnSwap {
     pub referral_id: Option<String>,
 }
 impl BtcLnSwap {
+    /// Convert instance to a JSON string.
+    pub fn to_json(&self) -> Result<String, BoltzError> {
+        match serde_json::to_string(self) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
+    /// Parse from a JSON string.
+    pub fn from_json(json_str: &str) -> Result<Self, BoltzError> {
+        match serde_json::from_str(json_str) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
     /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
@@ -461,6 +478,7 @@ impl BtcLnSwap {
                         if balance.0 == 0 {
                             return Ok(SwapAction::Close);
                         } else {
+                            // self.refund(out_address, abs_fee, try_cooperate);
                             return Ok(SwapAction::Refund);
                         }
                     }

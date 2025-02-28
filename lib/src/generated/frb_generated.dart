@@ -62,7 +62,7 @@ class BoltzCore
   String get codegenVersion => '2.0.0';
 
   @override
-  int get rustContentHash => -1475532107;
+  int get rustContentHash => 1097141196;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -87,6 +87,8 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<void> crateApiBtcLnBtcLnSwapCoopCloseSubmarine(
       {required BtcLnSwap that});
+
+  Future<BtcLnSwap> crateApiBtcLnBtcLnSwapFromJson({required String jsonStr});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNew(
       {required String id,
@@ -132,6 +134,8 @@ abstract class BoltzCoreApi extends BaseApi {
       required BigInt absFee,
       required bool tryCooperate});
 
+  Future<String> crateApiBtcLnBtcLnSwapToJson({required BtcLnSwap that});
+
   Future<BigInt> crateApiBtcLnBtcLnSwapTxSize(
       {required BtcLnSwap that, required bool isCooperative});
 
@@ -151,6 +155,9 @@ abstract class BoltzCoreApi extends BaseApi {
       required String refundAddress,
       required BigInt absFee,
       required bool tryCooperate});
+
+  Future<ChainSwap> crateApiChainSwapChainSwapFromJson(
+      {required String jsonStr});
 
   Future<String> crateApiChainSwapChainSwapGetServerLockup(
       {required ChainSwap that});
@@ -197,6 +204,8 @@ abstract class BoltzCoreApi extends BaseApi {
       required BigInt absFee,
       required bool tryCooperate});
 
+  Future<String> crateApiChainSwapChainSwapToJson({required ChainSwap that});
+
   Future<BoltzError> crateApiErrorBoltzErrorNew(
       {required String kind, required String message});
 
@@ -223,6 +232,9 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<void> crateApiLbtcLnLbtcLnSwapCoopCloseSubmarine(
       {required LbtcLnSwap that});
+
+  Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapFromJson(
+      {required String jsonStr});
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNew(
       {required String id,
@@ -269,10 +281,12 @@ abstract class BoltzCoreApi extends BaseApi {
       required BigInt absFee,
       required bool tryCooperate});
 
+  Future<String> crateApiLbtcLnLbtcLnSwapToJson({required LbtcLnSwap that});
+
   Future<BigInt> crateApiLbtcLnLbtcLnSwapTxSize(
       {required LbtcLnSwap that, required bool isCooperative});
 
-  BtcSwapScriptStr crateApiTypesBtcSwapScriptStrNew(
+  Future<BtcSwapScriptStr> crateApiTypesBtcSwapScriptStrNew(
       {required SwapType swapType,
       String? fundingAddrs,
       required String hashlock,
@@ -295,10 +309,10 @@ abstract class BoltzCoreApi extends BaseApi {
       required BigInt index,
       required SwapType swapType});
 
-  KeyPair crateApiTypesKeyPairNew(
+  Future<KeyPair> crateApiTypesKeyPairNew(
       {required String secretKey, required String publicKey});
 
-  LBtcSwapScriptStr crateApiTypesLBtcSwapScriptStrNew(
+  Future<LBtcSwapScriptStr> crateApiTypesLBtcSwapScriptStrNew(
       {required SwapType swapType,
       String? fundingAddrs,
       required String hashlock,
@@ -310,7 +324,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<PreImage> crateApiTypesPreImageGenerate();
 
-  PreImage crateApiTypesPreImageNew(
+  Future<PreImage> crateApiTypesPreImageNew(
       {required String value, required String sha256, required String hash160});
 
   Future<bool> crateApiTypesValidateLnurl({required String lnurl});
@@ -434,6 +448,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "btc_ln_swap_coop_close_submarine",
         argNames: ["that"],
+      );
+
+  @override
+  Future<BtcLnSwap> crateApiBtcLnBtcLnSwapFromJson({required String jsonStr}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(jsonStr);
+        return wire.wire__crate__api__btc_ln__btc_ln_swap_from_json(
+            port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_btc_ln_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiBtcLnBtcLnSwapFromJsonConstMeta,
+      argValues: [jsonStr],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiBtcLnBtcLnSwapFromJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "btc_ln_swap_from_json",
+        argNames: ["jsonStr"],
       );
 
   @override
@@ -697,6 +735,29 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<String> crateApiBtcLnBtcLnSwapToJson({required BtcLnSwap that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        return wire.wire__crate__api__btc_ln__btc_ln_swap_to_json(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiBtcLnBtcLnSwapToJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiBtcLnBtcLnSwapToJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "btc_ln_swap_to_json",
+        argNames: ["that"],
+      );
+
+  @override
   Future<BigInt> crateApiBtcLnBtcLnSwapTxSize(
       {required BtcLnSwap that, required bool isCooperative}) {
     return handler.executeNormal(NormalTask(
@@ -817,6 +878,31 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "absFee",
           "tryCooperate"
         ],
+      );
+
+  @override
+  Future<ChainSwap> crateApiChainSwapChainSwapFromJson(
+      {required String jsonStr}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(jsonStr);
+        return wire.wire__crate__api__chain_swap__chain_swap_from_json(
+            port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_chain_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiChainSwapChainSwapFromJsonConstMeta,
+      argValues: [jsonStr],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiChainSwapChainSwapFromJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "chain_swap_from_json",
+        argNames: ["jsonStr"],
       );
 
   @override
@@ -1098,6 +1184,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<String> crateApiChainSwapChainSwapToJson({required ChainSwap that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        return wire.wire__crate__api__chain_swap__chain_swap_to_json(
+            port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiChainSwapChainSwapToJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiChainSwapChainSwapToJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "chain_swap_to_json",
+        argNames: ["that"],
+      );
+
+  @override
   Future<BoltzError> crateApiErrorBoltzErrorNew(
       {required String kind, required String message}) {
     return handler.executeNormal(NormalTask(
@@ -1317,6 +1427,31 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_coop_close_submarine",
         argNames: ["that"],
+      );
+
+  @override
+  Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapFromJson(
+      {required String jsonStr}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(jsonStr);
+        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
+            port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_lbtc_ln_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLbtcLnLbtcLnSwapFromJsonConstMeta,
+      argValues: [jsonStr],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapFromJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "lbtc_ln_swap_from_json",
+        argNames: ["jsonStr"],
       );
 
   @override
@@ -1586,6 +1721,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<String> crateApiLbtcLnLbtcLnSwapToJson({required LbtcLnSwap that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json(
+            port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLbtcLnLbtcLnSwapToJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapToJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "lbtc_ln_swap_to_json",
+        argNames: ["that"],
+      );
+
+  @override
   Future<BigInt> crateApiLbtcLnLbtcLnSwapTxSize(
       {required LbtcLnSwap that, required bool isCooperative}) {
     return handler.executeNormal(NormalTask(
@@ -1612,7 +1771,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  BtcSwapScriptStr crateApiTypesBtcSwapScriptStrNew(
+  Future<BtcSwapScriptStr> crateApiTypesBtcSwapScriptStrNew(
       {required SwapType swapType,
       String? fundingAddrs,
       required String hashlock,
@@ -1620,8 +1779,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required int locktime,
       required String senderPubkey,
       Side? side}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
         var arg0 = cst_encode_swap_type(swapType);
         var arg1 = cst_encode_opt_String(fundingAddrs);
         var arg2 = cst_encode_String(hashlock);
@@ -1630,7 +1789,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg5 = cst_encode_String(senderPubkey);
         var arg6 = cst_encode_opt_box_autoadd_side(side);
         return wire.wire__crate__api__types__btc_swap_script_str_new(
-            arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_btc_swap_script_str,
@@ -1772,13 +1931,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  KeyPair crateApiTypesKeyPairNew(
+  Future<KeyPair> crateApiTypesKeyPairNew(
       {required String secretKey, required String publicKey}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
         var arg0 = cst_encode_String(secretKey);
         var arg1 = cst_encode_String(publicKey);
-        return wire.wire__crate__api__types__key_pair_new(arg0, arg1);
+        return wire.wire__crate__api__types__key_pair_new(port_, arg0, arg1);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_key_pair,
@@ -1796,7 +1955,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  LBtcSwapScriptStr crateApiTypesLBtcSwapScriptStrNew(
+  Future<LBtcSwapScriptStr> crateApiTypesLBtcSwapScriptStrNew(
       {required SwapType swapType,
       String? fundingAddrs,
       required String hashlock,
@@ -1805,8 +1964,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       required String senderPubkey,
       required String blindingKey,
       Side? side}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
         var arg0 = cst_encode_swap_type(swapType);
         var arg1 = cst_encode_opt_String(fundingAddrs);
         var arg2 = cst_encode_String(hashlock);
@@ -1816,7 +1975,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg6 = cst_encode_String(blindingKey);
         var arg7 = cst_encode_opt_box_autoadd_side(side);
         return wire.wire__crate__api__types__l_btc_swap_script_str_new(
-            arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            port_, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_l_btc_swap_script_str,
@@ -1875,16 +2034,17 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  PreImage crateApiTypesPreImageNew(
+  Future<PreImage> crateApiTypesPreImageNew(
       {required String value,
       required String sha256,
       required String hash160}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
         var arg0 = cst_encode_String(value);
         var arg1 = cst_encode_String(sha256);
         var arg2 = cst_encode_String(hash160);
-        return wire.wire__crate__api__types__pre_image_new(arg0, arg1, arg2);
+        return wire.wire__crate__api__types__pre_image_new(
+            port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_pre_image,
@@ -2054,7 +2214,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     final arr = raw as List<dynamic>;
     if (arr.length != 7)
       throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
-    return BtcSwapScriptStr.raw(
+    return BtcSwapScriptStr(
       swapType: dco_decode_swap_type(arr[0]),
       fundingAddrs: dco_decode_opt_String(arr[1]),
       hashlock: dco_decode_String(arr[2]),
@@ -2180,7 +2340,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     final arr = raw as List<dynamic>;
     if (arr.length != 2)
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return KeyPair.raw(
+    return KeyPair(
       secretKey: dco_decode_String(arr[0]),
       publicKey: dco_decode_String(arr[1]),
     );
@@ -2192,7 +2352,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     final arr = raw as List<dynamic>;
     if (arr.length != 8)
       throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
-    return LBtcSwapScriptStr.raw(
+    return LBtcSwapScriptStr(
       swapType: dco_decode_swap_type(arr[0]),
       fundingAddrs: dco_decode_opt_String(arr[1]),
       hashlock: dco_decode_String(arr[2]),
@@ -2264,7 +2424,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     final arr = raw as List<dynamic>;
     if (arr.length != 3)
       throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-    return PreImage.raw(
+    return PreImage(
       value: dco_decode_String(arr[0]),
       sha256: dco_decode_String(arr[1]),
       hash160: dco_decode_String(arr[2]),
@@ -2509,7 +2669,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_locktime = sse_decode_u_32(deserializer);
     var var_senderPubkey = sse_decode_String(deserializer);
     var var_side = sse_decode_opt_box_autoadd_side(deserializer);
-    return BtcSwapScriptStr.raw(
+    return BtcSwapScriptStr(
         swapType: var_swapType,
         fundingAddrs: var_fundingAddrs,
         hashlock: var_hashlock,
@@ -2651,7 +2811,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_secretKey = sse_decode_String(deserializer);
     var var_publicKey = sse_decode_String(deserializer);
-    return KeyPair.raw(secretKey: var_secretKey, publicKey: var_publicKey);
+    return KeyPair(secretKey: var_secretKey, publicKey: var_publicKey);
   }
 
   @protected
@@ -2666,7 +2826,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_senderPubkey = sse_decode_String(deserializer);
     var var_blindingKey = sse_decode_String(deserializer);
     var var_side = sse_decode_opt_box_autoadd_side(deserializer);
-    return LBtcSwapScriptStr.raw(
+    return LBtcSwapScriptStr(
         swapType: var_swapType,
         fundingAddrs: var_fundingAddrs,
         hashlock: var_hashlock,
@@ -2754,8 +2914,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_value = sse_decode_String(deserializer);
     var var_sha256 = sse_decode_String(deserializer);
     var var_hash160 = sse_decode_String(deserializer);
-    return PreImage.raw(
-        value: var_value, sha256: var_sha256, hash160: var_hash160);
+    return PreImage(value: var_value, sha256: var_sha256, hash160: var_hash160);
   }
 
   @protected
