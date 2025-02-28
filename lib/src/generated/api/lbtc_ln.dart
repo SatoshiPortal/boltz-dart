@@ -6,32 +6,44 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'types.dart';
-part 'lbtc_ln.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `clone`, `eq`
 
 /// Liquid-Lightning Swap Class
-@freezed
-class LbtcLnSwap with _$LbtcLnSwap {
-  const LbtcLnSwap._();
-  const factory LbtcLnSwap({
-    required String id,
-    required SwapType kind,
-    required Chain network,
-    required KeyPair keys,
-    required BigInt keyIndex,
-    required PreImage preimage,
-    required LBtcSwapScriptStr swapScript,
-    required String invoice,
-    required BigInt outAmount,
-    required String scriptAddress,
-    required String blindingKey,
-    required String electrumUrl,
-    required String boltzUrl,
-    String? referralId,
-  }) = _LbtcLnSwap;
+class LbtcLnSwap {
+  final String id;
+  final SwapType kind;
+  final Chain network;
+  final KeyPair keys;
+  final BigInt keyIndex;
+  final PreImage preimage;
+  final LBtcSwapScriptStr swapScript;
+  final String invoice;
+  final BigInt outAmount;
+  final String scriptAddress;
+  final String blindingKey;
+  final String electrumUrl;
+  final String boltzUrl;
+  final String? referralId;
+
+  const LbtcLnSwap({
+    required this.id,
+    required this.kind,
+    required this.network,
+    required this.keys,
+    required this.keyIndex,
+    required this.preimage,
+    required this.swapScript,
+    required this.invoice,
+    required this.outAmount,
+    required this.scriptAddress,
+    required this.blindingKey,
+    required this.electrumUrl,
+    required this.boltzUrl,
+    this.referralId,
+  });
 
   /// Broadcast using boltz's electrum server
   Future<String> broadcastBoltz({required String signedHex}) => BoltzCore
@@ -61,6 +73,10 @@ class LbtcLnSwap with _$LbtcLnSwap {
       BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapCoopCloseSubmarine(
         that: this,
       );
+
+  /// Parse from a JSON string.
+  static Future<LbtcLnSwap> fromJson({required String jsonStr}) =>
+      BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapFromJson(jsonStr: jsonStr);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Manually create the class. Primarily used when recovering a swap.
@@ -155,7 +171,50 @@ class LbtcLnSwap with _$LbtcLnSwap {
           absFee: absFee,
           tryCooperate: tryCooperate);
 
+  /// Convert instance to a JSON string.
+  Future<String> toJson() =>
+      BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapToJson(
+        that: this,
+      );
+
   /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
   Future<BigInt> txSize({required bool isCooperative}) => BoltzCore.instance.api
       .crateApiLbtcLnLbtcLnSwapTxSize(that: this, isCooperative: isCooperative);
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      kind.hashCode ^
+      network.hashCode ^
+      keys.hashCode ^
+      keyIndex.hashCode ^
+      preimage.hashCode ^
+      swapScript.hashCode ^
+      invoice.hashCode ^
+      outAmount.hashCode ^
+      scriptAddress.hashCode ^
+      blindingKey.hashCode ^
+      electrumUrl.hashCode ^
+      boltzUrl.hashCode ^
+      referralId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LbtcLnSwap &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          kind == other.kind &&
+          network == other.network &&
+          keys == other.keys &&
+          keyIndex == other.keyIndex &&
+          preimage == other.preimage &&
+          swapScript == other.swapScript &&
+          invoice == other.invoice &&
+          outAmount == other.outAmount &&
+          scriptAddress == other.scriptAddress &&
+          blindingKey == other.blindingKey &&
+          electrumUrl == other.electrumUrl &&
+          boltzUrl == other.boltzUrl &&
+          referralId == other.referralId;
 }

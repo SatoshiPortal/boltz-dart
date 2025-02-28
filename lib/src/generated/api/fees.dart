@@ -6,40 +6,80 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
-part 'fees.freezed.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`
 
 /// Complete fees and limits class for Chain swaps
-@freezed
-class ChainFeesAndLimits with _$ChainFeesAndLimits {
-  const factory ChainFeesAndLimits({
-    required SwapLimits btcLimits,
-    required SwapLimits lbtcLimits,
-    required ChainSwapFees btcFees,
-    required ChainSwapFees lbtcFees,
-  }) = _ChainFeesAndLimits;
+class ChainFeesAndLimits {
+  final SwapLimits btcLimits;
+  final SwapLimits lbtcLimits;
+  final ChainSwapFees btcFees;
+  final ChainSwapFees lbtcFees;
+
+  const ChainFeesAndLimits({
+    required this.btcLimits,
+    required this.lbtcLimits,
+    required this.btcFees,
+    required this.lbtcFees,
+  });
+
+  @override
+  int get hashCode =>
+      btcLimits.hashCode ^
+      lbtcLimits.hashCode ^
+      btcFees.hashCode ^
+      lbtcFees.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChainFeesAndLimits &&
+          runtimeType == other.runtimeType &&
+          btcLimits == other.btcLimits &&
+          lbtcLimits == other.lbtcLimits &&
+          btcFees == other.btcFees &&
+          lbtcFees == other.lbtcFees;
 }
 
 /// Chain swap fee breakdown.
-@freezed
-class ChainSwapFees with _$ChainSwapFees {
-  const factory ChainSwapFees({
-    required double percentage,
-    required BigInt userLockup,
-    required BigInt userClaim,
-    required BigInt server,
-  }) = _ChainSwapFees;
+class ChainSwapFees {
+  final double percentage;
+  final BigInt userLockup;
+  final BigInt userClaim;
+  final BigInt server;
+
+  const ChainSwapFees({
+    required this.percentage,
+    required this.userLockup,
+    required this.userClaim,
+    required this.server,
+  });
+
+  @override
+  int get hashCode =>
+      percentage.hashCode ^
+      userLockup.hashCode ^
+      userClaim.hashCode ^
+      server.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChainSwapFees &&
+          runtimeType == other.runtimeType &&
+          percentage == other.percentage &&
+          userLockup == other.userLockup &&
+          userClaim == other.userClaim &&
+          server == other.server;
 }
 
 /// A Class that helps fetch both Fees and Limits for the various swap types
-@freezed
-class Fees with _$Fees {
-  const Fees._();
-  const factory Fees({
-    required String boltzUrl,
-  }) = _Fees;
+class Fees {
+  final String boltzUrl;
+
+  const Fees({
+    required this.boltzUrl,
+  });
 
   /// Method to get the fees & limits for a chain swap
   Future<ChainFeesAndLimits> chain() =>
@@ -63,63 +103,170 @@ class Fees with _$Fees {
       BoltzCore.instance.api.crateApiFeesFeesSubmarine(
         that: this,
       );
+
+  @override
+  int get hashCode => boltzUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Fees &&
+          runtimeType == other.runtimeType &&
+          boltzUrl == other.boltzUrl;
 }
 
 /// Breakdown of Miner Fees
-@freezed
-class MinerFees with _$MinerFees {
-  const factory MinerFees({
-    required BigInt lockup,
-    required BigInt claim,
-  }) = _MinerFees;
+class MinerFees {
+  final BigInt lockup;
+  final BigInt claim;
+
+  const MinerFees({
+    required this.lockup,
+    required this.claim,
+  });
+
+  @override
+  int get hashCode => lockup.hashCode ^ claim.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MinerFees &&
+          runtimeType == other.runtimeType &&
+          lockup == other.lockup &&
+          claim == other.claim;
 }
 
 /// Reverse swap fee breakdown.
-@freezed
-class RevSwapFees with _$RevSwapFees {
-  const factory RevSwapFees({
-    required double percentage,
-    required MinerFees minerFees,
-  }) = _RevSwapFees;
+class RevSwapFees {
+  final double percentage;
+  final MinerFees minerFees;
+
+  const RevSwapFees({
+    required this.percentage,
+    required this.minerFees,
+  });
+
+  @override
+  int get hashCode => percentage.hashCode ^ minerFees.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RevSwapFees &&
+          runtimeType == other.runtimeType &&
+          percentage == other.percentage &&
+          minerFees == other.minerFees;
 }
 
 /// Complete fees and limits class for Reverse swaps
-@freezed
-class ReverseFeesAndLimits with _$ReverseFeesAndLimits {
-  const factory ReverseFeesAndLimits({
-    required SwapLimits btcLimits,
-    required SwapLimits lbtcLimits,
-    required RevSwapFees btcFees,
-    required RevSwapFees lbtcFees,
-  }) = _ReverseFeesAndLimits;
+class ReverseFeesAndLimits {
+  final SwapLimits btcLimits;
+  final SwapLimits lbtcLimits;
+  final RevSwapFees btcFees;
+  final RevSwapFees lbtcFees;
+
+  const ReverseFeesAndLimits({
+    required this.btcLimits,
+    required this.lbtcLimits,
+    required this.btcFees,
+    required this.lbtcFees,
+  });
+
+  @override
+  int get hashCode =>
+      btcLimits.hashCode ^
+      lbtcLimits.hashCode ^
+      btcFees.hashCode ^
+      lbtcFees.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReverseFeesAndLimits &&
+          runtimeType == other.runtimeType &&
+          btcLimits == other.btcLimits &&
+          lbtcLimits == other.lbtcLimits &&
+          btcFees == other.btcFees &&
+          lbtcFees == other.lbtcFees;
 }
 
 /// Submarine swap fee breakdown.
-@freezed
-class SubSwapFees with _$SubSwapFees {
-  const factory SubSwapFees({
-    required double percentage,
-    required BigInt minerFees,
-  }) = _SubSwapFees;
+class SubSwapFees {
+  /// Boltz fees as a percentage
+  final double percentage;
+
+  /// Fees going to Bitcoin miners/Liquid block validators
+  final BigInt minerFees;
+
+  const SubSwapFees({
+    required this.percentage,
+    required this.minerFees,
+  });
+
+  @override
+  int get hashCode => percentage.hashCode ^ minerFees.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SubSwapFees &&
+          runtimeType == other.runtimeType &&
+          percentage == other.percentage &&
+          minerFees == other.minerFees;
 }
 
 /// Complete fees and limits class for Submarine swaps
-@freezed
-class SubmarineFeesAndLimits with _$SubmarineFeesAndLimits {
-  const factory SubmarineFeesAndLimits({
-    required SwapLimits btcLimits,
-    required SwapLimits lbtcLimits,
-    required SubSwapFees btcFees,
-    required SubSwapFees lbtcFees,
-  }) = _SubmarineFeesAndLimits;
+class SubmarineFeesAndLimits {
+  final SwapLimits btcLimits;
+  final SwapLimits lbtcLimits;
+  final SubSwapFees btcFees;
+  final SubSwapFees lbtcFees;
+
+  const SubmarineFeesAndLimits({
+    required this.btcLimits,
+    required this.lbtcLimits,
+    required this.btcFees,
+    required this.lbtcFees,
+  });
+
+  @override
+  int get hashCode =>
+      btcLimits.hashCode ^
+      lbtcLimits.hashCode ^
+      btcFees.hashCode ^
+      lbtcFees.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SubmarineFeesAndLimits &&
+          runtimeType == other.runtimeType &&
+          btcLimits == other.btcLimits &&
+          lbtcLimits == other.lbtcLimits &&
+          btcFees == other.btcFees &&
+          lbtcFees == other.lbtcFees;
 }
 
 /// Boltz limits for swaps.
 /// Internally used and returned by the Fees class methods.
-@freezed
-class SwapLimits with _$SwapLimits {
-  const factory SwapLimits({
-    required BigInt minimal,
-    required BigInt maximal,
-  }) = _SwapLimits;
+class SwapLimits {
+  final BigInt minimal;
+  final BigInt maximal;
+
+  const SwapLimits({
+    required this.minimal,
+    required this.maximal,
+  });
+
+  @override
+  int get hashCode => minimal.hashCode ^ maximal.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SwapLimits &&
+          runtimeType == other.runtimeType &&
+          minimal == other.minimal &&
+          maximal == other.maximal;
 }

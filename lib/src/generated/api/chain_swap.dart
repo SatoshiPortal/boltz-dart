@@ -6,35 +6,50 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'types.dart';
-part 'chain_swap.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `clone`, `eq`
 
 /// Bitcoin-Liquid Swap Class
-@freezed
-class ChainSwap with _$ChainSwap {
-  const ChainSwap._();
-  const factory ChainSwap({
-    required String id,
-    required bool isTestnet,
-    required ChainSwapDirection direction,
-    required KeyPair refundKeys,
-    required BigInt refundIndex,
-    required KeyPair claimKeys,
-    required BigInt claimIndex,
-    required PreImage preimage,
-    required BtcSwapScriptStr btcScriptStr,
-    required LBtcSwapScriptStr lbtcScriptStr,
-    required String scriptAddress,
-    required BigInt outAmount,
-    required String btcElectrumUrl,
-    required String lbtcElectrumUrl,
-    required String boltzUrl,
-    String? referralId,
-    required String blindingKey,
-  }) = _ChainSwap;
+class ChainSwap {
+  final String id;
+  final bool isTestnet;
+  final ChainSwapDirection direction;
+  final KeyPair refundKeys;
+  final BigInt refundIndex;
+  final KeyPair claimKeys;
+  final BigInt claimIndex;
+  final PreImage preimage;
+  final BtcSwapScriptStr btcScriptStr;
+  final LBtcSwapScriptStr lbtcScriptStr;
+  final String scriptAddress;
+  final BigInt outAmount;
+  final String btcElectrumUrl;
+  final String lbtcElectrumUrl;
+  final String boltzUrl;
+  final String? referralId;
+  final String blindingKey;
+
+  const ChainSwap({
+    required this.id,
+    required this.isTestnet,
+    required this.direction,
+    required this.refundKeys,
+    required this.refundIndex,
+    required this.claimKeys,
+    required this.claimIndex,
+    required this.preimage,
+    required this.btcScriptStr,
+    required this.lbtcScriptStr,
+    required this.scriptAddress,
+    required this.outAmount,
+    required this.btcElectrumUrl,
+    required this.lbtcElectrumUrl,
+    required this.boltzUrl,
+    this.referralId,
+    required this.blindingKey,
+  });
 
   /// Broadcast a signed transaction using boltz's electrum server
   Future<String> broadcastBoltz(
@@ -60,6 +75,11 @@ class ChainSwap with _$ChainSwap {
           refundAddress: refundAddress,
           absFee: absFee,
           tryCooperate: tryCooperate);
+
+  /// Parse from a JSON string.
+  static Future<ChainSwap> fromJson({required String jsonStr}) =>
+      BoltzCore.instance.api
+          .crateApiChainSwapChainSwapFromJson(jsonStr: jsonStr);
 
   /// Get the transaction id of the server's lockup transaction
   Future<String> getServerLockup() =>
@@ -151,4 +171,53 @@ class ChainSwap with _$ChainSwap {
           refundAddress: refundAddress,
           absFee: absFee,
           tryCooperate: tryCooperate);
+
+  /// Convert instance to a JSON string.
+  Future<String> toJson() =>
+      BoltzCore.instance.api.crateApiChainSwapChainSwapToJson(
+        that: this,
+      );
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      isTestnet.hashCode ^
+      direction.hashCode ^
+      refundKeys.hashCode ^
+      refundIndex.hashCode ^
+      claimKeys.hashCode ^
+      claimIndex.hashCode ^
+      preimage.hashCode ^
+      btcScriptStr.hashCode ^
+      lbtcScriptStr.hashCode ^
+      scriptAddress.hashCode ^
+      outAmount.hashCode ^
+      btcElectrumUrl.hashCode ^
+      lbtcElectrumUrl.hashCode ^
+      boltzUrl.hashCode ^
+      referralId.hashCode ^
+      blindingKey.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChainSwap &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          isTestnet == other.isTestnet &&
+          direction == other.direction &&
+          refundKeys == other.refundKeys &&
+          refundIndex == other.refundIndex &&
+          claimKeys == other.claimKeys &&
+          claimIndex == other.claimIndex &&
+          preimage == other.preimage &&
+          btcScriptStr == other.btcScriptStr &&
+          lbtcScriptStr == other.lbtcScriptStr &&
+          scriptAddress == other.scriptAddress &&
+          outAmount == other.outAmount &&
+          btcElectrumUrl == other.btcElectrumUrl &&
+          lbtcElectrumUrl == other.lbtcElectrumUrl &&
+          boltzUrl == other.boltzUrl &&
+          referralId == other.referralId &&
+          blindingKey == other.blindingKey;
 }

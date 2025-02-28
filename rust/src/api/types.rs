@@ -94,7 +94,7 @@ impl From<BoltzSwapType> for SwapType {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Eq, Serialize, Deserialize, PartialEq)]
 pub enum Chain {
     Bitcoin,
     BitcoinTestnet,
@@ -113,13 +113,13 @@ impl Into<BChain> for Chain {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 pub enum ChainSwapDirection {
     BtcToLbtc,
     LbtcToBtc,
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct KeyPair {
     pub secret_key: String,
     pub public_key: String,
@@ -182,7 +182,7 @@ impl KeyPair {
 use boltz_client::util::secrets::Preimage;
 
 /// Used internally to create a secret - PreImage for swaps
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PreImage {
     pub value: String,
     pub sha256: String,
