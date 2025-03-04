@@ -12,26 +12,27 @@ void main() {
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {
-    final stream = await BoltzStream.create(mainnetBaseUrl);
-    stream.initialize(mainnetBaseUrl);
+    final boltzWs = BoltzWebSocket.create(testnetBaseUrl);
+    // stream.initialize(mainnetBaseUrl);
 
     const List<String> swapIds = [
-      'h3BNw2',
-      'dhbn5n2ypzBC',
+      '67ptET',
+      'EXVCx6',
       'kuaECCcK4ZJ9',
       'EXVCx6',
       'grWI22',
       'invalid'
     ];
 
-    Stream<SwapStreamStatus> eventStream = stream.subscribe(swapIds);
+    boltzWs.subscribe(swapIds);
+    var eventStream = boltzWs.stream;
 
     var receivedEvents = <SwapStreamStatus>[];
     var completer = Completer();
     var subscription = eventStream.listen((event) {
       receivedEvents.add(event);
-
       print(event);
+      completer.complete();
     }, onError: (e) {
       print('onError');
       completer.completeError(e);
@@ -46,14 +47,15 @@ void main() {
   }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 
   test('Get status stream multiple; Multiple calls to update', () async {
-    final api = await BoltzStream.create(testnetBaseUrl);
+    final boltzWs = BoltzWebSocket.create(testnetBaseUrl);
     var receivedEvents = <SwapStreamStatus>[];
     // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
     const List<String> swapIds1 = ['67ptET'];
-    Stream<SwapStreamStatus> eventStream1 = api.subscribe(swapIds1);
+    boltzWs.subscribe(swapIds1);
+    var eventStream = boltzWs.stream;
 
     var completer1 = Completer();
-    var sub1 = eventStream1.listen((event) {
+    var sub1 = eventStream.listen((event) {
       receivedEvents.add(event);
       print('Listen data');
       print(event);
@@ -61,21 +63,21 @@ void main() {
     });
 
     await completer1.future;
-    await sub1.cancel();
-
+    // await sub1.cancel();
     const List<String> swapIds2 = ['EXVCx6'];
-    Stream<SwapStreamStatus> eventStream2 = api.subscribe(swapIds2);
 
-    var completer2 = Completer();
+    boltzWs.subscribe(swapIds2);
 
-    var sub2 = eventStream2.listen((event) {
-      receivedEvents.add(event);
-      print('Listen2 data');
-      print(event);
-      completer2.complete();
-    });
+    // var completer2 = Completer();
 
-    await completer2.future;
-    await sub2.cancel();
+    // var sub2 = eventStream.listen((event) {
+    //   receivedEvents.add(event);
+    //   print('Listen2 data');
+    //   print(event);
+    //   completer2.complete();
+    // });
+
+    // await completer2.future;
+    // await sub2.cancel();
   }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 }

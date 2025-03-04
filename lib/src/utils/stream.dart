@@ -7,17 +7,19 @@ import 'package:web_socket_channel/io.dart';
 final String mainnetBaseUrl = 'api.boltz.exchange/v2';
 final String testnetBaseUrl = 'api.testnet.boltz.exchange/v2';
 
-class BoltzStream {
+class BoltzWebSocket {
   // final Dio _dio;
   IOWebSocketChannel? channel;
   StreamController<SwapStreamStatus>? _broadcastController;
   StreamSubscription? _channelSubscription;
 
-  BoltzStream._();
+  BoltzWebSocket._();
 
-  static BoltzStream create(String boltzUrl) {
+  Stream<SwapStreamStatus> get stream => _broadcastController!.stream;
+
+  static BoltzWebSocket create(String boltzUrl) {
     try {
-      BoltzStream stream = BoltzStream._();
+      BoltzWebSocket stream = BoltzWebSocket._();
       stream.initialize(boltzUrl);
       return stream;
     } catch (e) {
@@ -52,24 +54,22 @@ class BoltzStream {
     });
   }
 
-  Stream<SwapStreamStatus> subscribe(List<String> swapIds) {
+  void subscribe(List<String> swapIds) {
     Map<String, dynamic> payload = {
       'op': 'subscribe',
       'channel': 'swap.update',
       'args': swapIds
     };
     channel!.sink.add(jsonEncode(payload));
-    return _broadcastController!.stream;
   }
 
-  Stream<SwapStreamStatus> unsubscribe(List<String> swapIds) {
+  void unsubscribe(List<String> swapIds) {
     Map<String, dynamic> payload = {
       'op': 'unsubscribe',
       'channel': 'swap.update',
       'args': swapIds
     };
     channel!.sink.add(jsonEncode(payload));
-    return _broadcastController!.stream;
   }
 
   void dispose() {
