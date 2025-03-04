@@ -56,12 +56,12 @@ class BtcLnSwap {
   /// Used to claim a reverse swap.
   Future<String> claim(
           {required String outAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaim(
           that: this,
           outAddress: outAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
 
   /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
@@ -159,12 +159,12 @@ class BtcLnSwap {
   /// Used to refund a failed submarine swap.
   Future<String> refund(
           {required String outAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefund(
           that: this,
           outAddress: outAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
 
   /// Convert instance to a JSON string.

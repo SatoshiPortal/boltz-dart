@@ -97,7 +97,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     out_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
+    miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -109,14 +109,14 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
         move || {
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
+            let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::btc_ln::BtcLnSwap::claim(
                         &api_that,
                         api_out_address,
-                        api_abs_fee,
+                        api_miner_fee,
                         api_try_cooperate,
                     )?;
                     Ok(output_ok)
@@ -341,7 +341,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     out_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
+    miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -353,14 +353,14 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
         move || {
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
+            let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::btc_ln::BtcLnSwap::refund(
                         &api_that,
                         api_out_address,
-                        api_abs_fee,
+                        api_miner_fee,
                         api_try_cooperate,
                     )?;
                     Ok(output_ok)
@@ -933,7 +933,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     out_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
+    miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -945,14 +945,14 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
         move || {
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
+            let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::lbtc_ln::LbtcLnSwap::claim(
                         &api_that,
                         api_out_address,
-                        api_abs_fee,
+                        api_miner_fee,
                         api_try_cooperate,
                     )?;
                     Ok(output_ok)
@@ -1182,7 +1182,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     out_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
+    miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -1194,14 +1194,14 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
         move || {
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
+            let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::lbtc_ln::LbtcLnSwap::refund(
                         &api_that,
                         api_out_address,
-                        api_abs_fee,
+                        api_miner_fee,
                         api_try_cooperate,
                     )?;
                     Ok(output_ok)
@@ -2157,6 +2157,26 @@ impl SseDecode for crate::api::types::SwapType {
     }
 }
 
+impl SseDecode for crate::api::types::TxFee {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_field0 = <u64>::sse_decode(deserializer);
+                return crate::api::types::TxFee::Absolute(var_field0);
+            }
+            1 => {
+                let mut var_field0 = <f64>::sse_decode(deserializer);
+                return crate::api::types::TxFee::Relative(var_field0);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseDecode for u32 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2738,6 +2758,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapType>
         self
     }
 }
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::types::TxFee {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::types::TxFee::Absolute(field0) => {
+                [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::types::TxFee::Relative(field0) => {
+                [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::TxFee {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::TxFee> for crate::api::types::TxFee {
+    fn into_into_dart(self) -> crate::api::types::TxFee {
+        self
+    }
+}
 
 impl SseEncode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -3104,6 +3146,25 @@ impl SseEncode for crate::api::types::SwapType {
             },
             serializer,
         );
+    }
+}
+
+impl SseEncode for crate::api::types::TxFee {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::types::TxFee::Absolute(field0) => {
+                <i32>::sse_encode(0, serializer);
+                <u64>::sse_encode(field0, serializer);
+            }
+            crate::api::types::TxFee::Relative(field0) => {
+                <i32>::sse_encode(1, serializer);
+                <f64>::sse_encode(field0, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
     }
 }
 

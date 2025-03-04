@@ -82,7 +82,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<String> crateApiBtcLnBtcLnSwapClaim(
       {required BtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate});
 
   Future<void> crateApiBtcLnBtcLnSwapCoopCloseSubmarine(
@@ -131,7 +131,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<String> crateApiBtcLnBtcLnSwapRefund(
       {required BtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate});
 
   Future<String> crateApiBtcLnBtcLnSwapToJson({required BtcLnSwap that});
@@ -227,7 +227,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<String> crateApiLbtcLnLbtcLnSwapClaim(
       {required LbtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate});
 
   Future<void> crateApiLbtcLnLbtcLnSwapCoopCloseSubmarine(
@@ -278,7 +278,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<String> crateApiLbtcLnLbtcLnSwapRefund(
       {required LbtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate});
 
   Future<String> crateApiLbtcLnLbtcLnSwapToJson({required LbtcLnSwap that});
@@ -398,13 +398,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<String> crateApiBtcLnBtcLnSwapClaim(
       {required BtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
         var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_u_64(absFee);
+        var arg2 = cst_encode_box_autoadd_tx_fee(minerFee);
         var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire__crate__api__btc_ln__btc_ln_swap_claim(
             port_, arg0, arg1, arg2, arg3);
@@ -414,7 +414,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiBtcLnBtcLnSwapClaimConstMeta,
-      argValues: [that, outAddress, absFee, tryCooperate],
+      argValues: [that, outAddress, minerFee, tryCooperate],
       apiImpl: this,
     ));
   }
@@ -422,7 +422,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiBtcLnBtcLnSwapClaimConstMeta =>
       const TaskConstMeta(
         debugName: "btc_ln_swap_claim",
-        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
+        argNames: ["that", "outAddress", "minerFee", "tryCooperate"],
       );
 
   @override
@@ -707,13 +707,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<String> crateApiBtcLnBtcLnSwapRefund(
       {required BtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
         var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_u_64(absFee);
+        var arg2 = cst_encode_box_autoadd_tx_fee(minerFee);
         var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire__crate__api__btc_ln__btc_ln_swap_refund(
             port_, arg0, arg1, arg2, arg3);
@@ -723,7 +723,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiBtcLnBtcLnSwapRefundConstMeta,
-      argValues: [that, outAddress, absFee, tryCooperate],
+      argValues: [that, outAddress, minerFee, tryCooperate],
       apiImpl: this,
     ));
   }
@@ -731,7 +731,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiBtcLnBtcLnSwapRefundConstMeta =>
       const TaskConstMeta(
         debugName: "btc_ln_swap_refund",
-        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
+        argNames: ["that", "outAddress", "minerFee", "tryCooperate"],
       );
 
   @override
@@ -1376,13 +1376,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<String> crateApiLbtcLnLbtcLnSwapClaim(
       {required LbtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
         var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_u_64(absFee);
+        var arg2 = cst_encode_box_autoadd_tx_fee(minerFee);
         var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(
             port_, arg0, arg1, arg2, arg3);
@@ -1392,7 +1392,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiLbtcLnLbtcLnSwapClaimConstMeta,
-      argValues: [that, outAddress, absFee, tryCooperate],
+      argValues: [that, outAddress, minerFee, tryCooperate],
       apiImpl: this,
     ));
   }
@@ -1400,7 +1400,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapClaimConstMeta =>
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_claim",
-        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
+        argNames: ["that", "outAddress", "minerFee", "tryCooperate"],
       );
 
   @override
@@ -1693,13 +1693,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<String> crateApiLbtcLnLbtcLnSwapRefund(
       {required LbtcLnSwap that,
       required String outAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
         var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_u_64(absFee);
+        var arg2 = cst_encode_box_autoadd_tx_fee(minerFee);
         var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
             port_, arg0, arg1, arg2, arg3);
@@ -1709,7 +1709,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiLbtcLnLbtcLnSwapRefundConstMeta,
-      argValues: [that, outAddress, absFee, tryCooperate],
+      argValues: [that, outAddress, minerFee, tryCooperate],
       apiImpl: this,
     ));
   }
@@ -1717,7 +1717,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapRefundConstMeta =>
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_refund",
-        argNames: ["that", "outAddress", "absFee", "tryCooperate"],
+        argNames: ["that", "outAddress", "minerFee", "tryCooperate"],
       );
 
   @override
@@ -2186,6 +2186,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  TxFee dco_decode_box_autoadd_tx_fee(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_tx_fee(raw);
+  }
+
+  @protected
   BtcLnSwap dco_decode_btc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -2520,6 +2526,23 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  TxFee dco_decode_tx_fee(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return TxFee_Absolute(
+          dco_decode_u_64(raw[1]),
+        );
+      case 1:
+        return TxFee_Relative(
+          dco_decode_f_64(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
   int dco_decode_u_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
@@ -2624,6 +2647,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Side sse_decode_box_autoadd_side(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_side(deserializer));
+  }
+
+  @protected
+  TxFee sse_decode_box_autoadd_tx_fee(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_tx_fee(deserializer));
   }
 
   @protected
@@ -3000,6 +3029,23 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  TxFee sse_decode_tx_fee(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_field0 = sse_decode_u_64(deserializer);
+        return TxFee_Absolute(var_field0);
+      case 1:
+        var var_field0 = sse_decode_f_64(deserializer);
+        return TxFee_Relative(var_field0);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
   int sse_decode_u_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getUint32();
@@ -3177,6 +3223,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_box_autoadd_side(Side self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_side(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_tx_fee(TxFee self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_tx_fee(self, serializer);
   }
 
   @protected
@@ -3444,6 +3496,21 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_swap_type(SwapType self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_tx_fee(TxFee self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case TxFee_Absolute(field0: final field0):
+        sse_encode_i_32(0, serializer);
+        sse_encode_u_64(field0, serializer);
+      case TxFee_Relative(field0: final field0):
+        sse_encode_i_32(1, serializer);
+        sse_encode_f_64(field0, serializer);
+      default:
+        throw UnimplementedError('');
+    }
   }
 
   @protected
