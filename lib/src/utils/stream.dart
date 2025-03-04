@@ -15,7 +15,7 @@ class BoltzStream {
 
   BoltzStream._();
 
-  static Future<BoltzStream> create(String boltzUrl) async {
+  static BoltzStream create(String boltzUrl) {
     try {
       BoltzStream stream = BoltzStream._();
       stream.initialize(boltzUrl);
