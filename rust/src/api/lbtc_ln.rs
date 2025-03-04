@@ -4,7 +4,7 @@ use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
-    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapType},
+    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapType, TxFee},
 };
 use boltz_client::{
     bitcoin::Txid,
@@ -261,7 +261,7 @@ impl LbtcLnSwap {
     pub fn claim(
         &self,
         out_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
@@ -292,7 +292,7 @@ impl LbtcLnSwap {
         let signed = match tx.sign_claim(
             &ckp,
             &preimage.try_into()?,
-            Fee::Absolute(abs_fee),
+            miner_fee.into(),
             if try_cooperate {
                 Some(Cooperative {
                     boltz_api: &boltz_client,
@@ -303,7 +303,7 @@ impl LbtcLnSwap {
             } else {
                 None
             },
-            false,
+            true,
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -316,7 +316,7 @@ impl LbtcLnSwap {
     pub fn refund(
         &self,
         out_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
@@ -345,7 +345,7 @@ impl LbtcLnSwap {
         let ckp: Keypair = self.keys.clone().try_into()?;
         let signed = match tx.sign_refund(
             &ckp,
-            Fee::Absolute(abs_fee),
+            miner_fee.into(),
             if try_cooperate {
                 Some(Cooperative {
                     boltz_api: &boltz_client,
@@ -356,7 +356,7 @@ impl LbtcLnSwap {
             } else {
                 None
             },
-            false,
+            true,
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),

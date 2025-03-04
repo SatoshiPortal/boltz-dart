@@ -62,6 +62,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Side dco_decode_box_autoadd_side(dynamic raw);
 
   @protected
+  TxFee dco_decode_box_autoadd_tx_fee(dynamic raw);
+
+  @protected
   BtcLnSwap dco_decode_btc_ln_swap(dynamic raw);
 
   @protected
@@ -146,6 +149,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   SwapType dco_decode_swap_type(dynamic raw);
 
   @protected
+  TxFee dco_decode_tx_fee(dynamic raw);
+
+  @protected
   int dco_decode_u_32(dynamic raw);
 
   @protected
@@ -197,6 +203,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Side sse_decode_box_autoadd_side(SseDeserializer deserializer);
+
+  @protected
+  TxFee sse_decode_box_autoadd_tx_fee(SseDeserializer deserializer);
 
   @protected
   BtcLnSwap sse_decode_btc_ln_swap(SseDeserializer deserializer);
@@ -288,6 +297,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   SwapType sse_decode_swap_type(SseDeserializer deserializer);
 
   @protected
+  TxFee sse_decode_tx_fee(SseDeserializer deserializer);
+
+  @protected
   int sse_decode_u_32(SseDeserializer deserializer);
 
   @protected
@@ -367,6 +379,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   int cst_encode_box_autoadd_side(Side raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_side(raw);
+  }
+
+  @protected
+  JSAny cst_encode_box_autoadd_tx_fee(TxFee raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_tx_fee(raw);
   }
 
   @protected
@@ -594,6 +612,19 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  JSAny cst_encode_tx_fee(TxFee raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    if (raw is TxFee_Absolute) {
+      return [0, cst_encode_u_64(raw.field0)].jsify()!;
+    }
+    if (raw is TxFee_Relative) {
+      return [1, cst_encode_f_64(raw.field0)].jsify()!;
+    }
+
+    throw Exception('unreachable');
+  }
+
+  @protected
   JSAny cst_encode_u_64(BigInt raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return castNativeBigInt(raw);
@@ -682,6 +713,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_box_autoadd_side(Side self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_tx_fee(TxFee self, SseSerializer serializer);
 
   @protected
   void sse_encode_btc_ln_swap(BtcLnSwap self, SseSerializer serializer);
@@ -776,6 +810,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_swap_type(SwapType self, SseSerializer serializer);
 
   @protected
+  void sse_encode_tx_fee(TxFee self, SseSerializer serializer);
+
+  @protected
   void sse_encode_u_32(int self, SseSerializer serializer);
 
   @protected
@@ -806,10 +843,14 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_broadcast_local(
           port_, that, signed_hex);
 
-  void wire__crate__api__btc_ln__btc_ln_swap_claim(NativePortType port_,
-          JSAny that, String out_address, JSAny abs_fee, bool try_cooperate) =>
+  void wire__crate__api__btc_ln__btc_ln_swap_claim(
+          NativePortType port_,
+          JSAny that,
+          String out_address,
+          JSAny miner_fee,
+          bool try_cooperate) =>
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_claim(
-          port_, that, out_address, abs_fee, try_cooperate);
+          port_, that, out_address, miner_fee, try_cooperate);
 
   void wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(
           NativePortType port_, JSAny that) =>
@@ -899,10 +940,14 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_process(
           port_, that, status);
 
-  void wire__crate__api__btc_ln__btc_ln_swap_refund(NativePortType port_,
-          JSAny that, String out_address, JSAny abs_fee, bool try_cooperate) =>
+  void wire__crate__api__btc_ln__btc_ln_swap_refund(
+          NativePortType port_,
+          JSAny that,
+          String out_address,
+          JSAny miner_fee,
+          bool try_cooperate) =>
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_refund(
-          port_, that, out_address, abs_fee, try_cooperate);
+          port_, that, out_address, miner_fee, try_cooperate);
 
   void wire__crate__api__btc_ln__btc_ln_swap_to_json(
           NativePortType port_, JSAny that) =>
@@ -1056,10 +1101,14 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local(
           port_, that, signed_hex);
 
-  void wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(NativePortType port_,
-          JSAny that, String out_address, JSAny abs_fee, bool try_cooperate) =>
+  void wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(
+          NativePortType port_,
+          JSAny that,
+          String out_address,
+          JSAny miner_fee,
+          bool try_cooperate) =>
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(
-          port_, that, out_address, abs_fee, try_cooperate);
+          port_, that, out_address, miner_fee, try_cooperate);
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(
           NativePortType port_, JSAny that) =>
@@ -1151,10 +1200,14 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
           port_, that, status);
 
-  void wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(NativePortType port_,
-          JSAny that, String out_address, JSAny abs_fee, bool try_cooperate) =>
+  void wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
+          NativePortType port_,
+          JSAny that,
+          String out_address,
+          JSAny miner_fee,
+          bool try_cooperate) =>
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
-          port_, that, out_address, abs_fee, try_cooperate);
+          port_, that, out_address, miner_fee, try_cooperate);
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json(
           NativePortType port_, JSAny that) =>
@@ -1262,7 +1315,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       NativePortType port_,
       JSAny that,
       String out_address,
-      JSAny abs_fee,
+      JSAny miner_fee,
       bool try_cooperate);
 
   external void wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(
@@ -1316,7 +1369,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       NativePortType port_,
       JSAny that,
       String out_address,
-      JSAny abs_fee,
+      JSAny miner_fee,
       bool try_cooperate);
 
   external void wire__crate__api__btc_ln__btc_ln_swap_to_json(
@@ -1418,7 +1471,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       NativePortType port_,
       JSAny that,
       String out_address,
-      JSAny abs_fee,
+      JSAny miner_fee,
       bool try_cooperate);
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(
@@ -1473,7 +1526,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       NativePortType port_,
       JSAny that,
       String out_address,
-      JSAny abs_fee,
+      JSAny miner_fee,
       bool try_cooperate);
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json(

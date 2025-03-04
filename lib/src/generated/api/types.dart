@@ -6,9 +6,11 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+part 'types.freezed.dart';
 
 // These types are ignored because they are not used by any `pub` functions: `SwapState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
 
 /// LNURL helper to validate an lnurl string
 Future<bool> validateLnurl({required String lnurl}) =>
@@ -336,4 +338,16 @@ enum SwapType {
   reverse,
   chain,
   ;
+}
+
+@freezed
+sealed class TxFee with _$TxFee {
+  const TxFee._();
+
+  const factory TxFee.absolute(
+    BigInt field0,
+  ) = TxFee_Absolute;
+  const factory TxFee.relative(
+    double field0,
+  ) = TxFee_Relative;
 }

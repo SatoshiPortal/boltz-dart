@@ -4,6 +4,7 @@ use std::{
 };
 
 use boltz_client::{
+    fees::Fee,
     network::Chain as BChain,
     swaps::boltz::{
         BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
@@ -18,6 +19,20 @@ use serde::{Deserialize, Serialize};
 use crate::util::ensure_http_prefix;
 
 use super::error::BoltzError;
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub enum TxFee {
+    Absolute(u64),
+    Relative(f64),
+}
+
+impl Into<Fee> for TxFee {
+    fn into(self) -> Fee {
+        match self {
+            TxFee::Absolute(x) => Fee::Absolute(x),
+            TxFee::Relative(x) => Fee::Relative(x),
+        }
+    }
+}
 
 /// Used for chain-swaps only. The side is based on which transaction is being made by the user.
 /// When a swap is created the user must first make a Lockup.
