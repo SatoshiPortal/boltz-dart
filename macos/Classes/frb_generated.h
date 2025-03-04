@@ -277,7 +277,7 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim(int64_t port_,
                                                                  struct wire_cst_chain_swap *that,
                                                                  struct wire_cst_list_prim_u_8_strict *out_address,
                                                                  struct wire_cst_list_prim_u_8_strict *refund_address,
-                                                                 uint64_t abs_fee,
+                                                                 struct wire_cst_tx_fee *miner_fee,
                                                                  bool try_cooperate);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_from_json(int64_t port_,
@@ -326,7 +326,7 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_process(int64_t port_
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(int64_t port_,
                                                                   struct wire_cst_chain_swap *that,
                                                                   struct wire_cst_list_prim_u_8_strict *refund_address,
-                                                                  uint64_t abs_fee,
+                                                                  struct wire_cst_tx_fee *miner_fee,
                                                                   bool try_cooperate);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json(int64_t port_,

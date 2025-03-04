@@ -859,7 +859,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim(
     that: *mut wire_cst_chain_swap,
     out_address: *mut wire_cst_list_prim_u_8_strict,
     refund_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
+    miner_fee: *mut wire_cst_tx_fee,
     try_cooperate: bool,
 ) {
     wire__crate__api__chain_swap__chain_swap_claim_impl(
@@ -867,7 +867,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim(
         that,
         out_address,
         refund_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
 }
@@ -980,14 +980,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(
     port_: i64,
     that: *mut wire_cst_chain_swap,
     refund_address: *mut wire_cst_list_prim_u_8_strict,
-    abs_fee: u64,
+    miner_fee: *mut wire_cst_tx_fee,
     try_cooperate: bool,
 ) {
     wire__crate__api__chain_swap__chain_swap_refund_impl(
         port_,
         that,
         refund_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
 }

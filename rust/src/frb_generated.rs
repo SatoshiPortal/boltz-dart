@@ -477,7 +477,7 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     out_address: impl CstDecode<String>,
     refund_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
+    miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -490,7 +490,7 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
             let api_refund_address = refund_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
+            let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
@@ -498,7 +498,7 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
                         &api_that,
                         api_out_address,
                         api_refund_address,
-                        api_abs_fee,
+                        api_miner_fee,
                         api_try_cooperate,
                     )?;
                     Ok(output_ok)
@@ -717,7 +717,7 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     refund_address: impl CstDecode<String>,
-    abs_fee: impl CstDecode<u64>,
+    miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
@@ -729,14 +729,14 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
         move || {
             let api_that = that.cst_decode();
             let api_refund_address = refund_address.cst_decode();
-            let api_abs_fee = abs_fee.cst_decode();
+            let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::chain_swap::ChainSwap::refund(
                         &api_that,
                         api_refund_address,
-                        api_abs_fee,
+                        api_miner_fee,
                         api_try_cooperate,
                     )?;
                     Ok(output_ok)

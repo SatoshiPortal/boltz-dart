@@ -781,7 +781,7 @@ pub fn wire__crate__api__chain_swap__chain_swap_claim(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     refund_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__chain_swap__chain_swap_claim_impl(
@@ -789,7 +789,7 @@ pub fn wire__crate__api__chain_swap__chain_swap_claim(
         that,
         out_address,
         refund_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
 }
@@ -902,14 +902,14 @@ pub fn wire__crate__api__chain_swap__chain_swap_refund(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     refund_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__chain_swap__chain_swap_refund_impl(
         port_,
         that,
         refund_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
 }

@@ -6,7 +6,7 @@ use super::{
     error::BoltzError,
     types::{
         BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage,
-        SwapAction, SwapTxKind, SwapType,
+        SwapAction, SwapTxKind, SwapType, TxFee,
     },
 };
 
@@ -298,7 +298,7 @@ impl ChainSwap {
         &self,
         out_address: String,
         refund_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         let btc_chain = if self.is_testnet {
@@ -350,7 +350,7 @@ impl ChainSwap {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
                         &preimage.try_into()?,
-                        Fee::Absolute(abs_fee),
+                        miner_fee.into(),
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
@@ -367,7 +367,7 @@ impl ChainSwap {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
                         &preimage.try_into()?,
-                        Fee::Absolute(abs_fee),
+                        miner_fee.into(),
                         None,
                         false,
                     ) {
@@ -410,7 +410,7 @@ impl ChainSwap {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
                         &preimage.try_into()?,
-                        Fee::Absolute(abs_fee),
+                        miner_fee.into(),
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
@@ -427,7 +427,7 @@ impl ChainSwap {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
                         &preimage.try_into()?,
-                        Fee::Absolute(abs_fee),
+                        miner_fee.into(),
                         None,
                     ) {
                         Ok(result) => result,
@@ -443,7 +443,7 @@ impl ChainSwap {
     pub fn refund(
         &self,
         refund_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         let btc_chain = if self.is_testnet {
@@ -475,7 +475,7 @@ impl ChainSwap {
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
                     &rkp,
-                    Fee::Absolute(abs_fee),
+                    miner_fee.into(),
                     if try_cooperate {
                         Some(Cooperative {
                             boltz_api: &boltz_client,
@@ -505,7 +505,7 @@ impl ChainSwap {
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
                     &rkp,
-                    Fee::Absolute(abs_fee),
+                    miner_fee.into(),
                     if try_cooperate {
                         Some(Cooperative {
                             boltz_api: &boltz_client,

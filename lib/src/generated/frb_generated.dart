@@ -153,7 +153,7 @@ abstract class BoltzCoreApi extends BaseApi {
       {required ChainSwap that,
       required String outAddress,
       required String refundAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate});
 
   Future<ChainSwap> crateApiChainSwapChainSwapFromJson(
@@ -201,7 +201,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<String> crateApiChainSwapChainSwapRefund(
       {required ChainSwap that,
       required String refundAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate});
 
   Future<String> crateApiChainSwapChainSwapToJson({required ChainSwap that});
@@ -846,14 +846,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       {required ChainSwap that,
       required String outAddress,
       required String refundAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_chain_swap(that);
         var arg1 = cst_encode_String(outAddress);
         var arg2 = cst_encode_String(refundAddress);
-        var arg3 = cst_encode_u_64(absFee);
+        var arg3 = cst_encode_box_autoadd_tx_fee(minerFee);
         var arg4 = cst_encode_bool(tryCooperate);
         return wire.wire__crate__api__chain_swap__chain_swap_claim(
             port_, arg0, arg1, arg2, arg3, arg4);
@@ -863,7 +863,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiChainSwapChainSwapClaimConstMeta,
-      argValues: [that, outAddress, refundAddress, absFee, tryCooperate],
+      argValues: [that, outAddress, refundAddress, minerFee, tryCooperate],
       apiImpl: this,
     ));
   }
@@ -875,7 +875,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "that",
           "outAddress",
           "refundAddress",
-          "absFee",
+          "minerFee",
           "tryCooperate"
         ],
       );
@@ -1156,13 +1156,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<String> crateApiChainSwapChainSwapRefund(
       {required ChainSwap that,
       required String refundAddress,
-      required BigInt absFee,
+      required TxFee minerFee,
       required bool tryCooperate}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_chain_swap(that);
         var arg1 = cst_encode_String(refundAddress);
-        var arg2 = cst_encode_u_64(absFee);
+        var arg2 = cst_encode_box_autoadd_tx_fee(minerFee);
         var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire__crate__api__chain_swap__chain_swap_refund(
             port_, arg0, arg1, arg2, arg3);
@@ -1172,7 +1172,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiChainSwapChainSwapRefundConstMeta,
-      argValues: [that, refundAddress, absFee, tryCooperate],
+      argValues: [that, refundAddress, minerFee, tryCooperate],
       apiImpl: this,
     ));
   }
@@ -1180,7 +1180,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiChainSwapChainSwapRefundConstMeta =>
       const TaskConstMeta(
         debugName: "chain_swap_refund",
-        argNames: ["that", "refundAddress", "absFee", "tryCooperate"],
+        argNames: ["that", "refundAddress", "minerFee", "tryCooperate"],
       );
 
   @override

@@ -973,10 +973,10 @@ class BoltzCoreWire implements BaseWire {
           JSAny that,
           String out_address,
           String refund_address,
-          JSAny abs_fee,
+          JSAny miner_fee,
           bool try_cooperate) =>
       wasmModule.wire__crate__api__chain_swap__chain_swap_claim(
-          port_, that, out_address, refund_address, abs_fee, try_cooperate);
+          port_, that, out_address, refund_address, miner_fee, try_cooperate);
 
   void wire__crate__api__chain_swap__chain_swap_from_json(
           NativePortType port_, String json_str) =>
@@ -1064,10 +1064,10 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_,
           JSAny that,
           String refund_address,
-          JSAny abs_fee,
+          JSAny miner_fee,
           bool try_cooperate) =>
       wasmModule.wire__crate__api__chain_swap__chain_swap_refund(
-          port_, that, refund_address, abs_fee, try_cooperate);
+          port_, that, refund_address, miner_fee, try_cooperate);
 
   void wire__crate__api__chain_swap__chain_swap_to_json(
           NativePortType port_, JSAny that) =>
@@ -1389,7 +1389,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       JSAny that,
       String out_address,
       String refund_address,
-      JSAny abs_fee,
+      JSAny miner_fee,
       bool try_cooperate);
 
   external void wire__crate__api__chain_swap__chain_swap_from_json(
@@ -1440,7 +1440,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       NativePortType port_,
       JSAny that,
       String refund_address,
-      JSAny abs_fee,
+      JSAny miner_fee,
       bool try_cooperate);
 
   external void wire__crate__api__chain_swap__chain_swap_to_json(
