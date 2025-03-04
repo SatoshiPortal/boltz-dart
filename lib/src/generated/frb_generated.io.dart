@@ -1378,7 +1378,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_chain_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> refund_address,
-    int abs_fee,
+    ffi.Pointer<wire_cst_tx_fee> miner_fee,
     bool try_cooperate,
   ) {
     return _wire__crate__api__chain_swap__chain_swap_claim(
@@ -1386,7 +1386,7 @@ class BoltzCoreWire implements BaseWire {
       that,
       out_address,
       refund_address,
-      abs_fee,
+      miner_fee,
       try_cooperate,
     );
   }
@@ -1398,7 +1398,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Pointer<wire_cst_chain_swap>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Uint64,
+                  ffi.Pointer<wire_cst_tx_fee>,
                   ffi.Bool)>>(
       'frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim');
   late final _wire__crate__api__chain_swap__chain_swap_claim =
@@ -1408,7 +1408,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_chain_swap>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              int,
+              ffi.Pointer<wire_cst_tx_fee>,
               bool)>();
 
   void wire__crate__api__chain_swap__chain_swap_from_json(
@@ -1636,14 +1636,14 @@ class BoltzCoreWire implements BaseWire {
     int port_,
     ffi.Pointer<wire_cst_chain_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> refund_address,
-    int abs_fee,
+    ffi.Pointer<wire_cst_tx_fee> miner_fee,
     bool try_cooperate,
   ) {
     return _wire__crate__api__chain_swap__chain_swap_refund(
       port_,
       that,
       refund_address,
-      abs_fee,
+      miner_fee,
       try_cooperate,
     );
   }
@@ -1654,13 +1654,17 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Int64,
                   ffi.Pointer<wire_cst_chain_swap>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Uint64,
+                  ffi.Pointer<wire_cst_tx_fee>,
                   ffi.Bool)>>(
       'frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund');
   late final _wire__crate__api__chain_swap__chain_swap_refund =
       _wire__crate__api__chain_swap__chain_swap_refundPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_chain_swap>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, bool)>();
+          void Function(
+              int,
+              ffi.Pointer<wire_cst_chain_swap>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_tx_fee>,
+              bool)>();
 
   void wire__crate__api__chain_swap__chain_swap_to_json(
     int port_,

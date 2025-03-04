@@ -67,13 +67,13 @@ class ChainSwap {
   Future<String> claim(
           {required String outAddress,
           required String refundAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapClaim(
           that: this,
           outAddress: outAddress,
           refundAddress: refundAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
 
   /// Parse from a JSON string.
@@ -164,12 +164,12 @@ class ChainSwap {
   /// Refund a failed swap
   Future<String> refund(
           {required String refundAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapRefund(
           that: this,
           refundAddress: refundAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
 
   /// Convert instance to a JSON string.
