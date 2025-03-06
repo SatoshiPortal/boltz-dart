@@ -67,6 +67,12 @@ class ChainSwap with _$ChainSwap {
       BoltzCore.instance.api
           .crateApiChainSwapChainSwapFromJson(jsonStr: jsonStr);
 
+  /// Process swap based on status
+  /// To be used with WebSocket Notification Stream
+  Future<(SwapAction, SwapState)> getAction({required String status}) =>
+      BoltzCore.instance.api
+          .crateApiChainSwapChainSwapGetAction(that: this, status: status);
+
   /// Get the transaction id of the server's lockup transaction
   Future<String> getServerLockup() =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapGetServerLockup(
@@ -141,11 +147,6 @@ class ChainSwap with _$ChainSwap {
           lbtcElectrumUrl: lbtcElectrumUrl,
           boltzUrl: boltzUrl,
           referralId: referralId);
-
-  /// Process swap based on status
-  /// To be used with WebSocket Notification Stream
-  Future<SwapAction> process({required String status}) => BoltzCore.instance.api
-      .crateApiChainSwapChainSwapProcess(that: this, status: status);
 
   /// Refund a failed swap
   Future<String> refund(
