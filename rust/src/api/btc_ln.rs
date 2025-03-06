@@ -10,18 +10,18 @@ use boltz_client::{
     bitcoin::{consensus::encode::serialize, Transaction, Txid},
     boltz::{Cooperative, RevSwapStates, SubSwapStates},
     electrum_client::ElectrumApi,
-    fees::Fee,
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
-use openssl::derive;
+use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// Bitcoin-Lightning Swap Class
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,

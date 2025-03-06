@@ -15,14 +15,15 @@ use boltz_client::{
     boltz::{ChainSwapDetails, ChainSwapStates, Cooperative, Side},
     electrum_client::ElectrumApi,
     error::Error,
-    fees::Fee,
     network::electrum::ElectrumConfig,
     swaps::boltz::BoltzApiClientV2,
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };
+use flutter_rust_bridge::frb;
 use serde_json::Value;
 
+#[frb(dart_metadata=("freezed"))]
 /// Bitcoin-Liquid Swap Class
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct ChainSwap {

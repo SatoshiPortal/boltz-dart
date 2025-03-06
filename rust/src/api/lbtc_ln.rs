@@ -11,16 +11,17 @@ use boltz_client::{
     boltz::{Cooperative, RevSwapStates, SubSwapStates},
     electrum_client::ElectrumApi,
     elements::hashes::hex::DisplayHex,
-    fees::Fee,
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
     Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
+use flutter_rust_bridge::frb;
 use serde_json::Value;
 
 /// Liquid-Lightning Swap Class
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnSwap {
     pub id: String,
     pub kind: SwapType,
