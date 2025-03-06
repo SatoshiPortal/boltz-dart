@@ -446,7 +446,7 @@ impl BtcLnSwap {
     }
     /// Process swap based on status
     /// To be used with WebSocket Notification Stream
-    pub fn process(&self, status: String) -> Result<(SwapAction,SwapState), BoltzError> {
+    pub fn get_action(&self, status: String) -> Result<(SwapAction,SwapState), BoltzError> {
         match self.kind {
             SwapType::Submarine => {
                 let status = SubSwapStates::from_str(&status);
@@ -464,7 +464,7 @@ impl BtcLnSwap {
                     SubSwapStates::InvoiceSet => return Ok((SwapAction::WaitConfirmed, SwapState::Paid)),
                     SubSwapStates::InvoicePending => return Ok((SwapAction::WaitConfirmed, SwapState::Paid)),
                     SubSwapStates::InvoicePaid => return Ok((SwapAction::CoopSign, SwapState::Paid)),
-                    SubSwapStates::TransactionClaimPending => return Ok((SwapAction::CoopSign, SwapState::Settled)),
+                    SubSwapStates::TransactionClaimPending => return Ok((SwapAction::CoopSign, SwapState::Paid)),
                     SubSwapStates::SwapExpired => {
                         let network_config = ElectrumConfig::new(
                             self.network.clone().into(),

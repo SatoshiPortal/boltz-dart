@@ -5,8 +5,7 @@ use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 use super::{
     error::BoltzError,
     types::{
-        BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage,
-        SwapAction, SwapTxKind, SwapType, TxFee,
+        BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapState, SwapTxKind, SwapType, TxFee
     },
 };
 
@@ -605,7 +604,7 @@ impl ChainSwap {
     }
     /// Process swap based on status
     /// To be used with WebSocket Notification Stream
-    pub fn process(&self, status: String) -> Result<SwapAction, BoltzError> {
+    pub fn get_action(&self, status: String) -> Result<(SwapAction,SwapState), BoltzError> {
         let status = ChainSwapStates::from_str(&status);
         if status.is_err() {
             return Err(BoltzError::new(
@@ -615,12 +614,12 @@ impl ChainSwap {
         } else {
             let status = status.unwrap();
             match status {
-                ChainSwapStates::Created => return Ok(SwapAction::Pay),
-                ChainSwapStates::TransactionZeroConfRejected => return Ok(SwapAction::WaitZeroConf),
-                ChainSwapStates::TransactionMempool => return Ok(SwapAction::WaitZeroConf),
-                ChainSwapStates::TransactionConfirmed => return Ok(SwapAction::WaitConfirmed),
-                ChainSwapStates::TransactionServerMempool => return Ok(SwapAction::WaitServerZeroConf),
-                ChainSwapStates::TransactionServerConfirmed => return Ok(SwapAction::Claim),
+                ChainSwapStates::Created => return Ok((SwapAction::Pay,SwapState::Created)),
+                ChainSwapStates::TransactionZeroConfRejected => return Ok((SwapAction::WaitZeroConf,SwapState::Paid)),
+                ChainSwapStates::TransactionMempool => return Ok((SwapAction::WaitZeroConf,SwapState::Paid)),
+                ChainSwapStates::TransactionConfirmed => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
+                ChainSwapStates::TransactionServerMempool => return Ok((SwapAction::WaitServerZeroConf,SwapState::Paid)),
+                ChainSwapStates::TransactionServerConfirmed => return Ok((SwapAction::Claim,SwapState::Paid)),
                 ChainSwapStates::TransactionClaimed => match self.direction {
                     ChainSwapDirection::BtcToLbtc => {
                         // we are looking for claimed LBTC
@@ -639,9 +638,9 @@ impl ChainSwap {
                             self.lbtc_script_str.clone().try_into()?;
                         let utxo = swap_script.fetch_utxo(&network_config)?;
                         if utxo.is_none() {
-                            return Ok(SwapAction::Close);
+                            return Ok((SwapAction::Close,SwapState::Settled));
                         } else {
-                            return Ok(SwapAction::Claim);
+                            return Ok((SwapAction::Claim,SwapState::Paid));
                         }
                     }
                     ChainSwapDirection::LbtcToBtc => {
@@ -660,13 +659,13 @@ impl ChainSwap {
                         let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
                         let balance = swap_script.get_balance(&network_config)?;
                         if balance.0 == 0 {
-                            return Ok(SwapAction::Close);
+                            return Ok((SwapAction::Close,SwapState::Settled));
                         } else {
-                            return Ok(SwapAction::Claim);
+                            return Ok((SwapAction::Claim,SwapState::Paid));
                         }
                     }
                 },
-                ChainSwapStates::TransactionLockupFailed => return Ok(SwapAction::Refund),
+                ChainSwapStates::TransactionLockupFailed => return Ok((SwapAction::Refund,SwapState::Failed)),
                 ChainSwapStates::SwapExpired
                 | ChainSwapStates::TransactionFailed
                 | ChainSwapStates::TransactionRefunded => match self.direction {
@@ -685,9 +684,17 @@ impl ChainSwap {
                         let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
                         let balance = swap_script.get_balance(&network_config)?;
                         if balance.0 == 0 {
-                            return Ok(SwapAction::Close);
+                            match status{
+                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Close,SwapState::Expired)),
+                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Close,SwapState::Failed)),
+                                _ => return Ok((SwapAction::Close,SwapState::Refunded)),
+                            }
                         } else {
-                            return Ok(SwapAction::Refund);
+                            match status{
+                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Refund,SwapState::Expired)),
+                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Refund,SwapState::Failed)),
+                                _ => return Ok((SwapAction::Refund,SwapState::Refunded)),
+                            }
                         }
                     }
                     ChainSwapDirection::LbtcToBtc => {
@@ -706,9 +713,17 @@ impl ChainSwap {
                             self.lbtc_script_str.clone().try_into()?;
                         let utxo = swap_script.fetch_utxo(&network_config)?;
                         if utxo.is_none() {
-                            return Ok(SwapAction::Close);
+                            match status{
+                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Close,SwapState::Expired)),
+                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Close,SwapState::Failed)),
+                                _ => return Ok((SwapAction::Close,SwapState::Refunded)),
+                            }
                         } else {
-                            return Ok(SwapAction::Refund);
+                            match status{
+                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Refund,SwapState::Expired)),
+                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Refund,SwapState::Failed)),
+                                _ => return Ok((SwapAction::Refund,SwapState::Refunded)),
+                            }                        
                         }
                     }
                 },
