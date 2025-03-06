@@ -433,7 +433,7 @@ impl LbtcLnSwap {
     }
     /// Process swap based on status
     /// To be used with WebSocket Notification Stream
-    pub fn process(&self, status: String) -> Result<(SwapAction,SwapState), BoltzError> {
+    pub fn get_action(&self, status: String) -> Result<(SwapAction,SwapState), BoltzError> {
         match self.kind {
             SwapType::Submarine => {
                 let status = SubSwapStates::from_str(&status);
@@ -450,8 +450,8 @@ impl LbtcLnSwap {
                     SubSwapStates::TransactionConfirmed => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
                     SubSwapStates::InvoiceSet => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
                     SubSwapStates::InvoicePending => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
-                    SubSwapStates::InvoicePaid => return Ok((SwapAction::CoopSign,SwapState::Settled)),
-                    SubSwapStates::TransactionClaimPending => return Ok((SwapAction::CoopSign,SwapState::Settled)),
+                    SubSwapStates::InvoicePaid => return Ok((SwapAction::CoopSign,SwapState::Paid)),
+                    SubSwapStates::TransactionClaimPending => return Ok((SwapAction::CoopSign,SwapState::Paid)),
                     SubSwapStates::SwapExpired => {
                         // save the claim_txid as part of the struct to avoid a network call
                         let network_config = ElectrumConfig::new(
@@ -464,9 +464,9 @@ impl LbtcLnSwap {
                         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
                         let utxo = swap_script.fetch_utxo(&network_config)?;
                         if utxo.is_none() {
-                            return Ok((SwapAction::Close,SwapState::Created));
+                            return Ok((SwapAction::Close,SwapState::Expired));
                         } else {
-                            return Ok((SwapAction::Refund,SwapState::Created));
+                            return Ok((SwapAction::Refund,SwapState::Expired));
                         }
                     }
                     SubSwapStates::InvoiceFailedToPay => return Ok((SwapAction::Refund,SwapState::Failed)),
@@ -485,7 +485,7 @@ impl LbtcLnSwap {
                 let status = status.unwrap();
                 match status {
                     RevSwapStates::Created => return Ok((SwapAction::Pay,SwapState::Created)),
-                    RevSwapStates::MinerFeePaid => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
+                    RevSwapStates::MinerFeePaid => return Ok((SwapAction::WaitZeroConf,SwapState::Paid)),
                     RevSwapStates::TransactionMempool => return Ok((SwapAction::Claim,SwapState::Paid)),
                     RevSwapStates::TransactionConfirmed => return Ok((SwapAction::Claim,SwapState::Paid)),
                     RevSwapStates::InvoiceSettled => {
