@@ -14,6 +14,7 @@ use boltz_client::{
     Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
     PublicKey, Secp256k1, ZKKeyPair,
 };
+use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::util::ensure_http_prefix;
@@ -38,6 +39,7 @@ impl Into<Fee> for TxFee {
 /// When a swap is created the user must first make a Lockup.
 /// Once the swap is completed, the user must make a Claim.
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub enum Side {
     Lockup,
     Claim,
@@ -61,6 +63,7 @@ impl From<BoltzSide> for Side {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub enum SwapTxKind {
     Claim,
     Refund,
@@ -84,6 +87,7 @@ impl From<BoltzSwapTxKind> for SwapTxKind {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub enum SwapType {
     Submarine,
     Reverse,
@@ -110,6 +114,7 @@ impl From<BoltzSwapType> for SwapType {
 }
 
 #[derive(Clone, Copy, Eq, Serialize, Deserialize, PartialEq)]
+#[frb(dart_metadata=("freezed"))]
 pub enum Chain {
     Bitcoin,
     BitcoinTestnet,
@@ -129,12 +134,14 @@ impl Into<BChain> for Chain {
 }
 
 #[derive(Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[frb(dart_metadata=("freezed"))]
 pub enum ChainSwapDirection {
     BtcToLbtc,
     LbtcToBtc,
 }
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct KeyPair {
     pub secret_key: String,
     pub public_key: String,
@@ -198,6 +205,7 @@ use boltz_client::util::secrets::Preimage;
 
 /// Used internally to create a secret - PreImage for swaps
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct PreImage {
     pub value: String,
     pub sha256: String,
@@ -246,6 +254,7 @@ impl Into<PreImage> for Preimage {
 
 /// Helper to handle Lightning invoices
 #[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
 pub struct DecodedInvoice {
     pub msats: u64,
     pub expiry: u64,
@@ -337,6 +346,7 @@ pub fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct BtcSwapScriptStr {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,
@@ -458,6 +468,7 @@ impl From<BtcSwapScript> for BtcSwapScriptStr {
 }
 /// Helper to store a LBtcSwapScript and convert to a LBtcSwapScript
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[frb(dart_metadata=("freezed"))]
 pub struct LBtcSwapScriptStr {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,
@@ -590,6 +601,7 @@ impl From<LBtcSwapScript> for LBtcSwapScriptStr {
     }
 }
 
+#[frb(dart_metadata=("freezed"))]
 pub enum SwapAction {
     Wait,
     CoopSign,
@@ -598,6 +610,7 @@ pub enum SwapAction {
     Close,
 }
 
+#[frb(dart_metadata=("freezed"))]
 pub enum SwapState {
     Paid,
     Claimed,
