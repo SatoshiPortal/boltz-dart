@@ -122,6 +122,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage dco_decode_pre_image(dynamic raw);
 
   @protected
+  (SwapAction, SwapState) dco_decode_record_swap_action_swap_state(dynamic raw);
+
+  @protected
   RevSwapFees dco_decode_rev_swap_fees(dynamic raw);
 
   @protected
@@ -141,6 +144,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   SwapLimits dco_decode_swap_limits(dynamic raw);
+
+  @protected
+  SwapState dco_decode_swap_state(dynamic raw);
 
   @protected
   SwapTxKind dco_decode_swap_tx_kind(dynamic raw);
@@ -268,6 +274,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
 
   @protected
+  (SwapAction, SwapState) sse_decode_record_swap_action_swap_state(
+      SseDeserializer deserializer);
+
+  @protected
   RevSwapFees sse_decode_rev_swap_fees(SseDeserializer deserializer);
 
   @protected
@@ -289,6 +299,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   SwapLimits sse_decode_swap_limits(SseDeserializer deserializer);
+
+  @protected
+  SwapState sse_decode_swap_state(SseDeserializer deserializer);
 
   @protected
   SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer);
@@ -567,6 +580,13 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  JSAny cst_encode_record_swap_action_swap_state((SwapAction, SwapState) raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [cst_encode_swap_action(raw.$1), cst_encode_swap_state(raw.$2)]
+        .jsify()!;
+  }
+
+  @protected
   JSAny cst_encode_rev_swap_fees(RevSwapFees raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
@@ -656,6 +676,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_swap_action(SwapAction raw);
+
+  @protected
+  int cst_encode_swap_state(SwapState raw);
 
   @protected
   int cst_encode_swap_tx_kind(SwapTxKind raw);
@@ -781,6 +804,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
 
   @protected
+  void sse_encode_record_swap_action_swap_state(
+      (SwapAction, SwapState) self, SseSerializer serializer);
+
+  @protected
   void sse_encode_rev_swap_fees(RevSwapFees self, SseSerializer serializer);
 
   @protected
@@ -802,6 +829,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_swap_state(SwapState self, SseSerializer serializer);
 
   @protected
   void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer);

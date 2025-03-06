@@ -1617,12 +1617,29 @@ impl CstDecode<crate::api::types::SwapAction> for i32 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::SwapAction {
         match self {
-            0 => crate::api::types::SwapAction::Wait,
-            1 => crate::api::types::SwapAction::CoopSign,
-            2 => crate::api::types::SwapAction::Claim,
-            3 => crate::api::types::SwapAction::Refund,
-            4 => crate::api::types::SwapAction::Close,
+            0 => crate::api::types::SwapAction::Pay,
+            1 => crate::api::types::SwapAction::WaitZeroConf,
+            2 => crate::api::types::SwapAction::WaitConfirmed,
+            3 => crate::api::types::SwapAction::WaitServerZeroConf,
+            4 => crate::api::types::SwapAction::CoopSign,
+            5 => crate::api::types::SwapAction::Claim,
+            6 => crate::api::types::SwapAction::Refund,
+            7 => crate::api::types::SwapAction::Close,
             _ => unreachable!("Invalid variant for SwapAction: {}", self),
+        }
+    }
+}
+impl CstDecode<crate::api::types::SwapState> for i32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::SwapState {
+        match self {
+            0 => crate::api::types::SwapState::Created,
+            1 => crate::api::types::SwapState::Paid,
+            2 => crate::api::types::SwapState::Settled,
+            3 => crate::api::types::SwapState::Refunded,
+            4 => crate::api::types::SwapState::Expired,
+            5 => crate::api::types::SwapState::Failed,
+            _ => unreachable!("Invalid variant for SwapState: {}", self),
         }
     }
 }
@@ -2037,6 +2054,15 @@ impl SseDecode for crate::api::types::PreImage {
     }
 }
 
+impl SseDecode for (crate::api::types::SwapAction, crate::api::types::SwapState) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <crate::api::types::SwapAction>::sse_decode(deserializer);
+        let mut var_field1 = <crate::api::types::SwapState>::sse_decode(deserializer);
+        return (var_field0, var_field1);
+    }
+}
+
 impl SseDecode for crate::api::fees::RevSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2110,11 +2136,14 @@ impl SseDecode for crate::api::types::SwapAction {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <i32>::sse_decode(deserializer);
         return match inner {
-            0 => crate::api::types::SwapAction::Wait,
-            1 => crate::api::types::SwapAction::CoopSign,
-            2 => crate::api::types::SwapAction::Claim,
-            3 => crate::api::types::SwapAction::Refund,
-            4 => crate::api::types::SwapAction::Close,
+            0 => crate::api::types::SwapAction::Pay,
+            1 => crate::api::types::SwapAction::WaitZeroConf,
+            2 => crate::api::types::SwapAction::WaitConfirmed,
+            3 => crate::api::types::SwapAction::WaitServerZeroConf,
+            4 => crate::api::types::SwapAction::CoopSign,
+            5 => crate::api::types::SwapAction::Claim,
+            6 => crate::api::types::SwapAction::Refund,
+            7 => crate::api::types::SwapAction::Close,
             _ => unreachable!("Invalid variant for SwapAction: {}", inner),
         };
     }
@@ -2128,6 +2157,22 @@ impl SseDecode for crate::api::fees::SwapLimits {
         return crate::api::fees::SwapLimits {
             minimal: var_minimal,
             maximal: var_maximal,
+        };
+    }
+}
+
+impl SseDecode for crate::api::types::SwapState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::types::SwapState::Created,
+            1 => crate::api::types::SwapState::Paid,
+            2 => crate::api::types::SwapState::Settled,
+            3 => crate::api::types::SwapState::Refunded,
+            4 => crate::api::types::SwapState::Expired,
+            5 => crate::api::types::SwapState::Failed,
+            _ => unreachable!("Invalid variant for SwapState: {}", inner),
         };
     }
 }
@@ -2686,11 +2731,14 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SubmarineFeesAndLimits>
 impl flutter_rust_bridge::IntoDart for crate::api::types::SwapAction {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
-            Self::Wait => 0.into_dart(),
-            Self::CoopSign => 1.into_dart(),
-            Self::Claim => 2.into_dart(),
-            Self::Refund => 3.into_dart(),
-            Self::Close => 4.into_dart(),
+            Self::Pay => 0.into_dart(),
+            Self::WaitZeroConf => 1.into_dart(),
+            Self::WaitConfirmed => 2.into_dart(),
+            Self::WaitServerZeroConf => 3.into_dart(),
+            Self::CoopSign => 4.into_dart(),
+            Self::Claim => 5.into_dart(),
+            Self::Refund => 6.into_dart(),
+            Self::Close => 7.into_dart(),
             _ => unreachable!(),
         }
     }
@@ -2718,6 +2766,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SwapLimits>
     for crate::api::fees::SwapLimits
 {
     fn into_into_dart(self) -> crate::api::fees::SwapLimits {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::types::SwapState {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Created => 0.into_dart(),
+            Self::Paid => 1.into_dart(),
+            Self::Settled => 2.into_dart(),
+            Self::Refunded => 3.into_dart(),
+            Self::Expired => 4.into_dart(),
+            Self::Failed => 5.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::SwapState {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapState>
+    for crate::api::types::SwapState
+{
+    fn into_into_dart(self) -> crate::api::types::SwapState {
         self
     }
 }
@@ -3037,6 +3107,14 @@ impl SseEncode for crate::api::types::PreImage {
     }
 }
 
+impl SseEncode for (crate::api::types::SwapAction, crate::api::types::SwapState) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::types::SwapAction>::sse_encode(self.0, serializer);
+        <crate::api::types::SwapState>::sse_encode(self.1, serializer);
+    }
+}
+
 impl SseEncode for crate::api::fees::RevSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3094,11 +3172,14 @@ impl SseEncode for crate::api::types::SwapAction {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(
             match self {
-                crate::api::types::SwapAction::Wait => 0,
-                crate::api::types::SwapAction::CoopSign => 1,
-                crate::api::types::SwapAction::Claim => 2,
-                crate::api::types::SwapAction::Refund => 3,
-                crate::api::types::SwapAction::Close => 4,
+                crate::api::types::SwapAction::Pay => 0,
+                crate::api::types::SwapAction::WaitZeroConf => 1,
+                crate::api::types::SwapAction::WaitConfirmed => 2,
+                crate::api::types::SwapAction::WaitServerZeroConf => 3,
+                crate::api::types::SwapAction::CoopSign => 4,
+                crate::api::types::SwapAction::Claim => 5,
+                crate::api::types::SwapAction::Refund => 6,
+                crate::api::types::SwapAction::Close => 7,
                 _ => {
                     unimplemented!("");
                 }
@@ -3113,6 +3194,26 @@ impl SseEncode for crate::api::fees::SwapLimits {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.minimal, serializer);
         <u64>::sse_encode(self.maximal, serializer);
+    }
+}
+
+impl SseEncode for crate::api::types::SwapState {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::types::SwapState::Created => 0,
+                crate::api::types::SwapState::Paid => 1,
+                crate::api::types::SwapState::Settled => 2,
+                crate::api::types::SwapState::Refunded => 3,
+                crate::api::types::SwapState::Expired => 4,
+                crate::api::types::SwapState::Failed => 5,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
     }
 }
 

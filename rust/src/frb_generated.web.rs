@@ -354,6 +354,23 @@ impl CstDecode<crate::api::types::PreImage>
         }
     }
 }
+impl CstDecode<(crate::api::types::SwapAction, crate::api::types::SwapState)>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> (crate::api::types::SwapAction, crate::api::types::SwapState) {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            2,
+            "Expected 2 elements, got {}",
+            self_.length()
+        );
+        (self_.get(0).cst_decode(), self_.get(1).cst_decode())
+    }
+}
 impl CstDecode<crate::api::fees::RevSwapFees>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
@@ -532,6 +549,14 @@ impl CstDecode<crate::api::types::SwapAction>
 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::SwapAction {
+        (self.unchecked_into_f64() as i32).cst_decode()
+    }
+}
+impl CstDecode<crate::api::types::SwapState>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::SwapState {
         (self.unchecked_into_f64() as i32).cst_decode()
     }
 }

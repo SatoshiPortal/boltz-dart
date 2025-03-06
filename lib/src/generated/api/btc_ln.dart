@@ -143,8 +143,9 @@ class BtcLnSwap with _$BtcLnSwap {
 
   /// Process swap based on status
   /// To be used with WebSocket Notification Stream
-  Future<SwapAction> process({required String status}) => BoltzCore.instance.api
-      .crateApiBtcLnBtcLnSwapProcess(that: this, status: status);
+  Future<(SwapAction, SwapState)> process({required String status}) =>
+      BoltzCore.instance.api
+          .crateApiBtcLnBtcLnSwapProcess(that: this, status: status);
 
   /// Used to refund a failed submarine swap.
   Future<String> refund(

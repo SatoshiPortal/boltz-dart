@@ -167,6 +167,11 @@ typedef struct wire_cst_miner_fees {
   uint64_t claim;
 } wire_cst_miner_fees;
 
+typedef struct wire_cst_record_swap_action_swap_state {
+  int32_t field0;
+  int32_t field1;
+} wire_cst_record_swap_action_swap_state;
+
 typedef struct wire_cst_rev_swap_fees {
   double percentage;
   struct wire_cst_miner_fees miner_fees;
