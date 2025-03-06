@@ -120,6 +120,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage dco_decode_pre_image(dynamic raw);
 
   @protected
+  (SwapAction, SwapState) dco_decode_record_swap_action_swap_state(dynamic raw);
+
+  @protected
   RevSwapFees dco_decode_rev_swap_fees(dynamic raw);
 
   @protected
@@ -139,6 +142,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   SwapLimits dco_decode_swap_limits(dynamic raw);
+
+  @protected
+  SwapState dco_decode_swap_state(dynamic raw);
 
   @protected
   SwapTxKind dco_decode_swap_tx_kind(dynamic raw);
@@ -266,6 +272,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
 
   @protected
+  (SwapAction, SwapState) sse_decode_record_swap_action_swap_state(
+      SseDeserializer deserializer);
+
+  @protected
   RevSwapFees sse_decode_rev_swap_fees(SseDeserializer deserializer);
 
   @protected
@@ -287,6 +297,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   SwapLimits sse_decode_swap_limits(SseDeserializer deserializer);
+
+  @protected
+  SwapState sse_decode_swap_state(SseDeserializer deserializer);
 
   @protected
   SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer);
@@ -647,6 +660,14 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_record_swap_action_swap_state(
+      (SwapAction, SwapState) apiObj,
+      wire_cst_record_swap_action_swap_state wireObj) {
+    wireObj.field0 = cst_encode_swap_action(apiObj.$1);
+    wireObj.field1 = cst_encode_swap_state(apiObj.$2);
+  }
+
+  @protected
   void cst_api_fill_to_wire_rev_swap_fees(
       RevSwapFees apiObj, wire_cst_rev_swap_fees wireObj) {
     wireObj.percentage = cst_encode_f_64(apiObj.percentage);
@@ -722,6 +743,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_swap_action(SwapAction raw);
+
+  @protected
+  int cst_encode_swap_state(SwapState raw);
 
   @protected
   int cst_encode_swap_tx_kind(SwapTxKind raw);
@@ -847,6 +871,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
 
   @protected
+  void sse_encode_record_swap_action_swap_state(
+      (SwapAction, SwapState) self, SseSerializer serializer);
+
+  @protected
   void sse_encode_rev_swap_fees(RevSwapFees self, SseSerializer serializer);
 
   @protected
@@ -868,6 +896,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_swap_state(SwapState self, SseSerializer serializer);
 
   @protected
   void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer);
@@ -2889,6 +2920,14 @@ final class wire_cst_miner_fees extends ffi.Struct {
 
   @ffi.Uint64()
   external int claim;
+}
+
+final class wire_cst_record_swap_action_swap_state extends ffi.Struct {
+  @ffi.Int32()
+  external int field0;
+
+  @ffi.Int32()
+  external int field1;
 }
 
 final class wire_cst_rev_swap_fees extends ffi.Struct {

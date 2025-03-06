@@ -277,6 +277,14 @@ impl CstDecode<crate::api::types::PreImage> for wire_cst_pre_image {
         }
     }
 }
+impl CstDecode<(crate::api::types::SwapAction, crate::api::types::SwapState)>
+    for wire_cst_record_swap_action_swap_state
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> (crate::api::types::SwapAction, crate::api::types::SwapState) {
+        (self.field0.cst_decode(), self.field1.cst_decode())
+    }
+}
 impl CstDecode<crate::api::fees::RevSwapFees> for wire_cst_rev_swap_fees {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::fees::RevSwapFees {
@@ -567,6 +575,19 @@ impl NewWithNullPtr for wire_cst_pre_image {
     }
 }
 impl Default for wire_cst_pre_image {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_record_swap_action_swap_state {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            field0: Default::default(),
+            field1: Default::default(),
+        }
+    }
+}
+impl Default for wire_cst_record_swap_action_swap_state {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -1558,6 +1579,12 @@ pub struct wire_cst_pre_image {
     value: *mut wire_cst_list_prim_u_8_strict,
     sha256: *mut wire_cst_list_prim_u_8_strict,
     hash160: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_record_swap_action_swap_state {
+    field0: i32,
+    field1: i32,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

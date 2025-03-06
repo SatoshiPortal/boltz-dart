@@ -603,17 +603,21 @@ impl From<LBtcSwapScript> for LBtcSwapScriptStr {
 
 #[frb(dart_metadata=("freezed"))]
 pub enum SwapAction {
-    Wait,
+    Pay,
+    WaitZeroConf,
+    WaitConfirmed,
+    WaitServerZeroConf,
     CoopSign,
     Claim,
     Refund,
-    Close,
+    Close
 }
 
 #[frb(dart_metadata=("freezed"))]
 pub enum SwapState {
+    Created,
     Paid,
-    Claimed,
+    Settled,
     Refunded,
     Expired,
     Failed,

@@ -4,7 +4,7 @@ use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
-    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapType, TxFee},
+    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapState, SwapType, TxFee},
 };
 use boltz_client::{
     bitcoin::Txid,
@@ -425,7 +425,7 @@ impl LbtcLnSwap {
         };
         let ckp: Keypair = self.keys.clone().try_into()?;
 
-        let size = match tx.size(&ckp, is_cooperative, false) {
+        let size = match tx.size(&ckp, is_cooperative, true) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
@@ -433,7 +433,7 @@ impl LbtcLnSwap {
     }
     /// Process swap based on status
     /// To be used with WebSocket Notification Stream
-    pub fn process(&self, status: String) -> Result<SwapAction, BoltzError> {
+    pub fn process(&self, status: String) -> Result<(SwapAction,SwapState), BoltzError> {
         match self.kind {
             SwapType::Submarine => {
                 let status = SubSwapStates::from_str(&status);
@@ -445,13 +445,13 @@ impl LbtcLnSwap {
                 }
                 let status = status.unwrap();
                 match status {
-                    SubSwapStates::Created => return Ok(SwapAction::Wait),
-                    SubSwapStates::TransactionMempool => return Ok(SwapAction::Wait),
-                    SubSwapStates::TransactionConfirmed => return Ok(SwapAction::Wait),
-                    SubSwapStates::InvoiceSet => return Ok(SwapAction::Wait),
-                    SubSwapStates::InvoicePending => return Ok(SwapAction::Wait),
-                    SubSwapStates::InvoicePaid => return Ok(SwapAction::CoopSign),
-                    SubSwapStates::TransactionClaimPending => return Ok(SwapAction::CoopSign),
+                    SubSwapStates::Created => return Ok((SwapAction::Pay,SwapState::Created)),
+                    SubSwapStates::TransactionMempool => return Ok((SwapAction::WaitZeroConf,SwapState::Paid)),
+                    SubSwapStates::TransactionConfirmed => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
+                    SubSwapStates::InvoiceSet => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
+                    SubSwapStates::InvoicePending => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
+                    SubSwapStates::InvoicePaid => return Ok((SwapAction::CoopSign,SwapState::Settled)),
+                    SubSwapStates::TransactionClaimPending => return Ok((SwapAction::CoopSign,SwapState::Settled)),
                     SubSwapStates::SwapExpired => {
                         // save the claim_txid as part of the struct to avoid a network call
                         let network_config = ElectrumConfig::new(
@@ -464,14 +464,14 @@ impl LbtcLnSwap {
                         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
                         let utxo = swap_script.fetch_utxo(&network_config)?;
                         if utxo.is_none() {
-                            return Ok(SwapAction::Close);
+                            return Ok((SwapAction::Close,SwapState::Created));
                         } else {
-                            return Ok(SwapAction::Refund);
+                            return Ok((SwapAction::Refund,SwapState::Created));
                         }
                     }
-                    SubSwapStates::InvoiceFailedToPay => return Ok(SwapAction::Refund),
-                    SubSwapStates::TransactionLockupFailed => return Ok(SwapAction::Refund),
-                    SubSwapStates::TransactionClaimed => return Ok(SwapAction::Close),
+                    SubSwapStates::InvoiceFailedToPay => return Ok((SwapAction::Refund,SwapState::Failed)),
+                    SubSwapStates::TransactionLockupFailed => return Ok((SwapAction::Refund,SwapState::Failed)),
+                    SubSwapStates::TransactionClaimed => return Ok((SwapAction::Close,SwapState::Settled)),
                 }
             }
             SwapType::Reverse => {
@@ -484,10 +484,10 @@ impl LbtcLnSwap {
                 }
                 let status = status.unwrap();
                 match status {
-                    RevSwapStates::Created => return Ok(SwapAction::Wait),
-                    RevSwapStates::MinerFeePaid => return Ok(SwapAction::Wait),
-                    RevSwapStates::TransactionMempool => return Ok(SwapAction::Claim),
-                    RevSwapStates::TransactionConfirmed => return Ok(SwapAction::Claim),
+                    RevSwapStates::Created => return Ok((SwapAction::Pay,SwapState::Created)),
+                    RevSwapStates::MinerFeePaid => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
+                    RevSwapStates::TransactionMempool => return Ok((SwapAction::Claim,SwapState::Paid)),
+                    RevSwapStates::TransactionConfirmed => return Ok((SwapAction::Claim,SwapState::Paid)),
                     RevSwapStates::InvoiceSettled => {
                         // save the claim_txid as part of the struct to avoid a network call
                         let network_config = ElectrumConfig::new(
@@ -500,15 +500,15 @@ impl LbtcLnSwap {
                         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
                         let utxo = swap_script.fetch_utxo(&network_config)?;
                         if utxo.is_none() {
-                            return Ok(SwapAction::Close);
+                            return Ok((SwapAction::Close,SwapState::Settled));
                         } else {
-                            return Ok(SwapAction::Claim);
+                            return Ok((SwapAction::Claim,SwapState::Paid));
                         }
                     }
-                    RevSwapStates::InvoiceExpired => return Ok(SwapAction::Close),
-                    RevSwapStates::SwapExpired => return Ok(SwapAction::Close),
-                    RevSwapStates::TransactionFailed => return Ok(SwapAction::Close),
-                    RevSwapStates::TransactionRefunded => return Ok(SwapAction::Close),
+                    RevSwapStates::InvoiceExpired => return Ok((SwapAction::Close,SwapState::Expired)),
+                    RevSwapStates::SwapExpired => return Ok((SwapAction::Close,SwapState::Expired)),
+                    RevSwapStates::TransactionFailed => return Ok((SwapAction::Close,SwapState::Failed)),
+                    RevSwapStates::TransactionRefunded => return Ok((SwapAction::Close,SwapState::Refunded)),
                 }
             }
             SwapType::Chain => {

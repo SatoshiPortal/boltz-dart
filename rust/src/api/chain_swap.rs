@@ -615,11 +615,11 @@ impl ChainSwap {
         } else {
             let status = status.unwrap();
             match status {
-                ChainSwapStates::Created => return Ok(SwapAction::Wait),
-                ChainSwapStates::TransactionZeroConfRejected => return Ok(SwapAction::Wait),
-                ChainSwapStates::TransactionMempool => return Ok(SwapAction::Wait),
-                ChainSwapStates::TransactionConfirmed => return Ok(SwapAction::Wait),
-                ChainSwapStates::TransactionServerMempool => return Ok(SwapAction::Wait),
+                ChainSwapStates::Created => return Ok(SwapAction::Pay),
+                ChainSwapStates::TransactionZeroConfRejected => return Ok(SwapAction::WaitZeroConf),
+                ChainSwapStates::TransactionMempool => return Ok(SwapAction::WaitZeroConf),
+                ChainSwapStates::TransactionConfirmed => return Ok(SwapAction::WaitConfirmed),
+                ChainSwapStates::TransactionServerMempool => return Ok(SwapAction::WaitServerZeroConf),
                 ChainSwapStates::TransactionServerConfirmed => return Ok(SwapAction::Claim),
                 ChainSwapStates::TransactionClaimed => match self.direction {
                     ChainSwapDirection::BtcToLbtc => {
