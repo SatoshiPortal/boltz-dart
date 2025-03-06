@@ -62,7 +62,7 @@ class BoltzCore
   String get codegenVersion => '2.0.0';
 
   @override
-  int get rustContentHash => 1097141196;
+  int get rustContentHash => -554324912;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -89,6 +89,9 @@ abstract class BoltzCoreApi extends BaseApi {
       {required BtcLnSwap that});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapFromJson({required String jsonStr});
+
+  Future<(SwapAction, SwapState)> crateApiBtcLnBtcLnSwapGetAction(
+      {required BtcLnSwap that, required String status});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNew(
       {required String id,
@@ -125,9 +128,6 @@ abstract class BoltzCoreApi extends BaseApi {
       required String boltzUrl,
       String? referralId});
 
-  Future<(SwapAction, SwapState)> crateApiBtcLnBtcLnSwapProcess(
-      {required BtcLnSwap that, required String status});
-
   Future<String> crateApiBtcLnBtcLnSwapRefund(
       {required BtcLnSwap that,
       required String outAddress,
@@ -158,6 +158,9 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<ChainSwap> crateApiChainSwapChainSwapFromJson(
       {required String jsonStr});
+
+  Future<(SwapAction, SwapState)> crateApiChainSwapChainSwapGetAction(
+      {required ChainSwap that, required String status});
 
   Future<String> crateApiChainSwapChainSwapGetServerLockup(
       {required ChainSwap that});
@@ -194,9 +197,6 @@ abstract class BoltzCoreApi extends BaseApi {
       required String lbtcElectrumUrl,
       required String boltzUrl,
       String? referralId});
-
-  Future<SwapAction> crateApiChainSwapChainSwapProcess(
-      {required ChainSwap that, required String status});
 
   Future<String> crateApiChainSwapChainSwapRefund(
       {required ChainSwap that,
@@ -236,6 +236,9 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapFromJson(
       {required String jsonStr});
 
+  Future<(SwapAction, SwapState)> crateApiLbtcLnLbtcLnSwapGetAction(
+      {required LbtcLnSwap that, required String status});
+
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNew(
       {required String id,
       required SwapType kind,
@@ -271,9 +274,6 @@ abstract class BoltzCoreApi extends BaseApi {
       required String electrumUrl,
       required String boltzUrl,
       String? referralId});
-
-  Future<(SwapAction, SwapState)> crateApiLbtcLnLbtcLnSwapProcess(
-      {required LbtcLnSwap that, required String status});
 
   Future<String> crateApiLbtcLnLbtcLnSwapRefund(
       {required LbtcLnSwap that,
@@ -472,6 +472,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "btc_ln_swap_from_json",
         argNames: ["jsonStr"],
+      );
+
+  @override
+  Future<(SwapAction, SwapState)> crateApiBtcLnBtcLnSwapGetAction(
+      {required BtcLnSwap that, required String status}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        var arg1 = cst_encode_String(status);
+        return wire.wire__crate__api__btc_ln__btc_ln_swap_get_action(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_record_swap_action_swap_state,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiBtcLnBtcLnSwapGetActionConstMeta,
+      argValues: [that, status],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiBtcLnBtcLnSwapGetActionConstMeta =>
+      const TaskConstMeta(
+        debugName: "btc_ln_swap_get_action",
+        argNames: ["that", "status"],
       );
 
   @override
@@ -678,32 +704,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<(SwapAction, SwapState)> crateApiBtcLnBtcLnSwapProcess(
-      {required BtcLnSwap that, required String status}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
-        var arg1 = cst_encode_String(status);
-        return wire.wire__crate__api__btc_ln__btc_ln_swap_process(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_record_swap_action_swap_state,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiBtcLnBtcLnSwapProcessConstMeta,
-      argValues: [that, status],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiBtcLnBtcLnSwapProcessConstMeta =>
-      const TaskConstMeta(
-        debugName: "btc_ln_swap_process",
-        argNames: ["that", "status"],
-      );
-
-  @override
   Future<String> crateApiBtcLnBtcLnSwapRefund(
       {required BtcLnSwap that,
       required String outAddress,
@@ -903,6 +903,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "chain_swap_from_json",
         argNames: ["jsonStr"],
+      );
+
+  @override
+  Future<(SwapAction, SwapState)> crateApiChainSwapChainSwapGetAction(
+      {required ChainSwap that, required String status}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        var arg1 = cst_encode_String(status);
+        return wire.wire__crate__api__chain_swap__chain_swap_get_action(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_record_swap_action_swap_state,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiChainSwapChainSwapGetActionConstMeta,
+      argValues: [that, status],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiChainSwapChainSwapGetActionConstMeta =>
+      const TaskConstMeta(
+        debugName: "chain_swap_get_action",
+        argNames: ["that", "status"],
       );
 
   @override
@@ -1124,32 +1150,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "boltzUrl",
           "referralId"
         ],
-      );
-
-  @override
-  Future<SwapAction> crateApiChainSwapChainSwapProcess(
-      {required ChainSwap that, required String status}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_chain_swap(that);
-        var arg1 = cst_encode_String(status);
-        return wire.wire__crate__api__chain_swap__chain_swap_process(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_swap_action,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiChainSwapChainSwapProcessConstMeta,
-      argValues: [that, status],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiChainSwapChainSwapProcessConstMeta =>
-      const TaskConstMeta(
-        debugName: "chain_swap_process",
-        argNames: ["that", "status"],
       );
 
   @override
@@ -1455,6 +1455,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<(SwapAction, SwapState)> crateApiLbtcLnLbtcLnSwapGetAction(
+      {required LbtcLnSwap that, required String status}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        var arg1 = cst_encode_String(status);
+        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_record_swap_action_swap_state,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLbtcLnLbtcLnSwapGetActionConstMeta,
+      argValues: [that, status],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapGetActionConstMeta =>
+      const TaskConstMeta(
+        debugName: "lbtc_ln_swap_get_action",
+        argNames: ["that", "status"],
+      );
+
+  @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNew(
       {required String id,
       required SwapType kind,
@@ -1661,32 +1687,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "boltzUrl",
           "referralId"
         ],
-      );
-
-  @override
-  Future<(SwapAction, SwapState)> crateApiLbtcLnLbtcLnSwapProcess(
-      {required LbtcLnSwap that, required String status}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
-        var arg1 = cst_encode_String(status);
-        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_process(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_record_swap_action_swap_state,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiLbtcLnLbtcLnSwapProcessConstMeta,
-      argValues: [that, status],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapProcessConstMeta =>
-      const TaskConstMeta(
-        debugName: "lbtc_ln_swap_process",
-        argNames: ["that", "status"],
       );
 
   @override
