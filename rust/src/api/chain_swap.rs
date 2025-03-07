@@ -1,18 +1,16 @@
-use std::str::FromStr;
-
 use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
     types::{
         BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage,
-        SwapAction, SwapState, SwapTxKind, SwapType, TxFee,
+        SwapTxKind, SwapType, TxFee,
     },
 };
 
 use boltz_client::{
     bitcoin::{consensus::serialize, hex::DisplayHex, Txid},
-    boltz::{ChainSwapDetails, ChainSwapStates, Cooperative, Side},
+    boltz::{ChainSwapDetails, Cooperative, Side},
     electrum_client::ElectrumApi,
     error::Error,
     network::electrum::ElectrumConfig,

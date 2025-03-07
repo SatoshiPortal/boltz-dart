@@ -1,14 +1,12 @@
-use std::str::FromStr;
-
 use super::{
     error::BoltzError,
-    types::{BtcSwapScriptStr, Chain, KeyPair, PreImage, SwapAction, SwapState, SwapType, TxFee},
+    types::{BtcSwapScriptStr, Chain, KeyPair, PreImage, SwapType, TxFee},
 };
 use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use boltz_client::{
     bitcoin::{consensus::encode::serialize, Transaction, Txid},
-    boltz::{Cooperative, RevSwapStates, SubSwapStates},
+    boltz::Cooperative,
     electrum_client::ElectrumApi,
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
