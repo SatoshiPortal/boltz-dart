@@ -120,9 +120,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage dco_decode_pre_image(dynamic raw);
 
   @protected
-  (SwapAction, SwapState) dco_decode_record_swap_action_swap_state(dynamic raw);
-
-  @protected
   RevSwapFees dco_decode_rev_swap_fees(dynamic raw);
 
   @protected
@@ -138,13 +135,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   SubmarineFeesAndLimits dco_decode_submarine_fees_and_limits(dynamic raw);
 
   @protected
-  SwapAction dco_decode_swap_action(dynamic raw);
-
-  @protected
   SwapLimits dco_decode_swap_limits(dynamic raw);
-
-  @protected
-  SwapState dco_decode_swap_state(dynamic raw);
 
   @protected
   SwapTxKind dco_decode_swap_tx_kind(dynamic raw);
@@ -272,10 +263,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
 
   @protected
-  (SwapAction, SwapState) sse_decode_record_swap_action_swap_state(
-      SseDeserializer deserializer);
-
-  @protected
   RevSwapFees sse_decode_rev_swap_fees(SseDeserializer deserializer);
 
   @protected
@@ -293,13 +280,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       SseDeserializer deserializer);
 
   @protected
-  SwapAction sse_decode_swap_action(SseDeserializer deserializer);
-
-  @protected
   SwapLimits sse_decode_swap_limits(SseDeserializer deserializer);
-
-  @protected
-  SwapState sse_decode_swap_state(SseDeserializer deserializer);
 
   @protected
   SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer);
@@ -660,14 +641,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  void cst_api_fill_to_wire_record_swap_action_swap_state(
-      (SwapAction, SwapState) apiObj,
-      wire_cst_record_swap_action_swap_state wireObj) {
-    wireObj.field0 = cst_encode_swap_action(apiObj.$1);
-    wireObj.field1 = cst_encode_swap_state(apiObj.$2);
-  }
-
-  @protected
   void cst_api_fill_to_wire_rev_swap_fees(
       RevSwapFees apiObj, wire_cst_rev_swap_fees wireObj) {
     wireObj.percentage = cst_encode_f_64(apiObj.percentage);
@@ -740,12 +713,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_side(Side raw);
-
-  @protected
-  int cst_encode_swap_action(SwapAction raw);
-
-  @protected
-  int cst_encode_swap_state(SwapState raw);
 
   @protected
   int cst_encode_swap_tx_kind(SwapTxKind raw);
@@ -871,10 +838,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
 
   @protected
-  void sse_encode_record_swap_action_swap_state(
-      (SwapAction, SwapState) self, SseSerializer serializer);
-
-  @protected
   void sse_encode_rev_swap_fees(RevSwapFees self, SseSerializer serializer);
 
   @protected
@@ -892,13 +855,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       SubmarineFeesAndLimits self, SseSerializer serializer);
 
   @protected
-  void sse_encode_swap_action(SwapAction self, SseSerializer serializer);
-
-  @protected
   void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_swap_state(SwapState self, SseSerializer serializer);
 
   @protected
   void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer);
@@ -1088,28 +1045,6 @@ class BoltzCoreWire implements BaseWire {
   late final _wire__crate__api__btc_ln__btc_ln_swap_from_json =
       _wire__crate__api__btc_ln__btc_ln_swap_from_jsonPtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__btc_ln__btc_ln_swap_get_action(
-    int port_,
-    ffi.Pointer<wire_cst_btc_ln_swap> that,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> status,
-  ) {
-    return _wire__crate__api__btc_ln__btc_ln_swap_get_action(
-      port_,
-      that,
-      status,
-    );
-  }
-
-  late final _wire__crate__api__btc_ln__btc_ln_swap_get_actionPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_btc_ln_swap>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_get_action');
-  late final _wire__crate__api__btc_ln__btc_ln_swap_get_action =
-      _wire__crate__api__btc_ln__btc_ln_swap_get_actionPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_btc_ln_swap>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire__crate__api__btc_ln__btc_ln_swap_new(
     int port_,
@@ -1460,28 +1395,6 @@ class BoltzCoreWire implements BaseWire {
   late final _wire__crate__api__chain_swap__chain_swap_from_json =
       _wire__crate__api__chain_swap__chain_swap_from_jsonPtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__chain_swap__chain_swap_get_action(
-    int port_,
-    ffi.Pointer<wire_cst_chain_swap> that,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> status,
-  ) {
-    return _wire__crate__api__chain_swap__chain_swap_get_action(
-      port_,
-      that,
-      status,
-    );
-  }
-
-  late final _wire__crate__api__chain_swap__chain_swap_get_actionPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_chain_swap>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__chain_swap__chain_swap_get_action');
-  late final _wire__crate__api__chain_swap__chain_swap_get_action =
-      _wire__crate__api__chain_swap__chain_swap_get_actionPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_chain_swap>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire__crate__api__chain_swap__chain_swap_get_server_lockup(
     int port_,
@@ -1934,28 +1847,6 @@ class BoltzCoreWire implements BaseWire {
   late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json =
       _wire__crate__api__lbtc_ln__lbtc_ln_swap_from_jsonPtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action(
-    int port_,
-    ffi.Pointer<wire_cst_lbtc_ln_swap> that,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> status,
-  ) {
-    return _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action(
-      port_,
-      that,
-      status,
-    );
-  }
-
-  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_actionPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_lbtc_ln_swap>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action');
-  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action =
-      _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_actionPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
     int port_,
@@ -2648,14 +2539,10 @@ class BoltzCoreWire implements BaseWire {
       _dummy_method_to_enforce_bundlingPtr.asFunction<int Function()>();
 }
 
+typedef DartPostCObjectFnType = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Bool Function(DartPort port_id, ffi.Pointer<ffi.Void> message)>>;
 typedef DartPort = ffi.Int64;
-typedef DartDartPort = int;
-typedef DartPostCObjectFnTypeFunction = ffi.Bool Function(
-    DartPort port_id, ffi.Pointer<ffi.Void> message);
-typedef DartDartPostCObjectFnTypeFunction = bool Function(
-    DartDartPort port_id, ffi.Pointer<ffi.Void> message);
-typedef DartPostCObjectFnType
-    = ffi.Pointer<ffi.NativeFunction<DartPostCObjectFnTypeFunction>>;
 
 final class wire_cst_list_prim_u_8_strict extends ffi.Struct {
   external ffi.Pointer<ffi.Uint8> ptr;
@@ -2920,14 +2807,6 @@ final class wire_cst_miner_fees extends ffi.Struct {
 
   @ffi.Uint64()
   external int claim;
-}
-
-final class wire_cst_record_swap_action_swap_state extends ffi.Struct {
-  @ffi.Int32()
-  external int field0;
-
-  @ffi.Int32()
-  external int field1;
 }
 
 final class wire_cst_rev_swap_fees extends ffi.Struct {

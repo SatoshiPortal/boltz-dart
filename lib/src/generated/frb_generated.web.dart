@@ -122,9 +122,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage dco_decode_pre_image(dynamic raw);
 
   @protected
-  (SwapAction, SwapState) dco_decode_record_swap_action_swap_state(dynamic raw);
-
-  @protected
   RevSwapFees dco_decode_rev_swap_fees(dynamic raw);
 
   @protected
@@ -140,13 +137,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   SubmarineFeesAndLimits dco_decode_submarine_fees_and_limits(dynamic raw);
 
   @protected
-  SwapAction dco_decode_swap_action(dynamic raw);
-
-  @protected
   SwapLimits dco_decode_swap_limits(dynamic raw);
-
-  @protected
-  SwapState dco_decode_swap_state(dynamic raw);
 
   @protected
   SwapTxKind dco_decode_swap_tx_kind(dynamic raw);
@@ -274,10 +265,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
 
   @protected
-  (SwapAction, SwapState) sse_decode_record_swap_action_swap_state(
-      SseDeserializer deserializer);
-
-  @protected
   RevSwapFees sse_decode_rev_swap_fees(SseDeserializer deserializer);
 
   @protected
@@ -295,13 +282,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       SseDeserializer deserializer);
 
   @protected
-  SwapAction sse_decode_swap_action(SseDeserializer deserializer);
-
-  @protected
   SwapLimits sse_decode_swap_limits(SseDeserializer deserializer);
-
-  @protected
-  SwapState sse_decode_swap_state(SseDeserializer deserializer);
 
   @protected
   SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer);
@@ -580,13 +561,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
-  JSAny cst_encode_record_swap_action_swap_state((SwapAction, SwapState) raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return [cst_encode_swap_action(raw.$1), cst_encode_swap_state(raw.$2)]
-        .jsify()!;
-  }
-
-  @protected
   JSAny cst_encode_rev_swap_fees(RevSwapFees raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [
@@ -673,12 +647,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_side(Side raw);
-
-  @protected
-  int cst_encode_swap_action(SwapAction raw);
-
-  @protected
-  int cst_encode_swap_state(SwapState raw);
 
   @protected
   int cst_encode_swap_tx_kind(SwapTxKind raw);
@@ -804,10 +772,6 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
 
   @protected
-  void sse_encode_record_swap_action_swap_state(
-      (SwapAction, SwapState) self, SseSerializer serializer);
-
-  @protected
   void sse_encode_rev_swap_fees(RevSwapFees self, SseSerializer serializer);
 
   @protected
@@ -825,13 +789,7 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       SubmarineFeesAndLimits self, SseSerializer serializer);
 
   @protected
-  void sse_encode_swap_action(SwapAction self, SseSerializer serializer);
-
-  @protected
   void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_swap_state(SwapState self, SseSerializer serializer);
 
   @protected
   void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer);
@@ -891,11 +849,6 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, String json_str) =>
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_from_json(
           port_, json_str);
-
-  void wire__crate__api__btc_ln__btc_ln_swap_get_action(
-          NativePortType port_, JSAny that, String status) =>
-      wasmModule.wire__crate__api__btc_ln__btc_ln_swap_get_action(
-          port_, that, status);
 
   void wire__crate__api__btc_ln__btc_ln_swap_new(
           NativePortType port_,
@@ -1012,11 +965,6 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, String json_str) =>
       wasmModule.wire__crate__api__chain_swap__chain_swap_from_json(
           port_, json_str);
-
-  void wire__crate__api__chain_swap__chain_swap_get_action(
-          NativePortType port_, JSAny that, String status) =>
-      wasmModule.wire__crate__api__chain_swap__chain_swap_get_action(
-          port_, that, status);
 
   void wire__crate__api__chain_swap__chain_swap_get_server_lockup(
           NativePortType port_, JSAny that) =>
@@ -1149,11 +1097,6 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, String json_str) =>
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
           port_, json_str);
-
-  void wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action(
-          NativePortType port_, JSAny that, String status) =>
-      wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action(
-          port_, that, status);
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
           NativePortType port_,
@@ -1354,9 +1297,6 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__btc_ln__btc_ln_swap_from_json(
       NativePortType port_, String json_str);
 
-  external void wire__crate__api__btc_ln__btc_ln_swap_get_action(
-      NativePortType port_, JSAny that, String status);
-
   external void wire__crate__api__btc_ln__btc_ln_swap_new(
       NativePortType port_,
       String id,
@@ -1424,9 +1364,6 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
 
   external void wire__crate__api__chain_swap__chain_swap_from_json(
       NativePortType port_, String json_str);
-
-  external void wire__crate__api__chain_swap__chain_swap_get_action(
-      NativePortType port_, JSAny that, String status);
 
   external void wire__crate__api__chain_swap__chain_swap_get_server_lockup(
       NativePortType port_, JSAny that);
@@ -1509,9 +1446,6 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
       NativePortType port_, String json_str);
-
-  external void wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action(
-      NativePortType port_, JSAny that, String status);
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
       NativePortType port_,

@@ -5,7 +5,8 @@ use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 use super::{
     error::BoltzError,
     types::{
-        BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage, SwapAction, SwapState, SwapTxKind, SwapType, TxFee
+        BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage,
+        SwapAction, SwapState, SwapTxKind, SwapType, TxFee,
     },
 };
 
@@ -601,134 +602,6 @@ impl ChainSwap {
             Err(e) => return Err(e.into()),
         };
         Ok(extract_id(txid)?)
-    }
-    /// Process swap based on status
-    /// To be used with WebSocket Notification Stream
-    pub fn get_action(&self, status: String) -> Result<(SwapAction,SwapState), BoltzError> {
-        let status = ChainSwapStates::from_str(&status);
-        if status.is_err() {
-            return Err(BoltzError::new(
-                "Parse".to_string(),
-                "Could not parse string status to ChainSwapState".to_string(),
-            ));
-        } else {
-            let status = status.unwrap();
-            match status {
-                ChainSwapStates::Created => return Ok((SwapAction::Pay,SwapState::Created)),
-                ChainSwapStates::TransactionZeroConfRejected => return Ok((SwapAction::WaitZeroConf,SwapState::Paid)),
-                ChainSwapStates::TransactionMempool => return Ok((SwapAction::WaitZeroConf,SwapState::Paid)),
-                ChainSwapStates::TransactionConfirmed => return Ok((SwapAction::WaitConfirmed,SwapState::Paid)),
-                ChainSwapStates::TransactionServerMempool => return Ok((SwapAction::WaitServerZeroConf,SwapState::Paid)),
-                ChainSwapStates::TransactionServerConfirmed => return Ok((SwapAction::Claim,SwapState::Paid)),
-                ChainSwapStates::TransactionClaimed => match self.direction {
-                    ChainSwapDirection::BtcToLbtc => {
-                        // we are looking for claimed LBTC
-                        let network_config = ElectrumConfig::new(
-                            if self.is_testnet {
-                                Chain::LiquidTestnet.into()
-                            } else {
-                                Chain::Liquid.into()
-                            },
-                            &self.lbtc_electrum_url,
-                            true,
-                            false,
-                            10,
-                        );
-                        let swap_script: LBtcSwapScript =
-                            self.lbtc_script_str.clone().try_into()?;
-                        let utxo = swap_script.fetch_utxo(&network_config)?;
-                        if utxo.is_none() {
-                            return Ok((SwapAction::Close,SwapState::Settled));
-                        } else {
-                            return Ok((SwapAction::Claim,SwapState::Paid));
-                        }
-                    }
-                    ChainSwapDirection::LbtcToBtc => {
-                        // we are looking for claimed BTC
-                        let network_config = ElectrumConfig::new(
-                            if self.is_testnet {
-                                Chain::BitcoinTestnet.into()
-                            } else {
-                                Chain::Bitcoin.into()
-                            },
-                            &self.btc_electrum_url,
-                            true,
-                            true,
-                            10,
-                        );
-                        let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
-                        let balance = swap_script.get_balance(&network_config)?;
-                        if balance.0 == 0 {
-                            return Ok((SwapAction::Close,SwapState::Settled));
-                        } else {
-                            return Ok((SwapAction::Claim,SwapState::Paid));
-                        }
-                    }
-                },
-                ChainSwapStates::TransactionLockupFailed => return Ok((SwapAction::Refund,SwapState::Failed)),
-                ChainSwapStates::SwapExpired
-                | ChainSwapStates::TransactionFailed
-                | ChainSwapStates::TransactionRefunded => match self.direction {
-                    ChainSwapDirection::BtcToLbtc => {
-                        let network_config = ElectrumConfig::new(
-                            if self.is_testnet {
-                                Chain::BitcoinTestnet.into()
-                            } else {
-                                Chain::Bitcoin.into()
-                            },
-                            &self.btc_electrum_url,
-                            true,
-                            true,
-                            10,
-                        );
-                        let swap_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
-                        let balance = swap_script.get_balance(&network_config)?;
-                        if balance.0 == 0 {
-                            match status{
-                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Close,SwapState::Expired)),
-                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Close,SwapState::Failed)),
-                                _ => return Ok((SwapAction::Close,SwapState::Refunded)),
-                            }
-                        } else {
-                            match status{
-                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Refund,SwapState::Expired)),
-                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Refund,SwapState::Failed)),
-                                _ => return Ok((SwapAction::Refund,SwapState::Refunded)),
-                            }
-                        }
-                    }
-                    ChainSwapDirection::LbtcToBtc => {
-                        let network_config = ElectrumConfig::new(
-                            if self.is_testnet {
-                                Chain::LiquidTestnet.into()
-                            } else {
-                                Chain::Liquid.into()
-                            },
-                            &self.lbtc_electrum_url,
-                            true,
-                            false,
-                            10,
-                        );
-                        let swap_script: LBtcSwapScript =
-                            self.lbtc_script_str.clone().try_into()?;
-                        let utxo = swap_script.fetch_utxo(&network_config)?;
-                        if utxo.is_none() {
-                            match status{
-                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Close,SwapState::Expired)),
-                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Close,SwapState::Failed)),
-                                _ => return Ok((SwapAction::Close,SwapState::Refunded)),
-                            }
-                        } else {
-                            match status{
-                                ChainSwapStates::SwapExpired => return Ok((SwapAction::Refund,SwapState::Expired)),
-                                ChainSwapStates::TransactionFailed => return Ok((SwapAction::Refund,SwapState::Failed)),
-                                _ => return Ok((SwapAction::Refund,SwapState::Refunded)),
-                            }                        
-                        }
-                    }
-                },
-            }
-        }
     }
 }
 /// Helper method used to extract the txid from a JSON response

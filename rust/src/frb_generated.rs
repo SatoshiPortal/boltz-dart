@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.0.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -554324912;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -394494677;
 
 // Section: executor
 
@@ -161,30 +161,6 @@ fn wire__crate__api__btc_ln__btc_ln_swap_from_json_impl(
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::btc_ln::BtcLnSwap::from_json(&api_json_str)?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
-fn wire__crate__api__btc_ln__btc_ln_swap_get_action_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
-    status: impl CstDecode<String>,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "btc_ln_swap_get_action",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.cst_decode();
-            let api_status = status.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::btc_ln::BtcLnSwap::get_action(&api_that, api_status)?;
                     Ok(output_ok)
                 })())
             }
@@ -523,30 +499,6 @@ fn wire__crate__api__chain_swap__chain_swap_from_json_impl(
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::chain_swap::ChainSwap::from_json(&api_json_str)?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
-fn wire__crate__api__chain_swap__chain_swap_get_action_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
-    status: impl CstDecode<String>,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "chain_swap_get_action",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.cst_decode();
-            let api_status = status.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::chain_swap::ChainSwap::get_action(&api_that, api_status)?;
                     Ok(output_ok)
                 })())
             }
@@ -999,30 +951,6 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json_impl(
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::lbtc_ln::LbtcLnSwap::from_json(&api_json_str)?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
-fn wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
-    status: impl CstDecode<String>,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "lbtc_ln_swap_get_action",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.cst_decode();
-            let api_status = status.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::lbtc_ln::LbtcLnSwap::get_action(&api_that, api_status)?;
                     Ok(output_ok)
                 })())
             }
@@ -1614,36 +1542,6 @@ impl CstDecode<crate::api::types::Side> for i32 {
         }
     }
 }
-impl CstDecode<crate::api::types::SwapAction> for i32 {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::SwapAction {
-        match self {
-            0 => crate::api::types::SwapAction::Pay,
-            1 => crate::api::types::SwapAction::WaitZeroConf,
-            2 => crate::api::types::SwapAction::WaitConfirmed,
-            3 => crate::api::types::SwapAction::WaitServerZeroConf,
-            4 => crate::api::types::SwapAction::CoopSign,
-            5 => crate::api::types::SwapAction::Claim,
-            6 => crate::api::types::SwapAction::Refund,
-            7 => crate::api::types::SwapAction::Close,
-            _ => unreachable!("Invalid variant for SwapAction: {}", self),
-        }
-    }
-}
-impl CstDecode<crate::api::types::SwapState> for i32 {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    fn cst_decode(self) -> crate::api::types::SwapState {
-        match self {
-            0 => crate::api::types::SwapState::Created,
-            1 => crate::api::types::SwapState::Paid,
-            2 => crate::api::types::SwapState::Settled,
-            3 => crate::api::types::SwapState::Refunded,
-            4 => crate::api::types::SwapState::Expired,
-            5 => crate::api::types::SwapState::Failed,
-            _ => unreachable!("Invalid variant for SwapState: {}", self),
-        }
-    }
-}
 impl CstDecode<crate::api::types::SwapTxKind> for i32 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::types::SwapTxKind {
@@ -2055,15 +1953,6 @@ impl SseDecode for crate::api::types::PreImage {
     }
 }
 
-impl SseDecode for (crate::api::types::SwapAction, crate::api::types::SwapState) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_field0 = <crate::api::types::SwapAction>::sse_decode(deserializer);
-        let mut var_field1 = <crate::api::types::SwapState>::sse_decode(deserializer);
-        return (var_field0, var_field1);
-    }
-}
-
 impl SseDecode for crate::api::fees::RevSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2132,24 +2021,6 @@ impl SseDecode for crate::api::fees::SubmarineFeesAndLimits {
     }
 }
 
-impl SseDecode for crate::api::types::SwapAction {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <i32>::sse_decode(deserializer);
-        return match inner {
-            0 => crate::api::types::SwapAction::Pay,
-            1 => crate::api::types::SwapAction::WaitZeroConf,
-            2 => crate::api::types::SwapAction::WaitConfirmed,
-            3 => crate::api::types::SwapAction::WaitServerZeroConf,
-            4 => crate::api::types::SwapAction::CoopSign,
-            5 => crate::api::types::SwapAction::Claim,
-            6 => crate::api::types::SwapAction::Refund,
-            7 => crate::api::types::SwapAction::Close,
-            _ => unreachable!("Invalid variant for SwapAction: {}", inner),
-        };
-    }
-}
-
 impl SseDecode for crate::api::fees::SwapLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2158,22 +2029,6 @@ impl SseDecode for crate::api::fees::SwapLimits {
         return crate::api::fees::SwapLimits {
             minimal: var_minimal,
             maximal: var_maximal,
-        };
-    }
-}
-
-impl SseDecode for crate::api::types::SwapState {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <i32>::sse_decode(deserializer);
-        return match inner {
-            0 => crate::api::types::SwapState::Created,
-            1 => crate::api::types::SwapState::Paid,
-            2 => crate::api::types::SwapState::Settled,
-            3 => crate::api::types::SwapState::Refunded,
-            4 => crate::api::types::SwapState::Expired,
-            5 => crate::api::types::SwapState::Failed,
-            _ => unreachable!("Invalid variant for SwapState: {}", inner),
         };
     }
 }
@@ -2729,30 +2584,6 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SubmarineFeesAndLimits>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::SwapAction {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        match self {
-            Self::Pay => 0.into_dart(),
-            Self::WaitZeroConf => 1.into_dart(),
-            Self::WaitConfirmed => 2.into_dart(),
-            Self::WaitServerZeroConf => 3.into_dart(),
-            Self::CoopSign => 4.into_dart(),
-            Self::Claim => 5.into_dart(),
-            Self::Refund => 6.into_dart(),
-            Self::Close => 7.into_dart(),
-            _ => unreachable!(),
-        }
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::SwapAction {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapAction>
-    for crate::api::types::SwapAction
-{
-    fn into_into_dart(self) -> crate::api::types::SwapAction {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::fees::SwapLimits {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -2767,28 +2598,6 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SwapLimits>
     for crate::api::fees::SwapLimits
 {
     fn into_into_dart(self) -> crate::api::fees::SwapLimits {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::SwapState {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        match self {
-            Self::Created => 0.into_dart(),
-            Self::Paid => 1.into_dart(),
-            Self::Settled => 2.into_dart(),
-            Self::Refunded => 3.into_dart(),
-            Self::Expired => 4.into_dart(),
-            Self::Failed => 5.into_dart(),
-            _ => unreachable!(),
-        }
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::SwapState {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapState>
-    for crate::api::types::SwapState
-{
-    fn into_into_dart(self) -> crate::api::types::SwapState {
         self
     }
 }
@@ -3108,14 +2917,6 @@ impl SseEncode for crate::api::types::PreImage {
     }
 }
 
-impl SseEncode for (crate::api::types::SwapAction, crate::api::types::SwapState) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::types::SwapAction>::sse_encode(self.0, serializer);
-        <crate::api::types::SwapState>::sse_encode(self.1, serializer);
-    }
-}
-
 impl SseEncode for crate::api::fees::RevSwapFees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3168,53 +2969,11 @@ impl SseEncode for crate::api::fees::SubmarineFeesAndLimits {
     }
 }
 
-impl SseEncode for crate::api::types::SwapAction {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <i32>::sse_encode(
-            match self {
-                crate::api::types::SwapAction::Pay => 0,
-                crate::api::types::SwapAction::WaitZeroConf => 1,
-                crate::api::types::SwapAction::WaitConfirmed => 2,
-                crate::api::types::SwapAction::WaitServerZeroConf => 3,
-                crate::api::types::SwapAction::CoopSign => 4,
-                crate::api::types::SwapAction::Claim => 5,
-                crate::api::types::SwapAction::Refund => 6,
-                crate::api::types::SwapAction::Close => 7,
-                _ => {
-                    unimplemented!("");
-                }
-            },
-            serializer,
-        );
-    }
-}
-
 impl SseEncode for crate::api::fees::SwapLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.minimal, serializer);
         <u64>::sse_encode(self.maximal, serializer);
-    }
-}
-
-impl SseEncode for crate::api::types::SwapState {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <i32>::sse_encode(
-            match self {
-                crate::api::types::SwapState::Created => 0,
-                crate::api::types::SwapState::Paid => 1,
-                crate::api::types::SwapState::Settled => 2,
-                crate::api::types::SwapState::Refunded => 3,
-                crate::api::types::SwapState::Expired => 4,
-                crate::api::types::SwapState::Failed => 5,
-                _ => {
-                    unimplemented!("");
-                }
-            },
-            serializer,
-        );
     }
 }
 

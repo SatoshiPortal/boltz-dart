@@ -66,12 +66,6 @@ class BtcLnSwap with _$BtcLnSwap {
   static Future<BtcLnSwap> fromJson({required String jsonStr}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapFromJson(jsonStr: jsonStr);
 
-  /// Process swap based on status
-  /// To be used with WebSocket Notification Stream
-  Future<(SwapAction, SwapState)> getAction({required String status}) =>
-      BoltzCore.instance.api
-          .crateApiBtcLnBtcLnSwapGetAction(that: this, status: status);
-
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Manually create the class. Primarily used when recovering a swap.
   static Future<BtcLnSwap> newInstance(
