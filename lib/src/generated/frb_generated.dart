@@ -62,7 +62,7 @@ class BoltzCore
   String get codegenVersion => '2.0.0';
 
   @override
-  int get rustContentHash => -554324912;
+  int get rustContentHash => -394494677;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -89,9 +89,6 @@ abstract class BoltzCoreApi extends BaseApi {
       {required BtcLnSwap that});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapFromJson({required String jsonStr});
-
-  Future<(SwapAction, SwapState)> crateApiBtcLnBtcLnSwapGetAction(
-      {required BtcLnSwap that, required String status});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNew(
       {required String id,
@@ -158,9 +155,6 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<ChainSwap> crateApiChainSwapChainSwapFromJson(
       {required String jsonStr});
-
-  Future<(SwapAction, SwapState)> crateApiChainSwapChainSwapGetAction(
-      {required ChainSwap that, required String status});
 
   Future<String> crateApiChainSwapChainSwapGetServerLockup(
       {required ChainSwap that});
@@ -235,9 +229,6 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapFromJson(
       {required String jsonStr});
-
-  Future<(SwapAction, SwapState)> crateApiLbtcLnLbtcLnSwapGetAction(
-      {required LbtcLnSwap that, required String status});
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNew(
       {required String id,
@@ -472,32 +463,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "btc_ln_swap_from_json",
         argNames: ["jsonStr"],
-      );
-
-  @override
-  Future<(SwapAction, SwapState)> crateApiBtcLnBtcLnSwapGetAction(
-      {required BtcLnSwap that, required String status}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
-        var arg1 = cst_encode_String(status);
-        return wire.wire__crate__api__btc_ln__btc_ln_swap_get_action(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_record_swap_action_swap_state,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiBtcLnBtcLnSwapGetActionConstMeta,
-      argValues: [that, status],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiBtcLnBtcLnSwapGetActionConstMeta =>
-      const TaskConstMeta(
-        debugName: "btc_ln_swap_get_action",
-        argNames: ["that", "status"],
       );
 
   @override
@@ -903,32 +868,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "chain_swap_from_json",
         argNames: ["jsonStr"],
-      );
-
-  @override
-  Future<(SwapAction, SwapState)> crateApiChainSwapChainSwapGetAction(
-      {required ChainSwap that, required String status}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_chain_swap(that);
-        var arg1 = cst_encode_String(status);
-        return wire.wire__crate__api__chain_swap__chain_swap_get_action(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_record_swap_action_swap_state,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiChainSwapChainSwapGetActionConstMeta,
-      argValues: [that, status],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiChainSwapChainSwapGetActionConstMeta =>
-      const TaskConstMeta(
-        debugName: "chain_swap_get_action",
-        argNames: ["that", "status"],
       );
 
   @override
@@ -1452,32 +1391,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_from_json",
         argNames: ["jsonStr"],
-      );
-
-  @override
-  Future<(SwapAction, SwapState)> crateApiLbtcLnLbtcLnSwapGetAction(
-      {required LbtcLnSwap that, required String status}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
-        var arg1 = cst_encode_String(status);
-        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_get_action(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_record_swap_action_swap_state,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiLbtcLnLbtcLnSwapGetActionConstMeta,
-      argValues: [that, status],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapGetActionConstMeta =>
-      const TaskConstMeta(
-        debugName: "lbtc_ln_swap_get_action",
-        argNames: ["that", "status"],
       );
 
   @override
@@ -2438,20 +2351,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  (SwapAction, SwapState) dco_decode_record_swap_action_swap_state(
-      dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
-    }
-    return (
-      dco_decode_swap_action(arr[0]),
-      dco_decode_swap_state(arr[1]),
-    );
-  }
-
-  @protected
   RevSwapFees dco_decode_rev_swap_fees(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -2510,12 +2409,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  SwapAction dco_decode_swap_action(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SwapAction.values[raw as int];
-  }
-
-  @protected
   SwapLimits dco_decode_swap_limits(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -2525,12 +2418,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       minimal: dco_decode_u_64(arr[0]),
       maximal: dco_decode_u_64(arr[1]),
     );
-  }
-
-  @protected
-  SwapState dco_decode_swap_state(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return SwapState.values[raw as int];
   }
 
   @protected
@@ -2967,15 +2854,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  (SwapAction, SwapState) sse_decode_record_swap_action_swap_state(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_field0 = sse_decode_swap_action(deserializer);
-    var var_field1 = sse_decode_swap_state(deserializer);
-    return (var_field0, var_field1);
-  }
-
-  @protected
   RevSwapFees sse_decode_rev_swap_fees(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_percentage = sse_decode_f_64(deserializer);
@@ -3029,25 +2907,11 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  SwapAction sse_decode_swap_action(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var inner = sse_decode_i_32(deserializer);
-    return SwapAction.values[inner];
-  }
-
-  @protected
   SwapLimits sse_decode_swap_limits(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_minimal = sse_decode_u_64(deserializer);
     var var_maximal = sse_decode_u_64(deserializer);
     return SwapLimits(minimal: var_minimal, maximal: var_maximal);
-  }
-
-  @protected
-  SwapState sse_decode_swap_state(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var inner = sse_decode_i_32(deserializer);
-    return SwapState.values[inner];
   }
 
   @protected
@@ -3142,18 +3006,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @protected
   int cst_encode_side(Side raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_i_32(raw.index);
-  }
-
-  @protected
-  int cst_encode_swap_action(SwapAction raw) {
-    // Codec=Cst (C-struct based), see doc to use other codecs
-    return cst_encode_i_32(raw.index);
-  }
-
-  @protected
-  int cst_encode_swap_state(SwapState raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_i_32(raw.index);
   }
@@ -3476,14 +3328,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_record_swap_action_swap_state(
-      (SwapAction, SwapState) self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_swap_action(self.$1, serializer);
-    sse_encode_swap_state(self.$2, serializer);
-  }
-
-  @protected
   void sse_encode_rev_swap_fees(RevSwapFees self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_f_64(self.percentage, serializer);
@@ -3524,22 +3368,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
-  void sse_encode_swap_action(SwapAction self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.index, serializer);
-  }
-
-  @protected
   void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self.minimal, serializer);
     sse_encode_u_64(self.maximal, serializer);
-  }
-
-  @protected
-  void sse_encode_swap_state(SwapState self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.index, serializer);
   }
 
   @protected

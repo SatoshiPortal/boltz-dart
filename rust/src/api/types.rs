@@ -600,29 +600,3 @@ impl From<LBtcSwapScript> for LBtcSwapScriptStr {
         }
     }
 }
-
-#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-/// Indicates what action the client should take
-#[frb(dart_metadata=("freezed"))]
-pub enum SwapAction {
-    Pay,
-    WaitZeroConf,
-    WaitConfirmed,
-    WaitServerZeroConf,
-    CoopSign,
-    Claim,
-    Refund,
-    Close
-}
-
-/// Indicates the state of the swap
- #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
-pub enum SwapState {
-    Created,
-    Paid,
-    Settled,
-    Refunded,
-    Expired,
-    Failed,
-}
