@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'swap_status_response.dart';
+part of 'swap_status.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

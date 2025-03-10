@@ -4,30 +4,26 @@ use super::{
     error::BoltzError,
     types::{
         BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage,
-        SwapTxKind, SwapType,
+        SwapTxKind, SwapType, TxFee,
     },
 };
 
 use boltz_client::{
-    bitcoin::{
-        consensus::{deserialize, serialize},
-        hex::DisplayHex,
-        Transaction, Txid,
-    },
+    bitcoin::{consensus::serialize, hex::DisplayHex, Txid},
     boltz::{ChainSwapDetails, Cooperative, Side},
     electrum_client::ElectrumApi,
     error::Error,
     network::electrum::ElectrumConfig,
     swaps::boltz::BoltzApiClientV2,
     util::secrets::Preimage,
-    Amount, BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
-    ToHex,
+    BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };
 use flutter_rust_bridge::frb;
 use serde_json::Value;
 
-/// Bitcoin-Liquid Swap Class
 #[frb(dart_metadata=("freezed"))]
+/// Bitcoin-Liquid Swap Class
+#[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct ChainSwap {
     pub id: String,
     pub is_testnet: bool,
@@ -48,6 +44,20 @@ pub struct ChainSwap {
     pub blinding_key: String,
 }
 impl ChainSwap {
+    /// Convert instance to a JSON string.
+    pub fn to_json(&self) -> Result<String, BoltzError> {
+        match serde_json::to_string(self) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
+    /// Parse from a JSON string.
+    pub fn from_json(json_str: &str) -> Result<Self, BoltzError> {
+        match serde_json::from_str(json_str) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
     /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
@@ -287,7 +297,7 @@ impl ChainSwap {
         &self,
         out_address: String,
         refund_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         let btc_chain = if self.is_testnet {
@@ -339,13 +349,14 @@ impl ChainSwap {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
                         &preimage.try_into()?,
-                        Amount::from_sat(abs_fee),
+                        miner_fee.into(),
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
                             pub_nonce: Some(pub_nonce),
                             partial_sig: Some(partial_sig),
                         }),
+                        false,
                     ) {
                         Ok(result) => result,
                         Err(e) => return Err(e.into()),
@@ -355,8 +366,9 @@ impl ChainSwap {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
                         &preimage.try_into()?,
-                        Amount::from_sat(abs_fee),
+                        miner_fee.into(),
                         None,
+                        false,
                     ) {
                         Ok(result) => result,
                         Err(e) => return Err(e.into()),
@@ -397,7 +409,7 @@ impl ChainSwap {
                     let signed = match claim_tx.sign_claim(
                         &ckp,
                         &preimage.try_into()?,
-                        abs_fee,
+                        miner_fee.into(),
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
@@ -411,11 +423,15 @@ impl ChainSwap {
                     let serialized_tx: Vec<u8> = serialize(&signed);
                     Ok(serialized_tx.to_hex())
                 } else {
-                    let signed =
-                        match claim_tx.sign_claim(&ckp, &preimage.try_into()?, abs_fee, None) {
-                            Ok(result) => result,
-                            Err(e) => return Err(e.into()),
-                        };
+                    let signed = match claim_tx.sign_claim(
+                        &ckp,
+                        &preimage.try_into()?,
+                        miner_fee.into(),
+                        None,
+                    ) {
+                        Ok(result) => result,
+                        Err(e) => return Err(e.into()),
+                    };
                     let serialized_tx: Vec<u8> = serialize(&signed);
                     Ok(serialized_tx.to_hex())
                 }
@@ -426,7 +442,7 @@ impl ChainSwap {
     pub fn refund(
         &self,
         refund_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         let btc_chain = if self.is_testnet {
@@ -458,7 +474,7 @@ impl ChainSwap {
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
                     &rkp,
-                    abs_fee,
+                    miner_fee.into(),
                     if try_cooperate {
                         Some(Cooperative {
                             boltz_api: &boltz_client,
@@ -488,7 +504,7 @@ impl ChainSwap {
                 let rkp: Keypair = self.refund_keys.clone().try_into()?;
                 let signed = match refund_tx.sign_refund(
                     &rkp,
-                    Amount::from_sat(abs_fee),
+                    miner_fee.into(),
                     if try_cooperate {
                         Some(Cooperative {
                             boltz_api: &boltz_client,
@@ -499,6 +515,7 @@ impl ChainSwap {
                     } else {
                         None
                     },
+                    false,
                 ) {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
@@ -608,7 +625,7 @@ mod tests {
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))
             .unwrap();
-        let signed_tx: elements::Transaction =
+        let _signed_tx: elements::Transaction =
             elements::Transaction::consensus_decode(&*signed_bytes).unwrap();
     }
 }

@@ -458,6 +458,19 @@ impl CstDecode<crate::api::fees::SwapLimits>
         }
     }
 }
+impl CstDecode<crate::api::types::TxFee>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::TxFee {
+        let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
+        match self_.get(0).unchecked_into_f64() as _ {
+            0 => crate::api::types::TxFee::Absolute(self_.get(1).cst_decode()),
+            1 => crate::api::types::TxFee::Relative(self_.get(1).cst_decode()),
+            _ => unreachable!(),
+        }
+    }
+}
 impl CstDecode<String> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> String {
@@ -578,14 +591,14 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_claim(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
         port_,
         that,
         out_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
 }
@@ -596,6 +609,14 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
     wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__btc_ln__btc_ln_swap_from_json(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    json_str: String,
+) {
+    wire__crate__api__btc_ln__btc_ln_swap_from_json_impl(port_, json_str)
 }
 
 #[wasm_bindgen]
@@ -688,24 +709,33 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_refund(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
         port_,
         that,
         out_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__btc_ln__btc_ln_swap_to_json(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__btc_ln__btc_ln_swap_to_json_impl(port_, that)
 }
 
 #[wasm_bindgen]
 pub fn wire__crate__api__btc_ln__btc_ln_swap_tx_size(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    is_cooperative: bool,
 ) {
-    wire__crate__api__btc_ln__btc_ln_swap_tx_size_impl(port_, that)
+    wire__crate__api__btc_ln__btc_ln_swap_tx_size_impl(port_, that, is_cooperative)
 }
 
 #[wasm_bindgen]
@@ -734,7 +764,7 @@ pub fn wire__crate__api__chain_swap__chain_swap_claim(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
     refund_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__chain_swap__chain_swap_claim_impl(
@@ -742,9 +772,17 @@ pub fn wire__crate__api__chain_swap__chain_swap_claim(
         that,
         out_address,
         refund_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__chain_swap__chain_swap_from_json(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    json_str: String,
+) {
+    wire__crate__api__chain_swap__chain_swap_from_json_impl(port_, json_str)
 }
 
 #[wasm_bindgen]
@@ -838,16 +876,24 @@ pub fn wire__crate__api__chain_swap__chain_swap_refund(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     refund_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__chain_swap__chain_swap_refund_impl(
         port_,
         that,
         refund_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__chain_swap__chain_swap_to_json(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__chain_swap__chain_swap_to_json_impl(port_, that)
 }
 
 #[wasm_bindgen]
@@ -914,14 +960,14 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
         port_,
         that,
         out_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
 }
@@ -932,6 +978,14 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
     wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    json_str: String,
+) {
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json_impl(port_, json_str)
 }
 
 #[wasm_bindgen]
@@ -1026,28 +1080,38 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: String,
-    abs_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    miner_fee: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     try_cooperate: bool,
 ) {
     wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
         port_,
         that,
         out_address,
-        abs_fee,
+        miner_fee,
         try_cooperate,
     )
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json_impl(port_, that)
 }
 
 #[wasm_bindgen]
 pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    is_cooperative: bool,
 ) {
-    wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size_impl(port_, that)
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size_impl(port_, that, is_cooperative)
 }
 
 #[wasm_bindgen]
 pub fn wire__crate__api__types__btc_swap_script_str_new(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
     swap_type: i32,
     funding_addrs: Option<String>,
     hashlock: String,
@@ -1055,8 +1119,9 @@ pub fn wire__crate__api__types__btc_swap_script_str_new(
     locktime: u32,
     sender_pubkey: String,
     side: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+) {
     wire__crate__api__types__btc_swap_script_str_new_impl(
+        port_,
         swap_type,
         funding_addrs,
         hashlock,
@@ -1106,14 +1171,16 @@ pub fn wire__crate__api__types__key_pair_generate(
 
 #[wasm_bindgen]
 pub fn wire__crate__api__types__key_pair_new(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
     secret_key: String,
     public_key: String,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire__crate__api__types__key_pair_new_impl(secret_key, public_key)
+) {
+    wire__crate__api__types__key_pair_new_impl(port_, secret_key, public_key)
 }
 
 #[wasm_bindgen]
 pub fn wire__crate__api__types__l_btc_swap_script_str_new(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
     swap_type: i32,
     funding_addrs: Option<String>,
     hashlock: String,
@@ -1122,8 +1189,9 @@ pub fn wire__crate__api__types__l_btc_swap_script_str_new(
     sender_pubkey: String,
     blinding_key: String,
     side: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+) {
     wire__crate__api__types__l_btc_swap_script_str_new_impl(
+        port_,
         swap_type,
         funding_addrs,
         hashlock,
@@ -1144,11 +1212,12 @@ pub fn wire__crate__api__types__pre_image_generate(
 
 #[wasm_bindgen]
 pub fn wire__crate__api__types__pre_image_new(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
     value: String,
     sha256: String,
     hash160: String,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire__crate__api__types__pre_image_new_impl(value, sha256, hash160)
+) {
+    wire__crate__api__types__pre_image_new_impl(port_, value, sha256, hash160)
 }
 
 #[wasm_bindgen]

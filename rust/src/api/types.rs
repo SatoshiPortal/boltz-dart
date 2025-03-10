@@ -1,31 +1,39 @@
-use std::{str::FromStr, time::Duration};
+use std::{
+    str::FromStr,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
-use flutter_rust_bridge::frb;
 use boltz_client::{
+    fees::Fee,
     network::Chain as BChain,
     swaps::boltz::{
-        BoltzApiClientV2, 
-        Side as BoltzSide, 
-        SwapTxKind as BoltzSwapTxKind,
+        BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
         SwapType as BoltzSwapType,
     },
     util::{lnurl, secrets::SwapKey},
-    Address,
-    Bolt11Invoice,
-    BtcSwapScript,
-    ElementsAddress,
-    Hash,
-    Keypair,
-    LBtcSwapScript,
-    PublicKey,
-    Secp256k1,
-    ZKKeyPair,
+    Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
+    PublicKey, Secp256k1, ZKKeyPair,
 };
+use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::util::ensure_http_prefix;
 
 use super::error::BoltzError;
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub enum TxFee {
+    Absolute(u64),
+    Relative(f64),
+}
+
+impl Into<Fee> for TxFee {
+    fn into(self) -> Fee {
+        match self {
+            TxFee::Absolute(x) => Fee::Absolute(x),
+            TxFee::Relative(x) => Fee::Relative(x),
+        }
+    }
+}
 
 /// Used for chain-swaps only. The side is based on which transaction is being made by the user.
 /// When a swap is created the user must first make a Lockup.
@@ -105,7 +113,7 @@ impl From<BoltzSwapType> for SwapType {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Eq, Serialize, Deserialize, PartialEq)]
 #[frb(dart_metadata=("freezed"))]
 pub enum Chain {
     Bitcoin,
@@ -125,13 +133,14 @@ impl Into<BChain> for Chain {
     }
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[frb(dart_metadata=("freezed"))]
 pub enum ChainSwapDirection {
     BtcToLbtc,
     LbtcToBtc,
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct KeyPair {
     pub secret_key: String,
@@ -144,14 +153,13 @@ impl TryInto<Keypair> for KeyPair {
         let secp = Secp256k1::new();
         match Keypair::from_seckey_str(&secp, &self.secret_key) {
             Ok(keypair) => Ok(keypair),
-            Err(e) => Err(boltz_client::error::Error::Key(e.into()).into()),
+            Err(e) => Err(BoltzError::new("Key".to_string(), e.to_string())),
         }
     }
 }
 
 /// Used internally to create a KeyPair for swaps
 impl KeyPair {
-    #[frb(sync)]
     pub fn new(secret_key: String, public_key: String) -> Self {
         KeyPair {
             secret_key,
@@ -196,7 +204,7 @@ impl KeyPair {
 use boltz_client::util::secrets::Preimage;
 
 /// Used internally to create a secret - PreImage for swaps
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct PreImage {
     pub value: String,
@@ -217,7 +225,6 @@ impl TryInto<Preimage> for PreImage {
 }
 
 impl PreImage {
-    #[frb(sync)]
     pub fn new(value: String, sha256: String, hash160: String) -> Self {
         PreImage {
             value,
@@ -246,8 +253,8 @@ impl Into<PreImage> for Preimage {
 }
 
 /// Helper to handle Lightning invoices
-#[frb(dart_metadata=("freezed"))]
 #[derive(Debug, Clone)]
+#[frb(dart_metadata=("freezed"))]
 pub struct DecodedInvoice {
     pub msats: u64,
     pub expiry: u64,
@@ -285,14 +292,25 @@ impl DecodedInvoice {
         } else {
             None
         };
+        let now = SystemTime::now();
+        let duration_since_epoch = now.duration_since(UNIX_EPOCH).expect("Time went backwards");
+        let current_secs = duration_since_epoch.as_secs();
+        let expires_at = invoice
+            .expires_at()
+            .unwrap_or(Duration::from_secs(0))
+            .as_secs();
+
         Ok(DecodedInvoice {
             expiry: invoice.expiry_time().as_secs(),
-            expires_in: invoice.duration_until_expiry().as_secs(),
-            expires_at: invoice
-                .expires_at()
-                .unwrap_or(Duration::from_secs(0))
+            expires_in: invoice
+                .expiration_remaining_from_epoch(duration_since_epoch)
                 .as_secs(),
-            is_expired: invoice.is_expired(),
+            expires_at: expires_at,
+            is_expired: if current_secs >= expires_at {
+                true
+            } else {
+                false
+            },
             msats: invoice.amount_milli_satoshis().unwrap_or(0),
             cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
             network: invoice.network().to_string(),
@@ -307,12 +325,10 @@ pub fn validate_lnurl(lnurl: String) -> bool {
     lnurl::validate_lnurl(&lnurl)
 }
 
-
 /// LNURL helper to get an invoice from an lnurl string
 pub fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
     Ok(lnurl::fetch_invoice(&lnurl, msats)?)
 }
-
 
 /// LNURL helper to get an lnurl-w voucher amount
 pub fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
@@ -342,7 +358,6 @@ pub struct BtcSwapScriptStr {
 }
 
 impl BtcSwapScriptStr {
-    #[frb(sync)]
     pub fn new(
         swap_type: SwapType,
         funding_addrs: Option<String>,
@@ -465,7 +480,6 @@ pub struct LBtcSwapScriptStr {
     pub side: Option<Side>,
 }
 impl LBtcSwapScriptStr {
-    #[frb(sync)]
     pub fn new(
         swap_type: SwapType,
         funding_addrs: Option<String>,

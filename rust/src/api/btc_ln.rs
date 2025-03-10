@@ -1,14 +1,11 @@
 use super::{
     error::BoltzError,
-    types::{BtcSwapScriptStr, Chain, KeyPair, PreImage, SwapType},
+    types::{BtcSwapScriptStr, Chain, KeyPair, PreImage, SwapType, TxFee},
 };
 use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use boltz_client::{
-    bitcoin::{
-        consensus::encode::{deserialize, serialize},
-        Transaction, Txid,
-    },
+    bitcoin::{consensus::encode::serialize, Transaction, Txid},
     boltz::Cooperative,
     electrum_client::ElectrumApi,
     network::electrum::ElectrumConfig,
@@ -17,9 +14,11 @@ use boltz_client::{
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
 use flutter_rust_bridge::frb;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// Bitcoin-Lightning Swap Class
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct BtcLnSwap {
     pub id: String,
@@ -38,6 +37,20 @@ pub struct BtcLnSwap {
     pub referral_id: Option<String>,
 }
 impl BtcLnSwap {
+    /// Convert instance to a JSON string.
+    pub fn to_json(&self) -> Result<String, BoltzError> {
+        match serde_json::to_string(self) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
+    /// Parse from a JSON string.
+    pub fn from_json(json_str: &str) -> Result<Self, BoltzError> {
+        match serde_json::from_str(json_str) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
     /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
@@ -241,7 +254,7 @@ impl BtcLnSwap {
     pub fn claim(
         &self,
         out_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
@@ -277,7 +290,7 @@ impl BtcLnSwap {
             let signed: Transaction = match tx.sign_claim(
                 &ckp,
                 &preimage.try_into()?,
-                abs_fee,
+                miner_fee.into(),
                 if try_cooperate {
                     Some(Cooperative {
                         boltz_api: &boltz_client,
@@ -305,7 +318,7 @@ impl BtcLnSwap {
     pub fn refund(
         &self,
         out_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
@@ -339,7 +352,7 @@ impl BtcLnSwap {
             let ckp: Keypair = self.keys.clone().try_into()?;
             let signed = match tx.sign_refund(
                 &ckp,
-                abs_fee,
+                miner_fee.into(),
                 if try_cooperate {
                     Some(Cooperative {
                         boltz_api: &boltz_client,
@@ -394,7 +407,7 @@ impl BtcLnSwap {
         Ok(extract_id(txid)?)
     }
     /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-    pub fn tx_size(&self) -> Result<usize, BoltzError> {
+    pub fn tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -423,14 +436,13 @@ impl BtcLnSwap {
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().try_into()?;
-        let size = match tx.size(&ckp, &self.preimage.clone().try_into()?) {
+        let size = match tx.size(&ckp, is_cooperative) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
         Ok(size)
     }
 }
-
 
 /// Helper method used to extract the txid from a JSON response
 fn extract_id(response: Value) -> Result<String, BoltzError> {
