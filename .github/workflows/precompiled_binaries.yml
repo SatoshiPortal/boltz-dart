@@ -18,7 +18,6 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       
       - name: Install Rust
-        uses: actions/checkout@v4
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
