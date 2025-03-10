@@ -2,22 +2,23 @@ use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use super::{
     error::BoltzError,
-    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapType},
+    types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapType, TxFee},
 };
 use boltz_client::{
-    bitcoin::{consensus::deserialize, Transaction, Txid},
+    bitcoin::Txid,
     boltz::Cooperative,
     electrum_client::ElectrumApi,
-    elements::{self, encode::Decodable, hashes::hex::DisplayHex},
+    elements::hashes::hex::DisplayHex,
     network::electrum::ElectrumConfig,
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
-    Amount, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
+    Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
 use flutter_rust_bridge::frb;
 use serde_json::Value;
 
 /// Liquid-Lightning Swap Class
+#[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnSwap {
     pub id: String,
@@ -37,6 +38,20 @@ pub struct LbtcLnSwap {
 }
 
 impl LbtcLnSwap {
+    /// Convert instance to a JSON string.
+    pub fn to_json(&self) -> Result<String, BoltzError> {
+        match serde_json::to_string(self) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
+    /// Parse from a JSON string.
+    pub fn from_json(json_str: &str) -> Result<Self, BoltzError> {
+        match serde_json::from_str(json_str) {
+            Ok(result) => Ok(result),
+            Err(e) => Err(BoltzError::new("JSON".to_string(), e.to_string())),
+        }
+    }
     /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
@@ -245,7 +260,7 @@ impl LbtcLnSwap {
     pub fn claim(
         &self,
         out_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
@@ -276,7 +291,7 @@ impl LbtcLnSwap {
         let signed = match tx.sign_claim(
             &ckp,
             &preimage.try_into()?,
-            Amount::from_sat(abs_fee),
+            miner_fee.into(),
             if try_cooperate {
                 Some(Cooperative {
                     boltz_api: &boltz_client,
@@ -287,6 +302,7 @@ impl LbtcLnSwap {
             } else {
                 None
             },
+            true,
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -299,7 +315,7 @@ impl LbtcLnSwap {
     pub fn refund(
         &self,
         out_address: String,
-        abs_fee: u64,
+        miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
@@ -328,7 +344,7 @@ impl LbtcLnSwap {
         let ckp: Keypair = self.keys.clone().try_into()?;
         let signed = match tx.sign_refund(
             &ckp,
-            Amount::from_sat(abs_fee),
+            miner_fee.into(),
             if try_cooperate {
                 Some(Cooperative {
                     boltz_api: &boltz_client,
@@ -339,6 +355,7 @@ impl LbtcLnSwap {
             } else {
                 None
             },
+            true,
         ) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -376,7 +393,7 @@ impl LbtcLnSwap {
         Ok(extract_id(txid)?)
     }
     /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-    pub fn tx_size(&self) -> Result<usize, BoltzError> {
+    pub fn tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -406,7 +423,7 @@ impl LbtcLnSwap {
         };
         let ckp: Keypair = self.keys.clone().try_into()?;
 
-        let size = match tx.size(&ckp, &self.preimage.clone().try_into()?) {
+        let size = match tx.size(&ckp, is_cooperative, true) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };

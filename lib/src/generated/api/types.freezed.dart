@@ -23,62 +23,6 @@ mixin _$BtcSwapScriptStr {
   int get locktime => throw _privateConstructorUsedError;
   String get senderPubkey => throw _privateConstructorUsedError;
   Side? get side => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            Side? side)
-        raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            Side? side)?
-        raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            Side? side)?
-        raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_BtcSwapScriptStr value) raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_BtcSwapScriptStr value)? raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_BtcSwapScriptStr value)? raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
 
   /// Create a copy of BtcSwapScriptStr
   /// with the given fields replaced by the non-null parameter values.
@@ -261,7 +205,7 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
 
   @override
   String toString() {
-    return 'BtcSwapScriptStr.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, side: $side)';
+    return 'BtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, side: $side)';
   }
 
   @override
@@ -296,89 +240,6 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
   _$$BtcSwapScriptStrImplCopyWith<_$BtcSwapScriptStrImpl> get copyWith =>
       __$$BtcSwapScriptStrImplCopyWithImpl<_$BtcSwapScriptStrImpl>(
           this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            Side? side)
-        raw,
-  }) {
-    return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey, side);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            Side? side)?
-        raw,
-  }) {
-    return raw?.call(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey, side);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            Side? side)?
-        raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-          senderPubkey, side);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_BtcSwapScriptStr value) raw,
-  }) {
-    return raw(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_BtcSwapScriptStr value)? raw,
-  }) {
-    return raw?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_BtcSwapScriptStr value)? raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class _BtcSwapScriptStr extends BtcSwapScriptStr {
@@ -720,38 +581,6 @@ abstract class _DecodedInvoice extends DecodedInvoice {
 mixin _$KeyPair {
   String get secretKey => throw _privateConstructorUsedError;
   String get publicKey => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String secretKey, String publicKey) raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String secretKey, String publicKey)? raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String secretKey, String publicKey)? raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_KeyPair value) raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_KeyPair value)? raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_KeyPair value)? raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
 
   /// Create a copy of KeyPair
   /// with the given fields replaced by the non-null parameter values.
@@ -850,7 +679,7 @@ class _$KeyPairImpl extends _KeyPair {
 
   @override
   String toString() {
-    return 'KeyPair.raw(secretKey: $secretKey, publicKey: $publicKey)';
+    return 'KeyPair(secretKey: $secretKey, publicKey: $publicKey)';
   }
 
   @override
@@ -874,62 +703,6 @@ class _$KeyPairImpl extends _KeyPair {
   @pragma('vm:prefer-inline')
   _$$KeyPairImplCopyWith<_$KeyPairImpl> get copyWith =>
       __$$KeyPairImplCopyWithImpl<_$KeyPairImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String secretKey, String publicKey) raw,
-  }) {
-    return raw(secretKey, publicKey);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String secretKey, String publicKey)? raw,
-  }) {
-    return raw?.call(secretKey, publicKey);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String secretKey, String publicKey)? raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(secretKey, publicKey);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_KeyPair value) raw,
-  }) {
-    return raw(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_KeyPair value)? raw,
-  }) {
-    return raw?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_KeyPair value)? raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class _KeyPair extends KeyPair {
@@ -961,65 +734,6 @@ mixin _$LBtcSwapScriptStr {
   String get senderPubkey => throw _privateConstructorUsedError;
   String get blindingKey => throw _privateConstructorUsedError;
   Side? get side => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            String blindingKey,
-            Side? side)
-        raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            String blindingKey,
-            Side? side)?
-        raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            String blindingKey,
-            Side? side)?
-        raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_LBtcSwapScriptStr value) raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_LBtcSwapScriptStr value)? raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LBtcSwapScriptStr value)? raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
 
   /// Create a copy of LBtcSwapScriptStr
   /// with the given fields replaced by the non-null parameter values.
@@ -1217,7 +931,7 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
 
   @override
   String toString() {
-    return 'LBtcSwapScriptStr.raw(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey, side: $side)';
+    return 'LBtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey, side: $side)';
   }
 
   @override
@@ -1254,92 +968,6 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
   _$$LBtcSwapScriptStrImplCopyWith<_$LBtcSwapScriptStrImpl> get copyWith =>
       __$$LBtcSwapScriptStrImplCopyWithImpl<_$LBtcSwapScriptStrImpl>(
           this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            String blindingKey,
-            Side? side)
-        raw,
-  }) {
-    return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey, blindingKey, side);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            String blindingKey,
-            Side? side)?
-        raw,
-  }) {
-    return raw?.call(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-        senderPubkey, blindingKey, side);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(
-            SwapType swapType,
-            String? fundingAddrs,
-            String hashlock,
-            String receiverPubkey,
-            int locktime,
-            String senderPubkey,
-            String blindingKey,
-            Side? side)?
-        raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(swapType, fundingAddrs, hashlock, receiverPubkey, locktime,
-          senderPubkey, blindingKey, side);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_LBtcSwapScriptStr value) raw,
-  }) {
-    return raw(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_LBtcSwapScriptStr value)? raw,
-  }) {
-    return raw?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LBtcSwapScriptStr value)? raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class _LBtcSwapScriptStr extends LBtcSwapScriptStr {
@@ -1384,38 +1012,6 @@ mixin _$PreImage {
   String get value => throw _privateConstructorUsedError;
   String get sha256 => throw _privateConstructorUsedError;
   String get hash160 => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String value, String sha256, String hash160) raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String value, String sha256, String hash160)? raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String value, String sha256, String hash160)? raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PreImage value) raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PreImage value)? raw,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PreImage value)? raw,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
 
   /// Create a copy of PreImage
   /// with the given fields replaced by the non-null parameter values.
@@ -1529,7 +1125,7 @@ class _$PreImageImpl extends _PreImage {
 
   @override
   String toString() {
-    return 'PreImage.raw(value: $value, sha256: $sha256, hash160: $hash160)';
+    return 'PreImage(value: $value, sha256: $sha256, hash160: $hash160)';
   }
 
   @override
@@ -1552,62 +1148,6 @@ class _$PreImageImpl extends _PreImage {
   @pragma('vm:prefer-inline')
   _$$PreImageImplCopyWith<_$PreImageImpl> get copyWith =>
       __$$PreImageImplCopyWithImpl<_$PreImageImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String value, String sha256, String hash160) raw,
-  }) {
-    return raw(value, sha256, hash160);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String value, String sha256, String hash160)? raw,
-  }) {
-    return raw?.call(value, sha256, hash160);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String value, String sha256, String hash160)? raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(value, sha256, hash160);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_PreImage value) raw,
-  }) {
-    return raw(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_PreImage value)? raw,
-  }) {
-    return raw?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_PreImage value)? raw,
-    required TResult orElse(),
-  }) {
-    if (raw != null) {
-      return raw(this);
-    }
-    return orElse();
-  }
 }
 
 abstract class _PreImage extends PreImage {
@@ -1629,5 +1169,354 @@ abstract class _PreImage extends PreImage {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PreImageImplCopyWith<_$PreImageImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$TxFee {
+  Object get field0 => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(BigInt field0) absolute,
+    required TResult Function(double field0) relative,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(BigInt field0)? absolute,
+    TResult? Function(double field0)? relative,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(BigInt field0)? absolute,
+    TResult Function(double field0)? relative,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(TxFee_Absolute value) absolute,
+    required TResult Function(TxFee_Relative value) relative,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(TxFee_Absolute value)? absolute,
+    TResult? Function(TxFee_Relative value)? relative,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(TxFee_Absolute value)? absolute,
+    TResult Function(TxFee_Relative value)? relative,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TxFeeCopyWith<$Res> {
+  factory $TxFeeCopyWith(TxFee value, $Res Function(TxFee) then) =
+      _$TxFeeCopyWithImpl<$Res, TxFee>;
+}
+
+/// @nodoc
+class _$TxFeeCopyWithImpl<$Res, $Val extends TxFee>
+    implements $TxFeeCopyWith<$Res> {
+  _$TxFeeCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$TxFee_AbsoluteImplCopyWith<$Res> {
+  factory _$$TxFee_AbsoluteImplCopyWith(_$TxFee_AbsoluteImpl value,
+          $Res Function(_$TxFee_AbsoluteImpl) then) =
+      __$$TxFee_AbsoluteImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({BigInt field0});
+}
+
+/// @nodoc
+class __$$TxFee_AbsoluteImplCopyWithImpl<$Res>
+    extends _$TxFeeCopyWithImpl<$Res, _$TxFee_AbsoluteImpl>
+    implements _$$TxFee_AbsoluteImplCopyWith<$Res> {
+  __$$TxFee_AbsoluteImplCopyWithImpl(
+      _$TxFee_AbsoluteImpl _value, $Res Function(_$TxFee_AbsoluteImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$TxFee_AbsoluteImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$TxFee_AbsoluteImpl extends TxFee_Absolute {
+  const _$TxFee_AbsoluteImpl(this.field0) : super._();
+
+  @override
+  final BigInt field0;
+
+  @override
+  String toString() {
+    return 'TxFee.absolute(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TxFee_AbsoluteImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TxFee_AbsoluteImplCopyWith<_$TxFee_AbsoluteImpl> get copyWith =>
+      __$$TxFee_AbsoluteImplCopyWithImpl<_$TxFee_AbsoluteImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(BigInt field0) absolute,
+    required TResult Function(double field0) relative,
+  }) {
+    return absolute(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(BigInt field0)? absolute,
+    TResult? Function(double field0)? relative,
+  }) {
+    return absolute?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(BigInt field0)? absolute,
+    TResult Function(double field0)? relative,
+    required TResult orElse(),
+  }) {
+    if (absolute != null) {
+      return absolute(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(TxFee_Absolute value) absolute,
+    required TResult Function(TxFee_Relative value) relative,
+  }) {
+    return absolute(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(TxFee_Absolute value)? absolute,
+    TResult? Function(TxFee_Relative value)? relative,
+  }) {
+    return absolute?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(TxFee_Absolute value)? absolute,
+    TResult Function(TxFee_Relative value)? relative,
+    required TResult orElse(),
+  }) {
+    if (absolute != null) {
+      return absolute(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class TxFee_Absolute extends TxFee {
+  const factory TxFee_Absolute(final BigInt field0) = _$TxFee_AbsoluteImpl;
+  const TxFee_Absolute._() : super._();
+
+  @override
+  BigInt get field0;
+
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TxFee_AbsoluteImplCopyWith<_$TxFee_AbsoluteImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$TxFee_RelativeImplCopyWith<$Res> {
+  factory _$$TxFee_RelativeImplCopyWith(_$TxFee_RelativeImpl value,
+          $Res Function(_$TxFee_RelativeImpl) then) =
+      __$$TxFee_RelativeImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({double field0});
+}
+
+/// @nodoc
+class __$$TxFee_RelativeImplCopyWithImpl<$Res>
+    extends _$TxFeeCopyWithImpl<$Res, _$TxFee_RelativeImpl>
+    implements _$$TxFee_RelativeImplCopyWith<$Res> {
+  __$$TxFee_RelativeImplCopyWithImpl(
+      _$TxFee_RelativeImpl _value, $Res Function(_$TxFee_RelativeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field0 = null,
+  }) {
+    return _then(_$TxFee_RelativeImpl(
+      null == field0
+          ? _value.field0
+          : field0 // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$TxFee_RelativeImpl extends TxFee_Relative {
+  const _$TxFee_RelativeImpl(this.field0) : super._();
+
+  @override
+  final double field0;
+
+  @override
+  String toString() {
+    return 'TxFee.relative(field0: $field0)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TxFee_RelativeImpl &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TxFee_RelativeImplCopyWith<_$TxFee_RelativeImpl> get copyWith =>
+      __$$TxFee_RelativeImplCopyWithImpl<_$TxFee_RelativeImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(BigInt field0) absolute,
+    required TResult Function(double field0) relative,
+  }) {
+    return relative(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(BigInt field0)? absolute,
+    TResult? Function(double field0)? relative,
+  }) {
+    return relative?.call(field0);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(BigInt field0)? absolute,
+    TResult Function(double field0)? relative,
+    required TResult orElse(),
+  }) {
+    if (relative != null) {
+      return relative(field0);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(TxFee_Absolute value) absolute,
+    required TResult Function(TxFee_Relative value) relative,
+  }) {
+    return relative(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(TxFee_Absolute value)? absolute,
+    TResult? Function(TxFee_Relative value)? relative,
+  }) {
+    return relative?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(TxFee_Absolute value)? absolute,
+    TResult Function(TxFee_Relative value)? relative,
+    required TResult orElse(),
+  }) {
+    if (relative != null) {
+      return relative(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class TxFee_Relative extends TxFee {
+  const factory TxFee_Relative(final double field0) = _$TxFee_RelativeImpl;
+  const TxFee_Relative._() : super._();
+
+  @override
+  double get field0;
+
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TxFee_RelativeImplCopyWith<_$TxFee_RelativeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

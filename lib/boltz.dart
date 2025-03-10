@@ -9,6 +9,5 @@ export './src/generated/api/types.dart';
 export './src/generated/api/fees.dart';
 export './src/root.dart';
 export './src/utils/loader.dart';
-export './src/utils/http.dart';
-export './src/types/swap.dart';
-export './src/types/swap_status_response.dart';
+export './src/utils/stream.dart';
+export './src/types/swap_status.dart';

@@ -11,6 +11,7 @@ import 'types.dart';
 part 'chain_swap.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `clone`, `eq`
 
 /// Bitcoin-Liquid Swap Class
 @freezed
@@ -52,14 +53,19 @@ class ChainSwap with _$ChainSwap {
   Future<String> claim(
           {required String outAddress,
           required String refundAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapClaim(
           that: this,
           outAddress: outAddress,
           refundAddress: refundAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
+
+  /// Parse from a JSON string.
+  static Future<ChainSwap> fromJson({required String jsonStr}) =>
+      BoltzCore.instance.api
+          .crateApiChainSwapChainSwapFromJson(jsonStr: jsonStr);
 
   /// Get the transaction id of the server's lockup transaction
   Future<String> getServerLockup() =>
@@ -139,11 +145,17 @@ class ChainSwap with _$ChainSwap {
   /// Refund a failed swap
   Future<String> refund(
           {required String refundAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapRefund(
           that: this,
           refundAddress: refundAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
+
+  /// Convert instance to a JSON string.
+  Future<String> toJson() =>
+      BoltzCore.instance.api.crateApiChainSwapChainSwapToJson(
+        that: this,
+      );
 }

@@ -9,7 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'types.freezed.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
 
 /// LNURL helper to validate an lnurl string
 Future<bool> validateLnurl({required String lnurl}) =>
@@ -34,7 +34,7 @@ Future<void> withdraw({required String lnurl, required String invoice}) =>
 @freezed
 class BtcSwapScriptStr with _$BtcSwapScriptStr {
   const BtcSwapScriptStr._();
-  const factory BtcSwapScriptStr.raw({
+  const factory BtcSwapScriptStr({
     required SwapType swapType,
     String? fundingAddrs,
     required String hashlock,
@@ -43,7 +43,8 @@ class BtcSwapScriptStr with _$BtcSwapScriptStr {
     required String senderPubkey,
     Side? side,
   }) = _BtcSwapScriptStr;
-  factory BtcSwapScriptStr(
+  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  static Future<BtcSwapScriptStr> newInstance(
           {required SwapType swapType,
           String? fundingAddrs,
           required String hashlock,
@@ -101,7 +102,7 @@ class DecodedInvoice with _$DecodedInvoice {
 @freezed
 class KeyPair with _$KeyPair {
   const KeyPair._();
-  const factory KeyPair.raw({
+  const factory KeyPair({
     required String secretKey,
     required String publicKey,
   }) = _KeyPair;
@@ -118,8 +119,10 @@ class KeyPair with _$KeyPair {
           index: index,
           swapType: swapType);
 
+  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Used internally to create a KeyPair for swaps
-  factory KeyPair({required String secretKey, required String publicKey}) =>
+  static Future<KeyPair> newInstance(
+          {required String secretKey, required String publicKey}) =>
       BoltzCore.instance.api
           .crateApiTypesKeyPairNew(secretKey: secretKey, publicKey: publicKey);
 }
@@ -128,7 +131,7 @@ class KeyPair with _$KeyPair {
 @freezed
 class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
   const LBtcSwapScriptStr._();
-  const factory LBtcSwapScriptStr.raw({
+  const factory LBtcSwapScriptStr({
     required SwapType swapType,
     String? fundingAddrs,
     required String hashlock,
@@ -138,7 +141,8 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
     required String blindingKey,
     Side? side,
   }) = _LBtcSwapScriptStr;
-  factory LBtcSwapScriptStr(
+  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  static Future<LBtcSwapScriptStr> newInstance(
           {required SwapType swapType,
           String? fundingAddrs,
           required String hashlock,
@@ -162,7 +166,7 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
 @freezed
 class PreImage with _$PreImage {
   const PreImage._();
-  const factory PreImage.raw({
+  const factory PreImage({
     required String value,
     required String sha256,
     required String hash160,
@@ -170,7 +174,8 @@ class PreImage with _$PreImage {
   static Future<PreImage> generate() =>
       BoltzCore.instance.api.crateApiTypesPreImageGenerate();
 
-  factory PreImage(
+  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  static Future<PreImage> newInstance(
           {required String value,
           required String sha256,
           required String hash160}) =>
@@ -198,4 +203,16 @@ enum SwapType {
   reverse,
   chain,
   ;
+}
+
+@freezed
+sealed class TxFee with _$TxFee {
+  const TxFee._();
+
+  const factory TxFee.absolute(
+    BigInt field0,
+  ) = TxFee_Absolute;
+  const factory TxFee.relative(
+    double field0,
+  ) = TxFee_Relative;
 }

@@ -12,16 +12,16 @@ doctest = false
 crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
-boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "3bbc0ddb068df7f12a1b8b37cfbb353f4db36fe5", features = ["lnurl"] }
+boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", features = ["lnurl"] }
 flutter_rust_bridge = "=2.0.0"
 anyhow = "1.0.68"
-serde = "1.0.89"
-serde_json = "1.0.96"
+serde = { version = "1.0.0", features = ["derive"] }
+serde_json = "1.0.0"
 openssl = { version = "0.10.64", features = ["vendored"] }
 hex = "0.4"
 
 [patch.crates-io]
-secp256k1-zkp = { git = "https://github.com/BlockstreamResearch/rust-secp256k1-zkp.git", rev = "60e631c24588a0c9e271badd61959294848c665d" }
+secp256k1-zkp = { git = "https://github.com/dangeross/rust-secp256k1-zkp.git", rev = "57d29b15269ca2ce3c3b118b6a72b66c1169e7b1" }
 
 [build-dependencies]
 flutter_rust_bridge_codegen = { version = "=2.0.0" }

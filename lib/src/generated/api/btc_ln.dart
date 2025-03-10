@@ -11,6 +11,7 @@ import 'types.dart';
 part 'btc_ln.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `clone`, `eq`
 
 /// Bitcoin-Lightning Swap Class
 @freezed
@@ -45,12 +46,12 @@ class BtcLnSwap with _$BtcLnSwap {
   /// Used to claim a reverse swap.
   Future<String> claim(
           {required String outAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaim(
           that: this,
           outAddress: outAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
 
   /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
@@ -60,6 +61,10 @@ class BtcLnSwap with _$BtcLnSwap {
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapCoopCloseSubmarine(
         that: this,
       );
+
+  /// Parse from a JSON string.
+  static Future<BtcLnSwap> fromJson({required String jsonStr}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapFromJson(jsonStr: jsonStr);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Manually create the class. Primarily used when recovering a swap.
@@ -139,17 +144,21 @@ class BtcLnSwap with _$BtcLnSwap {
   /// Used to refund a failed submarine swap.
   Future<String> refund(
           {required String outAddress,
-          required BigInt absFee,
+          required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefund(
           that: this,
           outAddress: outAddress,
-          absFee: absFee,
+          minerFee: minerFee,
           tryCooperate: tryCooperate);
 
-  /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-  Future<BigInt> txSize() =>
-      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapTxSize(
+  /// Convert instance to a JSON string.
+  Future<String> toJson() =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapToJson(
         that: this,
       );
+
+  /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
+  Future<BigInt> txSize({required bool isCooperative}) => BoltzCore.instance.api
+      .crateApiBtcLnBtcLnSwapTxSize(that: this, isCooperative: isCooperative);
 }
