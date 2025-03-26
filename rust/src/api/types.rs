@@ -5,7 +5,7 @@ use std::{
 
 use boltz_client::{
     fees::Fee,
-    network::Chain as LegacyChain,
+    network::Chain as AllChains,
     network::BitcoinChain,
     network::LiquidChain,
     swaps::boltz::{
@@ -124,13 +124,13 @@ pub enum Chain {
     LiquidTestnet,
 }
 
-impl Into<LegacyChain> for Chain {
-    fn into(self) -> LegacyChain {
+impl Into<AllChains> for Chain {
+    fn into(self) -> AllChains {
         match self {
-            Chain::Bitcoin => LegacyChain::Bitcoin(BitcoinChain::Bitcoin),
-            Chain::BitcoinTestnet => LegacyChain::Bitcoin(BitcoinChain::BitcoinTestnet),
-            Chain::Liquid => LegacyChain::Liquid(LiquidChain::Liquid),
-            Chain::LiquidTestnet => LegacyChain::Liquid(LiquidChain::LiquidTestnet),
+            Chain::Bitcoin => AllChains::Bitcoin(BitcoinChain::Bitcoin),
+            Chain::BitcoinTestnet => AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
+            Chain::Liquid => AllChains::Liquid(LiquidChain::Liquid),
+            Chain::LiquidTestnet => AllChains::Liquid(LiquidChain::LiquidTestnet),
         }
     }
 }
