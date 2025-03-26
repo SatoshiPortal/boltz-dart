@@ -866,6 +866,12 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_from_json(
           port_, json_str);
 
+  void wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(
+          NativePortType port_, JSAny that) =>
+      wasmModule
+          .wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(
+              port_, that);
+
   void wire__crate__api__btc_ln__btc_ln_swap_new(
           NativePortType port_,
           String id,
@@ -1124,6 +1130,12 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
           port_, json_str);
 
+  void wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(
+          NativePortType port_, JSAny that) =>
+      wasmModule
+          .wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(
+              port_, that);
+
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
           NativePortType port_,
           String id,
@@ -1332,6 +1344,10 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__btc_ln__btc_ln_swap_from_json(
       NativePortType port_, String json_str);
 
+  external void
+      wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(
+          NativePortType port_, JSAny that);
+
   external void wire__crate__api__btc_ln__btc_ln_swap_new(
       NativePortType port_,
       String id,
@@ -1487,6 +1503,10 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
       NativePortType port_, String json_str);
+
+  external void
+      wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(
+          NativePortType port_, JSAny that);
 
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
       NativePortType port_,

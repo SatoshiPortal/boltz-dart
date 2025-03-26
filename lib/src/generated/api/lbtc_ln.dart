@@ -67,6 +67,12 @@ class LbtcLnSwap with _$LbtcLnSwap {
   static Future<LbtcLnSwap> fromJson({required String jsonStr}) =>
       BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapFromJson(jsonStr: jsonStr);
 
+  /// Retrieves the preimage for a completed submarine swap.
+  Future<String> getCompletedSubmarinePreimage() => BoltzCore.instance.api
+          .crateApiLbtcLnLbtcLnSwapGetCompletedSubmarinePreimage(
+        that: this,
+      );
+
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Manually create the class. Primarily used when recovering a swap.
   static Future<LbtcLnSwap> newInstance(

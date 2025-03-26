@@ -62,7 +62,7 @@ class BoltzCore
   String get codegenVersion => '2.0.0';
 
   @override
-  int get rustContentHash => -966384958;
+  int get rustContentHash => 342652895;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -89,6 +89,9 @@ abstract class BoltzCoreApi extends BaseApi {
       {required BtcLnSwap that});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapFromJson({required String jsonStr});
+
+  Future<String> crateApiBtcLnBtcLnSwapGetCompletedSubmarinePreimage(
+      {required BtcLnSwap that});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNew(
       {required String id,
@@ -234,6 +237,9 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapFromJson(
       {required String jsonStr});
+
+  Future<String> crateApiLbtcLnLbtcLnSwapGetCompletedSubmarinePreimage(
+      {required LbtcLnSwap that});
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNew(
       {required String id,
@@ -472,6 +478,33 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         debugName: "btc_ln_swap_from_json",
         argNames: ["jsonStr"],
       );
+
+  @override
+  Future<String> crateApiBtcLnBtcLnSwapGetCompletedSubmarinePreimage(
+      {required BtcLnSwap that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        return wire
+            .wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(
+                port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiBtcLnBtcLnSwapGetCompletedSubmarinePreimageConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiBtcLnBtcLnSwapGetCompletedSubmarinePreimageConstMeta =>
+          const TaskConstMeta(
+            debugName: "btc_ln_swap_get_completed_submarine_preimage",
+            argNames: ["that"],
+          );
 
   @override
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNew(
@@ -1435,6 +1468,34 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         debugName: "lbtc_ln_swap_from_json",
         argNames: ["jsonStr"],
       );
+
+  @override
+  Future<String> crateApiLbtcLnLbtcLnSwapGetCompletedSubmarinePreimage(
+      {required LbtcLnSwap that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        return wire
+            .wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(
+                port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta:
+          kCrateApiLbtcLnLbtcLnSwapGetCompletedSubmarinePreimageConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiLbtcLnLbtcLnSwapGetCompletedSubmarinePreimageConstMeta =>
+          const TaskConstMeta(
+            debugName: "lbtc_ln_swap_get_completed_submarine_preimage",
+            argNames: ["that"],
+          );
 
   @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNew(

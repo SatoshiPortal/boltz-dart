@@ -175,7 +175,16 @@ impl LbtcLnSwap {
             &claim_tx_response.transaction_hash,
         )?;
         boltz_client.post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
+
         Ok(())
+    }
+
+    /// Retrieves the preimage for a completed submarine swap.
+    pub fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let response = boltz_client.get_submarine_claim_tx_details(&self.id)?;
+        let preimage = response.preimage.clone();
+        Ok(preimage)
     }
 
     /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.

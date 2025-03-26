@@ -713,6 +713,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_from_json(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(
+    port_: i64,
+    that: *mut wire_cst_btc_ln_swap,
+) {
+    wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage_impl(port_, that)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new(
     port_: i64,
     id: *mut wire_cst_list_prim_u_8_strict,
@@ -1093,6 +1101,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json
     json_str: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json_impl(port_, json_str)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(
+    port_: i64,
+    that: *mut wire_cst_lbtc_ln_swap,
+) {
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage_impl(port_, that)
 }
 
 #[no_mangle]

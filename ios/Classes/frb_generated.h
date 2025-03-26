@@ -211,6 +211,9 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(int
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_from_json(int64_t port_,
                                                                   struct wire_cst_list_prim_u_8_strict *json_str);
 
+void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(int64_t port_,
+                                                                                         struct wire_cst_btc_ln_swap *that);
+
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new(int64_t port_,
                                                             struct wire_cst_list_prim_u_8_strict *id,
                                                             int32_t kind,
@@ -363,6 +366,9 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(i
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(int64_t port_,
                                                                     struct wire_cst_list_prim_u_8_strict *json_str);
 
+void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(int64_t port_,
+                                                                                           struct wire_cst_lbtc_ln_swap *that);
+
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new(int64_t port_,
                                                               struct wire_cst_list_prim_u_8_strict *id,
                                                               int32_t kind,
@@ -511,6 +517,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_from_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine);
@@ -538,6 +545,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine);

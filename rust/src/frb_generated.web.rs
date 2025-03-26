@@ -620,6 +620,14 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_from_json(
 }
 
 #[wasm_bindgen]
+pub fn wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage_impl(port_, that)
+}
+
+#[wasm_bindgen]
 pub fn wire__crate__api__btc_ln__btc_ln_swap_new(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: String,
@@ -1000,6 +1008,14 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
     json_str: String,
 ) {
     wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json_impl(port_, json_str)
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage_impl(port_, that)
 }
 
 #[wasm_bindgen]
