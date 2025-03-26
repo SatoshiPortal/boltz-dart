@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.0.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 342652895;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1150231082;
 
 // Section: executor
 
@@ -750,13 +750,13 @@ fn wire__crate__api__chain_swap__chain_swap_to_json_impl(
         },
     )
 }
-fn wire__crate__api__error__boltz_error_message_impl(
+fn wire__crate__api__error__boltz_error_detail_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::error::BoltzError>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "boltz_error_message",
+            debug_name: "boltz_error_detail",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -765,7 +765,7 @@ fn wire__crate__api__error__boltz_error_message_impl(
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok({
-                        crate::api::error::BoltzError::message(&api_that);
+                        crate::api::error::BoltzError::detail(&api_that);
                     })?;
                     Ok(output_ok)
                 })())

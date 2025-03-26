@@ -1004,11 +1004,11 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_boltz_wire__crate__api__error__boltz_error_message(
+pub extern "C" fn frbgen_boltz_wire__crate__api__error__boltz_error_detail(
     port_: i64,
     that: *mut wire_cst_boltz_error,
 ) {
-    wire__crate__api__error__boltz_error_message_impl(port_, that)
+    wire__crate__api__error__boltz_error_detail_impl(port_, that)
 }
 
 #[no_mangle]

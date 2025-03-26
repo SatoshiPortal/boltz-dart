@@ -1685,22 +1685,22 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__chain_swap__chain_swap_to_jsonPtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_chain_swap>)>();
 
-  void wire__crate__api__error__boltz_error_message(
+  void wire__crate__api__error__boltz_error_detail(
     int port_,
     ffi.Pointer<wire_cst_boltz_error> that,
   ) {
-    return _wire__crate__api__error__boltz_error_message(
+    return _wire__crate__api__error__boltz_error_detail(
       port_,
       that,
     );
   }
 
-  late final _wire__crate__api__error__boltz_error_messagePtr = _lookup<
+  late final _wire__crate__api__error__boltz_error_detailPtr = _lookup<
           ffi.NativeFunction<
               ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_boltz_error>)>>(
-      'frbgen_boltz_wire__crate__api__error__boltz_error_message');
-  late final _wire__crate__api__error__boltz_error_message =
-      _wire__crate__api__error__boltz_error_messagePtr
+      'frbgen_boltz_wire__crate__api__error__boltz_error_detail');
+  late final _wire__crate__api__error__boltz_error_detail =
+      _wire__crate__api__error__boltz_error_detailPtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_boltz_error>)>();
 
   void wire__crate__api__error__boltz_error_new(

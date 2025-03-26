@@ -911,11 +911,11 @@ pub fn wire__crate__api__chain_swap__chain_swap_to_json(
 }
 
 #[wasm_bindgen]
-pub fn wire__crate__api__error__boltz_error_message(
+pub fn wire__crate__api__error__boltz_error_detail(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
-    wire__crate__api__error__boltz_error_message_impl(port_, that)
+    wire__crate__api__error__boltz_error_detail_impl(port_, that)
 }
 
 #[wasm_bindgen]

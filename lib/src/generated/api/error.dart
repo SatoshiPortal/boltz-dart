@@ -17,8 +17,7 @@ class BoltzError with _$BoltzError implements FrbException {
     required String kind,
     required String message,
   }) = _BoltzError;
-  Future<void> message() =>
-      BoltzCore.instance.api.crateApiErrorBoltzErrorMessage(
+  Future<void> detail() => BoltzCore.instance.api.crateApiErrorBoltzErrorDetail(
         that: this,
       );
 

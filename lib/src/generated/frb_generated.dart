@@ -62,7 +62,7 @@ class BoltzCore
   String get codegenVersion => '2.0.0';
 
   @override
-  int get rustContentHash => 342652895;
+  int get rustContentHash => 1150231082;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -206,7 +206,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<String> crateApiChainSwapChainSwapToJson({required ChainSwap that});
 
-  Future<void> crateApiErrorBoltzErrorMessage({required BoltzError that});
+  Future<void> crateApiErrorBoltzErrorDetail({required BoltzError that});
 
   Future<BoltzError> crateApiErrorBoltzErrorNew(
       {required String kind, required String message});
@@ -1200,25 +1200,25 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<void> crateApiErrorBoltzErrorMessage({required BoltzError that}) {
+  Future<void> crateApiErrorBoltzErrorDetail({required BoltzError that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_boltz_error(that);
-        return wire.wire__crate__api__error__boltz_error_message(port_, arg0);
+        return wire.wire__crate__api__error__boltz_error_detail(port_, arg0);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiErrorBoltzErrorMessageConstMeta,
+      constMeta: kCrateApiErrorBoltzErrorDetailConstMeta,
       argValues: [that],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiErrorBoltzErrorMessageConstMeta =>
+  TaskConstMeta get kCrateApiErrorBoltzErrorDetailConstMeta =>
       const TaskConstMeta(
-        debugName: "boltz_error_message",
+        debugName: "boltz_error_detail",
         argNames: ["that"],
       );
 

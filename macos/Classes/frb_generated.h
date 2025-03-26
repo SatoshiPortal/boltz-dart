@@ -330,8 +330,8 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(int64_t port_,
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json(int64_t port_,
                                                                    struct wire_cst_chain_swap *that);
 
-void frbgen_boltz_wire__crate__api__error__boltz_error_message(int64_t port_,
-                                                               struct wire_cst_boltz_error *that);
+void frbgen_boltz_wire__crate__api__error__boltz_error_detail(int64_t port_,
+                                                              struct wire_cst_boltz_error *that);
 
 void frbgen_boltz_wire__crate__api__error__boltz_error_new(int64_t port_,
                                                            struct wire_cst_list_prim_u_8_strict *kind,
@@ -534,7 +534,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__error__boltz_error_message);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__error__boltz_error_detail);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__error__boltz_error_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__fees__fees_chain);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__fees__fees_new);

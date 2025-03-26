@@ -1079,9 +1079,9 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, JSAny that) =>
       wasmModule.wire__crate__api__chain_swap__chain_swap_to_json(port_, that);
 
-  void wire__crate__api__error__boltz_error_message(
+  void wire__crate__api__error__boltz_error_detail(
           NativePortType port_, JSAny that) =>
-      wasmModule.wire__crate__api__error__boltz_error_message(port_, that);
+      wasmModule.wire__crate__api__error__boltz_error_detail(port_, that);
 
   void wire__crate__api__error__boltz_error_new(
           NativePortType port_, String kind, String message) =>
@@ -1467,7 +1467,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__chain_swap__chain_swap_to_json(
       NativePortType port_, JSAny that);
 
-  external void wire__crate__api__error__boltz_error_message(
+  external void wire__crate__api__error__boltz_error_detail(
       NativePortType port_, JSAny that);
 
   external void wire__crate__api__error__boltz_error_new(

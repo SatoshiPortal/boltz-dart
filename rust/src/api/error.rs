@@ -17,7 +17,7 @@ impl BoltzError {
         }
     }
     
-    pub fn message(&self) -> &str {
+    pub fn detail(&self) -> &str {
         &self.message
     }
 }
