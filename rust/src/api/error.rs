@@ -1,6 +1,8 @@
 use boltz_client::error::Error;
+use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
+#[frb(dart_metadata=("freezed"))]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BoltzError {
     pub kind: String,
@@ -13,6 +15,10 @@ impl BoltzError {
             kind: kind,
             message: message,
         }
+    }
+    
+    pub fn detail(&self) -> &str {
+        &self.message
     }
 }
 

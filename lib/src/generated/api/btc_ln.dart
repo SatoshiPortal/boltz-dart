@@ -66,6 +66,12 @@ class BtcLnSwap with _$BtcLnSwap {
   static Future<BtcLnSwap> fromJson({required String jsonStr}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapFromJson(jsonStr: jsonStr);
 
+  /// Retrieves the preimage for a completed submarine swap.
+  Future<String> getCompletedSubmarinePreimage() => BoltzCore.instance.api
+          .crateApiBtcLnBtcLnSwapGetCompletedSubmarinePreimage(
+        that: this,
+      );
+
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Manually create the class. Primarily used when recovering a swap.
   static Future<BtcLnSwap> newInstance(
@@ -102,6 +108,7 @@ class BtcLnSwap with _$BtcLnSwap {
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<BtcLnSwap> newReverse(
           {required String mnemonic,
+          required String passphrase,
           required BigInt index,
           required BigInt outAmount,
           String? outAddress,
@@ -112,6 +119,7 @@ class BtcLnSwap with _$BtcLnSwap {
           String? referralId}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewReverse(
           mnemonic: mnemonic,
+          passphrase: passphrase,
           index: index,
           outAmount: outAmount,
           outAddress: outAddress,
@@ -126,6 +134,7 @@ class BtcLnSwap with _$BtcLnSwap {
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<BtcLnSwap> newSubmarine(
           {required String mnemonic,
+          required String passphrase,
           required BigInt index,
           required String invoice,
           required Chain network,
@@ -134,6 +143,7 @@ class BtcLnSwap with _$BtcLnSwap {
           String? referralId}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewSubmarine(
           mnemonic: mnemonic,
+          passphrase: passphrase,
           index: index,
           invoice: invoice,
           network: network,

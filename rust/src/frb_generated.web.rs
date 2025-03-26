@@ -620,6 +620,14 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_from_json(
 }
 
 #[wasm_bindgen]
+pub fn wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage_impl(port_, that)
+}
+
+#[wasm_bindgen]
 pub fn wire__crate__api__btc_ln__btc_ln_swap_new(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: String,
@@ -658,6 +666,7 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_new(
 pub fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
+    passphrase: String,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_amount: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: Option<String>,
@@ -670,6 +679,7 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
     wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         out_amount,
         out_address,
@@ -685,6 +695,7 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
 pub fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
+    passphrase: String,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     invoice: String,
     network: i32,
@@ -695,6 +706,7 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
     wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         invoice,
         network,
@@ -849,6 +861,7 @@ pub fn wire__crate__api__chain_swap__chain_swap_new_swap(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     direction: i32,
     mnemonic: String,
+    passphrase: String,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     amount: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     is_testnet: bool,
@@ -861,6 +874,7 @@ pub fn wire__crate__api__chain_swap__chain_swap_new_swap(
         port_,
         direction,
         mnemonic,
+        passphrase,
         index,
         amount,
         is_testnet,
@@ -894,6 +908,14 @@ pub fn wire__crate__api__chain_swap__chain_swap_to_json(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
     wire__crate__api__chain_swap__chain_swap_to_json_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire__crate__api__error__boltz_error_detail(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__error__boltz_error_detail_impl(port_, that)
 }
 
 #[wasm_bindgen]
@@ -989,6 +1011,14 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_from_json(
 }
 
 #[wasm_bindgen]
+pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage_impl(port_, that)
+}
+
+#[wasm_bindgen]
 pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: String,
@@ -1029,6 +1059,7 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
 pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
+    passphrase: String,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_amount: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: Option<String>,
@@ -1041,6 +1072,7 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
     wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         out_amount,
         out_address,
@@ -1056,6 +1088,7 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
 pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
+    passphrase: String,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     invoice: String,
     network: i32,
@@ -1066,6 +1099,7 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
     wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         invoice,
         network,
@@ -1162,11 +1196,14 @@ pub fn wire__crate__api__types__invoice_from_lnurl(
 pub fn wire__crate__api__types__key_pair_generate(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
+    passphrase: String,
     network: i32,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     swap_type: i32,
 ) {
-    wire__crate__api__types__key_pair_generate_impl(port_, mnemonic, network, index, swap_type)
+    wire__crate__api__types__key_pair_generate_impl(
+        port_, mnemonic, passphrase, network, index, swap_type,
+    )
 }
 
 #[wasm_bindgen]

@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:boltz/boltz.dart';
+import 'package:boltz/src/utils/stream.dart';
 import 'package:test/test.dart';
+const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
 
 void main() {
   test('SwapStatus to string', () async {
@@ -12,7 +14,7 @@ void main() {
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {
-    final boltzWs = BoltzWebSocket.create(testnetBaseUrl);
+    final boltzWs = BoltzWebSocket.create(boltzUrl);
     // stream.initialize(mainnetBaseUrl);
 
     const List<String> swapIds = [
@@ -47,7 +49,7 @@ void main() {
   }, skip: true, timeout: const Timeout(Duration(minutes: 120)));
 
   test('Get status stream multiple; Multiple calls to update', () async {
-    final boltzWs = BoltzWebSocket.create(testnetBaseUrl);
+    final boltzWs = BoltzWebSocket.create(boltzUrl);
     var receivedEvents = <SwapStreamStatus>[];
     // const List<String> swapIds = ['QbkqhN9ed2zQ', 'dhbn5n2ypzBC', 'kuaECCcK4ZJ9', 'EXVCx6', 'grWI22', 'invalid'];
     const List<String> swapIds1 = ['67ptET'];

@@ -91,6 +91,7 @@ impl LbtcLnSwap {
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_submarine(
         mnemonic: String,
+        passphrase: String,
         index: u64,
         invoice: String,
         network: Chain,
@@ -100,7 +101,7 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
-        let refund_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
+        let refund_keypair = match KeyPair::generate(mnemonic, passphrase,network.into(), index, swap_type) {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };
@@ -174,7 +175,16 @@ impl LbtcLnSwap {
             &claim_tx_response.transaction_hash,
         )?;
         boltz_client.post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
+
         Ok(())
+    }
+
+    /// Retrieves the preimage for a completed submarine swap.
+    pub fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
+        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let response = boltz_client.get_submarine_claim_tx_details(&self.id)?;
+        let preimage = response.preimage.clone();
+        Ok(preimage)
     }
 
     /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.
@@ -182,6 +192,7 @@ impl LbtcLnSwap {
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_reverse(
         mnemonic: String,
+        passphrase: String,
         index: u64,
         out_amount: u64,
         out_address: Option<String>,
@@ -193,7 +204,7 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
-        let claim_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
+        let claim_keypair = match KeyPair::generate(mnemonic, passphrase,network.into(), index, swap_type) {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };
@@ -457,6 +468,7 @@ mod tests {
         let boltz_url = "api.boltz.exchange/v2".to_string();
         let _ = LbtcLnSwap::new_reverse(
             mnemonic,
+            "".to_string(),
             index,
             out_amount,
             out_address,

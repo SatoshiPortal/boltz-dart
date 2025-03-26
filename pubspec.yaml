@@ -21,8 +21,6 @@ dependencies:
   archive: ^4.0.2
   http: ^1.2.0
   web_socket_channel: ^3.0.1
-  # rust_lib_boltz:
-  #   path: rust_builder
 
 dev_dependencies:
   flutter_test:
