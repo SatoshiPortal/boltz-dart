@@ -169,11 +169,16 @@ impl KeyPair {
 
     pub fn generate(
         mnemonic: String,
-        passphrase: String,
+        passphrase: Option<String>,
         network: Chain,
         index: u64,
         swap_type: SwapType,
     ) -> Result<Self, BoltzError> {
+        let passphrase = if passphrase.is_some() {
+            passphrase.unwrap()
+        } else {
+            "".to_string()
+        };
         match swap_type {
             SwapType::Submarine => {
                 let child_keys =
@@ -192,7 +197,8 @@ impl KeyPair {
                 })
             }
             SwapType::Chain => {
-                let child_keys = SwapKey::from_chain_account(&mnemonic, &passphrase, network.into(), index)?;
+                let child_keys =
+                    SwapKey::from_chain_account(&mnemonic, &passphrase, network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),

@@ -104,7 +104,7 @@ impl ChainSwap {
     pub fn new_swap(
         direction: ChainSwapDirection,
         mnemonic: String,
-        passphrase: String,
+        passphrase: Option<String>,
         index: u64,
         amount: u64,
         is_testnet: bool,
@@ -127,21 +127,31 @@ impl ChainSwap {
                 (Chain::Liquid, Chain::Bitcoin)
             }
         };
-        let refund_keypair =
-            match KeyPair::generate(mnemonic.clone(), passphrase.clone(),refund_network.into(), index, swap_type) {
-                Ok(keypair) => keypair,
-                Err(err) => return Err(err.into()),
-            };
+        let refund_keypair = match KeyPair::generate(
+            mnemonic.clone(),
+            passphrase.clone(),
+            refund_network.into(),
+            index,
+            swap_type,
+        ) {
+            Ok(keypair) => keypair,
+            Err(err) => return Err(err.into()),
+        };
         let refund_kps: Keypair = refund_keypair.clone().try_into()?;
         let refund_public_key = PublicKey {
             inner: refund_kps.public_key(),
             compressed: true,
         };
-        let claim_keypair =
-            match KeyPair::generate(mnemonic, passphrase, claim_network.into(), index + 1, swap_type) {
-                Ok(keypair) => keypair,
-                Err(err) => return Err(err.into()),
-            };
+        let claim_keypair = match KeyPair::generate(
+            mnemonic,
+            passphrase,
+            claim_network.into(),
+            index + 1,
+            swap_type,
+        ) {
+            Ok(keypair) => keypair,
+            Err(err) => return Err(err.into()),
+        };
         let claim_kps: Keypair = claim_keypair.clone().try_into()?;
 
         let claim_public_key = PublicKey {

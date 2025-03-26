@@ -111,7 +111,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<LbtcLnSwap> newReverse(
           {required String mnemonic,
-          required String passphrase,
+          String? passphrase,
           required BigInt index,
           required BigInt outAmount,
           String? outAddress,
@@ -137,7 +137,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<LbtcLnSwap> newSubmarine(
           {required String mnemonic,
-          required String passphrase,
+          String? passphrase,
           required BigInt index,
           required String invoice,
           required Chain network,

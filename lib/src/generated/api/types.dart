@@ -110,7 +110,7 @@ class KeyPair with _$KeyPair {
   /// Used internally to create a KeyPair for swaps
   static Future<KeyPair> generate(
           {required String mnemonic,
-          required String passphrase,
+          String? passphrase,
           required Chain network,
           required BigInt index,
           required SwapType swapType}) =>

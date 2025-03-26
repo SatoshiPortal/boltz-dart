@@ -251,7 +251,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
 fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<String>,
+    passphrase: impl CstDecode<Option<String>>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -301,7 +301,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
 fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<String>,
+    passphrase: impl CstDecode<Option<String>>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -651,7 +651,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
     mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<String>,
+    passphrase: impl CstDecode<Option<String>>,
     index: impl CstDecode<u64>,
     amount: impl CstDecode<u64>,
     is_testnet: impl CstDecode<bool>,
@@ -1100,7 +1100,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<String>,
+    passphrase: impl CstDecode<Option<String>>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -1150,7 +1150,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<String>,
+    passphrase: impl CstDecode<Option<String>>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -1380,7 +1380,7 @@ fn wire__crate__api__types__invoice_from_lnurl_impl(
 fn wire__crate__api__types__key_pair_generate_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<String>,
+    passphrase: impl CstDecode<Option<String>>,
     network: impl CstDecode<crate::api::types::Chain>,
     index: impl CstDecode<u64>,
     swap_type: impl CstDecode<crate::api::types::SwapType>,

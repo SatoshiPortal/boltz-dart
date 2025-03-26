@@ -88,7 +88,7 @@ impl BtcLnSwap {
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_submarine(
         mnemonic: String,
-        passphrase: String,
+        passphrase: Option<String>,
         index: u64,
         invoice: String,
         network: Chain,
@@ -98,10 +98,11 @@ impl BtcLnSwap {
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let electrum_url = strip_tcp_prefix(&electrum_url);
-        let refund_keypair = match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
-            Ok(keypair) => keypair,
-            Err(err) => return Err(err.into()),
-        };
+        let refund_keypair =
+            match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
+                Ok(keypair) => keypair,
+                Err(err) => return Err(err.into()),
+            };
         let refund_kps: Keypair = refund_keypair.clone().try_into()?;
         let preimage = match Preimage::from_invoice_str(&invoice) {
             Ok(result) => result,
@@ -174,7 +175,7 @@ impl BtcLnSwap {
         boltz_client.post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)?;
         Ok(())
     }
-    
+
     /// Retrieves the preimage for a completed submarine swap.
     pub fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
@@ -182,13 +183,13 @@ impl BtcLnSwap {
         let preimage = response.preimage.clone();
         Ok(preimage)
     }
-    
+
     /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
     /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_reverse(
         mnemonic: String,
-        passphrase: String,
+        passphrase: Option<String>,
         index: u64,
         out_amount: u64,
         out_address: Option<String>,
@@ -199,10 +200,11 @@ impl BtcLnSwap {
         referral_id: Option<String>,
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
-        let claim_keypair = match KeyPair::generate(mnemonic, passphrase,network.into(), index, swap_type) {
-            Ok(keypair) => keypair,
-            Err(err) => return Err(err.into()),
-        };
+        let claim_keypair =
+            match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
+                Ok(keypair) => keypair,
+                Err(err) => return Err(err.into()),
+            };
         let preimage = Preimage::new();
         let ckp: Keypair = claim_keypair.clone().try_into()?;
         let claim_public_key = PublicKey {

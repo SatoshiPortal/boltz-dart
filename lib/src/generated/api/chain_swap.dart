@@ -124,7 +124,7 @@ class ChainSwap with _$ChainSwap {
   static Future<ChainSwap> newSwap(
           {required ChainSwapDirection direction,
           required String mnemonic,
-          required String passphrase,
+          String? passphrase,
           required BigInt index,
           required BigInt amount,
           required bool isTestnet,

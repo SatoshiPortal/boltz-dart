@@ -110,7 +110,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -122,7 +122,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -189,7 +189,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<ChainSwap> crateApiChainSwapChainSwapNewSwap(
       {required ChainSwapDirection direction,
       required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt amount,
       required bool isTestnet,
@@ -259,7 +259,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -271,7 +271,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -309,7 +309,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required Chain network,
       required BigInt index,
       required SwapType swapType});
@@ -598,7 +598,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -610,7 +610,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_u_64(outAmount);
         var arg4 = cst_encode_opt_String(outAddress);
@@ -663,7 +663,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -673,7 +673,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_String(invoice);
         var arg4 = cst_encode_chain(network);
@@ -1083,7 +1083,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<ChainSwap> crateApiChainSwapChainSwapNewSwap(
       {required ChainSwapDirection direction,
       required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt amount,
       required bool isTestnet,
@@ -1095,7 +1095,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       callFfi: (port_) {
         var arg0 = cst_encode_chain_swap_direction(direction);
         var arg1 = cst_encode_String(mnemonic);
-        var arg2 = cst_encode_String(passphrase);
+        var arg2 = cst_encode_opt_String(passphrase);
         var arg3 = cst_encode_u_64(index);
         var arg4 = cst_encode_u_64(amount);
         var arg5 = cst_encode_bool(isTestnet);
@@ -1595,7 +1595,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -1607,7 +1607,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_u_64(outAmount);
         var arg4 = cst_encode_opt_String(outAddress);
@@ -1660,7 +1660,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -1670,7 +1670,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_String(invoice);
         var arg4 = cst_encode_chain(network);
@@ -1927,14 +1927,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required Chain network,
       required BigInt index,
       required SwapType swapType}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_chain(network);
         var arg3 = cst_encode_u_64(index);
         var arg4 = cst_encode_swap_type(swapType);
