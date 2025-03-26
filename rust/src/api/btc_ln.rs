@@ -88,6 +88,7 @@ impl BtcLnSwap {
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_submarine(
         mnemonic: String,
+        passphrase: String,
         index: u64,
         invoice: String,
         network: Chain,
@@ -97,7 +98,7 @@ impl BtcLnSwap {
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let electrum_url = strip_tcp_prefix(&electrum_url);
-        let refund_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
+        let refund_keypair = match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };
@@ -178,6 +179,7 @@ impl BtcLnSwap {
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub fn new_reverse(
         mnemonic: String,
+        passphrase: String,
         index: u64,
         out_amount: u64,
         out_address: Option<String>,
@@ -188,7 +190,7 @@ impl BtcLnSwap {
         referral_id: Option<String>,
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
-        let claim_keypair = match KeyPair::generate(mnemonic, network.into(), index, swap_type) {
+        let claim_keypair = match KeyPair::generate(mnemonic, passphrase,network.into(), index, swap_type) {
             Ok(keypair) => keypair,
             Err(err) => return Err(err.into()),
         };

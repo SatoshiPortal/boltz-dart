@@ -110,11 +110,13 @@ class KeyPair with _$KeyPair {
   /// Used internally to create a KeyPair for swaps
   static Future<KeyPair> generate(
           {required String mnemonic,
+          required String passphrase,
           required Chain network,
           required BigInt index,
           required SwapType swapType}) =>
       BoltzCore.instance.api.crateApiTypesKeyPairGenerate(
           mnemonic: mnemonic,
+          passphrase: passphrase,
           network: network,
           index: index,
           swapType: swapType);

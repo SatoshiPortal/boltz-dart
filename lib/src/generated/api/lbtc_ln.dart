@@ -105,6 +105,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<LbtcLnSwap> newReverse(
           {required String mnemonic,
+          required String passphrase,
           required BigInt index,
           required BigInt outAmount,
           String? outAddress,
@@ -115,6 +116,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
           String? referralId}) =>
       BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewReverse(
           mnemonic: mnemonic,
+          passphrase: passphrase,
           index: index,
           outAmount: outAmount,
           outAddress: outAddress,
@@ -129,6 +131,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<LbtcLnSwap> newSubmarine(
           {required String mnemonic,
+          required String passphrase,
           required BigInt index,
           required String invoice,
           required Chain network,
@@ -137,6 +140,7 @@ class LbtcLnSwap with _$LbtcLnSwap {
           String? referralId}) =>
       BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewSubmarine(
           mnemonic: mnemonic,
+          passphrase: passphrase,
           index: index,
           invoice: invoice,
           network: network,

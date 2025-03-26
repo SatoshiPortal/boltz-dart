@@ -30,6 +30,13 @@ impl CstDecode<crate::api::error::BoltzError> for wire_cst_boltz_error {
         }
     }
 }
+impl CstDecode<crate::api::error::BoltzError> for *mut wire_cst_boltz_error {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::error::BoltzError {
+        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+        CstDecode::<crate::api::error::BoltzError>::cst_decode(*wrap).into()
+    }
+}
 impl CstDecode<crate::api::btc_ln::BtcLnSwap> for *mut wire_cst_btc_ln_swap {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> crate::api::btc_ln::BtcLnSwap {
@@ -744,6 +751,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new(
 pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
+    passphrase: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
     out_amount: u64,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -756,6 +764,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse
     wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         out_amount,
         out_address,
@@ -771,6 +780,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse
 pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
+    passphrase: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
     invoice: *mut wire_cst_list_prim_u_8_strict,
     network: i32,
@@ -781,6 +791,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submari
     wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         invoice,
         network,
@@ -935,6 +946,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap
     port_: i64,
     direction: i32,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
+    passphrase: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
     amount: u64,
     is_testnet: bool,
@@ -947,6 +959,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap
         port_,
         direction,
         mnemonic,
+        passphrase,
         index,
         amount,
         is_testnet,
@@ -980,6 +993,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json(
     that: *mut wire_cst_chain_swap,
 ) {
     wire__crate__api__chain_swap__chain_swap_to_json_impl(port_, that)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_wire__crate__api__error__boltz_error_message(
+    port_: i64,
+    that: *mut wire_cst_boltz_error,
+) {
+    wire__crate__api__error__boltz_error_message_impl(port_, that)
 }
 
 #[no_mangle]
@@ -1115,6 +1136,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
 pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
+    passphrase: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
     out_amount: u64,
     out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -1127,6 +1149,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_rever
     wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         out_amount,
         out_address,
@@ -1142,6 +1165,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_rever
 pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
+    passphrase: *mut wire_cst_list_prim_u_8_strict,
     index: u64,
     invoice: *mut wire_cst_list_prim_u_8_strict,
     network: i32,
@@ -1152,6 +1176,7 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_subma
     wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
         port_,
         mnemonic,
+        passphrase,
         index,
         invoice,
         network,
@@ -1248,11 +1273,14 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__types__invoice_from_lnurl(
 pub extern "C" fn frbgen_boltz_wire__crate__api__types__key_pair_generate(
     port_: i64,
     mnemonic: *mut wire_cst_list_prim_u_8_strict,
+    passphrase: *mut wire_cst_list_prim_u_8_strict,
     network: i32,
     index: u64,
     swap_type: i32,
 ) {
-    wire__crate__api__types__key_pair_generate_impl(port_, mnemonic, network, index, swap_type)
+    wire__crate__api__types__key_pair_generate_impl(
+        port_, mnemonic, passphrase, network, index, swap_type,
+    )
 }
 
 #[no_mangle]
@@ -1319,6 +1347,11 @@ pub extern "C" fn frbgen_boltz_wire__crate__api__types__withdraw(
     invoice: *mut wire_cst_list_prim_u_8_strict,
 ) {
     wire__crate__api__types__withdraw_impl(port_, lnurl, invoice)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_boltz_error() -> *mut wire_cst_boltz_error {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_boltz_error::new_with_null_ptr())
 }
 
 #[no_mangle]

@@ -169,6 +169,7 @@ impl KeyPair {
 
     pub fn generate(
         mnemonic: String,
+        passphrase: String,
         network: Chain,
         index: u64,
         swap_type: SwapType,
@@ -176,7 +177,7 @@ impl KeyPair {
         match swap_type {
             SwapType::Submarine => {
                 let child_keys =
-                    SwapKey::from_submarine_account(&mnemonic, "", network.into(), index)?;
+                    SwapKey::from_submarine_account(&mnemonic, &passphrase, network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
@@ -184,14 +185,14 @@ impl KeyPair {
             }
             SwapType::Reverse => {
                 let child_keys =
-                    SwapKey::from_reverse_account(&mnemonic, "", network.into(), index)?;
+                    SwapKey::from_reverse_account(&mnemonic, &passphrase, network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
                 })
             }
             SwapType::Chain => {
-                let child_keys = SwapKey::from_chain_account(&mnemonic, "", network.into(), index)?;
+                let child_keys = SwapKey::from_chain_account(&mnemonic, &passphrase, network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),

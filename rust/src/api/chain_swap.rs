@@ -104,6 +104,7 @@ impl ChainSwap {
     pub fn new_swap(
         direction: ChainSwapDirection,
         mnemonic: String,
+        passphrase: String,
         index: u64,
         amount: u64,
         is_testnet: bool,
@@ -127,7 +128,7 @@ impl ChainSwap {
             }
         };
         let refund_keypair =
-            match KeyPair::generate(mnemonic.clone(), refund_network.into(), index, swap_type) {
+            match KeyPair::generate(mnemonic.clone(), passphrase.clone(),refund_network.into(), index, swap_type) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };
@@ -137,7 +138,7 @@ impl ChainSwap {
             compressed: true,
         };
         let claim_keypair =
-            match KeyPair::generate(mnemonic, claim_network.into(), index + 1, swap_type) {
+            match KeyPair::generate(mnemonic, passphrase, claim_network.into(), index + 1, swap_type) {
                 Ok(keypair) => keypair,
                 Err(err) => return Err(err.into()),
             };

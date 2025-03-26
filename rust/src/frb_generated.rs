@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.0.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -394494677;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -966384958;
 
 // Section: executor
 
@@ -229,6 +229,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
 fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
+    passphrase: impl CstDecode<String>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -246,6 +247,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
         },
         move || {
             let api_mnemonic = mnemonic.cst_decode();
+            let api_passphrase = passphrase.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
             let api_out_address = out_address.cst_decode();
@@ -258,6 +260,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::btc_ln::BtcLnSwap::new_reverse(
                         api_mnemonic,
+                        api_passphrase,
                         api_index,
                         api_out_amount,
                         api_out_address,
@@ -276,6 +279,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
 fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
+    passphrase: impl CstDecode<String>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -291,6 +295,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
         },
         move || {
             let api_mnemonic = mnemonic.cst_decode();
+            let api_passphrase = passphrase.cst_decode();
             let api_index = index.cst_decode();
             let api_invoice = invoice.cst_decode();
             let api_network = network.cst_decode();
@@ -301,6 +306,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::btc_ln::BtcLnSwap::new_submarine(
                         api_mnemonic,
+                        api_passphrase,
                         api_index,
                         api_invoice,
                         api_network,
@@ -623,6 +629,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
     mnemonic: impl CstDecode<String>,
+    passphrase: impl CstDecode<String>,
     index: impl CstDecode<u64>,
     amount: impl CstDecode<u64>,
     is_testnet: impl CstDecode<bool>,
@@ -640,6 +647,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
         move || {
             let api_direction = direction.cst_decode();
             let api_mnemonic = mnemonic.cst_decode();
+            let api_passphrase = passphrase.cst_decode();
             let api_index = index.cst_decode();
             let api_amount = amount.cst_decode();
             let api_is_testnet = is_testnet.cst_decode();
@@ -652,6 +660,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
                     let output_ok = crate::api::chain_swap::ChainSwap::new_swap(
                         api_direction,
                         api_mnemonic,
+                        api_passphrase,
                         api_index,
                         api_amount,
                         api_is_testnet,
@@ -713,6 +722,29 @@ fn wire__crate__api__chain_swap__chain_swap_to_json_impl(
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::chain_swap::ChainSwap::to_json(&api_that)?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__error__boltz_error_message_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::error::BoltzError>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "boltz_error_message",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok({
+                        crate::api::error::BoltzError::message(&api_that);
+                    })?;
                     Ok(output_ok)
                 })())
             }
@@ -1022,6 +1054,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
+    passphrase: impl CstDecode<String>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -1039,6 +1072,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
         },
         move || {
             let api_mnemonic = mnemonic.cst_decode();
+            let api_passphrase = passphrase.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
             let api_out_address = out_address.cst_decode();
@@ -1051,6 +1085,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_reverse(
                         api_mnemonic,
+                        api_passphrase,
                         api_index,
                         api_out_amount,
                         api_out_address,
@@ -1069,6 +1104,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
+    passphrase: impl CstDecode<String>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -1084,6 +1120,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
         },
         move || {
             let api_mnemonic = mnemonic.cst_decode();
+            let api_passphrase = passphrase.cst_decode();
             let api_index = index.cst_decode();
             let api_invoice = invoice.cst_decode();
             let api_network = network.cst_decode();
@@ -1094,6 +1131,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_submarine(
                         api_mnemonic,
+                        api_passphrase,
                         api_index,
                         api_invoice,
                         api_network,
@@ -1296,6 +1334,7 @@ fn wire__crate__api__types__invoice_from_lnurl_impl(
 fn wire__crate__api__types__key_pair_generate_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
+    passphrase: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
     index: impl CstDecode<u64>,
     swap_type: impl CstDecode<crate::api::types::SwapType>,
@@ -1308,6 +1347,7 @@ fn wire__crate__api__types__key_pair_generate_impl(
         },
         move || {
             let api_mnemonic = mnemonic.cst_decode();
+            let api_passphrase = passphrase.cst_decode();
             let api_network = network.cst_decode();
             let api_index = index.cst_decode();
             let api_swap_type = swap_type.cst_decode();
@@ -1315,6 +1355,7 @@ fn wire__crate__api__types__key_pair_generate_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
                     let output_ok = crate::api::types::KeyPair::generate(
                         api_mnemonic,
+                        api_passphrase,
                         api_network,
                         api_index,
                         api_swap_type,

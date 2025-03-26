@@ -35,6 +35,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   bool dco_decode_bool(dynamic raw);
 
   @protected
+  BoltzError dco_decode_box_autoadd_boltz_error(dynamic raw);
+
+  @protected
   BtcLnSwap dco_decode_box_autoadd_btc_ln_swap(dynamic raw);
 
   @protected
@@ -171,6 +174,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   bool sse_decode_bool(SseDeserializer deserializer);
+
+  @protected
+  BoltzError sse_decode_box_autoadd_boltz_error(SseDeserializer deserializer);
 
   @protected
   BtcLnSwap sse_decode_box_autoadd_btc_ln_swap(SseDeserializer deserializer);
@@ -319,6 +325,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [cst_encode_String(raw.kind), cst_encode_String(raw.message)]
         .jsify()!;
+  }
+
+  @protected
+  JSAny cst_encode_box_autoadd_boltz_error(BoltzError raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_boltz_error(raw);
   }
 
   @protected
@@ -673,6 +685,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_boltz_error(
+      BoltzError self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_btc_ln_swap(
       BtcLnSwap self, SseSerializer serializer);
 
@@ -884,6 +900,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
           NativePortType port_,
           String mnemonic,
+          String passphrase,
           JSAny index,
           JSAny out_amount,
           String? out_address,
@@ -895,6 +912,7 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
           port_,
           mnemonic,
+          passphrase,
           index,
           out_amount,
           out_address,
@@ -907,6 +925,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
           NativePortType port_,
           String mnemonic,
+          String passphrase,
           JSAny index,
           String invoice,
           int network,
@@ -916,6 +935,7 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
           port_,
           mnemonic,
+          passphrase,
           index,
           invoice,
           network,
@@ -1019,6 +1039,7 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_,
           int direction,
           String mnemonic,
+          String passphrase,
           JSAny index,
           JSAny amount,
           bool is_testnet,
@@ -1030,6 +1051,7 @@ class BoltzCoreWire implements BaseWire {
           port_,
           direction,
           mnemonic,
+          passphrase,
           index,
           amount,
           is_testnet,
@@ -1050,6 +1072,10 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__chain_swap__chain_swap_to_json(
           NativePortType port_, JSAny that) =>
       wasmModule.wire__crate__api__chain_swap__chain_swap_to_json(port_, that);
+
+  void wire__crate__api__error__boltz_error_message(
+          NativePortType port_, JSAny that) =>
+      wasmModule.wire__crate__api__error__boltz_error_message(port_, that);
 
   void wire__crate__api__error__boltz_error_new(
           NativePortType port_, String kind, String message) =>
@@ -1134,6 +1160,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
           NativePortType port_,
           String mnemonic,
+          String passphrase,
           JSAny index,
           JSAny out_amount,
           String? out_address,
@@ -1145,6 +1172,7 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
           port_,
           mnemonic,
+          passphrase,
           index,
           out_amount,
           out_address,
@@ -1157,6 +1185,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
           NativePortType port_,
           String mnemonic,
+          String passphrase,
           JSAny index,
           String invoice,
           int network,
@@ -1166,6 +1195,7 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
           port_,
           mnemonic,
+          passphrase,
           index,
           invoice,
           network,
@@ -1224,10 +1254,15 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__types__invoice_from_lnurl(
           port_, lnurl, msats);
 
-  void wire__crate__api__types__key_pair_generate(NativePortType port_,
-          String mnemonic, int network, JSAny index, int swap_type) =>
+  void wire__crate__api__types__key_pair_generate(
+          NativePortType port_,
+          String mnemonic,
+          String passphrase,
+          int network,
+          JSAny index,
+          int swap_type) =>
       wasmModule.wire__crate__api__types__key_pair_generate(
-          port_, mnemonic, network, index, swap_type);
+          port_, mnemonic, passphrase, network, index, swap_type);
 
   void wire__crate__api__types__key_pair_new(
           NativePortType port_, String secret_key, String public_key) =>
@@ -1316,6 +1351,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
       NativePortType port_,
       String mnemonic,
+      String passphrase,
       JSAny index,
       JSAny out_amount,
       String? out_address,
@@ -1328,6 +1364,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
       NativePortType port_,
       String mnemonic,
+      String passphrase,
       JSAny index,
       String invoice,
       int network,
@@ -1395,6 +1432,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       NativePortType port_,
       int direction,
       String mnemonic,
+      String passphrase,
       JSAny index,
       JSAny amount,
       bool is_testnet,
@@ -1411,6 +1449,9 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       bool try_cooperate);
 
   external void wire__crate__api__chain_swap__chain_swap_to_json(
+      NativePortType port_, JSAny that);
+
+  external void wire__crate__api__error__boltz_error_message(
       NativePortType port_, JSAny that);
 
   external void wire__crate__api__error__boltz_error_new(
@@ -1467,6 +1508,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
       NativePortType port_,
       String mnemonic,
+      String passphrase,
       JSAny index,
       JSAny out_amount,
       String? out_address,
@@ -1479,6 +1521,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
       NativePortType port_,
       String mnemonic,
+      String passphrase,
       JSAny index,
       String invoice,
       int network,
@@ -1518,8 +1561,13 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__types__invoice_from_lnurl(
       NativePortType port_, String lnurl, JSAny msats);
 
-  external void wire__crate__api__types__key_pair_generate(NativePortType port_,
-      String mnemonic, int network, JSAny index, int swap_type);
+  external void wire__crate__api__types__key_pair_generate(
+      NativePortType port_,
+      String mnemonic,
+      String passphrase,
+      int network,
+      JSAny index,
+      int swap_type);
 
   external void wire__crate__api__types__key_pair_new(
       NativePortType port_, String secret_key, String public_key);
