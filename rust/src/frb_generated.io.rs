@@ -200,6 +200,7 @@ impl CstDecode<crate::api::types::DecodedInvoice> for wire_cst_decoded_invoice {
             cltv_exp_delta: self.cltv_exp_delta.cst_decode(),
             bip21: self.bip21.cst_decode(),
             preimage_hash: self.preimage_hash.cst_decode(),
+            description: self.description.cst_decode(),
         }
     }
 }
@@ -474,6 +475,7 @@ impl NewWithNullPtr for wire_cst_decoded_invoice {
             cltv_exp_delta: Default::default(),
             bip21: core::ptr::null_mut(),
             preimage_hash: core::ptr::null_mut(),
+            description: core::ptr::null_mut(),
         }
     }
 }
@@ -1520,6 +1522,7 @@ pub struct wire_cst_decoded_invoice {
     cltv_exp_delta: u64,
     bip21: *mut wire_cst_list_prim_u_8_strict,
     preimage_hash: *mut wire_cst_list_prim_u_8_strict,
+    description: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

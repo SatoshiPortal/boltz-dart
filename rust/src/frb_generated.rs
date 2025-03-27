@@ -50,7 +50,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz_impl(
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     signed_hex: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_broadcast_boltz",
             port: Some(port_),
@@ -59,12 +59,18 @@ fn wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz_impl(
         move || {
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::btc_ln::BtcLnSwap::broadcast_boltz(&api_that, api_signed_hex)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::btc_ln::BtcLnSwap::broadcast_boltz(
+                            &api_that,
+                            api_signed_hex,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -74,7 +80,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_broadcast_local_impl(
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     signed_hex: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_broadcast_local",
             port: Some(port_),
@@ -83,12 +89,18 @@ fn wire__crate__api__btc_ln__btc_ln_swap_broadcast_local_impl(
         move || {
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::btc_ln::BtcLnSwap::broadcast_local(&api_that, api_signed_hex)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::btc_ln::BtcLnSwap::broadcast_local(
+                            &api_that,
+                            api_signed_hex,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -100,7 +112,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_claim",
             port: Some(port_),
@@ -111,16 +123,20 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::btc_ln::BtcLnSwap::claim(
-                        &api_that,
-                        api_out_address,
-                        api_miner_fee,
-                        api_try_cooperate,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::btc_ln::BtcLnSwap::claim(
+                            &api_that,
+                            api_out_address,
+                            api_miner_fee,
+                            api_try_cooperate,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -129,7 +145,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_coop_close_submarine",
             port: Some(port_),
@@ -137,11 +153,15 @@ fn wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::btc_ln::BtcLnSwap::coop_close_submarine(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::btc_ln::BtcLnSwap::coop_close_submarine(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -171,7 +191,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_get_completed_submarine_preimage",
             port: Some(port_),
@@ -179,12 +199,18 @@ fn wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::btc_ln::BtcLnSwap::get_completed_submarine_preimage(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::btc_ln::BtcLnSwap::get_completed_submarine_preimage(
+                                &api_that,
+                            )
+                            .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -261,7 +287,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
     description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_new_reverse",
             port: Some(port_),
@@ -278,22 +304,26 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             let api_boltz_url = boltz_url.cst_decode();
             let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::btc_ln::BtcLnSwap::new_reverse(
-                        api_mnemonic,
-                        api_passphrase,
-                        api_index,
-                        api_out_amount,
-                        api_out_address,
-                        api_network,
-                        api_electrum_url,
-                        api_boltz_url,
-                        api_description,
-                        api_referral_id,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::btc_ln::BtcLnSwap::new_reverse(
+                            api_mnemonic,
+                            api_passphrase,
+                            api_index,
+                            api_out_amount,
+                            api_out_address,
+                            api_network,
+                            api_electrum_url,
+                            api_boltz_url,
+                            api_description,
+                            api_referral_id,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -309,7 +339,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_new_submarine",
             port: Some(port_),
@@ -324,20 +354,24 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::btc_ln::BtcLnSwap::new_submarine(
-                        api_mnemonic,
-                        api_passphrase,
-                        api_index,
-                        api_invoice,
-                        api_network,
-                        api_electrum_url,
-                        api_boltz_url,
-                        api_referral_id,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::btc_ln::BtcLnSwap::new_submarine(
+                            api_mnemonic,
+                            api_passphrase,
+                            api_index,
+                            api_invoice,
+                            api_network,
+                            api_electrum_url,
+                            api_boltz_url,
+                            api_referral_id,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -349,7 +383,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_refund",
             port: Some(port_),
@@ -360,16 +394,20 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::btc_ln::BtcLnSwap::refund(
-                        &api_that,
-                        api_out_address,
-                        api_miner_fee,
-                        api_try_cooperate,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::btc_ln::BtcLnSwap::refund(
+                            &api_that,
+                            api_out_address,
+                            api_miner_fee,
+                            api_try_cooperate,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -400,7 +438,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_tx_size_impl(
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     is_cooperative: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "btc_ln_swap_tx_size",
             port: Some(port_),
@@ -409,12 +447,16 @@ fn wire__crate__api__btc_ln__btc_ln_swap_tx_size_impl(
         move || {
             let api_that = that.cst_decode();
             let api_is_cooperative = is_cooperative.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::btc_ln::BtcLnSwap::tx_size(&api_that, api_is_cooperative)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::btc_ln::BtcLnSwap::tx_size(&api_that, api_is_cooperative)
+                                .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -425,7 +467,7 @@ fn wire__crate__api__chain_swap__chain_swap_broadcast_boltz_impl(
     signed_hex: impl CstDecode<String>,
     kind: impl CstDecode<crate::api::types::SwapTxKind>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_broadcast_boltz",
             port: Some(port_),
@@ -435,15 +477,19 @@ fn wire__crate__api__chain_swap__chain_swap_broadcast_boltz_impl(
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
             let api_kind = kind.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::broadcast_boltz(
-                        &api_that,
-                        api_signed_hex,
-                        api_kind,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::chain_swap::ChainSwap::broadcast_boltz(
+                            &api_that,
+                            api_signed_hex,
+                            api_kind,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -454,7 +500,7 @@ fn wire__crate__api__chain_swap__chain_swap_broadcast_local_impl(
     signed_hex: impl CstDecode<String>,
     kind: impl CstDecode<crate::api::types::SwapTxKind>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_broadcast_local",
             port: Some(port_),
@@ -464,15 +510,19 @@ fn wire__crate__api__chain_swap__chain_swap_broadcast_local_impl(
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
             let api_kind = kind.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::broadcast_local(
-                        &api_that,
-                        api_signed_hex,
-                        api_kind,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::chain_swap::ChainSwap::broadcast_local(
+                            &api_that,
+                            api_signed_hex,
+                            api_kind,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -485,7 +535,7 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_claim",
             port: Some(port_),
@@ -497,17 +547,21 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
             let api_refund_address = refund_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::claim(
-                        &api_that,
-                        api_out_address,
-                        api_refund_address,
-                        api_miner_fee,
-                        api_try_cooperate,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::chain_swap::ChainSwap::claim(
+                            &api_that,
+                            api_out_address,
+                            api_refund_address,
+                            api_miner_fee,
+                            api_try_cooperate,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -516,7 +570,7 @@ fn wire__crate__api__chain_swap__chain_swap_from_json_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     json_str: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_from_json",
             port: Some(port_),
@@ -524,11 +578,15 @@ fn wire__crate__api__chain_swap__chain_swap_from_json_impl(
         },
         move || {
             let api_json_str = json_str.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::from_json(&api_json_str)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::chain_swap::ChainSwap::from_json(&api_json_str).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -537,7 +595,7 @@ fn wire__crate__api__chain_swap__chain_swap_get_server_lockup_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_get_server_lockup",
             port: Some(port_),
@@ -545,12 +603,15 @@ fn wire__crate__api__chain_swap__chain_swap_get_server_lockup_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::chain_swap::ChainSwap::get_server_lockup(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::chain_swap::ChainSwap::get_server_lockup(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -559,7 +620,7 @@ fn wire__crate__api__chain_swap__chain_swap_get_user_lockup_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_get_user_lockup",
             port: Some(port_),
@@ -567,11 +628,15 @@ fn wire__crate__api__chain_swap__chain_swap_get_user_lockup_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::get_user_lockup(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::chain_swap::ChainSwap::get_user_lockup(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -660,7 +725,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_new_swap",
             port: Some(port_),
@@ -677,22 +742,26 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
             let api_lbtc_electrum_url = lbtc_electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::new_swap(
-                        api_direction,
-                        api_mnemonic,
-                        api_passphrase,
-                        api_index,
-                        api_amount,
-                        api_is_testnet,
-                        api_btc_electrum_url,
-                        api_lbtc_electrum_url,
-                        api_boltz_url,
-                        api_referral_id,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::chain_swap::ChainSwap::new_swap(
+                            api_direction,
+                            api_mnemonic,
+                            api_passphrase,
+                            api_index,
+                            api_amount,
+                            api_is_testnet,
+                            api_btc_electrum_url,
+                            api_lbtc_electrum_url,
+                            api_boltz_url,
+                            api_referral_id,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -704,7 +773,7 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_refund",
             port: Some(port_),
@@ -715,16 +784,20 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
             let api_refund_address = refund_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::refund(
-                        &api_that,
-                        api_refund_address,
-                        api_miner_fee,
-                        api_try_cooperate,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::chain_swap::ChainSwap::refund(
+                            &api_that,
+                            api_refund_address,
+                            api_miner_fee,
+                            api_try_cooperate,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -733,7 +806,7 @@ fn wire__crate__api__chain_swap__chain_swap_to_json_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "chain_swap_to_json",
             port: Some(port_),
@@ -741,11 +814,15 @@ fn wire__crate__api__chain_swap__chain_swap_to_json_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::chain_swap::ChainSwap::to_json(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::chain_swap::ChainSwap::to_json(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -803,7 +880,7 @@ fn wire__crate__api__fees__fees_chain_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::fees::Fees>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "fees_chain",
             port: Some(port_),
@@ -811,11 +888,14 @@ fn wire__crate__api__fees__fees_chain_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::fees::Fees::chain(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::fees::Fees::chain(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -846,7 +926,7 @@ fn wire__crate__api__fees__fees_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::fees::Fees>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "fees_reverse",
             port: Some(port_),
@@ -854,11 +934,14 @@ fn wire__crate__api__fees__fees_reverse_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::fees::Fees::reverse(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::fees::Fees::reverse(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -867,7 +950,7 @@ fn wire__crate__api__fees__fees_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::fees::Fees>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "fees_submarine",
             port: Some(port_),
@@ -875,11 +958,14 @@ fn wire__crate__api__fees__fees_submarine_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::fees::Fees::submarine(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::fees::Fees::submarine(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -889,7 +975,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_boltz_impl(
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     signed_hex: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_broadcast_boltz",
             port: Some(port_),
@@ -898,14 +984,18 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_boltz_impl(
         move || {
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::lbtc_ln::LbtcLnSwap::broadcast_boltz(
-                        &api_that,
-                        api_signed_hex,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::lbtc_ln::LbtcLnSwap::broadcast_boltz(
+                            &api_that,
+                            api_signed_hex,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -915,7 +1005,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local_impl(
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     signed_hex: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_broadcast_local",
             port: Some(port_),
@@ -924,14 +1014,18 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local_impl(
         move || {
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::lbtc_ln::LbtcLnSwap::broadcast_local(
-                        &api_that,
-                        api_signed_hex,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::lbtc_ln::LbtcLnSwap::broadcast_local(
+                            &api_that,
+                            api_signed_hex,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -943,7 +1037,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_claim",
             port: Some(port_),
@@ -954,16 +1048,20 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::lbtc_ln::LbtcLnSwap::claim(
-                        &api_that,
-                        api_out_address,
-                        api_miner_fee,
-                        api_try_cooperate,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::lbtc_ln::LbtcLnSwap::claim(
+                            &api_that,
+                            api_out_address,
+                            api_miner_fee,
+                            api_try_cooperate,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -972,7 +1070,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_coop_close_submarine",
             port: Some(port_),
@@ -980,12 +1078,16 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine_impl(
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::lbtc_ln::LbtcLnSwap::coop_close_submarine(&api_that)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::lbtc_ln::LbtcLnSwap::coop_close_submarine(&api_that)
+                                .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1015,7 +1117,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage_impl
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_get_completed_submarine_preimage",
             port: Some(port_),
@@ -1023,14 +1125,18 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage_impl
         },
         move || {
             let api_that = that.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::lbtc_ln::LbtcLnSwap::get_completed_submarine_preimage(
-                            &api_that,
-                        )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::lbtc_ln::LbtcLnSwap::get_completed_submarine_preimage(
+                                &api_that,
+                            )
+                            .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1110,7 +1216,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
     description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_new_reverse",
             port: Some(port_),
@@ -1127,22 +1233,26 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             let api_boltz_url = boltz_url.cst_decode();
             let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_reverse(
-                        api_mnemonic,
-                        api_passphrase,
-                        api_index,
-                        api_out_amount,
-                        api_out_address,
-                        api_network,
-                        api_electrum_url,
-                        api_boltz_url,
-                        api_description,
-                        api_referral_id,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_reverse(
+                            api_mnemonic,
+                            api_passphrase,
+                            api_index,
+                            api_out_amount,
+                            api_out_address,
+                            api_network,
+                            api_electrum_url,
+                            api_boltz_url,
+                            api_description,
+                            api_referral_id,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1158,7 +1268,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_new_submarine",
             port: Some(port_),
@@ -1173,20 +1283,24 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_submarine(
-                        api_mnemonic,
-                        api_passphrase,
-                        api_index,
-                        api_invoice,
-                        api_network,
-                        api_electrum_url,
-                        api_boltz_url,
-                        api_referral_id,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_submarine(
+                            api_mnemonic,
+                            api_passphrase,
+                            api_index,
+                            api_invoice,
+                            api_network,
+                            api_electrum_url,
+                            api_boltz_url,
+                            api_referral_id,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1198,7 +1312,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_refund",
             port: Some(port_),
@@ -1209,16 +1323,20 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::lbtc_ln::LbtcLnSwap::refund(
-                        &api_that,
-                        api_out_address,
-                        api_miner_fee,
-                        api_try_cooperate,
-                    )?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::lbtc_ln::LbtcLnSwap::refund(
+                            &api_that,
+                            api_out_address,
+                            api_miner_fee,
+                            api_try_cooperate,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1249,7 +1367,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size_impl(
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     is_cooperative: impl CstDecode<bool>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "lbtc_ln_swap_tx_size",
             port: Some(port_),
@@ -1258,12 +1376,16 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size_impl(
         move || {
             let api_that = that.cst_decode();
             let api_is_cooperative = is_cooperative.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::lbtc_ln::LbtcLnSwap::tx_size(&api_that, api_is_cooperative)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::lbtc_ln::LbtcLnSwap::tx_size(&api_that, api_is_cooperative)
+                                .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1314,7 +1436,7 @@ fn wire__crate__api__types__decoded_invoice_from_string_impl(
     s: impl CstDecode<String>,
     boltz_url: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "decoded_invoice_from_string",
             port: Some(port_),
@@ -1323,12 +1445,16 @@ fn wire__crate__api__types__decoded_invoice_from_string_impl(
         move || {
             let api_s = s.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok =
-                        crate::api::types::DecodedInvoice::from_string(api_s, api_boltz_url)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::types::DecodedInvoice::from_string(api_s, api_boltz_url)
+                                .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1337,7 +1463,7 @@ fn wire__crate__api__types__get_voucher_max_amount_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     lnurl: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_voucher_max_amount",
             port: Some(port_),
@@ -1345,11 +1471,15 @@ fn wire__crate__api__types__get_voucher_max_amount_impl(
         },
         move || {
             let api_lnurl = lnurl.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::types::get_voucher_max_amount(api_lnurl)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::types::get_voucher_max_amount(api_lnurl).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1359,7 +1489,7 @@ fn wire__crate__api__types__invoice_from_lnurl_impl(
     lnurl: impl CstDecode<String>,
     msats: impl CstDecode<u64>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "invoice_from_lnurl",
             port: Some(port_),
@@ -1368,11 +1498,15 @@ fn wire__crate__api__types__invoice_from_lnurl_impl(
         move || {
             let api_lnurl = lnurl.cst_decode();
             let api_msats = msats.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::types::invoice_from_lnurl(api_lnurl, api_msats)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::types::invoice_from_lnurl(api_lnurl, api_msats).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1558,7 +1692,7 @@ fn wire__crate__api__types__withdraw_impl(
     lnurl: impl CstDecode<String>,
     invoice: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "withdraw",
             port: Some(port_),
@@ -1567,11 +1701,14 @@ fn wire__crate__api__types__withdraw_impl(
         move || {
             let api_lnurl = lnurl.cst_decode();
             let api_invoice = invoice.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::types::withdraw(api_lnurl, api_invoice)?;
-                    Ok(output_ok)
-                })())
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::types::withdraw(api_lnurl, api_invoice).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -1870,6 +2007,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
         let mut var_cltvExpDelta = <u64>::sse_decode(deserializer);
         let mut var_bip21 = <Option<String>>::sse_decode(deserializer);
         let mut var_preimageHash = <String>::sse_decode(deserializer);
+        let mut var_description = <String>::sse_decode(deserializer);
         return crate::api::types::DecodedInvoice {
             msats: var_msats,
             expiry: var_expiry,
@@ -1880,6 +2018,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
             cltv_exp_delta: var_cltvExpDelta,
             bip21: var_bip21,
             preimage_hash: var_preimageHash,
+            description: var_description,
         };
     }
 }
@@ -2432,6 +2571,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::DecodedInvoice {
             self.cltv_exp_delta.into_into_dart().into_dart(),
             self.bip21.into_into_dart().into_dart(),
             self.preimage_hash.into_into_dart().into_dart(),
+            self.description.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2891,6 +3031,7 @@ impl SseEncode for crate::api::types::DecodedInvoice {
         <u64>::sse_encode(self.cltv_exp_delta, serializer);
         <Option<String>>::sse_encode(self.bip21, serializer);
         <String>::sse_encode(self.preimage_hash, serializer);
+        <String>::sse_encode(self.description, serializer);
     }
 }
 

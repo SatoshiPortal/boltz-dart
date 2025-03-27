@@ -5,8 +5,8 @@ use std::{
 
 use boltz_client::{
     fees::Fee,
-    network::Chain as AllChains,
     network::BitcoinChain,
+    network::Chain as AllChains,
     network::LiquidChain,
     swaps::boltz::{
         BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
@@ -134,25 +134,37 @@ impl Into<AllChains> for Chain {
         }
     }
 }
+// implement from AllChains
+impl From<AllChains> for Chain {
+    fn from(chain: AllChains) -> Self {
+        match chain {
+            AllChains::Bitcoin(BitcoinChain::Bitcoin) => Chain::Bitcoin,
+            AllChains::Bitcoin(BitcoinChain::BitcoinTestnet) => Chain::BitcoinTestnet,
+            AllChains::Liquid(LiquidChain::Liquid) => Chain::Liquid,
+            AllChains::Liquid(LiquidChain::LiquidTestnet) => Chain::LiquidTestnet,
+            _ => panic!("Invalid chain"),
+        }
+    }
+}
 
-// impl Into<BitcoinChain> for Chain {
-//     fn into(self) -> BitcoinChain {
-//         match self {
-//             Chain::Bitcoin => BitcoinChain::Bitcoin,
-//             Chain::BitcoinTestnet => BitcoinChain::BitcoinTestnet,
-//             _=> panic!("Invalid chain"),
-//         }
-//     }
-// }
-// impl Into<LiquidChain> for Chain {
-//     fn into(self) -> LiquidChain {
-//         match self {
-//             Chain::Liquid => LiquidChain::Liquid,
-//             Chain::LiquidTestnet => LiquidChain::LiquidTestnet,
-//             _=> panic!("Invalid chain"),
-//         }
-//     }
-// }
+impl Into<BitcoinChain> for Chain {
+    fn into(self) -> BitcoinChain {
+        match self {
+            Chain::Bitcoin => BitcoinChain::Bitcoin,
+            Chain::BitcoinTestnet => BitcoinChain::BitcoinTestnet,
+            _ => panic!("Invalid chain"),
+        }
+    }
+}
+impl Into<LiquidChain> for Chain {
+    fn into(self) -> LiquidChain {
+        match self {
+            Chain::Liquid => LiquidChain::Liquid,
+            Chain::LiquidTestnet => LiquidChain::LiquidTestnet,
+            _ => panic!("Invalid chain"),
+        }
+    }
+}
 
 #[derive(Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[frb(dart_metadata=("freezed"))]
@@ -294,6 +306,7 @@ pub struct DecodedInvoice {
     // / (address, btc_amount)
     pub bip21: Option<String>,
     pub preimage_hash: String,
+    pub description: String,
 }
 impl DecodedInvoice {
     /// Add boltz_url & chain for route hint check
@@ -344,6 +357,7 @@ impl DecodedInvoice {
             network: invoice.network().to_string(),
             bip21: bip21,
             preimage_hash: invoice.payment_hash().to_string(),
+            description: invoice.description().to_string(),
         })
     }
 }
@@ -360,16 +374,18 @@ pub async fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, Bol
 
 /// LNURL helper to get an lnurl-w voucher amount
 pub async fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
-    let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl).await?.max_withdrawable;
+    let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl)
+        .await?
+        .max_withdrawable;
     Ok(max_withdrawable_msat / 1000)
 }
 
 /// LNURL helper to claim an lnurl-w
 pub async fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
-    Ok(lnurl::process_withdrawal(
-        &lnurl::create_withdraw_response(&lnurl).await?,
-        &invoice,
-    ).await?)
+    Ok(
+        lnurl::process_withdrawal(&lnurl::create_withdraw_response(&lnurl).await?, &invoice)
+            .await?,
+    )
 }
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript

@@ -5,11 +5,10 @@ use super::{
     types::{Chain, KeyPair, LBtcSwapScriptStr, PreImage, SwapType, TxFee},
 };
 use boltz_client::{
-    bitcoin::Txid,
     boltz::Cooperative,
     elements::{encode::Decodable, hashes::hex::DisplayHex, Transaction},
-    network::{electrum::ElectrumLiquidClient, Chain as AllChains, LiquidChain, LiquidClient},
-    swaps::{boltz::BoltzApiClientV2, liquid, magic_routing},
+    network::{electrum::ElectrumLiquidClient, Chain as AllChains, LiquidClient},
+    swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
     Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };

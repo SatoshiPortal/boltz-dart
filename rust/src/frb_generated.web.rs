@@ -187,8 +187,8 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             .unwrap();
         assert_eq!(
             self_.length(),
-            9,
-            "Expected 9 elements, got {}",
+            10,
+            "Expected 10 elements, got {}",
             self_.length()
         );
         crate::api::types::DecodedInvoice {
@@ -201,6 +201,7 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             cltv_exp_delta: self_.get(6).cst_decode(),
             bip21: self_.get(7).cst_decode(),
             preimage_hash: self_.get(8).cst_decode(),
+            description: self_.get(9).cst_decode(),
         }
     }
 }

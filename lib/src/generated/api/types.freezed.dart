@@ -287,6 +287,7 @@ mixin _$DecodedInvoice {
   BigInt get cltvExpDelta => throw _privateConstructorUsedError;
   String? get bip21 => throw _privateConstructorUsedError;
   String get preimageHash => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
 
   /// Create a copy of DecodedInvoice
   /// with the given fields replaced by the non-null parameter values.
@@ -310,7 +311,8 @@ abstract class $DecodedInvoiceCopyWith<$Res> {
       String network,
       BigInt cltvExpDelta,
       String? bip21,
-      String preimageHash});
+      String preimageHash,
+      String description});
 }
 
 /// @nodoc
@@ -337,6 +339,7 @@ class _$DecodedInvoiceCopyWithImpl<$Res, $Val extends DecodedInvoice>
     Object? cltvExpDelta = null,
     Object? bip21 = freezed,
     Object? preimageHash = null,
+    Object? description = null,
   }) {
     return _then(_value.copyWith(
       msats: null == msats
@@ -375,6 +378,10 @@ class _$DecodedInvoiceCopyWithImpl<$Res, $Val extends DecodedInvoice>
           ? _value.preimageHash
           : preimageHash // ignore: cast_nullable_to_non_nullable
               as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -396,7 +403,8 @@ abstract class _$$DecodedInvoiceImplCopyWith<$Res>
       String network,
       BigInt cltvExpDelta,
       String? bip21,
-      String preimageHash});
+      String preimageHash,
+      String description});
 }
 
 /// @nodoc
@@ -421,6 +429,7 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
     Object? cltvExpDelta = null,
     Object? bip21 = freezed,
     Object? preimageHash = null,
+    Object? description = null,
   }) {
     return _then(_$DecodedInvoiceImpl(
       msats: null == msats
@@ -459,6 +468,10 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
           ? _value.preimageHash
           : preimageHash // ignore: cast_nullable_to_non_nullable
               as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -475,7 +488,8 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
       required this.network,
       required this.cltvExpDelta,
       this.bip21,
-      required this.preimageHash})
+      required this.preimageHash,
+      required this.description})
       : super._();
 
   @override
@@ -496,10 +510,12 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
   final String? bip21;
   @override
   final String preimageHash;
+  @override
+  final String description;
 
   @override
   String toString() {
-    return 'DecodedInvoice(msats: $msats, expiry: $expiry, expiresIn: $expiresIn, expiresAt: $expiresAt, isExpired: $isExpired, network: $network, cltvExpDelta: $cltvExpDelta, bip21: $bip21, preimageHash: $preimageHash)';
+    return 'DecodedInvoice(msats: $msats, expiry: $expiry, expiresIn: $expiresIn, expiresAt: $expiresAt, isExpired: $isExpired, network: $network, cltvExpDelta: $cltvExpDelta, bip21: $bip21, preimageHash: $preimageHash, description: $description)';
   }
 
   @override
@@ -520,12 +536,24 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
                 other.cltvExpDelta == cltvExpDelta) &&
             (identical(other.bip21, bip21) || other.bip21 == bip21) &&
             (identical(other.preimageHash, preimageHash) ||
-                other.preimageHash == preimageHash));
+                other.preimageHash == preimageHash) &&
+            (identical(other.description, description) ||
+                other.description == description));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, msats, expiry, expiresIn,
-      expiresAt, isExpired, network, cltvExpDelta, bip21, preimageHash);
+  int get hashCode => Object.hash(
+      runtimeType,
+      msats,
+      expiry,
+      expiresIn,
+      expiresAt,
+      isExpired,
+      network,
+      cltvExpDelta,
+      bip21,
+      preimageHash,
+      description);
 
   /// Create a copy of DecodedInvoice
   /// with the given fields replaced by the non-null parameter values.
@@ -547,7 +575,8 @@ abstract class _DecodedInvoice extends DecodedInvoice {
       required final String network,
       required final BigInt cltvExpDelta,
       final String? bip21,
-      required final String preimageHash}) = _$DecodedInvoiceImpl;
+      required final String preimageHash,
+      required final String description}) = _$DecodedInvoiceImpl;
   const _DecodedInvoice._() : super._();
 
   @override
@@ -568,6 +597,8 @@ abstract class _DecodedInvoice extends DecodedInvoice {
   String? get bip21;
   @override
   String get preimageHash;
+  @override
+  String get description;
 
   /// Create a copy of DecodedInvoice
   /// with the given fields replaced by the non-null parameter values.
