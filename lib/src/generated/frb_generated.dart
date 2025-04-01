@@ -110,7 +110,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -122,7 +122,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -189,7 +189,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<ChainSwap> crateApiChainSwapChainSwapNewSwap(
       {required ChainSwapDirection direction,
       required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt amount,
       required bool isTestnet,
@@ -259,7 +259,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -271,7 +271,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -309,7 +309,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required Chain network,
       required BigInt index,
       required SwapType swapType});
@@ -598,7 +598,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -610,7 +610,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_u_64(outAmount);
         var arg4 = cst_encode_opt_String(outAddress);
@@ -663,7 +663,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -673,7 +673,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_String(invoice);
         var arg4 = cst_encode_chain(network);
@@ -1083,7 +1083,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<ChainSwap> crateApiChainSwapChainSwapNewSwap(
       {required ChainSwapDirection direction,
       required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt amount,
       required bool isTestnet,
@@ -1095,7 +1095,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       callFfi: (port_) {
         var arg0 = cst_encode_chain_swap_direction(direction);
         var arg1 = cst_encode_String(mnemonic);
-        var arg2 = cst_encode_String(passphrase);
+        var arg2 = cst_encode_opt_String(passphrase);
         var arg3 = cst_encode_u_64(index);
         var arg4 = cst_encode_u_64(amount);
         var arg5 = cst_encode_bool(isTestnet);
@@ -1595,7 +1595,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewReverse(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -1607,7 +1607,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_u_64(outAmount);
         var arg4 = cst_encode_opt_String(outAddress);
@@ -1660,7 +1660,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -1670,7 +1670,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_String(invoice);
         var arg4 = cst_encode_chain(network);
@@ -1927,14 +1927,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
-      required String passphrase,
+      String? passphrase,
       required Chain network,
       required BigInt index,
       required SwapType swapType}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_String(mnemonic);
-        var arg1 = cst_encode_String(passphrase);
+        var arg1 = cst_encode_opt_String(passphrase);
         var arg2 = cst_encode_chain(network);
         var arg3 = cst_encode_u_64(index);
         var arg4 = cst_encode_swap_type(swapType);
@@ -2335,8 +2335,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   DecodedInvoice dco_decode_decoded_invoice(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 9)
-      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
+    if (arr.length != 10)
+      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
     return DecodedInvoice(
       msats: dco_decode_u_64(arr[0]),
       expiry: dco_decode_u_64(arr[1]),
@@ -2347,6 +2347,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       cltvExpDelta: dco_decode_u_64(arr[6]),
       bip21: dco_decode_opt_String(arr[7]),
       preimageHash: dco_decode_String(arr[8]),
+      description: dco_decode_String(arr[9]),
     );
   }
 
@@ -2837,6 +2838,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_cltvExpDelta = sse_decode_u_64(deserializer);
     var var_bip21 = sse_decode_opt_String(deserializer);
     var var_preimageHash = sse_decode_String(deserializer);
+    var var_description = sse_decode_String(deserializer);
     return DecodedInvoice(
         msats: var_msats,
         expiry: var_expiry,
@@ -2846,7 +2848,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         network: var_network,
         cltvExpDelta: var_cltvExpDelta,
         bip21: var_bip21,
-        preimageHash: var_preimageHash);
+        preimageHash: var_preimageHash,
+        description: var_description);
   }
 
   @protected
@@ -3357,6 +3360,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_u_64(self.cltvExpDelta, serializer);
     sse_encode_opt_String(self.bip21, serializer);
     sse_encode_String(self.preimageHash, serializer);
+    sse_encode_String(self.description, serializer);
   }
 
   @protected

@@ -5,7 +5,9 @@ use std::{
 
 use boltz_client::{
     fees::Fee,
-    network::Chain as BChain,
+    network::BitcoinChain,
+    network::Chain as AllChains,
+    network::LiquidChain,
     swaps::boltz::{
         BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
         SwapType as BoltzSwapType,
@@ -122,13 +124,44 @@ pub enum Chain {
     LiquidTestnet,
 }
 
-impl Into<BChain> for Chain {
-    fn into(self) -> BChain {
+impl Into<AllChains> for Chain {
+    fn into(self) -> AllChains {
         match self {
-            Chain::Bitcoin => BChain::Bitcoin,
-            Chain::BitcoinTestnet => BChain::BitcoinTestnet,
-            Chain::Liquid => BChain::Liquid,
-            Chain::LiquidTestnet => BChain::LiquidTestnet,
+            Chain::Bitcoin => AllChains::Bitcoin(BitcoinChain::Bitcoin),
+            Chain::BitcoinTestnet => AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
+            Chain::Liquid => AllChains::Liquid(LiquidChain::Liquid),
+            Chain::LiquidTestnet => AllChains::Liquid(LiquidChain::LiquidTestnet),
+        }
+    }
+}
+// implement from AllChains
+impl From<AllChains> for Chain {
+    fn from(chain: AllChains) -> Self {
+        match chain {
+            AllChains::Bitcoin(BitcoinChain::Bitcoin) => Chain::Bitcoin,
+            AllChains::Bitcoin(BitcoinChain::BitcoinTestnet) => Chain::BitcoinTestnet,
+            AllChains::Liquid(LiquidChain::Liquid) => Chain::Liquid,
+            AllChains::Liquid(LiquidChain::LiquidTestnet) => Chain::LiquidTestnet,
+            _ => panic!("Invalid chain"),
+        }
+    }
+}
+
+impl Into<BitcoinChain> for Chain {
+    fn into(self) -> BitcoinChain {
+        match self {
+            Chain::Bitcoin => BitcoinChain::Bitcoin,
+            Chain::BitcoinTestnet => BitcoinChain::BitcoinTestnet,
+            _ => panic!("Invalid chain"),
+        }
+    }
+}
+impl Into<LiquidChain> for Chain {
+    fn into(self) -> LiquidChain {
+        match self {
+            Chain::Liquid => LiquidChain::Liquid,
+            Chain::LiquidTestnet => LiquidChain::LiquidTestnet,
+            _ => panic!("Invalid chain"),
         }
     }
 }
@@ -169,11 +202,16 @@ impl KeyPair {
 
     pub fn generate(
         mnemonic: String,
-        passphrase: String,
+        passphrase: Option<String>,
         network: Chain,
         index: u64,
         swap_type: SwapType,
     ) -> Result<Self, BoltzError> {
+        let passphrase = if passphrase.is_some() {
+            passphrase.unwrap()
+        } else {
+            "".to_string()
+        };
         match swap_type {
             SwapType::Submarine => {
                 let child_keys =
@@ -192,7 +230,8 @@ impl KeyPair {
                 })
             }
             SwapType::Chain => {
-                let child_keys = SwapKey::from_chain_account(&mnemonic, &passphrase, network.into(), index)?;
+                let child_keys =
+                    SwapKey::from_chain_account(&mnemonic, &passphrase, network.into(), index)?;
                 Ok(KeyPair {
                     secret_key: child_keys.keypair.display_secret().to_string(),
                     public_key: child_keys.keypair.public_key().to_string(),
@@ -267,10 +306,11 @@ pub struct DecodedInvoice {
     // / (address, btc_amount)
     pub bip21: Option<String>,
     pub preimage_hash: String,
+    pub description: String,
 }
 impl DecodedInvoice {
     /// Add boltz_url & chain for route hint check
-    pub fn from_string(s: String, boltz_url: Option<String>) -> Result<Self, BoltzError> {
+    pub async fn from_string(s: String, boltz_url: Option<String>) -> Result<Self, BoltzError> {
         // Attempt to parse the string to a Bolt11Invoice
         let invoice = match Bolt11Invoice::from_str(&s) {
             Ok(result) => result,
@@ -285,7 +325,7 @@ impl DecodedInvoice {
                 None
             } else {
                 let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url.unwrap()));
-                match boltz_client.get_mrh_bip21(&s) {
+                match boltz_client.get_mrh_bip21(&s).await {
                     Ok(r) => Some(r.bip21),
                     Err(_) => None,
                 }
@@ -317,6 +357,7 @@ impl DecodedInvoice {
             network: invoice.network().to_string(),
             bip21: bip21,
             preimage_hash: invoice.payment_hash().to_string(),
+            description: invoice.description().to_string(),
         })
     }
 }
@@ -327,22 +368,24 @@ pub fn validate_lnurl(lnurl: String) -> bool {
 }
 
 /// LNURL helper to get an invoice from an lnurl string
-pub fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
-    Ok(lnurl::fetch_invoice(&lnurl, msats)?)
+pub async fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
+    Ok(lnurl::fetch_invoice(&lnurl, msats).await?)
 }
 
 /// LNURL helper to get an lnurl-w voucher amount
-pub fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
-    let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl)?.max_withdrawable;
+pub async fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
+    let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl)
+        .await?
+        .max_withdrawable;
     Ok(max_withdrawable_msat / 1000)
 }
 
 /// LNURL helper to claim an lnurl-w
-pub fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
-    Ok(lnurl::process_withdrawal(
-        &lnurl::create_withdraw_response(&lnurl)?,
-        &invoice,
-    )?)
+pub async fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
+    Ok(
+        lnurl::process_withdrawal(&lnurl::create_withdraw_response(&lnurl).await?, &invoice)
+            .await?,
+    )
 }
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript

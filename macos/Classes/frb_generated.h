@@ -160,6 +160,7 @@ typedef struct wire_cst_decoded_invoice {
   uint64_t cltv_exp_delta;
   struct wire_cst_list_prim_u_8_strict *bip21;
   struct wire_cst_list_prim_u_8_strict *preimage_hash;
+  struct wire_cst_list_prim_u_8_strict *description;
 } wire_cst_decoded_invoice;
 
 typedef struct wire_cst_miner_fees {

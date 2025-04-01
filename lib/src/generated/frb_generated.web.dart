@@ -485,7 +485,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       cst_encode_String(raw.network),
       cst_encode_u_64(raw.cltvExpDelta),
       cst_encode_opt_String(raw.bip21),
-      cst_encode_String(raw.preimageHash)
+      cst_encode_String(raw.preimageHash),
+      cst_encode_String(raw.description)
     ].jsify()!;
   }
 
@@ -906,7 +907,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
           NativePortType port_,
           String mnemonic,
-          String passphrase,
+          String? passphrase,
           JSAny index,
           JSAny out_amount,
           String? out_address,
@@ -931,7 +932,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
           NativePortType port_,
           String mnemonic,
-          String passphrase,
+          String? passphrase,
           JSAny index,
           String invoice,
           int network,
@@ -1045,7 +1046,7 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_,
           int direction,
           String mnemonic,
-          String passphrase,
+          String? passphrase,
           JSAny index,
           JSAny amount,
           bool is_testnet,
@@ -1172,7 +1173,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
           NativePortType port_,
           String mnemonic,
-          String passphrase,
+          String? passphrase,
           JSAny index,
           JSAny out_amount,
           String? out_address,
@@ -1197,7 +1198,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
           NativePortType port_,
           String mnemonic,
-          String passphrase,
+          String? passphrase,
           JSAny index,
           String invoice,
           int network,
@@ -1269,7 +1270,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__types__key_pair_generate(
           NativePortType port_,
           String mnemonic,
-          String passphrase,
+          String? passphrase,
           int network,
           JSAny index,
           int swap_type) =>
@@ -1367,7 +1368,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
       NativePortType port_,
       String mnemonic,
-      String passphrase,
+      String? passphrase,
       JSAny index,
       JSAny out_amount,
       String? out_address,
@@ -1380,7 +1381,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
       NativePortType port_,
       String mnemonic,
-      String passphrase,
+      String? passphrase,
       JSAny index,
       String invoice,
       int network,
@@ -1448,7 +1449,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
       NativePortType port_,
       int direction,
       String mnemonic,
-      String passphrase,
+      String? passphrase,
       JSAny index,
       JSAny amount,
       bool is_testnet,
@@ -1528,7 +1529,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
       NativePortType port_,
       String mnemonic,
-      String passphrase,
+      String? passphrase,
       JSAny index,
       JSAny out_amount,
       String? out_address,
@@ -1541,7 +1542,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
       NativePortType port_,
       String mnemonic,
-      String passphrase,
+      String? passphrase,
       JSAny index,
       String invoice,
       int network,
@@ -1584,7 +1585,7 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__types__key_pair_generate(
       NativePortType port_,
       String mnemonic,
-      String passphrase,
+      String? passphrase,
       int network,
       JSAny index,
       int swap_type);

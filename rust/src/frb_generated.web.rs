@@ -187,8 +187,8 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             .unwrap();
         assert_eq!(
             self_.length(),
-            9,
-            "Expected 9 elements, got {}",
+            10,
+            "Expected 10 elements, got {}",
             self_.length()
         );
         crate::api::types::DecodedInvoice {
@@ -201,6 +201,7 @@ impl CstDecode<crate::api::types::DecodedInvoice>
             cltv_exp_delta: self_.get(6).cst_decode(),
             bip21: self_.get(7).cst_decode(),
             preimage_hash: self_.get(8).cst_decode(),
+            description: self_.get(9).cst_decode(),
         }
     }
 }
@@ -666,7 +667,7 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_new(
 pub fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
-    passphrase: String,
+    passphrase: Option<String>,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_amount: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: Option<String>,
@@ -695,7 +696,7 @@ pub fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
 pub fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
-    passphrase: String,
+    passphrase: Option<String>,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     invoice: String,
     network: i32,
@@ -861,7 +862,7 @@ pub fn wire__crate__api__chain_swap__chain_swap_new_swap(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     direction: i32,
     mnemonic: String,
-    passphrase: String,
+    passphrase: Option<String>,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     amount: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     is_testnet: bool,
@@ -1059,7 +1060,7 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
 pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
-    passphrase: String,
+    passphrase: Option<String>,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_amount: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     out_address: Option<String>,
@@ -1088,7 +1089,7 @@ pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
 pub fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
-    passphrase: String,
+    passphrase: Option<String>,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     invoice: String,
     network: i32,
@@ -1196,7 +1197,7 @@ pub fn wire__crate__api__types__invoice_from_lnurl(
 pub fn wire__crate__api__types__key_pair_generate(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: String,
-    passphrase: String,
+    passphrase: Option<String>,
     network: i32,
     index: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     swap_type: i32,
