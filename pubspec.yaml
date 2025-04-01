@@ -18,7 +18,7 @@ dependencies:
   dio: ^5.4.0
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
-  archive: ^4.0.2
+  archive: ^4.0.5
   http: ^1.2.0
   web_socket_channel: ^3.0.1
 
