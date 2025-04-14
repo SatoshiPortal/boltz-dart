@@ -52,19 +52,27 @@ pub struct SwapLimits {
     pub maximal: u64,
 }
 
-impl Into<SwapLimits> for boltz_client::swaps::boltz::PairLimits {
-    fn into(self) -> SwapLimits {
+impl From<boltz_client::swaps::boltz::PairLimits> for SwapLimits {
+    fn from(limits: boltz_client::swaps::boltz::PairLimits) -> Self {
         SwapLimits {
-            minimal: self.minimal as u64,
-            maximal: self.maximal as u64,
+            minimal: limits.minimal as u64,
+            maximal: limits.maximal as u64,
         }
     }
 }
-impl Into<SwapLimits> for boltz_client::swaps::boltz::ReverseLimits {
-    fn into(self) -> SwapLimits {
+impl From<boltz_client::swaps::boltz::ReverseLimits> for SwapLimits {
+    fn from(limits: boltz_client::swaps::boltz::ReverseLimits) -> Self {
         SwapLimits {
-            minimal: self.minimal as u64,
-            maximal: self.maximal as u64,
+            minimal: limits.minimal as u64,
+            maximal: limits.maximal as u64,
+        }
+    }
+}
+impl From<boltz_client::swaps::boltz::SubmarinePairLimits> for SwapLimits {
+    fn from(limits: boltz_client::swaps::boltz::SubmarinePairLimits) -> Self {
+        SwapLimits {
+            minimal: limits.minimal as u64,
+            maximal: limits.maximal as u64,
         }
     }
 }
