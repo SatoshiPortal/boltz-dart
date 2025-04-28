@@ -533,3 +533,20 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
         )),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_v2_reverse() {
+        // ...existing code...
+    }
+
+    #[test]
+    fn test_lbtc_ln_swap_from_json() {
+        let json_str: &str = r#"{"id":"U36attpPqMUo","kind":"Submarine","network":"Liquid","keys":{"secret_key":"5207026dc10ed9e698a210fa33eda0593cc33e02ef9179627c87717b11db70ed","public_key":"037f4e416e89dbe06dbdd73e9e7046f38c5ed807e5dc6d6659fa97bc42bca0d542"},"key_index":12,"preimage":{"value":"","sha256":"b2e3a7b04d8da12d66d7675e8b49cd9eb0aacb678906ae6041c841afdad18afa","hash160":"afb3f5c2b0a81fa6b5fddaa59f860aee631673f9"},"swap_script":{"swap_type":"Submarine","funding_addrs":"lq1pqv6t4czgftrm2tf8u5z977ysdxjucpepfjhfkj0gr74cex03fn6umma9lf64zdk6vv2jnznjztq68uf48wv3fmuheee665j3a3t5f0d75mfvuuypmtjy","hashlock":"afb3f5c2b0a81fa6b5fddaa59f860aee631673f9","receiver_pubkey":"02b4a11c513f485248cd0f631c582a17cc368b971d6fffa697702b8142a5b7975b","locktime":3343910,"sender_pubkey":"037f4e416e89dbe06dbdd73e9e7046f38c5ed807e5dc6d6659fa97bc42bca0d542","blinding_key":"091ed0fb1420d4e92535b3e627fae4ed14ce164ccab0efe17a5938a816dcb58c","side":null},"invoice":"lnbc10u1pnle5gcpp5kt360vzd3ksj6ekhva0gkjwdn6c24jm83yr2uczpepq6lkk33taqhp5pk24lyjep93uz92uxpc7c3d8s58q5g0xr66fpja5xg7zrq47sf2qcqzzsxqyz5vqsp5wc4yxlh83cnm0zc4w64lren8hmn59jq7jmc9m2m6wcsveumpxvvq9qxpqysgqw58qkad47xdmnca3c4elk9eex9smhk36x768u7zrld5kmwzmaf29ad45503fhkdacc8dnnf00ph6qzwuprwsf7uud83safs5adux8scpv9kkjf","out_amount":1020,"script_address":"lq1pqv6t4czgftrm2tf8u5z977ysdxjucpepfjhfkj0gr74cex03fn6umma9lf64zdk6vv2jnznjztq68uf48wv3fmuheee665j3a3t5f0d75mfvuuypmtjy","blinding_key":"091ed0fb1420d4e92535b3e627fae4ed14ce164ccab0efe17a5938a816dcb58c","electrum_url":"les.bullbitcoin.com:995","boltz_url":"https://api.boltz.exchange/v2","referral_id":""}"#;
+        let swap = LbtcLnSwap::from_json(json_str).unwrap();
+        assert_eq!(swap.id, "U36attpPqMUo");
+    }
+}

@@ -19,6 +19,11 @@ typedef struct wire_cst_list_prim_u_8_strict {
   int32_t len;
 } wire_cst_list_prim_u_8_strict;
 
+typedef struct wire_cst_boltz_error {
+  struct wire_cst_list_prim_u_8_strict *kind;
+  struct wire_cst_list_prim_u_8_strict *message;
+} wire_cst_boltz_error;
+
 typedef struct wire_cst_key_pair {
   struct wire_cst_list_prim_u_8_strict *secret_key;
   struct wire_cst_list_prim_u_8_strict *public_key;
@@ -105,11 +110,6 @@ typedef struct wire_cst_chain_swap {
   struct wire_cst_list_prim_u_8_strict *blinding_key;
 } wire_cst_chain_swap;
 
-typedef struct wire_cst_boltz_error {
-  struct wire_cst_list_prim_u_8_strict *kind;
-  struct wire_cst_list_prim_u_8_strict *message;
-} wire_cst_boltz_error;
-
 typedef struct wire_cst_fees {
   struct wire_cst_list_prim_u_8_strict *boltz_url;
 } wire_cst_fees;
@@ -192,6 +192,13 @@ typedef struct wire_cst_submarine_fees_and_limits {
   struct wire_cst_sub_swap_fees lbtc_fees;
 } wire_cst_submarine_fees_and_limits;
 
+void frbgen_boltz_wire__crate__api__error__boltz_error_detail(int64_t port_,
+                                                              struct wire_cst_boltz_error *that);
+
+void frbgen_boltz_wire__crate__api__error__boltz_error_new(int64_t port_,
+                                                           struct wire_cst_list_prim_u_8_strict *kind,
+                                                           struct wire_cst_list_prim_u_8_strict *message);
+
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz(int64_t port_,
                                                                         struct wire_cst_btc_ln_swap *that,
                                                                         struct wire_cst_list_prim_u_8_strict *signed_hex);
@@ -265,6 +272,15 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_tx_size(int64_t port_,
                                                                 struct wire_cst_btc_ln_swap *that,
                                                                 bool is_cooperative);
 
+void frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new(int64_t port_,
+                                                                   int32_t swap_type,
+                                                                   struct wire_cst_list_prim_u_8_strict *funding_addrs,
+                                                                   struct wire_cst_list_prim_u_8_strict *hashlock,
+                                                                   struct wire_cst_list_prim_u_8_strict *receiver_pubkey,
+                                                                   uint32_t locktime,
+                                                                   struct wire_cst_list_prim_u_8_strict *sender_pubkey,
+                                                                   int32_t *side);
+
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_boltz(int64_t port_,
                                                                            struct wire_cst_chain_swap *that,
                                                                            struct wire_cst_list_prim_u_8_strict *signed_hex,
@@ -331,12 +347,9 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(int64_t port_,
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json(int64_t port_,
                                                                    struct wire_cst_chain_swap *that);
 
-void frbgen_boltz_wire__crate__api__error__boltz_error_detail(int64_t port_,
-                                                              struct wire_cst_boltz_error *that);
-
-void frbgen_boltz_wire__crate__api__error__boltz_error_new(int64_t port_,
-                                                           struct wire_cst_list_prim_u_8_strict *kind,
-                                                           struct wire_cst_list_prim_u_8_strict *message);
+void frbgen_boltz_wire__crate__api__types__decoded_invoice_from_string(int64_t port_,
+                                                                       struct wire_cst_list_prim_u_8_strict *s,
+                                                                       struct wire_cst_list_prim_u_8_strict *boltz_url);
 
 void frbgen_boltz_wire__crate__api__fees__fees_chain(int64_t port_, struct wire_cst_fees *that);
 
@@ -346,6 +359,34 @@ void frbgen_boltz_wire__crate__api__fees__fees_new(int64_t port_,
 void frbgen_boltz_wire__crate__api__fees__fees_reverse(int64_t port_, struct wire_cst_fees *that);
 
 void frbgen_boltz_wire__crate__api__fees__fees_submarine(int64_t port_, struct wire_cst_fees *that);
+
+void frbgen_boltz_wire__crate__api__types__get_voucher_max_amount(int64_t port_,
+                                                                  struct wire_cst_list_prim_u_8_strict *lnurl);
+
+void frbgen_boltz_wire__crate__api__types__invoice_from_lnurl(int64_t port_,
+                                                              struct wire_cst_list_prim_u_8_strict *lnurl,
+                                                              uint64_t msats);
+
+void frbgen_boltz_wire__crate__api__types__key_pair_generate(int64_t port_,
+                                                             struct wire_cst_list_prim_u_8_strict *mnemonic,
+                                                             struct wire_cst_list_prim_u_8_strict *passphrase,
+                                                             int32_t network,
+                                                             uint64_t index,
+                                                             int32_t swap_type);
+
+void frbgen_boltz_wire__crate__api__types__key_pair_new(int64_t port_,
+                                                        struct wire_cst_list_prim_u_8_strict *secret_key,
+                                                        struct wire_cst_list_prim_u_8_strict *public_key);
+
+void frbgen_boltz_wire__crate__api__types__l_btc_swap_script_str_new(int64_t port_,
+                                                                     int32_t swap_type,
+                                                                     struct wire_cst_list_prim_u_8_strict *funding_addrs,
+                                                                     struct wire_cst_list_prim_u_8_strict *hashlock,
+                                                                     struct wire_cst_list_prim_u_8_strict *receiver_pubkey,
+                                                                     uint32_t locktime,
+                                                                     struct wire_cst_list_prim_u_8_strict *sender_pubkey,
+                                                                     struct wire_cst_list_prim_u_8_strict *blinding_key,
+                                                                     int32_t *side);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_boltz(int64_t port_,
                                                                           struct wire_cst_lbtc_ln_swap *that,
@@ -420,47 +461,6 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json(int64_t port_,
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(int64_t port_,
                                                                   struct wire_cst_lbtc_ln_swap *that,
                                                                   bool is_cooperative);
-
-void frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new(int64_t port_,
-                                                                   int32_t swap_type,
-                                                                   struct wire_cst_list_prim_u_8_strict *funding_addrs,
-                                                                   struct wire_cst_list_prim_u_8_strict *hashlock,
-                                                                   struct wire_cst_list_prim_u_8_strict *receiver_pubkey,
-                                                                   uint32_t locktime,
-                                                                   struct wire_cst_list_prim_u_8_strict *sender_pubkey,
-                                                                   int32_t *side);
-
-void frbgen_boltz_wire__crate__api__types__decoded_invoice_from_string(int64_t port_,
-                                                                       struct wire_cst_list_prim_u_8_strict *s,
-                                                                       struct wire_cst_list_prim_u_8_strict *boltz_url);
-
-void frbgen_boltz_wire__crate__api__types__get_voucher_max_amount(int64_t port_,
-                                                                  struct wire_cst_list_prim_u_8_strict *lnurl);
-
-void frbgen_boltz_wire__crate__api__types__invoice_from_lnurl(int64_t port_,
-                                                              struct wire_cst_list_prim_u_8_strict *lnurl,
-                                                              uint64_t msats);
-
-void frbgen_boltz_wire__crate__api__types__key_pair_generate(int64_t port_,
-                                                             struct wire_cst_list_prim_u_8_strict *mnemonic,
-                                                             struct wire_cst_list_prim_u_8_strict *passphrase,
-                                                             int32_t network,
-                                                             uint64_t index,
-                                                             int32_t swap_type);
-
-void frbgen_boltz_wire__crate__api__types__key_pair_new(int64_t port_,
-                                                        struct wire_cst_list_prim_u_8_strict *secret_key,
-                                                        struct wire_cst_list_prim_u_8_strict *public_key);
-
-void frbgen_boltz_wire__crate__api__types__l_btc_swap_script_str_new(int64_t port_,
-                                                                     int32_t swap_type,
-                                                                     struct wire_cst_list_prim_u_8_strict *funding_addrs,
-                                                                     struct wire_cst_list_prim_u_8_strict *hashlock,
-                                                                     struct wire_cst_list_prim_u_8_strict *receiver_pubkey,
-                                                                     uint32_t locktime,
-                                                                     struct wire_cst_list_prim_u_8_strict *sender_pubkey,
-                                                                     struct wire_cst_list_prim_u_8_strict *blinding_key,
-                                                                     int32_t *side);
 
 void frbgen_boltz_wire__crate__api__types__pre_image_generate(int64_t port_);
 
