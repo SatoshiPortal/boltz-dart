@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'swap_status.freezed.dart';
 part 'swap_status.g.dart';
