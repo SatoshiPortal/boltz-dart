@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,107 +10,62 @@ part of 'types.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$BtcSwapScriptStr {
-  SwapType get swapType => throw _privateConstructorUsedError;
-  String? get fundingAddrs => throw _privateConstructorUsedError;
-  String get hashlock => throw _privateConstructorUsedError;
-  String get receiverPubkey => throw _privateConstructorUsedError;
-  int get locktime => throw _privateConstructorUsedError;
-  String get senderPubkey => throw _privateConstructorUsedError;
-  Side? get side => throw _privateConstructorUsedError;
+  SwapType get swapType;
+  String? get fundingAddrs;
+  String get hashlock;
+  String get receiverPubkey;
+  int get locktime;
+  String get senderPubkey;
+  Side? get side;
 
   /// Create a copy of BtcSwapScriptStr
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $BtcSwapScriptStrCopyWith<BtcSwapScriptStr> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BtcSwapScriptStrCopyWith<$Res> {
-  factory $BtcSwapScriptStrCopyWith(
-          BtcSwapScriptStr value, $Res Function(BtcSwapScriptStr) then) =
-      _$BtcSwapScriptStrCopyWithImpl<$Res, BtcSwapScriptStr>;
-  @useResult
-  $Res call(
-      {SwapType swapType,
-      String? fundingAddrs,
-      String hashlock,
-      String receiverPubkey,
-      int locktime,
-      String senderPubkey,
-      Side? side});
-}
-
-/// @nodoc
-class _$BtcSwapScriptStrCopyWithImpl<$Res, $Val extends BtcSwapScriptStr>
-    implements $BtcSwapScriptStrCopyWith<$Res> {
-  _$BtcSwapScriptStrCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of BtcSwapScriptStr
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $BtcSwapScriptStrCopyWith<BtcSwapScriptStr> get copyWith =>
+      _$BtcSwapScriptStrCopyWithImpl<BtcSwapScriptStr>(
+          this as BtcSwapScriptStr, _$identity);
+
   @override
-  $Res call({
-    Object? swapType = null,
-    Object? fundingAddrs = freezed,
-    Object? hashlock = null,
-    Object? receiverPubkey = null,
-    Object? locktime = null,
-    Object? senderPubkey = null,
-    Object? side = freezed,
-  }) {
-    return _then(_value.copyWith(
-      swapType: null == swapType
-          ? _value.swapType
-          : swapType // ignore: cast_nullable_to_non_nullable
-              as SwapType,
-      fundingAddrs: freezed == fundingAddrs
-          ? _value.fundingAddrs
-          : fundingAddrs // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hashlock: null == hashlock
-          ? _value.hashlock
-          : hashlock // ignore: cast_nullable_to_non_nullable
-              as String,
-      receiverPubkey: null == receiverPubkey
-          ? _value.receiverPubkey
-          : receiverPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      locktime: null == locktime
-          ? _value.locktime
-          : locktime // ignore: cast_nullable_to_non_nullable
-              as int,
-      senderPubkey: null == senderPubkey
-          ? _value.senderPubkey
-          : senderPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      side: freezed == side
-          ? _value.side
-          : side // ignore: cast_nullable_to_non_nullable
-              as Side?,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is BtcSwapScriptStr &&
+            (identical(other.swapType, swapType) ||
+                other.swapType == swapType) &&
+            (identical(other.fundingAddrs, fundingAddrs) ||
+                other.fundingAddrs == fundingAddrs) &&
+            (identical(other.hashlock, hashlock) ||
+                other.hashlock == hashlock) &&
+            (identical(other.receiverPubkey, receiverPubkey) ||
+                other.receiverPubkey == receiverPubkey) &&
+            (identical(other.locktime, locktime) ||
+                other.locktime == locktime) &&
+            (identical(other.senderPubkey, senderPubkey) ||
+                other.senderPubkey == senderPubkey) &&
+            (identical(other.side, side) || other.side == side));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
+      receiverPubkey, locktime, senderPubkey, side);
+
+  @override
+  String toString() {
+    return 'BtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, side: $side)';
   }
 }
 
 /// @nodoc
-abstract class _$$BtcSwapScriptStrImplCopyWith<$Res>
-    implements $BtcSwapScriptStrCopyWith<$Res> {
-  factory _$$BtcSwapScriptStrImplCopyWith(_$BtcSwapScriptStrImpl value,
-          $Res Function(_$BtcSwapScriptStrImpl) then) =
-      __$$BtcSwapScriptStrImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $BtcSwapScriptStrCopyWith<$Res> {
+  factory $BtcSwapScriptStrCopyWith(
+          BtcSwapScriptStr value, $Res Function(BtcSwapScriptStr) _then) =
+      _$BtcSwapScriptStrCopyWithImpl;
   @useResult
   $Res call(
       {SwapType swapType,
@@ -122,12 +78,12 @@ abstract class _$$BtcSwapScriptStrImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$BtcSwapScriptStrImplCopyWithImpl<$Res>
-    extends _$BtcSwapScriptStrCopyWithImpl<$Res, _$BtcSwapScriptStrImpl>
-    implements _$$BtcSwapScriptStrImplCopyWith<$Res> {
-  __$$BtcSwapScriptStrImplCopyWithImpl(_$BtcSwapScriptStrImpl _value,
-      $Res Function(_$BtcSwapScriptStrImpl) _then)
-      : super(_value, _then);
+class _$BtcSwapScriptStrCopyWithImpl<$Res>
+    implements $BtcSwapScriptStrCopyWith<$Res> {
+  _$BtcSwapScriptStrCopyWithImpl(this._self, this._then);
+
+  final BtcSwapScriptStr _self;
+  final $Res Function(BtcSwapScriptStr) _then;
 
   /// Create a copy of BtcSwapScriptStr
   /// with the given fields replaced by the non-null parameter values.
@@ -142,33 +98,33 @@ class __$$BtcSwapScriptStrImplCopyWithImpl<$Res>
     Object? senderPubkey = null,
     Object? side = freezed,
   }) {
-    return _then(_$BtcSwapScriptStrImpl(
+    return _then(_self.copyWith(
       swapType: null == swapType
-          ? _value.swapType
+          ? _self.swapType
           : swapType // ignore: cast_nullable_to_non_nullable
               as SwapType,
       fundingAddrs: freezed == fundingAddrs
-          ? _value.fundingAddrs
+          ? _self.fundingAddrs
           : fundingAddrs // ignore: cast_nullable_to_non_nullable
               as String?,
       hashlock: null == hashlock
-          ? _value.hashlock
+          ? _self.hashlock
           : hashlock // ignore: cast_nullable_to_non_nullable
               as String,
       receiverPubkey: null == receiverPubkey
-          ? _value.receiverPubkey
+          ? _self.receiverPubkey
           : receiverPubkey // ignore: cast_nullable_to_non_nullable
               as String,
       locktime: null == locktime
-          ? _value.locktime
+          ? _self.locktime
           : locktime // ignore: cast_nullable_to_non_nullable
               as int,
       senderPubkey: null == senderPubkey
-          ? _value.senderPubkey
+          ? _self.senderPubkey
           : senderPubkey // ignore: cast_nullable_to_non_nullable
               as String,
       side: freezed == side
-          ? _value.side
+          ? _self.side
           : side // ignore: cast_nullable_to_non_nullable
               as Side?,
     ));
@@ -177,8 +133,8 @@ class __$$BtcSwapScriptStrImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
-  const _$BtcSwapScriptStrImpl(
+class _BtcSwapScriptStr extends BtcSwapScriptStr {
+  const _BtcSwapScriptStr(
       {required this.swapType,
       this.fundingAddrs,
       required this.hashlock,
@@ -203,16 +159,19 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
   @override
   final Side? side;
 
+  /// Create a copy of BtcSwapScriptStr
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'BtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, side: $side)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$BtcSwapScriptStrCopyWith<_BtcSwapScriptStr> get copyWith =>
+      __$BtcSwapScriptStrCopyWithImpl<_BtcSwapScriptStr>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BtcSwapScriptStrImpl &&
+            other is _BtcSwapScriptStr &&
             (identical(other.swapType, swapType) ||
                 other.swapType == swapType) &&
             (identical(other.fundingAddrs, fundingAddrs) ||
@@ -232,167 +191,153 @@ class _$BtcSwapScriptStrImpl extends _BtcSwapScriptStr {
   int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
       receiverPubkey, locktime, senderPubkey, side);
 
-  /// Create a copy of BtcSwapScriptStr
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$BtcSwapScriptStrImplCopyWith<_$BtcSwapScriptStrImpl> get copyWith =>
-      __$$BtcSwapScriptStrImplCopyWithImpl<_$BtcSwapScriptStrImpl>(
-          this, _$identity);
-}
-
-abstract class _BtcSwapScriptStr extends BtcSwapScriptStr {
-  const factory _BtcSwapScriptStr(
-      {required final SwapType swapType,
-      final String? fundingAddrs,
-      required final String hashlock,
-      required final String receiverPubkey,
-      required final int locktime,
-      required final String senderPubkey,
-      final Side? side}) = _$BtcSwapScriptStrImpl;
-  const _BtcSwapScriptStr._() : super._();
-
-  @override
-  SwapType get swapType;
-  @override
-  String? get fundingAddrs;
-  @override
-  String get hashlock;
-  @override
-  String get receiverPubkey;
-  @override
-  int get locktime;
-  @override
-  String get senderPubkey;
-  @override
-  Side? get side;
-
-  /// Create a copy of BtcSwapScriptStr
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BtcSwapScriptStrImplCopyWith<_$BtcSwapScriptStrImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-mixin _$DecodedInvoice {
-  BigInt get msats => throw _privateConstructorUsedError;
-  BigInt get expiry => throw _privateConstructorUsedError;
-  BigInt get expiresIn => throw _privateConstructorUsedError;
-  BigInt get expiresAt => throw _privateConstructorUsedError;
-  bool get isExpired => throw _privateConstructorUsedError;
-  String get network => throw _privateConstructorUsedError;
-  BigInt get cltvExpDelta => throw _privateConstructorUsedError;
-  String? get bip21 => throw _privateConstructorUsedError;
-  String get preimageHash => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
-
-  /// Create a copy of DecodedInvoice
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DecodedInvoiceCopyWith<DecodedInvoice> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $DecodedInvoiceCopyWith<$Res> {
-  factory $DecodedInvoiceCopyWith(
-          DecodedInvoice value, $Res Function(DecodedInvoice) then) =
-      _$DecodedInvoiceCopyWithImpl<$Res, DecodedInvoice>;
-  @useResult
-  $Res call(
-      {BigInt msats,
-      BigInt expiry,
-      BigInt expiresIn,
-      BigInt expiresAt,
-      bool isExpired,
-      String network,
-      BigInt cltvExpDelta,
-      String? bip21,
-      String preimageHash,
-      String description});
-}
-
-/// @nodoc
-class _$DecodedInvoiceCopyWithImpl<$Res, $Val extends DecodedInvoice>
-    implements $DecodedInvoiceCopyWith<$Res> {
-  _$DecodedInvoiceCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of DecodedInvoice
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? msats = null,
-    Object? expiry = null,
-    Object? expiresIn = null,
-    Object? expiresAt = null,
-    Object? isExpired = null,
-    Object? network = null,
-    Object? cltvExpDelta = null,
-    Object? bip21 = freezed,
-    Object? preimageHash = null,
-    Object? description = null,
-  }) {
-    return _then(_value.copyWith(
-      msats: null == msats
-          ? _value.msats
-          : msats // ignore: cast_nullable_to_non_nullable
-              as BigInt,
-      expiry: null == expiry
-          ? _value.expiry
-          : expiry // ignore: cast_nullable_to_non_nullable
-              as BigInt,
-      expiresIn: null == expiresIn
-          ? _value.expiresIn
-          : expiresIn // ignore: cast_nullable_to_non_nullable
-              as BigInt,
-      expiresAt: null == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as BigInt,
-      isExpired: null == isExpired
-          ? _value.isExpired
-          : isExpired // ignore: cast_nullable_to_non_nullable
-              as bool,
-      network: null == network
-          ? _value.network
-          : network // ignore: cast_nullable_to_non_nullable
-              as String,
-      cltvExpDelta: null == cltvExpDelta
-          ? _value.cltvExpDelta
-          : cltvExpDelta // ignore: cast_nullable_to_non_nullable
-              as BigInt,
-      bip21: freezed == bip21
-          ? _value.bip21
-          : bip21 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      preimageHash: null == preimageHash
-          ? _value.preimageHash
-          : preimageHash // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  String toString() {
+    return 'BtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, side: $side)';
   }
 }
 
 /// @nodoc
-abstract class _$$DecodedInvoiceImplCopyWith<$Res>
-    implements $DecodedInvoiceCopyWith<$Res> {
-  factory _$$DecodedInvoiceImplCopyWith(_$DecodedInvoiceImpl value,
-          $Res Function(_$DecodedInvoiceImpl) then) =
-      __$$DecodedInvoiceImplCopyWithImpl<$Res>;
+abstract mixin class _$BtcSwapScriptStrCopyWith<$Res>
+    implements $BtcSwapScriptStrCopyWith<$Res> {
+  factory _$BtcSwapScriptStrCopyWith(
+          _BtcSwapScriptStr value, $Res Function(_BtcSwapScriptStr) _then) =
+      __$BtcSwapScriptStrCopyWithImpl;
   @override
+  @useResult
+  $Res call(
+      {SwapType swapType,
+      String? fundingAddrs,
+      String hashlock,
+      String receiverPubkey,
+      int locktime,
+      String senderPubkey,
+      Side? side});
+}
+
+/// @nodoc
+class __$BtcSwapScriptStrCopyWithImpl<$Res>
+    implements _$BtcSwapScriptStrCopyWith<$Res> {
+  __$BtcSwapScriptStrCopyWithImpl(this._self, this._then);
+
+  final _BtcSwapScriptStr _self;
+  final $Res Function(_BtcSwapScriptStr) _then;
+
+  /// Create a copy of BtcSwapScriptStr
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? swapType = null,
+    Object? fundingAddrs = freezed,
+    Object? hashlock = null,
+    Object? receiverPubkey = null,
+    Object? locktime = null,
+    Object? senderPubkey = null,
+    Object? side = freezed,
+  }) {
+    return _then(_BtcSwapScriptStr(
+      swapType: null == swapType
+          ? _self.swapType
+          : swapType // ignore: cast_nullable_to_non_nullable
+              as SwapType,
+      fundingAddrs: freezed == fundingAddrs
+          ? _self.fundingAddrs
+          : fundingAddrs // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hashlock: null == hashlock
+          ? _self.hashlock
+          : hashlock // ignore: cast_nullable_to_non_nullable
+              as String,
+      receiverPubkey: null == receiverPubkey
+          ? _self.receiverPubkey
+          : receiverPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      locktime: null == locktime
+          ? _self.locktime
+          : locktime // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderPubkey: null == senderPubkey
+          ? _self.senderPubkey
+          : senderPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      side: freezed == side
+          ? _self.side
+          : side // ignore: cast_nullable_to_non_nullable
+              as Side?,
+    ));
+  }
+}
+
+/// @nodoc
+mixin _$DecodedInvoice {
+  BigInt get msats;
+  BigInt get expiry;
+  BigInt get expiresIn;
+  BigInt get expiresAt;
+  bool get isExpired;
+  String get network;
+  BigInt get cltvExpDelta;
+  String? get bip21;
+  String get preimageHash;
+  String get description;
+
+  /// Create a copy of DecodedInvoice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $DecodedInvoiceCopyWith<DecodedInvoice> get copyWith =>
+      _$DecodedInvoiceCopyWithImpl<DecodedInvoice>(
+          this as DecodedInvoice, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is DecodedInvoice &&
+            (identical(other.msats, msats) || other.msats == msats) &&
+            (identical(other.expiry, expiry) || other.expiry == expiry) &&
+            (identical(other.expiresIn, expiresIn) ||
+                other.expiresIn == expiresIn) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt) &&
+            (identical(other.isExpired, isExpired) ||
+                other.isExpired == isExpired) &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.cltvExpDelta, cltvExpDelta) ||
+                other.cltvExpDelta == cltvExpDelta) &&
+            (identical(other.bip21, bip21) || other.bip21 == bip21) &&
+            (identical(other.preimageHash, preimageHash) ||
+                other.preimageHash == preimageHash) &&
+            (identical(other.description, description) ||
+                other.description == description));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      msats,
+      expiry,
+      expiresIn,
+      expiresAt,
+      isExpired,
+      network,
+      cltvExpDelta,
+      bip21,
+      preimageHash,
+      description);
+
+  @override
+  String toString() {
+    return 'DecodedInvoice(msats: $msats, expiry: $expiry, expiresIn: $expiresIn, expiresAt: $expiresAt, isExpired: $isExpired, network: $network, cltvExpDelta: $cltvExpDelta, bip21: $bip21, preimageHash: $preimageHash, description: $description)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $DecodedInvoiceCopyWith<$Res> {
+  factory $DecodedInvoiceCopyWith(
+          DecodedInvoice value, $Res Function(DecodedInvoice) _then) =
+      _$DecodedInvoiceCopyWithImpl;
   @useResult
   $Res call(
       {BigInt msats,
@@ -408,12 +353,12 @@ abstract class _$$DecodedInvoiceImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$DecodedInvoiceImplCopyWithImpl<$Res>
-    extends _$DecodedInvoiceCopyWithImpl<$Res, _$DecodedInvoiceImpl>
-    implements _$$DecodedInvoiceImplCopyWith<$Res> {
-  __$$DecodedInvoiceImplCopyWithImpl(
-      _$DecodedInvoiceImpl _value, $Res Function(_$DecodedInvoiceImpl) _then)
-      : super(_value, _then);
+class _$DecodedInvoiceCopyWithImpl<$Res>
+    implements $DecodedInvoiceCopyWith<$Res> {
+  _$DecodedInvoiceCopyWithImpl(this._self, this._then);
+
+  final DecodedInvoice _self;
+  final $Res Function(DecodedInvoice) _then;
 
   /// Create a copy of DecodedInvoice
   /// with the given fields replaced by the non-null parameter values.
@@ -431,45 +376,45 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
     Object? preimageHash = null,
     Object? description = null,
   }) {
-    return _then(_$DecodedInvoiceImpl(
+    return _then(_self.copyWith(
       msats: null == msats
-          ? _value.msats
+          ? _self.msats
           : msats // ignore: cast_nullable_to_non_nullable
               as BigInt,
       expiry: null == expiry
-          ? _value.expiry
+          ? _self.expiry
           : expiry // ignore: cast_nullable_to_non_nullable
               as BigInt,
       expiresIn: null == expiresIn
-          ? _value.expiresIn
+          ? _self.expiresIn
           : expiresIn // ignore: cast_nullable_to_non_nullable
               as BigInt,
       expiresAt: null == expiresAt
-          ? _value.expiresAt
+          ? _self.expiresAt
           : expiresAt // ignore: cast_nullable_to_non_nullable
               as BigInt,
       isExpired: null == isExpired
-          ? _value.isExpired
+          ? _self.isExpired
           : isExpired // ignore: cast_nullable_to_non_nullable
               as bool,
       network: null == network
-          ? _value.network
+          ? _self.network
           : network // ignore: cast_nullable_to_non_nullable
               as String,
       cltvExpDelta: null == cltvExpDelta
-          ? _value.cltvExpDelta
+          ? _self.cltvExpDelta
           : cltvExpDelta // ignore: cast_nullable_to_non_nullable
               as BigInt,
       bip21: freezed == bip21
-          ? _value.bip21
+          ? _self.bip21
           : bip21 // ignore: cast_nullable_to_non_nullable
               as String?,
       preimageHash: null == preimageHash
-          ? _value.preimageHash
+          ? _self.preimageHash
           : preimageHash // ignore: cast_nullable_to_non_nullable
               as String,
       description: null == description
-          ? _value.description
+          ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
     ));
@@ -478,8 +423,8 @@ class __$$DecodedInvoiceImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DecodedInvoiceImpl extends _DecodedInvoice {
-  const _$DecodedInvoiceImpl(
+class _DecodedInvoice extends DecodedInvoice {
+  const _DecodedInvoice(
       {required this.msats,
       required this.expiry,
       required this.expiresIn,
@@ -513,16 +458,19 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
   @override
   final String description;
 
+  /// Create a copy of DecodedInvoice
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'DecodedInvoice(msats: $msats, expiry: $expiry, expiresIn: $expiresIn, expiresAt: $expiresAt, isExpired: $isExpired, network: $network, cltvExpDelta: $cltvExpDelta, bip21: $bip21, preimageHash: $preimageHash, description: $description)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$DecodedInvoiceCopyWith<_DecodedInvoice> get copyWith =>
+      __$DecodedInvoiceCopyWithImpl<_DecodedInvoice>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DecodedInvoiceImpl &&
+            other is _DecodedInvoice &&
             (identical(other.msats, msats) || other.msats == msats) &&
             (identical(other.expiry, expiry) || other.expiry == expiry) &&
             (identical(other.expiresIn, expiresIn) ||
@@ -555,169 +503,119 @@ class _$DecodedInvoiceImpl extends _DecodedInvoice {
       preimageHash,
       description);
 
-  /// Create a copy of DecodedInvoice
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$DecodedInvoiceImplCopyWith<_$DecodedInvoiceImpl> get copyWith =>
-      __$$DecodedInvoiceImplCopyWithImpl<_$DecodedInvoiceImpl>(
-          this, _$identity);
-}
-
-abstract class _DecodedInvoice extends DecodedInvoice {
-  const factory _DecodedInvoice(
-      {required final BigInt msats,
-      required final BigInt expiry,
-      required final BigInt expiresIn,
-      required final BigInt expiresAt,
-      required final bool isExpired,
-      required final String network,
-      required final BigInt cltvExpDelta,
-      final String? bip21,
-      required final String preimageHash,
-      required final String description}) = _$DecodedInvoiceImpl;
-  const _DecodedInvoice._() : super._();
-
-  @override
-  BigInt get msats;
-  @override
-  BigInt get expiry;
-  @override
-  BigInt get expiresIn;
-  @override
-  BigInt get expiresAt;
-  @override
-  bool get isExpired;
-  @override
-  String get network;
-  @override
-  BigInt get cltvExpDelta;
-  @override
-  String? get bip21;
-  @override
-  String get preimageHash;
-  @override
-  String get description;
-
-  /// Create a copy of DecodedInvoice
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DecodedInvoiceImplCopyWith<_$DecodedInvoiceImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-mixin _$KeyPair {
-  String get secretKey => throw _privateConstructorUsedError;
-  String get publicKey => throw _privateConstructorUsedError;
-
-  /// Create a copy of KeyPair
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $KeyPairCopyWith<KeyPair> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $KeyPairCopyWith<$Res> {
-  factory $KeyPairCopyWith(KeyPair value, $Res Function(KeyPair) then) =
-      _$KeyPairCopyWithImpl<$Res, KeyPair>;
-  @useResult
-  $Res call({String secretKey, String publicKey});
-}
-
-/// @nodoc
-class _$KeyPairCopyWithImpl<$Res, $Val extends KeyPair>
-    implements $KeyPairCopyWith<$Res> {
-  _$KeyPairCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of KeyPair
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? secretKey = null,
-    Object? publicKey = null,
-  }) {
-    return _then(_value.copyWith(
-      secretKey: null == secretKey
-          ? _value.secretKey
-          : secretKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      publicKey: null == publicKey
-          ? _value.publicKey
-          : publicKey // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  String toString() {
+    return 'DecodedInvoice(msats: $msats, expiry: $expiry, expiresIn: $expiresIn, expiresAt: $expiresAt, isExpired: $isExpired, network: $network, cltvExpDelta: $cltvExpDelta, bip21: $bip21, preimageHash: $preimageHash, description: $description)';
   }
 }
 
 /// @nodoc
-abstract class _$$KeyPairImplCopyWith<$Res> implements $KeyPairCopyWith<$Res> {
-  factory _$$KeyPairImplCopyWith(
-          _$KeyPairImpl value, $Res Function(_$KeyPairImpl) then) =
-      __$$KeyPairImplCopyWithImpl<$Res>;
+abstract mixin class _$DecodedInvoiceCopyWith<$Res>
+    implements $DecodedInvoiceCopyWith<$Res> {
+  factory _$DecodedInvoiceCopyWith(
+          _DecodedInvoice value, $Res Function(_DecodedInvoice) _then) =
+      __$DecodedInvoiceCopyWithImpl;
   @override
   @useResult
-  $Res call({String secretKey, String publicKey});
+  $Res call(
+      {BigInt msats,
+      BigInt expiry,
+      BigInt expiresIn,
+      BigInt expiresAt,
+      bool isExpired,
+      String network,
+      BigInt cltvExpDelta,
+      String? bip21,
+      String preimageHash,
+      String description});
 }
 
 /// @nodoc
-class __$$KeyPairImplCopyWithImpl<$Res>
-    extends _$KeyPairCopyWithImpl<$Res, _$KeyPairImpl>
-    implements _$$KeyPairImplCopyWith<$Res> {
-  __$$KeyPairImplCopyWithImpl(
-      _$KeyPairImpl _value, $Res Function(_$KeyPairImpl) _then)
-      : super(_value, _then);
+class __$DecodedInvoiceCopyWithImpl<$Res>
+    implements _$DecodedInvoiceCopyWith<$Res> {
+  __$DecodedInvoiceCopyWithImpl(this._self, this._then);
 
-  /// Create a copy of KeyPair
+  final _DecodedInvoice _self;
+  final $Res Function(_DecodedInvoice) _then;
+
+  /// Create a copy of DecodedInvoice
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
   @override
+  @pragma('vm:prefer-inline')
   $Res call({
-    Object? secretKey = null,
-    Object? publicKey = null,
+    Object? msats = null,
+    Object? expiry = null,
+    Object? expiresIn = null,
+    Object? expiresAt = null,
+    Object? isExpired = null,
+    Object? network = null,
+    Object? cltvExpDelta = null,
+    Object? bip21 = freezed,
+    Object? preimageHash = null,
+    Object? description = null,
   }) {
-    return _then(_$KeyPairImpl(
-      secretKey: null == secretKey
-          ? _value.secretKey
-          : secretKey // ignore: cast_nullable_to_non_nullable
+    return _then(_DecodedInvoice(
+      msats: null == msats
+          ? _self.msats
+          : msats // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+      expiry: null == expiry
+          ? _self.expiry
+          : expiry // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+      expiresIn: null == expiresIn
+          ? _self.expiresIn
+          : expiresIn // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+      expiresAt: null == expiresAt
+          ? _self.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+      isExpired: null == isExpired
+          ? _self.isExpired
+          : isExpired // ignore: cast_nullable_to_non_nullable
+              as bool,
+      network: null == network
+          ? _self.network
+          : network // ignore: cast_nullable_to_non_nullable
               as String,
-      publicKey: null == publicKey
-          ? _value.publicKey
-          : publicKey // ignore: cast_nullable_to_non_nullable
+      cltvExpDelta: null == cltvExpDelta
+          ? _self.cltvExpDelta
+          : cltvExpDelta // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+      bip21: freezed == bip21
+          ? _self.bip21
+          : bip21 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      preimageHash: null == preimageHash
+          ? _self.preimageHash
+          : preimageHash // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
 
 /// @nodoc
+mixin _$KeyPair {
+  String get secretKey;
+  String get publicKey;
 
-class _$KeyPairImpl extends _KeyPair {
-  const _$KeyPairImpl({required this.secretKey, required this.publicKey})
-      : super._();
-
-  @override
-  final String secretKey;
-  @override
-  final String publicKey;
-
-  @override
-  String toString() {
-    return 'KeyPair(secretKey: $secretKey, publicKey: $publicKey)';
-  }
+  /// Create a copy of KeyPair
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $KeyPairCopyWith<KeyPair> get copyWith =>
+      _$KeyPairCopyWithImpl<KeyPair>(this as KeyPair, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$KeyPairImpl &&
+            other is KeyPair &&
             (identical(other.secretKey, secretKey) ||
                 other.secretKey == secretKey) &&
             (identical(other.publicKey, publicKey) ||
@@ -727,137 +625,180 @@ class _$KeyPairImpl extends _KeyPair {
   @override
   int get hashCode => Object.hash(runtimeType, secretKey, publicKey);
 
-  /// Create a copy of KeyPair
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$KeyPairImplCopyWith<_$KeyPairImpl> get copyWith =>
-      __$$KeyPairImplCopyWithImpl<_$KeyPairImpl>(this, _$identity);
-}
-
-abstract class _KeyPair extends KeyPair {
-  const factory _KeyPair(
-      {required final String secretKey,
-      required final String publicKey}) = _$KeyPairImpl;
-  const _KeyPair._() : super._();
-
-  @override
-  String get secretKey;
-  @override
-  String get publicKey;
-
-  /// Create a copy of KeyPair
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$KeyPairImplCopyWith<_$KeyPairImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-mixin _$LBtcSwapScriptStr {
-  SwapType get swapType => throw _privateConstructorUsedError;
-  String? get fundingAddrs => throw _privateConstructorUsedError;
-  String get hashlock => throw _privateConstructorUsedError;
-  String get receiverPubkey => throw _privateConstructorUsedError;
-  int get locktime => throw _privateConstructorUsedError;
-  String get senderPubkey => throw _privateConstructorUsedError;
-  String get blindingKey => throw _privateConstructorUsedError;
-  Side? get side => throw _privateConstructorUsedError;
-
-  /// Create a copy of LBtcSwapScriptStr
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $LBtcSwapScriptStrCopyWith<LBtcSwapScriptStr> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $LBtcSwapScriptStrCopyWith<$Res> {
-  factory $LBtcSwapScriptStrCopyWith(
-          LBtcSwapScriptStr value, $Res Function(LBtcSwapScriptStr) then) =
-      _$LBtcSwapScriptStrCopyWithImpl<$Res, LBtcSwapScriptStr>;
-  @useResult
-  $Res call(
-      {SwapType swapType,
-      String? fundingAddrs,
-      String hashlock,
-      String receiverPubkey,
-      int locktime,
-      String senderPubkey,
-      String blindingKey,
-      Side? side});
-}
-
-/// @nodoc
-class _$LBtcSwapScriptStrCopyWithImpl<$Res, $Val extends LBtcSwapScriptStr>
-    implements $LBtcSwapScriptStrCopyWith<$Res> {
-  _$LBtcSwapScriptStrCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of LBtcSwapScriptStr
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? swapType = null,
-    Object? fundingAddrs = freezed,
-    Object? hashlock = null,
-    Object? receiverPubkey = null,
-    Object? locktime = null,
-    Object? senderPubkey = null,
-    Object? blindingKey = null,
-    Object? side = freezed,
-  }) {
-    return _then(_value.copyWith(
-      swapType: null == swapType
-          ? _value.swapType
-          : swapType // ignore: cast_nullable_to_non_nullable
-              as SwapType,
-      fundingAddrs: freezed == fundingAddrs
-          ? _value.fundingAddrs
-          : fundingAddrs // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hashlock: null == hashlock
-          ? _value.hashlock
-          : hashlock // ignore: cast_nullable_to_non_nullable
-              as String,
-      receiverPubkey: null == receiverPubkey
-          ? _value.receiverPubkey
-          : receiverPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      locktime: null == locktime
-          ? _value.locktime
-          : locktime // ignore: cast_nullable_to_non_nullable
-              as int,
-      senderPubkey: null == senderPubkey
-          ? _value.senderPubkey
-          : senderPubkey // ignore: cast_nullable_to_non_nullable
-              as String,
-      blindingKey: null == blindingKey
-          ? _value.blindingKey
-          : blindingKey // ignore: cast_nullable_to_non_nullable
-              as String,
-      side: freezed == side
-          ? _value.side
-          : side // ignore: cast_nullable_to_non_nullable
-              as Side?,
-    ) as $Val);
+  String toString() {
+    return 'KeyPair(secretKey: $secretKey, publicKey: $publicKey)';
   }
 }
 
 /// @nodoc
-abstract class _$$LBtcSwapScriptStrImplCopyWith<$Res>
-    implements $LBtcSwapScriptStrCopyWith<$Res> {
-  factory _$$LBtcSwapScriptStrImplCopyWith(_$LBtcSwapScriptStrImpl value,
-          $Res Function(_$LBtcSwapScriptStrImpl) then) =
-      __$$LBtcSwapScriptStrImplCopyWithImpl<$Res>;
+abstract mixin class $KeyPairCopyWith<$Res> {
+  factory $KeyPairCopyWith(KeyPair value, $Res Function(KeyPair) _then) =
+      _$KeyPairCopyWithImpl;
+  @useResult
+  $Res call({String secretKey, String publicKey});
+}
+
+/// @nodoc
+class _$KeyPairCopyWithImpl<$Res> implements $KeyPairCopyWith<$Res> {
+  _$KeyPairCopyWithImpl(this._self, this._then);
+
+  final KeyPair _self;
+  final $Res Function(KeyPair) _then;
+
+  /// Create a copy of KeyPair
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
   @override
+  $Res call({
+    Object? secretKey = null,
+    Object? publicKey = null,
+  }) {
+    return _then(_self.copyWith(
+      secretKey: null == secretKey
+          ? _self.secretKey
+          : secretKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicKey: null == publicKey
+          ? _self.publicKey
+          : publicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _KeyPair extends KeyPair {
+  const _KeyPair({required this.secretKey, required this.publicKey})
+      : super._();
+
+  @override
+  final String secretKey;
+  @override
+  final String publicKey;
+
+  /// Create a copy of KeyPair
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$KeyPairCopyWith<_KeyPair> get copyWith =>
+      __$KeyPairCopyWithImpl<_KeyPair>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _KeyPair &&
+            (identical(other.secretKey, secretKey) ||
+                other.secretKey == secretKey) &&
+            (identical(other.publicKey, publicKey) ||
+                other.publicKey == publicKey));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, secretKey, publicKey);
+
+  @override
+  String toString() {
+    return 'KeyPair(secretKey: $secretKey, publicKey: $publicKey)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$KeyPairCopyWith<$Res> implements $KeyPairCopyWith<$Res> {
+  factory _$KeyPairCopyWith(_KeyPair value, $Res Function(_KeyPair) _then) =
+      __$KeyPairCopyWithImpl;
+  @override
+  @useResult
+  $Res call({String secretKey, String publicKey});
+}
+
+/// @nodoc
+class __$KeyPairCopyWithImpl<$Res> implements _$KeyPairCopyWith<$Res> {
+  __$KeyPairCopyWithImpl(this._self, this._then);
+
+  final _KeyPair _self;
+  final $Res Function(_KeyPair) _then;
+
+  /// Create a copy of KeyPair
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? secretKey = null,
+    Object? publicKey = null,
+  }) {
+    return _then(_KeyPair(
+      secretKey: null == secretKey
+          ? _self.secretKey
+          : secretKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicKey: null == publicKey
+          ? _self.publicKey
+          : publicKey // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+mixin _$LBtcSwapScriptStr {
+  SwapType get swapType;
+  String? get fundingAddrs;
+  String get hashlock;
+  String get receiverPubkey;
+  int get locktime;
+  String get senderPubkey;
+  String get blindingKey;
+  Side? get side;
+
+  /// Create a copy of LBtcSwapScriptStr
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $LBtcSwapScriptStrCopyWith<LBtcSwapScriptStr> get copyWith =>
+      _$LBtcSwapScriptStrCopyWithImpl<LBtcSwapScriptStr>(
+          this as LBtcSwapScriptStr, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is LBtcSwapScriptStr &&
+            (identical(other.swapType, swapType) ||
+                other.swapType == swapType) &&
+            (identical(other.fundingAddrs, fundingAddrs) ||
+                other.fundingAddrs == fundingAddrs) &&
+            (identical(other.hashlock, hashlock) ||
+                other.hashlock == hashlock) &&
+            (identical(other.receiverPubkey, receiverPubkey) ||
+                other.receiverPubkey == receiverPubkey) &&
+            (identical(other.locktime, locktime) ||
+                other.locktime == locktime) &&
+            (identical(other.senderPubkey, senderPubkey) ||
+                other.senderPubkey == senderPubkey) &&
+            (identical(other.blindingKey, blindingKey) ||
+                other.blindingKey == blindingKey) &&
+            (identical(other.side, side) || other.side == side));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
+      receiverPubkey, locktime, senderPubkey, blindingKey, side);
+
+  @override
+  String toString() {
+    return 'LBtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey, side: $side)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $LBtcSwapScriptStrCopyWith<$Res> {
+  factory $LBtcSwapScriptStrCopyWith(
+          LBtcSwapScriptStr value, $Res Function(LBtcSwapScriptStr) _then) =
+      _$LBtcSwapScriptStrCopyWithImpl;
   @useResult
   $Res call(
       {SwapType swapType,
@@ -871,12 +812,12 @@ abstract class _$$LBtcSwapScriptStrImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LBtcSwapScriptStrImplCopyWithImpl<$Res>
-    extends _$LBtcSwapScriptStrCopyWithImpl<$Res, _$LBtcSwapScriptStrImpl>
-    implements _$$LBtcSwapScriptStrImplCopyWith<$Res> {
-  __$$LBtcSwapScriptStrImplCopyWithImpl(_$LBtcSwapScriptStrImpl _value,
-      $Res Function(_$LBtcSwapScriptStrImpl) _then)
-      : super(_value, _then);
+class _$LBtcSwapScriptStrCopyWithImpl<$Res>
+    implements $LBtcSwapScriptStrCopyWith<$Res> {
+  _$LBtcSwapScriptStrCopyWithImpl(this._self, this._then);
+
+  final LBtcSwapScriptStr _self;
+  final $Res Function(LBtcSwapScriptStr) _then;
 
   /// Create a copy of LBtcSwapScriptStr
   /// with the given fields replaced by the non-null parameter values.
@@ -892,37 +833,37 @@ class __$$LBtcSwapScriptStrImplCopyWithImpl<$Res>
     Object? blindingKey = null,
     Object? side = freezed,
   }) {
-    return _then(_$LBtcSwapScriptStrImpl(
+    return _then(_self.copyWith(
       swapType: null == swapType
-          ? _value.swapType
+          ? _self.swapType
           : swapType // ignore: cast_nullable_to_non_nullable
               as SwapType,
       fundingAddrs: freezed == fundingAddrs
-          ? _value.fundingAddrs
+          ? _self.fundingAddrs
           : fundingAddrs // ignore: cast_nullable_to_non_nullable
               as String?,
       hashlock: null == hashlock
-          ? _value.hashlock
+          ? _self.hashlock
           : hashlock // ignore: cast_nullable_to_non_nullable
               as String,
       receiverPubkey: null == receiverPubkey
-          ? _value.receiverPubkey
+          ? _self.receiverPubkey
           : receiverPubkey // ignore: cast_nullable_to_non_nullable
               as String,
       locktime: null == locktime
-          ? _value.locktime
+          ? _self.locktime
           : locktime // ignore: cast_nullable_to_non_nullable
               as int,
       senderPubkey: null == senderPubkey
-          ? _value.senderPubkey
+          ? _self.senderPubkey
           : senderPubkey // ignore: cast_nullable_to_non_nullable
               as String,
       blindingKey: null == blindingKey
-          ? _value.blindingKey
+          ? _self.blindingKey
           : blindingKey // ignore: cast_nullable_to_non_nullable
               as String,
       side: freezed == side
-          ? _value.side
+          ? _self.side
           : side // ignore: cast_nullable_to_non_nullable
               as Side?,
     ));
@@ -931,8 +872,8 @@ class __$$LBtcSwapScriptStrImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
-  const _$LBtcSwapScriptStrImpl(
+class _LBtcSwapScriptStr extends LBtcSwapScriptStr {
+  const _LBtcSwapScriptStr(
       {required this.swapType,
       this.fundingAddrs,
       required this.hashlock,
@@ -960,16 +901,19 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
   @override
   final Side? side;
 
+  /// Create a copy of LBtcSwapScriptStr
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'LBtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey, side: $side)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$LBtcSwapScriptStrCopyWith<_LBtcSwapScriptStr> get copyWith =>
+      __$LBtcSwapScriptStrCopyWithImpl<_LBtcSwapScriptStr>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LBtcSwapScriptStrImpl &&
+            other is _LBtcSwapScriptStr &&
             (identical(other.swapType, swapType) ||
                 other.swapType == swapType) &&
             (identical(other.fundingAddrs, fundingAddrs) ||
@@ -991,128 +935,136 @@ class _$LBtcSwapScriptStrImpl extends _LBtcSwapScriptStr {
   int get hashCode => Object.hash(runtimeType, swapType, fundingAddrs, hashlock,
       receiverPubkey, locktime, senderPubkey, blindingKey, side);
 
-  /// Create a copy of LBtcSwapScriptStr
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$LBtcSwapScriptStrImplCopyWith<_$LBtcSwapScriptStrImpl> get copyWith =>
-      __$$LBtcSwapScriptStrImplCopyWithImpl<_$LBtcSwapScriptStrImpl>(
-          this, _$identity);
-}
-
-abstract class _LBtcSwapScriptStr extends LBtcSwapScriptStr {
-  const factory _LBtcSwapScriptStr(
-      {required final SwapType swapType,
-      final String? fundingAddrs,
-      required final String hashlock,
-      required final String receiverPubkey,
-      required final int locktime,
-      required final String senderPubkey,
-      required final String blindingKey,
-      final Side? side}) = _$LBtcSwapScriptStrImpl;
-  const _LBtcSwapScriptStr._() : super._();
-
-  @override
-  SwapType get swapType;
-  @override
-  String? get fundingAddrs;
-  @override
-  String get hashlock;
-  @override
-  String get receiverPubkey;
-  @override
-  int get locktime;
-  @override
-  String get senderPubkey;
-  @override
-  String get blindingKey;
-  @override
-  Side? get side;
-
-  /// Create a copy of LBtcSwapScriptStr
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LBtcSwapScriptStrImplCopyWith<_$LBtcSwapScriptStrImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-mixin _$PreImage {
-  String get value => throw _privateConstructorUsedError;
-  String get sha256 => throw _privateConstructorUsedError;
-  String get hash160 => throw _privateConstructorUsedError;
-
-  /// Create a copy of PreImage
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $PreImageCopyWith<PreImage> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $PreImageCopyWith<$Res> {
-  factory $PreImageCopyWith(PreImage value, $Res Function(PreImage) then) =
-      _$PreImageCopyWithImpl<$Res, PreImage>;
-  @useResult
-  $Res call({String value, String sha256, String hash160});
-}
-
-/// @nodoc
-class _$PreImageCopyWithImpl<$Res, $Val extends PreImage>
-    implements $PreImageCopyWith<$Res> {
-  _$PreImageCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of PreImage
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? value = null,
-    Object? sha256 = null,
-    Object? hash160 = null,
-  }) {
-    return _then(_value.copyWith(
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
-      sha256: null == sha256
-          ? _value.sha256
-          : sha256 // ignore: cast_nullable_to_non_nullable
-              as String,
-      hash160: null == hash160
-          ? _value.hash160
-          : hash160 // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  String toString() {
+    return 'LBtcSwapScriptStr(swapType: $swapType, fundingAddrs: $fundingAddrs, hashlock: $hashlock, receiverPubkey: $receiverPubkey, locktime: $locktime, senderPubkey: $senderPubkey, blindingKey: $blindingKey, side: $side)';
   }
 }
 
 /// @nodoc
-abstract class _$$PreImageImplCopyWith<$Res>
-    implements $PreImageCopyWith<$Res> {
-  factory _$$PreImageImplCopyWith(
-          _$PreImageImpl value, $Res Function(_$PreImageImpl) then) =
-      __$$PreImageImplCopyWithImpl<$Res>;
+abstract mixin class _$LBtcSwapScriptStrCopyWith<$Res>
+    implements $LBtcSwapScriptStrCopyWith<$Res> {
+  factory _$LBtcSwapScriptStrCopyWith(
+          _LBtcSwapScriptStr value, $Res Function(_LBtcSwapScriptStr) _then) =
+      __$LBtcSwapScriptStrCopyWithImpl;
   @override
+  @useResult
+  $Res call(
+      {SwapType swapType,
+      String? fundingAddrs,
+      String hashlock,
+      String receiverPubkey,
+      int locktime,
+      String senderPubkey,
+      String blindingKey,
+      Side? side});
+}
+
+/// @nodoc
+class __$LBtcSwapScriptStrCopyWithImpl<$Res>
+    implements _$LBtcSwapScriptStrCopyWith<$Res> {
+  __$LBtcSwapScriptStrCopyWithImpl(this._self, this._then);
+
+  final _LBtcSwapScriptStr _self;
+  final $Res Function(_LBtcSwapScriptStr) _then;
+
+  /// Create a copy of LBtcSwapScriptStr
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? swapType = null,
+    Object? fundingAddrs = freezed,
+    Object? hashlock = null,
+    Object? receiverPubkey = null,
+    Object? locktime = null,
+    Object? senderPubkey = null,
+    Object? blindingKey = null,
+    Object? side = freezed,
+  }) {
+    return _then(_LBtcSwapScriptStr(
+      swapType: null == swapType
+          ? _self.swapType
+          : swapType // ignore: cast_nullable_to_non_nullable
+              as SwapType,
+      fundingAddrs: freezed == fundingAddrs
+          ? _self.fundingAddrs
+          : fundingAddrs // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hashlock: null == hashlock
+          ? _self.hashlock
+          : hashlock // ignore: cast_nullable_to_non_nullable
+              as String,
+      receiverPubkey: null == receiverPubkey
+          ? _self.receiverPubkey
+          : receiverPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      locktime: null == locktime
+          ? _self.locktime
+          : locktime // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderPubkey: null == senderPubkey
+          ? _self.senderPubkey
+          : senderPubkey // ignore: cast_nullable_to_non_nullable
+              as String,
+      blindingKey: null == blindingKey
+          ? _self.blindingKey
+          : blindingKey // ignore: cast_nullable_to_non_nullable
+              as String,
+      side: freezed == side
+          ? _self.side
+          : side // ignore: cast_nullable_to_non_nullable
+              as Side?,
+    ));
+  }
+}
+
+/// @nodoc
+mixin _$PreImage {
+  String get value;
+  String get sha256;
+  String get hash160;
+
+  /// Create a copy of PreImage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $PreImageCopyWith<PreImage> get copyWith =>
+      _$PreImageCopyWithImpl<PreImage>(this as PreImage, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is PreImage &&
+            (identical(other.value, value) || other.value == value) &&
+            (identical(other.sha256, sha256) || other.sha256 == sha256) &&
+            (identical(other.hash160, hash160) || other.hash160 == hash160));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, value, sha256, hash160);
+
+  @override
+  String toString() {
+    return 'PreImage(value: $value, sha256: $sha256, hash160: $hash160)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $PreImageCopyWith<$Res> {
+  factory $PreImageCopyWith(PreImage value, $Res Function(PreImage) _then) =
+      _$PreImageCopyWithImpl;
   @useResult
   $Res call({String value, String sha256, String hash160});
 }
 
 /// @nodoc
-class __$$PreImageImplCopyWithImpl<$Res>
-    extends _$PreImageCopyWithImpl<$Res, _$PreImageImpl>
-    implements _$$PreImageImplCopyWith<$Res> {
-  __$$PreImageImplCopyWithImpl(
-      _$PreImageImpl _value, $Res Function(_$PreImageImpl) _then)
-      : super(_value, _then);
+class _$PreImageCopyWithImpl<$Res> implements $PreImageCopyWith<$Res> {
+  _$PreImageCopyWithImpl(this._self, this._then);
+
+  final PreImage _self;
+  final $Res Function(PreImage) _then;
 
   /// Create a copy of PreImage
   /// with the given fields replaced by the non-null parameter values.
@@ -1123,17 +1075,17 @@ class __$$PreImageImplCopyWithImpl<$Res>
     Object? sha256 = null,
     Object? hash160 = null,
   }) {
-    return _then(_$PreImageImpl(
+    return _then(_self.copyWith(
       value: null == value
-          ? _value.value
+          ? _self.value
           : value // ignore: cast_nullable_to_non_nullable
               as String,
       sha256: null == sha256
-          ? _value.sha256
+          ? _self.sha256
           : sha256 // ignore: cast_nullable_to_non_nullable
               as String,
       hash160: null == hash160
-          ? _value.hash160
+          ? _self.hash160
           : hash160 // ignore: cast_nullable_to_non_nullable
               as String,
     ));
@@ -1142,8 +1094,8 @@ class __$$PreImageImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PreImageImpl extends _PreImage {
-  const _$PreImageImpl(
+class _PreImage extends PreImage {
+  const _PreImage(
       {required this.value, required this.sha256, required this.hash160})
       : super._();
 
@@ -1154,16 +1106,19 @@ class _$PreImageImpl extends _PreImage {
   @override
   final String hash160;
 
+  /// Create a copy of PreImage
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'PreImage(value: $value, sha256: $sha256, hash160: $hash160)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$PreImageCopyWith<_PreImage> get copyWith =>
+      __$PreImageCopyWithImpl<_PreImage>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PreImageImpl &&
+            other is _PreImage &&
             (identical(other.value, value) || other.value == value) &&
             (identical(other.sha256, sha256) || other.sha256 == sha256) &&
             (identical(other.hash160, hash160) || other.hash160 == hash160));
@@ -1172,127 +1127,141 @@ class _$PreImageImpl extends _PreImage {
   @override
   int get hashCode => Object.hash(runtimeType, value, sha256, hash160);
 
-  /// Create a copy of PreImage
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$PreImageImplCopyWith<_$PreImageImpl> get copyWith =>
-      __$$PreImageImplCopyWithImpl<_$PreImageImpl>(this, _$identity);
+  String toString() {
+    return 'PreImage(value: $value, sha256: $sha256, hash160: $hash160)';
+  }
 }
 
-abstract class _PreImage extends PreImage {
-  const factory _PreImage(
-      {required final String value,
-      required final String sha256,
-      required final String hash160}) = _$PreImageImpl;
-  const _PreImage._() : super._();
+/// @nodoc
+abstract mixin class _$PreImageCopyWith<$Res>
+    implements $PreImageCopyWith<$Res> {
+  factory _$PreImageCopyWith(_PreImage value, $Res Function(_PreImage) _then) =
+      __$PreImageCopyWithImpl;
+  @override
+  @useResult
+  $Res call({String value, String sha256, String hash160});
+}
 
-  @override
-  String get value;
-  @override
-  String get sha256;
-  @override
-  String get hash160;
+/// @nodoc
+class __$PreImageCopyWithImpl<$Res> implements _$PreImageCopyWith<$Res> {
+  __$PreImageCopyWithImpl(this._self, this._then);
+
+  final _PreImage _self;
+  final $Res Function(_PreImage) _then;
 
   /// Create a copy of PreImage
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PreImageImplCopyWith<_$PreImageImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? value = null,
+    Object? sha256 = null,
+    Object? hash160 = null,
+  }) {
+    return _then(_PreImage(
+      value: null == value
+          ? _self.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+      sha256: null == sha256
+          ? _self.sha256
+          : sha256 // ignore: cast_nullable_to_non_nullable
+              as String,
+      hash160: null == hash160
+          ? _self.hash160
+          : hash160 // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 mixin _$TxFee {
-  Object get field0 => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(BigInt field0) absolute,
-    required TResult Function(double field0) relative,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(BigInt field0)? absolute,
-    TResult? Function(double field0)? relative,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(BigInt field0)? absolute,
-    TResult Function(double field0)? relative,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(TxFee_Absolute value) absolute,
-    required TResult Function(TxFee_Relative value) relative,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(TxFee_Absolute value)? absolute,
-    TResult? Function(TxFee_Relative value)? relative,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(TxFee_Absolute value)? absolute,
-    TResult Function(TxFee_Relative value)? relative,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  Object get field0;
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is TxFee &&
+            const DeepCollectionEquality().equals(other.field0, field0));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(field0));
+
+  @override
+  String toString() {
+    return 'TxFee(field0: $field0)';
+  }
 }
 
 /// @nodoc
-abstract class $TxFeeCopyWith<$Res> {
-  factory $TxFeeCopyWith(TxFee value, $Res Function(TxFee) then) =
-      _$TxFeeCopyWithImpl<$Res, TxFee>;
+class $TxFeeCopyWith<$Res> {
+  $TxFeeCopyWith(TxFee _, $Res Function(TxFee) __);
 }
 
 /// @nodoc
-class _$TxFeeCopyWithImpl<$Res, $Val extends TxFee>
-    implements $TxFeeCopyWith<$Res> {
-  _$TxFeeCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+class TxFee_Absolute extends TxFee {
+  const TxFee_Absolute(this.field0) : super._();
+
+  @override
+  final BigInt field0;
 
   /// Create a copy of TxFee
   /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $TxFee_AbsoluteCopyWith<TxFee_Absolute> get copyWith =>
+      _$TxFee_AbsoluteCopyWithImpl<TxFee_Absolute>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is TxFee_Absolute &&
+            (identical(other.field0, field0) || other.field0 == field0));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, field0);
+
+  @override
+  String toString() {
+    return 'TxFee.absolute(field0: $field0)';
+  }
 }
 
 /// @nodoc
-abstract class _$$TxFee_AbsoluteImplCopyWith<$Res> {
-  factory _$$TxFee_AbsoluteImplCopyWith(_$TxFee_AbsoluteImpl value,
-          $Res Function(_$TxFee_AbsoluteImpl) then) =
-      __$$TxFee_AbsoluteImplCopyWithImpl<$Res>;
+abstract mixin class $TxFee_AbsoluteCopyWith<$Res>
+    implements $TxFeeCopyWith<$Res> {
+  factory $TxFee_AbsoluteCopyWith(
+          TxFee_Absolute value, $Res Function(TxFee_Absolute) _then) =
+      _$TxFee_AbsoluteCopyWithImpl;
   @useResult
   $Res call({BigInt field0});
 }
 
 /// @nodoc
-class __$$TxFee_AbsoluteImplCopyWithImpl<$Res>
-    extends _$TxFeeCopyWithImpl<$Res, _$TxFee_AbsoluteImpl>
-    implements _$$TxFee_AbsoluteImplCopyWith<$Res> {
-  __$$TxFee_AbsoluteImplCopyWithImpl(
-      _$TxFee_AbsoluteImpl _value, $Res Function(_$TxFee_AbsoluteImpl) _then)
-      : super(_value, _then);
+class _$TxFee_AbsoluteCopyWithImpl<$Res>
+    implements $TxFee_AbsoluteCopyWith<$Res> {
+  _$TxFee_AbsoluteCopyWithImpl(this._self, this._then);
+
+  final TxFee_Absolute _self;
+  final $Res Function(TxFee_Absolute) _then;
 
   /// Create a copy of TxFee
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
   $Res call({
     Object? field0 = null,
   }) {
-    return _then(_$TxFee_AbsoluteImpl(
+    return _then(TxFee_Absolute(
       null == field0
-          ? _value.field0
+          ? _self.field0
           : field0 // ignore: cast_nullable_to_non_nullable
               as BigInt,
     ));
@@ -1301,253 +1270,67 @@ class __$$TxFee_AbsoluteImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$TxFee_AbsoluteImpl extends TxFee_Absolute {
-  const _$TxFee_AbsoluteImpl(this.field0) : super._();
+class TxFee_Relative extends TxFee {
+  const TxFee_Relative(this.field0) : super._();
 
   @override
-  final BigInt field0;
+  final double field0;
 
-  @override
-  String toString() {
-    return 'TxFee.absolute(field0: $field0)';
-  }
+  /// Create a copy of TxFee
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $TxFee_RelativeCopyWith<TxFee_Relative> get copyWith =>
+      _$TxFee_RelativeCopyWithImpl<TxFee_Relative>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TxFee_AbsoluteImpl &&
+            other is TxFee_Relative &&
             (identical(other.field0, field0) || other.field0 == field0));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, field0);
 
-  /// Create a copy of TxFee
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @pragma('vm:prefer-inline')
-  _$$TxFee_AbsoluteImplCopyWith<_$TxFee_AbsoluteImpl> get copyWith =>
-      __$$TxFee_AbsoluteImplCopyWithImpl<_$TxFee_AbsoluteImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(BigInt field0) absolute,
-    required TResult Function(double field0) relative,
-  }) {
-    return absolute(field0);
+  String toString() {
+    return 'TxFee.relative(field0: $field0)';
   }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(BigInt field0)? absolute,
-    TResult? Function(double field0)? relative,
-  }) {
-    return absolute?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(BigInt field0)? absolute,
-    TResult Function(double field0)? relative,
-    required TResult orElse(),
-  }) {
-    if (absolute != null) {
-      return absolute(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(TxFee_Absolute value) absolute,
-    required TResult Function(TxFee_Relative value) relative,
-  }) {
-    return absolute(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(TxFee_Absolute value)? absolute,
-    TResult? Function(TxFee_Relative value)? relative,
-  }) {
-    return absolute?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(TxFee_Absolute value)? absolute,
-    TResult Function(TxFee_Relative value)? relative,
-    required TResult orElse(),
-  }) {
-    if (absolute != null) {
-      return absolute(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class TxFee_Absolute extends TxFee {
-  const factory TxFee_Absolute(final BigInt field0) = _$TxFee_AbsoluteImpl;
-  const TxFee_Absolute._() : super._();
-
-  @override
-  BigInt get field0;
-
-  /// Create a copy of TxFee
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TxFee_AbsoluteImplCopyWith<_$TxFee_AbsoluteImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$TxFee_RelativeImplCopyWith<$Res> {
-  factory _$$TxFee_RelativeImplCopyWith(_$TxFee_RelativeImpl value,
-          $Res Function(_$TxFee_RelativeImpl) then) =
-      __$$TxFee_RelativeImplCopyWithImpl<$Res>;
+abstract mixin class $TxFee_RelativeCopyWith<$Res>
+    implements $TxFeeCopyWith<$Res> {
+  factory $TxFee_RelativeCopyWith(
+          TxFee_Relative value, $Res Function(TxFee_Relative) _then) =
+      _$TxFee_RelativeCopyWithImpl;
   @useResult
   $Res call({double field0});
 }
 
 /// @nodoc
-class __$$TxFee_RelativeImplCopyWithImpl<$Res>
-    extends _$TxFeeCopyWithImpl<$Res, _$TxFee_RelativeImpl>
-    implements _$$TxFee_RelativeImplCopyWith<$Res> {
-  __$$TxFee_RelativeImplCopyWithImpl(
-      _$TxFee_RelativeImpl _value, $Res Function(_$TxFee_RelativeImpl) _then)
-      : super(_value, _then);
+class _$TxFee_RelativeCopyWithImpl<$Res>
+    implements $TxFee_RelativeCopyWith<$Res> {
+  _$TxFee_RelativeCopyWithImpl(this._self, this._then);
+
+  final TxFee_Relative _self;
+  final $Res Function(TxFee_Relative) _then;
 
   /// Create a copy of TxFee
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
-  @override
   $Res call({
     Object? field0 = null,
   }) {
-    return _then(_$TxFee_RelativeImpl(
+    return _then(TxFee_Relative(
       null == field0
-          ? _value.field0
+          ? _self.field0
           : field0 // ignore: cast_nullable_to_non_nullable
               as double,
     ));
   }
 }
 
-/// @nodoc
-
-class _$TxFee_RelativeImpl extends TxFee_Relative {
-  const _$TxFee_RelativeImpl(this.field0) : super._();
-
-  @override
-  final double field0;
-
-  @override
-  String toString() {
-    return 'TxFee.relative(field0: $field0)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$TxFee_RelativeImpl &&
-            (identical(other.field0, field0) || other.field0 == field0));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, field0);
-
-  /// Create a copy of TxFee
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$TxFee_RelativeImplCopyWith<_$TxFee_RelativeImpl> get copyWith =>
-      __$$TxFee_RelativeImplCopyWithImpl<_$TxFee_RelativeImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(BigInt field0) absolute,
-    required TResult Function(double field0) relative,
-  }) {
-    return relative(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(BigInt field0)? absolute,
-    TResult? Function(double field0)? relative,
-  }) {
-    return relative?.call(field0);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(BigInt field0)? absolute,
-    TResult Function(double field0)? relative,
-    required TResult orElse(),
-  }) {
-    if (relative != null) {
-      return relative(field0);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(TxFee_Absolute value) absolute,
-    required TResult Function(TxFee_Relative value) relative,
-  }) {
-    return relative(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(TxFee_Absolute value)? absolute,
-    TResult? Function(TxFee_Relative value)? relative,
-  }) {
-    return relative?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(TxFee_Absolute value)? absolute,
-    TResult Function(TxFee_Relative value)? relative,
-    required TResult orElse(),
-  }) {
-    if (relative != null) {
-      return relative(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class TxFee_Relative extends TxFee {
-  const factory TxFee_Relative(final double field0) = _$TxFee_RelativeImpl;
-  const TxFee_Relative._() : super._();
-
-  @override
-  double get field0;
-
-  /// Create a copy of TxFee
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TxFee_RelativeImplCopyWith<_$TxFee_RelativeImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

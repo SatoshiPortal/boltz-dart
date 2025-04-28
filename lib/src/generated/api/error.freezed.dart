@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,81 +10,54 @@ part of 'error.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$BoltzError {
-  String get kind => throw _privateConstructorUsedError;
-  String get message => throw _privateConstructorUsedError;
+  String get kind;
+  String get message;
 
   /// Create a copy of BoltzError
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $BoltzErrorCopyWith<BoltzError> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BoltzErrorCopyWith<$Res> {
-  factory $BoltzErrorCopyWith(
-          BoltzError value, $Res Function(BoltzError) then) =
-      _$BoltzErrorCopyWithImpl<$Res, BoltzError>;
-  @useResult
-  $Res call({String kind, String message});
-}
-
-/// @nodoc
-class _$BoltzErrorCopyWithImpl<$Res, $Val extends BoltzError>
-    implements $BoltzErrorCopyWith<$Res> {
-  _$BoltzErrorCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of BoltzError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $BoltzErrorCopyWith<BoltzError> get copyWith =>
+      _$BoltzErrorCopyWithImpl<BoltzError>(this as BoltzError, _$identity);
+
   @override
-  $Res call({
-    Object? kind = null,
-    Object? message = null,
-  }) {
-    return _then(_value.copyWith(
-      kind: null == kind
-          ? _value.kind
-          : kind // ignore: cast_nullable_to_non_nullable
-              as String,
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is BoltzError &&
+            (identical(other.kind, kind) || other.kind == kind) &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, kind, message);
+
+  @override
+  String toString() {
+    return 'BoltzError(kind: $kind, message: $message)';
   }
 }
 
 /// @nodoc
-abstract class _$$BoltzErrorImplCopyWith<$Res>
-    implements $BoltzErrorCopyWith<$Res> {
-  factory _$$BoltzErrorImplCopyWith(
-          _$BoltzErrorImpl value, $Res Function(_$BoltzErrorImpl) then) =
-      __$$BoltzErrorImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $BoltzErrorCopyWith<$Res> {
+  factory $BoltzErrorCopyWith(
+          BoltzError value, $Res Function(BoltzError) _then) =
+      _$BoltzErrorCopyWithImpl;
   @useResult
   $Res call({String kind, String message});
 }
 
 /// @nodoc
-class __$$BoltzErrorImplCopyWithImpl<$Res>
-    extends _$BoltzErrorCopyWithImpl<$Res, _$BoltzErrorImpl>
-    implements _$$BoltzErrorImplCopyWith<$Res> {
-  __$$BoltzErrorImplCopyWithImpl(
-      _$BoltzErrorImpl _value, $Res Function(_$BoltzErrorImpl) _then)
-      : super(_value, _then);
+class _$BoltzErrorCopyWithImpl<$Res> implements $BoltzErrorCopyWith<$Res> {
+  _$BoltzErrorCopyWithImpl(this._self, this._then);
+
+  final BoltzError _self;
+  final $Res Function(BoltzError) _then;
 
   /// Create a copy of BoltzError
   /// with the given fields replaced by the non-null parameter values.
@@ -93,13 +67,13 @@ class __$$BoltzErrorImplCopyWithImpl<$Res>
     Object? kind = null,
     Object? message = null,
   }) {
-    return _then(_$BoltzErrorImpl(
+    return _then(_self.copyWith(
       kind: null == kind
-          ? _value.kind
+          ? _self.kind
           : kind // ignore: cast_nullable_to_non_nullable
               as String,
       message: null == message
-          ? _value.message
+          ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
     ));
@@ -108,25 +82,27 @@ class __$$BoltzErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BoltzErrorImpl extends _BoltzError {
-  const _$BoltzErrorImpl({required this.kind, required this.message})
-      : super._();
+class _BoltzError extends BoltzError {
+  const _BoltzError({required this.kind, required this.message}) : super._();
 
   @override
   final String kind;
   @override
   final String message;
 
+  /// Create a copy of BoltzError
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'BoltzError(kind: $kind, message: $message)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$BoltzErrorCopyWith<_BoltzError> get copyWith =>
+      __$BoltzErrorCopyWithImpl<_BoltzError>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BoltzErrorImpl &&
+            other is _BoltzError &&
             (identical(other.kind, kind) || other.kind == kind) &&
             (identical(other.message, message) || other.message == message));
   }
@@ -134,30 +110,49 @@ class _$BoltzErrorImpl extends _BoltzError {
   @override
   int get hashCode => Object.hash(runtimeType, kind, message);
 
+  @override
+  String toString() {
+    return 'BoltzError(kind: $kind, message: $message)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$BoltzErrorCopyWith<$Res>
+    implements $BoltzErrorCopyWith<$Res> {
+  factory _$BoltzErrorCopyWith(
+          _BoltzError value, $Res Function(_BoltzError) _then) =
+      __$BoltzErrorCopyWithImpl;
+  @override
+  @useResult
+  $Res call({String kind, String message});
+}
+
+/// @nodoc
+class __$BoltzErrorCopyWithImpl<$Res> implements _$BoltzErrorCopyWith<$Res> {
+  __$BoltzErrorCopyWithImpl(this._self, this._then);
+
+  final _BoltzError _self;
+  final $Res Function(_BoltzError) _then;
+
   /// Create a copy of BoltzError
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$BoltzErrorImplCopyWith<_$BoltzErrorImpl> get copyWith =>
-      __$$BoltzErrorImplCopyWithImpl<_$BoltzErrorImpl>(this, _$identity);
+  $Res call({
+    Object? kind = null,
+    Object? message = null,
+  }) {
+    return _then(_BoltzError(
+      kind: null == kind
+          ? _self.kind
+          : kind // ignore: cast_nullable_to_non_nullable
+              as String,
+      message: null == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
-abstract class _BoltzError extends BoltzError {
-  const factory _BoltzError(
-      {required final String kind,
-      required final String message}) = _$BoltzErrorImpl;
-  const _BoltzError._() : super._();
-
-  @override
-  String get kind;
-  @override
-  String get message;
-
-  /// Create a copy of BoltzError
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BoltzErrorImplCopyWith<_$BoltzErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

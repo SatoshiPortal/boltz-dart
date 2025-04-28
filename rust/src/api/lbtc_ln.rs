@@ -110,7 +110,7 @@ impl LbtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
             from: "L-BTC".to_string(),
             to: "BTC".to_string(),
@@ -173,14 +173,14 @@ impl LbtcLnSwap {
         };
         let network_config =
             ElectrumLiquidClient::new(liquid_chain, &self.electrum_url, true, true, 10)?;
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
         let tx = match LBtcSwapTx::new_refund(
             swap_script,
             &self.script_address,
             &network_config,
-            ensure_http_prefix(&self.boltz_url.clone()),
+            &boltz_client,
             self.id.clone(),
         )
         .await
@@ -206,7 +206,7 @@ impl LbtcLnSwap {
 
     /// Retrieves the preimage for a completed submarine swap.
     pub async fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let response = boltz_client
             .get_submarine_claim_tx_details(&self.id)
             .await?;
@@ -243,7 +243,7 @@ impl LbtcLnSwap {
             inner: ckp.public_key(),
         };
 
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -333,13 +333,13 @@ impl LbtcLnSwap {
         let network_config =
             ElectrumLiquidClient::new(liquid_chain, &self.electrum_url, true, true, 10)?;
         let id: String = self.id.clone();
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let tx = match LBtcSwapTx::new_claim(
             swap_script,
             out_address,
             &network_config,
-            ensure_http_prefix(&self.boltz_url.clone()),
+            &boltz_client,
             self.id.clone(),
         )
         .await
@@ -403,13 +403,13 @@ impl LbtcLnSwap {
         let network_config =
             ElectrumLiquidClient::new(liquid_chain, &self.electrum_url, true, true, 10)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let id = self.id.clone();
         let tx = match LBtcSwapTx::new_refund(
             swap_script.clone(),
             &out_address,
             &network_config,
-            ensure_http_prefix(&self.boltz_url.clone()),
+            &boltz_client,
             self.id.clone(),
         )
         .await
@@ -467,7 +467,8 @@ impl LbtcLnSwap {
     }
     /// Broadcast using boltz's electrum server
     pub async fn broadcast_boltz(&self, signed_hex: String) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client: BoltzApiClientV2 =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let txid = match boltz_client
             .broadcast_tx(self.network.into(), &signed_hex)
             .await
@@ -500,12 +501,14 @@ impl LbtcLnSwap {
         let network_config =
             ElectrumLiquidClient::new(liquid_chain, &self.electrum_url, true, true, 10)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
+        let boltz_client: BoltzApiClientV2 =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
 
         let tx = match LBtcSwapTx::new_claim(
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
-            ensure_http_prefix(&self.boltz_url.clone()),
+            &boltz_client,
             self.id.clone(),
         )
         .await

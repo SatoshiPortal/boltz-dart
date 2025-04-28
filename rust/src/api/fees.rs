@@ -24,21 +24,21 @@ impl Fees {
 
     /// Method to get the fees & limits for a submarine swap
     pub async fn submarine(&self) -> Result<SubmarineFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
         let sub_fees: SubmarineFeesAndLimits =
             boltz_client.get_submarine_pairs().await?.try_into()?;
         Ok(sub_fees)
     }
     /// Method to get the fees & limits for a reverse swap
     pub async fn reverse(&self) -> Result<ReverseFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
         let reverse_fees: ReverseFeesAndLimits =
             boltz_client.get_reverse_pairs().await?.try_into()?;
         Ok(reverse_fees)
     }
     /// Method to get the fees & limits for a chain swap
     pub async fn chain(&self) -> Result<ChainFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
         let chain_fees: ChainFeesAndLimits = boltz_client.get_chain_pairs().await?.try_into()?;
         Ok(chain_fees)
     }

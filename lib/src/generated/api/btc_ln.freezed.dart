@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,38 +10,87 @@ part of 'btc_ln.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$BtcLnSwap {
-  String get id => throw _privateConstructorUsedError;
-  SwapType get kind => throw _privateConstructorUsedError;
-  Chain get network => throw _privateConstructorUsedError;
-  KeyPair get keys => throw _privateConstructorUsedError;
-  BigInt get keyIndex => throw _privateConstructorUsedError;
-  PreImage get preimage => throw _privateConstructorUsedError;
-  BtcSwapScriptStr get swapScript => throw _privateConstructorUsedError;
-  String get invoice => throw _privateConstructorUsedError;
-  String get scriptAddress => throw _privateConstructorUsedError;
-  BigInt get outAmount => throw _privateConstructorUsedError;
-  String get electrumUrl => throw _privateConstructorUsedError;
-  String get boltzUrl => throw _privateConstructorUsedError;
-  String? get referralId => throw _privateConstructorUsedError;
+  String get id;
+  SwapType get kind;
+  Chain get network;
+  KeyPair get keys;
+  BigInt get keyIndex;
+  PreImage get preimage;
+  BtcSwapScriptStr get swapScript;
+  String get invoice;
+  String get scriptAddress;
+  BigInt get outAmount;
+  String get electrumUrl;
+  String get boltzUrl;
+  String? get referralId;
 
   /// Create a copy of BtcLnSwap
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $BtcLnSwapCopyWith<BtcLnSwap> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$BtcLnSwapCopyWithImpl<BtcLnSwap>(this as BtcLnSwap, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is BtcLnSwap &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.kind, kind) || other.kind == kind) &&
+            (identical(other.network, network) || other.network == network) &&
+            (identical(other.keys, keys) || other.keys == keys) &&
+            (identical(other.keyIndex, keyIndex) ||
+                other.keyIndex == keyIndex) &&
+            (identical(other.preimage, preimage) ||
+                other.preimage == preimage) &&
+            (identical(other.swapScript, swapScript) ||
+                other.swapScript == swapScript) &&
+            (identical(other.invoice, invoice) || other.invoice == invoice) &&
+            (identical(other.scriptAddress, scriptAddress) ||
+                other.scriptAddress == scriptAddress) &&
+            (identical(other.outAmount, outAmount) ||
+                other.outAmount == outAmount) &&
+            (identical(other.electrumUrl, electrumUrl) ||
+                other.electrumUrl == electrumUrl) &&
+            (identical(other.boltzUrl, boltzUrl) ||
+                other.boltzUrl == boltzUrl) &&
+            (identical(other.referralId, referralId) ||
+                other.referralId == referralId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      kind,
+      network,
+      keys,
+      keyIndex,
+      preimage,
+      swapScript,
+      invoice,
+      scriptAddress,
+      outAmount,
+      electrumUrl,
+      boltzUrl,
+      referralId);
+
+  @override
+  String toString() {
+    return 'BtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, keyIndex: $keyIndex, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, scriptAddress: $scriptAddress, outAmount: $outAmount, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
+  }
 }
 
 /// @nodoc
-abstract class $BtcLnSwapCopyWith<$Res> {
-  factory $BtcLnSwapCopyWith(BtcLnSwap value, $Res Function(BtcLnSwap) then) =
-      _$BtcLnSwapCopyWithImpl<$Res, BtcLnSwap>;
+abstract mixin class $BtcLnSwapCopyWith<$Res> {
+  factory $BtcLnSwapCopyWith(BtcLnSwap value, $Res Function(BtcLnSwap) _then) =
+      _$BtcLnSwapCopyWithImpl;
   @useResult
   $Res call(
       {String id,
@@ -63,14 +113,11 @@ abstract class $BtcLnSwapCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
-    implements $BtcLnSwapCopyWith<$Res> {
-  _$BtcLnSwapCopyWithImpl(this._value, this._then);
+class _$BtcLnSwapCopyWithImpl<$Res> implements $BtcLnSwapCopyWith<$Res> {
+  _$BtcLnSwapCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final BtcLnSwap _self;
+  final $Res Function(BtcLnSwap) _then;
 
   /// Create a copy of BtcLnSwap
   /// with the given fields replaced by the non-null parameter values.
@@ -91,60 +138,60 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
     Object? boltzUrl = null,
     Object? referralId = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       id: null == id
-          ? _value.id
+          ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       kind: null == kind
-          ? _value.kind
+          ? _self.kind
           : kind // ignore: cast_nullable_to_non_nullable
               as SwapType,
       network: null == network
-          ? _value.network
+          ? _self.network
           : network // ignore: cast_nullable_to_non_nullable
               as Chain,
       keys: null == keys
-          ? _value.keys
+          ? _self.keys
           : keys // ignore: cast_nullable_to_non_nullable
               as KeyPair,
       keyIndex: null == keyIndex
-          ? _value.keyIndex
+          ? _self.keyIndex
           : keyIndex // ignore: cast_nullable_to_non_nullable
               as BigInt,
       preimage: null == preimage
-          ? _value.preimage
+          ? _self.preimage
           : preimage // ignore: cast_nullable_to_non_nullable
               as PreImage,
       swapScript: null == swapScript
-          ? _value.swapScript
+          ? _self.swapScript
           : swapScript // ignore: cast_nullable_to_non_nullable
               as BtcSwapScriptStr,
       invoice: null == invoice
-          ? _value.invoice
+          ? _self.invoice
           : invoice // ignore: cast_nullable_to_non_nullable
               as String,
       scriptAddress: null == scriptAddress
-          ? _value.scriptAddress
+          ? _self.scriptAddress
           : scriptAddress // ignore: cast_nullable_to_non_nullable
               as String,
       outAmount: null == outAmount
-          ? _value.outAmount
+          ? _self.outAmount
           : outAmount // ignore: cast_nullable_to_non_nullable
               as BigInt,
       electrumUrl: null == electrumUrl
-          ? _value.electrumUrl
+          ? _self.electrumUrl
           : electrumUrl // ignore: cast_nullable_to_non_nullable
               as String,
       boltzUrl: null == boltzUrl
-          ? _value.boltzUrl
+          ? _self.boltzUrl
           : boltzUrl // ignore: cast_nullable_to_non_nullable
               as String,
       referralId: freezed == referralId
-          ? _value.referralId
+          ? _self.referralId
           : referralId // ignore: cast_nullable_to_non_nullable
               as String?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of BtcLnSwap
@@ -152,8 +199,8 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
   @override
   @pragma('vm:prefer-inline')
   $KeyPairCopyWith<$Res> get keys {
-    return $KeyPairCopyWith<$Res>(_value.keys, (value) {
-      return _then(_value.copyWith(keys: value) as $Val);
+    return $KeyPairCopyWith<$Res>(_self.keys, (value) {
+      return _then(_self.copyWith(keys: value));
     });
   }
 
@@ -162,8 +209,8 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
   @override
   @pragma('vm:prefer-inline')
   $PreImageCopyWith<$Res> get preimage {
-    return $PreImageCopyWith<$Res>(_value.preimage, (value) {
-      return _then(_value.copyWith(preimage: value) as $Val);
+    return $PreImageCopyWith<$Res>(_self.preimage, (value) {
+      return _then(_self.copyWith(preimage: value));
     });
   }
 
@@ -172,131 +219,16 @@ class _$BtcLnSwapCopyWithImpl<$Res, $Val extends BtcLnSwap>
   @override
   @pragma('vm:prefer-inline')
   $BtcSwapScriptStrCopyWith<$Res> get swapScript {
-    return $BtcSwapScriptStrCopyWith<$Res>(_value.swapScript, (value) {
-      return _then(_value.copyWith(swapScript: value) as $Val);
+    return $BtcSwapScriptStrCopyWith<$Res>(_self.swapScript, (value) {
+      return _then(_self.copyWith(swapScript: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$BtcLnSwapImplCopyWith<$Res>
-    implements $BtcLnSwapCopyWith<$Res> {
-  factory _$$BtcLnSwapImplCopyWith(
-          _$BtcLnSwapImpl value, $Res Function(_$BtcLnSwapImpl) then) =
-      __$$BtcLnSwapImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String id,
-      SwapType kind,
-      Chain network,
-      KeyPair keys,
-      BigInt keyIndex,
-      PreImage preimage,
-      BtcSwapScriptStr swapScript,
-      String invoice,
-      String scriptAddress,
-      BigInt outAmount,
-      String electrumUrl,
-      String boltzUrl,
-      String? referralId});
 
-  @override
-  $KeyPairCopyWith<$Res> get keys;
-  @override
-  $PreImageCopyWith<$Res> get preimage;
-  @override
-  $BtcSwapScriptStrCopyWith<$Res> get swapScript;
-}
-
-/// @nodoc
-class __$$BtcLnSwapImplCopyWithImpl<$Res>
-    extends _$BtcLnSwapCopyWithImpl<$Res, _$BtcLnSwapImpl>
-    implements _$$BtcLnSwapImplCopyWith<$Res> {
-  __$$BtcLnSwapImplCopyWithImpl(
-      _$BtcLnSwapImpl _value, $Res Function(_$BtcLnSwapImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of BtcLnSwap
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? kind = null,
-    Object? network = null,
-    Object? keys = null,
-    Object? keyIndex = null,
-    Object? preimage = null,
-    Object? swapScript = null,
-    Object? invoice = null,
-    Object? scriptAddress = null,
-    Object? outAmount = null,
-    Object? electrumUrl = null,
-    Object? boltzUrl = null,
-    Object? referralId = freezed,
-  }) {
-    return _then(_$BtcLnSwapImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      kind: null == kind
-          ? _value.kind
-          : kind // ignore: cast_nullable_to_non_nullable
-              as SwapType,
-      network: null == network
-          ? _value.network
-          : network // ignore: cast_nullable_to_non_nullable
-              as Chain,
-      keys: null == keys
-          ? _value.keys
-          : keys // ignore: cast_nullable_to_non_nullable
-              as KeyPair,
-      keyIndex: null == keyIndex
-          ? _value.keyIndex
-          : keyIndex // ignore: cast_nullable_to_non_nullable
-              as BigInt,
-      preimage: null == preimage
-          ? _value.preimage
-          : preimage // ignore: cast_nullable_to_non_nullable
-              as PreImage,
-      swapScript: null == swapScript
-          ? _value.swapScript
-          : swapScript // ignore: cast_nullable_to_non_nullable
-              as BtcSwapScriptStr,
-      invoice: null == invoice
-          ? _value.invoice
-          : invoice // ignore: cast_nullable_to_non_nullable
-              as String,
-      scriptAddress: null == scriptAddress
-          ? _value.scriptAddress
-          : scriptAddress // ignore: cast_nullable_to_non_nullable
-              as String,
-      outAmount: null == outAmount
-          ? _value.outAmount
-          : outAmount // ignore: cast_nullable_to_non_nullable
-              as BigInt,
-      electrumUrl: null == electrumUrl
-          ? _value.electrumUrl
-          : electrumUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      boltzUrl: null == boltzUrl
-          ? _value.boltzUrl
-          : boltzUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      referralId: freezed == referralId
-          ? _value.referralId
-          : referralId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$BtcLnSwapImpl extends _BtcLnSwap {
-  const _$BtcLnSwapImpl(
+class _BtcLnSwap extends BtcLnSwap {
+  const _BtcLnSwap(
       {required this.id,
       required this.kind,
       required this.network,
@@ -339,16 +271,19 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
   @override
   final String? referralId;
 
+  /// Create a copy of BtcLnSwap
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'BtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, keyIndex: $keyIndex, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, scriptAddress: $scriptAddress, outAmount: $outAmount, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$BtcLnSwapCopyWith<_BtcLnSwap> get copyWith =>
+      __$BtcLnSwapCopyWithImpl<_BtcLnSwap>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BtcLnSwapImpl &&
+            other is _BtcLnSwap &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.kind, kind) || other.kind == kind) &&
             (identical(other.network, network) || other.network == network) &&
@@ -389,63 +324,154 @@ class _$BtcLnSwapImpl extends _BtcLnSwap {
       boltzUrl,
       referralId);
 
+  @override
+  String toString() {
+    return 'BtcLnSwap(id: $id, kind: $kind, network: $network, keys: $keys, keyIndex: $keyIndex, preimage: $preimage, swapScript: $swapScript, invoice: $invoice, scriptAddress: $scriptAddress, outAmount: $outAmount, electrumUrl: $electrumUrl, boltzUrl: $boltzUrl, referralId: $referralId)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$BtcLnSwapCopyWith<$Res>
+    implements $BtcLnSwapCopyWith<$Res> {
+  factory _$BtcLnSwapCopyWith(
+          _BtcLnSwap value, $Res Function(_BtcLnSwap) _then) =
+      __$BtcLnSwapCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      SwapType kind,
+      Chain network,
+      KeyPair keys,
+      BigInt keyIndex,
+      PreImage preimage,
+      BtcSwapScriptStr swapScript,
+      String invoice,
+      String scriptAddress,
+      BigInt outAmount,
+      String electrumUrl,
+      String boltzUrl,
+      String? referralId});
+
+  @override
+  $KeyPairCopyWith<$Res> get keys;
+  @override
+  $PreImageCopyWith<$Res> get preimage;
+  @override
+  $BtcSwapScriptStrCopyWith<$Res> get swapScript;
+}
+
+/// @nodoc
+class __$BtcLnSwapCopyWithImpl<$Res> implements _$BtcLnSwapCopyWith<$Res> {
+  __$BtcLnSwapCopyWithImpl(this._self, this._then);
+
+  final _BtcLnSwap _self;
+  final $Res Function(_BtcLnSwap) _then;
+
   /// Create a copy of BtcLnSwap
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$BtcLnSwapImplCopyWith<_$BtcLnSwapImpl> get copyWith =>
-      __$$BtcLnSwapImplCopyWithImpl<_$BtcLnSwapImpl>(this, _$identity);
-}
-
-abstract class _BtcLnSwap extends BtcLnSwap {
-  const factory _BtcLnSwap(
-      {required final String id,
-      required final SwapType kind,
-      required final Chain network,
-      required final KeyPair keys,
-      required final BigInt keyIndex,
-      required final PreImage preimage,
-      required final BtcSwapScriptStr swapScript,
-      required final String invoice,
-      required final String scriptAddress,
-      required final BigInt outAmount,
-      required final String electrumUrl,
-      required final String boltzUrl,
-      final String? referralId}) = _$BtcLnSwapImpl;
-  const _BtcLnSwap._() : super._();
-
-  @override
-  String get id;
-  @override
-  SwapType get kind;
-  @override
-  Chain get network;
-  @override
-  KeyPair get keys;
-  @override
-  BigInt get keyIndex;
-  @override
-  PreImage get preimage;
-  @override
-  BtcSwapScriptStr get swapScript;
-  @override
-  String get invoice;
-  @override
-  String get scriptAddress;
-  @override
-  BigInt get outAmount;
-  @override
-  String get electrumUrl;
-  @override
-  String get boltzUrl;
-  @override
-  String? get referralId;
+  $Res call({
+    Object? id = null,
+    Object? kind = null,
+    Object? network = null,
+    Object? keys = null,
+    Object? keyIndex = null,
+    Object? preimage = null,
+    Object? swapScript = null,
+    Object? invoice = null,
+    Object? scriptAddress = null,
+    Object? outAmount = null,
+    Object? electrumUrl = null,
+    Object? boltzUrl = null,
+    Object? referralId = freezed,
+  }) {
+    return _then(_BtcLnSwap(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      kind: null == kind
+          ? _self.kind
+          : kind // ignore: cast_nullable_to_non_nullable
+              as SwapType,
+      network: null == network
+          ? _self.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as Chain,
+      keys: null == keys
+          ? _self.keys
+          : keys // ignore: cast_nullable_to_non_nullable
+              as KeyPair,
+      keyIndex: null == keyIndex
+          ? _self.keyIndex
+          : keyIndex // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+      preimage: null == preimage
+          ? _self.preimage
+          : preimage // ignore: cast_nullable_to_non_nullable
+              as PreImage,
+      swapScript: null == swapScript
+          ? _self.swapScript
+          : swapScript // ignore: cast_nullable_to_non_nullable
+              as BtcSwapScriptStr,
+      invoice: null == invoice
+          ? _self.invoice
+          : invoice // ignore: cast_nullable_to_non_nullable
+              as String,
+      scriptAddress: null == scriptAddress
+          ? _self.scriptAddress
+          : scriptAddress // ignore: cast_nullable_to_non_nullable
+              as String,
+      outAmount: null == outAmount
+          ? _self.outAmount
+          : outAmount // ignore: cast_nullable_to_non_nullable
+              as BigInt,
+      electrumUrl: null == electrumUrl
+          ? _self.electrumUrl
+          : electrumUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      boltzUrl: null == boltzUrl
+          ? _self.boltzUrl
+          : boltzUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      referralId: freezed == referralId
+          ? _self.referralId
+          : referralId // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
 
   /// Create a copy of BtcLnSwap
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BtcLnSwapImplCopyWith<_$BtcLnSwapImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $KeyPairCopyWith<$Res> get keys {
+    return $KeyPairCopyWith<$Res>(_self.keys, (value) {
+      return _then(_self.copyWith(keys: value));
+    });
+  }
+
+  /// Create a copy of BtcLnSwap
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PreImageCopyWith<$Res> get preimage {
+    return $PreImageCopyWith<$Res>(_self.preimage, (value) {
+      return _then(_self.copyWith(preimage: value));
+    });
+  }
+
+  /// Create a copy of BtcLnSwap
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BtcSwapScriptStrCopyWith<$Res> get swapScript {
+    return $BtcSwapScriptStrCopyWith<$Res>(_self.swapScript, (value) {
+      return _then(_self.copyWith(swapScript: value));
+    });
+  }
 }
+
+// dart format on

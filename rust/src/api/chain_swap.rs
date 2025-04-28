@@ -14,7 +14,7 @@ use boltz_client::{
         hex::DisplayHex,
         Transaction as BitcoinTransaction, Txid,
     },
-    boltz::{ChainSwapDetails, Cooperative, Side},
+    boltz::{self, ChainSwapDetails, Cooperative, Side},
     elements::Transaction as LiquidTransaction,
     error::Error,
     network::{
@@ -179,7 +179,7 @@ impl ChainSwap {
             inner: claim_kps.public_key(),
         };
         let preimage = Preimage::new();
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
         match direction {
             ChainSwapDirection::BtcToLbtc => {
                 let create_swap_req = boltz_client::swaps::boltz::CreateChainRequest {
@@ -310,7 +310,7 @@ impl ChainSwap {
     }
     /// Get the transaction id of the server's lockup transaction
     pub async fn get_server_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let txs = boltz_client.get_chain_txs(&self.id.clone()).await?;
         if txs.server_lock.is_none() {
             Err(BoltzError::new(
@@ -323,7 +323,7 @@ impl ChainSwap {
     }
     /// Get the transaction id of the user's lockup transaction
     pub async fn get_user_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let txs = boltz_client.get_chain_txs(&self.id.clone()).await?;
         if txs.user_lock.is_none() {
             Err(BoltzError::new(
@@ -359,7 +359,7 @@ impl ChainSwap {
 
         let lbtc_network_config =
             ElectrumLiquidClient::new(lbtc_chain, &self.lbtc_electrum_url, true, true, 10)?;
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -368,7 +368,7 @@ impl ChainSwap {
                     lbtc_claim_script.clone(),
                     out_address.clone(),
                     &lbtc_network_config,
-                    ensure_http_prefix(&self.boltz_url),
+                    &boltz_client,
                     id.clone(),
                 )
                 .await?;
@@ -381,7 +381,7 @@ impl ChainSwap {
                         btc_lockup_script.clone(),
                         &refund_address,
                         &btc_network_config,
-                        ensure_http_prefix(&self.boltz_url),
+                        &boltz_client,
                         self.id.clone(),
                     )
                     .await?;
@@ -428,7 +428,7 @@ impl ChainSwap {
                     btc_claim_script.clone(),
                     out_address.clone(),
                     &btc_network_config,
-                    ensure_http_prefix(&self.boltz_url),
+                    &boltz_client,
                     self.id.clone(),
                 )
                 .await?;
@@ -443,7 +443,7 @@ impl ChainSwap {
                         lbtc_lockup_script.clone(),
                         &refund_address,
                         &lbtc_network_config,
-                        ensure_http_prefix(&self.boltz_url),
+                        &boltz_client,
                         id.clone(),
                     )
                     .await?;
@@ -512,7 +512,7 @@ impl ChainSwap {
         let lbtc_network_config =
             ElectrumLiquidClient::new(lbtc_chain, &self.lbtc_electrum_url, true, true, 10)?;
 
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
                 let btc_lockup_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
@@ -520,7 +520,7 @@ impl ChainSwap {
                     btc_lockup_script.clone(),
                     &refund_address,
                     &btc_network_config,
-                    ensure_http_prefix(&self.boltz_url),
+                    &boltz_client,
                     self.id.clone(),
                 )
                 .await?;
@@ -554,7 +554,7 @@ impl ChainSwap {
                     lbtc_lockup_script.clone(),
                     &refund_address,
                     &lbtc_network_config,
-                    ensure_http_prefix(&self.boltz_url),
+                    &boltz_client,
                     id.clone(),
                 )
                 .await?;
@@ -678,7 +678,7 @@ impl ChainSwap {
         kind: SwapTxKind,
     ) -> Result<String, BoltzError> {
         let (network, _) = self.get_network(kind);
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let txid = match boltz_client.broadcast_tx(network.into(), &signed_hex).await {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
