@@ -12,7 +12,7 @@ use boltz_client::{
         BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
         SwapType as BoltzSwapType,
     },
-    util::{lnurl, secrets::SwapKey},
+    util::secrets::SwapKey,
     Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
     PublicKey, Secp256k1, ZKKeyPair,
 };

@@ -9,7 +9,7 @@ use boltz_client::{
         consensus::{encode::serialize, Decodable},
         Transaction, Txid,
     },
-    boltz::{self, Cooperative},
+    boltz::Cooperative,
     network::{electrum::ElectrumBitcoinClient, BitcoinClient, Chain as AllChains},
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,

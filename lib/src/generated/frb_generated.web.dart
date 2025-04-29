@@ -11,6 +11,7 @@ import 'api/chain_swap.dart';
 import 'api/error.dart';
 import 'api/fees.dart';
 import 'api/lbtc_ln.dart';
+import 'api/lnurl.dart';
 import 'api/types.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -1126,6 +1127,15 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, JSAny that) =>
       wasmModule.wire__crate__api__fees__fees_submarine(port_, that);
 
+  void wire__crate__api__lnurl__get_voucher_max_amount(
+          NativePortType port_, String lnurl) =>
+      wasmModule.wire__crate__api__lnurl__get_voucher_max_amount(port_, lnurl);
+
+  void wire__crate__api__lnurl__invoice_from_lnurl(
+          NativePortType port_, String lnurl, JSAny msats) =>
+      wasmModule.wire__crate__api__lnurl__invoice_from_lnurl(
+          port_, lnurl, msats);
+
   void wire__crate__api__types__key_pair_generate(
           NativePortType port_,
           String mnemonic,
@@ -1301,6 +1311,14 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, String value, String sha256, String hash160) =>
       wasmModule.wire__crate__api__types__pre_image_new(
           port_, value, sha256, hash160);
+
+  void wire__crate__api__lnurl__validate_lnurl(
+          NativePortType port_, String lnurl) =>
+      wasmModule.wire__crate__api__lnurl__validate_lnurl(port_, lnurl);
+
+  void wire__crate__api__lnurl__withdraw(
+          NativePortType port_, String lnurl, String invoice) =>
+      wasmModule.wire__crate__api__lnurl__withdraw(port_, lnurl, invoice);
 }
 
 @JS('wasm_bindgen')
@@ -1482,6 +1500,12 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__fees__fees_submarine(
       NativePortType port_, JSAny that);
 
+  external void wire__crate__api__lnurl__get_voucher_max_amount(
+      NativePortType port_, String lnurl);
+
+  external void wire__crate__api__lnurl__invoice_from_lnurl(
+      NativePortType port_, String lnurl, JSAny msats);
+
   external void wire__crate__api__types__key_pair_generate(
       NativePortType port_,
       String mnemonic,
@@ -1586,4 +1610,10 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
 
   external void wire__crate__api__types__pre_image_new(
       NativePortType port_, String value, String sha256, String hash160);
+
+  external void wire__crate__api__lnurl__validate_lnurl(
+      NativePortType port_, String lnurl);
+
+  external void wire__crate__api__lnurl__withdraw(
+      NativePortType port_, String lnurl, String invoice);
 }

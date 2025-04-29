@@ -1,3 +1,7 @@
+use boltz_client::util::lnurl;
+
+use super::error::BoltzError;
+
 /// LNURL helper to validate an lnurl string
 pub fn validate_lnurl(lnurl: String) -> bool {
     lnurl::validate_lnurl(&lnurl)

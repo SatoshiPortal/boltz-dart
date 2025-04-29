@@ -14,7 +14,7 @@ use boltz_client::{
         hex::DisplayHex,
         Transaction as BitcoinTransaction, Txid,
     },
-    boltz::{self, ChainSwapDetails, Cooperative, Side},
+    boltz::{ChainSwapDetails, Cooperative, Side},
     elements::Transaction as LiquidTransaction,
     error::Error,
     network::{

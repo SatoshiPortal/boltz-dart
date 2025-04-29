@@ -360,6 +360,13 @@ void frbgen_boltz_wire__crate__api__fees__fees_reverse(int64_t port_, struct wir
 
 void frbgen_boltz_wire__crate__api__fees__fees_submarine(int64_t port_, struct wire_cst_fees *that);
 
+void frbgen_boltz_wire__crate__api__lnurl__get_voucher_max_amount(int64_t port_,
+                                                                  struct wire_cst_list_prim_u_8_strict *lnurl);
+
+void frbgen_boltz_wire__crate__api__lnurl__invoice_from_lnurl(int64_t port_,
+                                                              struct wire_cst_list_prim_u_8_strict *lnurl,
+                                                              uint64_t msats);
+
 void frbgen_boltz_wire__crate__api__types__key_pair_generate(int64_t port_,
                                                              struct wire_cst_list_prim_u_8_strict *mnemonic,
                                                              struct wire_cst_list_prim_u_8_strict *passphrase,
@@ -462,6 +469,13 @@ void frbgen_boltz_wire__crate__api__types__pre_image_new(int64_t port_,
                                                          struct wire_cst_list_prim_u_8_strict *sha256,
                                                          struct wire_cst_list_prim_u_8_strict *hash160);
 
+void frbgen_boltz_wire__crate__api__lnurl__validate_lnurl(int64_t port_,
+                                                          struct wire_cst_list_prim_u_8_strict *lnurl);
+
+void frbgen_boltz_wire__crate__api__lnurl__withdraw(int64_t port_,
+                                                    struct wire_cst_list_prim_u_8_strict *lnurl,
+                                                    struct wire_cst_list_prim_u_8_strict *invoice);
+
 struct wire_cst_boltz_error *frbgen_boltz_cst_new_box_autoadd_boltz_error(void);
 
 struct wire_cst_btc_ln_swap *frbgen_boltz_cst_new_box_autoadd_btc_ln_swap(void);
@@ -539,6 +553,10 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__get_voucher_max_amount);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__invoice_from_lnurl);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__validate_lnurl);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__withdraw);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__decoded_invoice_from_string);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__key_pair_generate);

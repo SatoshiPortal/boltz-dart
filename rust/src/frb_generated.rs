@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.9.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -291363850;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 2130652112;
 
 // Section: executor
 
@@ -1039,6 +1039,58 @@ fn wire__crate__api__fees__fees_submarine_impl(
         },
     )
 }
+fn wire__crate__api__lnurl__get_voucher_max_amount_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "get_voucher_max_amount",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::lnurl::get_voucher_max_amount(api_lnurl).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__lnurl__invoice_from_lnurl_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+    msats: impl CstDecode<u64>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "invoice_from_lnurl",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            let api_msats = msats.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::lnurl::invoice_from_lnurl(api_lnurl, api_msats).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__types__key_pair_generate_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     mnemonic: impl CstDecode<String>,
@@ -1609,6 +1661,54 @@ fn wire__crate__api__types__pre_image_new_impl(
                     ))?;
                     Ok(output_ok)
                 })())
+            }
+        },
+    )
+}
+fn wire__crate__api__lnurl__validate_lnurl_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "validate_lnurl",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::lnurl::validate_lnurl(api_lnurl))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__lnurl__withdraw_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    lnurl: impl CstDecode<String>,
+    invoice: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "withdraw",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_lnurl = lnurl.cst_decode();
+            let api_invoice = invoice.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::lnurl::withdraw(api_lnurl, api_invoice).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -4286,6 +4386,23 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__lnurl__get_voucher_max_amount(
+        port_: i64,
+        lnurl: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__lnurl__get_voucher_max_amount_impl(port_, lnurl)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__lnurl__invoice_from_lnurl(
+        port_: i64,
+        lnurl: *mut wire_cst_list_prim_u_8_strict,
+        msats: u64,
+    ) {
+        wire__crate__api__lnurl__invoice_from_lnurl_impl(port_, lnurl, msats)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__types__key_pair_generate(
         port_: i64,
         mnemonic: *mut wire_cst_list_prim_u_8_strict,
@@ -4530,6 +4647,23 @@ mod io {
         hash160: *mut wire_cst_list_prim_u_8_strict,
     ) {
         wire__crate__api__types__pre_image_new_impl(port_, value, sha256, hash160)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__lnurl__validate_lnurl(
+        port_: i64,
+        lnurl: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__lnurl__validate_lnurl_impl(port_, lnurl)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__lnurl__withdraw(
+        port_: i64,
+        lnurl: *mut wire_cst_list_prim_u_8_strict,
+        invoice: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__lnurl__withdraw_impl(port_, lnurl, invoice)
     }
 
     #[unsafe(no_mangle)]
@@ -5819,6 +5953,23 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn wire__crate__api__lnurl__get_voucher_max_amount(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        lnurl: String,
+    ) {
+        wire__crate__api__lnurl__get_voucher_max_amount_impl(port_, lnurl)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__lnurl__invoice_from_lnurl(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        lnurl: String,
+        msats: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__lnurl__invoice_from_lnurl_impl(port_, lnurl, msats)
+    }
+
+    #[wasm_bindgen]
     pub fn wire__crate__api__types__key_pair_generate(
         port_: flutter_rust_bridge::for_generated::MessagePort,
         mnemonic: String,
@@ -6065,6 +6216,23 @@ mod web {
         hash160: String,
     ) {
         wire__crate__api__types__pre_image_new_impl(port_, value, sha256, hash160)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__lnurl__validate_lnurl(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        lnurl: String,
+    ) {
+        wire__crate__api__lnurl__validate_lnurl_impl(port_, lnurl)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__lnurl__withdraw(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        lnurl: String,
+        invoice: String,
+    ) {
+        wire__crate__api__lnurl__withdraw_impl(port_, lnurl, invoice)
     }
 }
 #[cfg(target_family = "wasm")]
