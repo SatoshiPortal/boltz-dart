@@ -58,6 +58,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   LbtcLnSwap dco_decode_box_autoadd_lbtc_ln_swap(dynamic raw);
 
   @protected
+  Lnurl dco_decode_box_autoadd_lnurl(dynamic raw);
+
+  @protected
   PreImage dco_decode_box_autoadd_pre_image(dynamic raw);
 
   @protected
@@ -110,6 +113,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  Lnurl dco_decode_lnurl(dynamic raw);
 
   @protected
   MinerFees dco_decode_miner_fees(dynamic raw);
@@ -201,6 +207,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   LbtcLnSwap sse_decode_box_autoadd_lbtc_ln_swap(SseDeserializer deserializer);
 
   @protected
+  Lnurl sse_decode_box_autoadd_lnurl(SseDeserializer deserializer);
+
+  @protected
   PreImage sse_decode_box_autoadd_pre_image(SseDeserializer deserializer);
 
   @protected
@@ -256,6 +265,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  Lnurl sse_decode_lnurl(SseDeserializer deserializer);
 
   @protected
   MinerFees sse_decode_miner_fees(SseDeserializer deserializer);
@@ -390,6 +402,14 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  ffi.Pointer<wire_cst_lnurl> cst_encode_box_autoadd_lnurl(Lnurl raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_lnurl();
+    cst_api_fill_to_wire_lnurl(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_cst_pre_image> cst_encode_box_autoadd_pre_image(
       PreImage raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
@@ -501,6 +521,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void cst_api_fill_to_wire_box_autoadd_lbtc_ln_swap(
       LbtcLnSwap apiObj, ffi.Pointer<wire_cst_lbtc_ln_swap> wireObj) {
     cst_api_fill_to_wire_lbtc_ln_swap(apiObj, wireObj.ref);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_autoadd_lnurl(
+      Lnurl apiObj, ffi.Pointer<wire_cst_lnurl> wireObj) {
+    cst_api_fill_to_wire_lnurl(apiObj, wireObj.ref);
   }
 
   @protected
@@ -649,6 +675,11 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_lnurl(Lnurl apiObj, wire_cst_lnurl wireObj) {
+    wireObj.value = cst_encode_String(apiObj.value);
+  }
+
+  @protected
   void cst_api_fill_to_wire_miner_fees(
       MinerFees apiObj, wire_cst_miner_fees wireObj) {
     wireObj.lockup = cst_encode_u_64(apiObj.lockup);
@@ -792,6 +823,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       LbtcLnSwap self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_lnurl(Lnurl self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_pre_image(
       PreImage self, SseSerializer serializer);
 
@@ -851,6 +885,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_lnurl(Lnurl self, SseSerializer serializer);
 
   @protected
   void sse_encode_miner_fees(MinerFees self, SseSerializer serializer);
@@ -1872,47 +1909,6 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__fees__fees_submarinePtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_fees>)>();
 
-  void wire__crate__api__lnurl__get_voucher_max_amount(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-  ) {
-    return _wire__crate__api__lnurl__get_voucher_max_amount(
-      port_,
-      lnurl,
-    );
-  }
-
-  late final _wire__crate__api__lnurl__get_voucher_max_amountPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__lnurl__get_voucher_max_amount');
-  late final _wire__crate__api__lnurl__get_voucher_max_amount =
-      _wire__crate__api__lnurl__get_voucher_max_amountPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__lnurl__invoice_from_lnurl(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-    int msats,
-  ) {
-    return _wire__crate__api__lnurl__invoice_from_lnurl(
-      port_,
-      lnurl,
-      msats,
-    );
-  }
-
-  late final _wire__crate__api__lnurl__invoice_from_lnurlPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>, ffi.Uint64)>>(
-      'frbgen_boltz_wire__crate__api__lnurl__invoice_from_lnurl');
-  late final _wire__crate__api__lnurl__invoice_from_lnurl =
-      _wire__crate__api__lnurl__invoice_from_lnurlPtr.asFunction<
-          void Function(
-              int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)>();
-
   void wire__crate__api__types__key_pair_generate(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
@@ -2420,6 +2416,105 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_sizePtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>, bool)>();
 
+  void wire__crate__api__lnurl__lnurl_fetch_invoice(
+    int port_,
+    ffi.Pointer<wire_cst_lnurl> that,
+    int msats,
+  ) {
+    return _wire__crate__api__lnurl__lnurl_fetch_invoice(
+      port_,
+      that,
+      msats,
+    );
+  }
+
+  late final _wire__crate__api__lnurl__lnurl_fetch_invoicePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_lnurl>, ffi.Uint64)>>(
+      'frbgen_boltz_wire__crate__api__lnurl__lnurl_fetch_invoice');
+  late final _wire__crate__api__lnurl__lnurl_fetch_invoice =
+      _wire__crate__api__lnurl__lnurl_fetch_invoicePtr
+          .asFunction<void Function(int, ffi.Pointer<wire_cst_lnurl>, int)>();
+
+  void wire__crate__api__lnurl__lnurl_get_voucher_max_amount(
+    int port_,
+    ffi.Pointer<wire_cst_lnurl> that,
+  ) {
+    return _wire__crate__api__lnurl__lnurl_get_voucher_max_amount(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire__crate__api__lnurl__lnurl_get_voucher_max_amountPtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_lnurl>)>>(
+          'frbgen_boltz_wire__crate__api__lnurl__lnurl_get_voucher_max_amount');
+  late final _wire__crate__api__lnurl__lnurl_get_voucher_max_amount =
+      _wire__crate__api__lnurl__lnurl_get_voucher_max_amountPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_cst_lnurl>)>();
+
+  void wire__crate__api__lnurl__lnurl_new(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> value,
+  ) {
+    return _wire__crate__api__lnurl__lnurl_new(
+      port_,
+      value,
+    );
+  }
+
+  late final _wire__crate__api__lnurl__lnurl_newPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_wire__crate__api__lnurl__lnurl_new');
+  late final _wire__crate__api__lnurl__lnurl_new =
+      _wire__crate__api__lnurl__lnurl_newPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  void wire__crate__api__lnurl__lnurl_validate(
+    int port_,
+    ffi.Pointer<wire_cst_lnurl> that,
+  ) {
+    return _wire__crate__api__lnurl__lnurl_validate(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire__crate__api__lnurl__lnurl_validatePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_lnurl>)>>(
+      'frbgen_boltz_wire__crate__api__lnurl__lnurl_validate');
+  late final _wire__crate__api__lnurl__lnurl_validate =
+      _wire__crate__api__lnurl__lnurl_validatePtr
+          .asFunction<void Function(int, ffi.Pointer<wire_cst_lnurl>)>();
+
+  void wire__crate__api__lnurl__lnurl_withdraw(
+    int port_,
+    ffi.Pointer<wire_cst_lnurl> that,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
+  ) {
+    return _wire__crate__api__lnurl__lnurl_withdraw(
+      port_,
+      that,
+      invoice,
+    );
+  }
+
+  late final _wire__crate__api__lnurl__lnurl_withdrawPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_lnurl>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_boltz_wire__crate__api__lnurl__lnurl_withdraw');
+  late final _wire__crate__api__lnurl__lnurl_withdraw =
+      _wire__crate__api__lnurl__lnurl_withdrawPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_lnurl>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
   void wire__crate__api__types__pre_image_generate(
     int port_,
   ) {
@@ -2463,49 +2558,6 @@ class BoltzCoreWire implements BaseWire {
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__lnurl__validate_lnurl(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-  ) {
-    return _wire__crate__api__lnurl__validate_lnurl(
-      port_,
-      lnurl,
-    );
-  }
-
-  late final _wire__crate__api__lnurl__validate_lnurlPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__lnurl__validate_lnurl');
-  late final _wire__crate__api__lnurl__validate_lnurl =
-      _wire__crate__api__lnurl__validate_lnurlPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__lnurl__withdraw(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
-  ) {
-    return _wire__crate__api__lnurl__withdraw(
-      port_,
-      lnurl,
-      invoice,
-    );
-  }
-
-  late final _wire__crate__api__lnurl__withdrawPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__lnurl__withdraw');
-  late final _wire__crate__api__lnurl__withdraw =
-      _wire__crate__api__lnurl__withdrawPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   ffi.Pointer<wire_cst_boltz_error> cst_new_box_autoadd_boltz_error() {
@@ -2597,6 +2649,16 @@ class BoltzCoreWire implements BaseWire {
   late final _cst_new_box_autoadd_lbtc_ln_swap =
       _cst_new_box_autoadd_lbtc_ln_swapPtr
           .asFunction<ffi.Pointer<wire_cst_lbtc_ln_swap> Function()>();
+
+  ffi.Pointer<wire_cst_lnurl> cst_new_box_autoadd_lnurl() {
+    return _cst_new_box_autoadd_lnurl();
+  }
+
+  late final _cst_new_box_autoadd_lnurlPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_cst_lnurl> Function()>>(
+          'frbgen_boltz_cst_new_box_autoadd_lnurl');
+  late final _cst_new_box_autoadd_lnurl = _cst_new_box_autoadd_lnurlPtr
+      .asFunction<ffi.Pointer<wire_cst_lnurl> Function()>();
 
   ffi.Pointer<wire_cst_pre_image> cst_new_box_autoadd_pre_image() {
     return _cst_new_box_autoadd_pre_image();
@@ -2864,6 +2926,10 @@ final class wire_cst_lbtc_ln_swap extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id;
+}
+
+final class wire_cst_lnurl extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> value;
 }
 
 final class wire_cst_swap_limits extends ffi.Struct {

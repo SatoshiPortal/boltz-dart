@@ -73,7 +73,7 @@ class BoltzCore
   String get codegenVersion => '2.9.0';
 
   @override
-  int get rustContentHash => 2130652112;
+  int get rustContentHash => 1496721001;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -243,11 +243,6 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<SubmarineFeesAndLimits> crateApiFeesFeesSubmarine(
       {required Fees that});
 
-  Future<BigInt> crateApiLnurlGetVoucherMaxAmount({required String lnurl});
-
-  Future<String> crateApiLnurlInvoiceFromLnurl(
-      {required String lnurl, required BigInt msats});
-
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
       String? passphrase,
@@ -338,15 +333,22 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<BigInt> crateApiLbtcLnLbtcLnSwapTxSize(
       {required LbtcLnSwap that, required bool isCooperative});
 
+  Future<String> crateApiLnurlLnurlFetchInvoice(
+      {required Lnurl that, required BigInt msats});
+
+  Future<BigInt> crateApiLnurlLnurlGetVoucherMaxAmount({required Lnurl that});
+
+  Future<Lnurl> crateApiLnurlLnurlNew({required String value});
+
+  Future<bool> crateApiLnurlLnurlValidate({required Lnurl that});
+
+  Future<void> crateApiLnurlLnurlWithdraw(
+      {required Lnurl that, required String invoice});
+
   Future<PreImage> crateApiTypesPreImageGenerate();
 
   Future<PreImage> crateApiTypesPreImageNew(
       {required String value, required String sha256, required String hash160});
-
-  Future<bool> crateApiLnurlValidateLnurl({required String lnurl});
-
-  Future<void> crateApiLnurlWithdraw(
-      {required String lnurl, required String invoice});
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -1426,56 +1428,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<BigInt> crateApiLnurlGetVoucherMaxAmount({required String lnurl}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        return wire.wire__crate__api__lnurl__get_voucher_max_amount(
-            port_, arg0);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_u_64,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiLnurlGetVoucherMaxAmountConstMeta,
-      argValues: [lnurl],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLnurlGetVoucherMaxAmountConstMeta =>
-      const TaskConstMeta(
-        debugName: "get_voucher_max_amount",
-        argNames: ["lnurl"],
-      );
-
-  @override
-  Future<String> crateApiLnurlInvoiceFromLnurl(
-      {required String lnurl, required BigInt msats}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        var arg1 = cst_encode_u_64(msats);
-        return wire.wire__crate__api__lnurl__invoice_from_lnurl(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_String,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiLnurlInvoiceFromLnurlConstMeta,
-      argValues: [lnurl, msats],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLnurlInvoiceFromLnurlConstMeta =>
-      const TaskConstMeta(
-        debugName: "invoice_from_lnurl",
-        argNames: ["lnurl", "msats"],
-      );
-
-  @override
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
       String? passphrase,
@@ -2050,6 +2002,124 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<String> crateApiLnurlLnurlFetchInvoice(
+      {required Lnurl that, required BigInt msats}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lnurl(that);
+        var arg1 = cst_encode_u_64(msats);
+        return wire.wire__crate__api__lnurl__lnurl_fetch_invoice(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLnurlLnurlFetchInvoiceConstMeta,
+      argValues: [that, msats],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLnurlLnurlFetchInvoiceConstMeta =>
+      const TaskConstMeta(
+        debugName: "lnurl_fetch_invoice",
+        argNames: ["that", "msats"],
+      );
+
+  @override
+  Future<BigInt> crateApiLnurlLnurlGetVoucherMaxAmount({required Lnurl that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lnurl(that);
+        return wire.wire__crate__api__lnurl__lnurl_get_voucher_max_amount(
+            port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_u_64,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLnurlLnurlGetVoucherMaxAmountConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLnurlLnurlGetVoucherMaxAmountConstMeta =>
+      const TaskConstMeta(
+        debugName: "lnurl_get_voucher_max_amount",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<Lnurl> crateApiLnurlLnurlNew({required String value}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(value);
+        return wire.wire__crate__api__lnurl__lnurl_new(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_lnurl,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLnurlLnurlNewConstMeta,
+      argValues: [value],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLnurlLnurlNewConstMeta => const TaskConstMeta(
+        debugName: "lnurl_new",
+        argNames: ["value"],
+      );
+
+  @override
+  Future<bool> crateApiLnurlLnurlValidate({required Lnurl that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lnurl(that);
+        return wire.wire__crate__api__lnurl__lnurl_validate(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_bool,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLnurlLnurlValidateConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLnurlLnurlValidateConstMeta => const TaskConstMeta(
+        debugName: "lnurl_validate",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<void> crateApiLnurlLnurlWithdraw(
+      {required Lnurl that, required String invoice}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lnurl(that);
+        var arg1 = cst_encode_String(invoice);
+        return wire.wire__crate__api__lnurl__lnurl_withdraw(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLnurlLnurlWithdrawConstMeta,
+      argValues: [that, invoice],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLnurlLnurlWithdrawConstMeta => const TaskConstMeta(
+        debugName: "lnurl_withdraw",
+        argNames: ["that", "invoice"],
+      );
+
+  @override
   Future<PreImage> crateApiTypesPreImageGenerate() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2097,52 +2167,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiTypesPreImageNewConstMeta => const TaskConstMeta(
         debugName: "pre_image_new",
         argNames: ["value", "sha256", "hash160"],
-      );
-
-  @override
-  Future<bool> crateApiLnurlValidateLnurl({required String lnurl}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        return wire.wire__crate__api__lnurl__validate_lnurl(port_, arg0);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_bool,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiLnurlValidateLnurlConstMeta,
-      argValues: [lnurl],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLnurlValidateLnurlConstMeta => const TaskConstMeta(
-        debugName: "validate_lnurl",
-        argNames: ["lnurl"],
-      );
-
-  @override
-  Future<void> crateApiLnurlWithdraw(
-      {required String lnurl, required String invoice}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        var arg1 = cst_encode_String(invoice);
-        return wire.wire__crate__api__lnurl__withdraw(port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_unit,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiLnurlWithdrawConstMeta,
-      argValues: [lnurl, invoice],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLnurlWithdrawConstMeta => const TaskConstMeta(
-        debugName: "withdraw",
-        argNames: ["lnurl", "invoice"],
       );
 
   @protected
@@ -2215,6 +2239,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   LbtcLnSwap dco_decode_box_autoadd_lbtc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_lbtc_ln_swap(raw);
+  }
+
+  @protected
+  Lnurl dco_decode_box_autoadd_lnurl(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_lnurl(raw);
   }
 
   @protected
@@ -2443,6 +2473,17 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  Lnurl dco_decode_lnurl(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return Lnurl(
+      value: dco_decode_String(arr[0]),
+    );
   }
 
   @protected
@@ -2680,6 +2721,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   LbtcLnSwap sse_decode_box_autoadd_lbtc_ln_swap(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_lbtc_ln_swap(deserializer));
+  }
+
+  @protected
+  Lnurl sse_decode_box_autoadd_lnurl(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_lnurl(deserializer));
   }
 
   @protected
@@ -2952,6 +2999,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  Lnurl sse_decode_lnurl(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_value = sse_decode_String(deserializer);
+    return Lnurl(value: var_value);
   }
 
   @protected
@@ -3254,6 +3308,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_box_autoadd_lnurl(Lnurl self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_lnurl(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_pre_image(
       PreImage self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -3438,6 +3498,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_lnurl(Lnurl self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.value, serializer);
   }
 
   @protected

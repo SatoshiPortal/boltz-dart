@@ -60,6 +60,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   LbtcLnSwap dco_decode_box_autoadd_lbtc_ln_swap(dynamic raw);
 
   @protected
+  Lnurl dco_decode_box_autoadd_lnurl(dynamic raw);
+
+  @protected
   PreImage dco_decode_box_autoadd_pre_image(dynamic raw);
 
   @protected
@@ -112,6 +115,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  Lnurl dco_decode_lnurl(dynamic raw);
 
   @protected
   MinerFees dco_decode_miner_fees(dynamic raw);
@@ -203,6 +209,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   LbtcLnSwap sse_decode_box_autoadd_lbtc_ln_swap(SseDeserializer deserializer);
 
   @protected
+  Lnurl sse_decode_box_autoadd_lnurl(SseDeserializer deserializer);
+
+  @protected
   PreImage sse_decode_box_autoadd_pre_image(SseDeserializer deserializer);
 
   @protected
@@ -258,6 +267,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  Lnurl sse_decode_lnurl(SseDeserializer deserializer);
 
   @protected
   MinerFees sse_decode_miner_fees(SseDeserializer deserializer);
@@ -374,6 +386,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   JSAny cst_encode_box_autoadd_lbtc_ln_swap(LbtcLnSwap raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_lbtc_ln_swap(raw);
+  }
+
+  @protected
+  JSAny cst_encode_box_autoadd_lnurl(Lnurl raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_lnurl(raw);
   }
 
   @protected
@@ -547,6 +565,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  JSAny cst_encode_lnurl(Lnurl raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return [cst_encode_String(raw.value)].jsify()!;
+  }
+
+  @protected
   JSAny cst_encode_miner_fees(MinerFees raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return [cst_encode_u_64(raw.lockup), cst_encode_u_64(raw.claim)].jsify()!;
@@ -717,6 +741,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       LbtcLnSwap self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_lnurl(Lnurl self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_pre_image(
       PreImage self, SseSerializer serializer);
 
@@ -776,6 +803,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_lnurl(Lnurl self, SseSerializer serializer);
 
   @protected
   void sse_encode_miner_fees(MinerFees self, SseSerializer serializer);
@@ -1127,15 +1157,6 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, JSAny that) =>
       wasmModule.wire__crate__api__fees__fees_submarine(port_, that);
 
-  void wire__crate__api__lnurl__get_voucher_max_amount(
-          NativePortType port_, String lnurl) =>
-      wasmModule.wire__crate__api__lnurl__get_voucher_max_amount(port_, lnurl);
-
-  void wire__crate__api__lnurl__invoice_from_lnurl(
-          NativePortType port_, String lnurl, JSAny msats) =>
-      wasmModule.wire__crate__api__lnurl__invoice_from_lnurl(
-          port_, lnurl, msats);
-
   void wire__crate__api__types__key_pair_generate(
           NativePortType port_,
           String mnemonic,
@@ -1304,6 +1325,27 @@ class BoltzCoreWire implements BaseWire {
       wasmModule.wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
           port_, that, is_cooperative);
 
+  void wire__crate__api__lnurl__lnurl_fetch_invoice(
+          NativePortType port_, JSAny that, JSAny msats) =>
+      wasmModule.wire__crate__api__lnurl__lnurl_fetch_invoice(
+          port_, that, msats);
+
+  void wire__crate__api__lnurl__lnurl_get_voucher_max_amount(
+          NativePortType port_, JSAny that) =>
+      wasmModule.wire__crate__api__lnurl__lnurl_get_voucher_max_amount(
+          port_, that);
+
+  void wire__crate__api__lnurl__lnurl_new(NativePortType port_, String value) =>
+      wasmModule.wire__crate__api__lnurl__lnurl_new(port_, value);
+
+  void wire__crate__api__lnurl__lnurl_validate(
+          NativePortType port_, JSAny that) =>
+      wasmModule.wire__crate__api__lnurl__lnurl_validate(port_, that);
+
+  void wire__crate__api__lnurl__lnurl_withdraw(
+          NativePortType port_, JSAny that, String invoice) =>
+      wasmModule.wire__crate__api__lnurl__lnurl_withdraw(port_, that, invoice);
+
   void wire__crate__api__types__pre_image_generate(NativePortType port_) =>
       wasmModule.wire__crate__api__types__pre_image_generate(port_);
 
@@ -1311,14 +1353,6 @@ class BoltzCoreWire implements BaseWire {
           NativePortType port_, String value, String sha256, String hash160) =>
       wasmModule.wire__crate__api__types__pre_image_new(
           port_, value, sha256, hash160);
-
-  void wire__crate__api__lnurl__validate_lnurl(
-          NativePortType port_, String lnurl) =>
-      wasmModule.wire__crate__api__lnurl__validate_lnurl(port_, lnurl);
-
-  void wire__crate__api__lnurl__withdraw(
-          NativePortType port_, String lnurl, String invoice) =>
-      wasmModule.wire__crate__api__lnurl__withdraw(port_, lnurl, invoice);
 }
 
 @JS('wasm_bindgen')
@@ -1500,12 +1534,6 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__fees__fees_submarine(
       NativePortType port_, JSAny that);
 
-  external void wire__crate__api__lnurl__get_voucher_max_amount(
-      NativePortType port_, String lnurl);
-
-  external void wire__crate__api__lnurl__invoice_from_lnurl(
-      NativePortType port_, String lnurl, JSAny msats);
-
   external void wire__crate__api__types__key_pair_generate(
       NativePortType port_,
       String mnemonic,
@@ -1605,15 +1633,24 @@ extension type BoltzCoreWasmModule._(JSObject _) implements JSObject {
   external void wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
       NativePortType port_, JSAny that, bool is_cooperative);
 
+  external void wire__crate__api__lnurl__lnurl_fetch_invoice(
+      NativePortType port_, JSAny that, JSAny msats);
+
+  external void wire__crate__api__lnurl__lnurl_get_voucher_max_amount(
+      NativePortType port_, JSAny that);
+
+  external void wire__crate__api__lnurl__lnurl_new(
+      NativePortType port_, String value);
+
+  external void wire__crate__api__lnurl__lnurl_validate(
+      NativePortType port_, JSAny that);
+
+  external void wire__crate__api__lnurl__lnurl_withdraw(
+      NativePortType port_, JSAny that, String invoice);
+
   external void wire__crate__api__types__pre_image_generate(
       NativePortType port_);
 
   external void wire__crate__api__types__pre_image_new(
       NativePortType port_, String value, String sha256, String hash160);
-
-  external void wire__crate__api__lnurl__validate_lnurl(
-      NativePortType port_, String lnurl);
-
-  external void wire__crate__api__lnurl__withdraw(
-      NativePortType port_, String lnurl, String invoice);
 }

@@ -6,22 +6,40 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+part 'lnurl.freezed.dart';
 
-/// LNURL helper to validate an lnurl string
-Future<bool> validateLnurl({required String lnurl}) =>
-    BoltzCore.instance.api.crateApiLnurlValidateLnurl(lnurl: lnurl);
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 
-/// LNURL helper to get an invoice from an lnurl string
-Future<String> invoiceFromLnurl(
-        {required String lnurl, required BigInt msats}) =>
-    BoltzCore.instance.api
-        .crateApiLnurlInvoiceFromLnurl(lnurl: lnurl, msats: msats);
+/// LNURL utilities for working with Lightning Network URLs
+@freezed
+class Lnurl with _$Lnurl {
+  const Lnurl._();
+  const factory Lnurl({
+    required String value,
+  }) = _Lnurl;
 
-/// LNURL helper to get an lnurl-w voucher amount
-Future<BigInt> getVoucherMaxAmount({required String lnurl}) =>
-    BoltzCore.instance.api.crateApiLnurlGetVoucherMaxAmount(lnurl: lnurl);
+  /// LNURL helper to get an invoice from an lnurl string
+  Future<String> fetchInvoice({required BigInt msats}) => BoltzCore.instance.api
+      .crateApiLnurlLnurlFetchInvoice(that: this, msats: msats);
 
-/// LNURL helper to claim an lnurl-w
-Future<void> withdraw({required String lnurl, required String invoice}) =>
-    BoltzCore.instance.api
-        .crateApiLnurlWithdraw(lnurl: lnurl, invoice: invoice);
+  /// LNURL helper to get an lnurl-w voucher amount
+  Future<BigInt> getVoucherMaxAmount() =>
+      BoltzCore.instance.api.crateApiLnurlLnurlGetVoucherMaxAmount(
+        that: this,
+      );
+
+  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
+  /// Create a new Lnurl instance
+  static Future<Lnurl> newInstance({required String value}) =>
+      BoltzCore.instance.api.crateApiLnurlLnurlNew(value: value);
+
+  /// LNURL helper to validate an lnurl string
+  Future<bool> validate() => BoltzCore.instance.api.crateApiLnurlLnurlValidate(
+        that: this,
+      );
+
+  /// LNURL helper to claim an lnurl-w
+  Future<void> withdraw({required String invoice}) => BoltzCore.instance.api
+      .crateApiLnurlLnurlWithdraw(that: this, invoice: invoice);
+}

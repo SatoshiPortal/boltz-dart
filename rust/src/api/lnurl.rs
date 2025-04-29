@@ -1,29 +1,41 @@
 use boltz_client::util::lnurl;
+use flutter_rust_bridge::frb;
 
 use super::error::BoltzError;
 
-/// LNURL helper to validate an lnurl string
-pub fn validate_lnurl(lnurl: String) -> bool {
-    lnurl::validate_lnurl(&lnurl)
+/// LNURL utilities for working with Lightning Network URLs
+#[derive(Clone, serde::Serialize, serde::Deserialize, Debug)]
+#[frb(dart_metadata=("freezed"))]
+pub struct Lnurl {
+    pub value: String,
 }
 
-/// LNURL helper to get an invoice from an lnurl string
-pub async fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
-    Ok(lnurl::fetch_invoice(&lnurl, msats).await?)
-}
-
-/// LNURL helper to get an lnurl-w voucher amount
-pub async fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
-    let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl)
-        .await?
-        .max_withdrawable;
-    Ok(max_withdrawable_msat / 1000)
-}
-
-/// LNURL helper to claim an lnurl-w
-pub async fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
-    Ok(
-        lnurl::process_withdrawal(&lnurl::create_withdraw_response(&lnurl).await?, &invoice)
-            .await?,
-    )
+impl Lnurl {
+    /// Create a new Lnurl instance
+    pub fn new(value: String) -> Self {
+        Lnurl { value }
+    }
+    /// LNURL helper to validate an lnurl string
+    pub fn validate(&self) -> bool {
+        lnurl::validate_lnurl(&self.value)
+    }
+    /// LNURL helper to get an invoice from an lnurl string
+    pub async fn fetch_invoice(&self, msats: u64) -> Result<String, BoltzError> {
+        Ok(lnurl::fetch_invoice(&self.value, msats).await?)
+    }
+    /// LNURL helper to get an lnurl-w voucher amount
+    pub async fn get_voucher_max_amount(&self) -> Result<u64, BoltzError> {
+        let max_withdrawable_msat = lnurl::create_withdraw_response(&self.value)
+            .await?
+            .max_withdrawable;
+        Ok(max_withdrawable_msat / 1000)
+    }
+    /// LNURL helper to claim an lnurl-w
+    pub async fn withdraw(&self, invoice: String) -> Result<(), BoltzError> {
+        Ok(lnurl::process_withdrawal(
+            &lnurl::create_withdraw_response(&self.value).await?,
+            &invoice,
+        )
+        .await?)
+    }
 }
