@@ -17,7 +17,6 @@ use serde_json::Value;
 
 /// Liquid-Lightning Swap Class
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub struct LbtcLnSwap {
     pub id: String,
     pub kind: SwapType,

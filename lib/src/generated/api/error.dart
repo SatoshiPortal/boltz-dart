@@ -5,18 +5,18 @@
 
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
-part 'error.freezed.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`, `from`
 
-@freezed
-class BoltzError with _$BoltzError {
-  const BoltzError._();
-  const factory BoltzError({
-    required String kind,
-    required String message,
-  }) = _BoltzError;
+class BoltzError {
+  final String kind;
+  final String message;
+
+  const BoltzError({
+    required this.kind,
+    required this.message,
+  });
+
   Future<void> detail() => BoltzCore.instance.api.crateApiErrorBoltzErrorDetail(
         that: this,
       );
@@ -26,4 +26,15 @@ class BoltzError with _$BoltzError {
           {required String kind, required String message}) =>
       BoltzCore.instance.api
           .crateApiErrorBoltzErrorNew(kind: kind, message: message);
+
+  @override
+  int get hashCode => kind.hashCode ^ message.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BoltzError &&
+          runtimeType == other.runtimeType &&
+          kind == other.kind &&
+          message == other.message;
 }

@@ -6,32 +6,42 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 import 'types.dart';
-part 'btc_ln.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `clone`, `eq`
 
 /// Bitcoin-Lightning Swap Class
-@freezed
-class BtcLnSwap with _$BtcLnSwap {
-  const BtcLnSwap._();
-  const factory BtcLnSwap({
-    required String id,
-    required SwapType kind,
-    required Chain network,
-    required KeyPair keys,
-    required BigInt keyIndex,
-    required PreImage preimage,
-    required BtcSwapScriptStr swapScript,
-    required String invoice,
-    required String scriptAddress,
-    required BigInt outAmount,
-    required String electrumUrl,
-    required String boltzUrl,
-    String? referralId,
-  }) = _BtcLnSwap;
+class BtcLnSwap {
+  final String id;
+  final SwapType kind;
+  final Chain network;
+  final KeyPair keys;
+  final BigInt keyIndex;
+  final PreImage preimage;
+  final BtcSwapScriptStr swapScript;
+  final String invoice;
+  final String scriptAddress;
+  final BigInt outAmount;
+  final String electrumUrl;
+  final String boltzUrl;
+  final String? referralId;
+
+  const BtcLnSwap({
+    required this.id,
+    required this.kind,
+    required this.network,
+    required this.keys,
+    required this.keyIndex,
+    required this.preimage,
+    required this.swapScript,
+    required this.invoice,
+    required this.scriptAddress,
+    required this.outAmount,
+    required this.electrumUrl,
+    required this.boltzUrl,
+    this.referralId,
+  });
 
   /// Broadcast using boltz's electrum server
   Future<String> broadcastBoltz({required String signedHex}) => BoltzCore
@@ -171,4 +181,39 @@ class BtcLnSwap with _$BtcLnSwap {
   /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
   Future<BigInt> txSize({required bool isCooperative}) => BoltzCore.instance.api
       .crateApiBtcLnBtcLnSwapTxSize(that: this, isCooperative: isCooperative);
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      kind.hashCode ^
+      network.hashCode ^
+      keys.hashCode ^
+      keyIndex.hashCode ^
+      preimage.hashCode ^
+      swapScript.hashCode ^
+      invoice.hashCode ^
+      scriptAddress.hashCode ^
+      outAmount.hashCode ^
+      electrumUrl.hashCode ^
+      boltzUrl.hashCode ^
+      referralId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BtcLnSwap &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          kind == other.kind &&
+          network == other.network &&
+          keys == other.keys &&
+          keyIndex == other.keyIndex &&
+          preimage == other.preimage &&
+          swapScript == other.swapScript &&
+          invoice == other.invoice &&
+          scriptAddress == other.scriptAddress &&
+          outAmount == other.outAmount &&
+          electrumUrl == other.electrumUrl &&
+          boltzUrl == other.boltzUrl &&
+          referralId == other.referralId;
 }

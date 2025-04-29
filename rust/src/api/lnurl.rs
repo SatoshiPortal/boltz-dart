@@ -5,7 +5,6 @@ use super::error::BoltzError;
 
 /// LNURL utilities for working with Lightning Network URLs
 #[derive(Clone, serde::Serialize, serde::Deserialize, Debug)]
-#[frb(dart_metadata=("freezed"))]
 pub struct Lnurl {
     pub value: String,
 }

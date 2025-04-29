@@ -15,13 +15,11 @@ use boltz_client::{
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
-use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// Bitcoin-Lightning Swap Class
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,

@@ -6,18 +6,16 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
-part 'lnurl.freezed.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 
 /// LNURL utilities for working with Lightning Network URLs
-@freezed
-class Lnurl with _$Lnurl {
-  const Lnurl._();
-  const factory Lnurl({
-    required String value,
-  }) = _Lnurl;
+class Lnurl {
+  final String value;
+
+  const Lnurl({
+    required this.value,
+  });
 
   /// LNURL helper to get an invoice from an lnurl string
   Future<String> fetchInvoice({required BigInt msats}) => BoltzCore.instance.api
@@ -42,4 +40,14 @@ class Lnurl with _$Lnurl {
   /// LNURL helper to claim an lnurl-w
   Future<void> withdraw({required String invoice}) => BoltzCore.instance.api
       .crateApiLnurlLnurlWithdraw(that: this, invoice: invoice);
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Lnurl &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
 }

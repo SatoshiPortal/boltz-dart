@@ -12,18 +12,25 @@ part 'types.freezed.dart';
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
-@freezed
-class BtcSwapScriptStr with _$BtcSwapScriptStr {
-  const BtcSwapScriptStr._();
-  const factory BtcSwapScriptStr({
-    required SwapType swapType,
-    String? fundingAddrs,
-    required String hashlock,
-    required String receiverPubkey,
-    required int locktime,
-    required String senderPubkey,
-    Side? side,
-  }) = _BtcSwapScriptStr;
+class BtcSwapScriptStr {
+  final SwapType swapType;
+  final String? fundingAddrs;
+  final String hashlock;
+  final String receiverPubkey;
+  final int locktime;
+  final String senderPubkey;
+  final Side? side;
+
+  const BtcSwapScriptStr({
+    required this.swapType,
+    this.fundingAddrs,
+    required this.hashlock,
+    required this.receiverPubkey,
+    required this.locktime,
+    required this.senderPubkey,
+    this.side,
+  });
+
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<BtcSwapScriptStr> newInstance(
           {required SwapType swapType,
@@ -41,6 +48,29 @@ class BtcSwapScriptStr with _$BtcSwapScriptStr {
           locktime: locktime,
           senderPubkey: senderPubkey,
           side: side);
+
+  @override
+  int get hashCode =>
+      swapType.hashCode ^
+      fundingAddrs.hashCode ^
+      hashlock.hashCode ^
+      receiverPubkey.hashCode ^
+      locktime.hashCode ^
+      senderPubkey.hashCode ^
+      side.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BtcSwapScriptStr &&
+          runtimeType == other.runtimeType &&
+          swapType == other.swapType &&
+          fundingAddrs == other.fundingAddrs &&
+          hashlock == other.hashlock &&
+          receiverPubkey == other.receiverPubkey &&
+          locktime == other.locktime &&
+          senderPubkey == other.senderPubkey &&
+          side == other.side;
 }
 
 enum Chain {
@@ -58,36 +88,75 @@ enum ChainSwapDirection {
 }
 
 /// Helper to handle Lightning invoices
-@freezed
-class DecodedInvoice with _$DecodedInvoice {
-  const DecodedInvoice._();
-  const factory DecodedInvoice({
-    required BigInt msats,
-    required BigInt expiry,
-    required BigInt expiresIn,
-    required BigInt expiresAt,
-    required bool isExpired,
-    required String network,
-    required BigInt cltvExpDelta,
-    String? bip21,
-    required String preimageHash,
-    required String description,
-  }) = _DecodedInvoice;
+class DecodedInvoice {
+  final BigInt msats;
+  final BigInt expiry;
+  final BigInt expiresIn;
+  final BigInt expiresAt;
+  final bool isExpired;
+  final String network;
+  final BigInt cltvExpDelta;
+  final String? bip21;
+  final String preimageHash;
+  final String description;
+
+  const DecodedInvoice({
+    required this.msats,
+    required this.expiry,
+    required this.expiresIn,
+    required this.expiresAt,
+    required this.isExpired,
+    required this.network,
+    required this.cltvExpDelta,
+    this.bip21,
+    required this.preimageHash,
+    required this.description,
+  });
 
   /// Add boltz_url & chain for route hint check
   static Future<DecodedInvoice> fromString(
           {required String s, String? boltzUrl}) =>
       BoltzCore.instance.api
           .crateApiTypesDecodedInvoiceFromString(s: s, boltzUrl: boltzUrl);
+
+  @override
+  int get hashCode =>
+      msats.hashCode ^
+      expiry.hashCode ^
+      expiresIn.hashCode ^
+      expiresAt.hashCode ^
+      isExpired.hashCode ^
+      network.hashCode ^
+      cltvExpDelta.hashCode ^
+      bip21.hashCode ^
+      preimageHash.hashCode ^
+      description.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DecodedInvoice &&
+          runtimeType == other.runtimeType &&
+          msats == other.msats &&
+          expiry == other.expiry &&
+          expiresIn == other.expiresIn &&
+          expiresAt == other.expiresAt &&
+          isExpired == other.isExpired &&
+          network == other.network &&
+          cltvExpDelta == other.cltvExpDelta &&
+          bip21 == other.bip21 &&
+          preimageHash == other.preimageHash &&
+          description == other.description;
 }
 
-@freezed
-class KeyPair with _$KeyPair {
-  const KeyPair._();
-  const factory KeyPair({
-    required String secretKey,
-    required String publicKey,
-  }) = _KeyPair;
+class KeyPair {
+  final String secretKey;
+  final String publicKey;
+
+  const KeyPair({
+    required this.secretKey,
+    required this.publicKey,
+  });
 
   /// Used internally to create a KeyPair for swaps
   static Future<KeyPair> generate(
@@ -109,22 +178,41 @@ class KeyPair with _$KeyPair {
           {required String secretKey, required String publicKey}) =>
       BoltzCore.instance.api
           .crateApiTypesKeyPairNew(secretKey: secretKey, publicKey: publicKey);
+
+  @override
+  int get hashCode => secretKey.hashCode ^ publicKey.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is KeyPair &&
+          runtimeType == other.runtimeType &&
+          secretKey == other.secretKey &&
+          publicKey == other.publicKey;
 }
 
 /// Helper to store a LBtcSwapScript and convert to a LBtcSwapScript
-@freezed
-class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
-  const LBtcSwapScriptStr._();
-  const factory LBtcSwapScriptStr({
-    required SwapType swapType,
-    String? fundingAddrs,
-    required String hashlock,
-    required String receiverPubkey,
-    required int locktime,
-    required String senderPubkey,
-    required String blindingKey,
-    Side? side,
-  }) = _LBtcSwapScriptStr;
+class LBtcSwapScriptStr {
+  final SwapType swapType;
+  final String? fundingAddrs;
+  final String hashlock;
+  final String receiverPubkey;
+  final int locktime;
+  final String senderPubkey;
+  final String blindingKey;
+  final Side? side;
+
+  const LBtcSwapScriptStr({
+    required this.swapType,
+    this.fundingAddrs,
+    required this.hashlock,
+    required this.receiverPubkey,
+    required this.locktime,
+    required this.senderPubkey,
+    required this.blindingKey,
+    this.side,
+  });
+
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<LBtcSwapScriptStr> newInstance(
           {required SwapType swapType,
@@ -144,17 +232,45 @@ class LBtcSwapScriptStr with _$LBtcSwapScriptStr {
           senderPubkey: senderPubkey,
           blindingKey: blindingKey,
           side: side);
+
+  @override
+  int get hashCode =>
+      swapType.hashCode ^
+      fundingAddrs.hashCode ^
+      hashlock.hashCode ^
+      receiverPubkey.hashCode ^
+      locktime.hashCode ^
+      senderPubkey.hashCode ^
+      blindingKey.hashCode ^
+      side.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LBtcSwapScriptStr &&
+          runtimeType == other.runtimeType &&
+          swapType == other.swapType &&
+          fundingAddrs == other.fundingAddrs &&
+          hashlock == other.hashlock &&
+          receiverPubkey == other.receiverPubkey &&
+          locktime == other.locktime &&
+          senderPubkey == other.senderPubkey &&
+          blindingKey == other.blindingKey &&
+          side == other.side;
 }
 
 /// Used internally to create a secret - PreImage for swaps
-@freezed
-class PreImage with _$PreImage {
-  const PreImage._();
-  const factory PreImage({
-    required String value,
-    required String sha256,
-    required String hash160,
-  }) = _PreImage;
+class PreImage {
+  final String value;
+  final String sha256;
+  final String hash160;
+
+  const PreImage({
+    required this.value,
+    required this.sha256,
+    required this.hash160,
+  });
+
   static Future<PreImage> generate() =>
       BoltzCore.instance.api.crateApiTypesPreImageGenerate();
 
@@ -165,6 +281,18 @@ class PreImage with _$PreImage {
           required String hash160}) =>
       BoltzCore.instance.api.crateApiTypesPreImageNew(
           value: value, sha256: sha256, hash160: hash160);
+
+  @override
+  int get hashCode => value.hashCode ^ sha256.hashCode ^ hash160.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PreImage &&
+          runtimeType == other.runtimeType &&
+          value == other.value &&
+          sha256 == other.sha256 &&
+          hash160 == other.hash160;
 }
 
 /// Used for chain-swaps only. The side is based on which transaction is being made by the user.
