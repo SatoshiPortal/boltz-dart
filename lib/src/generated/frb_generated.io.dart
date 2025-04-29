@@ -1871,47 +1871,6 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__fees__fees_submarinePtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_fees>)>();
 
-  void wire__crate__api__types__get_voucher_max_amount(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-  ) {
-    return _wire__crate__api__types__get_voucher_max_amount(
-      port_,
-      lnurl,
-    );
-  }
-
-  late final _wire__crate__api__types__get_voucher_max_amountPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__types__get_voucher_max_amount');
-  late final _wire__crate__api__types__get_voucher_max_amount =
-      _wire__crate__api__types__get_voucher_max_amountPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__types__invoice_from_lnurl(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-    int msats,
-  ) {
-    return _wire__crate__api__types__invoice_from_lnurl(
-      port_,
-      lnurl,
-      msats,
-    );
-  }
-
-  late final _wire__crate__api__types__invoice_from_lnurlPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>, ffi.Uint64)>>(
-      'frbgen_boltz_wire__crate__api__types__invoice_from_lnurl');
-  late final _wire__crate__api__types__invoice_from_lnurl =
-      _wire__crate__api__types__invoice_from_lnurlPtr.asFunction<
-          void Function(
-              int, ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)>();
-
   void wire__crate__api__types__key_pair_generate(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
@@ -2462,49 +2421,6 @@ class BoltzCoreWire implements BaseWire {
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__types__validate_lnurl(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-  ) {
-    return _wire__crate__api__types__validate_lnurl(
-      port_,
-      lnurl,
-    );
-  }
-
-  late final _wire__crate__api__types__validate_lnurlPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__types__validate_lnurl');
-  late final _wire__crate__api__types__validate_lnurl =
-      _wire__crate__api__types__validate_lnurlPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
-  void wire__crate__api__types__withdraw(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> lnurl,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
-  ) {
-    return _wire__crate__api__types__withdraw(
-      port_,
-      lnurl,
-      invoice,
-    );
-  }
-
-  late final _wire__crate__api__types__withdrawPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__types__withdraw');
-  late final _wire__crate__api__types__withdraw =
-      _wire__crate__api__types__withdrawPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   ffi.Pointer<wire_cst_boltz_error> cst_new_box_autoadd_boltz_error() {

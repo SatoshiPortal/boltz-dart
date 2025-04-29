@@ -11,25 +11,6 @@ part 'types.freezed.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
 
-/// LNURL helper to validate an lnurl string
-Future<bool> validateLnurl({required String lnurl}) =>
-    BoltzCore.instance.api.crateApiTypesValidateLnurl(lnurl: lnurl);
-
-/// LNURL helper to get an invoice from an lnurl string
-Future<String> invoiceFromLnurl(
-        {required String lnurl, required BigInt msats}) =>
-    BoltzCore.instance.api
-        .crateApiTypesInvoiceFromLnurl(lnurl: lnurl, msats: msats);
-
-/// LNURL helper to get an lnurl-w voucher amount
-Future<BigInt> getVoucherMaxAmount({required String lnurl}) =>
-    BoltzCore.instance.api.crateApiTypesGetVoucherMaxAmount(lnurl: lnurl);
-
-/// LNURL helper to claim an lnurl-w
-Future<void> withdraw({required String lnurl, required String invoice}) =>
-    BoltzCore.instance.api
-        .crateApiTypesWithdraw(lnurl: lnurl, invoice: invoice);
-
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 @freezed
 class BtcSwapScriptStr with _$BtcSwapScriptStr {

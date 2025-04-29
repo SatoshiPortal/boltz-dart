@@ -72,7 +72,7 @@ class BoltzCore
   String get codegenVersion => '2.9.0';
 
   @override
-  int get rustContentHash => 1150231082;
+  int get rustContentHash => -291363850;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -242,11 +242,6 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<SubmarineFeesAndLimits> crateApiFeesFeesSubmarine(
       {required Fees that});
 
-  Future<BigInt> crateApiTypesGetVoucherMaxAmount({required String lnurl});
-
-  Future<String> crateApiTypesInvoiceFromLnurl(
-      {required String lnurl, required BigInt msats});
-
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
       String? passphrase,
@@ -341,11 +336,6 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<PreImage> crateApiTypesPreImageNew(
       {required String value, required String sha256, required String hash160});
-
-  Future<bool> crateApiTypesValidateLnurl({required String lnurl});
-
-  Future<void> crateApiTypesWithdraw(
-      {required String lnurl, required String invoice});
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -1425,56 +1415,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<BigInt> crateApiTypesGetVoucherMaxAmount({required String lnurl}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        return wire.wire__crate__api__types__get_voucher_max_amount(
-            port_, arg0);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_u_64,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiTypesGetVoucherMaxAmountConstMeta,
-      argValues: [lnurl],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiTypesGetVoucherMaxAmountConstMeta =>
-      const TaskConstMeta(
-        debugName: "get_voucher_max_amount",
-        argNames: ["lnurl"],
-      );
-
-  @override
-  Future<String> crateApiTypesInvoiceFromLnurl(
-      {required String lnurl, required BigInt msats}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        var arg1 = cst_encode_u_64(msats);
-        return wire.wire__crate__api__types__invoice_from_lnurl(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_String,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiTypesInvoiceFromLnurlConstMeta,
-      argValues: [lnurl, msats],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiTypesInvoiceFromLnurlConstMeta =>
-      const TaskConstMeta(
-        debugName: "invoice_from_lnurl",
-        argNames: ["lnurl", "msats"],
-      );
-
-  @override
   Future<KeyPair> crateApiTypesKeyPairGenerate(
       {required String mnemonic,
       String? passphrase,
@@ -2096,52 +2036,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiTypesPreImageNewConstMeta => const TaskConstMeta(
         debugName: "pre_image_new",
         argNames: ["value", "sha256", "hash160"],
-      );
-
-  @override
-  Future<bool> crateApiTypesValidateLnurl({required String lnurl}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        return wire.wire__crate__api__types__validate_lnurl(port_, arg0);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_bool,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiTypesValidateLnurlConstMeta,
-      argValues: [lnurl],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiTypesValidateLnurlConstMeta => const TaskConstMeta(
-        debugName: "validate_lnurl",
-        argNames: ["lnurl"],
-      );
-
-  @override
-  Future<void> crateApiTypesWithdraw(
-      {required String lnurl, required String invoice}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(lnurl);
-        var arg1 = cst_encode_String(invoice);
-        return wire.wire__crate__api__types__withdraw(port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_unit,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiTypesWithdrawConstMeta,
-      argValues: [lnurl, invoice],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiTypesWithdrawConstMeta => const TaskConstMeta(
-        debugName: "withdraw",
-        argNames: ["lnurl", "invoice"],
       );
 
   @protected
