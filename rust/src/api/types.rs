@@ -16,7 +16,6 @@ use boltz_client::{
     Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
     PublicKey, Secp256k1, ZKKeyPair,
 };
-use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::util::ensure_http_prefix;

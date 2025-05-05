@@ -1113,6 +1113,27 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_tx_fee>,
               bool)>();
 
+  void wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size(
+    int port_,
+    ffi.Pointer<wire_cst_btc_ln_swap> that,
+    bool is_cooperative,
+  ) {
+    return _wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size(
+      port_,
+      that,
+      is_cooperative,
+    );
+  }
+
+  late final _wire__crate__api__btc_ln__btc_ln_swap_claim_tx_sizePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_btc_ln_swap>, ffi.Bool)>>(
+      'frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size');
+  late final _wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size =
+      _wire__crate__api__btc_ln__btc_ln_swap_claim_tx_sizePtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_btc_ln_swap>, bool)>();
+
   void wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(
     int port_,
     ffi.Pointer<wire_cst_btc_ln_swap> that,
@@ -1384,6 +1405,27 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_tx_fee>,
               bool)>();
 
+  void wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size(
+    int port_,
+    ffi.Pointer<wire_cst_btc_ln_swap> that,
+    bool is_cooperative,
+  ) {
+    return _wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size(
+      port_,
+      that,
+      is_cooperative,
+    );
+  }
+
+  late final _wire__crate__api__btc_ln__btc_ln_swap_refund_tx_sizePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_btc_ln_swap>, ffi.Bool)>>(
+      'frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size');
+  late final _wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size =
+      _wire__crate__api__btc_ln__btc_ln_swap_refund_tx_sizePtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_btc_ln_swap>, bool)>();
+
   void wire__crate__api__btc_ln__btc_ln_swap_to_json(
     int port_,
     ffi.Pointer<wire_cst_btc_ln_swap> that,
@@ -1401,27 +1443,6 @@ class BoltzCoreWire implements BaseWire {
   late final _wire__crate__api__btc_ln__btc_ln_swap_to_json =
       _wire__crate__api__btc_ln__btc_ln_swap_to_jsonPtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_btc_ln_swap>)>();
-
-  void wire__crate__api__btc_ln__btc_ln_swap_tx_size(
-    int port_,
-    ffi.Pointer<wire_cst_btc_ln_swap> that,
-    bool is_cooperative,
-  ) {
-    return _wire__crate__api__btc_ln__btc_ln_swap_tx_size(
-      port_,
-      that,
-      is_cooperative,
-    );
-  }
-
-  late final _wire__crate__api__btc_ln__btc_ln_swap_tx_sizePtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64, ffi.Pointer<wire_cst_btc_ln_swap>, ffi.Bool)>>(
-      'frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_tx_size');
-  late final _wire__crate__api__btc_ln__btc_ln_swap_tx_size =
-      _wire__crate__api__btc_ln__btc_ln_swap_tx_sizePtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_btc_ln_swap>, bool)>();
 
   void wire__crate__api__types__btc_swap_script_str_new(
     int port_,
@@ -1556,6 +1577,31 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_tx_fee>,
               bool)>();
+
+  void wire__crate__api__chain_swap__chain_swap_claim_tx_size(
+    int port_,
+    ffi.Pointer<wire_cst_chain_swap> that,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
+    bool try_cooperate,
+  ) {
+    return _wire__crate__api__chain_swap__chain_swap_claim_tx_size(
+      port_,
+      that,
+      out_address,
+      try_cooperate,
+    );
+  }
+
+  late final _wire__crate__api__chain_swap__chain_swap_claim_tx_sizePtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_chain_swap>,
+                      ffi.Pointer<wire_cst_list_prim_u_8_strict>, ffi.Bool)>>(
+          'frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim_tx_size');
+  late final _wire__crate__api__chain_swap__chain_swap_claim_tx_size =
+      _wire__crate__api__chain_swap__chain_swap_claim_tx_sizePtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_chain_swap>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>, bool)>();
 
   void wire__crate__api__chain_swap__chain_swap_from_json(
     int port_,
@@ -1793,6 +1839,31 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_tx_fee>,
               bool)>();
+
+  void wire__crate__api__chain_swap__chain_swap_refund_tx_size(
+    int port_,
+    ffi.Pointer<wire_cst_chain_swap> that,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> refund_address,
+    bool try_cooperate,
+  ) {
+    return _wire__crate__api__chain_swap__chain_swap_refund_tx_size(
+      port_,
+      that,
+      refund_address,
+      try_cooperate,
+    );
+  }
+
+  late final _wire__crate__api__chain_swap__chain_swap_refund_tx_sizePtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_chain_swap>,
+                      ffi.Pointer<wire_cst_list_prim_u_8_strict>, ffi.Bool)>>(
+          'frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund_tx_size');
+  late final _wire__crate__api__chain_swap__chain_swap_refund_tx_size =
+      _wire__crate__api__chain_swap__chain_swap_refund_tx_sizePtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_chain_swap>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>, bool)>();
 
   void wire__crate__api__chain_swap__chain_swap_to_json(
     int port_,
@@ -2100,6 +2171,28 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_tx_fee>,
               bool)>();
 
+  void wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size(
+    int port_,
+    ffi.Pointer<wire_cst_lbtc_ln_swap> that,
+    bool is_cooperative,
+  ) {
+    return _wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size(
+      port_,
+      that,
+      is_cooperative,
+    );
+  }
+
+  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_sizePtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(ffi.Int64,
+                      ffi.Pointer<wire_cst_lbtc_ln_swap>, ffi.Bool)>>(
+          'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size');
+  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size =
+      _wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_sizePtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>, bool)>();
+
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(
     int port_,
     ffi.Pointer<wire_cst_lbtc_ln_swap> that,
@@ -2376,6 +2469,28 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_tx_fee>,
               bool)>();
 
+  void wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size(
+    int port_,
+    ffi.Pointer<wire_cst_lbtc_ln_swap> that,
+    bool is_cooperative,
+  ) {
+    return _wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size(
+      port_,
+      that,
+      is_cooperative,
+    );
+  }
+
+  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_sizePtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(ffi.Int64,
+                      ffi.Pointer<wire_cst_lbtc_ln_swap>, ffi.Bool)>>(
+          'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size');
+  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size =
+      _wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_sizePtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>, bool)>();
+
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json(
     int port_,
     ffi.Pointer<wire_cst_lbtc_ln_swap> that,
@@ -2394,27 +2509,6 @@ class BoltzCoreWire implements BaseWire {
   late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json =
       _wire__crate__api__lbtc_ln__lbtc_ln_swap_to_jsonPtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>)>();
-
-  void wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
-    int port_,
-    ffi.Pointer<wire_cst_lbtc_ln_swap> that,
-    bool is_cooperative,
-  ) {
-    return _wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
-      port_,
-      that,
-      is_cooperative,
-    );
-  }
-
-  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_sizePtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64, ffi.Pointer<wire_cst_lbtc_ln_swap>, ffi.Bool)>>(
-      'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size');
-  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size =
-      _wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_sizePtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>, bool)>();
 
   void wire__crate__api__lnurl__lnurl_fetch_invoice(
     int port_,

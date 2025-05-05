@@ -76,6 +76,12 @@ class ChainSwap {
           minerFee: minerFee,
           tryCooperate: tryCooperate);
 
+  /// Claim tx size
+  Future<BigInt> claimTxSize(
+          {required String outAddress, required bool tryCooperate}) =>
+      BoltzCore.instance.api.crateApiChainSwapChainSwapClaimTxSize(
+          that: this, outAddress: outAddress, tryCooperate: tryCooperate);
+
   /// Parse from a JSON string.
   static Future<ChainSwap> fromJson({required String jsonStr}) =>
       BoltzCore.instance.api
@@ -168,6 +174,12 @@ class ChainSwap {
           refundAddress: refundAddress,
           minerFee: minerFee,
           tryCooperate: tryCooperate);
+
+  /// Get the size of a refund tx
+  Future<BigInt> refundTxSize(
+          {required String refundAddress, required bool tryCooperate}) =>
+      BoltzCore.instance.api.crateApiChainSwapChainSwapRefundTxSize(
+          that: this, refundAddress: refundAddress, tryCooperate: tryCooperate);
 
   /// Convert instance to a JSON string.
   Future<String> toJson() =>

@@ -12,7 +12,6 @@ use boltz_client::{
     util::secrets::Preimage,
     Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
-use flutter_rust_bridge::frb;
 use serde_json::Value;
 
 /// Liquid-Lightning Swap Class
@@ -477,8 +476,8 @@ impl LbtcLnSwap {
         };
         Ok(extract_id(txid)?)
     }
-    /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-    pub async fn tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
+    /// Get the size of the claim transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
+    pub async fn claim_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -506,6 +505,53 @@ impl LbtcLnSwap {
         let tx = match LBtcSwapTx::new_claim(
             swap_script.clone(),
             self.script_address.clone(),
+            &network_config,
+            &boltz_client,
+            self.id.clone(),
+        )
+        .await
+        {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().try_into()?;
+
+        let size = match tx.size(&ckp, is_cooperative, true) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        Ok(size)
+    }
+
+    /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
+    pub async fn refund_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
+        if self.kind == SwapType::Reverse {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Reverse swaps are not refundable".to_string(),
+            });
+        } else {
+            ()
+        }
+        let all_chains: AllChains = self.network.into();
+        let liquid_chain = match all_chains {
+            AllChains::Liquid(inner_chain) => inner_chain,
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Liquid chain but got Bitcoin chain".to_string(),
+                ))
+            }
+        };
+        let network_config =
+            ElectrumLiquidClient::new(liquid_chain, &self.electrum_url, true, true, 10)?;
+        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
+        let boltz_client: BoltzApiClientV2 =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+
+        let tx = match LBtcSwapTx::new_refund(
+            swap_script.clone(),
+            &self.script_address,
             &network_config,
             &boltz_client,
             self.id.clone(),

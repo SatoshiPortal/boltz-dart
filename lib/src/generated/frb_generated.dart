@@ -73,7 +73,7 @@ class BoltzCore
   String get codegenVersion => '2.9.0';
 
   @override
-  int get rustContentHash => 1496721001;
+  int get rustContentHash => 1081101194;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -100,6 +100,9 @@ abstract class BoltzCoreApi extends BaseApi {
       required String outAddress,
       required TxFee minerFee,
       required bool tryCooperate});
+
+  Future<BigInt> crateApiBtcLnBtcLnSwapClaimTxSize(
+      {required BtcLnSwap that, required bool isCooperative});
 
   Future<void> crateApiBtcLnBtcLnSwapCoopCloseSubmarine(
       {required BtcLnSwap that});
@@ -152,10 +155,10 @@ abstract class BoltzCoreApi extends BaseApi {
       required TxFee minerFee,
       required bool tryCooperate});
 
-  Future<String> crateApiBtcLnBtcLnSwapToJson({required BtcLnSwap that});
-
-  Future<BigInt> crateApiBtcLnBtcLnSwapTxSize(
+  Future<BigInt> crateApiBtcLnBtcLnSwapRefundTxSize(
       {required BtcLnSwap that, required bool isCooperative});
+
+  Future<String> crateApiBtcLnBtcLnSwapToJson({required BtcLnSwap that});
 
   Future<BtcSwapScriptStr> crateApiTypesBtcSwapScriptStrNew(
       {required SwapType swapType,
@@ -181,6 +184,11 @@ abstract class BoltzCoreApi extends BaseApi {
       required String outAddress,
       required String refundAddress,
       required TxFee minerFee,
+      required bool tryCooperate});
+
+  Future<BigInt> crateApiChainSwapChainSwapClaimTxSize(
+      {required ChainSwap that,
+      required String outAddress,
       required bool tryCooperate});
 
   Future<ChainSwap> crateApiChainSwapChainSwapFromJson(
@@ -229,6 +237,11 @@ abstract class BoltzCoreApi extends BaseApi {
       required TxFee minerFee,
       required bool tryCooperate});
 
+  Future<BigInt> crateApiChainSwapChainSwapRefundTxSize(
+      {required ChainSwap that,
+      required String refundAddress,
+      required bool tryCooperate});
+
   Future<String> crateApiChainSwapChainSwapToJson({required ChainSwap that});
 
   Future<DecodedInvoice> crateApiTypesDecodedInvoiceFromString(
@@ -274,6 +287,9 @@ abstract class BoltzCoreApi extends BaseApi {
       required String outAddress,
       required TxFee minerFee,
       required bool tryCooperate});
+
+  Future<BigInt> crateApiLbtcLnLbtcLnSwapClaimTxSize(
+      {required LbtcLnSwap that, required bool isCooperative});
 
   Future<void> crateApiLbtcLnLbtcLnSwapCoopCloseSubmarine(
       {required LbtcLnSwap that});
@@ -328,10 +344,10 @@ abstract class BoltzCoreApi extends BaseApi {
       required TxFee minerFee,
       required bool tryCooperate});
 
-  Future<String> crateApiLbtcLnLbtcLnSwapToJson({required LbtcLnSwap that});
-
-  Future<BigInt> crateApiLbtcLnLbtcLnSwapTxSize(
+  Future<BigInt> crateApiLbtcLnLbtcLnSwapRefundTxSize(
       {required LbtcLnSwap that, required bool isCooperative});
+
+  Future<String> crateApiLbtcLnLbtcLnSwapToJson({required LbtcLnSwap that});
 
   Future<String> crateApiLnurlLnurlFetchInvoice(
       {required Lnurl that, required BigInt msats});
@@ -488,6 +504,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "btc_ln_swap_claim",
         argNames: ["that", "outAddress", "minerFee", "tryCooperate"],
+      );
+
+  @override
+  Future<BigInt> crateApiBtcLnBtcLnSwapClaimTxSize(
+      {required BtcLnSwap that, required bool isCooperative}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        var arg1 = cst_encode_bool(isCooperative);
+        return wire.wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_usize,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiBtcLnBtcLnSwapClaimTxSizeConstMeta,
+      argValues: [that, isCooperative],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiBtcLnBtcLnSwapClaimTxSizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "btc_ln_swap_claim_tx_size",
+        argNames: ["that", "isCooperative"],
       );
 
   @override
@@ -809,6 +851,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<BigInt> crateApiBtcLnBtcLnSwapRefundTxSize(
+      {required BtcLnSwap that, required bool isCooperative}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
+        var arg1 = cst_encode_bool(isCooperative);
+        return wire.wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_usize,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiBtcLnBtcLnSwapRefundTxSizeConstMeta,
+      argValues: [that, isCooperative],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiBtcLnBtcLnSwapRefundTxSizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "btc_ln_swap_refund_tx_size",
+        argNames: ["that", "isCooperative"],
+      );
+
+  @override
   Future<String> crateApiBtcLnBtcLnSwapToJson({required BtcLnSwap that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -829,32 +897,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "btc_ln_swap_to_json",
         argNames: ["that"],
-      );
-
-  @override
-  Future<BigInt> crateApiBtcLnBtcLnSwapTxSize(
-      {required BtcLnSwap that, required bool isCooperative}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_btc_ln_swap(that);
-        var arg1 = cst_encode_bool(isCooperative);
-        return wire.wire__crate__api__btc_ln__btc_ln_swap_tx_size(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_usize,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiBtcLnBtcLnSwapTxSizeConstMeta,
-      argValues: [that, isCooperative],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiBtcLnBtcLnSwapTxSizeConstMeta =>
-      const TaskConstMeta(
-        debugName: "btc_ln_swap_tx_size",
-        argNames: ["that", "isCooperative"],
       );
 
   @override
@@ -1005,6 +1047,35 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "minerFee",
           "tryCooperate"
         ],
+      );
+
+  @override
+  Future<BigInt> crateApiChainSwapChainSwapClaimTxSize(
+      {required ChainSwap that,
+      required String outAddress,
+      required bool tryCooperate}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        var arg1 = cst_encode_String(outAddress);
+        var arg2 = cst_encode_bool(tryCooperate);
+        return wire.wire__crate__api__chain_swap__chain_swap_claim_tx_size(
+            port_, arg0, arg1, arg2);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_usize,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiChainSwapChainSwapClaimTxSizeConstMeta,
+      argValues: [that, outAddress, tryCooperate],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiChainSwapChainSwapClaimTxSizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "chain_swap_claim_tx_size",
+        argNames: ["that", "outAddress", "tryCooperate"],
       );
 
   @override
@@ -1286,6 +1357,35 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "chain_swap_refund",
         argNames: ["that", "refundAddress", "minerFee", "tryCooperate"],
+      );
+
+  @override
+  Future<BigInt> crateApiChainSwapChainSwapRefundTxSize(
+      {required ChainSwap that,
+      required String refundAddress,
+      required bool tryCooperate}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_chain_swap(that);
+        var arg1 = cst_encode_String(refundAddress);
+        var arg2 = cst_encode_bool(tryCooperate);
+        return wire.wire__crate__api__chain_swap__chain_swap_refund_tx_size(
+            port_, arg0, arg1, arg2);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_usize,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiChainSwapChainSwapRefundTxSizeConstMeta,
+      argValues: [that, refundAddress, tryCooperate],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiChainSwapChainSwapRefundTxSizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "chain_swap_refund_tx_size",
+        argNames: ["that", "refundAddress", "tryCooperate"],
       );
 
   @override
@@ -1625,6 +1725,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<BigInt> crateApiLbtcLnLbtcLnSwapClaimTxSize(
+      {required LbtcLnSwap that, required bool isCooperative}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        var arg1 = cst_encode_bool(isCooperative);
+        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_usize,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLbtcLnLbtcLnSwapClaimTxSizeConstMeta,
+      argValues: [that, isCooperative],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapClaimTxSizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "lbtc_ln_swap_claim_tx_size",
+        argNames: ["that", "isCooperative"],
+      );
+
+  @override
   Future<void> crateApiLbtcLnLbtcLnSwapCoopCloseSubmarine(
       {required LbtcLnSwap that}) {
     return handler.executeNormal(NormalTask(
@@ -1952,6 +2078,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<BigInt> crateApiLbtcLnLbtcLnSwapRefundTxSize(
+      {required LbtcLnSwap that, required bool isCooperative}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
+        var arg1 = cst_encode_bool(isCooperative);
+        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_usize,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiLbtcLnLbtcLnSwapRefundTxSizeConstMeta,
+      argValues: [that, isCooperative],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapRefundTxSizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "lbtc_ln_swap_refund_tx_size",
+        argNames: ["that", "isCooperative"],
+      );
+
+  @override
   Future<String> crateApiLbtcLnLbtcLnSwapToJson({required LbtcLnSwap that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1973,32 +2125,6 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_to_json",
         argNames: ["that"],
-      );
-
-  @override
-  Future<BigInt> crateApiLbtcLnLbtcLnSwapTxSize(
-      {required LbtcLnSwap that, required bool isCooperative}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_lbtc_ln_swap(that);
-        var arg1 = cst_encode_bool(isCooperative);
-        return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_tx_size(
-            port_, arg0, arg1);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_usize,
-        decodeErrorData: dco_decode_boltz_error,
-      ),
-      constMeta: kCrateApiLbtcLnLbtcLnSwapTxSizeConstMeta,
-      argValues: [that, isCooperative],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiLbtcLnLbtcLnSwapTxSizeConstMeta =>
-      const TaskConstMeta(
-        debugName: "lbtc_ln_swap_tx_size",
-        argNames: ["that", "isCooperative"],
       );
 
   @override

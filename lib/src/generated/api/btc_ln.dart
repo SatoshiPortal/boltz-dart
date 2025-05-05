@@ -64,6 +64,11 @@ class BtcLnSwap {
           minerFee: minerFee,
           tryCooperate: tryCooperate);
 
+  /// Get the size of the claim transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
+  Future<BigInt> claimTxSize({required bool isCooperative}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaimTxSize(
+          that: this, isCooperative: isCooperative);
+
   /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
   /// If this function is not called within ~1 hour, the swap will be closed via the script path.
   /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
@@ -172,15 +177,16 @@ class BtcLnSwap {
           minerFee: minerFee,
           tryCooperate: tryCooperate);
 
+  /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
+  Future<BigInt> refundTxSize({required bool isCooperative}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefundTxSize(
+          that: this, isCooperative: isCooperative);
+
   /// Convert instance to a JSON string.
   Future<String> toJson() =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapToJson(
         that: this,
       );
-
-  /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-  Future<BigInt> txSize({required bool isCooperative}) => BoltzCore.instance.api
-      .crateApiBtcLnBtcLnSwapTxSize(that: this, isCooperative: isCooperative);
 
   @override
   int get hashCode =>

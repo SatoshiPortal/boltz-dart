@@ -1,5 +1,4 @@
 use boltz_client::util::lnurl;
-use flutter_rust_bridge::frb;
 
 use super::error::BoltzError;
 
