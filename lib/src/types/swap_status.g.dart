@@ -6,23 +6,21 @@ part of 'swap_status.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
-    _$TransactionImpl(
+_Transaction _$TransactionFromJson(Map<String, dynamic> json) => _Transaction(
       id: json['id'] as String,
       hex: json['hex'] as String,
       eta: (json['eta'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
+Map<String, dynamic> _$TransactionToJson(_Transaction instance) =>
     <String, dynamic>{
       'id': instance.id,
       'hex': instance.hex,
       'eta': instance.eta,
     };
 
-_$SwapStatusResponseImpl _$$SwapStatusResponseImplFromJson(
-        Map<String, dynamic> json) =>
-    _$SwapStatusResponseImpl(
+_SwapStatusResponse _$SwapStatusResponseFromJson(Map<String, dynamic> json) =>
+    _SwapStatusResponse(
       status: $enumDecode(_$SwapStatusEnumMap, json['status']),
       transaction: json['transaction'] == null
           ? null
@@ -31,8 +29,7 @@ _$SwapStatusResponseImpl _$$SwapStatusResponseImplFromJson(
       error: json['error'] as String?,
     );
 
-Map<String, dynamic> _$$SwapStatusResponseImplToJson(
-        _$SwapStatusResponseImpl instance) =>
+Map<String, dynamic> _$SwapStatusResponseToJson(_SwapStatusResponse instance) =>
     <String, dynamic>{
       'status': _$SwapStatusEnumMap[instance.status]!,
       'transaction': instance.transaction,
@@ -63,16 +60,14 @@ const _$SwapStatusEnumMap = {
   SwapStatus.minerfeePaid: 'minerfee.paid',
 };
 
-_$SwapStreamStatusImpl _$$SwapStreamStatusImplFromJson(
-        Map<String, dynamic> json) =>
-    _$SwapStreamStatusImpl(
+_SwapStreamStatus _$SwapStreamStatusFromJson(Map<String, dynamic> json) =>
+    _SwapStreamStatus(
       id: json['id'] as String,
       status: $enumDecode(_$SwapStatusEnumMap, json['status']),
       error: json['error'] as String?,
     );
 
-Map<String, dynamic> _$$SwapStreamStatusImplToJson(
-        _$SwapStreamStatusImpl instance) =>
+Map<String, dynamic> _$SwapStreamStatusToJson(_SwapStreamStatus instance) =>
     <String, dynamic>{
       'id': instance.id,
       'status': _$SwapStatusEnumMap[instance.status]!,

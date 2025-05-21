@@ -24,21 +24,21 @@ impl Fees {
 
     /// Method to get the fees & limits for a submarine swap
     pub async fn submarine(&self) -> Result<SubmarineFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
         let sub_fees: SubmarineFeesAndLimits =
             boltz_client.get_submarine_pairs().await?.try_into()?;
         Ok(sub_fees)
     }
     /// Method to get the fees & limits for a reverse swap
     pub async fn reverse(&self) -> Result<ReverseFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
         let reverse_fees: ReverseFeesAndLimits =
             boltz_client.get_reverse_pairs().await?.try_into()?;
         Ok(reverse_fees)
     }
     /// Method to get the fees & limits for a chain swap
     pub async fn chain(&self) -> Result<ChainFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&self.boltz_url);
+        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
         let chain_fees: ChainFeesAndLimits = boltz_client.get_chain_pairs().await?.try_into()?;
         Ok(chain_fees)
     }
@@ -52,19 +52,27 @@ pub struct SwapLimits {
     pub maximal: u64,
 }
 
-impl Into<SwapLimits> for boltz_client::swaps::boltz::PairLimits {
-    fn into(self) -> SwapLimits {
+impl From<boltz_client::swaps::boltz::PairLimits> for SwapLimits {
+    fn from(limits: boltz_client::swaps::boltz::PairLimits) -> Self {
         SwapLimits {
-            minimal: self.minimal as u64,
-            maximal: self.maximal as u64,
+            minimal: limits.minimal as u64,
+            maximal: limits.maximal as u64,
         }
     }
 }
-impl Into<SwapLimits> for boltz_client::swaps::boltz::ReverseLimits {
-    fn into(self) -> SwapLimits {
+impl From<boltz_client::swaps::boltz::ReverseLimits> for SwapLimits {
+    fn from(limits: boltz_client::swaps::boltz::ReverseLimits) -> Self {
         SwapLimits {
-            minimal: self.minimal as u64,
-            maximal: self.maximal as u64,
+            minimal: limits.minimal as u64,
+            maximal: limits.maximal as u64,
+        }
+    }
+}
+impl From<boltz_client::swaps::boltz::SubmarinePairLimits> for SwapLimits {
+    fn from(limits: boltz_client::swaps::boltz::SubmarinePairLimits) -> Self {
+        SwapLimits {
+            minimal: limits.minimal as u64,
+            maximal: limits.maximal as u64,
         }
     }
 }

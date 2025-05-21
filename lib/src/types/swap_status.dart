@@ -1,4 +1,3 @@
-// import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'swap_status.freezed.dart';
 part 'swap_status.g.dart';
@@ -170,7 +169,7 @@ SwapStatus getSwapStatusFromString(String statusString) {
 }
 
 @freezed
-class Transaction with _$Transaction {
+abstract class Transaction with _$Transaction {
   const factory Transaction({
     required String id,
     required String hex,
@@ -182,7 +181,7 @@ class Transaction with _$Transaction {
 }
 
 @freezed
-class SwapStatusResponse with _$SwapStatusResponse {
+abstract class SwapStatusResponse with _$SwapStatusResponse {
   const factory SwapStatusResponse({
     required SwapStatus status,
     Transaction? transaction,
@@ -195,7 +194,7 @@ class SwapStatusResponse with _$SwapStatusResponse {
 }
 
 @freezed
-class SwapStreamStatus with _$SwapStreamStatus {
+abstract class SwapStreamStatus with _$SwapStreamStatus {
   const factory SwapStreamStatus({
     required String id,
     required SwapStatus status,

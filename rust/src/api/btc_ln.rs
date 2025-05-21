@@ -5,20 +5,21 @@ use super::{
 use crate::util::{ensure_http_prefix, strip_tcp_prefix};
 
 use boltz_client::{
-    bitcoin::{consensus::{encode::serialize, Decodable}, Transaction, Txid},
+    bitcoin::{
+        consensus::{encode::serialize, Decodable},
+        Transaction, Txid,
+    },
     boltz::Cooperative,
     network::{electrum::ElectrumBitcoinClient, BitcoinClient, Chain as AllChains},
     swaps::{boltz::BoltzApiClientV2, magic_routing},
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
-use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// Bitcoin-Lightning Swap Class
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub struct BtcLnSwap {
     pub id: String,
     pub kind: SwapType,
@@ -97,16 +98,17 @@ impl BtcLnSwap {
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
         let electrum_url = strip_tcp_prefix(&electrum_url);
-        let refund_keypair = match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
-            Ok(keypair) => keypair,
-            Err(err) => return Err(err.into()),
-        };
+        let refund_keypair =
+            match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
+                Ok(keypair) => keypair,
+                Err(err) => return Err(err.into()),
+            };
         let refund_kps: Keypair = refund_keypair.clone().try_into()?;
         let preimage = match Preimage::from_invoice_str(&invoice) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
             from: "BTC".to_string(),
             to: "BTC".to_string(),
@@ -129,14 +131,16 @@ impl BtcLnSwap {
         let all_chains: AllChains = network.into();
         let bitcoin_chain = match all_chains {
             AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => return Err(BoltzError::new(
-                "ChainType".to_string(),
-                "Expected Bitcoin chain but got Liquid chain".to_string(),
-            )),
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
         };
-        
+
         let script_address = swap_script.to_address(bitcoin_chain.into())?.to_string();
-        
+
         Ok(BtcLnSwap::new(
             create_swap_response.id,
             swap_type,
@@ -161,45 +165,55 @@ impl BtcLnSwap {
         let all_chains: AllChains = self.network.into();
         let bitcoin_chain = match all_chains {
             AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => return Err(BoltzError::new(
-                "ChainType".to_string(),
-                "Expected Bitcoin chain but got Liquid chain".to_string(),
-            )),
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
         };
         let network_config =
             ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         // WE SHOULD NOT NEED TO MAKE A TX, JUST A SCRIPT
         let tx = match BtcSwapTx::new_refund(
             swap_script,
             &self.script_address,
             &network_config,
-            ensure_http_prefix(&self.boltz_url),
+            &boltz_client,
             self.id.clone(),
-        ).await {
+        )
+        .await
+        {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().try_into()?;
-        let claim_tx_response = boltz_client.get_submarine_claim_tx_details(&self.id).await?;
+        let claim_tx_response = boltz_client
+            .get_submarine_claim_tx_details(&self.id)
+            .await?;
         let (partial_sig, pub_nonce) = tx.partial_sign(
             &ckp,
             &claim_tx_response.pub_nonce,
             &claim_tx_response.transaction_hash,
         )?;
-        boltz_client.post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig).await?;
+        boltz_client
+            .post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)
+            .await?;
         Ok(())
     }
-    
+
     /// Retrieves the preimage for a completed submarine swap.
     pub async fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
-        let response = boltz_client.get_submarine_claim_tx_details(&self.id).await?;
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let response = boltz_client
+            .get_submarine_claim_tx_details(&self.id)
+            .await?;
         let preimage = response.preimage.clone();
         Ok(preimage)
     }
-    
+
     /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
     /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
@@ -216,17 +230,18 @@ impl BtcLnSwap {
         referral_id: Option<String>,
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
-        let claim_keypair = match KeyPair::generate(mnemonic, passphrase,network.into(), index, swap_type) {
-            Ok(keypair) => keypair,
-            Err(err) => return Err(err.into()),
-        };
+        let claim_keypair =
+            match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
+                Ok(keypair) => keypair,
+                Err(err) => return Err(err.into()),
+            };
         let preimage = Preimage::new();
         let ckp: Keypair = claim_keypair.clone().try_into()?;
         let claim_public_key = PublicKey {
             compressed: true,
             inner: ckp.public_key(),
         };
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -260,10 +275,12 @@ impl BtcLnSwap {
         let all_chains: AllChains = network.into();
         let bitcoin_chain = match all_chains {
             AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => return Err(BoltzError::new(
-                "ChainType".to_string(),
-                "Expected Bitcoin chain but got Liquid chain".to_string(),
-            )),
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
         };
         let create_swap_response = boltz_client.post_reverse_req(create_reverse_req).await?;
         create_swap_response.validate(&preimage, &claim_public_key, all_chains.into())?;
@@ -305,14 +322,16 @@ impl BtcLnSwap {
         let all_chains: AllChains = self.network.into();
         let bitcoin_chain = match all_chains {
             AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => return Err(BoltzError::new(
-                "ChainType".to_string(),
-                "Expected Bitcoin chain but got Liquid chain".to_string(),
-            )),
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
         };
         let network_config =
             ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let script_balance = match swap_script.get_balance(&network_config).await {
             Ok(result) => result,
@@ -323,29 +342,34 @@ impl BtcLnSwap {
                 swap_script,
                 out_address,
                 &network_config,
-                ensure_http_prefix(&self.boltz_url),
+                &boltz_client,
                 self.id.clone(),
-            ).await {
+            )
+            .await
+            {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = self.keys.clone().try_into()?;
             let preimage = self.preimage.clone();
-            let signed: Transaction = match tx.sign_claim(
-                &ckp,
-                &preimage.try_into()?,
-                miner_fee.into(),
-                if try_cooperate {
-                    Some(Cooperative {
-                        boltz_api: &boltz_client,
-                        swap_id: id,
-                        pub_nonce: None,
-                        partial_sig: None,
-                    })
-                } else {
-                    None
-                },
-            ).await {
+            let signed: Transaction = match tx
+                .sign_claim(
+                    &ckp,
+                    &preimage.try_into()?,
+                    miner_fee.into(),
+                    if try_cooperate {
+                        Some(Cooperative {
+                            boltz_api: &boltz_client,
+                            swap_id: id,
+                            pub_nonce: None,
+                            partial_sig: None,
+                        })
+                    } else {
+                        None
+                    },
+                )
+                .await
+            {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
@@ -376,15 +400,17 @@ impl BtcLnSwap {
         let all_chains: AllChains = self.network.into();
         let bitcoin_chain = match all_chains {
             AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => return Err(BoltzError::new(
-                "ChainType".to_string(),
-                "Expected Bitcoin chain but got Liquid chain".to_string(),
-            )),
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
         };
         let network_config =
             ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let id: String = self.id.clone();
         let script_balance = match swap_script.get_balance(&network_config).await {
             Ok(result) => result,
@@ -395,27 +421,32 @@ impl BtcLnSwap {
                 swap_script.clone(),
                 &out_address,
                 &network_config,
-                ensure_http_prefix(&self.boltz_url),
+                &boltz_client,
                 self.id.clone(),
-            ).await {
+            )
+            .await
+            {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = self.keys.clone().try_into()?;
-            let signed = match tx.sign_refund(
-                &ckp,
-                miner_fee.into(),
-                if try_cooperate {
-                    Some(Cooperative {
-                        boltz_api: &boltz_client,
-                        swap_id: id,
-                        pub_nonce: None,
-                        partial_sig: None,
-                    })
-                } else {
-                    None
-                },
-            ).await {
+            let signed = match tx
+                .sign_refund(
+                    &ckp,
+                    miner_fee.into(),
+                    if try_cooperate {
+                        Some(Cooperative {
+                            boltz_api: &boltz_client,
+                            swap_id: id,
+                            pub_nonce: None,
+                            partial_sig: None,
+                        })
+                    } else {
+                        None
+                    },
+                )
+                .await
+            {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
@@ -435,10 +466,12 @@ impl BtcLnSwap {
         let all_chains: AllChains = self.network.into();
         let bitcoin_chain = match all_chains {
             AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => return Err(BoltzError::new(
-                "ChainType".to_string(),
-                "Expected Bitcoin chain but got Liquid chain".to_string(),
-            )),
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
         };
         let network_config = ElectrumBitcoinClient::new(
             bitcoin_chain,
@@ -449,11 +482,8 @@ impl BtcLnSwap {
         )?;
         let transaction = Transaction::consensus_decode(&mut &signed_bytes[..])
             .map_err(|e| BoltzError::new("Bitcoin".to_string(), e.to_string()))?;
-        
-        let txid: Txid = match network_config
-            .broadcast_tx(&transaction)
-            .await
-        {
+
+        let txid: Txid = match network_config.broadcast_tx(&transaction).await {
             Ok(r) => r,
             Err(e) => return Err(BoltzError::new("Electrum".to_string(), format!("{:?}", e))),
         };
@@ -461,15 +491,18 @@ impl BtcLnSwap {
     }
     /// Broadcast using boltz's electrum server
     pub async fn broadcast_boltz(&self, signed_hex: String) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&self.boltz_url));
-        let txid = match boltz_client.broadcast_tx(self.network.into(), &signed_hex).await {
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let txid = match boltz_client
+            .broadcast_tx(self.network.into(), &signed_hex)
+            .await
+        {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
         Ok(extract_id(txid)?)
     }
-    /// Get the size of the transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-    pub async fn tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
+    /// Get the size of the claim transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
+    pub async fn claim_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -481,27 +514,74 @@ impl BtcLnSwap {
         let all_chains: AllChains = self.network.into();
         let bitcoin_chain = match all_chains {
             AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => return Err(BoltzError::new(
-                "ChainType".to_string(),
-                "Expected Bitcoin chain but got Liquid chain".to_string(),
-            )),
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
         };
-        let network_config = ElectrumBitcoinClient::new(
-            bitcoin_chain,
-            &self.electrum_url,
-            true,
-            true,
-            10,
-        )?;
+        let network_config =
+            ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
         // okay to use script address, we are just chekcing size
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+
         let tx = match BtcSwapTx::new_claim(
             swap_script.clone(),
             self.script_address.clone(),
             &network_config,
-            ensure_http_prefix(&self.boltz_url),
+            &boltz_client,
             self.id.clone(),
-        ).await {
+        )
+        .await
+        {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        let ckp: Keypair = self.keys.clone().try_into()?;
+        let size = match tx.size(&ckp, is_cooperative) {
+            Ok(result) => result,
+            Err(e) => return Err(e.into()),
+        };
+        Ok(size)
+    }
+
+    /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
+    pub async fn refund_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
+        if self.kind == SwapType::Reverse {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Reverse swaps are not refundable".to_string(),
+            });
+        } else {
+            ()
+        }
+        let all_chains: AllChains = self.network.into();
+        let bitcoin_chain = match all_chains {
+            AllChains::Bitcoin(inner_chain) => inner_chain,
+            _ => {
+                return Err(BoltzError::new(
+                    "ChainType".to_string(),
+                    "Expected Bitcoin chain but got Liquid chain".to_string(),
+                ))
+            }
+        };
+        let network_config =
+            ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
+        // okay to use script address, we are just chekcing size
+        let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+
+        let tx = match BtcSwapTx::new_refund(
+            swap_script.clone(),
+            &self.script_address,
+            &network_config,
+            &boltz_client,
+            self.id.clone(),
+        )
+        .await
+        {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };

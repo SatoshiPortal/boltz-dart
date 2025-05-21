@@ -12,11 +12,10 @@ use boltz_client::{
         BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
         SwapType as BoltzSwapType,
     },
-    util::{lnurl, secrets::SwapKey},
+    util::secrets::SwapKey,
     Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
     PublicKey, Secp256k1, ZKKeyPair,
 };
-use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::util::ensure_http_prefix;
@@ -41,7 +40,6 @@ impl Into<Fee> for TxFee {
 /// When a swap is created the user must first make a Lockup.
 /// Once the swap is completed, the user must make a Claim.
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub enum Side {
     Lockup,
     Claim,
@@ -65,7 +63,6 @@ impl From<BoltzSide> for Side {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub enum SwapTxKind {
     Claim,
     Refund,
@@ -89,7 +86,6 @@ impl From<BoltzSwapTxKind> for SwapTxKind {
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub enum SwapType {
     Submarine,
     Reverse,
@@ -116,7 +112,6 @@ impl From<BoltzSwapType> for SwapType {
 }
 
 #[derive(Clone, Copy, Eq, Serialize, Deserialize, PartialEq)]
-#[frb(dart_metadata=("freezed"))]
 pub enum Chain {
     Bitcoin,
     BitcoinTestnet,
@@ -167,14 +162,12 @@ impl Into<LiquidChain> for Chain {
 }
 
 #[derive(Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
-#[frb(dart_metadata=("freezed"))]
 pub enum ChainSwapDirection {
     BtcToLbtc,
     LbtcToBtc,
 }
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub struct KeyPair {
     pub secret_key: String,
     pub public_key: String,
@@ -245,7 +238,6 @@ use boltz_client::util::secrets::Preimage;
 
 /// Used internally to create a secret - PreImage for swaps
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub struct PreImage {
     pub value: String,
     pub sha256: String,
@@ -294,7 +286,6 @@ impl Into<PreImage> for Preimage {
 
 /// Helper to handle Lightning invoices
 #[derive(Debug, Clone)]
-#[frb(dart_metadata=("freezed"))]
 pub struct DecodedInvoice {
     pub msats: u64,
     pub expiry: u64,
@@ -324,7 +315,8 @@ impl DecodedInvoice {
             if mrh.is_none() {
                 None
             } else {
-                let boltz_client = BoltzApiClientV2::new(&ensure_http_prefix(&boltz_url.unwrap()));
+                let boltz_client =
+                    BoltzApiClientV2::new(ensure_http_prefix(&boltz_url.unwrap()), None);
                 match boltz_client.get_mrh_bip21(&s).await {
                     Ok(r) => Some(r.bip21),
                     Err(_) => None,
@@ -362,35 +354,8 @@ impl DecodedInvoice {
     }
 }
 
-/// LNURL helper to validate an lnurl string
-pub fn validate_lnurl(lnurl: String) -> bool {
-    lnurl::validate_lnurl(&lnurl)
-}
-
-/// LNURL helper to get an invoice from an lnurl string
-pub async fn invoice_from_lnurl(lnurl: String, msats: u64) -> Result<String, BoltzError> {
-    Ok(lnurl::fetch_invoice(&lnurl, msats).await?)
-}
-
-/// LNURL helper to get an lnurl-w voucher amount
-pub async fn get_voucher_max_amount(lnurl: String) -> Result<u64, BoltzError> {
-    let max_withdrawable_msat = lnurl::create_withdraw_response(&lnurl)
-        .await?
-        .max_withdrawable;
-    Ok(max_withdrawable_msat / 1000)
-}
-
-/// LNURL helper to claim an lnurl-w
-pub async fn withdraw(lnurl: String, invoice: String) -> Result<(), BoltzError> {
-    Ok(
-        lnurl::process_withdrawal(&lnurl::create_withdraw_response(&lnurl).await?, &invoice)
-            .await?,
-    )
-}
-
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub struct BtcSwapScriptStr {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,
@@ -512,7 +477,6 @@ impl From<BtcSwapScript> for BtcSwapScriptStr {
 }
 /// Helper to store a LBtcSwapScript and convert to a LBtcSwapScript
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[frb(dart_metadata=("freezed"))]
 pub struct LBtcSwapScriptStr {
     pub swap_type: SwapType,
     pub funding_addrs: Option<String>,

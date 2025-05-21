@@ -22,3 +22,9 @@
 - boltz-0.3.0: Updated fees
 - dep(update): using latest boltz-rust. added description to decoded invoice
 - fix: lock boltz-client version 
+
+# 0.2.0
+- upgrade: frb 2.9.0 (breaking)
+- fix: added into() for submarine limits.
+- Added lnurl freezed. Updated generated files 
+- feat: claim/refund sizes

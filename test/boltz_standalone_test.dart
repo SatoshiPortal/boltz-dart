@@ -133,7 +133,7 @@ void main() {
 //       expect(receivedEvents[0].status, equals(SwapStatus.invoiceSet));
 //       expect(receivedEvents[1].status, equals(SwapStatus.txnLockupFailed));
 
-//       // TODO: Refund flow goes here
+//       // Refund flow goes here
 //       // expect(receivedEvents[2], equals(SwapStatus.swapRefunded));
 //     }, skip: true, timeout: testTimeout);
 
@@ -168,7 +168,7 @@ void main() {
 //       expect(receivedEvents[3].status, equals(SwapStatus.invoicePending));
 //       expect(receivedEvents[4].status, equals(SwapStatus.invoiceFailedToPay));
 
-//       // TODO: Refund flow goes here
+//       // Refund flow goes here
 //       // expect(receivedEvents[2], equals(SwapStatus.swapRefunded));
 //     }, skip: true, timeout: testTimeout);
 

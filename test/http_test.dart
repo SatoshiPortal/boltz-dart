@@ -1,9 +1,11 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:boltz/boltz.dart';
-import 'package:boltz/src/utils/stream.dart';
 import 'package:test/test.dart';
+
 const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
 
 void main() {

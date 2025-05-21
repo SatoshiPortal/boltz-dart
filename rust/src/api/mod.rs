@@ -7,4 +7,5 @@ pub mod chain_swap;
 pub mod error;
 pub mod fees;
 pub mod lbtc_ln;
+pub mod lnurl;
 pub mod types;
