@@ -9,10 +9,7 @@ pub struct BoltzError {
 
 impl BoltzError {
     pub fn new(kind: String, message: String) -> Self {
-        BoltzError {
-            kind: kind,
-            message: message,
-        }
+        BoltzError { kind, message }
     }
 
     pub fn detail(&self) -> &str {

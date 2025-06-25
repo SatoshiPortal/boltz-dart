@@ -66,13 +66,11 @@ class ChainSwap {
   /// Claim a successful swap
   Future<String> claim(
           {required String outAddress,
-          required String refundAddress,
           required TxFee minerFee,
           required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapClaim(
           that: this,
           outAddress: outAddress,
-          refundAddress: refundAddress,
           minerFee: minerFee,
           tryCooperate: tryCooperate);
 

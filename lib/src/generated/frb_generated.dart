@@ -182,7 +182,6 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<String> crateApiChainSwapChainSwapClaim(
       {required ChainSwap that,
       required String outAddress,
-      required String refundAddress,
       required TxFee minerFee,
       required bool tryCooperate});
 
@@ -1014,25 +1013,23 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<String> crateApiChainSwapChainSwapClaim(
       {required ChainSwap that,
       required String outAddress,
-      required String refundAddress,
       required TxFee minerFee,
       required bool tryCooperate}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_box_autoadd_chain_swap(that);
         var arg1 = cst_encode_String(outAddress);
-        var arg2 = cst_encode_String(refundAddress);
-        var arg3 = cst_encode_box_autoadd_tx_fee(minerFee);
-        var arg4 = cst_encode_bool(tryCooperate);
+        var arg2 = cst_encode_box_autoadd_tx_fee(minerFee);
+        var arg3 = cst_encode_bool(tryCooperate);
         return wire.wire__crate__api__chain_swap__chain_swap_claim(
-            port_, arg0, arg1, arg2, arg3, arg4);
+            port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_String,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiChainSwapChainSwapClaimConstMeta,
-      argValues: [that, outAddress, refundAddress, minerFee, tryCooperate],
+      argValues: [that, outAddress, minerFee, tryCooperate],
       apiImpl: this,
     ));
   }
@@ -1040,13 +1037,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiChainSwapChainSwapClaimConstMeta =>
       const TaskConstMeta(
         debugName: "chain_swap_claim",
-        argNames: [
-          "that",
-          "outAddress",
-          "refundAddress",
-          "minerFee",
-          "tryCooperate"
-        ],
+        argNames: ["that", "outAddress", "minerFee", "tryCooperate"],
       );
 
   @override

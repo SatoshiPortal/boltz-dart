@@ -11,7 +11,6 @@ import 'types.dart';
 // These functions are ignored because they are not marked as `pub`: `extract_id`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `clone`, `eq`
 
-/// Bitcoin-Lightning Swap Class
 class BtcLnSwap {
   final String id;
   final SwapType kind;
