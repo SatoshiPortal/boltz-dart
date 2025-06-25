@@ -336,7 +336,6 @@ impl ChainSwap {
     pub async fn claim(
         &self,
         out_address: String,
-        refund_address: String,
         miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {

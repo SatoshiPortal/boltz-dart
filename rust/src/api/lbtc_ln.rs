@@ -8,7 +8,7 @@ use boltz_client::{
     boltz::Cooperative,
     elements::{encode::Decodable, hashes::hex::DisplayHex, Transaction},
     network::{electrum::ElectrumLiquidClient, Chain as AllChains, LiquidClient},
-    swaps::{boltz::BoltzApiClientV2, magic_routing},
+    swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScriptCommon},
     util::secrets::Preimage,
     Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
@@ -159,18 +159,6 @@ impl LbtcLnSwap {
     /// If this function is not called within ~1 hour, the swap will be closed via the script path.
     /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
     pub async fn coop_close_submarine(&self) -> Result<(), BoltzError> {
-        let all_chains: AllChains = self.network.into();
-        let liquid_chain = match all_chains {
-            AllChains::Liquid(inner_chain) => inner_chain,
-            _ => {
-                return Err(BoltzError::new(
-                    "ChainType".to_string(),
-                    "Expected Liquid chain but got Bitcoin chain".to_string(),
-                ))
-            }
-        };
-        let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &self.electrum_url, true, true, 10)?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let ckp: Keypair = self.keys.clone().try_into()?;
@@ -235,7 +223,7 @@ impl LbtcLnSwap {
                 invoice_amount: Some(out_amount),
                 from: "BTC".to_string(),
                 to: "L-BTC".to_string(),
-                preimage_hash: preimage.sha256,
+                preimage_hash: Some(preimage.sha256),
                 claim_public_key,
                 referral_id: referral_id.clone(),
                 address: Some(address.clone()),
@@ -250,7 +238,7 @@ impl LbtcLnSwap {
                 invoice_amount: Some(out_amount),
                 from: "BTC".to_string(),
                 to: "L-BTC".to_string(),
-                preimage_hash: preimage.sha256,
+                preimage_hash: Some(preimage.sha256),
                 claim_public_key,
                 referral_id: referral_id.clone(),
                 address: None,
@@ -272,6 +260,7 @@ impl LbtcLnSwap {
             }
         };
         let response = boltz_client.post_reverse_req(create_reverse_req).await?;
+        let invoice = response.invoice.clone().unwrap_or_default();
         response.validate(&preimage, &claim_public_key, network.into())?;
         let swap_script = LBtcSwapScript::reverse_from_swap_resp(&response, claim_public_key)?;
         let script_address = swap_script.to_address(liquid_chain)?.to_string();
@@ -283,7 +272,7 @@ impl LbtcLnSwap {
             index,
             preimage.into(),
             swap_script.clone().into(),
-            response.invoice,
+            invoice,
             out_amount,
             script_address,
             swap_script.blinding_key.display_secret().to_string(),

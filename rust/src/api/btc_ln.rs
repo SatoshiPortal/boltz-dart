@@ -11,7 +11,7 @@ use boltz_client::{
     },
     boltz::Cooperative,
     network::{electrum::ElectrumBitcoinClient, BitcoinClient, Chain as AllChains},
-    swaps::{boltz::BoltzApiClientV2, magic_routing},
+    swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScriptCommon},
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
@@ -162,18 +162,6 @@ impl BtcLnSwap {
     /// If this function is not called within ~1 hour, the swap will be closed via the script path.
     /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
     pub async fn coop_close_submarine(&self) -> Result<(), BoltzError> {
-        let all_chains: AllChains = self.network.into();
-        let bitcoin_chain = match all_chains {
-            AllChains::Bitcoin(inner_chain) => inner_chain,
-            _ => {
-                return Err(BoltzError::new(
-                    "ChainType".to_string(),
-                    "Expected Bitcoin chain but got Liquid chain".to_string(),
-                ))
-            }
-        };
-        let network_config =
-            ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let ckp: Keypair = self.keys.clone().try_into()?;
@@ -235,7 +223,7 @@ impl BtcLnSwap {
                 invoice_amount: Some(out_amount as u64),
                 from: "BTC".to_string(),
                 to: "BTC".to_string(),
-                preimage_hash: preimage.sha256,
+                preimage_hash: Some(preimage.sha256),
                 claim_public_key,
                 referral_id: referral_id.clone(),
                 address: Some(address.clone()),
@@ -250,7 +238,7 @@ impl BtcLnSwap {
                 invoice_amount: Some(out_amount),
                 from: "BTC".to_string(),
                 to: "BTC".to_string(),
-                preimage_hash: preimage.sha256,
+                preimage_hash: Some(preimage.sha256),
                 claim_public_key,
                 referral_id: referral_id.clone(),
                 address: None,
@@ -284,7 +272,7 @@ impl BtcLnSwap {
             index,
             preimage.into(),
             swap_script.into(),
-            create_swap_response.invoice,
+            create_swap_response.invoice.unwrap_or_default(),
             script_address,
             out_amount,
             strip_tcp_prefix(&electrum_url),

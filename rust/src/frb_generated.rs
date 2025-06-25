@@ -653,7 +653,6 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     out_address: impl CstDecode<String>,
-    refund_address: impl CstDecode<String>,
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
 ) {
@@ -666,7 +665,6 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
         move || {
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
-            let api_refund_address = refund_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
             move |context| async move {
@@ -675,7 +673,6 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
                         let output_ok = crate::api::chain_swap::ChainSwap::claim(
                             &api_that,
                             api_out_address,
-                            api_refund_address,
                             api_miner_fee,
                             api_try_cooperate,
                         )
@@ -4424,7 +4421,6 @@ mod io {
         port_: i64,
         that: *mut wire_cst_chain_swap,
         out_address: *mut wire_cst_list_prim_u_8_strict,
-        refund_address: *mut wire_cst_list_prim_u_8_strict,
         miner_fee: *mut wire_cst_tx_fee,
         try_cooperate: bool,
     ) {
@@ -4432,7 +4428,6 @@ mod io {
             port_,
             that,
             out_address,
-            refund_address,
             miner_fee,
             try_cooperate,
         )
