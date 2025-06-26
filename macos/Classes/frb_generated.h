@@ -302,7 +302,6 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_local(int64
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim(int64_t port_,
                                                                  struct wire_cst_chain_swap *that,
                                                                  struct wire_cst_list_prim_u_8_strict *out_address,
-                                                                 struct wire_cst_list_prim_u_8_strict *refund_address,
                                                                  struct wire_cst_tx_fee *miner_fee,
                                                                  bool try_cooperate);
 

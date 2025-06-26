@@ -21,7 +21,7 @@ use boltz_client::{
         electrum::{ElectrumBitcoinClient, ElectrumLiquidClient},
         BitcoinChain, BitcoinClient, Chain as AllChains, LiquidChain, LiquidClient,
     },
-    swaps::boltz::BoltzApiClientV2,
+    swaps::{boltz::BoltzApiClientV2, SwapScriptCommon},
     util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };
@@ -336,7 +336,6 @@ impl ChainSwap {
     pub async fn claim(
         &self,
         out_address: String,
-        refund_address: String,
         miner_fee: TxFee,
         try_cooperate: bool,
     ) -> Result<String, BoltzError> {
@@ -375,17 +374,9 @@ impl ChainSwap {
                 if try_cooperate {
                     let btc_lockup_script: BtcSwapScript =
                         self.btc_script_str.clone().try_into()?;
-                    let refund_tx = BtcSwapTx::new_refund(
-                        btc_lockup_script.clone(),
-                        &refund_address,
-                        &btc_network_config,
-                        &boltz_client,
-                        self.id.clone(),
-                    )
-                    .await?;
                     let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id).await?;
                     let rkp: Keypair = self.refund_keys.clone().try_into()?;
-                    let (partial_sig, pub_nonce) = refund_tx.partial_sign(
+                    let (partial_sig, pub_nonce) = btc_lockup_script.partial_sign(
                         &rkp,
                         &claim_tx_response.pub_nonce,
                         &claim_tx_response.transaction_hash,
@@ -437,17 +428,9 @@ impl ChainSwap {
                     let lbtc_lockup_script: LBtcSwapScript =
                         self.lbtc_script_str.clone().try_into()?;
 
-                    let refund_tx = LBtcSwapTx::new_refund(
-                        lbtc_lockup_script.clone(),
-                        &refund_address,
-                        &lbtc_network_config,
-                        &boltz_client,
-                        id.clone(),
-                    )
-                    .await?;
                     let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id).await?;
                     let rkp: Keypair = self.refund_keys.clone().try_into()?;
-                    let (partial_sig, pub_nonce) = refund_tx.partial_sign(
+                    let (partial_sig, pub_nonce) = lbtc_lockup_script.partial_sign(
                         &rkp,
                         &claim_tx_response.pub_nonce,
                         &claim_tx_response.transaction_hash,
