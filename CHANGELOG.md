@@ -28,3 +28,7 @@
 - fix: added into() for submarine limits.
 - Added lnurl freezed. Updated generated files 
 - feat: claim/refund sizes
+
+# 0.2.1
+- fix: do not build swap tx for chain claim and coop close
+- fix: Update to latest boltz-rust commit
