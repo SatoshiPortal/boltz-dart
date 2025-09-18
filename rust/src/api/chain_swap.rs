@@ -389,8 +389,7 @@ impl ChainSwap {
                             Some(Cooperative {
                                 boltz_api: &boltz_client,
                                 swap_id: id,
-                                pub_nonce: Some(pub_nonce),
-                                partial_sig: Some(partial_sig),
+                                signature: Some((partial_sig, pub_nonce)),
                             }),
                             false,
                         )
@@ -443,8 +442,7 @@ impl ChainSwap {
                             Some(Cooperative {
                                 boltz_api: &boltz_client,
                                 swap_id: id,
-                                pub_nonce: Some(pub_nonce),
-                                partial_sig: Some(partial_sig),
+                                signature: Some((partial_sig, pub_nonce)),
                             }),
                         )
                         .await
@@ -578,8 +576,7 @@ impl ChainSwap {
                             Some(Cooperative {
                                 boltz_api: &boltz_client,
                                 swap_id: id,
-                                pub_nonce: None,
-                                partial_sig: None,
+                                signature: None,
                             })
                         } else {
                             None
@@ -612,8 +609,7 @@ impl ChainSwap {
                             Some(Cooperative {
                                 boltz_api: &boltz_client,
                                 swap_id: id,
-                                pub_nonce: None,
-                                partial_sig: None,
+                                signature: None,
                             })
                         } else {
                             None

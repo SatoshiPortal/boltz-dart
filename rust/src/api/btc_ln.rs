@@ -157,7 +157,6 @@ impl BtcLnSwap {
             referral_id,
         ))
     }
-
     /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
     /// If this function is not called within ~1 hour, the swap will be closed via the script path.
     /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
@@ -178,7 +177,6 @@ impl BtcLnSwap {
             .await?;
         Ok(())
     }
-
     /// Retrieves the preimage for a completed submarine swap.
     pub async fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
@@ -188,7 +186,6 @@ impl BtcLnSwap {
         let preimage = response.preimage.clone();
         Ok(preimage)
     }
-
     /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
     /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
@@ -338,8 +335,7 @@ impl BtcLnSwap {
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
-                            pub_nonce: None,
-                            partial_sig: None,
+                            signature: None,
                         })
                     } else {
                         None
@@ -415,8 +411,7 @@ impl BtcLnSwap {
                         Some(Cooperative {
                             boltz_api: &boltz_client,
                             swap_id: id,
-                            pub_nonce: None,
-                            partial_sig: None,
+                            signature: None,
                         })
                     } else {
                         None
@@ -523,7 +518,6 @@ impl BtcLnSwap {
         };
         Ok(size)
     }
-
     /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
     pub async fn refund_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Reverse {
@@ -568,6 +562,19 @@ impl BtcLnSwap {
             Err(e) => return Err(e.into()),
         };
         Ok(size)
+    }
+    /// Get the preimage of the lightning invoice for a submarine swap
+    pub async fn get_preimage(&self) -> Result<String, BoltzError> {
+        if self.kind == SwapType::Reverse {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Cannot get preimage of reverse swap".to_string(),
+            });
+        }
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let response = boltz_client.get_submarine_preimage(&self.id).await?;
+        let preimage = response.preimage.clone();
+        Ok(preimage)
     }
 }
 

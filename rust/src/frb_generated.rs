@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.9.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1081101194;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1442815566;
 
 // Section: executor
 
@@ -286,6 +286,31 @@ fn wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimage_impl(
                                 &api_that,
                             )
                             .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__btc_ln__btc_ln_swap_get_preimage_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "btc_ln_swap_get_preimage",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::btc_ln::BtcLnSwap::get_preimage(&api_that).await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -1433,6 +1458,31 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage_impl
                                 &api_that,
                             )
                             .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimage_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "lbtc_ln_swap_get_preimage",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok =
+                            crate::api::lbtc_ln::LbtcLnSwap::get_preimage(&api_that).await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -4251,6 +4301,14 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_get_preimage(
+        port_: i64,
+        that: *mut wire_cst_btc_ln_swap,
+    ) {
+        wire__crate__api__btc_ln__btc_ln_swap_get_preimage_impl(port_, that)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new(
         port_: i64,
         id: *mut wire_cst_list_prim_u_8_strict,
@@ -4739,6 +4797,14 @@ mod io {
         that: *mut wire_cst_lbtc_ln_swap,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage_impl(port_, that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimage(
+        port_: i64,
+        that: *mut wire_cst_lbtc_ln_swap,
+    ) {
+        wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimage_impl(port_, that)
     }
 
     #[unsafe(no_mangle)]

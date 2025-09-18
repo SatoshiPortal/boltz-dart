@@ -154,7 +154,6 @@ impl LbtcLnSwap {
             referral_id,
         ))
     }
-
     /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
     /// If this function is not called within ~1 hour, the swap will be closed via the script path.
     /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
@@ -334,8 +333,7 @@ impl LbtcLnSwap {
                     Some(Cooperative {
                         boltz_api: &boltz_client,
                         swap_id: id,
-                        pub_nonce: None,
-                        partial_sig: None,
+                        signature: None,
                     })
                 } else {
                     None
@@ -350,7 +348,6 @@ impl LbtcLnSwap {
 
         Ok(signed.serialize().to_lower_hex_string())
     }
-
     /// Used to refund a failed submarine swap.
     pub async fn refund(
         &self,
@@ -402,8 +399,7 @@ impl LbtcLnSwap {
                     Some(Cooperative {
                         boltz_api: &boltz_client,
                         swap_id: id,
-                        pub_nonce: None,
-                        partial_sig: None,
+                        signature: None,
                     })
                 } else {
                     None
@@ -500,7 +496,6 @@ impl LbtcLnSwap {
         };
         Ok(size)
     }
-
     /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
     pub async fn refund_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Reverse {
@@ -546,6 +541,19 @@ impl LbtcLnSwap {
             Err(e) => return Err(e.into()),
         };
         Ok(size)
+    }
+    /// Get the preimage of the lightning invoice for a submarine swap
+    pub async fn get_preimage(&self) -> Result<String, BoltzError> {
+        if self.kind == SwapType::Reverse {
+            return Err(BoltzError {
+                kind: "Input".to_string(),
+                message: "Cannot get preimage of reverse swap".to_string(),
+            });
+        }
+        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let response = boltz_client.get_submarine_preimage(&self.id).await?;
+        let preimage = response.preimage.clone();
+        Ok(preimage)
     }
 }
 /// Helper method used to extract the txid from a JSON response

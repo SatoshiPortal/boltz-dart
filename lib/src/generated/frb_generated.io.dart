@@ -1193,6 +1193,24 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__btc_ln__btc_ln_swap_get_completed_submarine_preimagePtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_btc_ln_swap>)>();
 
+  void wire__crate__api__btc_ln__btc_ln_swap_get_preimage(
+    int port_,
+    ffi.Pointer<wire_cst_btc_ln_swap> that,
+  ) {
+    return _wire__crate__api__btc_ln__btc_ln_swap_get_preimage(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire__crate__api__btc_ln__btc_ln_swap_get_preimagePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_cst_btc_ln_swap>)>>(
+      'frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_get_preimage');
+  late final _wire__crate__api__btc_ln__btc_ln_swap_get_preimage =
+      _wire__crate__api__btc_ln__btc_ln_swap_get_preimagePtr
+          .asFunction<void Function(int, ffi.Pointer<wire_cst_btc_ln_swap>)>();
+
   void wire__crate__api__btc_ln__btc_ln_swap_new(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> id,
@@ -2246,6 +2264,25 @@ class BoltzCoreWire implements BaseWire {
           'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage');
   late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimage =
       _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_completed_submarine_preimagePtr
+          .asFunction<void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>)>();
+
+  void wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimage(
+    int port_,
+    ffi.Pointer<wire_cst_lbtc_ln_swap> that,
+  ) {
+    return _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimage(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimagePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_lbtc_ln_swap>)>>(
+      'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimage');
+  late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimage =
+      _wire__crate__api__lbtc_ln__lbtc_ln_swap_get_preimagePtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_lbtc_ln_swap>)>();
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
