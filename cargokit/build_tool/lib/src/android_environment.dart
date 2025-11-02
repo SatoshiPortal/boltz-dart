@@ -1,3 +1,6 @@
+/// This is copied from Cargokit (which is the official way to use it currently)
+/// Details: https://fzyzcjy.github.io/flutter_rust_bridge/manual/integrate/builtin
+
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math' as math;
@@ -10,6 +13,13 @@ import 'target.dart';
 import 'util.dart';
 
 class AndroidEnvironment {
+  static const kSupports16KbPageSize = [
+    "arm64-v8a",
+    "x86_64"
+  ]; // Android 15+ 64-bit architectures
+  static const kPageSize16Kb = 16384;
+  static const kPageSize4Kb = 4096;
+
   AndroidEnvironment({
     required this.sdkPath,
     required this.ndkVersion,
@@ -186,7 +196,25 @@ class AndroidEnvironment {
     if (rustFlags.isNotEmpty) {
       rustFlags = '$rustFlags\x1f';
     }
-    rustFlags = '$rustFlags-L\x1f$workaroundDir';
+
+    final pageSize = kSupports16KbPageSize.contains(target.android)
+        ? kPageSize16Kb
+        : kPageSize4Kb;
+
+    final baseLinkerArgs = ["-L", workaroundDir];
+
+    final linkerArgs = pageSize != kPageSize4Kb
+        ? [
+            ...baseLinkerArgs,
+            "-C",
+            "link-arg=-Wl,--hash-style=both",
+            "-C",
+            "link-arg=-Wl,-z,max-page-size=$pageSize",
+          ]
+        : baseLinkerArgs;
+
+    rustFlags = '$rustFlags${linkerArgs.join("\x1f")}';
+
     return rustFlags;
   }
 }
