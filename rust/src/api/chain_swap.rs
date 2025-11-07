@@ -467,7 +467,7 @@ impl ChainSwap {
         }
     }
 
-    /// Claim tx size
+    /// Get the size of a claim tx
     pub async fn claim_tx_size(
         &self,
         out_address: String,
@@ -504,6 +504,7 @@ impl ChainSwap {
                 )
                 .await?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
+
                 let size = match claim_tx.size(&ckp, try_cooperate, true) {
                     Ok(result) => result,
                     Err(e) => return Err(e.into()),
@@ -512,12 +513,13 @@ impl ChainSwap {
             }
             ChainSwapDirection::LbtcToBtc => {
                 let btc_claim_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
+
                 let claim_tx = BtcSwapTx::new_claim(
                     btc_claim_script.clone(),
                     out_address.clone(),
                     &btc_network_config,
                     &boltz_client,
-                    self.id.clone(),
+                    id.clone(),
                 )
                 .await?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
