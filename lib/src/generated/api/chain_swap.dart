@@ -74,7 +74,7 @@ class ChainSwap {
           minerFee: minerFee,
           tryCooperate: tryCooperate);
 
-  /// Claim tx size
+  /// Get the size of a claim tx
   Future<BigInt> claimTxSize(
           {required String outAddress, required bool tryCooperate}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapClaimTxSize(
