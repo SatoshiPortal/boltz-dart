@@ -48,25 +48,31 @@ class BtcLnSwap {
       .crateApiBtcLnBtcLnSwapBroadcastBoltz(that: this, signedHex: signedHex);
 
   /// Broadcast using your own electrum server that was used to create the swap
-  Future<String> broadcastLocal({required String signedHex}) => BoltzCore
-      .instance.api
-      .crateApiBtcLnBtcLnSwapBroadcastLocal(that: this, signedHex: signedHex);
+  Future<String> broadcastLocal(
+          {required String signedHex, ElectrumSettings? electrumSettings}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapBroadcastLocal(
+          that: this, signedHex: signedHex, electrumSettings: electrumSettings);
 
   /// Used to claim a reverse swap.
   Future<String> claim(
           {required String outAddress,
           required TxFee minerFee,
-          required bool tryCooperate}) =>
+          required bool tryCooperate,
+          ElectrumSettings? electrumSettings}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaim(
           that: this,
           outAddress: outAddress,
           minerFee: minerFee,
-          tryCooperate: tryCooperate);
+          tryCooperate: tryCooperate,
+          electrumSettings: electrumSettings);
 
   /// Get the size of the claim transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-  Future<BigInt> claimTxSize({required bool isCooperative}) =>
+  Future<BigInt> claimTxSize(
+          {required bool isCooperative, ElectrumSettings? electrumSettings}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaimTxSize(
-          that: this, isCooperative: isCooperative);
+          that: this,
+          isCooperative: isCooperative,
+          electrumSettings: electrumSettings);
 
   /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
   /// If this function is not called within ~1 hour, the swap will be closed via the script path.
@@ -175,17 +181,22 @@ class BtcLnSwap {
   Future<String> refund(
           {required String outAddress,
           required TxFee minerFee,
-          required bool tryCooperate}) =>
+          required bool tryCooperate,
+          ElectrumSettings? electrumSettings}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefund(
           that: this,
           outAddress: outAddress,
           minerFee: minerFee,
-          tryCooperate: tryCooperate);
+          tryCooperate: tryCooperate,
+          electrumSettings: electrumSettings);
 
   /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-  Future<BigInt> refundTxSize({required bool isCooperative}) =>
+  Future<BigInt> refundTxSize(
+          {required bool isCooperative, ElectrumSettings? electrumSettings}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefundTxSize(
-          that: this, isCooperative: isCooperative);
+          that: this,
+          isCooperative: isCooperative,
+          electrumSettings: electrumSettings);
 
   /// Convert instance to a JSON string.
   Future<String> toJson() =>

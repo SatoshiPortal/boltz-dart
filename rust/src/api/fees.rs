@@ -214,10 +214,10 @@ impl From<ChainFees> for ChainSwapFees {
 /// Complete fees and limits class for Chain swaps
 #[derive(Debug, Clone)]
 pub struct ChainFeesAndLimits {
-    pub btc_limits: SwapLimits,
-    pub lbtc_limits: SwapLimits,
-    pub btc_fees: ChainSwapFees,  // we lockup (send) btc, we claim lbtc
-    pub lbtc_fees: ChainSwapFees, // we lockup (send) lbtc, we claim btc
+    pub btc_limits: SwapLimits,   // use for btc-lbtc chain swaps
+    pub lbtc_limits: SwapLimits,  // use for lbtc-btc chain swaps
+    pub btc_fees: ChainSwapFees,  // use for btc-lbtc chain swaps
+    pub lbtc_fees: ChainSwapFees, // use for lbtc-btc chain swaps
 }
 impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
     type Error = BoltzError; // Use a more specific error type in a real application

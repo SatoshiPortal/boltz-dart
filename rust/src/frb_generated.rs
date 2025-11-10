@@ -128,6 +128,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_broadcast_local_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     signed_hex: impl CstDecode<String>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -138,12 +139,14 @@ fn wire__crate__api__btc_ln__btc_ln_swap_broadcast_local_impl(
         move || {
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::btc_ln::BtcLnSwap::broadcast_local(
                             &api_that,
                             api_signed_hex,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -160,6 +163,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
     out_address: impl CstDecode<String>,
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -172,6 +176,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -180,6 +185,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
                             api_out_address,
                             api_miner_fee,
                             api_try_cooperate,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -194,6 +200,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     is_cooperative: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -204,12 +211,14 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size_impl(
         move || {
             let api_that = that.cst_decode();
             let api_is_cooperative = is_cooperative.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::btc_ln::BtcLnSwap::claim_tx_size(
                             &api_that,
                             api_is_cooperative,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -486,6 +495,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
     out_address: impl CstDecode<String>,
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -498,6 +508,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -506,6 +517,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
                             api_out_address,
                             api_miner_fee,
                             api_try_cooperate,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -520,6 +532,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     is_cooperative: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -530,12 +543,14 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size_impl(
         move || {
             let api_that = that.cst_decode();
             let api_is_cooperative = is_cooperative.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::btc_ln::BtcLnSwap::refund_tx_size(
                             &api_that,
                             api_is_cooperative,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -646,6 +661,7 @@ fn wire__crate__api__chain_swap__chain_swap_broadcast_local_impl(
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     signed_hex: impl CstDecode<String>,
     kind: impl CstDecode<crate::api::types::SwapTxKind>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -657,6 +673,7 @@ fn wire__crate__api__chain_swap__chain_swap_broadcast_local_impl(
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
             let api_kind = kind.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -664,6 +681,7 @@ fn wire__crate__api__chain_swap__chain_swap_broadcast_local_impl(
                             &api_that,
                             api_signed_hex,
                             api_kind,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -680,6 +698,8 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
     out_address: impl CstDecode<String>,
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
+    btc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
+    lbtc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -692,6 +712,8 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_btc_electrum_settings = btc_electrum_settings.cst_decode();
+            let api_lbtc_electrum_settings = lbtc_electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -700,6 +722,8 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
                             api_out_address,
                             api_miner_fee,
                             api_try_cooperate,
+                            api_btc_electrum_settings,
+                            api_lbtc_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -715,6 +739,8 @@ fn wire__crate__api__chain_swap__chain_swap_claim_tx_size_impl(
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     out_address: impl CstDecode<String>,
     try_cooperate: impl CstDecode<bool>,
+    btc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
+    lbtc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -726,6 +752,8 @@ fn wire__crate__api__chain_swap__chain_swap_claim_tx_size_impl(
             let api_that = that.cst_decode();
             let api_out_address = out_address.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_btc_electrum_settings = btc_electrum_settings.cst_decode();
+            let api_lbtc_electrum_settings = lbtc_electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -733,6 +761,8 @@ fn wire__crate__api__chain_swap__chain_swap_claim_tx_size_impl(
                             &api_that,
                             api_out_address,
                             api_try_cooperate,
+                            api_btc_electrum_settings,
+                            api_lbtc_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -949,6 +979,8 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
     refund_address: impl CstDecode<String>,
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
+    btc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
+    lbtc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -961,6 +993,8 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
             let api_refund_address = refund_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_btc_electrum_settings = btc_electrum_settings.cst_decode();
+            let api_lbtc_electrum_settings = lbtc_electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -969,6 +1003,8 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
                             api_refund_address,
                             api_miner_fee,
                             api_try_cooperate,
+                            api_btc_electrum_settings,
+                            api_lbtc_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -984,6 +1020,8 @@ fn wire__crate__api__chain_swap__chain_swap_refund_tx_size_impl(
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     refund_address: impl CstDecode<String>,
     try_cooperate: impl CstDecode<bool>,
+    btc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
+    lbtc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -995,6 +1033,8 @@ fn wire__crate__api__chain_swap__chain_swap_refund_tx_size_impl(
             let api_that = that.cst_decode();
             let api_refund_address = refund_address.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_btc_electrum_settings = btc_electrum_settings.cst_decode();
+            let api_lbtc_electrum_settings = lbtc_electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1002,6 +1042,8 @@ fn wire__crate__api__chain_swap__chain_swap_refund_tx_size_impl(
                             &api_that,
                             api_refund_address,
                             api_try_cooperate,
+                            api_btc_electrum_settings,
+                            api_lbtc_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -1299,6 +1341,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     signed_hex: impl CstDecode<String>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1309,12 +1352,14 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local_impl(
         move || {
             let api_that = that.cst_decode();
             let api_signed_hex = signed_hex.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::lbtc_ln::LbtcLnSwap::broadcast_local(
                             &api_that,
                             api_signed_hex,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -1331,6 +1376,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
     out_address: impl CstDecode<String>,
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1343,6 +1389,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1351,6 +1398,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
                             api_out_address,
                             api_miner_fee,
                             api_try_cooperate,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -1365,6 +1413,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     is_cooperative: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1375,12 +1424,14 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size_impl(
         move || {
             let api_that = that.cst_decode();
             let api_is_cooperative = is_cooperative.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::lbtc_ln::LbtcLnSwap::claim_tx_size(
                             &api_that,
                             api_is_cooperative,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -1661,6 +1712,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
     out_address: impl CstDecode<String>,
     miner_fee: impl CstDecode<crate::api::types::TxFee>,
     try_cooperate: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1673,6 +1725,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
             let api_out_address = out_address.cst_decode();
             let api_miner_fee = miner_fee.cst_decode();
             let api_try_cooperate = try_cooperate.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1681,6 +1734,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
                             api_out_address,
                             api_miner_fee,
                             api_try_cooperate,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -1695,6 +1749,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     is_cooperative: impl CstDecode<bool>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1705,12 +1760,14 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size_impl(
         move || {
             let api_that = that.cst_decode();
             let api_is_cooperative = is_cooperative.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::lbtc_ln::LbtcLnSwap::refund_tx_size(
                             &api_that,
                             api_is_cooperative,
+                            api_electrum_settings,
                         )
                         .await?;
                         Ok(output_ok)
@@ -2222,6 +2279,22 @@ impl SseDecode for crate::api::types::DecodedInvoice {
     }
 }
 
+impl SseDecode for crate::api::types::ElectrumSettings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_url = <String>::sse_decode(deserializer);
+        let mut var_validateDomain = <bool>::sse_decode(deserializer);
+        let mut var_tls = <bool>::sse_decode(deserializer);
+        let mut var_timeout = <u8>::sse_decode(deserializer);
+        return crate::api::types::ElectrumSettings {
+            url: var_url,
+            validate_domain: var_validateDomain,
+            tls: var_tls,
+            timeout: var_timeout,
+        };
+    }
+}
+
 impl SseDecode for f64 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2355,6 +2428,19 @@ impl SseDecode for Option<String> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
             return Some(<String>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<crate::api::types::ElectrumSettings> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::types::ElectrumSettings>::sse_decode(
+                deserializer,
+            ));
         } else {
             return None;
         }
@@ -2791,6 +2877,29 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::DecodedInvoice>
     for crate::api::types::DecodedInvoice
 {
     fn into_into_dart(self) -> crate::api::types::DecodedInvoice {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::types::ElectrumSettings {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.url.into_into_dart().into_dart(),
+            self.validate_domain.into_into_dart().into_dart(),
+            self.tls.into_into_dart().into_dart(),
+            self.timeout.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::types::ElectrumSettings
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::ElectrumSettings>
+    for crate::api::types::ElectrumSettings
+{
+    fn into_into_dart(self) -> crate::api::types::ElectrumSettings {
         self
     }
 }
@@ -3254,6 +3363,16 @@ impl SseEncode for crate::api::types::DecodedInvoice {
     }
 }
 
+impl SseEncode for crate::api::types::ElectrumSettings {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.url, serializer);
+        <bool>::sse_encode(self.validate_domain, serializer);
+        <bool>::sse_encode(self.tls, serializer);
+        <u8>::sse_encode(self.timeout, serializer);
+    }
+}
+
 impl SseEncode for f64 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3348,6 +3467,16 @@ impl SseEncode for Option<String> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <String>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::types::ElectrumSettings> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::types::ElectrumSettings>::sse_encode(value, serializer);
         }
     }
 }
@@ -3583,6 +3712,13 @@ mod io {
             CstDecode::<crate::api::chain_swap::ChainSwap>::cst_decode(*wrap).into()
         }
     }
+    impl CstDecode<crate::api::types::ElectrumSettings> for *mut wire_cst_electrum_settings {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::types::ElectrumSettings {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::types::ElectrumSettings>::cst_decode(*wrap).into()
+        }
+    }
     impl CstDecode<crate::api::fees::Fees> for *mut wire_cst_fees {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::fees::Fees {
@@ -3733,6 +3869,17 @@ mod io {
                 bip21: self.bip21.cst_decode(),
                 preimage_hash: self.preimage_hash.cst_decode(),
                 description: self.description.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::types::ElectrumSettings> for wire_cst_electrum_settings {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::types::ElectrumSettings {
+            crate::api::types::ElectrumSettings {
+                url: self.url.cst_decode(),
+                validate_domain: self.validate_domain.cst_decode(),
+                tls: self.tls.cst_decode(),
+                timeout: self.timeout.cst_decode(),
             }
         }
     }
@@ -4024,6 +4171,21 @@ mod io {
             Self::new_with_null_ptr()
         }
     }
+    impl NewWithNullPtr for wire_cst_electrum_settings {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                url: core::ptr::null_mut(),
+                validate_domain: Default::default(),
+                tls: Default::default(),
+                timeout: Default::default(),
+            }
+        }
+    }
+    impl Default for wire_cst_electrum_settings {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
     impl NewWithNullPtr for wire_cst_fees {
         fn new_with_null_ptr() -> Self {
             Self {
@@ -4246,8 +4408,14 @@ mod io {
         port_: i64,
         that: *mut wire_cst_btc_ln_swap,
         signed_hex: *mut wire_cst_list_prim_u_8_strict,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
-        wire__crate__api__btc_ln__btc_ln_swap_broadcast_local_impl(port_, that, signed_hex)
+        wire__crate__api__btc_ln__btc_ln_swap_broadcast_local_impl(
+            port_,
+            that,
+            signed_hex,
+            electrum_settings,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -4257,6 +4425,7 @@ mod io {
         out_address: *mut wire_cst_list_prim_u_8_strict,
         miner_fee: *mut wire_cst_tx_fee,
         try_cooperate: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
             port_,
@@ -4264,6 +4433,7 @@ mod io {
             out_address,
             miner_fee,
             try_cooperate,
+            electrum_settings,
         )
     }
 
@@ -4272,8 +4442,14 @@ mod io {
         port_: i64,
         that: *mut wire_cst_btc_ln_swap,
         is_cooperative: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
-        wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size_impl(port_, that, is_cooperative)
+        wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size_impl(
+            port_,
+            that,
+            is_cooperative,
+            electrum_settings,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -4404,6 +4580,7 @@ mod io {
         out_address: *mut wire_cst_list_prim_u_8_strict,
         miner_fee: *mut wire_cst_tx_fee,
         try_cooperate: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
             port_,
@@ -4411,6 +4588,7 @@ mod io {
             out_address,
             miner_fee,
             try_cooperate,
+            electrum_settings,
         )
     }
 
@@ -4419,8 +4597,14 @@ mod io {
         port_: i64,
         that: *mut wire_cst_btc_ln_swap,
         is_cooperative: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
-        wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size_impl(port_, that, is_cooperative)
+        wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size_impl(
+            port_,
+            that,
+            is_cooperative,
+            electrum_settings,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -4470,8 +4654,15 @@ mod io {
         that: *mut wire_cst_chain_swap,
         signed_hex: *mut wire_cst_list_prim_u_8_strict,
         kind: i32,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
-        wire__crate__api__chain_swap__chain_swap_broadcast_local_impl(port_, that, signed_hex, kind)
+        wire__crate__api__chain_swap__chain_swap_broadcast_local_impl(
+            port_,
+            that,
+            signed_hex,
+            kind,
+            electrum_settings,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -4481,6 +4672,8 @@ mod io {
         out_address: *mut wire_cst_list_prim_u_8_strict,
         miner_fee: *mut wire_cst_tx_fee,
         try_cooperate: bool,
+        btc_electrum_settings: *mut wire_cst_electrum_settings,
+        lbtc_electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__chain_swap__chain_swap_claim_impl(
             port_,
@@ -4488,6 +4681,8 @@ mod io {
             out_address,
             miner_fee,
             try_cooperate,
+            btc_electrum_settings,
+            lbtc_electrum_settings,
         )
     }
 
@@ -4497,12 +4692,16 @@ mod io {
         that: *mut wire_cst_chain_swap,
         out_address: *mut wire_cst_list_prim_u_8_strict,
         try_cooperate: bool,
+        btc_electrum_settings: *mut wire_cst_electrum_settings,
+        lbtc_electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__chain_swap__chain_swap_claim_tx_size_impl(
             port_,
             that,
             out_address,
             try_cooperate,
+            btc_electrum_settings,
+            lbtc_electrum_settings,
         )
     }
 
@@ -4609,6 +4808,8 @@ mod io {
         refund_address: *mut wire_cst_list_prim_u_8_strict,
         miner_fee: *mut wire_cst_tx_fee,
         try_cooperate: bool,
+        btc_electrum_settings: *mut wire_cst_electrum_settings,
+        lbtc_electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__chain_swap__chain_swap_refund_impl(
             port_,
@@ -4616,6 +4817,8 @@ mod io {
             refund_address,
             miner_fee,
             try_cooperate,
+            btc_electrum_settings,
+            lbtc_electrum_settings,
         )
     }
 
@@ -4625,12 +4828,16 @@ mod io {
         that: *mut wire_cst_chain_swap,
         refund_address: *mut wire_cst_list_prim_u_8_strict,
         try_cooperate: bool,
+        btc_electrum_settings: *mut wire_cst_electrum_settings,
+        lbtc_electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__chain_swap__chain_swap_refund_tx_size_impl(
             port_,
             that,
             refund_address,
             try_cooperate,
+            btc_electrum_settings,
+            lbtc_electrum_settings,
         )
     }
 
@@ -4745,8 +4952,14 @@ mod io {
         port_: i64,
         that: *mut wire_cst_lbtc_ln_swap,
         signed_hex: *mut wire_cst_list_prim_u_8_strict,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
-        wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local_impl(port_, that, signed_hex)
+        wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local_impl(
+            port_,
+            that,
+            signed_hex,
+            electrum_settings,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -4756,6 +4969,7 @@ mod io {
         out_address: *mut wire_cst_list_prim_u_8_strict,
         miner_fee: *mut wire_cst_tx_fee,
         try_cooperate: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
             port_,
@@ -4763,6 +4977,7 @@ mod io {
             out_address,
             miner_fee,
             try_cooperate,
+            electrum_settings,
         )
     }
 
@@ -4771,8 +4986,14 @@ mod io {
         port_: i64,
         that: *mut wire_cst_lbtc_ln_swap,
         is_cooperative: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
-        wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size_impl(port_, that, is_cooperative)
+        wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size_impl(
+            port_,
+            that,
+            is_cooperative,
+            electrum_settings,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -4905,6 +5126,7 @@ mod io {
         out_address: *mut wire_cst_list_prim_u_8_strict,
         miner_fee: *mut wire_cst_tx_fee,
         try_cooperate: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
             port_,
@@ -4912,6 +5134,7 @@ mod io {
             out_address,
             miner_fee,
             try_cooperate,
+            electrum_settings,
         )
     }
 
@@ -4920,8 +5143,14 @@ mod io {
         port_: i64,
         that: *mut wire_cst_lbtc_ln_swap,
         is_cooperative: bool,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
-        wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size_impl(port_, that, is_cooperative)
+        wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size_impl(
+            port_,
+            that,
+            is_cooperative,
+            electrum_settings,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -5015,6 +5244,14 @@ mod io {
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_chain_swap() -> *mut wire_cst_chain_swap {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(
             wire_cst_chain_swap::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_electrum_settings(
+    ) -> *mut wire_cst_electrum_settings {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_electrum_settings::new_with_null_ptr(),
         )
     }
 
@@ -5159,6 +5396,14 @@ mod io {
         bip21: *mut wire_cst_list_prim_u_8_strict,
         preimage_hash: *mut wire_cst_list_prim_u_8_strict,
         description: *mut wire_cst_list_prim_u_8_strict,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_electrum_settings {
+        url: *mut wire_cst_list_prim_u_8_strict,
+        validate_domain: bool,
+        tls: bool,
+        timeout: u8,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

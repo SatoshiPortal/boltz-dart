@@ -608,3 +608,11 @@ impl From<LBtcSwapScript> for LBtcSwapScriptStr {
         }
     }
 }
+
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ElectrumSettings {
+    pub url: String,
+    pub validate_domain: bool,
+    pub tls: bool,
+    pub timeout: u8,
+}

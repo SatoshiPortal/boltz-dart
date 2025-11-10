@@ -61,6 +61,13 @@ typedef struct wire_cst_btc_ln_swap {
   struct wire_cst_list_prim_u_8_strict *referral_id;
 } wire_cst_btc_ln_swap;
 
+typedef struct wire_cst_electrum_settings {
+  struct wire_cst_list_prim_u_8_strict *url;
+  bool validate_domain;
+  bool tls;
+  uint8_t timeout;
+} wire_cst_electrum_settings;
+
 typedef struct wire_cst_TxFee_Absolute {
   uint64_t field0;
 } wire_cst_TxFee_Absolute;
@@ -209,17 +216,20 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz(int64_t 
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_local(int64_t port_,
                                                                         struct wire_cst_btc_ln_swap *that,
-                                                                        struct wire_cst_list_prim_u_8_strict *signed_hex);
+                                                                        struct wire_cst_list_prim_u_8_strict *signed_hex,
+                                                                        struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim(int64_t port_,
                                                               struct wire_cst_btc_ln_swap *that,
                                                               struct wire_cst_list_prim_u_8_strict *out_address,
                                                               struct wire_cst_tx_fee *miner_fee,
-                                                              bool try_cooperate);
+                                                              bool try_cooperate,
+                                                              struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size(int64_t port_,
                                                                       struct wire_cst_btc_ln_swap *that,
-                                                                      bool is_cooperative);
+                                                                      bool is_cooperative,
+                                                                      struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_coop_close_submarine(int64_t port_,
                                                                              struct wire_cst_btc_ln_swap *that);
@@ -274,11 +284,13 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund(int64_t port_,
                                                                struct wire_cst_btc_ln_swap *that,
                                                                struct wire_cst_list_prim_u_8_strict *out_address,
                                                                struct wire_cst_tx_fee *miner_fee,
-                                                               bool try_cooperate);
+                                                               bool try_cooperate,
+                                                               struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size(int64_t port_,
                                                                        struct wire_cst_btc_ln_swap *that,
-                                                                       bool is_cooperative);
+                                                                       bool is_cooperative,
+                                                                       struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_to_json(int64_t port_,
                                                                 struct wire_cst_btc_ln_swap *that);
@@ -300,18 +312,23 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_boltz(int64
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_local(int64_t port_,
                                                                            struct wire_cst_chain_swap *that,
                                                                            struct wire_cst_list_prim_u_8_strict *signed_hex,
-                                                                           int32_t kind);
+                                                                           int32_t kind,
+                                                                           struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim(int64_t port_,
                                                                  struct wire_cst_chain_swap *that,
                                                                  struct wire_cst_list_prim_u_8_strict *out_address,
                                                                  struct wire_cst_tx_fee *miner_fee,
-                                                                 bool try_cooperate);
+                                                                 bool try_cooperate,
+                                                                 struct wire_cst_electrum_settings *btc_electrum_settings,
+                                                                 struct wire_cst_electrum_settings *lbtc_electrum_settings);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim_tx_size(int64_t port_,
                                                                          struct wire_cst_chain_swap *that,
                                                                          struct wire_cst_list_prim_u_8_strict *out_address,
-                                                                         bool try_cooperate);
+                                                                         bool try_cooperate,
+                                                                         struct wire_cst_electrum_settings *btc_electrum_settings,
+                                                                         struct wire_cst_electrum_settings *lbtc_electrum_settings);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_from_json(int64_t port_,
                                                                      struct wire_cst_list_prim_u_8_strict *json_str);
@@ -357,12 +374,16 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund(int64_t port_,
                                                                   struct wire_cst_chain_swap *that,
                                                                   struct wire_cst_list_prim_u_8_strict *refund_address,
                                                                   struct wire_cst_tx_fee *miner_fee,
-                                                                  bool try_cooperate);
+                                                                  bool try_cooperate,
+                                                                  struct wire_cst_electrum_settings *btc_electrum_settings,
+                                                                  struct wire_cst_electrum_settings *lbtc_electrum_settings);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund_tx_size(int64_t port_,
                                                                           struct wire_cst_chain_swap *that,
                                                                           struct wire_cst_list_prim_u_8_strict *refund_address,
-                                                                          bool try_cooperate);
+                                                                          bool try_cooperate,
+                                                                          struct wire_cst_electrum_settings *btc_electrum_settings,
+                                                                          struct wire_cst_electrum_settings *lbtc_electrum_settings);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json(int64_t port_,
                                                                    struct wire_cst_chain_swap *that);
@@ -407,17 +428,20 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_boltz(int64_
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_broadcast_local(int64_t port_,
                                                                           struct wire_cst_lbtc_ln_swap *that,
-                                                                          struct wire_cst_list_prim_u_8_strict *signed_hex);
+                                                                          struct wire_cst_list_prim_u_8_strict *signed_hex,
+                                                                          struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(int64_t port_,
                                                                 struct wire_cst_lbtc_ln_swap *that,
                                                                 struct wire_cst_list_prim_u_8_strict *out_address,
                                                                 struct wire_cst_tx_fee *miner_fee,
-                                                                bool try_cooperate);
+                                                                bool try_cooperate,
+                                                                struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size(int64_t port_,
                                                                         struct wire_cst_lbtc_ln_swap *that,
-                                                                        bool is_cooperative);
+                                                                        bool is_cooperative,
+                                                                        struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_coop_close_submarine(int64_t port_,
                                                                                struct wire_cst_lbtc_ln_swap *that);
@@ -473,11 +497,13 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(int64_t port_,
                                                                  struct wire_cst_lbtc_ln_swap *that,
                                                                  struct wire_cst_list_prim_u_8_strict *out_address,
                                                                  struct wire_cst_tx_fee *miner_fee,
-                                                                 bool try_cooperate);
+                                                                 bool try_cooperate,
+                                                                 struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size(int64_t port_,
                                                                          struct wire_cst_lbtc_ln_swap *that,
-                                                                         bool is_cooperative);
+                                                                         bool is_cooperative,
+                                                                         struct wire_cst_electrum_settings *electrum_settings);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_to_json(int64_t port_,
                                                                   struct wire_cst_lbtc_ln_swap *that);
@@ -514,6 +540,8 @@ struct wire_cst_btc_swap_script_str *frbgen_boltz_cst_new_box_autoadd_btc_swap_s
 
 struct wire_cst_chain_swap *frbgen_boltz_cst_new_box_autoadd_chain_swap(void);
 
+struct wire_cst_electrum_settings *frbgen_boltz_cst_new_box_autoadd_electrum_settings(void);
+
 struct wire_cst_fees *frbgen_boltz_cst_new_box_autoadd_fees(void);
 
 struct wire_cst_key_pair *frbgen_boltz_cst_new_box_autoadd_key_pair(void);
@@ -537,6 +565,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_btc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_btc_swap_script_str);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_chain_swap);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_electrum_settings);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_fees);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_key_pair);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_l_btc_swap_script_str);

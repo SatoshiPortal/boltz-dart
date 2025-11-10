@@ -1,10 +1,10 @@
-use crate::util::{ensure_http_prefix, strip_tcp_prefix};
+use crate::util::{ensure_http_prefix, get_electrum_configs, strip_protocol_prefix};
 
 use super::{
     error::BoltzError,
     types::{
-        BtcSwapScriptStr, Chain, ChainSwapDirection, KeyPair, LBtcSwapScriptStr, PreImage,
-        SwapTxKind, SwapType, TxFee,
+        BtcSwapScriptStr, Chain, ChainSwapDirection, ElectrumSettings, KeyPair, LBtcSwapScriptStr,
+        PreImage, SwapTxKind, SwapType, TxFee,
     },
 };
 
@@ -94,8 +94,8 @@ impl ChainSwap {
             preimage,
             btc_script_str,
             lbtc_script_str,
-            btc_electrum_url: strip_tcp_prefix(&btc_electrum_url),
-            lbtc_electrum_url: strip_tcp_prefix(&lbtc_electrum_url),
+            btc_electrum_url: strip_protocol_prefix(&btc_electrum_url),
+            lbtc_electrum_url: strip_protocol_prefix(&lbtc_electrum_url),
             boltz_url: ensure_http_prefix(&boltz_url.clone()),
             script_address,
             out_amount,
@@ -234,8 +234,8 @@ impl ChainSwap {
                     claim_script.clone().into(),
                     lockup_address.to_string(),
                     create_chain_response.lockup_details.amount as u64,
-                    strip_tcp_prefix(&btc_electrum_url),
-                    strip_tcp_prefix(&lbtc_electrum_url),
+                    strip_protocol_prefix(&btc_electrum_url),
+                    strip_protocol_prefix(&lbtc_electrum_url),
                     ensure_http_prefix(&boltz_url),
                     referral_id,
                     claim_script.blinding_key.display_secret().to_string(),
@@ -297,8 +297,8 @@ impl ChainSwap {
                     lockup_script.clone().into(),
                     lockup_address.to_string(),
                     create_chain_response.lockup_details.amount as u64,
-                    strip_tcp_prefix(&btc_electrum_url),
-                    strip_tcp_prefix(&lbtc_electrum_url),
+                    strip_protocol_prefix(&btc_electrum_url),
+                    strip_protocol_prefix(&lbtc_electrum_url),
                     ensure_http_prefix(&boltz_url),
                     referral_id,
                     lockup_script.blinding_key.display_secret().to_string(),
@@ -338,6 +338,8 @@ impl ChainSwap {
         out_address: String,
         miner_fee: TxFee,
         try_cooperate: bool,
+        btc_electrum_settings: Option<ElectrumSettings>,
+        lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
         let btc_chain = if self.is_testnet {
             BitcoinChain::BitcoinTestnet
@@ -351,11 +353,27 @@ impl ChainSwap {
         };
         let id: String = self.id.clone();
 
-        let btc_network_config =
-            ElectrumBitcoinClient::new(btc_chain, &self.btc_electrum_url, true, true, 10)?;
+        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let lbtc_network_config =
-            ElectrumLiquidClient::new(lbtc_chain, &self.lbtc_electrum_url, true, true, 10)?;
+        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+
+        let btc_network_config = ElectrumBitcoinClient::new(
+            btc_chain,
+            &btc_url,
+            btc_validate_domain,
+            btc_tls,
+            btc_timeout,
+        )?;
+
+        let lbtc_network_config = ElectrumLiquidClient::new(
+            lbtc_chain,
+            &lbtc_url,
+            lbtc_validate_domain,
+            lbtc_tls,
+            lbtc_timeout,
+        )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
 
         match self.direction {
@@ -401,7 +419,7 @@ impl ChainSwap {
                     Ok(signed.serialize().to_lower_hex_string())
                 } else {
                     let signed = match claim_tx
-                        .sign_claim(&ckp, &preimage.try_into()?, miner_fee.into(), None, false)
+                        .sign_claim(&ckp, &preimage.try_into()?, miner_fee.into(), None, true)
                         .await
                     {
                         Ok(result) => result,
@@ -472,6 +490,8 @@ impl ChainSwap {
         &self,
         out_address: String,
         try_cooperate: bool,
+        btc_electrum_settings: Option<ElectrumSettings>,
+        lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
         let btc_chain = if self.is_testnet {
             BitcoinChain::BitcoinTestnet
@@ -485,11 +505,27 @@ impl ChainSwap {
         };
         let id: String = self.id.clone();
 
-        let btc_network_config =
-            ElectrumBitcoinClient::new(btc_chain, &self.btc_electrum_url, true, true, 10)?;
+        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let lbtc_network_config =
-            ElectrumLiquidClient::new(lbtc_chain, &self.lbtc_electrum_url, true, true, 10)?;
+        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+
+        let btc_network_config = ElectrumBitcoinClient::new(
+            btc_chain,
+            &btc_url,
+            btc_validate_domain,
+            btc_tls,
+            btc_timeout,
+        )?;
+
+        let lbtc_network_config = ElectrumLiquidClient::new(
+            lbtc_chain,
+            &lbtc_url,
+            lbtc_validate_domain,
+            lbtc_tls,
+            lbtc_timeout,
+        )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
 
         match self.direction {
@@ -538,6 +574,8 @@ impl ChainSwap {
         refund_address: String,
         miner_fee: TxFee,
         try_cooperate: bool,
+        btc_electrum_settings: Option<ElectrumSettings>,
+        lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
         let btc_chain = if self.is_testnet {
             BitcoinChain::BitcoinTestnet
@@ -551,11 +589,27 @@ impl ChainSwap {
         };
         let id: String = self.id.clone();
 
-        let btc_network_config =
-            ElectrumBitcoinClient::new(btc_chain, &self.btc_electrum_url, true, true, 10)?;
+        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let lbtc_network_config =
-            ElectrumLiquidClient::new(lbtc_chain, &self.lbtc_electrum_url, true, true, 10)?;
+        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+
+        let btc_network_config = ElectrumBitcoinClient::new(
+            btc_chain,
+            &btc_url,
+            btc_validate_domain,
+            btc_tls,
+            btc_timeout,
+        )?;
+
+        let lbtc_network_config = ElectrumLiquidClient::new(
+            lbtc_chain,
+            &lbtc_url,
+            lbtc_validate_domain,
+            lbtc_tls,
+            lbtc_timeout,
+        )?;
 
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         match self.direction {
@@ -632,6 +686,8 @@ impl ChainSwap {
         &self,
         refund_address: String,
         try_cooperate: bool,
+        btc_electrum_settings: Option<ElectrumSettings>,
+        lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
         let btc_chain = if self.is_testnet {
             BitcoinChain::BitcoinTestnet
@@ -645,11 +701,27 @@ impl ChainSwap {
         };
         let id: String = self.id.clone();
 
-        let btc_network_config =
-            ElectrumBitcoinClient::new(btc_chain, &self.btc_electrum_url, true, true, 10)?;
+        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let lbtc_network_config =
-            ElectrumLiquidClient::new(lbtc_chain, &self.lbtc_electrum_url, true, true, 10)?;
+        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+
+        let btc_network_config = ElectrumBitcoinClient::new(
+            btc_chain,
+            &btc_url,
+            btc_validate_domain,
+            btc_tls,
+            btc_timeout,
+        )?;
+
+        let lbtc_network_config = ElectrumLiquidClient::new(
+            lbtc_chain,
+            &lbtc_url,
+            lbtc_validate_domain,
+            lbtc_tls,
+            lbtc_timeout,
+        )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
 
         match self.direction {
@@ -734,18 +806,23 @@ impl ChainSwap {
         &self,
         signed_hex: String,
         kind: SwapTxKind,
+        electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
-        let (network, electrum_url) = self.get_network(kind);
+        let (network, default_electrum_url) = self.get_network(kind);
+
+        let (electrum_url, validate_domain, tls, timeout) =
+            get_electrum_configs(electrum_settings, &default_electrum_url);
+
         match network {
             Chain::Bitcoin | Chain::BitcoinTestnet => {
                 let network_config = ElectrumBitcoinClient::new(
                     network.into(),
-                    &strip_tcp_prefix(&electrum_url),
-                    true,
-                    true,
-                    10,
+                    &electrum_url,
+                    validate_domain,
+                    tls,
+                    timeout,
                 )?;
 
                 let transaction = BitcoinTransaction::consensus_decode(&mut &signed_bytes[..])
@@ -762,10 +839,10 @@ impl ChainSwap {
             Chain::Liquid | Chain::LiquidTestnet => {
                 let network_config = ElectrumLiquidClient::new(
                     network.into(),
-                    &strip_tcp_prefix(&electrum_url),
-                    true,
-                    true,
-                    10,
+                    &electrum_url,
+                    validate_domain,
+                    tls,
+                    timeout,
                 )?;
                 let transaction = <LiquidTransaction as boltz_client::elements::encode::Decodable>::consensus_decode(&mut &signed_bytes[..])
                     .map_err(|e| BoltzError::new("Bitcoin".to_string(), e.to_string()))?;

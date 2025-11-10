@@ -9,7 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'types.freezed.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 class BtcSwapScriptStr {
@@ -147,6 +147,34 @@ class DecodedInvoice {
           bip21 == other.bip21 &&
           preimageHash == other.preimageHash &&
           description == other.description;
+}
+
+class ElectrumSettings {
+  final String url;
+  final bool validateDomain;
+  final bool tls;
+  final int timeout;
+
+  const ElectrumSettings({
+    required this.url,
+    required this.validateDomain,
+    required this.tls,
+    required this.timeout,
+  });
+
+  @override
+  int get hashCode =>
+      url.hashCode ^ validateDomain.hashCode ^ tls.hashCode ^ timeout.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ElectrumSettings &&
+          runtimeType == other.runtimeType &&
+          url == other.url &&
+          validateDomain == other.validateDomain &&
+          tls == other.tls &&
+          timeout == other.timeout;
 }
 
 class KeyPair {

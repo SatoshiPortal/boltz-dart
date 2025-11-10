@@ -1,8 +1,8 @@
 use super::{
     error::BoltzError,
-    types::{BtcSwapScriptStr, Chain, KeyPair, PreImage, SwapType, TxFee},
+    types::{BtcSwapScriptStr, Chain, ElectrumSettings, KeyPair, PreImage, SwapType, TxFee},
 };
-use crate::util::{ensure_http_prefix, strip_tcp_prefix};
+use crate::util::{ensure_http_prefix, get_electrum_configs, strip_protocol_prefix};
 
 use boltz_client::{
     bitcoin::{
@@ -76,7 +76,7 @@ impl BtcLnSwap {
             preimage,
             swap_script,
             invoice,
-            electrum_url: strip_tcp_prefix(&electrum_url),
+            electrum_url: strip_protocol_prefix(&electrum_url),
             boltz_url: ensure_http_prefix(&boltz_url),
             script_address,
             out_amount,
@@ -97,7 +97,7 @@ impl BtcLnSwap {
         referral_id: Option<String>,
     ) -> Result<BtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
-        let electrum_url = strip_tcp_prefix(&electrum_url);
+        let electrum_url = strip_protocol_prefix(&electrum_url);
         let refund_keypair =
             match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
                 Ok(keypair) => keypair,
@@ -152,7 +152,7 @@ impl BtcLnSwap {
             invoice,
             script_address,
             create_swap_response.expected_amount,
-            strip_tcp_prefix(&electrum_url),
+            strip_protocol_prefix(&electrum_url),
             ensure_http_prefix(&boltz_url),
             referral_id,
         ))
@@ -272,7 +272,7 @@ impl BtcLnSwap {
             create_swap_response.invoice.unwrap_or_default(),
             script_address,
             out_amount,
-            strip_tcp_prefix(&electrum_url),
+            strip_protocol_prefix(&electrum_url),
             ensure_http_prefix(&boltz_url),
             referral_id,
         ))
@@ -283,6 +283,7 @@ impl BtcLnSwap {
         out_address: String,
         miner_fee: TxFee,
         try_cooperate: bool,
+        electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
@@ -303,8 +304,15 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let network_config =
-            ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
+        let (electrum_url, validate_domain, tls, timeout) =
+            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let network_config = ElectrumBitcoinClient::new(
+            bitcoin_chain,
+            &electrum_url,
+            validate_domain,
+            tls,
+            timeout,
+        )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let script_balance = match swap_script.get_balance(&network_config).await {
@@ -361,6 +369,7 @@ impl BtcLnSwap {
         out_address: String,
         miner_fee: TxFee,
         try_cooperate: bool,
+        electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
@@ -380,8 +389,15 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let network_config =
-            ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
+        let (electrum_url, validate_domain, tls, timeout) =
+            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let network_config = ElectrumBitcoinClient::new(
+            bitcoin_chain,
+            &electrum_url,
+            validate_domain,
+            tls,
+            timeout,
+        )?;
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let id: String = self.id.clone();
@@ -432,7 +448,11 @@ impl BtcLnSwap {
         }
     }
     /// Broadcast using your own electrum server that was used to create the swap
-    pub async fn broadcast_local(&self, signed_hex: String) -> Result<String, BoltzError> {
+    pub async fn broadcast_local(
+        &self,
+        signed_hex: String,
+        electrum_settings: Option<ElectrumSettings>,
+    ) -> Result<String, BoltzError> {
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
         let all_chains: AllChains = self.network.into();
@@ -445,12 +465,14 @@ impl BtcLnSwap {
                 ))
             }
         };
+        let (electrum_url, validate_domain, tls, timeout) =
+            get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config = ElectrumBitcoinClient::new(
             bitcoin_chain,
-            &strip_tcp_prefix(&self.electrum_url),
-            true,
-            true,
-            10,
+            &electrum_url,
+            validate_domain,
+            tls,
+            timeout,
         )?;
         let transaction = Transaction::consensus_decode(&mut &signed_bytes[..])
             .map_err(|e| BoltzError::new("Bitcoin".to_string(), e.to_string()))?;
@@ -474,7 +496,11 @@ impl BtcLnSwap {
         Ok(extract_id(txid)?)
     }
     /// Get the size of the claim transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-    pub async fn claim_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
+    pub async fn claim_tx_size(
+        &self,
+        is_cooperative: bool,
+        electrum_settings: Option<ElectrumSettings>,
+    ) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -493,8 +519,15 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let network_config =
-            ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
+        let (electrum_url, validate_domain, tls, timeout) =
+            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let network_config = ElectrumBitcoinClient::new(
+            bitcoin_chain,
+            &electrum_url,
+            validate_domain,
+            tls,
+            timeout,
+        )?;
         // okay to use script address, we are just chekcing size
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
@@ -519,7 +552,11 @@ impl BtcLnSwap {
         Ok(size)
     }
     /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-    pub async fn refund_tx_size(&self, is_cooperative: bool) -> Result<usize, BoltzError> {
+    pub async fn refund_tx_size(
+        &self,
+        is_cooperative: bool,
+        electrum_settings: Option<ElectrumSettings>,
+    ) -> Result<usize, BoltzError> {
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -538,8 +575,15 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let network_config =
-            ElectrumBitcoinClient::new(bitcoin_chain, &self.electrum_url, true, true, 10)?;
+        let (electrum_url, validate_domain, tls, timeout) =
+            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let network_config = ElectrumBitcoinClient::new(
+            bitcoin_chain,
+            &electrum_url,
+            validate_domain,
+            tls,
+            timeout,
+        )?;
         // okay to use script address, we are just chekcing size
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
