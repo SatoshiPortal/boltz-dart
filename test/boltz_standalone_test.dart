@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:boltz/boltz.dart';
-import 'package:boltz/src/generated/api/invoice.dart';
-import 'package:boltz/src/generated/api/secrets.dart';
 // import 'package:boltz/src/generated/api/fees.dart';
 // import 'package:boltz/src/generated/api/btc_ln.dart';
 // import 'package:boltz/src/generated/api/error.dart';

@@ -2613,10 +2613,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     if (arr.length != 4)
       throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return ChainFeesAndLimits(
-      btcToLbtcLimits: dco_decode_swap_limits(arr[0]),
-      lbtcToBtcLimits: dco_decode_swap_limits(arr[1]),
-      btcToLbtcFees: dco_decode_chain_swap_fees(arr[2]),
-      lbtcToBtcFees: dco_decode_chain_swap_fees(arr[3]),
+      lbtcToBtcLimits: dco_decode_swap_limits(arr[0]),
+      btcToLbtcLimits: dco_decode_swap_limits(arr[1]),
+      lbtcToBtcFees: dco_decode_chain_swap_fees(arr[2]),
+      btcToLbtcFees: dco_decode_chain_swap_fees(arr[3]),
     );
   }
 
@@ -3161,15 +3161,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   ChainFeesAndLimits sse_decode_chain_fees_and_limits(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_btcToLbtcLimits = sse_decode_swap_limits(deserializer);
     var var_lbtcToBtcLimits = sse_decode_swap_limits(deserializer);
-    var var_btcToLbtcFees = sse_decode_chain_swap_fees(deserializer);
+    var var_btcToLbtcLimits = sse_decode_swap_limits(deserializer);
     var var_lbtcToBtcFees = sse_decode_chain_swap_fees(deserializer);
+    var var_btcToLbtcFees = sse_decode_chain_swap_fees(deserializer);
     return ChainFeesAndLimits(
-        btcToLbtcLimits: var_btcToLbtcLimits,
         lbtcToBtcLimits: var_lbtcToBtcLimits,
-        btcToLbtcFees: var_btcToLbtcFees,
-        lbtcToBtcFees: var_lbtcToBtcFees);
+        btcToLbtcLimits: var_btcToLbtcLimits,
+        lbtcToBtcFees: var_lbtcToBtcFees,
+        btcToLbtcFees: var_btcToLbtcFees);
   }
 
   @protected
@@ -3792,10 +3792,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_chain_fees_and_limits(
       ChainFeesAndLimits self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_swap_limits(self.btcToLbtcLimits, serializer);
     sse_encode_swap_limits(self.lbtcToBtcLimits, serializer);
-    sse_encode_chain_swap_fees(self.btcToLbtcFees, serializer);
+    sse_encode_swap_limits(self.btcToLbtcLimits, serializer);
     sse_encode_chain_swap_fees(self.lbtcToBtcFees, serializer);
+    sse_encode_chain_swap_fees(self.btcToLbtcFees, serializer);
   }
 
   @protected

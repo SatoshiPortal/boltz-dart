@@ -657,13 +657,13 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void cst_api_fill_to_wire_chain_fees_and_limits(
       ChainFeesAndLimits apiObj, wire_cst_chain_fees_and_limits wireObj) {
     cst_api_fill_to_wire_swap_limits(
-        apiObj.btcToLbtcLimits, wireObj.btc_to_lbtc_limits);
-    cst_api_fill_to_wire_swap_limits(
         apiObj.lbtcToBtcLimits, wireObj.lbtc_to_btc_limits);
-    cst_api_fill_to_wire_chain_swap_fees(
-        apiObj.btcToLbtcFees, wireObj.btc_to_lbtc_fees);
+    cst_api_fill_to_wire_swap_limits(
+        apiObj.btcToLbtcLimits, wireObj.btc_to_lbtc_limits);
     cst_api_fill_to_wire_chain_swap_fees(
         apiObj.lbtcToBtcFees, wireObj.lbtc_to_btc_fees);
+    cst_api_fill_to_wire_chain_swap_fees(
+        apiObj.btcToLbtcFees, wireObj.btc_to_lbtc_fees);
   }
 
   @protected
@@ -3317,13 +3317,13 @@ final class wire_cst_chain_swap_fees extends ffi.Struct {
 }
 
 final class wire_cst_chain_fees_and_limits extends ffi.Struct {
-  external wire_cst_swap_limits btc_to_lbtc_limits;
-
   external wire_cst_swap_limits lbtc_to_btc_limits;
 
-  external wire_cst_chain_swap_fees btc_to_lbtc_fees;
+  external wire_cst_swap_limits btc_to_lbtc_limits;
 
   external wire_cst_chain_swap_fees lbtc_to_btc_fees;
+
+  external wire_cst_chain_swap_fees btc_to_lbtc_fees;
 }
 
 final class wire_cst_decoded_invoice extends ffi.Struct {

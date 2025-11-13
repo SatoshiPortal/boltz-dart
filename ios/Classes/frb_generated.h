@@ -163,10 +163,10 @@ typedef struct wire_cst_chain_swap_fees {
 } wire_cst_chain_swap_fees;
 
 typedef struct wire_cst_chain_fees_and_limits {
-  struct wire_cst_swap_limits btc_to_lbtc_limits;
   struct wire_cst_swap_limits lbtc_to_btc_limits;
-  struct wire_cst_chain_swap_fees btc_to_lbtc_fees;
+  struct wire_cst_swap_limits btc_to_lbtc_limits;
   struct wire_cst_chain_swap_fees lbtc_to_btc_fees;
+  struct wire_cst_chain_swap_fees btc_to_lbtc_fees;
 } wire_cst_chain_fees_and_limits;
 
 typedef struct wire_cst_decoded_invoice {

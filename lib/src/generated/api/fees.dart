@@ -13,34 +13,34 @@ part 'fees.freezed.dart';
 
 /// Complete fees and limits class for Chain swaps
 class ChainFeesAndLimits {
-  final SwapLimits btcToLbtcLimits;
   final SwapLimits lbtcToBtcLimits;
-  final ChainSwapFees btcToLbtcFees;
+  final SwapLimits btcToLbtcLimits;
   final ChainSwapFees lbtcToBtcFees;
+  final ChainSwapFees btcToLbtcFees;
 
   const ChainFeesAndLimits({
-    required this.btcToLbtcLimits,
     required this.lbtcToBtcLimits,
-    required this.btcToLbtcFees,
+    required this.btcToLbtcLimits,
     required this.lbtcToBtcFees,
+    required this.btcToLbtcFees,
   });
 
   @override
   int get hashCode =>
-      btcToLbtcLimits.hashCode ^
       lbtcToBtcLimits.hashCode ^
-      btcToLbtcFees.hashCode ^
-      lbtcToBtcFees.hashCode;
+      btcToLbtcLimits.hashCode ^
+      lbtcToBtcFees.hashCode ^
+      btcToLbtcFees.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ChainFeesAndLimits &&
           runtimeType == other.runtimeType &&
-          btcToLbtcLimits == other.btcToLbtcLimits &&
           lbtcToBtcLimits == other.lbtcToBtcLimits &&
-          btcToLbtcFees == other.btcToLbtcFees &&
-          lbtcToBtcFees == other.lbtcToBtcFees;
+          btcToLbtcLimits == other.btcToLbtcLimits &&
+          lbtcToBtcFees == other.lbtcToBtcFees &&
+          btcToLbtcFees == other.btcToLbtcFees;
 }
 
 /// Chain swap fee breakdown.

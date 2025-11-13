@@ -2133,15 +2133,15 @@ impl SseDecode for crate::api::types::Chain {
 impl SseDecode for crate::api::fees::ChainFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_btcToLbtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
         let mut var_lbtcToBtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
-        let mut var_btcToLbtcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
+        let mut var_btcToLbtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
         let mut var_lbtcToBtcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
+        let mut var_btcToLbtcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
         return crate::api::fees::ChainFeesAndLimits {
-            btc_to_lbtc_limits: var_btcToLbtcLimits,
             lbtc_to_btc_limits: var_lbtcToBtcLimits,
-            btc_to_lbtc_fees: var_btcToLbtcFees,
+            btc_to_lbtc_limits: var_btcToLbtcLimits,
             lbtc_to_btc_fees: var_lbtcToBtcFees,
+            btc_to_lbtc_fees: var_btcToLbtcFees,
         };
     }
 }
@@ -2749,10 +2749,10 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::Chain> for crate::api:
 impl flutter_rust_bridge::IntoDart for crate::api::fees::ChainFeesAndLimits {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.btc_to_lbtc_limits.into_into_dart().into_dart(),
             self.lbtc_to_btc_limits.into_into_dart().into_dart(),
-            self.btc_to_lbtc_fees.into_into_dart().into_dart(),
+            self.btc_to_lbtc_limits.into_into_dart().into_dart(),
             self.lbtc_to_btc_fees.into_into_dart().into_dart(),
+            self.btc_to_lbtc_fees.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -3331,10 +3331,10 @@ impl SseEncode for crate::api::types::Chain {
 impl SseEncode for crate::api::fees::ChainFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::fees::SwapLimits>::sse_encode(self.btc_to_lbtc_limits, serializer);
         <crate::api::fees::SwapLimits>::sse_encode(self.lbtc_to_btc_limits, serializer);
-        <crate::api::fees::ChainSwapFees>::sse_encode(self.btc_to_lbtc_fees, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.btc_to_lbtc_limits, serializer);
         <crate::api::fees::ChainSwapFees>::sse_encode(self.lbtc_to_btc_fees, serializer);
+        <crate::api::fees::ChainSwapFees>::sse_encode(self.btc_to_lbtc_fees, serializer);
     }
 }
 
@@ -3888,10 +3888,10 @@ mod io {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::fees::ChainFeesAndLimits {
             crate::api::fees::ChainFeesAndLimits {
-                btc_to_lbtc_limits: self.btc_to_lbtc_limits.cst_decode(),
                 lbtc_to_btc_limits: self.lbtc_to_btc_limits.cst_decode(),
-                btc_to_lbtc_fees: self.btc_to_lbtc_fees.cst_decode(),
+                btc_to_lbtc_limits: self.btc_to_lbtc_limits.cst_decode(),
                 lbtc_to_btc_fees: self.lbtc_to_btc_fees.cst_decode(),
+                btc_to_lbtc_fees: self.btc_to_lbtc_fees.cst_decode(),
             }
         }
     }
@@ -4182,10 +4182,10 @@ mod io {
     impl NewWithNullPtr for wire_cst_chain_fees_and_limits {
         fn new_with_null_ptr() -> Self {
             Self {
-                btc_to_lbtc_limits: Default::default(),
                 lbtc_to_btc_limits: Default::default(),
-                btc_to_lbtc_fees: Default::default(),
+                btc_to_lbtc_limits: Default::default(),
                 lbtc_to_btc_fees: Default::default(),
+                btc_to_lbtc_fees: Default::default(),
             }
         }
     }
@@ -5445,10 +5445,10 @@ mod io {
     #[repr(C)]
     #[derive(Clone, Copy)]
     pub struct wire_cst_chain_fees_and_limits {
-        btc_to_lbtc_limits: wire_cst_swap_limits,
         lbtc_to_btc_limits: wire_cst_swap_limits,
-        btc_to_lbtc_fees: wire_cst_chain_swap_fees,
+        btc_to_lbtc_limits: wire_cst_swap_limits,
         lbtc_to_btc_fees: wire_cst_chain_swap_fees,
+        btc_to_lbtc_fees: wire_cst_chain_swap_fees,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
