@@ -7,8 +7,10 @@ import 'api/btc_ln.dart';
 import 'api/chain_swap.dart';
 import 'api/error.dart';
 import 'api/fees.dart';
+import 'api/invoice.dart';
 import 'api/lbtc_ln.dart';
 import 'api/lnurl.dart';
+import 'api/secrets.dart';
 import 'api/types.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -70,6 +72,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Side dco_decode_box_autoadd_side(dynamic raw);
 
   @protected
+  SwapMasterKey dco_decode_box_autoadd_swap_master_key(dynamic raw);
+
+  @protected
   TxFee dco_decode_box_autoadd_tx_fee(dynamic raw);
 
   @protected
@@ -127,6 +132,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   MinerFees dco_decode_miner_fees(dynamic raw);
 
   @protected
+  Network dco_decode_network(dynamic raw);
+
+  @protected
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
@@ -155,6 +163,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   SwapLimits dco_decode_swap_limits(dynamic raw);
+
+  @protected
+  SwapMasterKey dco_decode_swap_master_key(dynamic raw);
 
   @protected
   SwapTxKind dco_decode_swap_tx_kind(dynamic raw);
@@ -229,6 +240,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Side sse_decode_box_autoadd_side(SseDeserializer deserializer);
 
   @protected
+  SwapMasterKey sse_decode_box_autoadd_swap_master_key(
+      SseDeserializer deserializer);
+
+  @protected
   TxFee sse_decode_box_autoadd_tx_fee(SseDeserializer deserializer);
 
   @protected
@@ -289,6 +304,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   MinerFees sse_decode_miner_fees(SseDeserializer deserializer);
 
   @protected
+  Network sse_decode_network(SseDeserializer deserializer);
+
+  @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
@@ -320,6 +338,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   SwapLimits sse_decode_swap_limits(SseDeserializer deserializer);
+
+  @protected
+  SwapMasterKey sse_decode_swap_master_key(SseDeserializer deserializer);
 
   @protected
   SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer);
@@ -454,6 +475,15 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  ffi.Pointer<wire_cst_swap_master_key> cst_encode_box_autoadd_swap_master_key(
+      SwapMasterKey raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_swap_master_key();
+    cst_api_fill_to_wire_swap_master_key(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_cst_tx_fee> cst_encode_box_autoadd_tx_fee(TxFee raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     final ptr = wire.cst_new_box_autoadd_tx_fee();
@@ -581,6 +611,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_box_autoadd_swap_master_key(
+      SwapMasterKey apiObj, ffi.Pointer<wire_cst_swap_master_key> wireObj) {
+    cst_api_fill_to_wire_swap_master_key(apiObj, wireObj.ref);
+  }
+
+  @protected
   void cst_api_fill_to_wire_box_autoadd_tx_fee(
       TxFee apiObj, ffi.Pointer<wire_cst_tx_fee> wireObj) {
     cst_api_fill_to_wire_tx_fee(apiObj, wireObj.ref);
@@ -620,10 +656,14 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   @protected
   void cst_api_fill_to_wire_chain_fees_and_limits(
       ChainFeesAndLimits apiObj, wire_cst_chain_fees_and_limits wireObj) {
-    cst_api_fill_to_wire_swap_limits(apiObj.btcLimits, wireObj.btc_limits);
-    cst_api_fill_to_wire_swap_limits(apiObj.lbtcLimits, wireObj.lbtc_limits);
-    cst_api_fill_to_wire_chain_swap_fees(apiObj.btcFees, wireObj.btc_fees);
-    cst_api_fill_to_wire_chain_swap_fees(apiObj.lbtcFees, wireObj.lbtc_fees);
+    cst_api_fill_to_wire_swap_limits(
+        apiObj.btcToLbtcLimits, wireObj.btc_to_lbtc_limits);
+    cst_api_fill_to_wire_swap_limits(
+        apiObj.lbtcToBtcLimits, wireObj.lbtc_to_btc_limits);
+    cst_api_fill_to_wire_chain_swap_fees(
+        apiObj.btcToLbtcFees, wireObj.btc_to_lbtc_fees);
+    cst_api_fill_to_wire_chain_swap_fees(
+        apiObj.lbtcToBtcFees, wireObj.lbtc_to_btc_fees);
   }
 
   @protected
@@ -789,6 +829,15 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_swap_master_key(
+      SwapMasterKey apiObj, wire_cst_swap_master_key wireObj) {
+    wireObj.xprv = cst_encode_String(apiObj.xprv);
+    wireObj.xpub = cst_encode_String(apiObj.xpub);
+    wireObj.network = cst_encode_network(apiObj.network);
+    wireObj.mnemonic = cst_encode_String(apiObj.mnemonic);
+  }
+
+  @protected
   void cst_api_fill_to_wire_tx_fee(TxFee apiObj, wire_cst_tx_fee wireObj) {
     if (apiObj is TxFee_Absolute) {
       var pre_field0 = cst_encode_u_64(apiObj.field0);
@@ -818,6 +867,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   int cst_encode_i_32(int raw);
+
+  @protected
+  int cst_encode_network(Network raw);
 
   @protected
   int cst_encode_side(Side raw);
@@ -891,6 +943,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_box_autoadd_side(Side self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_swap_master_key(
+      SwapMasterKey self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_tx_fee(TxFee self, SseSerializer serializer);
 
   @protected
@@ -955,6 +1011,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_miner_fees(MinerFees self, SseSerializer serializer);
 
   @protected
+  void sse_encode_network(Network self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
@@ -986,6 +1045,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_swap_limits(SwapLimits self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_swap_master_key(SwapMasterKey self, SseSerializer serializer);
 
   @protected
   void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer);
@@ -1362,8 +1424,7 @@ class BoltzCoreWire implements BaseWire {
 
   void wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
     int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> passphrase,
+    ffi.Pointer<wire_cst_swap_master_key> swap_xkey,
     int index,
     int out_amount,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
@@ -1375,8 +1436,7 @@ class BoltzCoreWire implements BaseWire {
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
       port_,
-      mnemonic,
-      passphrase,
+      swap_xkey,
       index,
       out_amount,
       out_address,
@@ -1392,8 +1452,7 @@ class BoltzCoreWire implements BaseWire {
           ffi.NativeFunction<
               ffi.Void Function(
                   ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_swap_master_key>,
                   ffi.Uint64,
                   ffi.Uint64,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -1407,8 +1466,7 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__btc_ln__btc_ln_swap_new_reversePtr.asFunction<
           void Function(
               int,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_swap_master_key>,
               int,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -1420,8 +1478,7 @@ class BoltzCoreWire implements BaseWire {
 
   void wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
     int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> passphrase,
+    ffi.Pointer<wire_cst_swap_master_key> swap_xkey,
     int index,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
     int network,
@@ -1431,8 +1488,7 @@ class BoltzCoreWire implements BaseWire {
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
       port_,
-      mnemonic,
-      passphrase,
+      swap_xkey,
       index,
       invoice,
       network,
@@ -1446,8 +1502,7 @@ class BoltzCoreWire implements BaseWire {
           ffi.NativeFunction<
               ffi.Void Function(
                   ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_swap_master_key>,
                   ffi.Uint64,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Int32,
@@ -1459,8 +1514,7 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__btc_ln__btc_ln_swap_new_submarinePtr.asFunction<
           void Function(
               int,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_swap_master_key>,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
@@ -1883,8 +1937,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__chain_swap__chain_swap_new_swap(
     int port_,
     int direction,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> passphrase,
+    ffi.Pointer<wire_cst_swap_master_key> swap_xkey,
     int index,
     int amount,
     bool is_testnet,
@@ -1896,8 +1949,7 @@ class BoltzCoreWire implements BaseWire {
     return _wire__crate__api__chain_swap__chain_swap_new_swap(
       port_,
       direction,
-      mnemonic,
-      passphrase,
+      swap_xkey,
       index,
       amount,
       is_testnet,
@@ -1913,8 +1965,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Void Function(
                   ffi.Int64,
                   ffi.Int32,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_swap_master_key>,
                   ffi.Uint64,
                   ffi.Uint64,
                   ffi.Bool,
@@ -1928,8 +1979,7 @@ class BoltzCoreWire implements BaseWire {
           void Function(
               int,
               int,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_swap_master_key>,
               int,
               int,
               bool,
@@ -2037,27 +2087,28 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__chain_swap__chain_swap_to_jsonPtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_chain_swap>)>();
 
-  void wire__crate__api__types__decoded_invoice_from_string(
+  void wire__crate__api__invoice__decoded_invoice_from_string(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> s,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
   ) {
-    return _wire__crate__api__types__decoded_invoice_from_string(
+    return _wire__crate__api__invoice__decoded_invoice_from_string(
       port_,
       s,
       boltz_url,
     );
   }
 
-  late final _wire__crate__api__types__decoded_invoice_from_stringPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__types__decoded_invoice_from_string');
-  late final _wire__crate__api__types__decoded_invoice_from_string =
-      _wire__crate__api__types__decoded_invoice_from_stringPtr.asFunction<
+  late final _wire__crate__api__invoice__decoded_invoice_from_stringPtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(
+                      ffi.Int64,
+                      ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                      ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+          'frbgen_boltz_wire__crate__api__invoice__decoded_invoice_from_string');
+  late final _wire__crate__api__invoice__decoded_invoice_from_string =
+      _wire__crate__api__invoice__decoded_invoice_from_stringPtr.asFunction<
           void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
@@ -2133,63 +2184,6 @@ class BoltzCoreWire implements BaseWire {
   late final _wire__crate__api__fees__fees_submarine =
       _wire__crate__api__fees__fees_submarinePtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_fees>)>();
-
-  void wire__crate__api__types__key_pair_generate(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> passphrase,
-    int network,
-    int index,
-    int swap_type,
-  ) {
-    return _wire__crate__api__types__key_pair_generate(
-      port_,
-      mnemonic,
-      passphrase,
-      network,
-      index,
-      swap_type,
-    );
-  }
-
-  late final _wire__crate__api__types__key_pair_generatePtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Int32,
-                  ffi.Uint64,
-                  ffi.Int32)>>(
-      'frbgen_boltz_wire__crate__api__types__key_pair_generate');
-  late final _wire__crate__api__types__key_pair_generate =
-      _wire__crate__api__types__key_pair_generatePtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int, int, int)>();
-
-  void wire__crate__api__types__key_pair_new(
-    int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> secret_key,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> public_key,
-  ) {
-    return _wire__crate__api__types__key_pair_new(
-      port_,
-      secret_key,
-      public_key,
-    );
-  }
-
-  late final _wire__crate__api__types__key_pair_newPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__types__key_pair_new');
-  late final _wire__crate__api__types__key_pair_new =
-      _wire__crate__api__types__key_pair_newPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire__crate__api__types__l_btc_swap_script_str_new(
     int port_,
@@ -2517,8 +2511,7 @@ class BoltzCoreWire implements BaseWire {
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
     int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> passphrase,
+    ffi.Pointer<wire_cst_swap_master_key> swap_xkey,
     int index,
     int out_amount,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
@@ -2530,8 +2523,7 @@ class BoltzCoreWire implements BaseWire {
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
       port_,
-      mnemonic,
-      passphrase,
+      swap_xkey,
       index,
       out_amount,
       out_address,
@@ -2547,8 +2539,7 @@ class BoltzCoreWire implements BaseWire {
           ffi.NativeFunction<
               ffi.Void Function(
                   ffi.Int64,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_swap_master_key>,
                   ffi.Uint64,
                   ffi.Uint64,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -2562,8 +2553,7 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reversePtr.asFunction<
           void Function(
               int,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_swap_master_key>,
               int,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -2575,8 +2565,7 @@ class BoltzCoreWire implements BaseWire {
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
     int port_,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic,
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> passphrase,
+    ffi.Pointer<wire_cst_swap_master_key> swap_xkey,
     int index,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
     int network,
@@ -2586,8 +2575,7 @@ class BoltzCoreWire implements BaseWire {
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
       port_,
-      mnemonic,
-      passphrase,
+      swap_xkey,
       index,
       invoice,
       network,
@@ -2602,8 +2590,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.NativeFunction<
                   ffi.Void Function(
                       ffi.Int64,
-                      ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                      ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                      ffi.Pointer<wire_cst_swap_master_key>,
                       ffi.Uint64,
                       ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                       ffi.Int32,
@@ -2615,8 +2602,7 @@ class BoltzCoreWire implements BaseWire {
       _wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarinePtr.asFunction<
           void Function(
               int,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_swap_master_key>,
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               int,
@@ -2808,28 +2794,33 @@ class BoltzCoreWire implements BaseWire {
           void Function(int, ffi.Pointer<wire_cst_lnurl>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
-  void wire__crate__api__types__pre_image_generate(
+  void wire__crate__api__secrets__pre_image_from_invoice_str(
     int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> invoice,
   ) {
-    return _wire__crate__api__types__pre_image_generate(
+    return _wire__crate__api__secrets__pre_image_from_invoice_str(
       port_,
+      invoice,
     );
   }
 
-  late final _wire__crate__api__types__pre_image_generatePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
-          'frbgen_boltz_wire__crate__api__types__pre_image_generate');
-  late final _wire__crate__api__types__pre_image_generate =
-      _wire__crate__api__types__pre_image_generatePtr
-          .asFunction<void Function(int)>();
+  late final _wire__crate__api__secrets__pre_image_from_invoice_strPtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(
+                      ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+          'frbgen_boltz_wire__crate__api__secrets__pre_image_from_invoice_str');
+  late final _wire__crate__api__secrets__pre_image_from_invoice_str =
+      _wire__crate__api__secrets__pre_image_from_invoice_strPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
-  void wire__crate__api__types__pre_image_new(
+  void wire__crate__api__secrets__pre_image_new(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> value,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> sha256,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> hash160,
   ) {
-    return _wire__crate__api__types__pre_image_new(
+    return _wire__crate__api__secrets__pre_image_new(
       port_,
       value,
       sha256,
@@ -2837,21 +2828,48 @@ class BoltzCoreWire implements BaseWire {
     );
   }
 
-  late final _wire__crate__api__types__pre_image_newPtr = _lookup<
+  late final _wire__crate__api__secrets__pre_image_newPtr = _lookup<
           ffi.NativeFunction<
               ffi.Void Function(
                   ffi.Int64,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>,
                   ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_boltz_wire__crate__api__types__pre_image_new');
-  late final _wire__crate__api__types__pre_image_new =
-      _wire__crate__api__types__pre_image_newPtr.asFunction<
+      'frbgen_boltz_wire__crate__api__secrets__pre_image_new');
+  late final _wire__crate__api__secrets__pre_image_new =
+      _wire__crate__api__secrets__pre_image_newPtr.asFunction<
           void Function(
               int,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  void wire__crate__api__secrets__swap_master_key_new(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> wallet_mnemonic,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> wallet_passphrase,
+    int network,
+  ) {
+    return _wire__crate__api__secrets__swap_master_key_new(
+      port_,
+      wallet_mnemonic,
+      wallet_passphrase,
+      network,
+    );
+  }
+
+  late final _wire__crate__api__secrets__swap_master_key_newPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Int32)>>(
+      'frbgen_boltz_wire__crate__api__secrets__swap_master_key_new');
+  late final _wire__crate__api__secrets__swap_master_key_new =
+      _wire__crate__api__secrets__swap_master_key_newPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>, int)>();
 
   ffi.Pointer<wire_cst_boltz_error> cst_new_box_autoadd_boltz_error() {
     return _cst_new_box_autoadd_boltz_error();
@@ -2989,6 +3007,17 @@ class BoltzCoreWire implements BaseWire {
           'frbgen_boltz_cst_new_box_autoadd_side');
   late final _cst_new_box_autoadd_side = _cst_new_box_autoadd_sidePtr
       .asFunction<ffi.Pointer<ffi.Int32> Function(int)>();
+
+  ffi.Pointer<wire_cst_swap_master_key> cst_new_box_autoadd_swap_master_key() {
+    return _cst_new_box_autoadd_swap_master_key();
+  }
+
+  late final _cst_new_box_autoadd_swap_master_keyPtr = _lookup<
+          ffi.NativeFunction<ffi.Pointer<wire_cst_swap_master_key> Function()>>(
+      'frbgen_boltz_cst_new_box_autoadd_swap_master_key');
+  late final _cst_new_box_autoadd_swap_master_key =
+      _cst_new_box_autoadd_swap_master_keyPtr
+          .asFunction<ffi.Pointer<wire_cst_swap_master_key> Function()>();
 
   ffi.Pointer<wire_cst_tx_fee> cst_new_box_autoadd_tx_fee() {
     return _cst_new_box_autoadd_tx_fee();
@@ -3148,6 +3177,17 @@ final class wire_cst_tx_fee extends ffi.Struct {
   external TxFeeKind kind;
 }
 
+final class wire_cst_swap_master_key extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> xprv;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> xpub;
+
+  @ffi.Int32()
+  external int network;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> mnemonic;
+}
+
 final class wire_cst_l_btc_swap_script_str extends ffi.Struct {
   @ffi.Int32()
   external int swap_type;
@@ -3274,13 +3314,13 @@ final class wire_cst_chain_swap_fees extends ffi.Struct {
 }
 
 final class wire_cst_chain_fees_and_limits extends ffi.Struct {
-  external wire_cst_swap_limits btc_limits;
+  external wire_cst_swap_limits btc_to_lbtc_limits;
 
-  external wire_cst_swap_limits lbtc_limits;
+  external wire_cst_swap_limits lbtc_to_btc_limits;
 
-  external wire_cst_chain_swap_fees btc_fees;
+  external wire_cst_chain_swap_fees btc_to_lbtc_fees;
 
-  external wire_cst_chain_swap_fees lbtc_fees;
+  external wire_cst_chain_swap_fees lbtc_to_btc_fees;
 }
 
 final class wire_cst_decoded_invoice extends ffi.Struct {

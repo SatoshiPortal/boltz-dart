@@ -6,39 +6,41 @@
 import '../frb_generated.dart';
 import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+part 'fees.freezed.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`
 
 /// Complete fees and limits class for Chain swaps
 class ChainFeesAndLimits {
-  final SwapLimits btcLimits;
-  final SwapLimits lbtcLimits;
-  final ChainSwapFees btcFees;
-  final ChainSwapFees lbtcFees;
+  final SwapLimits btcToLbtcLimits;
+  final SwapLimits lbtcToBtcLimits;
+  final ChainSwapFees btcToLbtcFees;
+  final ChainSwapFees lbtcToBtcFees;
 
   const ChainFeesAndLimits({
-    required this.btcLimits,
-    required this.lbtcLimits,
-    required this.btcFees,
-    required this.lbtcFees,
+    required this.btcToLbtcLimits,
+    required this.lbtcToBtcLimits,
+    required this.btcToLbtcFees,
+    required this.lbtcToBtcFees,
   });
 
   @override
   int get hashCode =>
-      btcLimits.hashCode ^
-      lbtcLimits.hashCode ^
-      btcFees.hashCode ^
-      lbtcFees.hashCode;
+      btcToLbtcLimits.hashCode ^
+      lbtcToBtcLimits.hashCode ^
+      btcToLbtcFees.hashCode ^
+      lbtcToBtcFees.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ChainFeesAndLimits &&
           runtimeType == other.runtimeType &&
-          btcLimits == other.btcLimits &&
-          lbtcLimits == other.lbtcLimits &&
-          btcFees == other.btcFees &&
-          lbtcFees == other.lbtcFees;
+          btcToLbtcLimits == other.btcToLbtcLimits &&
+          lbtcToBtcLimits == other.lbtcToBtcLimits &&
+          btcToLbtcFees == other.btcToLbtcFees &&
+          lbtcToBtcFees == other.lbtcToBtcFees;
 }
 
 /// Chain swap fee breakdown.
@@ -269,4 +271,16 @@ class SwapLimits {
           runtimeType == other.runtimeType &&
           minimal == other.minimal &&
           maximal == other.maximal;
+}
+
+@freezed
+sealed class TxFee with _$TxFee {
+  const TxFee._();
+
+  const factory TxFee.absolute(
+    BigInt field0,
+  ) = TxFee_Absolute;
+  const factory TxFee.relative(
+    double field0,
+  ) = TxFee_Relative;
 }

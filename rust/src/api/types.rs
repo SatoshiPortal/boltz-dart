@@ -1,40 +1,15 @@
-use std::{
-    str::FromStr,
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
+use std::str::FromStr;
 
 use boltz_client::{
-    fees::Fee,
-    network::BitcoinChain,
-    network::Chain as AllChains,
-    network::LiquidChain,
-    swaps::boltz::{
-        BoltzApiClientV2, Side as BoltzSide, SwapTxKind as BoltzSwapTxKind,
-        SwapType as BoltzSwapType,
-    },
-    util::secrets::SwapKey,
-    Address, Bolt11Invoice, BtcSwapScript, ElementsAddress, Hash, Keypair, LBtcSwapScript,
-    PublicKey, Secp256k1, ZKKeyPair,
+    network::{BitcoinChain, Chain as AllChains, LiquidChain, Network as BoltzNetwork},
+    swaps::boltz::{Side as BoltzSide, SwapTxKind as BoltzSwapTxKind, SwapType as BoltzSwapType},
+    Address, BtcSwapScript, ElementsAddress, Hash, LBtcSwapScript, PublicKey, ZKKeyPair,
 };
 use serde::{Deserialize, Serialize};
 
-use crate::util::ensure_http_prefix;
-
 use super::error::BoltzError;
-#[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub enum TxFee {
-    Absolute(u64),
-    Relative(f64),
-}
 
-impl Into<Fee> for TxFee {
-    fn into(self) -> Fee {
-        match self {
-            TxFee::Absolute(x) => Fee::Absolute(x),
-            TxFee::Relative(x) => Fee::Relative(x),
-        }
-    }
-}
+pub use super::secrets::KeyPair;
 
 /// Used for chain-swaps only. The side is based on which transaction is being made by the user.
 /// When a swap is created the user must first make a Lockup.
@@ -167,192 +142,44 @@ pub enum ChainSwapDirection {
     LbtcToBtc,
 }
 
-#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct KeyPair {
-    pub secret_key: String,
-    pub public_key: String,
+/// Wrapper for Network from boltz-rust
+#[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Network {
+    Mainnet,
+    Testnet,
+    Regtest,
 }
 
-impl TryInto<Keypair> for KeyPair {
-    type Error = BoltzError;
-    fn try_into(self) -> Result<Keypair, Self::Error> {
-        let secp = Secp256k1::new();
-        match Keypair::from_seckey_str(&secp, &self.secret_key) {
-            Ok(keypair) => Ok(keypair),
-            Err(e) => Err(BoltzError::new("Key".to_string(), e.to_string())),
+impl Into<BoltzNetwork> for Network {
+    fn into(self) -> BoltzNetwork {
+        match self {
+            Network::Mainnet => BoltzNetwork::Mainnet,
+            Network::Testnet => BoltzNetwork::Testnet,
+            Network::Regtest => BoltzNetwork::Regtest,
         }
     }
 }
 
-/// Used internally to create a KeyPair for swaps
-impl KeyPair {
-    pub fn new(secret_key: String, public_key: String) -> Self {
-        KeyPair {
-            secret_key,
-            public_key,
-        }
-    }
-
-    pub fn generate(
-        mnemonic: String,
-        passphrase: Option<String>,
-        network: Chain,
-        index: u64,
-        swap_type: SwapType,
-    ) -> Result<Self, BoltzError> {
-        let passphrase = if passphrase.is_some() {
-            passphrase.unwrap()
-        } else {
-            "".to_string()
-        };
-        match swap_type {
-            SwapType::Submarine => {
-                let child_keys =
-                    SwapKey::from_submarine_account(&mnemonic, &passphrase, network.into(), index)?;
-                Ok(KeyPair {
-                    secret_key: child_keys.keypair.display_secret().to_string(),
-                    public_key: child_keys.keypair.public_key().to_string(),
-                })
-            }
-            SwapType::Reverse => {
-                let child_keys =
-                    SwapKey::from_reverse_account(&mnemonic, &passphrase, network.into(), index)?;
-                Ok(KeyPair {
-                    secret_key: child_keys.keypair.display_secret().to_string(),
-                    public_key: child_keys.keypair.public_key().to_string(),
-                })
-            }
-            SwapType::Chain => {
-                let child_keys =
-                    SwapKey::from_chain_account(&mnemonic, &passphrase, network.into(), index)?;
-                Ok(KeyPair {
-                    secret_key: child_keys.keypair.display_secret().to_string(),
-                    public_key: child_keys.keypair.public_key().to_string(),
-                })
-            }
+impl From<BoltzNetwork> for Network {
+    fn from(network: BoltzNetwork) -> Self {
+        match network {
+            BoltzNetwork::Mainnet => Network::Mainnet,
+            BoltzNetwork::Testnet => Network::Testnet,
+            BoltzNetwork::Regtest => Network::Regtest,
         }
     }
 }
 
-use boltz_client::util::secrets::Preimage;
-
-/// Used internally to create a secret - PreImage for swaps
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct PreImage {
-    pub value: String,
-    pub sha256: String,
-    pub hash160: String,
-}
-
-impl TryInto<Preimage> for PreImage {
-    type Error = BoltzError; // Use a more specific error type in a real application
-
-    fn try_into(self) -> Result<Preimage, Self::Error> {
-        if !self.value.is_empty() {
-            Ok(Preimage::from_str(&self.value)?)
-        } else {
-            Ok(Preimage::from_sha256_str(&self.sha256)?)
+impl From<Chain> for Network {
+    fn from(chain: Chain) -> Self {
+        match chain {
+            Chain::Bitcoin | Chain::Liquid => Network::Mainnet,
+            Chain::BitcoinTestnet | Chain::LiquidTestnet => Network::Testnet,
         }
     }
 }
 
-impl PreImage {
-    pub fn new(value: String, sha256: String, hash160: String) -> Self {
-        PreImage {
-            value,
-            sha256,
-            hash160,
-        }
-    }
-    pub fn generate() -> Self {
-        let preimage = Preimage::new();
-        PreImage {
-            value: preimage.to_string().unwrap(),
-            sha256: preimage.sha256.to_string(),
-            hash160: preimage.hash160.to_string(),
-        }
-    }
-}
-
-impl Into<PreImage> for Preimage {
-    fn into(self) -> PreImage {
-        PreImage {
-            value: self.to_string().unwrap_or("".to_string()),
-            sha256: self.sha256.to_string(),
-            hash160: self.hash160.to_string(),
-        }
-    }
-}
-
-/// Helper to handle Lightning invoices
-#[derive(Debug, Clone)]
-pub struct DecodedInvoice {
-    pub msats: u64,
-    pub expiry: u64,
-    pub expires_in: u64,
-    pub expires_at: u64,
-    pub is_expired: bool,
-    pub network: String,
-    pub cltv_exp_delta: u64,
-    // / (address, btc_amount)
-    pub bip21: Option<String>,
-    pub preimage_hash: String,
-    pub description: String,
-}
-impl DecodedInvoice {
-    /// Add boltz_url & chain for route hint check
-    pub async fn from_string(s: String, boltz_url: Option<String>) -> Result<Self, BoltzError> {
-        // Attempt to parse the string to a Bolt11Invoice
-        let invoice = match Bolt11Invoice::from_str(&s) {
-            Ok(result) => result,
-            Err(e) => return Err(BoltzError::new("Input".to_string(), e.to_string())),
-        };
-        let bip21 = if boltz_url.is_some() {
-            let mrh = match boltz_client::swaps::magic_routing::find_magic_routing_hint(&s) {
-                Ok(s) => s,
-                Err(_) => None,
-            };
-            if mrh.is_none() {
-                None
-            } else {
-                let boltz_client =
-                    BoltzApiClientV2::new(ensure_http_prefix(&boltz_url.unwrap()), None);
-                match boltz_client.get_mrh_bip21(&s).await {
-                    Ok(r) => Some(r.bip21),
-                    Err(_) => None,
-                }
-            }
-        } else {
-            None
-        };
-        let now = SystemTime::now();
-        let duration_since_epoch = now.duration_since(UNIX_EPOCH).expect("Time went backwards");
-        let current_secs = duration_since_epoch.as_secs();
-        let expires_at = invoice
-            .expires_at()
-            .unwrap_or(Duration::from_secs(0))
-            .as_secs();
-
-        Ok(DecodedInvoice {
-            expiry: invoice.expiry_time().as_secs(),
-            expires_in: invoice
-                .expiration_remaining_from_epoch(duration_since_epoch)
-                .as_secs(),
-            expires_at: expires_at,
-            is_expired: if current_secs >= expires_at {
-                true
-            } else {
-                false
-            },
-            msats: invoice.amount_milli_satoshis().unwrap_or(0),
-            cltv_exp_delta: invoice.min_final_cltv_expiry_delta(),
-            network: invoice.network().to_string(),
-            bip21: bip21,
-            preimage_hash: invoice.payment_hash().to_string(),
-            description: invoice.description().to_string(),
-        })
-    }
-}
+pub use super::secrets::PreImage;
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]

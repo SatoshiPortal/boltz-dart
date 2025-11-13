@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:boltz/boltz.dart';
+import 'package:boltz/src/generated/api/invoice.dart';
+import 'package:boltz/src/generated/api/secrets.dart';
 // import 'package:boltz/src/generated/api/fees.dart';
 // import 'package:boltz/src/generated/api/btc_ln.dart';
 // import 'package:boltz/src/generated/api/error.dart';
 // import 'package:boltz/src/generated/api/lbtc_ln.dart';
-// import 'package:boltz/src/generated/api/types.dart';
 // import 'package:boltz/src/types/swap.dart';
 // import 'package:boltz/src/types/swap_status_response.dart';
 // import 'package:boltz/src/utils/http.dart';
@@ -53,7 +54,7 @@ void main() {
     final chain_fees = await fees.chain();
     expect((sub_fees.btcFees.percentage > 0.0), true);
     expect((rev_fees.btcFees.percentage > 0.0), true);
-    expect((chain_fees.btcFees.percentage > 0.0), true);
+    expect((chain_fees.btcToLbtcFees.percentage > 0.0), true);
   });
 
   test('DECODE EXPIRED BOLT11', () async {
@@ -379,24 +380,33 @@ void main() {
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
-  // final amount = 100000;
+  final swapXkey = await SwapMasterKey.newInstance(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
 
   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
-    mnemonic: mnemonic,
+    swapXkey: swapXkey,
     index: BigInt.from(index),
     invoice: invoice,
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
-    // pairHash: fees.btcPairHash,
   );
 
   return btcLnSubmarineSwap;
 }
 
 Future<BtcLnSwap> setupReverse(int outAmount) async {
+  final swapXkey = await SwapMasterKey.newInstance(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
+
   final btcLnReverseSwap = await BtcLnSwap.newReverse(
-    mnemonic: mnemonic,
+    swapXkey: swapXkey,
     index: BigInt.from(index),
     outAmount: BigInt.from(outAmount),
     network: network,
@@ -408,10 +418,14 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
 }
 
 Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
-  // final amount = 100000;
+  final swapXkey = await SwapMasterKey.newInstance(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
 
   final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
-    mnemonic: mnemonic,
+    swapXkey: swapXkey,
     index: BigInt.from(index),
     invoice: invoice,
     network: lnetwork,
@@ -423,8 +437,14 @@ Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
 }
 
 Future<LbtcLnSwap> setupLReverse(int amount) async {
-  final lbtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
-    mnemonic: mnemonic,
+  final swapXkey = await SwapMasterKey.newInstance(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
+
+  final lbtcLnReverseSwap = await LbtcLnSwap.newReverse(
+    swapXkey: swapXkey,
     index: BigInt.from(index),
     outAmount: BigInt.from(amount),
     network: lnetwork,
@@ -432,5 +452,5 @@ Future<LbtcLnSwap> setupLReverse(int amount) async {
     boltzUrl: boltzUrl,
   );
 
-  return lbtcLnSubmarineSwap;
+  return lbtcLnReverseSwap;
 }

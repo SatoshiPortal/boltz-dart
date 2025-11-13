@@ -2,11 +2,14 @@ use crate::util::{ensure_http_prefix, get_electrum_configs, strip_protocol_prefi
 
 use super::{
     error::BoltzError,
+    fees::TxFee,
+    secrets::{KeyPair, SwapMasterKey},
     types::{
-        BtcSwapScriptStr, Chain, ChainSwapDirection, ElectrumSettings, KeyPair, LBtcSwapScriptStr,
-        PreImage, SwapTxKind, SwapType, TxFee,
+        BtcSwapScriptStr, Chain, ChainSwapDirection, ElectrumSettings, LBtcSwapScriptStr, PreImage,
+        SwapTxKind,
     },
 };
+use boltz_client::util::secrets::{Preimage, SwapXKey};
 
 use boltz_client::{
     bitcoin::{
@@ -22,7 +25,6 @@ use boltz_client::{
         BitcoinChain, BitcoinClient, Chain as AllChains, LiquidChain, LiquidClient,
     },
     swaps::{boltz::BoltzApiClientV2, SwapScriptCommon},
-    util::secrets::Preimage,
     BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
 };
 use serde_json::Value;
@@ -104,12 +106,11 @@ impl ChainSwap {
         }
     }
     /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
-    /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+    /// Note: The swap_xkey should be a SwapMasterKey. The refund key uses the given index, and the claim key uses index + 1.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub async fn new_swap(
         direction: ChainSwapDirection,
-        mnemonic: String,
-        passphrase: Option<String>,
+        swap_xkey: SwapMasterKey,
         index: u64,
         amount: u64,
         is_testnet: bool,
@@ -118,8 +119,7 @@ impl ChainSwap {
         boltz_url: String,
         referral_id: Option<String>,
     ) -> Result<ChainSwap, BoltzError> {
-        let swap_type = SwapType::Chain;
-        let (refund_network, claim_network) = if is_testnet {
+        let (refund_network, _) = if is_testnet {
             if direction == ChainSwapDirection::BtcToLbtc {
                 (
                     AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
@@ -145,30 +145,21 @@ impl ChainSwap {
             }
         };
 
-        let refund_keypair = match KeyPair::generate(
-            mnemonic.clone(),
-            passphrase.clone(),
-            refund_network.clone().into(),
-            index,
-            swap_type,
-        ) {
-            Ok(keypair) => keypair,
-            Err(err) => return Err(err.into()),
+        let swap_xkey_inner: SwapXKey = swap_xkey.try_into()?;
+        let refund_child_key = swap_xkey_inner.derive_swapkey(index)?;
+        let refund_keypair = KeyPair {
+            secret_key: refund_child_key.keypair.display_secret().to_string(),
+            public_key: refund_child_key.keypair.public_key().to_string(),
         };
         let refund_kps: Keypair = refund_keypair.clone().try_into()?;
         let refund_public_key = PublicKey {
             inner: refund_kps.public_key(),
             compressed: true,
         };
-        let claim_keypair = match KeyPair::generate(
-            mnemonic,
-            passphrase,
-            claim_network.clone().into(),
-            index + 1,
-            swap_type,
-        ) {
-            Ok(keypair) => keypair,
-            Err(err) => return Err(err.into()),
+        let claim_child_key = swap_xkey_inner.derive_swapkey(index + 1)?;
+        let claim_keypair = KeyPair {
+            secret_key: claim_child_key.keypair.display_secret().to_string(),
+            public_key: claim_child_key.keypair.public_key().to_string(),
         };
         let claim_kps: Keypair = claim_keypair.clone().try_into()?;
 
@@ -176,7 +167,7 @@ impl ChainSwap {
             compressed: true,
             inner: claim_kps.public_key(),
         };
-        let preimage = Preimage::new();
+        let preimage: Preimage = Preimage::from_swap_key(&claim_child_key);
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
         match direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -388,7 +379,7 @@ impl ChainSwap {
                 )
                 .await?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
-                let preimage = self.preimage.clone();
+                let preimage: Preimage = self.preimage.clone().into();
                 if try_cooperate {
                     let btc_lockup_script: BtcSwapScript =
                         self.btc_script_str.clone().try_into()?;
@@ -402,7 +393,7 @@ impl ChainSwap {
                     let signed = match claim_tx
                         .sign_claim(
                             &ckp,
-                            &preimage.try_into()?,
+                            &preimage,
                             miner_fee.into(),
                             Some(Cooperative {
                                 boltz_api: &boltz_client,
@@ -419,7 +410,7 @@ impl ChainSwap {
                     Ok(signed.serialize().to_lower_hex_string())
                 } else {
                     let signed = match claim_tx
-                        .sign_claim(&ckp, &preimage.try_into()?, miner_fee.into(), None, true)
+                        .sign_claim(&ckp, &preimage, miner_fee.into(), None, true)
                         .await
                     {
                         Ok(result) => result,
@@ -439,7 +430,7 @@ impl ChainSwap {
                 )
                 .await?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
-                let preimage = self.preimage.clone();
+                let preimage: Preimage = self.preimage.clone().into();
 
                 if try_cooperate {
                     let lbtc_lockup_script: LBtcSwapScript =
@@ -455,7 +446,7 @@ impl ChainSwap {
                     let signed = match claim_tx
                         .sign_claim(
                             &ckp,
-                            &preimage.try_into()?,
+                            &preimage,
                             miner_fee.into(),
                             Some(Cooperative {
                                 boltz_api: &boltz_client,
@@ -472,7 +463,7 @@ impl ChainSwap {
                     Ok(serialized_tx.to_hex())
                 } else {
                     let signed = match claim_tx
-                        .sign_claim(&ckp, &preimage.try_into()?, miner_fee.into(), None)
+                        .sign_claim(&ckp, &preimage, miner_fee.into(), None)
                         .await
                     {
                         Ok(result) => result,

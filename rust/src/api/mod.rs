@@ -6,6 +6,8 @@ pub mod btc_ln;
 pub mod chain_swap;
 pub mod error;
 pub mod fees;
+pub mod invoice;
 pub mod lbtc_ln;
 pub mod lnurl;
+pub mod secrets;
 pub mod types;

@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.9.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1442815566;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1646813877;
 
 // Section: executor
 
@@ -161,7 +161,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     out_address: impl CstDecode<String>,
-    miner_fee: impl CstDecode<crate::api::types::TxFee>,
+    miner_fee: impl CstDecode<crate::api::fees::TxFee>,
     try_cooperate: impl CstDecode<bool>,
     electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
@@ -333,9 +333,9 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
     id: impl CstDecode<String>,
     kind: impl CstDecode<crate::api::types::SwapType>,
     network: impl CstDecode<crate::api::types::Chain>,
-    keys: impl CstDecode<crate::api::types::KeyPair>,
+    keys: impl CstDecode<crate::api::secrets::KeyPair>,
     key_index: impl CstDecode<u64>,
-    preimage: impl CstDecode<crate::api::types::PreImage>,
+    preimage: impl CstDecode<crate::api::secrets::PreImage>,
     swap_script: impl CstDecode<crate::api::types::BtcSwapScriptStr>,
     invoice: impl CstDecode<String>,
     script_address: impl CstDecode<String>,
@@ -389,8 +389,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
 }
 fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<Option<String>>,
+    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -407,8 +406,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_mnemonic = mnemonic.cst_decode();
-            let api_passphrase = passphrase.cst_decode();
+            let api_swap_xkey = swap_xkey.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
             let api_out_address = out_address.cst_decode();
@@ -421,8 +419,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::btc_ln::BtcLnSwap::new_reverse(
-                            api_mnemonic,
-                            api_passphrase,
+                            api_swap_xkey,
                             api_index,
                             api_out_amount,
                             api_out_address,
@@ -443,8 +440,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
 }
 fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<Option<String>>,
+    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -459,8 +455,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_mnemonic = mnemonic.cst_decode();
-            let api_passphrase = passphrase.cst_decode();
+            let api_swap_xkey = swap_xkey.cst_decode();
             let api_index = index.cst_decode();
             let api_invoice = invoice.cst_decode();
             let api_network = network.cst_decode();
@@ -471,8 +466,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::btc_ln::BtcLnSwap::new_submarine(
-                            api_mnemonic,
-                            api_passphrase,
+                            api_swap_xkey,
                             api_index,
                             api_invoice,
                             api_network,
@@ -493,7 +487,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_refund_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::btc_ln::BtcLnSwap>,
     out_address: impl CstDecode<String>,
-    miner_fee: impl CstDecode<crate::api::types::TxFee>,
+    miner_fee: impl CstDecode<crate::api::fees::TxFee>,
     try_cooperate: impl CstDecode<bool>,
     electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
@@ -696,7 +690,7 @@ fn wire__crate__api__chain_swap__chain_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     out_address: impl CstDecode<String>,
-    miner_fee: impl CstDecode<crate::api::types::TxFee>,
+    miner_fee: impl CstDecode<crate::api::fees::TxFee>,
     try_cooperate: impl CstDecode<bool>,
     btc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
     lbtc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
@@ -853,11 +847,11 @@ fn wire__crate__api__chain_swap__chain_swap_new_impl(
     id: impl CstDecode<String>,
     is_testnet: impl CstDecode<bool>,
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
-    refund_keys: impl CstDecode<crate::api::types::KeyPair>,
+    refund_keys: impl CstDecode<crate::api::secrets::KeyPair>,
     refund_index: impl CstDecode<u64>,
-    claim_keys: impl CstDecode<crate::api::types::KeyPair>,
+    claim_keys: impl CstDecode<crate::api::secrets::KeyPair>,
     claim_index: impl CstDecode<u64>,
-    preimage: impl CstDecode<crate::api::types::PreImage>,
+    preimage: impl CstDecode<crate::api::secrets::PreImage>,
     btc_script_str: impl CstDecode<crate::api::types::BtcSwapScriptStr>,
     lbtc_script_str: impl CstDecode<crate::api::types::LBtcSwapScriptStr>,
     script_address: impl CstDecode<String>,
@@ -922,8 +916,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_impl(
 fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
-    mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<Option<String>>,
+    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     amount: impl CstDecode<u64>,
     is_testnet: impl CstDecode<bool>,
@@ -940,8 +933,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
         },
         move || {
             let api_direction = direction.cst_decode();
-            let api_mnemonic = mnemonic.cst_decode();
-            let api_passphrase = passphrase.cst_decode();
+            let api_swap_xkey = swap_xkey.cst_decode();
             let api_index = index.cst_decode();
             let api_amount = amount.cst_decode();
             let api_is_testnet = is_testnet.cst_decode();
@@ -954,8 +946,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
                     (move || async move {
                         let output_ok = crate::api::chain_swap::ChainSwap::new_swap(
                             api_direction,
-                            api_mnemonic,
-                            api_passphrase,
+                            api_swap_xkey,
                             api_index,
                             api_amount,
                             api_is_testnet,
@@ -977,7 +968,7 @@ fn wire__crate__api__chain_swap__chain_swap_refund_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::chain_swap::ChainSwap>,
     refund_address: impl CstDecode<String>,
-    miner_fee: impl CstDecode<crate::api::types::TxFee>,
+    miner_fee: impl CstDecode<crate::api::fees::TxFee>,
     try_cooperate: impl CstDecode<bool>,
     btc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
     lbtc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
@@ -1079,7 +1070,7 @@ fn wire__crate__api__chain_swap__chain_swap_to_json_impl(
         },
     )
 }
-fn wire__crate__api__types__decoded_invoice_from_string_impl(
+fn wire__crate__api__invoice__decoded_invoice_from_string_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: impl CstDecode<String>,
     boltz_url: impl CstDecode<Option<String>>,
@@ -1097,7 +1088,7 @@ fn wire__crate__api__types__decoded_invoice_from_string_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok =
-                            crate::api::types::DecodedInvoice::from_string(api_s, api_boltz_url)
+                            crate::api::invoice::DecodedInvoice::from_string(api_s, api_boltz_url)
                                 .await?;
                         Ok(output_ok)
                     })()
@@ -1197,67 +1188,6 @@ fn wire__crate__api__fees__fees_submarine_impl(
                     })()
                     .await,
                 )
-            }
-        },
-    )
-}
-fn wire__crate__api__types__key_pair_generate_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<Option<String>>,
-    network: impl CstDecode<crate::api::types::Chain>,
-    index: impl CstDecode<u64>,
-    swap_type: impl CstDecode<crate::api::types::SwapType>,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "key_pair_generate",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let api_mnemonic = mnemonic.cst_decode();
-            let api_passphrase = passphrase.cst_decode();
-            let api_network = network.cst_decode();
-            let api_index = index.cst_decode();
-            let api_swap_type = swap_type.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::types::KeyPair::generate(
-                        api_mnemonic,
-                        api_passphrase,
-                        api_network,
-                        api_index,
-                        api_swap_type,
-                    )?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
-fn wire__crate__api__types__key_pair_new_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    secret_key: impl CstDecode<String>,
-    public_key: impl CstDecode<String>,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "key_pair_new",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let api_secret_key = secret_key.cst_decode();
-            let api_public_key = public_key.cst_decode();
-            move |context| {
-                transform_result_dco::<_, _, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(crate::api::types::KeyPair::new(
-                        api_secret_key,
-                        api_public_key,
-                    ))?;
-                    Ok(output_ok)
-                })())
             }
         },
     )
@@ -1374,7 +1304,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     out_address: impl CstDecode<String>,
-    miner_fee: impl CstDecode<crate::api::types::TxFee>,
+    miner_fee: impl CstDecode<crate::api::fees::TxFee>,
     try_cooperate: impl CstDecode<bool>,
     electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
@@ -1547,9 +1477,9 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
     id: impl CstDecode<String>,
     kind: impl CstDecode<crate::api::types::SwapType>,
     network: impl CstDecode<crate::api::types::Chain>,
-    keys: impl CstDecode<crate::api::types::KeyPair>,
+    keys: impl CstDecode<crate::api::secrets::KeyPair>,
     key_index: impl CstDecode<u64>,
-    preimage: impl CstDecode<crate::api::types::PreImage>,
+    preimage: impl CstDecode<crate::api::secrets::PreImage>,
     swap_script: impl CstDecode<crate::api::types::LBtcSwapScriptStr>,
     invoice: impl CstDecode<String>,
     out_amount: impl CstDecode<u64>,
@@ -1606,8 +1536,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
 }
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<Option<String>>,
+    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -1624,8 +1553,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_mnemonic = mnemonic.cst_decode();
-            let api_passphrase = passphrase.cst_decode();
+            let api_swap_xkey = swap_xkey.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
             let api_out_address = out_address.cst_decode();
@@ -1638,8 +1566,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_reverse(
-                            api_mnemonic,
-                            api_passphrase,
+                            api_swap_xkey,
                             api_index,
                             api_out_amount,
                             api_out_address,
@@ -1660,8 +1587,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
 }
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    mnemonic: impl CstDecode<String>,
-    passphrase: impl CstDecode<Option<String>>,
+    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -1676,8 +1602,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_mnemonic = mnemonic.cst_decode();
-            let api_passphrase = passphrase.cst_decode();
+            let api_swap_xkey = swap_xkey.cst_decode();
             let api_index = index.cst_decode();
             let api_invoice = invoice.cst_decode();
             let api_network = network.cst_decode();
@@ -1688,8 +1613,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_submarine(
-                            api_mnemonic,
-                            api_passphrase,
+                            api_swap_xkey,
                             api_index,
                             api_invoice,
                             api_network,
@@ -1710,7 +1634,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<crate::api::lbtc_ln::LbtcLnSwap>,
     out_address: impl CstDecode<String>,
-    miner_fee: impl CstDecode<crate::api::types::TxFee>,
+    miner_fee: impl CstDecode<crate::api::fees::TxFee>,
     try_cooperate: impl CstDecode<bool>,
     electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
@@ -1921,26 +1845,28 @@ fn wire__crate__api__lnurl__lnurl_withdraw_impl(
         },
     )
 }
-fn wire__crate__api__types__pre_image_generate_impl(
+fn wire__crate__api__secrets__pre_image_from_invoice_str_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
+    invoice: impl CstDecode<String>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "pre_image_generate",
+            debug_name: "pre_image_from_invoice_str",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
+            let api_invoice = invoice.cst_decode();
             move |context| {
-                transform_result_dco::<_, _, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(crate::api::types::PreImage::generate())?;
+                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
+                    let output_ok = crate::api::secrets::PreImage::from_invoice_str(&api_invoice)?;
                     Ok(output_ok)
                 })())
             }
         },
     )
 }
-fn wire__crate__api__types__pre_image_new_impl(
+fn wire__crate__api__secrets__pre_image_new_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     value: impl CstDecode<String>,
     sha256: impl CstDecode<String>,
@@ -1958,11 +1884,40 @@ fn wire__crate__api__types__pre_image_new_impl(
             let api_hash160 = hash160.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(crate::api::types::PreImage::new(
+                    let output_ok = Result::<_, ()>::Ok(crate::api::secrets::PreImage::new(
                         api_value,
                         api_sha256,
                         api_hash160,
                     ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__secrets__swap_master_key_new_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    wallet_mnemonic: impl CstDecode<String>,
+    wallet_passphrase: impl CstDecode<Option<String>>,
+    network: impl CstDecode<crate::api::types::Network>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_master_key_new",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_wallet_mnemonic = wallet_mnemonic.cst_decode();
+            let api_wallet_passphrase = wallet_passphrase.cst_decode();
+            let api_network = network.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
+                    let output_ok = crate::api::secrets::SwapMasterKey::new(
+                        api_wallet_mnemonic,
+                        api_wallet_passphrase,
+                        api_network,
+                    )?;
                     Ok(output_ok)
                 })())
             }
@@ -2010,6 +1965,17 @@ impl CstDecode<i32> for i32 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> i32 {
         self
+    }
+}
+impl CstDecode<crate::api::types::Network> for i32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::types::Network {
+        match self {
+            0 => crate::api::types::Network::Mainnet,
+            1 => crate::api::types::Network::Testnet,
+            2 => crate::api::types::Network::Regtest,
+            _ => unreachable!("Invalid variant for Network: {}", self),
+        }
     }
 }
 impl CstDecode<crate::api::types::Side> for i32 {
@@ -2100,9 +2066,9 @@ impl SseDecode for crate::api::btc_ln::BtcLnSwap {
         let mut var_id = <String>::sse_decode(deserializer);
         let mut var_kind = <crate::api::types::SwapType>::sse_decode(deserializer);
         let mut var_network = <crate::api::types::Chain>::sse_decode(deserializer);
-        let mut var_keys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_keys = <crate::api::secrets::KeyPair>::sse_decode(deserializer);
         let mut var_keyIndex = <u64>::sse_decode(deserializer);
-        let mut var_preimage = <crate::api::types::PreImage>::sse_decode(deserializer);
+        let mut var_preimage = <crate::api::secrets::PreImage>::sse_decode(deserializer);
         let mut var_swapScript = <crate::api::types::BtcSwapScriptStr>::sse_decode(deserializer);
         let mut var_invoice = <String>::sse_decode(deserializer);
         let mut var_scriptAddress = <String>::sse_decode(deserializer);
@@ -2167,15 +2133,15 @@ impl SseDecode for crate::api::types::Chain {
 impl SseDecode for crate::api::fees::ChainFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_btcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
-        let mut var_lbtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
-        let mut var_btcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
-        let mut var_lbtcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
+        let mut var_btcToLbtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_lbtcToBtcLimits = <crate::api::fees::SwapLimits>::sse_decode(deserializer);
+        let mut var_btcToLbtcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
+        let mut var_lbtcToBtcFees = <crate::api::fees::ChainSwapFees>::sse_decode(deserializer);
         return crate::api::fees::ChainFeesAndLimits {
-            btc_limits: var_btcLimits,
-            lbtc_limits: var_lbtcLimits,
-            btc_fees: var_btcFees,
-            lbtc_fees: var_lbtcFees,
+            btc_to_lbtc_limits: var_btcToLbtcLimits,
+            lbtc_to_btc_limits: var_lbtcToBtcLimits,
+            btc_to_lbtc_fees: var_btcToLbtcFees,
+            lbtc_to_btc_fees: var_lbtcToBtcFees,
         };
     }
 }
@@ -2186,11 +2152,11 @@ impl SseDecode for crate::api::chain_swap::ChainSwap {
         let mut var_id = <String>::sse_decode(deserializer);
         let mut var_isTestnet = <bool>::sse_decode(deserializer);
         let mut var_direction = <crate::api::types::ChainSwapDirection>::sse_decode(deserializer);
-        let mut var_refundKeys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_refundKeys = <crate::api::secrets::KeyPair>::sse_decode(deserializer);
         let mut var_refundIndex = <u64>::sse_decode(deserializer);
-        let mut var_claimKeys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_claimKeys = <crate::api::secrets::KeyPair>::sse_decode(deserializer);
         let mut var_claimIndex = <u64>::sse_decode(deserializer);
-        let mut var_preimage = <crate::api::types::PreImage>::sse_decode(deserializer);
+        let mut var_preimage = <crate::api::secrets::PreImage>::sse_decode(deserializer);
         let mut var_btcScriptStr = <crate::api::types::BtcSwapScriptStr>::sse_decode(deserializer);
         let mut var_lbtcScriptStr =
             <crate::api::types::LBtcSwapScriptStr>::sse_decode(deserializer);
@@ -2251,7 +2217,7 @@ impl SseDecode for crate::api::fees::ChainSwapFees {
     }
 }
 
-impl SseDecode for crate::api::types::DecodedInvoice {
+impl SseDecode for crate::api::invoice::DecodedInvoice {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_msats = <u64>::sse_decode(deserializer);
@@ -2264,7 +2230,7 @@ impl SseDecode for crate::api::types::DecodedInvoice {
         let mut var_bip21 = <Option<String>>::sse_decode(deserializer);
         let mut var_preimageHash = <String>::sse_decode(deserializer);
         let mut var_description = <String>::sse_decode(deserializer);
-        return crate::api::types::DecodedInvoice {
+        return crate::api::invoice::DecodedInvoice {
             msats: var_msats,
             expiry: var_expiry,
             expires_in: var_expiresIn,
@@ -2319,12 +2285,12 @@ impl SseDecode for i32 {
     }
 }
 
-impl SseDecode for crate::api::types::KeyPair {
+impl SseDecode for crate::api::secrets::KeyPair {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_secretKey = <String>::sse_decode(deserializer);
         let mut var_publicKey = <String>::sse_decode(deserializer);
-        return crate::api::types::KeyPair {
+        return crate::api::secrets::KeyPair {
             secret_key: var_secretKey,
             public_key: var_publicKey,
         };
@@ -2361,9 +2327,9 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnSwap {
         let mut var_id = <String>::sse_decode(deserializer);
         let mut var_kind = <crate::api::types::SwapType>::sse_decode(deserializer);
         let mut var_network = <crate::api::types::Chain>::sse_decode(deserializer);
-        let mut var_keys = <crate::api::types::KeyPair>::sse_decode(deserializer);
+        let mut var_keys = <crate::api::secrets::KeyPair>::sse_decode(deserializer);
         let mut var_keyIndex = <u64>::sse_decode(deserializer);
-        let mut var_preimage = <crate::api::types::PreImage>::sse_decode(deserializer);
+        let mut var_preimage = <crate::api::secrets::PreImage>::sse_decode(deserializer);
         let mut var_swapScript = <crate::api::types::LBtcSwapScriptStr>::sse_decode(deserializer);
         let mut var_invoice = <String>::sse_decode(deserializer);
         let mut var_outAmount = <u64>::sse_decode(deserializer);
@@ -2423,6 +2389,19 @@ impl SseDecode for crate::api::fees::MinerFees {
     }
 }
 
+impl SseDecode for crate::api::types::Network {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::types::Network::Mainnet,
+            1 => crate::api::types::Network::Testnet,
+            2 => crate::api::types::Network::Regtest,
+            _ => unreachable!("Invalid variant for Network: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for Option<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2458,13 +2437,13 @@ impl SseDecode for Option<crate::api::types::Side> {
     }
 }
 
-impl SseDecode for crate::api::types::PreImage {
+impl SseDecode for crate::api::secrets::PreImage {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_value = <String>::sse_decode(deserializer);
         let mut var_sha256 = <String>::sse_decode(deserializer);
         let mut var_hash160 = <String>::sse_decode(deserializer);
-        return crate::api::types::PreImage {
+        return crate::api::secrets::PreImage {
             value: var_value,
             sha256: var_sha256,
             hash160: var_hash160,
@@ -2552,6 +2531,22 @@ impl SseDecode for crate::api::fees::SwapLimits {
     }
 }
 
+impl SseDecode for crate::api::secrets::SwapMasterKey {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_xprv = <String>::sse_decode(deserializer);
+        let mut var_xpub = <String>::sse_decode(deserializer);
+        let mut var_network = <crate::api::types::Network>::sse_decode(deserializer);
+        let mut var_mnemonic = <String>::sse_decode(deserializer);
+        return crate::api::secrets::SwapMasterKey {
+            xprv: var_xprv,
+            xpub: var_xpub,
+            network: var_network,
+            mnemonic: var_mnemonic,
+        };
+    }
+}
+
 impl SseDecode for crate::api::types::SwapTxKind {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2577,18 +2572,18 @@ impl SseDecode for crate::api::types::SwapType {
     }
 }
 
-impl SseDecode for crate::api::types::TxFee {
+impl SseDecode for crate::api::fees::TxFee {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut tag_ = <i32>::sse_decode(deserializer);
         match tag_ {
             0 => {
                 let mut var_field0 = <u64>::sse_decode(deserializer);
-                return crate::api::types::TxFee::Absolute(var_field0);
+                return crate::api::fees::TxFee::Absolute(var_field0);
             }
             1 => {
                 let mut var_field0 = <f64>::sse_decode(deserializer);
-                return crate::api::types::TxFee::Relative(var_field0);
+                return crate::api::fees::TxFee::Relative(var_field0);
             }
             _ => {
                 unimplemented!("");
@@ -2752,10 +2747,10 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::Chain> for crate::api:
 impl flutter_rust_bridge::IntoDart for crate::api::fees::ChainFeesAndLimits {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.btc_limits.into_into_dart().into_dart(),
-            self.lbtc_limits.into_into_dart().into_dart(),
-            self.btc_fees.into_into_dart().into_dart(),
-            self.lbtc_fees.into_into_dart().into_dart(),
+            self.btc_to_lbtc_limits.into_into_dart().into_dart(),
+            self.lbtc_to_btc_limits.into_into_dart().into_dart(),
+            self.btc_to_lbtc_fees.into_into_dart().into_dart(),
+            self.lbtc_to_btc_fees.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -2852,7 +2847,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::ChainSwapFees>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::DecodedInvoice {
+impl flutter_rust_bridge::IntoDart for crate::api::invoice::DecodedInvoice {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.msats.into_into_dart().into_dart(),
@@ -2870,13 +2865,13 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::DecodedInvoice {
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::types::DecodedInvoice
+    for crate::api::invoice::DecodedInvoice
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::DecodedInvoice>
-    for crate::api::types::DecodedInvoice
+impl flutter_rust_bridge::IntoIntoDart<crate::api::invoice::DecodedInvoice>
+    for crate::api::invoice::DecodedInvoice
 {
-    fn into_into_dart(self) -> crate::api::types::DecodedInvoice {
+    fn into_into_dart(self) -> crate::api::invoice::DecodedInvoice {
         self
     }
 }
@@ -2916,7 +2911,7 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::Fees> for crate::api::f
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::KeyPair {
+impl flutter_rust_bridge::IntoDart for crate::api::secrets::KeyPair {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.secret_key.into_into_dart().into_dart(),
@@ -2925,9 +2920,11 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::KeyPair {
         .into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::KeyPair {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::KeyPair> for crate::api::types::KeyPair {
-    fn into_into_dart(self) -> crate::api::types::KeyPair {
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::secrets::KeyPair {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::secrets::KeyPair>
+    for crate::api::secrets::KeyPair
+{
+    fn into_into_dart(self) -> crate::api::secrets::KeyPair {
         self
     }
 }
@@ -3022,7 +3019,24 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::MinerFees>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::PreImage {
+impl flutter_rust_bridge::IntoDart for crate::api::types::Network {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Mainnet => 0.into_dart(),
+            Self::Testnet => 1.into_dart(),
+            Self::Regtest => 2.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::Network {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::Network> for crate::api::types::Network {
+    fn into_into_dart(self) -> crate::api::types::Network {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::secrets::PreImage {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.value.into_into_dart().into_dart(),
@@ -3032,11 +3046,11 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::PreImage {
         .into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::PreImage {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::PreImage>
-    for crate::api::types::PreImage
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::secrets::PreImage {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::secrets::PreImage>
+    for crate::api::secrets::PreImage
 {
-    fn into_into_dart(self) -> crate::api::types::PreImage {
+    fn into_into_dart(self) -> crate::api::secrets::PreImage {
         self
     }
 }
@@ -3157,6 +3171,29 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SwapLimits>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::secrets::SwapMasterKey {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.xprv.into_into_dart().into_dart(),
+            self.xpub.into_into_dart().into_dart(),
+            self.network.into_into_dart().into_dart(),
+            self.mnemonic.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::secrets::SwapMasterKey
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::secrets::SwapMasterKey>
+    for crate::api::secrets::SwapMasterKey
+{
+    fn into_into_dart(self) -> crate::api::secrets::SwapMasterKey {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::types::SwapTxKind {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -3194,13 +3231,13 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapType>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::types::TxFee {
+impl flutter_rust_bridge::IntoDart for crate::api::fees::TxFee {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
-            crate::api::types::TxFee::Absolute(field0) => {
+            crate::api::fees::TxFee::Absolute(field0) => {
                 [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::types::TxFee::Relative(field0) => {
+            crate::api::fees::TxFee::Relative(field0) => {
                 [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
             _ => {
@@ -3209,9 +3246,9 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::TxFee {
         }
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::TxFee {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::types::TxFee> for crate::api::types::TxFee {
-    fn into_into_dart(self) -> crate::api::types::TxFee {
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::fees::TxFee {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::TxFee> for crate::api::fees::TxFee {
+    fn into_into_dart(self) -> crate::api::fees::TxFee {
         self
     }
 }
@@ -3244,9 +3281,9 @@ impl SseEncode for crate::api::btc_ln::BtcLnSwap {
         <String>::sse_encode(self.id, serializer);
         <crate::api::types::SwapType>::sse_encode(self.kind, serializer);
         <crate::api::types::Chain>::sse_encode(self.network, serializer);
-        <crate::api::types::KeyPair>::sse_encode(self.keys, serializer);
+        <crate::api::secrets::KeyPair>::sse_encode(self.keys, serializer);
         <u64>::sse_encode(self.key_index, serializer);
-        <crate::api::types::PreImage>::sse_encode(self.preimage, serializer);
+        <crate::api::secrets::PreImage>::sse_encode(self.preimage, serializer);
         <crate::api::types::BtcSwapScriptStr>::sse_encode(self.swap_script, serializer);
         <String>::sse_encode(self.invoice, serializer);
         <String>::sse_encode(self.script_address, serializer);
@@ -3291,10 +3328,10 @@ impl SseEncode for crate::api::types::Chain {
 impl SseEncode for crate::api::fees::ChainFeesAndLimits {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::fees::SwapLimits>::sse_encode(self.btc_limits, serializer);
-        <crate::api::fees::SwapLimits>::sse_encode(self.lbtc_limits, serializer);
-        <crate::api::fees::ChainSwapFees>::sse_encode(self.btc_fees, serializer);
-        <crate::api::fees::ChainSwapFees>::sse_encode(self.lbtc_fees, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.btc_to_lbtc_limits, serializer);
+        <crate::api::fees::SwapLimits>::sse_encode(self.lbtc_to_btc_limits, serializer);
+        <crate::api::fees::ChainSwapFees>::sse_encode(self.btc_to_lbtc_fees, serializer);
+        <crate::api::fees::ChainSwapFees>::sse_encode(self.lbtc_to_btc_fees, serializer);
     }
 }
 
@@ -3304,11 +3341,11 @@ impl SseEncode for crate::api::chain_swap::ChainSwap {
         <String>::sse_encode(self.id, serializer);
         <bool>::sse_encode(self.is_testnet, serializer);
         <crate::api::types::ChainSwapDirection>::sse_encode(self.direction, serializer);
-        <crate::api::types::KeyPair>::sse_encode(self.refund_keys, serializer);
+        <crate::api::secrets::KeyPair>::sse_encode(self.refund_keys, serializer);
         <u64>::sse_encode(self.refund_index, serializer);
-        <crate::api::types::KeyPair>::sse_encode(self.claim_keys, serializer);
+        <crate::api::secrets::KeyPair>::sse_encode(self.claim_keys, serializer);
         <u64>::sse_encode(self.claim_index, serializer);
-        <crate::api::types::PreImage>::sse_encode(self.preimage, serializer);
+        <crate::api::secrets::PreImage>::sse_encode(self.preimage, serializer);
         <crate::api::types::BtcSwapScriptStr>::sse_encode(self.btc_script_str, serializer);
         <crate::api::types::LBtcSwapScriptStr>::sse_encode(self.lbtc_script_str, serializer);
         <String>::sse_encode(self.script_address, serializer);
@@ -3347,7 +3384,7 @@ impl SseEncode for crate::api::fees::ChainSwapFees {
     }
 }
 
-impl SseEncode for crate::api::types::DecodedInvoice {
+impl SseEncode for crate::api::invoice::DecodedInvoice {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.msats, serializer);
@@ -3394,7 +3431,7 @@ impl SseEncode for i32 {
     }
 }
 
-impl SseEncode for crate::api::types::KeyPair {
+impl SseEncode for crate::api::secrets::KeyPair {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.secret_key, serializer);
@@ -3422,9 +3459,9 @@ impl SseEncode for crate::api::lbtc_ln::LbtcLnSwap {
         <String>::sse_encode(self.id, serializer);
         <crate::api::types::SwapType>::sse_encode(self.kind, serializer);
         <crate::api::types::Chain>::sse_encode(self.network, serializer);
-        <crate::api::types::KeyPair>::sse_encode(self.keys, serializer);
+        <crate::api::secrets::KeyPair>::sse_encode(self.keys, serializer);
         <u64>::sse_encode(self.key_index, serializer);
-        <crate::api::types::PreImage>::sse_encode(self.preimage, serializer);
+        <crate::api::secrets::PreImage>::sse_encode(self.preimage, serializer);
         <crate::api::types::LBtcSwapScriptStr>::sse_encode(self.swap_script, serializer);
         <String>::sse_encode(self.invoice, serializer);
         <u64>::sse_encode(self.out_amount, serializer);
@@ -3461,6 +3498,23 @@ impl SseEncode for crate::api::fees::MinerFees {
     }
 }
 
+impl SseEncode for crate::api::types::Network {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::types::Network::Mainnet => 0,
+                crate::api::types::Network::Testnet => 1,
+                crate::api::types::Network::Regtest => 2,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for Option<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3491,7 +3545,7 @@ impl SseEncode for Option<crate::api::types::Side> {
     }
 }
 
-impl SseEncode for crate::api::types::PreImage {
+impl SseEncode for crate::api::secrets::PreImage {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.value, serializer);
@@ -3560,6 +3614,16 @@ impl SseEncode for crate::api::fees::SwapLimits {
     }
 }
 
+impl SseEncode for crate::api::secrets::SwapMasterKey {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.xprv, serializer);
+        <String>::sse_encode(self.xpub, serializer);
+        <crate::api::types::Network>::sse_encode(self.network, serializer);
+        <String>::sse_encode(self.mnemonic, serializer);
+    }
+}
+
 impl SseEncode for crate::api::types::SwapTxKind {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3593,15 +3657,15 @@ impl SseEncode for crate::api::types::SwapType {
     }
 }
 
-impl SseEncode for crate::api::types::TxFee {
+impl SseEncode for crate::api::fees::TxFee {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         match self {
-            crate::api::types::TxFee::Absolute(field0) => {
+            crate::api::fees::TxFee::Absolute(field0) => {
                 <i32>::sse_encode(0, serializer);
                 <u64>::sse_encode(field0, serializer);
             }
-            crate::api::types::TxFee::Relative(field0) => {
+            crate::api::fees::TxFee::Relative(field0) => {
                 <i32>::sse_encode(1, serializer);
                 <f64>::sse_encode(field0, serializer);
             }
@@ -3726,11 +3790,11 @@ mod io {
             CstDecode::<crate::api::fees::Fees>::cst_decode(*wrap).into()
         }
     }
-    impl CstDecode<crate::api::types::KeyPair> for *mut wire_cst_key_pair {
+    impl CstDecode<crate::api::secrets::KeyPair> for *mut wire_cst_key_pair {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> crate::api::types::KeyPair {
+        fn cst_decode(self) -> crate::api::secrets::KeyPair {
             let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-            CstDecode::<crate::api::types::KeyPair>::cst_decode(*wrap).into()
+            CstDecode::<crate::api::secrets::KeyPair>::cst_decode(*wrap).into()
         }
     }
     impl CstDecode<crate::api::types::LBtcSwapScriptStr> for *mut wire_cst_l_btc_swap_script_str {
@@ -3754,11 +3818,11 @@ mod io {
             CstDecode::<crate::api::lnurl::Lnurl>::cst_decode(*wrap).into()
         }
     }
-    impl CstDecode<crate::api::types::PreImage> for *mut wire_cst_pre_image {
+    impl CstDecode<crate::api::secrets::PreImage> for *mut wire_cst_pre_image {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> crate::api::types::PreImage {
+        fn cst_decode(self) -> crate::api::secrets::PreImage {
             let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-            CstDecode::<crate::api::types::PreImage>::cst_decode(*wrap).into()
+            CstDecode::<crate::api::secrets::PreImage>::cst_decode(*wrap).into()
         }
     }
     impl CstDecode<crate::api::types::Side> for *mut i32 {
@@ -3768,11 +3832,18 @@ mod io {
             CstDecode::<crate::api::types::Side>::cst_decode(*wrap).into()
         }
     }
-    impl CstDecode<crate::api::types::TxFee> for *mut wire_cst_tx_fee {
+    impl CstDecode<crate::api::secrets::SwapMasterKey> for *mut wire_cst_swap_master_key {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> crate::api::types::TxFee {
+        fn cst_decode(self) -> crate::api::secrets::SwapMasterKey {
             let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-            CstDecode::<crate::api::types::TxFee>::cst_decode(*wrap).into()
+            CstDecode::<crate::api::secrets::SwapMasterKey>::cst_decode(*wrap).into()
+        }
+    }
+    impl CstDecode<crate::api::fees::TxFee> for *mut wire_cst_tx_fee {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::fees::TxFee {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::fees::TxFee>::cst_decode(*wrap).into()
         }
     }
     impl CstDecode<crate::api::btc_ln::BtcLnSwap> for wire_cst_btc_ln_swap {
@@ -3813,10 +3884,10 @@ mod io {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::fees::ChainFeesAndLimits {
             crate::api::fees::ChainFeesAndLimits {
-                btc_limits: self.btc_limits.cst_decode(),
-                lbtc_limits: self.lbtc_limits.cst_decode(),
-                btc_fees: self.btc_fees.cst_decode(),
-                lbtc_fees: self.lbtc_fees.cst_decode(),
+                btc_to_lbtc_limits: self.btc_to_lbtc_limits.cst_decode(),
+                lbtc_to_btc_limits: self.lbtc_to_btc_limits.cst_decode(),
+                btc_to_lbtc_fees: self.btc_to_lbtc_fees.cst_decode(),
+                lbtc_to_btc_fees: self.lbtc_to_btc_fees.cst_decode(),
             }
         }
     }
@@ -3855,10 +3926,10 @@ mod io {
             }
         }
     }
-    impl CstDecode<crate::api::types::DecodedInvoice> for wire_cst_decoded_invoice {
+    impl CstDecode<crate::api::invoice::DecodedInvoice> for wire_cst_decoded_invoice {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> crate::api::types::DecodedInvoice {
-            crate::api::types::DecodedInvoice {
+        fn cst_decode(self) -> crate::api::invoice::DecodedInvoice {
+            crate::api::invoice::DecodedInvoice {
                 msats: self.msats.cst_decode(),
                 expiry: self.expiry.cst_decode(),
                 expires_in: self.expires_in.cst_decode(),
@@ -3891,10 +3962,10 @@ mod io {
             }
         }
     }
-    impl CstDecode<crate::api::types::KeyPair> for wire_cst_key_pair {
+    impl CstDecode<crate::api::secrets::KeyPair> for wire_cst_key_pair {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> crate::api::types::KeyPair {
-            crate::api::types::KeyPair {
+        fn cst_decode(self) -> crate::api::secrets::KeyPair {
+            crate::api::secrets::KeyPair {
                 secret_key: self.secret_key.cst_decode(),
                 public_key: self.public_key.cst_decode(),
             }
@@ -3962,10 +4033,10 @@ mod io {
             }
         }
     }
-    impl CstDecode<crate::api::types::PreImage> for wire_cst_pre_image {
+    impl CstDecode<crate::api::secrets::PreImage> for wire_cst_pre_image {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> crate::api::types::PreImage {
-            crate::api::types::PreImage {
+        fn cst_decode(self) -> crate::api::secrets::PreImage {
+            crate::api::secrets::PreImage {
                 value: self.value.cst_decode(),
                 sha256: self.sha256.cst_decode(),
                 hash160: self.hash160.cst_decode(),
@@ -4021,17 +4092,28 @@ mod io {
             }
         }
     }
-    impl CstDecode<crate::api::types::TxFee> for wire_cst_tx_fee {
+    impl CstDecode<crate::api::secrets::SwapMasterKey> for wire_cst_swap_master_key {
         // Codec=Cst (C-struct based), see doc to use other codecs
-        fn cst_decode(self) -> crate::api::types::TxFee {
+        fn cst_decode(self) -> crate::api::secrets::SwapMasterKey {
+            crate::api::secrets::SwapMasterKey {
+                xprv: self.xprv.cst_decode(),
+                xpub: self.xpub.cst_decode(),
+                network: self.network.cst_decode(),
+                mnemonic: self.mnemonic.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::fees::TxFee> for wire_cst_tx_fee {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::fees::TxFee {
             match self.tag {
                 0 => {
                     let ans = unsafe { self.kind.Absolute };
-                    crate::api::types::TxFee::Absolute(ans.field0.cst_decode())
+                    crate::api::fees::TxFee::Absolute(ans.field0.cst_decode())
                 }
                 1 => {
                     let ans = unsafe { self.kind.Relative };
-                    crate::api::types::TxFee::Relative(ans.field0.cst_decode())
+                    crate::api::fees::TxFee::Relative(ans.field0.cst_decode())
                 }
                 _ => unreachable!(),
             }
@@ -4095,10 +4177,10 @@ mod io {
     impl NewWithNullPtr for wire_cst_chain_fees_and_limits {
         fn new_with_null_ptr() -> Self {
             Self {
-                btc_limits: Default::default(),
-                lbtc_limits: Default::default(),
-                btc_fees: Default::default(),
-                lbtc_fees: Default::default(),
+                btc_to_lbtc_limits: Default::default(),
+                lbtc_to_btc_limits: Default::default(),
+                btc_to_lbtc_fees: Default::default(),
+                lbtc_to_btc_fees: Default::default(),
             }
         }
     }
@@ -4363,6 +4445,21 @@ mod io {
             Self::new_with_null_ptr()
         }
     }
+    impl NewWithNullPtr for wire_cst_swap_master_key {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                xprv: core::ptr::null_mut(),
+                xpub: core::ptr::null_mut(),
+                network: Default::default(),
+                mnemonic: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_swap_master_key {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
     impl NewWithNullPtr for wire_cst_tx_fee {
         fn new_with_null_ptr() -> Self {
             Self {
@@ -4522,8 +4619,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
         port_: i64,
-        mnemonic: *mut wire_cst_list_prim_u_8_strict,
-        passphrase: *mut wire_cst_list_prim_u_8_strict,
+        swap_xkey: *mut wire_cst_swap_master_key,
         index: u64,
         out_amount: u64,
         out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -4535,8 +4631,7 @@ mod io {
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             port_,
-            mnemonic,
-            passphrase,
+            swap_xkey,
             index,
             out_amount,
             out_address,
@@ -4551,8 +4646,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
         port_: i64,
-        mnemonic: *mut wire_cst_list_prim_u_8_strict,
-        passphrase: *mut wire_cst_list_prim_u_8_strict,
+        swap_xkey: *mut wire_cst_swap_master_key,
         index: u64,
         invoice: *mut wire_cst_list_prim_u_8_strict,
         network: i32,
@@ -4562,8 +4656,7 @@ mod io {
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             port_,
-            mnemonic,
-            passphrase,
+            swap_xkey,
             index,
             invoice,
             network,
@@ -4776,8 +4869,7 @@ mod io {
     pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap(
         port_: i64,
         direction: i32,
-        mnemonic: *mut wire_cst_list_prim_u_8_strict,
-        passphrase: *mut wire_cst_list_prim_u_8_strict,
+        swap_xkey: *mut wire_cst_swap_master_key,
         index: u64,
         amount: u64,
         is_testnet: bool,
@@ -4789,8 +4881,7 @@ mod io {
         wire__crate__api__chain_swap__chain_swap_new_swap_impl(
             port_,
             direction,
-            mnemonic,
-            passphrase,
+            swap_xkey,
             index,
             amount,
             is_testnet,
@@ -4850,12 +4941,12 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_boltz_wire__crate__api__types__decoded_invoice_from_string(
+    pub extern "C" fn frbgen_boltz_wire__crate__api__invoice__decoded_invoice_from_string(
         port_: i64,
         s: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
     ) {
-        wire__crate__api__types__decoded_invoice_from_string_impl(port_, s, boltz_url)
+        wire__crate__api__invoice__decoded_invoice_from_string_impl(port_, s, boltz_url)
     }
 
     #[unsafe(no_mangle)]
@@ -4888,29 +4979,6 @@ mod io {
         that: *mut wire_cst_fees,
     ) {
         wire__crate__api__fees__fees_submarine_impl(port_, that)
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_boltz_wire__crate__api__types__key_pair_generate(
-        port_: i64,
-        mnemonic: *mut wire_cst_list_prim_u_8_strict,
-        passphrase: *mut wire_cst_list_prim_u_8_strict,
-        network: i32,
-        index: u64,
-        swap_type: i32,
-    ) {
-        wire__crate__api__types__key_pair_generate_impl(
-            port_, mnemonic, passphrase, network, index, swap_type,
-        )
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_boltz_wire__crate__api__types__key_pair_new(
-        port_: i64,
-        secret_key: *mut wire_cst_list_prim_u_8_strict,
-        public_key: *mut wire_cst_list_prim_u_8_strict,
-    ) {
-        wire__crate__api__types__key_pair_new_impl(port_, secret_key, public_key)
     }
 
     #[unsafe(no_mangle)]
@@ -5068,8 +5136,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
         port_: i64,
-        mnemonic: *mut wire_cst_list_prim_u_8_strict,
-        passphrase: *mut wire_cst_list_prim_u_8_strict,
+        swap_xkey: *mut wire_cst_swap_master_key,
         index: u64,
         out_amount: u64,
         out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -5081,8 +5148,7 @@ mod io {
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             port_,
-            mnemonic,
-            passphrase,
+            swap_xkey,
             index,
             out_amount,
             out_address,
@@ -5097,8 +5163,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
         port_: i64,
-        mnemonic: *mut wire_cst_list_prim_u_8_strict,
-        passphrase: *mut wire_cst_list_prim_u_8_strict,
+        swap_xkey: *mut wire_cst_swap_master_key,
         index: u64,
         invoice: *mut wire_cst_list_prim_u_8_strict,
         network: i32,
@@ -5108,8 +5173,7 @@ mod io {
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             port_,
-            mnemonic,
-            passphrase,
+            swap_xkey,
             index,
             invoice,
             network,
@@ -5204,18 +5268,36 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_boltz_wire__crate__api__types__pre_image_generate(port_: i64) {
-        wire__crate__api__types__pre_image_generate_impl(port_)
+    pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__pre_image_from_invoice_str(
+        port_: i64,
+        invoice: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__secrets__pre_image_from_invoice_str_impl(port_, invoice)
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_boltz_wire__crate__api__types__pre_image_new(
+    pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__pre_image_new(
         port_: i64,
         value: *mut wire_cst_list_prim_u_8_strict,
         sha256: *mut wire_cst_list_prim_u_8_strict,
         hash160: *mut wire_cst_list_prim_u_8_strict,
     ) {
-        wire__crate__api__types__pre_image_new_impl(port_, value, sha256, hash160)
+        wire__crate__api__secrets__pre_image_new_impl(port_, value, sha256, hash160)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__swap_master_key_new(
+        port_: i64,
+        wallet_mnemonic: *mut wire_cst_list_prim_u_8_strict,
+        wallet_passphrase: *mut wire_cst_list_prim_u_8_strict,
+        network: i32,
+    ) {
+        wire__crate__api__secrets__swap_master_key_new_impl(
+            port_,
+            wallet_mnemonic,
+            wallet_passphrase,
+            network,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -5297,6 +5379,14 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_swap_master_key(
+    ) -> *mut wire_cst_swap_master_key {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_swap_master_key::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_tx_fee() -> *mut wire_cst_tx_fee {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_tx_fee::new_with_null_ptr())
     }
@@ -5349,10 +5439,10 @@ mod io {
     #[repr(C)]
     #[derive(Clone, Copy)]
     pub struct wire_cst_chain_fees_and_limits {
-        btc_limits: wire_cst_swap_limits,
-        lbtc_limits: wire_cst_swap_limits,
-        btc_fees: wire_cst_chain_swap_fees,
-        lbtc_fees: wire_cst_chain_swap_fees,
+        btc_to_lbtc_limits: wire_cst_swap_limits,
+        lbtc_to_btc_limits: wire_cst_swap_limits,
+        btc_to_lbtc_fees: wire_cst_chain_swap_fees,
+        lbtc_to_btc_fees: wire_cst_chain_swap_fees,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
@@ -5503,6 +5593,14 @@ mod io {
     pub struct wire_cst_swap_limits {
         minimal: u64,
         maximal: u64,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_swap_master_key {
+        xprv: *mut wire_cst_list_prim_u_8_strict,
+        xpub: *mut wire_cst_list_prim_u_8_strict,
+        network: i32,
+        mnemonic: *mut wire_cst_list_prim_u_8_strict,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

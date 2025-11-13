@@ -5,7 +5,9 @@
 
 import '../frb_generated.dart';
 import 'error.dart';
+import 'fees.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'secrets.dart';
 import 'types.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`
@@ -135,11 +137,10 @@ class LbtcLnSwap {
           referralId: referralId);
 
   /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.
-  /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+  /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<LbtcLnSwap> newReverse(
-          {required String mnemonic,
-          String? passphrase,
+          {required SwapMasterKey swapXkey,
           required BigInt index,
           required BigInt outAmount,
           String? outAddress,
@@ -149,8 +150,7 @@ class LbtcLnSwap {
           String? description,
           String? referralId}) =>
       BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewReverse(
-          mnemonic: mnemonic,
-          passphrase: passphrase,
+          swapXkey: swapXkey,
           index: index,
           outAmount: outAmount,
           outAddress: outAddress,
@@ -161,11 +161,10 @@ class LbtcLnSwap {
           referralId: referralId);
 
   /// Used to create the class when starting a submarine swap to pay a lightning invoice with Liquid.
-  /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+  /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<LbtcLnSwap> newSubmarine(
-          {required String mnemonic,
-          String? passphrase,
+          {required SwapMasterKey swapXkey,
           required BigInt index,
           required String invoice,
           required Chain network,
@@ -173,8 +172,7 @@ class LbtcLnSwap {
           required String boltzUrl,
           String? referralId}) =>
       BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewSubmarine(
-          mnemonic: mnemonic,
-          passphrase: passphrase,
+          swapXkey: swapXkey,
           index: index,
           invoice: invoice,
           network: network,

@@ -2,14 +2,16 @@ use crate::util::{ensure_http_prefix, get_electrum_configs, strip_protocol_prefi
 
 use super::{
     error::BoltzError,
-    types::{Chain, ElectrumSettings, KeyPair, LBtcSwapScriptStr, PreImage, SwapType, TxFee},
+    fees::TxFee,
+    secrets::{KeyPair, SwapMasterKey},
+    types::{Chain, ElectrumSettings, LBtcSwapScriptStr, PreImage, SwapType},
 };
+use boltz_client::util::secrets::{Preimage, SwapXKey};
 use boltz_client::{
     boltz::Cooperative,
     elements::{encode::Decodable, hashes::hex::DisplayHex, Transaction},
     network::{electrum::ElectrumLiquidClient, Chain as AllChains, LiquidClient},
     swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScriptCommon},
-    util::secrets::Preimage,
     Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
 use serde_json::Value;
@@ -83,11 +85,10 @@ impl LbtcLnSwap {
         }
     }
     /// Used to create the class when starting a submarine swap to pay a lightning invoice with Liquid.
-    /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+    /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub async fn new_submarine(
-        mnemonic: String,
-        passphrase: Option<String>,
+        swap_xkey: SwapMasterKey,
         index: u64,
         invoice: String,
         network: Chain,
@@ -97,14 +98,14 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
-        let refund_keypair =
-            match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
-                Ok(keypair) => keypair,
-                Err(err) => return Err(err.into()),
-            };
-        let swap_type = SwapType::Submarine;
+        let swap_xkey_inner: SwapXKey = swap_xkey.try_into()?;
+        let child_key = swap_xkey_inner.derive_swapkey(index)?;
+        let refund_keypair = KeyPair {
+            secret_key: child_key.keypair.display_secret().to_string(),
+            public_key: child_key.keypair.public_key().to_string(),
+        };
         let refund_kps: Keypair = refund_keypair.clone().try_into()?;
-        let preimage = match Preimage::from_invoice_str(&invoice) {
+        let preimage: PreImage = match PreImage::from_invoice_str(&invoice) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
@@ -187,11 +188,10 @@ impl LbtcLnSwap {
     }
 
     /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.
-    /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+    /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub async fn new_reverse(
-        mnemonic: String,
-        passphrase: Option<String>,
+        swap_xkey: SwapMasterKey,
         index: u64,
         out_amount: u64,
         out_address: Option<String>,
@@ -203,12 +203,13 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
-        let claim_keypair =
-            match KeyPair::generate(mnemonic, passphrase, network.into(), index, swap_type) {
-                Ok(keypair) => keypair,
-                Err(err) => return Err(err.into()),
-            };
-        let preimage = Preimage::new();
+        let swap_xkey_inner: SwapXKey = swap_xkey.try_into()?;
+        let child_key = swap_xkey_inner.derive_swapkey(index)?;
+        let claim_keypair = KeyPair {
+            secret_key: child_key.keypair.display_secret().to_string(),
+            public_key: child_key.keypair.public_key().to_string(),
+        };
+        let preimage: Preimage = Preimage::from_swap_key(&child_key);
         let ckp: Keypair = claim_keypair.clone().try_into()?;
         let claim_public_key = PublicKey {
             compressed: true,
@@ -260,7 +261,8 @@ impl LbtcLnSwap {
         };
         let response = boltz_client.post_reverse_req(create_reverse_req).await?;
         let invoice = response.invoice.clone().unwrap_or_default();
-        response.validate(&preimage, &claim_public_key, network.into())?;
+        let preimage_boltz: Preimage = preimage.clone().into();
+        response.validate(&preimage_boltz, &claim_public_key, network.into())?;
         let swap_script = LBtcSwapScript::reverse_from_swap_resp(&response, claim_public_key)?;
         let script_address = swap_script.to_address(liquid_chain)?.to_string();
         Ok(LbtcLnSwap::new(
@@ -326,11 +328,11 @@ impl LbtcLnSwap {
             Err(e) => return Err(e.into()),
         };
         let ckp: Keypair = self.keys.clone().try_into()?;
-        let preimage = self.preimage.clone();
+        let preimage: Preimage = self.preimage.clone().into();
         let signed = match tx
             .sign_claim(
                 &ckp,
-                &preimage.try_into()?,
+                &preimage,
                 miner_fee.into(),
                 if try_cooperate {
                     Some(Cooperative {

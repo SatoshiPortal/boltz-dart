@@ -5,7 +5,9 @@
 
 import '../frb_generated.dart';
 import 'error.dart';
+import 'fees.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'secrets.dart';
 import 'types.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`
@@ -153,12 +155,11 @@ class ChainSwap {
           blindingKey: blindingKey);
 
   /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
-  /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+  /// Note: The swap_xkey should be a SwapMasterKey. The refund key uses the given index, and the claim key uses index + 1.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<ChainSwap> newSwap(
           {required ChainSwapDirection direction,
-          required String mnemonic,
-          String? passphrase,
+          required SwapMasterKey swapXkey,
           required BigInt index,
           required BigInt amount,
           required bool isTestnet,
@@ -168,8 +169,7 @@ class ChainSwap {
           String? referralId}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapNewSwap(
           direction: direction,
-          mnemonic: mnemonic,
-          passphrase: passphrase,
+          swapXkey: swapXkey,
           index: index,
           amount: amount,
           isTestnet: isTestnet,
