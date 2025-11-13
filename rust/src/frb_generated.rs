@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.9.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1646813877;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1386959524;
 
 // Section: executor
 
@@ -389,7 +389,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
 }
 fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -406,7 +406,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_swap_xkey = swap_xkey.cst_decode();
+            let api_swap_master_key = swap_master_key.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
             let api_out_address = out_address.cst_decode();
@@ -419,7 +419,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::btc_ln::BtcLnSwap::new_reverse(
-                            api_swap_xkey,
+                            api_swap_master_key,
                             api_index,
                             api_out_amount,
                             api_out_address,
@@ -440,7 +440,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
 }
 fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -455,7 +455,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_swap_xkey = swap_xkey.cst_decode();
+            let api_swap_master_key = swap_master_key.cst_decode();
             let api_index = index.cst_decode();
             let api_invoice = invoice.cst_decode();
             let api_network = network.cst_decode();
@@ -466,7 +466,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::btc_ln::BtcLnSwap::new_submarine(
-                            api_swap_xkey,
+                            api_swap_master_key,
                             api_index,
                             api_invoice,
                             api_network,
@@ -916,7 +916,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_impl(
 fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
-    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     amount: impl CstDecode<u64>,
     is_testnet: impl CstDecode<bool>,
@@ -933,7 +933,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
         },
         move || {
             let api_direction = direction.cst_decode();
-            let api_swap_xkey = swap_xkey.cst_decode();
+            let api_swap_master_key = swap_master_key.cst_decode();
             let api_index = index.cst_decode();
             let api_amount = amount.cst_decode();
             let api_is_testnet = is_testnet.cst_decode();
@@ -946,7 +946,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
                     (move || async move {
                         let output_ok = crate::api::chain_swap::ChainSwap::new_swap(
                             api_direction,
-                            api_swap_xkey,
+                            api_swap_master_key,
                             api_index,
                             api_amount,
                             api_is_testnet,
@@ -1536,7 +1536,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
 }
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     out_amount: impl CstDecode<u64>,
     out_address: impl CstDecode<Option<String>>,
@@ -1553,7 +1553,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_swap_xkey = swap_xkey.cst_decode();
+            let api_swap_master_key = swap_master_key.cst_decode();
             let api_index = index.cst_decode();
             let api_out_amount = out_amount.cst_decode();
             let api_out_address = out_address.cst_decode();
@@ -1566,7 +1566,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_reverse(
-                            api_swap_xkey,
+                            api_swap_master_key,
                             api_index,
                             api_out_amount,
                             api_out_address,
@@ -1587,7 +1587,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
 }
 fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    swap_xkey: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     invoice: impl CstDecode<String>,
     network: impl CstDecode<crate::api::types::Chain>,
@@ -1602,7 +1602,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let api_swap_xkey = swap_xkey.cst_decode();
+            let api_swap_master_key = swap_master_key.cst_decode();
             let api_index = index.cst_decode();
             let api_invoice = invoice.cst_decode();
             let api_network = network.cst_decode();
@@ -1613,7 +1613,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::lbtc_ln::LbtcLnSwap::new_submarine(
-                            api_swap_xkey,
+                            api_swap_master_key,
                             api_index,
                             api_invoice,
                             api_network,
@@ -1895,7 +1895,7 @@ fn wire__crate__api__secrets__pre_image_new_impl(
         },
     )
 }
-fn wire__crate__api__secrets__swap_master_key_new_impl(
+fn wire__crate__api__secrets__swap_master_key_create_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     wallet_mnemonic: impl CstDecode<String>,
     wallet_passphrase: impl CstDecode<Option<String>>,
@@ -1903,7 +1903,7 @@ fn wire__crate__api__secrets__swap_master_key_new_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "swap_master_key_new",
+            debug_name: "swap_master_key_create",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -1913,7 +1913,7 @@ fn wire__crate__api__secrets__swap_master_key_new_impl(
             let api_network = network.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
-                    let output_ok = crate::api::secrets::SwapMasterKey::new(
+                    let output_ok = crate::api::secrets::SwapMasterKey::create(
                         api_wallet_mnemonic,
                         api_wallet_passphrase,
                         api_network,
@@ -2538,11 +2538,13 @@ impl SseDecode for crate::api::secrets::SwapMasterKey {
         let mut var_xpub = <String>::sse_decode(deserializer);
         let mut var_network = <crate::api::types::Network>::sse_decode(deserializer);
         let mut var_mnemonic = <String>::sse_decode(deserializer);
+        let mut var_fingerprint = <String>::sse_decode(deserializer);
         return crate::api::secrets::SwapMasterKey {
             xprv: var_xprv,
             xpub: var_xpub,
             network: var_network,
             mnemonic: var_mnemonic,
+            fingerprint: var_fingerprint,
         };
     }
 }
@@ -3178,6 +3180,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::secrets::SwapMasterKey {
             self.xpub.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
             self.mnemonic.into_into_dart().into_dart(),
+            self.fingerprint.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -3621,6 +3624,7 @@ impl SseEncode for crate::api::secrets::SwapMasterKey {
         <String>::sse_encode(self.xpub, serializer);
         <crate::api::types::Network>::sse_encode(self.network, serializer);
         <String>::sse_encode(self.mnemonic, serializer);
+        <String>::sse_encode(self.fingerprint, serializer);
     }
 }
 
@@ -4100,6 +4104,7 @@ mod io {
                 xpub: self.xpub.cst_decode(),
                 network: self.network.cst_decode(),
                 mnemonic: self.mnemonic.cst_decode(),
+                fingerprint: self.fingerprint.cst_decode(),
             }
         }
     }
@@ -4452,6 +4457,7 @@ mod io {
                 xpub: core::ptr::null_mut(),
                 network: Default::default(),
                 mnemonic: core::ptr::null_mut(),
+                fingerprint: core::ptr::null_mut(),
             }
         }
     }
@@ -4619,7 +4625,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
         port_: i64,
-        swap_xkey: *mut wire_cst_swap_master_key,
+        swap_master_key: *mut wire_cst_swap_master_key,
         index: u64,
         out_amount: u64,
         out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -4631,7 +4637,7 @@ mod io {
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             port_,
-            swap_xkey,
+            swap_master_key,
             index,
             out_amount,
             out_address,
@@ -4646,7 +4652,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
         port_: i64,
-        swap_xkey: *mut wire_cst_swap_master_key,
+        swap_master_key: *mut wire_cst_swap_master_key,
         index: u64,
         invoice: *mut wire_cst_list_prim_u_8_strict,
         network: i32,
@@ -4656,7 +4662,7 @@ mod io {
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             port_,
-            swap_xkey,
+            swap_master_key,
             index,
             invoice,
             network,
@@ -4869,7 +4875,7 @@ mod io {
     pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap(
         port_: i64,
         direction: i32,
-        swap_xkey: *mut wire_cst_swap_master_key,
+        swap_master_key: *mut wire_cst_swap_master_key,
         index: u64,
         amount: u64,
         is_testnet: bool,
@@ -4881,7 +4887,7 @@ mod io {
         wire__crate__api__chain_swap__chain_swap_new_swap_impl(
             port_,
             direction,
-            swap_xkey,
+            swap_master_key,
             index,
             amount,
             is_testnet,
@@ -5136,7 +5142,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
         port_: i64,
-        swap_xkey: *mut wire_cst_swap_master_key,
+        swap_master_key: *mut wire_cst_swap_master_key,
         index: u64,
         out_amount: u64,
         out_address: *mut wire_cst_list_prim_u_8_strict,
@@ -5148,7 +5154,7 @@ mod io {
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             port_,
-            swap_xkey,
+            swap_master_key,
             index,
             out_amount,
             out_address,
@@ -5163,7 +5169,7 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
         port_: i64,
-        swap_xkey: *mut wire_cst_swap_master_key,
+        swap_master_key: *mut wire_cst_swap_master_key,
         index: u64,
         invoice: *mut wire_cst_list_prim_u_8_strict,
         network: i32,
@@ -5173,7 +5179,7 @@ mod io {
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             port_,
-            swap_xkey,
+            swap_master_key,
             index,
             invoice,
             network,
@@ -5286,13 +5292,13 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__swap_master_key_new(
+    pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(
         port_: i64,
         wallet_mnemonic: *mut wire_cst_list_prim_u_8_strict,
         wallet_passphrase: *mut wire_cst_list_prim_u_8_strict,
         network: i32,
     ) {
-        wire__crate__api__secrets__swap_master_key_new_impl(
+        wire__crate__api__secrets__swap_master_key_create_impl(
             port_,
             wallet_mnemonic,
             wallet_passphrase,
@@ -5601,6 +5607,7 @@ mod io {
         xpub: *mut wire_cst_list_prim_u_8_strict,
         network: i32,
         mnemonic: *mut wire_cst_list_prim_u_8_strict,
+        fingerprint: *mut wire_cst_list_prim_u_8_strict,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

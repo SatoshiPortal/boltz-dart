@@ -6,7 +6,7 @@ use super::{
     secrets::{KeyPair, SwapMasterKey},
     types::{Chain, ElectrumSettings, LBtcSwapScriptStr, PreImage, SwapType},
 };
-use boltz_client::util::secrets::{Preimage, SwapXKey};
+use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
 use boltz_client::{
     boltz::Cooperative,
     elements::{encode::Decodable, hashes::hex::DisplayHex, Transaction},
@@ -85,10 +85,10 @@ impl LbtcLnSwap {
         }
     }
     /// Used to create the class when starting a submarine swap to pay a lightning invoice with Liquid.
-    /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
+    /// Note: The swap_master_key should be a SwapMasterKey for the swap network.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub async fn new_submarine(
-        swap_xkey: SwapMasterKey,
+        swap_master_key: SwapMasterKey,
         index: u64,
         invoice: String,
         network: Chain,
@@ -98,13 +98,9 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
-        let swap_xkey_inner: SwapXKey = swap_xkey.try_into()?;
-        let child_key = swap_xkey_inner.derive_swapkey(index)?;
-        let refund_keypair = KeyPair {
-            secret_key: child_key.keypair.display_secret().to_string(),
-            public_key: child_key.keypair.public_key().to_string(),
-        };
-        let refund_kps: Keypair = refund_keypair.clone().try_into()?;
+        let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
+        let refund_kps = swap_xkey_inner.derive_liquid_swapkey(index)?;
+        let refund_keypair = KeyPair::from(refund_kps);
         let preimage: PreImage = match PreImage::from_invoice_str(&invoice) {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -188,10 +184,10 @@ impl LbtcLnSwap {
     }
 
     /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.
-    /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
+    /// Note: The swap_master_key should be a SwapMasterKey for the swap network.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub async fn new_reverse(
-        swap_xkey: SwapMasterKey,
+        swap_master_key: SwapMasterKey,
         index: u64,
         out_amount: u64,
         out_address: Option<String>,
@@ -203,17 +199,14 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
-        let swap_xkey_inner: SwapXKey = swap_xkey.try_into()?;
-        let child_key = swap_xkey_inner.derive_swapkey(index)?;
-        let claim_keypair = KeyPair {
-            secret_key: child_key.keypair.display_secret().to_string(),
-            public_key: child_key.keypair.public_key().to_string(),
-        };
-        let preimage: Preimage = Preimage::from_swap_key(&child_key);
+        let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
+        let claim_kps = swap_xkey_inner.derive_liquid_swapkey(index)?;
+        let claim_keypair = KeyPair::from(claim_kps);
+        let preimage: Preimage = Preimage::from_swap_key(&claim_kps);
         let ckp: Keypair = claim_keypair.clone().try_into()?;
         let claim_public_key = PublicKey {
             compressed: true,
-            inner: ckp.public_key(),
+            inner: claim_kps.public_key(),
         };
 
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);

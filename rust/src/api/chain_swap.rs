@@ -9,7 +9,7 @@ use super::{
         SwapTxKind,
     },
 };
-use boltz_client::util::secrets::{Preimage, SwapXKey};
+use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
 
 use boltz_client::{
     bitcoin::{
@@ -106,11 +106,11 @@ impl ChainSwap {
         }
     }
     /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
-    /// Note: The swap_xkey should be a SwapMasterKey. The refund key uses the given index, and the claim key uses index + 1.
+    /// Note: The swap_master_key should be a SwapMasterKey. The refund key uses the given index, and the claim key uses index + 1.
     /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
     pub async fn new_swap(
         direction: ChainSwapDirection,
-        swap_xkey: SwapMasterKey,
+        swap_master_key: SwapMasterKey,
         index: u64,
         amount: u64,
         is_testnet: bool,
@@ -145,29 +145,33 @@ impl ChainSwap {
             }
         };
 
-        let swap_xkey_inner: SwapXKey = swap_xkey.try_into()?;
-        let refund_child_key = swap_xkey_inner.derive_swapkey(index)?;
-        let refund_keypair = KeyPair {
-            secret_key: refund_child_key.keypair.display_secret().to_string(),
-            public_key: refund_child_key.keypair.public_key().to_string(),
+        let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
+
+        let (refund_kps, claim_kps) = match direction {
+            ChainSwapDirection::BtcToLbtc => {
+                let refund_kps = swap_xkey_inner.derive_swapkey(index)?;
+                let claim_kps = swap_xkey_inner.derive_liquid_swapkey(index + 1)?;
+                (refund_kps, claim_kps)
+            }
+            ChainSwapDirection::LbtcToBtc => {
+                let refund_kps = swap_xkey_inner.derive_liquid_swapkey(index)?;
+                let claim_kps = swap_xkey_inner.derive_swapkey(index + 1)?;
+                (refund_kps, claim_kps)
+            }
         };
-        let refund_kps: Keypair = refund_keypair.clone().try_into()?;
+
+        let refund_keypair = KeyPair::from(refund_kps);
         let refund_public_key = PublicKey {
             inner: refund_kps.public_key(),
             compressed: true,
         };
-        let claim_child_key = swap_xkey_inner.derive_swapkey(index + 1)?;
-        let claim_keypair = KeyPair {
-            secret_key: claim_child_key.keypair.display_secret().to_string(),
-            public_key: claim_child_key.keypair.public_key().to_string(),
-        };
-        let claim_kps: Keypair = claim_keypair.clone().try_into()?;
 
+        let claim_keypair = KeyPair::from(claim_kps);
         let claim_public_key = PublicKey {
             compressed: true,
             inner: claim_kps.public_key(),
         };
-        let preimage: Preimage = Preimage::from_swap_key(&claim_child_key);
+        let preimage: Preimage = Preimage::from_swap_key(&claim_kps);
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
         match direction {
             ChainSwapDirection::BtcToLbtc => {

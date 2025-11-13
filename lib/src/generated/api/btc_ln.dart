@@ -132,10 +132,10 @@ class BtcLnSwap {
           referralId: referralId);
 
   /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
-  /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
+  /// Note: The swap_master_key should be a SwapMasterKey for the swap network.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<BtcLnSwap> newReverse(
-          {required SwapMasterKey swapXkey,
+          {required SwapMasterKey swapMasterKey,
           required BigInt index,
           required BigInt outAmount,
           String? outAddress,
@@ -145,7 +145,7 @@ class BtcLnSwap {
           String? description,
           String? referralId}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewReverse(
-          swapXkey: swapXkey,
+          swapMasterKey: swapMasterKey,
           index: index,
           outAmount: outAmount,
           outAddress: outAddress,
@@ -156,10 +156,10 @@ class BtcLnSwap {
           referralId: referralId);
 
   /// Used to create the class when starting a submarine swap to pay a lightning invoice with Bitcoin.
-  /// Note: The swap_xkey should be a SwapMasterKey for the swap network.
+  /// Note: The swap_master_key should be a SwapMasterKey for the swap network.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<BtcLnSwap> newSubmarine(
-          {required SwapMasterKey swapXkey,
+          {required SwapMasterKey swapMasterKey,
           required BigInt index,
           required String invoice,
           required Chain network,
@@ -167,7 +167,7 @@ class BtcLnSwap {
           required String boltzUrl,
           String? referralId}) =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewSubmarine(
-          swapXkey: swapXkey,
+          swapMasterKey: swapMasterKey,
           index: index,
           invoice: invoice,
           network: network,

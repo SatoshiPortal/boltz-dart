@@ -155,11 +155,11 @@ class ChainSwap {
           blindingKey: blindingKey);
 
   /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
-  /// Note: The swap_xkey should be a SwapMasterKey. The refund key uses the given index, and the claim key uses index + 1.
+  /// Note: The swap_master_key should be a SwapMasterKey. The refund key uses the given index, and the claim key uses index + 1.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
   static Future<ChainSwap> newSwap(
           {required ChainSwapDirection direction,
-          required SwapMasterKey swapXkey,
+          required SwapMasterKey swapMasterKey,
           required BigInt index,
           required BigInt amount,
           required bool isTestnet,
@@ -169,7 +169,7 @@ class ChainSwap {
           String? referralId}) =>
       BoltzCore.instance.api.crateApiChainSwapChainSwapNewSwap(
           direction: direction,
-          swapXkey: swapXkey,
+          swapMasterKey: swapMasterKey,
           index: index,
           amount: amount,
           isTestnet: isTestnet,

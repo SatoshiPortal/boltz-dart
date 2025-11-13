@@ -75,7 +75,7 @@ class BoltzCore
   String get codegenVersion => '2.9.0';
 
   @override
-  int get rustContentHash => -1646813877;
+  int get rustContentHash => -1386959524;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -137,7 +137,7 @@ abstract class BoltzCoreApi extends BaseApi {
       String? referralId});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewReverse(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -148,7 +148,7 @@ abstract class BoltzCoreApi extends BaseApi {
       String? referralId});
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -235,7 +235,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<ChainSwap> crateApiChainSwapChainSwapNewSwap(
       {required ChainSwapDirection direction,
-      required SwapMasterKey swapXkey,
+      required SwapMasterKey swapMasterKey,
       required BigInt index,
       required BigInt amount,
       required bool isTestnet,
@@ -332,7 +332,7 @@ abstract class BoltzCoreApi extends BaseApi {
       String? referralId});
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewReverse(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -343,7 +343,7 @@ abstract class BoltzCoreApi extends BaseApi {
       String? referralId});
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -383,7 +383,7 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<PreImage> crateApiSecretsPreImageNew(
       {required String value, required String sha256, required String hash160});
 
-  Future<SwapMasterKey> crateApiSecretsSwapMasterKeyNew(
+  Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreate(
       {required String walletMnemonic,
       String? walletPassphrase,
       required Network network});
@@ -762,7 +762,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @override
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewReverse(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -773,7 +773,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       String? referralId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_swap_master_key(swapXkey);
+        var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
         var arg1 = cst_encode_u_64(index);
         var arg2 = cst_encode_u_64(outAmount);
         var arg3 = cst_encode_opt_String(outAddress);
@@ -791,7 +791,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       ),
       constMeta: kCrateApiBtcLnBtcLnSwapNewReverseConstMeta,
       argValues: [
-        swapXkey,
+        swapMasterKey,
         index,
         outAmount,
         outAddress,
@@ -809,7 +809,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "btc_ln_swap_new_reverse",
         argNames: [
-          "swapXkey",
+          "swapMasterKey",
           "index",
           "outAmount",
           "outAddress",
@@ -823,7 +823,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @override
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -832,7 +832,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       String? referralId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_swap_master_key(swapXkey);
+        var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
         var arg1 = cst_encode_u_64(index);
         var arg2 = cst_encode_String(invoice);
         var arg3 = cst_encode_chain(network);
@@ -848,7 +848,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       ),
       constMeta: kCrateApiBtcLnBtcLnSwapNewSubmarineConstMeta,
       argValues: [
-        swapXkey,
+        swapMasterKey,
         index,
         invoice,
         network,
@@ -864,7 +864,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "btc_ln_swap_new_submarine",
         argNames: [
-          "swapXkey",
+          "swapMasterKey",
           "index",
           "invoice",
           "network",
@@ -1367,7 +1367,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<ChainSwap> crateApiChainSwapChainSwapNewSwap(
       {required ChainSwapDirection direction,
-      required SwapMasterKey swapXkey,
+      required SwapMasterKey swapMasterKey,
       required BigInt index,
       required BigInt amount,
       required bool isTestnet,
@@ -1378,7 +1378,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 = cst_encode_chain_swap_direction(direction);
-        var arg1 = cst_encode_box_autoadd_swap_master_key(swapXkey);
+        var arg1 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
         var arg2 = cst_encode_u_64(index);
         var arg3 = cst_encode_u_64(amount);
         var arg4 = cst_encode_bool(isTestnet);
@@ -1396,7 +1396,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       constMeta: kCrateApiChainSwapChainSwapNewSwapConstMeta,
       argValues: [
         direction,
-        swapXkey,
+        swapMasterKey,
         index,
         amount,
         isTestnet,
@@ -1414,7 +1414,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         debugName: "chain_swap_new_swap",
         argNames: [
           "direction",
-          "swapXkey",
+          "swapMasterKey",
           "index",
           "amount",
           "isTestnet",
@@ -2046,7 +2046,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewReverse(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required BigInt outAmount,
       String? outAddress,
@@ -2057,7 +2057,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       String? referralId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_swap_master_key(swapXkey);
+        var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
         var arg1 = cst_encode_u_64(index);
         var arg2 = cst_encode_u_64(outAmount);
         var arg3 = cst_encode_opt_String(outAddress);
@@ -2075,7 +2075,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       ),
       constMeta: kCrateApiLbtcLnLbtcLnSwapNewReverseConstMeta,
       argValues: [
-        swapXkey,
+        swapMasterKey,
         index,
         outAmount,
         outAddress,
@@ -2093,7 +2093,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_new_reverse",
         argNames: [
-          "swapXkey",
+          "swapMasterKey",
           "index",
           "outAmount",
           "outAddress",
@@ -2107,7 +2107,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @override
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine(
-      {required SwapMasterKey swapXkey,
+      {required SwapMasterKey swapMasterKey,
       required BigInt index,
       required String invoice,
       required Chain network,
@@ -2116,7 +2116,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       String? referralId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        var arg0 = cst_encode_box_autoadd_swap_master_key(swapXkey);
+        var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
         var arg1 = cst_encode_u_64(index);
         var arg2 = cst_encode_String(invoice);
         var arg3 = cst_encode_chain(network);
@@ -2132,7 +2132,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       ),
       constMeta: kCrateApiLbtcLnLbtcLnSwapNewSubmarineConstMeta,
       argValues: [
-        swapXkey,
+        swapMasterKey,
         index,
         invoice,
         network,
@@ -2148,7 +2148,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "lbtc_ln_swap_new_submarine",
         argNames: [
-          "swapXkey",
+          "swapMasterKey",
           "index",
           "invoice",
           "network",
@@ -2424,7 +2424,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<SwapMasterKey> crateApiSecretsSwapMasterKeyNew(
+  Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreate(
       {required String walletMnemonic,
       String? walletPassphrase,
       required Network network}) {
@@ -2433,22 +2433,22 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         var arg0 = cst_encode_String(walletMnemonic);
         var arg1 = cst_encode_opt_String(walletPassphrase);
         var arg2 = cst_encode_network(network);
-        return wire.wire__crate__api__secrets__swap_master_key_new(
+        return wire.wire__crate__api__secrets__swap_master_key_create(
             port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_swap_master_key,
         decodeErrorData: dco_decode_boltz_error,
       ),
-      constMeta: kCrateApiSecretsSwapMasterKeyNewConstMeta,
+      constMeta: kCrateApiSecretsSwapMasterKeyCreateConstMeta,
       argValues: [walletMnemonic, walletPassphrase, network],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSecretsSwapMasterKeyNewConstMeta =>
+  TaskConstMeta get kCrateApiSecretsSwapMasterKeyCreateConstMeta =>
       const TaskConstMeta(
-        debugName: "swap_master_key_new",
+        debugName: "swap_master_key_create",
         argNames: ["walletMnemonic", "walletPassphrase", "network"],
       );
 
@@ -2918,13 +2918,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   SwapMasterKey dco_decode_swap_master_key(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return SwapMasterKey(
       xprv: dco_decode_String(arr[0]),
       xpub: dco_decode_String(arr[1]),
       network: dco_decode_network(arr[2]),
       mnemonic: dco_decode_String(arr[3]),
+      fingerprint: dco_decode_String(arr[4]),
     );
   }
 
@@ -3497,11 +3498,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_xpub = sse_decode_String(deserializer);
     var var_network = sse_decode_network(deserializer);
     var var_mnemonic = sse_decode_String(deserializer);
+    var var_fingerprint = sse_decode_String(deserializer);
     return SwapMasterKey(
         xprv: var_xprv,
         xpub: var_xpub,
         network: var_network,
-        mnemonic: var_mnemonic);
+        mnemonic: var_mnemonic,
+        fingerprint: var_fingerprint);
   }
 
   @protected
@@ -4039,6 +4042,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.xpub, serializer);
     sse_encode_network(self.network, serializer);
     sse_encode_String(self.mnemonic, serializer);
+    sse_encode_String(self.fingerprint, serializer);
   }
 
   @protected

@@ -91,6 +91,7 @@ typedef struct wire_cst_swap_master_key {
   struct wire_cst_list_prim_u_8_strict *xpub;
   int32_t network;
   struct wire_cst_list_prim_u_8_strict *mnemonic;
+  struct wire_cst_list_prim_u_8_strict *fingerprint;
 } wire_cst_swap_master_key;
 
 typedef struct wire_cst_l_btc_swap_script_str {
@@ -266,7 +267,7 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new(int64_t port_,
                                                             struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse(int64_t port_,
-                                                                    struct wire_cst_swap_master_key *swap_xkey,
+                                                                    struct wire_cst_swap_master_key *swap_master_key,
                                                                     uint64_t index,
                                                                     uint64_t out_amount,
                                                                     struct wire_cst_list_prim_u_8_strict *out_address,
@@ -277,7 +278,7 @@ void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse(int64_t port
                                                                     struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine(int64_t port_,
-                                                                      struct wire_cst_swap_master_key *swap_xkey,
+                                                                      struct wire_cst_swap_master_key *swap_master_key,
                                                                       uint64_t index,
                                                                       struct wire_cst_list_prim_u_8_strict *invoice,
                                                                       int32_t network,
@@ -365,7 +366,7 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new(int64_t port_,
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap(int64_t port_,
                                                                     int32_t direction,
-                                                                    struct wire_cst_swap_master_key *swap_xkey,
+                                                                    struct wire_cst_swap_master_key *swap_master_key,
                                                                     uint64_t index,
                                                                     uint64_t amount,
                                                                     bool is_testnet,
@@ -465,7 +466,7 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new(int64_t port_,
                                                               struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(int64_t port_,
-                                                                      struct wire_cst_swap_master_key *swap_xkey,
+                                                                      struct wire_cst_swap_master_key *swap_master_key,
                                                                       uint64_t index,
                                                                       uint64_t out_amount,
                                                                       struct wire_cst_list_prim_u_8_strict *out_address,
@@ -476,7 +477,7 @@ void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(int64_t po
                                                                       struct wire_cst_list_prim_u_8_strict *referral_id);
 
 void frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(int64_t port_,
-                                                                        struct wire_cst_swap_master_key *swap_xkey,
+                                                                        struct wire_cst_swap_master_key *swap_master_key,
                                                                         uint64_t index,
                                                                         struct wire_cst_list_prim_u_8_strict *invoice,
                                                                         int32_t network,
@@ -524,10 +525,10 @@ void frbgen_boltz_wire__crate__api__secrets__pre_image_new(int64_t port_,
                                                            struct wire_cst_list_prim_u_8_strict *sha256,
                                                            struct wire_cst_list_prim_u_8_strict *hash160);
 
-void frbgen_boltz_wire__crate__api__secrets__swap_master_key_new(int64_t port_,
-                                                                 struct wire_cst_list_prim_u_8_strict *wallet_mnemonic,
-                                                                 struct wire_cst_list_prim_u_8_strict *wallet_passphrase,
-                                                                 int32_t network);
+void frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(int64_t port_,
+                                                                    struct wire_cst_list_prim_u_8_strict *wallet_mnemonic,
+                                                                    struct wire_cst_list_prim_u_8_strict *wallet_passphrase,
+                                                                    int32_t network);
 
 struct wire_cst_boltz_error *frbgen_boltz_cst_new_box_autoadd_boltz_error(void);
 
@@ -629,7 +630,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__lnurl_withdraw);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_from_invoice_str);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_new);
-    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_create);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__l_btc_swap_script_str_new);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);

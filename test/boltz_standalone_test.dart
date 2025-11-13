@@ -380,14 +380,14 @@ void main() {
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
-  final swapXkey = await SwapMasterKey.newInstance(
+  final swapMasterKey = await SwapMasterKey.create(
     walletMnemonic: mnemonic,
     walletPassphrase: null,
     network: Network.testnet,
   );
 
   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
-    swapXkey: swapXkey,
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     invoice: invoice,
     network: network,
@@ -399,14 +399,14 @@ Future<BtcLnSwap> setupSubmarine(String invoice) async {
 }
 
 Future<BtcLnSwap> setupReverse(int outAmount) async {
-  final swapXkey = await SwapMasterKey.newInstance(
+  final swapMasterKey = await SwapMasterKey.create(
     walletMnemonic: mnemonic,
     walletPassphrase: null,
     network: Network.testnet,
   );
 
   final btcLnReverseSwap = await BtcLnSwap.newReverse(
-    swapXkey: swapXkey,
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     outAmount: BigInt.from(outAmount),
     network: network,
@@ -418,14 +418,14 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
 }
 
 Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
-  final swapXkey = await SwapMasterKey.newInstance(
+  final swapMasterKey = await SwapMasterKey.create(
     walletMnemonic: mnemonic,
     walletPassphrase: null,
     network: Network.testnet,
   );
 
   final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
-    swapXkey: swapXkey,
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     invoice: invoice,
     network: lnetwork,
@@ -437,14 +437,14 @@ Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
 }
 
 Future<LbtcLnSwap> setupLReverse(int amount) async {
-  final swapXkey = await SwapMasterKey.newInstance(
+  final swapMasterKey = await SwapMasterKey.create(
     walletMnemonic: mnemonic,
     walletPassphrase: null,
     network: Network.testnet,
   );
 
   final lbtcLnReverseSwap = await LbtcLnSwap.newReverse(
-    swapXkey: swapXkey,
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     outAmount: BigInt.from(amount),
     network: lnetwork,
