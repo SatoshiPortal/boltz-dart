@@ -150,6 +150,21 @@ typedef struct wire_cst_lnurl {
   struct wire_cst_list_prim_u_8_strict *value;
 } wire_cst_lnurl;
 
+typedef struct wire_cst_list_btc_ln_swap {
+  struct wire_cst_btc_ln_swap *ptr;
+  int32_t len;
+} wire_cst_list_btc_ln_swap;
+
+typedef struct wire_cst_list_chain_swap {
+  struct wire_cst_chain_swap *ptr;
+  int32_t len;
+} wire_cst_list_chain_swap;
+
+typedef struct wire_cst_list_lbtc_ln_swap {
+  struct wire_cst_lbtc_ln_swap *ptr;
+  int32_t len;
+} wire_cst_list_lbtc_ln_swap;
+
 typedef struct wire_cst_swap_limits {
   uint64_t minimal;
   uint64_t maximal;
@@ -525,6 +540,22 @@ void frbgen_boltz_wire__crate__api__secrets__pre_image_new(int64_t port_,
                                                            struct wire_cst_list_prim_u_8_strict *sha256,
                                                            struct wire_cst_list_prim_u_8_strict *hash160);
 
+void frbgen_boltz_wire__crate__api__restore__restore_chain_swaps(int64_t port_,
+                                                                 struct wire_cst_swap_master_key *swap_master_key,
+                                                                 struct wire_cst_list_prim_u_8_strict *btc_electrum_url,
+                                                                 struct wire_cst_list_prim_u_8_strict *lbtc_electrum_url,
+                                                                 struct wire_cst_list_prim_u_8_strict *boltz_url);
+
+void frbgen_boltz_wire__crate__api__restore__restore_ln_btc_swaps(int64_t port_,
+                                                                  struct wire_cst_swap_master_key *swap_master_key,
+                                                                  struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                                  struct wire_cst_list_prim_u_8_strict *boltz_url);
+
+void frbgen_boltz_wire__crate__api__restore__restore_ln_lbtc_swaps(int64_t port_,
+                                                                   struct wire_cst_swap_master_key *swap_master_key,
+                                                                   struct wire_cst_list_prim_u_8_strict *electrum_url,
+                                                                   struct wire_cst_list_prim_u_8_strict *boltz_url);
+
 void frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(int64_t port_,
                                                                     struct wire_cst_list_prim_u_8_strict *wallet_mnemonic,
                                                                     struct wire_cst_list_prim_u_8_strict *wallet_passphrase,
@@ -558,6 +589,12 @@ struct wire_cst_swap_master_key *frbgen_boltz_cst_new_box_autoadd_swap_master_ke
 
 struct wire_cst_tx_fee *frbgen_boltz_cst_new_box_autoadd_tx_fee(void);
 
+struct wire_cst_list_btc_ln_swap *frbgen_boltz_cst_new_list_btc_ln_swap(int32_t len);
+
+struct wire_cst_list_chain_swap *frbgen_boltz_cst_new_list_chain_swap(int32_t len);
+
+struct wire_cst_list_lbtc_ln_swap *frbgen_boltz_cst_new_list_lbtc_ln_swap(int32_t len);
+
 struct wire_cst_list_prim_u_8_strict *frbgen_boltz_cst_new_list_prim_u_8_strict(int32_t len);
 static int64_t dummy_method_to_enforce_bundling(void) {
     int64_t dummy_var = 0;
@@ -575,6 +612,9 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_side);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_swap_master_key);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_tx_fee);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_btc_ln_swap);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_chain_swap);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_lbtc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_prim_u_8_strict);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_local);
@@ -628,6 +668,9 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__lnurl_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__lnurl_validate);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__lnurl__lnurl_withdraw);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_chain_swaps);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_ln_btc_swaps);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_ln_lbtc_swaps);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_from_invoice_str);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_create);

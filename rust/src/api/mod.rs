@@ -9,5 +9,6 @@ pub mod fees;
 pub mod invoice;
 pub mod lbtc_ln;
 pub mod lnurl;
+pub mod restore;
 pub mod secrets;
 pub mod types;

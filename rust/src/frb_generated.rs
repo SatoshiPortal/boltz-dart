@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.9.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1386959524;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 66879098;
 
 // Section: executor
 
@@ -1895,6 +1895,108 @@ fn wire__crate__api__secrets__pre_image_new_impl(
         },
     )
 }
+fn wire__crate__api__restore__restore_chain_swaps_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    btc_electrum_url: impl CstDecode<String>,
+    lbtc_electrum_url: impl CstDecode<String>,
+    boltz_url: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "restore_chain_swaps",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap_master_key = swap_master_key.cst_decode();
+            let api_btc_electrum_url = btc_electrum_url.cst_decode();
+            let api_lbtc_electrum_url = lbtc_electrum_url.cst_decode();
+            let api_boltz_url = boltz_url.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::restore::restore_chain_swaps(
+                            api_swap_master_key,
+                            api_btc_electrum_url,
+                            api_lbtc_electrum_url,
+                            api_boltz_url,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__restore__restore_ln_btc_swaps_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    electrum_url: impl CstDecode<String>,
+    boltz_url: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "restore_ln_btc_swaps",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap_master_key = swap_master_key.cst_decode();
+            let api_electrum_url = electrum_url.cst_decode();
+            let api_boltz_url = boltz_url.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::restore::restore_ln_btc_swaps(
+                            api_swap_master_key,
+                            api_electrum_url,
+                            api_boltz_url,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__restore__restore_ln_lbtc_swaps_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    electrum_url: impl CstDecode<String>,
+    boltz_url: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "restore_ln_lbtc_swaps",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap_master_key = swap_master_key.cst_decode();
+            let api_electrum_url = electrum_url.cst_decode();
+            let api_boltz_url = boltz_url.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::restore::restore_ln_lbtc_swaps(
+                            api_swap_master_key,
+                            api_electrum_url,
+                            api_boltz_url,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__secrets__swap_master_key_create_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     wallet_mnemonic: impl CstDecode<String>,
@@ -2354,6 +2456,44 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnSwap {
             boltz_url: var_boltzUrl,
             referral_id: var_referralId,
         };
+    }
+}
+
+impl SseDecode for Vec<crate::api::btc_ln::BtcLnSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::btc_ln::BtcLnSwap>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::chain_swap::ChainSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::chain_swap::ChainSwap>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::lbtc_ln::LbtcLnSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::lbtc_ln::LbtcLnSwap>::sse_decode(deserializer));
+        }
+        return ans_;
     }
 }
 
@@ -3476,6 +3616,36 @@ impl SseEncode for crate::api::lbtc_ln::LbtcLnSwap {
     }
 }
 
+impl SseEncode for Vec<crate::api::btc_ln::BtcLnSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::btc_ln::BtcLnSwap>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::chain_swap::ChainSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::chain_swap::ChainSwap>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::lbtc_ln::LbtcLnSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::lbtc_ln::LbtcLnSwap>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<u8> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -4009,6 +4179,36 @@ mod io {
                 boltz_url: self.boltz_url.cst_decode(),
                 referral_id: self.referral_id.cst_decode(),
             }
+        }
+    }
+    impl CstDecode<Vec<crate::api::btc_ln::BtcLnSwap>> for *mut wire_cst_list_btc_ln_swap {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::btc_ln::BtcLnSwap> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
+        }
+    }
+    impl CstDecode<Vec<crate::api::chain_swap::ChainSwap>> for *mut wire_cst_list_chain_swap {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::chain_swap::ChainSwap> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
+        }
+    }
+    impl CstDecode<Vec<crate::api::lbtc_ln::LbtcLnSwap>> for *mut wire_cst_list_lbtc_ln_swap {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::lbtc_ln::LbtcLnSwap> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
         }
     }
     impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_strict {
@@ -5292,6 +5492,53 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__restore__restore_chain_swaps(
+        port_: i64,
+        swap_master_key: *mut wire_cst_swap_master_key,
+        btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+        lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+        boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__restore__restore_chain_swaps_impl(
+            port_,
+            swap_master_key,
+            btc_electrum_url,
+            lbtc_electrum_url,
+            boltz_url,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__restore__restore_ln_btc_swaps(
+        port_: i64,
+        swap_master_key: *mut wire_cst_swap_master_key,
+        electrum_url: *mut wire_cst_list_prim_u_8_strict,
+        boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__restore__restore_ln_btc_swaps_impl(
+            port_,
+            swap_master_key,
+            electrum_url,
+            boltz_url,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__restore__restore_ln_lbtc_swaps(
+        port_: i64,
+        swap_master_key: *mut wire_cst_swap_master_key,
+        electrum_url: *mut wire_cst_list_prim_u_8_strict,
+        boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__restore__restore_ln_lbtc_swaps_impl(
+            port_,
+            swap_master_key,
+            electrum_url,
+            boltz_url,
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(
         port_: i64,
         wallet_mnemonic: *mut wire_cst_list_prim_u_8_strict,
@@ -5395,6 +5642,48 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_tx_fee() -> *mut wire_cst_tx_fee {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_tx_fee::new_with_null_ptr())
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_list_btc_ln_swap(
+        len: i32,
+    ) -> *mut wire_cst_list_btc_ln_swap {
+        let wrap = wire_cst_list_btc_ln_swap {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <wire_cst_btc_ln_swap>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_list_chain_swap(
+        len: i32,
+    ) -> *mut wire_cst_list_chain_swap {
+        let wrap = wire_cst_list_chain_swap {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <wire_cst_chain_swap>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_list_lbtc_ln_swap(
+        len: i32,
+    ) -> *mut wire_cst_list_lbtc_ln_swap {
+        let wrap = wire_cst_list_lbtc_ln_swap {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <wire_cst_lbtc_ln_swap>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
     }
 
     #[unsafe(no_mangle)]
@@ -5541,6 +5830,24 @@ mod io {
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_list_btc_ln_swap {
+        ptr: *mut wire_cst_btc_ln_swap,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_list_chain_swap {
+        ptr: *mut wire_cst_chain_swap,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_list_lbtc_ln_swap {
+        ptr: *mut wire_cst_lbtc_ln_swap,
+        len: i32,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

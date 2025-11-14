@@ -10,6 +10,7 @@ import 'api/fees.dart';
 import 'api/invoice.dart';
 import 'api/lbtc_ln.dart';
 import 'api/lnurl.dart';
+import 'api/restore.dart';
 import 'api/secrets.dart';
 import 'api/types.dart';
 import 'dart:async';
@@ -75,7 +76,7 @@ class BoltzCore
   String get codegenVersion => '2.9.0';
 
   @override
-  int get rustContentHash => -1386959524;
+  int get rustContentHash => 66879098;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -382,6 +383,22 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<PreImage> crateApiSecretsPreImageNew(
       {required String value, required String sha256, required String hash160});
+
+  Future<List<ChainSwap>> crateApiRestoreRestoreChainSwaps(
+      {required SwapMasterKey swapMasterKey,
+      required String btcElectrumUrl,
+      required String lbtcElectrumUrl,
+      required String boltzUrl});
+
+  Future<List<BtcLnSwap>> crateApiRestoreRestoreLnBtcSwaps(
+      {required SwapMasterKey swapMasterKey,
+      required String electrumUrl,
+      required String boltzUrl});
+
+  Future<List<LbtcLnSwap>> crateApiRestoreRestoreLnLbtcSwaps(
+      {required SwapMasterKey swapMasterKey,
+      required String electrumUrl,
+      required String boltzUrl});
 
   Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreate(
       {required String walletMnemonic,
@@ -2424,6 +2441,100 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<List<ChainSwap>> crateApiRestoreRestoreChainSwaps(
+      {required SwapMasterKey swapMasterKey,
+      required String btcElectrumUrl,
+      required String lbtcElectrumUrl,
+      required String boltzUrl}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
+        var arg1 = cst_encode_String(btcElectrumUrl);
+        var arg2 = cst_encode_String(lbtcElectrumUrl);
+        var arg3 = cst_encode_String(boltzUrl);
+        return wire.wire__crate__api__restore__restore_chain_swaps(
+            port_, arg0, arg1, arg2, arg3);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_list_chain_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiRestoreRestoreChainSwapsConstMeta,
+      argValues: [swapMasterKey, btcElectrumUrl, lbtcElectrumUrl, boltzUrl],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRestoreRestoreChainSwapsConstMeta =>
+      const TaskConstMeta(
+        debugName: "restore_chain_swaps",
+        argNames: [
+          "swapMasterKey",
+          "btcElectrumUrl",
+          "lbtcElectrumUrl",
+          "boltzUrl"
+        ],
+      );
+
+  @override
+  Future<List<BtcLnSwap>> crateApiRestoreRestoreLnBtcSwaps(
+      {required SwapMasterKey swapMasterKey,
+      required String electrumUrl,
+      required String boltzUrl}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
+        var arg1 = cst_encode_String(electrumUrl);
+        var arg2 = cst_encode_String(boltzUrl);
+        return wire.wire__crate__api__restore__restore_ln_btc_swaps(
+            port_, arg0, arg1, arg2);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_list_btc_ln_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiRestoreRestoreLnBtcSwapsConstMeta,
+      argValues: [swapMasterKey, electrumUrl, boltzUrl],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRestoreRestoreLnBtcSwapsConstMeta =>
+      const TaskConstMeta(
+        debugName: "restore_ln_btc_swaps",
+        argNames: ["swapMasterKey", "electrumUrl", "boltzUrl"],
+      );
+
+  @override
+  Future<List<LbtcLnSwap>> crateApiRestoreRestoreLnLbtcSwaps(
+      {required SwapMasterKey swapMasterKey,
+      required String electrumUrl,
+      required String boltzUrl}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
+        var arg1 = cst_encode_String(electrumUrl);
+        var arg2 = cst_encode_String(boltzUrl);
+        return wire.wire__crate__api__restore__restore_ln_lbtc_swaps(
+            port_, arg0, arg1, arg2);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_list_lbtc_ln_swap,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiRestoreRestoreLnLbtcSwapsConstMeta,
+      argValues: [swapMasterKey, electrumUrl, boltzUrl],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRestoreRestoreLnLbtcSwapsConstMeta =>
+      const TaskConstMeta(
+        debugName: "restore_ln_lbtc_swaps",
+        argNames: ["swapMasterKey", "electrumUrl", "boltzUrl"],
+      );
+
+  @override
   Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreate(
       {required String walletMnemonic,
       String? walletPassphrase,
@@ -2776,6 +2887,24 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       boltzUrl: dco_decode_String(arr[12]),
       referralId: dco_decode_opt_String(arr[13]),
     );
+  }
+
+  @protected
+  List<BtcLnSwap> dco_decode_list_btc_ln_swap(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_btc_ln_swap).toList();
+  }
+
+  @protected
+  List<ChainSwap> dco_decode_list_chain_swap(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_chain_swap).toList();
+  }
+
+  @protected
+  List<LbtcLnSwap> dco_decode_list_lbtc_ln_swap(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_lbtc_ln_swap).toList();
   }
 
   @protected
@@ -3359,6 +3488,42 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  List<BtcLnSwap> sse_decode_list_btc_ln_swap(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <BtcLnSwap>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_btc_ln_swap(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<ChainSwap> sse_decode_list_chain_swap(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <ChainSwap>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_chain_swap(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<LbtcLnSwap> sse_decode_list_lbtc_ln_swap(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <LbtcLnSwap>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_lbtc_ln_swap(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
@@ -3919,6 +4084,36 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.electrumUrl, serializer);
     sse_encode_String(self.boltzUrl, serializer);
     sse_encode_opt_String(self.referralId, serializer);
+  }
+
+  @protected
+  void sse_encode_list_btc_ln_swap(
+      List<BtcLnSwap> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_btc_ln_swap(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_chain_swap(
+      List<ChainSwap> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_chain_swap(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_lbtc_ln_swap(
+      List<LbtcLnSwap> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_lbtc_ln_swap(item, serializer);
+    }
   }
 
   @protected

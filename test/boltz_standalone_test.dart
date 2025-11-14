@@ -60,6 +60,74 @@ void main() {
     assert(decoded.isExpired);
     print('$decoded');
   });
+
+  test(
+    'TEST RESTORE SWAPS',
+    () async {
+      final swapMasterKey = SwapMasterKey(
+        xprv:
+            'xprv9zRA4NuUPQSBywcrKbEapYaYPuJu2rwcGFceusCYtUM1Yx1z1b59TqnseHSk17eWgmo2mVeUWrHzy5uyXrwypZrJRRM7chrJJH1JyKNoE6L',
+        xpub:
+            'xpub6DQWTtSNDmzVCRhKRcmbBgXGww9PSKfTdUYFiFcASoszRkM8Z8PQ1e7MVYN7zukkhFknC96KYGkTrfSERdojG6coHdGEMoc1g44DGTbCt4D',
+        network: Network.mainnet,
+        mnemonic:
+            'item bar canyon diary fantasy coffee unit program badge drum tent empower',
+        fingerprint: 'd2e2529e',
+      );
+
+      try {
+        final restoredLbtcSwaps = await restoreLnLbtcSwaps(
+          swapMasterKey: swapMasterKey,
+          electrumUrl: 'les.bullbitcoin.com:995',
+          boltzUrl: 'api.boltz.exchange',
+        );
+
+        final reverseSwaps = restoredLbtcSwaps
+            .where((swap) => swap.kind == SwapType.reverse)
+            .toList();
+        final submarineSwaps = restoredLbtcSwaps
+            .where((swap) => swap.kind == SwapType.submarine)
+            .toList();
+
+        expect(reverseSwaps.length, equals(1),
+            reason: 'Expected 1 reverse swap, found ${reverseSwaps.length}');
+        expect(submarineSwaps.length, equals(1),
+            reason:
+                'Expected 1 submarine swap, found ${submarineSwaps.length}');
+      } on BoltzError catch (e) {
+        fail('Error restoring L-BTC-LN swaps: ${e.kind}: ${e.message}');
+      }
+
+      try {
+        final restoredBtcSwaps = await restoreLnBtcSwaps(
+          swapMasterKey: swapMasterKey,
+          electrumUrl: 'wes.bullbitcoin.com:50002',
+          boltzUrl: 'api.boltz.exchange',
+        );
+
+        expect(restoredBtcSwaps.length, equals(0),
+            reason:
+                'Expected 0 BTC-LN swaps, found ${restoredBtcSwaps.length}');
+      } on BoltzError catch (e) {
+        fail('Error restoring BTC-LN swaps: ${e.kind}: ${e.message}');
+      }
+
+      try {
+        final restoredChainSwaps = await restoreChainSwaps(
+          swapMasterKey: swapMasterKey,
+          btcElectrumUrl: 'wes.bullbitcoin.com:50002',
+          lbtcElectrumUrl: 'les.bullbitcoin.com:995',
+          boltzUrl: 'api.boltz.exchange',
+        );
+
+        expect(restoredChainSwaps.length, equals(0),
+            reason:
+                'Expected 0 chain swaps, found ${restoredChainSwaps.length}');
+      } on BoltzError catch (e) {
+        fail('Error restoring chain swaps: ${e.kind}: ${e.message}');
+      }
+    },
+  );
   // group('BTC-LN Submarine', () {
   //   test('Neg: Minimum limit (50k sats)', () async {
   //     // An invoice with <50k sats
