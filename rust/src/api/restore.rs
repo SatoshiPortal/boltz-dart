@@ -18,8 +18,6 @@ use boltz_client::{
 };
 use std::str::FromStr;
 
-const SWAP_RESTORE_KEY_DERIVATION_PATH: &str = "m/26589'/0'/0'/0";
-
 fn swap_restore_type_to_swap_type(restore_type: SwapRestoreType) -> SwapType {
     match restore_type {
         SwapRestoreType::Reverse => SwapType::Reverse,
@@ -35,7 +33,7 @@ async fn restore_swaps(
     let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
     let xpub = swap_master_key.xpub.clone();
     let restore_responses = boltz_client
-        .post_swap_restore(&xpub, SWAP_RESTORE_KEY_DERIVATION_PATH)
+        .post_swap_restore(&xpub)
         .await
         .map_err(|e| BoltzError::new("Restore".to_string(), e.to_string()))?;
 

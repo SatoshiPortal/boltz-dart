@@ -3,7 +3,7 @@ name = "boltz"
 authors = [
     "i5hi <ishi@satoshiportal.com>, mocodesmo <morteza@satoshiportal.com>",
 ]
-version = "0.1.6"
+version = "0.3.1"
 edition = "2021"
 
 [lib]
@@ -12,7 +12,7 @@ doctest = false
 crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
-boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", branch = "minor-restore-fixes", features = ["lnurl", "electrum"] }
+boltz-client = { version = "0.3.1", features = ["lnurl", "electrum"] }
 flutter_rust_bridge = "=2.9.0"
 anyhow = "1.0.68"
 serde = { version = "1.0.0", features = ["derive"] }

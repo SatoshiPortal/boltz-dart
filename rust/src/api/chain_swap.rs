@@ -389,11 +389,14 @@ impl ChainSwap {
                         self.btc_script_str.clone().try_into()?;
                     let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id).await?;
                     let rkp: Keypair = self.refund_keys.clone().try_into()?;
-                    let (partial_sig, pub_nonce) = btc_lockup_script.partial_sign(
-                        &rkp,
-                        &claim_tx_response.pub_nonce,
-                        &claim_tx_response.transaction_hash,
-                    )?;
+                    let claim_tx_response_opt = claim_tx_response.ok_or(BoltzError::new(
+                        "Not Found".to_string(),
+                        "No Claim Tx Details Detected.".to_string(),
+                    ))?;
+                    let pub_nonce = claim_tx_response_opt.pub_nonce;
+                    let transaction_hash = claim_tx_response_opt.transaction_hash;
+                    let (partial_sig, pub_nonce) =
+                        btc_lockup_script.partial_sign(&rkp, &pub_nonce, &transaction_hash)?;
                     let signed = match claim_tx
                         .sign_claim(
                             &ckp,
@@ -442,11 +445,14 @@ impl ChainSwap {
 
                     let claim_tx_response = boltz_client.get_chain_claim_tx_details(&id).await?;
                     let rkp: Keypair = self.refund_keys.clone().try_into()?;
-                    let (partial_sig, pub_nonce) = lbtc_lockup_script.partial_sign(
-                        &rkp,
-                        &claim_tx_response.pub_nonce,
-                        &claim_tx_response.transaction_hash,
-                    )?;
+                    let claim_tx_response_opt = claim_tx_response.ok_or(BoltzError::new(
+                        "Not Found".to_string(),
+                        "No Claim Tx Details Detected.".to_string(),
+                    ))?;
+                    let transaction_hash = claim_tx_response_opt.transaction_hash;
+                    let pub_nonce = claim_tx_response_opt.pub_nonce;
+                    let (partial_sig, pub_nonce) =
+                        lbtc_lockup_script.partial_sign(&rkp, &pub_nonce, &transaction_hash)?;
                     let signed = match claim_tx
                         .sign_claim(
                             &ckp,
