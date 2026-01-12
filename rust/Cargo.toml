@@ -13,7 +13,7 @@ crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
 boltz-client = { version = "0.3.1", features = ["lnurl", "electrum"] }
-flutter_rust_bridge = "=2.9.0"
+flutter_rust_bridge = "=2.11.1"
 anyhow = "1.0.68"
 serde = { version = "1.0.0", features = ["derive"] }
 serde_json = "1.0.0"
@@ -22,6 +22,9 @@ hex = "0.4"
 
 [build-dependencies]
 flutter_rust_bridge_codegen = "2.9.0"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [build]
 profiler = true
