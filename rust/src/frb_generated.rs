@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1442815566;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1061345564;
 
 // Section: executor
 
@@ -1071,6 +1071,48 @@ fn wire__crate__api__chain_swap__chain_swap_to_json_impl(
                     (move || async move {
                         let output_ok =
                             crate::api::chain_swap::ChainSwap::to_json(&api_that).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__transactions__check_vout_0_outspend_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    swap_id: impl CstDecode<String>,
+    swap_type: impl CstDecode<crate::api::types::SwapType>,
+    tx_kind: impl CstDecode<crate::api::types::SwapTxKind>,
+    network: impl CstDecode<crate::api::types::Chain>,
+    boltz_url: impl CstDecode<String>,
+    chain_swap_direction: impl CstDecode<Option<crate::api::types::ChainSwapDirection>>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "check_vout_0_outspend",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap_id = swap_id.cst_decode();
+            let api_swap_type = swap_type.cst_decode();
+            let api_tx_kind = tx_kind.cst_decode();
+            let api_network = network.cst_decode();
+            let api_boltz_url = boltz_url.cst_decode();
+            let api_chain_swap_direction = chain_swap_direction.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::transactions::check_vout_0_outspend(
+                            &api_swap_id,
+                            api_swap_type,
+                            api_tx_kind,
+                            api_network,
+                            &api_boltz_url,
+                            api_chain_swap_direction,
+                        )
+                        .await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -2434,6 +2476,19 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<crate::api::types::ChainSwapDirection> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::types::ChainSwapDirection>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<crate::api::types::ElectrumSettings> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2455,6 +2510,31 @@ impl SseDecode for Option<crate::api::types::Side> {
         } else {
             return None;
         }
+    }
+}
+
+impl SseDecode for Option<u64> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<u64>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for crate::api::types::OutspendStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_kind = <crate::api::types::SwapTxKind>::sse_decode(deserializer);
+        let mut var_txid = <Option<String>>::sse_decode(deserializer);
+        let mut var_timestamp = <Option<u64>>::sse_decode(deserializer);
+        return crate::api::types::OutspendStatus {
+            kind: var_kind,
+            txid: var_txid,
+            timestamp: var_timestamp,
+        };
     }
 }
 
@@ -3022,6 +3102,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::MinerFees>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::types::OutspendStatus {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.kind.into_into_dart().into_dart(),
+            self.txid.into_into_dart().into_dart(),
+            self.timestamp.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::types::OutspendStatus
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::OutspendStatus>
+    for crate::api::types::OutspendStatus
+{
+    fn into_into_dart(self) -> crate::api::types::OutspendStatus {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::types::PreImage {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -3471,6 +3573,16 @@ impl SseEncode for Option<String> {
     }
 }
 
+impl SseEncode for Option<crate::api::types::ChainSwapDirection> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::types::ChainSwapDirection>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<crate::api::types::ElectrumSettings> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3488,6 +3600,25 @@ impl SseEncode for Option<crate::api::types::Side> {
         if let Some(value) = self {
             <crate::api::types::Side>::sse_encode(value, serializer);
         }
+    }
+}
+
+impl SseEncode for Option<u64> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <u64>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for crate::api::types::OutspendStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::types::SwapTxKind>::sse_encode(self.kind, serializer);
+        <Option<String>>::sse_encode(self.txid, serializer);
+        <Option<u64>>::sse_encode(self.timestamp, serializer);
     }
 }
 
@@ -3712,6 +3843,13 @@ mod io {
             CstDecode::<crate::api::chain_swap::ChainSwap>::cst_decode(*wrap).into()
         }
     }
+    impl CstDecode<crate::api::types::ChainSwapDirection> for *mut i32 {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::types::ChainSwapDirection {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::types::ChainSwapDirection>::cst_decode(*wrap).into()
+        }
+    }
     impl CstDecode<crate::api::types::ElectrumSettings> for *mut wire_cst_electrum_settings {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::types::ElectrumSettings {
@@ -3773,6 +3911,12 @@ mod io {
         fn cst_decode(self) -> crate::api::types::TxFee {
             let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
             CstDecode::<crate::api::types::TxFee>::cst_decode(*wrap).into()
+        }
+    }
+    impl CstDecode<u64> for *mut u64 {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> u64 {
+            unsafe { *flutter_rust_bridge::for_generated::box_from_leak_ptr(self) }
         }
     }
     impl CstDecode<crate::api::btc_ln::BtcLnSwap> for wire_cst_btc_ln_swap {
@@ -3959,6 +4103,16 @@ mod io {
             crate::api::fees::MinerFees {
                 lockup: self.lockup.cst_decode(),
                 claim: self.claim.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::types::OutspendStatus> for wire_cst_outspend_status {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::types::OutspendStatus {
+            crate::api::types::OutspendStatus {
+                kind: self.kind.cst_decode(),
+                txid: self.txid.cst_decode(),
+                timestamp: self.timestamp.cst_decode(),
             }
         }
     }
@@ -4276,6 +4430,20 @@ mod io {
         }
     }
     impl Default for wire_cst_miner_fees {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_outspend_status {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                kind: Default::default(),
+                txid: core::ptr::null_mut(),
+                timestamp: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_outspend_status {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -4850,6 +5018,27 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__transactions__check_vout_0_outspend(
+        port_: i64,
+        swap_id: *mut wire_cst_list_prim_u_8_strict,
+        swap_type: i32,
+        tx_kind: i32,
+        network: i32,
+        boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        chain_swap_direction: *mut i32,
+    ) {
+        wire__crate__api__transactions__check_vout_0_outspend_impl(
+            port_,
+            swap_id,
+            swap_type,
+            tx_kind,
+            network,
+            boltz_url,
+            chain_swap_direction,
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__types__decoded_invoice_from_string(
         port_: i64,
         s: *mut wire_cst_list_prim_u_8_strict,
@@ -5248,6 +5437,13 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_chain_swap_direction(
+        value: i32,
+    ) -> *mut i32 {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_electrum_settings(
     ) -> *mut wire_cst_electrum_settings {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(
@@ -5299,6 +5495,11 @@ mod io {
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_tx_fee() -> *mut wire_cst_tx_fee {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_tx_fee::new_with_null_ptr())
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_u_64(value: u64) -> *mut u64 {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
     }
 
     #[unsafe(no_mangle)]
@@ -5462,6 +5663,13 @@ mod io {
     pub struct wire_cst_miner_fees {
         lockup: u64,
         claim: u64,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_outspend_status {
+        kind: i32,
+        txid: *mut wire_cst_list_prim_u_8_strict,
+        timestamp: *mut u64,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

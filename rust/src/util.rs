@@ -1,3 +1,9 @@
+// Mempool API URLs for checking transaction outspends
+pub const MEMPOOL_BITCOIN_URL: &str = "https://mempool.space/api";
+pub const MEMPOOL_BITCOIN_TESTNET_URL: &str = "https://mempool.space/testnet/api";
+pub const MEMPOOL_LIQUID_URL: &str = "https://liquid.network/api";
+pub const MEMPOOL_LIQUID_TESTNET_URL: &str = "https://liquid.network/liquidtestnet/api";
+
 pub fn ensure_http_prefix(url: &str) -> String {
     let protocols = ["http://", "https://"];
     for protocol in protocols.iter() {

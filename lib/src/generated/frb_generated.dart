@@ -9,6 +9,7 @@ import 'api/error.dart';
 import 'api/fees.dart';
 import 'api/lbtc_ln.dart';
 import 'api/lnurl.dart';
+import 'api/transactions.dart';
 import 'api/types.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -75,7 +76,7 @@ class BoltzCore
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1442815566;
+  int get rustContentHash => -1061345564;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -263,6 +264,14 @@ abstract class BoltzCoreApi extends BaseApi {
       ElectrumSettings? lbtcElectrumSettings});
 
   Future<String> crateApiChainSwapChainSwapToJson({required ChainSwap that});
+
+  Future<OutspendStatus> crateApiTransactionsCheckVout0Outspend(
+      {required String swapId,
+      required SwapType swapType,
+      required SwapTxKind txKind,
+      required Chain network,
+      required String boltzUrl,
+      ChainSwapDirection? chainSwapDirection});
 
   Future<DecodedInvoice> crateApiTypesDecodedInvoiceFromString(
       {required String s, String? boltzUrl});
@@ -1569,6 +1578,56 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<OutspendStatus> crateApiTransactionsCheckVout0Outspend(
+      {required String swapId,
+      required SwapType swapType,
+      required SwapTxKind txKind,
+      required Chain network,
+      required String boltzUrl,
+      ChainSwapDirection? chainSwapDirection}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_String(swapId);
+        var arg1 = cst_encode_swap_type(swapType);
+        var arg2 = cst_encode_swap_tx_kind(txKind);
+        var arg3 = cst_encode_chain(network);
+        var arg4 = cst_encode_String(boltzUrl);
+        var arg5 =
+            cst_encode_opt_box_autoadd_chain_swap_direction(chainSwapDirection);
+        return wire.wire__crate__api__transactions__check_vout_0_outspend(
+            port_, arg0, arg1, arg2, arg3, arg4, arg5);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_outspend_status,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiTransactionsCheckVout0OutspendConstMeta,
+      argValues: [
+        swapId,
+        swapType,
+        txKind,
+        network,
+        boltzUrl,
+        chainSwapDirection
+      ],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiTransactionsCheckVout0OutspendConstMeta =>
+      const TaskConstMeta(
+        debugName: "check_vout_0_outspend",
+        argNames: [
+          "swapId",
+          "swapType",
+          "txKind",
+          "network",
+          "boltzUrl",
+          "chainSwapDirection"
+        ],
+      );
+
+  @override
   Future<DecodedInvoice> crateApiTypesDecodedInvoiceFromString(
       {required String s, String? boltzUrl}) {
     return handler.executeNormal(NormalTask(
@@ -2555,6 +2614,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainSwapDirection dco_decode_box_autoadd_chain_swap_direction(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_chain_swap_direction(raw);
+  }
+
+  @protected
   ElectrumSettings dco_decode_box_autoadd_electrum_settings(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_electrum_settings(raw);
@@ -2606,6 +2671,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TxFee dco_decode_box_autoadd_tx_fee(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_tx_fee(raw);
+  }
+
+  @protected
+  BigInt dco_decode_box_autoadd_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_u_64(raw);
   }
 
   @protected
@@ -2862,6 +2933,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainSwapDirection? dco_decode_opt_box_autoadd_chain_swap_direction(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_chain_swap_direction(raw);
+  }
+
+  @protected
   ElectrumSettings? dco_decode_opt_box_autoadd_electrum_settings(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_electrum_settings(raw);
@@ -2871,6 +2951,25 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Side? dco_decode_opt_box_autoadd_side(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_side(raw);
+  }
+
+  @protected
+  BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_u_64(raw);
+  }
+
+  @protected
+  OutspendStatus dco_decode_outspend_status(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return OutspendStatus(
+      kind: dco_decode_swap_tx_kind(arr[0]),
+      txid: dco_decode_opt_String(arr[1]),
+      timestamp: dco_decode_opt_box_autoadd_u_64(arr[2]),
+    );
   }
 
   @protected
@@ -3062,6 +3161,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainSwapDirection sse_decode_box_autoadd_chain_swap_direction(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_chain_swap_direction(deserializer));
+  }
+
+  @protected
   ElectrumSettings sse_decode_box_autoadd_electrum_settings(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -3115,6 +3221,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TxFee sse_decode_box_autoadd_tx_fee(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_tx_fee(deserializer));
+  }
+
+  @protected
+  BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_u_64(deserializer));
   }
 
   @protected
@@ -3412,6 +3524,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  ChainSwapDirection? sse_decode_opt_box_autoadd_chain_swap_direction(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_chain_swap_direction(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   ElectrumSettings? sse_decode_opt_box_autoadd_electrum_settings(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -3432,6 +3556,27 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     } else {
       return null;
     }
+  }
+
+  @protected
+  BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_u_64(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  OutspendStatus sse_decode_outspend_status(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_kind = sse_decode_swap_tx_kind(deserializer);
+    var var_txid = sse_decode_opt_String(deserializer);
+    var var_timestamp = sse_decode_opt_box_autoadd_u_64(deserializer);
+    return OutspendStatus(
+        kind: var_kind, txid: var_txid, timestamp: var_timestamp);
   }
 
   @protected
@@ -3678,6 +3823,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_box_autoadd_chain_swap_direction(
+      ChainSwapDirection self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_chain_swap_direction(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_electrum_settings(
       ElectrumSettings self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -3733,6 +3885,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_box_autoadd_tx_fee(TxFee self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_tx_fee(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self, serializer);
   }
 
   @protected
@@ -3937,6 +4095,17 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_chain_swap_direction(
+      ChainSwapDirection? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_chain_swap_direction(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_electrum_settings(
       ElectrumSettings? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -3955,6 +4124,25 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     if (self != null) {
       sse_encode_box_autoadd_side(self, serializer);
     }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_u_64(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_outspend_status(
+      OutspendStatus self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_swap_tx_kind(self.kind, serializer);
+    sse_encode_opt_String(self.txid, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.timestamp, serializer);
   }
 
   @protected
