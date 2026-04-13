@@ -66,6 +66,9 @@ _SwapStreamStatus _$SwapStreamStatusFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       status: $enumDecode(_$SwapStatusEnumMap, json['status']),
       error: json['error'] as String?,
+      transaction: json['transaction'] == null
+          ? null
+          : Transaction.fromJson(json['transaction'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SwapStreamStatusToJson(_SwapStreamStatus instance) =>
@@ -73,4 +76,5 @@ Map<String, dynamic> _$SwapStreamStatusToJson(_SwapStreamStatus instance) =>
       'id': instance.id,
       'status': _$SwapStatusEnumMap[instance.status]!,
       'error': instance.error,
+      'transaction': instance.transaction,
     };
