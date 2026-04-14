@@ -1127,16 +1127,16 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) lookup,
   ) : _lookup = lookup;
 
-  void store_dart_post_cobject(int ptr) {
+  void store_dart_post_cobject(DartPostCObjectFnType ptr) {
     return _store_dart_post_cobject(ptr);
   }
 
   late final _store_dart_post_cobjectPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>(
+      _lookup<ffi.NativeFunction<ffi.Void Function(DartPostCObjectFnType)>>(
     'store_dart_post_cobject',
   );
-  late final _store_dart_post_cobject =
-      _store_dart_post_cobjectPtr.asFunction<void Function(int)>();
+  late final _store_dart_post_cobject = _store_dart_post_cobjectPtr
+      .asFunction<void Function(DartPostCObjectFnType)>();
 
   void wire__crate__api__error__boltz_error_detail(
     int port_,
@@ -1243,7 +1243,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_btc_ln_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     ffi.Pointer<wire_cst_tx_fee> miner_fee,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_claim(
@@ -1263,7 +1263,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_btc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>>('frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim');
   late final _wire__crate__api__btc_ln__btc_ln_swap_claim =
@@ -1273,14 +1273,14 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_btc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
   void wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size(
     int port_,
     ffi.Pointer<wire_cst_btc_ln_swap> that,
-    ffi.Pointer<bool> is_cooperative,
+    bool is_cooperative,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size(
@@ -1296,7 +1296,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Void Function(
                 ffi.Int64,
                 ffi.Pointer<wire_cst_btc_ln_swap>,
-                ffi.Pointer<bool>,
+                ffi.Bool,
                 ffi.Pointer<wire_cst_electrum_settings>,
               )>>(
       'frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim_tx_size');
@@ -1305,7 +1305,7 @@ class BoltzCoreWire implements BaseWire {
           void Function(
             int,
             ffi.Pointer<wire_cst_btc_ln_swap>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
@@ -1568,7 +1568,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_btc_ln_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     ffi.Pointer<wire_cst_tx_fee> miner_fee,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_refund(
@@ -1588,7 +1588,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_btc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>>('frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund');
   late final _wire__crate__api__btc_ln__btc_ln_swap_refund =
@@ -1598,14 +1598,14 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_btc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
   void wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size(
     int port_,
     ffi.Pointer<wire_cst_btc_ln_swap> that,
-    ffi.Pointer<bool> is_cooperative,
+    bool is_cooperative,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size(
@@ -1621,7 +1621,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Void Function(
                 ffi.Int64,
                 ffi.Pointer<wire_cst_btc_ln_swap>,
-                ffi.Pointer<bool>,
+                ffi.Bool,
                 ffi.Pointer<wire_cst_electrum_settings>,
               )>>(
       'frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_refund_tx_size');
@@ -1630,7 +1630,7 @@ class BoltzCoreWire implements BaseWire {
           void Function(
             int,
             ffi.Pointer<wire_cst_btc_ln_swap>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
@@ -1773,7 +1773,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_chain_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     ffi.Pointer<wire_cst_tx_fee> miner_fee,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> btc_electrum_settings,
     ffi.Pointer<wire_cst_electrum_settings> lbtc_electrum_settings,
   ) {
@@ -1795,7 +1795,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_chain_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Pointer<wire_cst_electrum_settings>,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>>('frbgen_boltz_wire__crate__api__chain_swap__chain_swap_claim');
@@ -1806,7 +1806,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_chain_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
@@ -1815,7 +1815,7 @@ class BoltzCoreWire implements BaseWire {
     int port_,
     ffi.Pointer<wire_cst_chain_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> btc_electrum_settings,
     ffi.Pointer<wire_cst_electrum_settings> lbtc_electrum_settings,
   ) {
@@ -1836,7 +1836,7 @@ class BoltzCoreWire implements BaseWire {
                     ffi.Int64,
                     ffi.Pointer<wire_cst_chain_swap>,
                     ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                    ffi.Pointer<bool>,
+                    ffi.Bool,
                     ffi.Pointer<wire_cst_electrum_settings>,
                     ffi.Pointer<wire_cst_electrum_settings>,
                   )>>(
@@ -1847,7 +1847,7 @@ class BoltzCoreWire implements BaseWire {
             int,
             ffi.Pointer<wire_cst_chain_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
@@ -1913,7 +1913,7 @@ class BoltzCoreWire implements BaseWire {
   void wire__crate__api__chain_swap__chain_swap_new(
     int port_,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> id,
-    ffi.Pointer<bool> is_testnet,
+    bool is_testnet,
     int direction,
     ffi.Pointer<wire_cst_key_pair> refund_keys,
     int refund_index,
@@ -1957,7 +1957,7 @@ class BoltzCoreWire implements BaseWire {
           ffi.Void Function(
             ffi.Int64,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Int32,
             ffi.Pointer<wire_cst_key_pair>,
             ffi.Uint64,
@@ -1979,7 +1979,7 @@ class BoltzCoreWire implements BaseWire {
           void Function(
             int,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            ffi.Pointer<bool>,
+            bool,
             int,
             ffi.Pointer<wire_cst_key_pair>,
             int,
@@ -2004,7 +2004,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> passphrase,
     int index,
     int amount,
-    ffi.Pointer<bool> is_testnet,
+    bool is_testnet,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> btc_electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> lbtc_electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
@@ -2034,7 +2034,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Uint64,
             ffi.Uint64,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -2049,7 +2049,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             int,
             int,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
@@ -2061,7 +2061,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_chain_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> refund_address,
     ffi.Pointer<wire_cst_tx_fee> miner_fee,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> btc_electrum_settings,
     ffi.Pointer<wire_cst_electrum_settings> lbtc_electrum_settings,
   ) {
@@ -2083,7 +2083,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_chain_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Pointer<wire_cst_electrum_settings>,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>>('frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund');
@@ -2094,7 +2094,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_chain_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
@@ -2103,7 +2103,7 @@ class BoltzCoreWire implements BaseWire {
     int port_,
     ffi.Pointer<wire_cst_chain_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> refund_address,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> btc_electrum_settings,
     ffi.Pointer<wire_cst_electrum_settings> lbtc_electrum_settings,
   ) {
@@ -2124,7 +2124,7 @@ class BoltzCoreWire implements BaseWire {
                     ffi.Int64,
                     ffi.Pointer<wire_cst_chain_swap>,
                     ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-                    ffi.Pointer<bool>,
+                    ffi.Bool,
                     ffi.Pointer<wire_cst_electrum_settings>,
                     ffi.Pointer<wire_cst_electrum_settings>,
                   )>>(
@@ -2135,7 +2135,7 @@ class BoltzCoreWire implements BaseWire {
             int,
             ffi.Pointer<wire_cst_chain_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
@@ -2475,7 +2475,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_lbtc_ln_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     ffi.Pointer<wire_cst_tx_fee> miner_fee,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_claim(
@@ -2495,7 +2495,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_lbtc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>>('frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim');
   late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_claim =
@@ -2505,14 +2505,14 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_lbtc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size(
     int port_,
     ffi.Pointer<wire_cst_lbtc_ln_swap> that,
-    ffi.Pointer<bool> is_cooperative,
+    bool is_cooperative,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size(
@@ -2529,7 +2529,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Void Function(
                     ffi.Int64,
                     ffi.Pointer<wire_cst_lbtc_ln_swap>,
-                    ffi.Pointer<bool>,
+                    ffi.Bool,
                     ffi.Pointer<wire_cst_electrum_settings>,
                   )>>(
           'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_claim_tx_size');
@@ -2538,7 +2538,7 @@ class BoltzCoreWire implements BaseWire {
           void Function(
             int,
             ffi.Pointer<wire_cst_lbtc_ln_swap>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
@@ -2810,7 +2810,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_lbtc_ln_swap> that,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> out_address,
     ffi.Pointer<wire_cst_tx_fee> miner_fee,
-    ffi.Pointer<bool> try_cooperate,
+    bool try_cooperate,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_refund(
@@ -2830,7 +2830,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_lbtc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            ffi.Bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>>('frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund');
   late final _wire__crate__api__lbtc_ln__lbtc_ln_swap_refund =
@@ -2840,14 +2840,14 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_lbtc_ln_swap>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_tx_fee>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
   void wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size(
     int port_,
     ffi.Pointer<wire_cst_lbtc_ln_swap> that,
-    ffi.Pointer<bool> is_cooperative,
+    bool is_cooperative,
     ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size(
@@ -2864,7 +2864,7 @@ class BoltzCoreWire implements BaseWire {
                   ffi.Void Function(
                     ffi.Int64,
                     ffi.Pointer<wire_cst_lbtc_ln_swap>,
-                    ffi.Pointer<bool>,
+                    ffi.Bool,
                     ffi.Pointer<wire_cst_electrum_settings>,
                   )>>(
           'frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_refund_tx_size');
@@ -2873,7 +2873,7 @@ class BoltzCoreWire implements BaseWire {
           void Function(
             int,
             ffi.Pointer<wire_cst_lbtc_ln_swap>,
-            ffi.Pointer<bool>,
+            bool,
             ffi.Pointer<wire_cst_electrum_settings>,
           )>();
 
@@ -3226,7 +3226,12 @@ class BoltzCoreWire implements BaseWire {
 
 typedef DartPort = ffi.Int64;
 typedef DartDartPort = int;
-typedef bool = ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Int>)>;
+typedef DartPostCObjectFnTypeFunction = ffi.Bool Function(
+    DartPort port_id, ffi.Pointer<ffi.Void> message);
+typedef DartDartPostCObjectFnTypeFunction = bool Function(
+    DartDartPort port_id, ffi.Pointer<ffi.Void> message);
+typedef DartPostCObjectFnType
+    = ffi.Pointer<ffi.NativeFunction<DartPostCObjectFnTypeFunction>>;
 
 final class wire_cst_list_prim_u_8_strict extends ffi.Struct {
   external ffi.Pointer<ffi.Uint8> ptr;
@@ -3308,8 +3313,10 @@ final class wire_cst_btc_ln_swap extends ffi.Struct {
 final class wire_cst_electrum_settings extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> url;
 
+  @ffi.Bool()
   external bool validate_domain;
 
+  @ffi.Bool()
   external bool tls;
 
   @ffi.Uint8()
@@ -3362,6 +3369,7 @@ final class wire_cst_l_btc_swap_script_str extends ffi.Struct {
 final class wire_cst_chain_swap extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> id;
 
+  @ffi.Bool()
   external bool is_testnet;
 
   @ffi.Int32()
@@ -3486,6 +3494,7 @@ final class wire_cst_decoded_invoice extends ffi.Struct {
   @ffi.Uint64()
   external int expires_at;
 
+  @ffi.Bool()
   external bool is_expired;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> network;
