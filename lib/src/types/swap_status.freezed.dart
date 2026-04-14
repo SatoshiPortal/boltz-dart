@@ -748,6 +748,7 @@ mixin _$SwapStreamStatus {
   String get id;
   SwapStatus get status;
   String? get error;
+  Transaction? get transaction;
 
   /// Create a copy of SwapStreamStatus
   /// with the given fields replaced by the non-null parameter values.
@@ -767,16 +768,18 @@ mixin _$SwapStreamStatus {
             other is SwapStreamStatus &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, status, error);
+  int get hashCode => Object.hash(runtimeType, id, status, error, transaction);
 
   @override
   String toString() {
-    return 'SwapStreamStatus(id: $id, status: $status, error: $error)';
+    return 'SwapStreamStatus(id: $id, status: $status, error: $error, transaction: $transaction)';
   }
 }
 
@@ -786,7 +789,10 @@ abstract mixin class $SwapStreamStatusCopyWith<$Res> {
           SwapStreamStatus value, $Res Function(SwapStreamStatus) _then) =
       _$SwapStreamStatusCopyWithImpl;
   @useResult
-  $Res call({String id, SwapStatus status, String? error});
+  $Res call(
+      {String id, SwapStatus status, String? error, Transaction? transaction});
+
+  $TransactionCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -805,6 +811,7 @@ class _$SwapStreamStatusCopyWithImpl<$Res>
     Object? id = null,
     Object? status = null,
     Object? error = freezed,
+    Object? transaction = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -819,7 +826,25 @@ class _$SwapStreamStatusCopyWithImpl<$Res>
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      transaction: freezed == transaction
+          ? _self.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as Transaction?,
     ));
+  }
+
+  /// Create a copy of SwapStreamStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionCopyWith<$Res>? get transaction {
+    if (_self.transaction == null) {
+      return null;
+    }
+
+    return $TransactionCopyWith<$Res>(_self.transaction!, (value) {
+      return _then(_self.copyWith(transaction: value));
+    });
   }
 }
 
@@ -916,13 +941,15 @@ extension SwapStreamStatusPatterns on SwapStreamStatus {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, SwapStatus status, String? error)? $default, {
+    TResult Function(String id, SwapStatus status, String? error,
+            Transaction? transaction)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _SwapStreamStatus() when $default != null:
-        return $default(_that.id, _that.status, _that.error);
+        return $default(_that.id, _that.status, _that.error, _that.transaction);
       case _:
         return orElse();
     }
@@ -943,12 +970,14 @@ extension SwapStreamStatusPatterns on SwapStreamStatus {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, SwapStatus status, String? error) $default,
+    TResult Function(String id, SwapStatus status, String? error,
+            Transaction? transaction)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SwapStreamStatus():
-        return $default(_that.id, _that.status, _that.error);
+        return $default(_that.id, _that.status, _that.error, _that.transaction);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -968,12 +997,14 @@ extension SwapStreamStatusPatterns on SwapStreamStatus {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, SwapStatus status, String? error)? $default,
+    TResult? Function(String id, SwapStatus status, String? error,
+            Transaction? transaction)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SwapStreamStatus() when $default != null:
-        return $default(_that.id, _that.status, _that.error);
+        return $default(_that.id, _that.status, _that.error, _that.transaction);
       case _:
         return null;
     }
@@ -983,7 +1014,8 @@ extension SwapStreamStatusPatterns on SwapStreamStatus {
 /// @nodoc
 @JsonSerializable()
 class _SwapStreamStatus implements SwapStreamStatus {
-  const _SwapStreamStatus({required this.id, required this.status, this.error});
+  const _SwapStreamStatus(
+      {required this.id, required this.status, this.error, this.transaction});
   factory _SwapStreamStatus.fromJson(Map<String, dynamic> json) =>
       _$SwapStreamStatusFromJson(json);
 
@@ -993,6 +1025,8 @@ class _SwapStreamStatus implements SwapStreamStatus {
   final SwapStatus status;
   @override
   final String? error;
+  @override
+  final Transaction? transaction;
 
   /// Create a copy of SwapStreamStatus
   /// with the given fields replaced by the non-null parameter values.
@@ -1016,16 +1050,18 @@ class _SwapStreamStatus implements SwapStreamStatus {
             other is _SwapStreamStatus &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, status, error);
+  int get hashCode => Object.hash(runtimeType, id, status, error, transaction);
 
   @override
   String toString() {
-    return 'SwapStreamStatus(id: $id, status: $status, error: $error)';
+    return 'SwapStreamStatus(id: $id, status: $status, error: $error, transaction: $transaction)';
   }
 }
 
@@ -1037,7 +1073,11 @@ abstract mixin class _$SwapStreamStatusCopyWith<$Res>
       __$SwapStreamStatusCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, SwapStatus status, String? error});
+  $Res call(
+      {String id, SwapStatus status, String? error, Transaction? transaction});
+
+  @override
+  $TransactionCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -1056,6 +1096,7 @@ class __$SwapStreamStatusCopyWithImpl<$Res>
     Object? id = null,
     Object? status = null,
     Object? error = freezed,
+    Object? transaction = freezed,
   }) {
     return _then(_SwapStreamStatus(
       id: null == id
@@ -1070,7 +1111,25 @@ class __$SwapStreamStatusCopyWithImpl<$Res>
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      transaction: freezed == transaction
+          ? _self.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as Transaction?,
     ));
+  }
+
+  /// Create a copy of SwapStreamStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionCopyWith<$Res>? get transaction {
+    if (_self.transaction == null) {
+      return null;
+    }
+
+    return $TransactionCopyWith<$Res>(_self.transaction!, (value) {
+      return _then(_self.copyWith(transaction: value));
+    });
   }
 }
 

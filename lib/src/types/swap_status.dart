@@ -206,6 +206,7 @@ abstract class SwapStreamStatus with _$SwapStreamStatus {
     required String id,
     required SwapStatus status,
     String? error,
+    Transaction? transaction,
   }) = _SwapStreamStatus;
 
   factory SwapStreamStatus.fromJson(Map<String, dynamic> json) =>
