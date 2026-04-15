@@ -42,6 +42,9 @@ enum SwapStatus {
   @JsonValue('transaction.server.confirmed')
   txnServerConfirmed,
 
+  @JsonValue('transaction.direct')
+  txnDirect,
+
   @JsonValue('invoice.set')
   invoiceSet,
 
@@ -93,6 +96,8 @@ extension SwapStatusX on SwapStatus {
         return 'transaction.server.mempool';
       case SwapStatus.txnServerConfirmed:
         return 'transaction.server.confirmed';
+      case SwapStatus.txnDirect:
+        return 'transaction.direct';
 
       case SwapStatus.invoiceSet:
         return 'invoice.set';
@@ -140,6 +145,8 @@ extension SwapStatusX on SwapStatus {
         return 'Transaction server mempool';
       case SwapStatus.txnServerConfirmed:
         return 'Transaction server confirmed';
+      case SwapStatus.txnDirect:
+        return 'Transaction direct';
 
       case SwapStatus.invoiceSet:
         return 'Invoice set';
@@ -199,6 +206,7 @@ abstract class SwapStreamStatus with _$SwapStreamStatus {
     required String id,
     required SwapStatus status,
     String? error,
+    Transaction? transaction,
   }) = _SwapStreamStatus;
 
   factory SwapStreamStatus.fromJson(Map<String, dynamic> json) =>

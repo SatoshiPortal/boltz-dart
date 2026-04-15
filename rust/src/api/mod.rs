@@ -8,4 +8,5 @@ pub mod error;
 pub mod fees;
 pub mod lbtc_ln;
 pub mod lnurl;
+pub mod transactions;
 pub mod types;

@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -88,6 +87,163 @@ class _$TransactionCopyWithImpl<$Res> implements $TransactionCopyWith<$Res> {
           : eta // ignore: cast_nullable_to_non_nullable
               as int?,
     ));
+  }
+}
+
+/// Adds pattern-matching-related methods to [Transaction].
+extension TransactionPatterns on Transaction {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_Transaction value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Transaction() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_Transaction value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Transaction():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_Transaction value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Transaction() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String id, String hex, int? eta)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _Transaction() when $default != null:
+        return $default(_that.id, _that.hex, _that.eta);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String id, String hex, int? eta) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Transaction():
+        return $default(_that.id, _that.hex, _that.eta);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(String id, String hex, int? eta)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _Transaction() when $default != null:
+        return $default(_that.id, _that.hex, _that.eta);
+      case _:
+        return null;
+    }
   }
 }
 
@@ -294,6 +450,172 @@ class _$SwapStatusResponseCopyWithImpl<$Res>
   }
 }
 
+/// Adds pattern-matching-related methods to [SwapStatusResponse].
+extension SwapStatusResponsePatterns on SwapStatusResponse {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_SwapStatusResponse value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStatusResponse() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_SwapStatusResponse value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStatusResponse():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_SwapStatusResponse value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStatusResponse() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(SwapStatus status, Transaction? transaction,
+            String? failureReason, String? error)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStatusResponse() when $default != null:
+        return $default(
+            _that.status, _that.transaction, _that.failureReason, _that.error);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(SwapStatus status, Transaction? transaction,
+            String? failureReason, String? error)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStatusResponse():
+        return $default(
+            _that.status, _that.transaction, _that.failureReason, _that.error);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(SwapStatus status, Transaction? transaction,
+            String? failureReason, String? error)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStatusResponse() when $default != null:
+        return $default(
+            _that.status, _that.transaction, _that.failureReason, _that.error);
+      case _:
+        return null;
+    }
+  }
+}
+
 /// @nodoc
 @JsonSerializable()
 class _SwapStatusResponse implements SwapStatusResponse {
@@ -426,6 +748,7 @@ mixin _$SwapStreamStatus {
   String get id;
   SwapStatus get status;
   String? get error;
+  Transaction? get transaction;
 
   /// Create a copy of SwapStreamStatus
   /// with the given fields replaced by the non-null parameter values.
@@ -445,16 +768,18 @@ mixin _$SwapStreamStatus {
             other is SwapStreamStatus &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, status, error);
+  int get hashCode => Object.hash(runtimeType, id, status, error, transaction);
 
   @override
   String toString() {
-    return 'SwapStreamStatus(id: $id, status: $status, error: $error)';
+    return 'SwapStreamStatus(id: $id, status: $status, error: $error, transaction: $transaction)';
   }
 }
 
@@ -464,7 +789,10 @@ abstract mixin class $SwapStreamStatusCopyWith<$Res> {
           SwapStreamStatus value, $Res Function(SwapStreamStatus) _then) =
       _$SwapStreamStatusCopyWithImpl;
   @useResult
-  $Res call({String id, SwapStatus status, String? error});
+  $Res call(
+      {String id, SwapStatus status, String? error, Transaction? transaction});
+
+  $TransactionCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -483,6 +811,7 @@ class _$SwapStreamStatusCopyWithImpl<$Res>
     Object? id = null,
     Object? status = null,
     Object? error = freezed,
+    Object? transaction = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -497,14 +826,196 @@ class _$SwapStreamStatusCopyWithImpl<$Res>
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      transaction: freezed == transaction
+          ? _self.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as Transaction?,
     ));
+  }
+
+  /// Create a copy of SwapStreamStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionCopyWith<$Res>? get transaction {
+    if (_self.transaction == null) {
+      return null;
+    }
+
+    return $TransactionCopyWith<$Res>(_self.transaction!, (value) {
+      return _then(_self.copyWith(transaction: value));
+    });
+  }
+}
+
+/// Adds pattern-matching-related methods to [SwapStreamStatus].
+extension SwapStreamStatusPatterns on SwapStreamStatus {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_SwapStreamStatus value)? $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStreamStatus() when $default != null:
+        return $default(_that);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_SwapStreamStatus value) $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStreamStatus():
+        return $default(_that);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_SwapStreamStatus value)? $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStreamStatus() when $default != null:
+        return $default(_that);
+      case _:
+        return null;
+    }
+  }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(String id, SwapStatus status, String? error,
+            Transaction? transaction)?
+        $default, {
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStreamStatus() when $default != null:
+        return $default(_that.id, _that.status, _that.error, _that.transaction);
+      case _:
+        return orElse();
+    }
+  }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(String id, SwapStatus status, String? error,
+            Transaction? transaction)
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStreamStatus():
+        return $default(_that.id, _that.status, _that.error, _that.transaction);
+      case _:
+        throw StateError('Unexpected subclass');
+    }
+  }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(String id, SwapStatus status, String? error,
+            Transaction? transaction)?
+        $default,
+  ) {
+    final _that = this;
+    switch (_that) {
+      case _SwapStreamStatus() when $default != null:
+        return $default(_that.id, _that.status, _that.error, _that.transaction);
+      case _:
+        return null;
+    }
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _SwapStreamStatus implements SwapStreamStatus {
-  const _SwapStreamStatus({required this.id, required this.status, this.error});
+  const _SwapStreamStatus(
+      {required this.id, required this.status, this.error, this.transaction});
   factory _SwapStreamStatus.fromJson(Map<String, dynamic> json) =>
       _$SwapStreamStatusFromJson(json);
 
@@ -514,6 +1025,8 @@ class _SwapStreamStatus implements SwapStreamStatus {
   final SwapStatus status;
   @override
   final String? error;
+  @override
+  final Transaction? transaction;
 
   /// Create a copy of SwapStreamStatus
   /// with the given fields replaced by the non-null parameter values.
@@ -537,16 +1050,18 @@ class _SwapStreamStatus implements SwapStreamStatus {
             other is _SwapStreamStatus &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, status, error);
+  int get hashCode => Object.hash(runtimeType, id, status, error, transaction);
 
   @override
   String toString() {
-    return 'SwapStreamStatus(id: $id, status: $status, error: $error)';
+    return 'SwapStreamStatus(id: $id, status: $status, error: $error, transaction: $transaction)';
   }
 }
 
@@ -558,7 +1073,11 @@ abstract mixin class _$SwapStreamStatusCopyWith<$Res>
       __$SwapStreamStatusCopyWithImpl;
   @override
   @useResult
-  $Res call({String id, SwapStatus status, String? error});
+  $Res call(
+      {String id, SwapStatus status, String? error, Transaction? transaction});
+
+  @override
+  $TransactionCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -577,6 +1096,7 @@ class __$SwapStreamStatusCopyWithImpl<$Res>
     Object? id = null,
     Object? status = null,
     Object? error = freezed,
+    Object? transaction = freezed,
   }) {
     return _then(_SwapStreamStatus(
       id: null == id
@@ -591,7 +1111,25 @@ class __$SwapStreamStatusCopyWithImpl<$Res>
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      transaction: freezed == transaction
+          ? _self.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as Transaction?,
     ));
+  }
+
+  /// Create a copy of SwapStreamStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionCopyWith<$Res>? get transaction {
+    if (_self.transaction == null) {
+      return null;
+    }
+
+    return $TransactionCopyWith<$Res>(_self.transaction!, (value) {
+      return _then(_self.copyWith(transaction: value));
+    });
   }
 }
 

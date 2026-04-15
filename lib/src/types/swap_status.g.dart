@@ -51,6 +51,7 @@ const _$SwapStatusEnumMap = {
   SwapStatus.txnLockupFailed: 'transaction.lockupFailed',
   SwapStatus.txnServerMempool: 'transaction.server.mempool',
   SwapStatus.txnServerConfirmed: 'transaction.server.confirmed',
+  SwapStatus.txnDirect: 'transaction.direct',
   SwapStatus.invoiceSet: 'invoice.set',
   SwapStatus.invoicePending: 'invoice.pending',
   SwapStatus.invoicePaid: 'invoice.paid',
@@ -65,6 +66,9 @@ _SwapStreamStatus _$SwapStreamStatusFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       status: $enumDecode(_$SwapStatusEnumMap, json['status']),
       error: json['error'] as String?,
+      transaction: json['transaction'] == null
+          ? null
+          : Transaction.fromJson(json['transaction'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SwapStreamStatusToJson(_SwapStreamStatus instance) =>
@@ -72,4 +76,5 @@ Map<String, dynamic> _$SwapStreamStatusToJson(_SwapStreamStatus instance) =>
       'id': instance.id,
       'status': _$SwapStatusEnumMap[instance.status]!,
       'error': instance.error,
+      'transaction': instance.transaction,
     };

@@ -32,3 +32,16 @@
 # 0.2.1
 - fix: do not build swap tx for chain claim and coop close
 - fix: Update to latest boltz-rust commit
+
+# 0.3.0
+- feat: add transactions module to track claim/refund transaction outspends
+- feat: add ElectrumSettings class to pass custom electrum settings to swap objects
+- feat: add transaction.direct support
+- feat: add tx to swap stream
+- feat: add claim tx size to chain swaps
+- feat: update Cooperative struct; added get submarine preimage method
+- fix: pass referral id to chain swaps
+- fix: support for 16kb page size on Android
+- fix: building for flutter >3.32.0
+- fix: bad dependency to boltz-rust
+- dep: update flutter_rust_bridge to 2.11.1
