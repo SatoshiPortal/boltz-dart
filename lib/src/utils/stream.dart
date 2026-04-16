@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:boltz/src/types/swap_status.dart';
+import 'package:boltz/src/generated/api/swap_status.dart';
 import 'package:web_socket_channel/io.dart';
 
 final String mainnetBaseUrl = 'api.boltz.exchange/v2';
@@ -40,7 +40,8 @@ class BoltzWebSocket {
         for (final swap in swapList) {
           if (swap['error'] == null) {
             // print(swap);
-            _broadcastController!.add(SwapStreamStatus.fromJson(swap));
+            _broadcastController!
+                .add(swapStreamStatusFromJson(json: jsonEncode(swap)));
           } else {
             _broadcastController!.add(SwapStreamStatus(
                 id: swap['id'],

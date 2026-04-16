@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1061345564;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -449079008;
 
 // Section: executor
 
@@ -2011,6 +2011,99 @@ fn wire__crate__api__types__pre_image_new_impl(
         },
     )
 }
+fn wire__crate__api__swap_status__swap_status_as_string_impl(
+    that: impl CstDecode<crate::api::swap_status::SwapStatus>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_status_as_string",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            transform_result_dco::<_, _, ()>((move || {
+                let output_ok =
+                    Result::<_, ()>::Ok(crate::api::swap_status::SwapStatus::as_string(&api_that))?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__swap_status__swap_status_from_json_string_impl(
+    status: impl CstDecode<String>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_status_from_json_string",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_status = status.cst_decode();
+            transform_result_dco::<_, _, String>((move || {
+                let output_ok = crate::api::swap_status::SwapStatus::from_json_string(api_status)?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__swap_status__swap_status_response_from_json_impl(
+    json: impl CstDecode<String>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_status_response_from_json",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_json = json.cst_decode();
+            transform_result_dco::<_, _, String>((move || {
+                let output_ok = crate::api::swap_status::swap_status_response_from_json(api_json)?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__swap_status__swap_status_to_json_string_impl(
+    that: impl CstDecode<crate::api::swap_status::SwapStatus>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_status_to_json_string",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            transform_result_dco::<_, _, ()>((move || {
+                let output_ok = Result::<_, ()>::Ok(
+                    crate::api::swap_status::SwapStatus::to_json_string(&api_that),
+                )?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__swap_status__swap_stream_status_from_json_impl(
+    json: impl CstDecode<String>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_stream_status_from_json",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_json = json.cst_decode();
+            transform_result_dco::<_, _, String>((move || {
+                let output_ok = crate::api::swap_status::swap_stream_status_from_json(api_json)?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
 
 // Section: dart2rust
 
@@ -2061,6 +2154,35 @@ impl CstDecode<crate::api::types::Side> for i32 {
             0 => crate::api::types::Side::Lockup,
             1 => crate::api::types::Side::Claim,
             _ => unreachable!("Invalid variant for Side: {}", self),
+        }
+    }
+}
+impl CstDecode<crate::api::swap_status::SwapStatus> for i32 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> crate::api::swap_status::SwapStatus {
+        match self {
+            0 => crate::api::swap_status::SwapStatus::SwapCreated,
+            1 => crate::api::swap_status::SwapStatus::SwapExpired,
+            2 => crate::api::swap_status::SwapStatus::SwapRefunded,
+            3 => crate::api::swap_status::SwapStatus::SwapError,
+            4 => crate::api::swap_status::SwapStatus::TxnMempool,
+            5 => crate::api::swap_status::SwapStatus::TxnClaimPending,
+            6 => crate::api::swap_status::SwapStatus::TxnClaimed,
+            7 => crate::api::swap_status::SwapStatus::TxnConfirmed,
+            8 => crate::api::swap_status::SwapStatus::TxnRefunded,
+            9 => crate::api::swap_status::SwapStatus::TxnFailed,
+            10 => crate::api::swap_status::SwapStatus::TxnLockupFailed,
+            11 => crate::api::swap_status::SwapStatus::TxnServerMempool,
+            12 => crate::api::swap_status::SwapStatus::TxnServerConfirmed,
+            13 => crate::api::swap_status::SwapStatus::TxnDirect,
+            14 => crate::api::swap_status::SwapStatus::InvoiceSet,
+            15 => crate::api::swap_status::SwapStatus::InvoicePending,
+            16 => crate::api::swap_status::SwapStatus::InvoicePaid,
+            17 => crate::api::swap_status::SwapStatus::InvoiceFailedToPay,
+            18 => crate::api::swap_status::SwapStatus::InvoiceSettled,
+            19 => crate::api::swap_status::SwapStatus::InvoiceExpired,
+            20 => crate::api::swap_status::SwapStatus::MinerfeePaid,
+            _ => unreachable!("Invalid variant for SwapStatus: {}", self),
         }
     }
 }
@@ -2513,6 +2635,30 @@ impl SseDecode for Option<crate::api::types::Side> {
     }
 }
 
+impl SseDecode for Option<crate::api::swap_status::Transaction> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::swap_status::Transaction>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<u32> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<u32>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2632,6 +2778,71 @@ impl SseDecode for crate::api::fees::SwapLimits {
     }
 }
 
+impl SseDecode for crate::api::swap_status::SwapStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::swap_status::SwapStatus::SwapCreated,
+            1 => crate::api::swap_status::SwapStatus::SwapExpired,
+            2 => crate::api::swap_status::SwapStatus::SwapRefunded,
+            3 => crate::api::swap_status::SwapStatus::SwapError,
+            4 => crate::api::swap_status::SwapStatus::TxnMempool,
+            5 => crate::api::swap_status::SwapStatus::TxnClaimPending,
+            6 => crate::api::swap_status::SwapStatus::TxnClaimed,
+            7 => crate::api::swap_status::SwapStatus::TxnConfirmed,
+            8 => crate::api::swap_status::SwapStatus::TxnRefunded,
+            9 => crate::api::swap_status::SwapStatus::TxnFailed,
+            10 => crate::api::swap_status::SwapStatus::TxnLockupFailed,
+            11 => crate::api::swap_status::SwapStatus::TxnServerMempool,
+            12 => crate::api::swap_status::SwapStatus::TxnServerConfirmed,
+            13 => crate::api::swap_status::SwapStatus::TxnDirect,
+            14 => crate::api::swap_status::SwapStatus::InvoiceSet,
+            15 => crate::api::swap_status::SwapStatus::InvoicePending,
+            16 => crate::api::swap_status::SwapStatus::InvoicePaid,
+            17 => crate::api::swap_status::SwapStatus::InvoiceFailedToPay,
+            18 => crate::api::swap_status::SwapStatus::InvoiceSettled,
+            19 => crate::api::swap_status::SwapStatus::InvoiceExpired,
+            20 => crate::api::swap_status::SwapStatus::MinerfeePaid,
+            _ => unreachable!("Invalid variant for SwapStatus: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::api::swap_status::SwapStatusResponse {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_status = <crate::api::swap_status::SwapStatus>::sse_decode(deserializer);
+        let mut var_transaction =
+            <Option<crate::api::swap_status::Transaction>>::sse_decode(deserializer);
+        let mut var_failureReason = <Option<String>>::sse_decode(deserializer);
+        let mut var_error = <Option<String>>::sse_decode(deserializer);
+        return crate::api::swap_status::SwapStatusResponse {
+            status: var_status,
+            transaction: var_transaction,
+            failure_reason: var_failureReason,
+            error: var_error,
+        };
+    }
+}
+
+impl SseDecode for crate::api::swap_status::SwapStreamStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_id = <String>::sse_decode(deserializer);
+        let mut var_status = <crate::api::swap_status::SwapStatus>::sse_decode(deserializer);
+        let mut var_error = <Option<String>>::sse_decode(deserializer);
+        let mut var_transaction =
+            <Option<crate::api::swap_status::Transaction>>::sse_decode(deserializer);
+        return crate::api::swap_status::SwapStreamStatus {
+            id: var_id,
+            status: var_status,
+            error: var_error,
+            transaction: var_transaction,
+        };
+    }
+}
+
 impl SseDecode for crate::api::types::SwapTxKind {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2653,6 +2864,20 @@ impl SseDecode for crate::api::types::SwapType {
             1 => crate::api::types::SwapType::Reverse,
             2 => crate::api::types::SwapType::Chain,
             _ => unreachable!("Invalid variant for SwapType: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::api::swap_status::Transaction {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_id = <String>::sse_decode(deserializer);
+        let mut var_hex = <String>::sse_decode(deserializer);
+        let mut var_eta = <Option<u32>>::sse_decode(deserializer);
+        return crate::api::swap_status::Transaction {
+            id: var_id,
+            hex: var_hex,
+            eta: var_eta,
         };
     }
 }
@@ -3259,6 +3484,92 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::fees::SwapLimits>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::swap_status::SwapStatus {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::SwapCreated => 0.into_dart(),
+            Self::SwapExpired => 1.into_dart(),
+            Self::SwapRefunded => 2.into_dart(),
+            Self::SwapError => 3.into_dart(),
+            Self::TxnMempool => 4.into_dart(),
+            Self::TxnClaimPending => 5.into_dart(),
+            Self::TxnClaimed => 6.into_dart(),
+            Self::TxnConfirmed => 7.into_dart(),
+            Self::TxnRefunded => 8.into_dart(),
+            Self::TxnFailed => 9.into_dart(),
+            Self::TxnLockupFailed => 10.into_dart(),
+            Self::TxnServerMempool => 11.into_dart(),
+            Self::TxnServerConfirmed => 12.into_dart(),
+            Self::TxnDirect => 13.into_dart(),
+            Self::InvoiceSet => 14.into_dart(),
+            Self::InvoicePending => 15.into_dart(),
+            Self::InvoicePaid => 16.into_dart(),
+            Self::InvoiceFailedToPay => 17.into_dart(),
+            Self::InvoiceSettled => 18.into_dart(),
+            Self::InvoiceExpired => 19.into_dart(),
+            Self::MinerfeePaid => 20.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::swap_status::SwapStatus
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::swap_status::SwapStatus>
+    for crate::api::swap_status::SwapStatus
+{
+    fn into_into_dart(self) -> crate::api::swap_status::SwapStatus {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::swap_status::SwapStatusResponse {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.status.into_into_dart().into_dart(),
+            self.transaction.into_into_dart().into_dart(),
+            self.failure_reason.into_into_dart().into_dart(),
+            self.error.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::swap_status::SwapStatusResponse
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::swap_status::SwapStatusResponse>
+    for crate::api::swap_status::SwapStatusResponse
+{
+    fn into_into_dart(self) -> crate::api::swap_status::SwapStatusResponse {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::swap_status::SwapStreamStatus {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.id.into_into_dart().into_dart(),
+            self.status.into_into_dart().into_dart(),
+            self.error.into_into_dart().into_dart(),
+            self.transaction.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::swap_status::SwapStreamStatus
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::swap_status::SwapStreamStatus>
+    for crate::api::swap_status::SwapStreamStatus
+{
+    fn into_into_dart(self) -> crate::api::swap_status::SwapStreamStatus {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::types::SwapTxKind {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -3292,6 +3603,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::SwapType>
     for crate::api::types::SwapType
 {
     fn into_into_dart(self) -> crate::api::types::SwapType {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::swap_status::Transaction {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.id.into_into_dart().into_dart(),
+            self.hex.into_into_dart().into_dart(),
+            self.eta.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::swap_status::Transaction
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::swap_status::Transaction>
+    for crate::api::swap_status::Transaction
+{
+    fn into_into_dart(self) -> crate::api::swap_status::Transaction {
         self
     }
 }
@@ -3603,6 +3936,26 @@ impl SseEncode for Option<crate::api::types::Side> {
     }
 }
 
+impl SseEncode for Option<crate::api::swap_status::Transaction> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::swap_status::Transaction>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<u32> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <u32>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<u64> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3691,6 +4044,61 @@ impl SseEncode for crate::api::fees::SwapLimits {
     }
 }
 
+impl SseEncode for crate::api::swap_status::SwapStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::swap_status::SwapStatus::SwapCreated => 0,
+                crate::api::swap_status::SwapStatus::SwapExpired => 1,
+                crate::api::swap_status::SwapStatus::SwapRefunded => 2,
+                crate::api::swap_status::SwapStatus::SwapError => 3,
+                crate::api::swap_status::SwapStatus::TxnMempool => 4,
+                crate::api::swap_status::SwapStatus::TxnClaimPending => 5,
+                crate::api::swap_status::SwapStatus::TxnClaimed => 6,
+                crate::api::swap_status::SwapStatus::TxnConfirmed => 7,
+                crate::api::swap_status::SwapStatus::TxnRefunded => 8,
+                crate::api::swap_status::SwapStatus::TxnFailed => 9,
+                crate::api::swap_status::SwapStatus::TxnLockupFailed => 10,
+                crate::api::swap_status::SwapStatus::TxnServerMempool => 11,
+                crate::api::swap_status::SwapStatus::TxnServerConfirmed => 12,
+                crate::api::swap_status::SwapStatus::TxnDirect => 13,
+                crate::api::swap_status::SwapStatus::InvoiceSet => 14,
+                crate::api::swap_status::SwapStatus::InvoicePending => 15,
+                crate::api::swap_status::SwapStatus::InvoicePaid => 16,
+                crate::api::swap_status::SwapStatus::InvoiceFailedToPay => 17,
+                crate::api::swap_status::SwapStatus::InvoiceSettled => 18,
+                crate::api::swap_status::SwapStatus::InvoiceExpired => 19,
+                crate::api::swap_status::SwapStatus::MinerfeePaid => 20,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::api::swap_status::SwapStatusResponse {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::swap_status::SwapStatus>::sse_encode(self.status, serializer);
+        <Option<crate::api::swap_status::Transaction>>::sse_encode(self.transaction, serializer);
+        <Option<String>>::sse_encode(self.failure_reason, serializer);
+        <Option<String>>::sse_encode(self.error, serializer);
+    }
+}
+
+impl SseEncode for crate::api::swap_status::SwapStreamStatus {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.id, serializer);
+        <crate::api::swap_status::SwapStatus>::sse_encode(self.status, serializer);
+        <Option<String>>::sse_encode(self.error, serializer);
+        <Option<crate::api::swap_status::Transaction>>::sse_encode(self.transaction, serializer);
+    }
+}
+
 impl SseEncode for crate::api::types::SwapTxKind {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3721,6 +4129,15 @@ impl SseEncode for crate::api::types::SwapType {
             },
             serializer,
         );
+    }
+}
+
+impl SseEncode for crate::api::swap_status::Transaction {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.id, serializer);
+        <String>::sse_encode(self.hex, serializer);
+        <Option<u32>>::sse_encode(self.eta, serializer);
     }
 }
 
@@ -3906,11 +4323,24 @@ mod io {
             CstDecode::<crate::api::types::Side>::cst_decode(*wrap).into()
         }
     }
+    impl CstDecode<crate::api::swap_status::Transaction> for *mut wire_cst_transaction {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::swap_status::Transaction {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::swap_status::Transaction>::cst_decode(*wrap).into()
+        }
+    }
     impl CstDecode<crate::api::types::TxFee> for *mut wire_cst_tx_fee {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::types::TxFee {
             let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
             CstDecode::<crate::api::types::TxFee>::cst_decode(*wrap).into()
+        }
+    }
+    impl CstDecode<u32> for *mut u32 {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> u32 {
+            unsafe { *flutter_rust_bridge::for_generated::box_from_leak_ptr(self) }
         }
     }
     impl CstDecode<u64> for *mut u64 {
@@ -4172,6 +4602,38 @@ mod io {
             crate::api::fees::SwapLimits {
                 minimal: self.minimal.cst_decode(),
                 maximal: self.maximal.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::swap_status::SwapStatusResponse> for wire_cst_swap_status_response {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::swap_status::SwapStatusResponse {
+            crate::api::swap_status::SwapStatusResponse {
+                status: self.status.cst_decode(),
+                transaction: self.transaction.cst_decode(),
+                failure_reason: self.failure_reason.cst_decode(),
+                error: self.error.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::swap_status::SwapStreamStatus> for wire_cst_swap_stream_status {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::swap_status::SwapStreamStatus {
+            crate::api::swap_status::SwapStreamStatus {
+                id: self.id.cst_decode(),
+                status: self.status.cst_decode(),
+                error: self.error.cst_decode(),
+                transaction: self.transaction.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::swap_status::Transaction> for wire_cst_transaction {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::swap_status::Transaction {
+            crate::api::swap_status::Transaction {
+                id: self.id.cst_decode(),
+                hex: self.hex.cst_decode(),
+                eta: self.eta.cst_decode(),
             }
         }
     }
@@ -4527,6 +4989,50 @@ mod io {
         }
     }
     impl Default for wire_cst_swap_limits {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_swap_status_response {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                status: Default::default(),
+                transaction: core::ptr::null_mut(),
+                failure_reason: core::ptr::null_mut(),
+                error: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_swap_status_response {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_swap_stream_status {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                id: core::ptr::null_mut(),
+                status: Default::default(),
+                error: core::ptr::null_mut(),
+                transaction: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_swap_stream_status {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_transaction {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                id: core::ptr::null_mut(),
+                hex: core::ptr::null_mut(),
+                eta: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_transaction {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -5408,6 +5914,41 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__swap_status__swap_status_as_string(
+        that: i32,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__swap_status__swap_status_as_string_impl(that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__swap_status__swap_status_from_json_string(
+        status: *mut wire_cst_list_prim_u_8_strict,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__swap_status__swap_status_from_json_string_impl(status)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__swap_status__swap_status_response_from_json(
+        json: *mut wire_cst_list_prim_u_8_strict,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__swap_status__swap_status_response_from_json_impl(json)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__swap_status__swap_status_to_json_string(
+        that: i32,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__swap_status__swap_status_to_json_string_impl(that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__swap_status__swap_stream_status_from_json(
+        json: *mut wire_cst_list_prim_u_8_strict,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__swap_status__swap_stream_status_from_json_impl(json)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_boltz_error() -> *mut wire_cst_boltz_error {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(
             wire_cst_boltz_error::new_with_null_ptr(),
@@ -5493,8 +6034,20 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_transaction() -> *mut wire_cst_transaction {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_transaction::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_tx_fee() -> *mut wire_cst_tx_fee {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_tx_fee::new_with_null_ptr())
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_u_32(value: u32) -> *mut u32 {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
     }
 
     #[unsafe(no_mangle)]
@@ -5711,6 +6264,29 @@ mod io {
     pub struct wire_cst_swap_limits {
         minimal: u64,
         maximal: u64,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_swap_status_response {
+        status: i32,
+        transaction: *mut wire_cst_transaction,
+        failure_reason: *mut wire_cst_list_prim_u_8_strict,
+        error: *mut wire_cst_list_prim_u_8_strict,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_swap_stream_status {
+        id: *mut wire_cst_list_prim_u_8_strict,
+        status: i32,
+        error: *mut wire_cst_list_prim_u_8_strict,
+        transaction: *mut wire_cst_transaction,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_transaction {
+        id: *mut wire_cst_list_prim_u_8_strict,
+        hex: *mut wire_cst_list_prim_u_8_strict,
+        eta: *mut u32,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

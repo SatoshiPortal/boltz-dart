@@ -9,6 +9,7 @@ import 'api/error.dart';
 import 'api/fees.dart';
 import 'api/lbtc_ln.dart';
 import 'api/lnurl.dart';
+import 'api/swap_status.dart';
 import 'api/transactions.dart';
 import 'api/types.dart';
 import 'dart:async';
@@ -76,7 +77,7 @@ class BoltzCore
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -1061345564;
+  int get rustContentHash => -449079008;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -405,6 +406,19 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<PreImage> crateApiTypesPreImageNew(
       {required String value, required String sha256, required String hash160});
+
+  String crateApiSwapStatusSwapStatusAsString({required SwapStatus that});
+
+  SwapStatus crateApiSwapStatusSwapStatusFromJsonString(
+      {required String status});
+
+  SwapStatusResponse crateApiSwapStatusSwapStatusResponseFromJson(
+      {required String json});
+
+  String crateApiSwapStatusSwapStatusToJsonString({required SwapStatus that});
+
+  SwapStreamStatus crateApiSwapStatusSwapStreamStatusFromJson(
+      {required String json});
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -2565,6 +2579,129 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         argNames: ["value", "sha256", "hash160"],
       );
 
+  @override
+  String crateApiSwapStatusSwapStatusAsString({required SwapStatus that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_swap_status(that);
+        return wire.wire__crate__api__swap_status__swap_status_as_string(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiSwapStatusSwapStatusAsStringConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusSwapStatusAsStringConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_status_as_string",
+        argNames: ["that"],
+      );
+
+  @override
+  SwapStatus crateApiSwapStatusSwapStatusFromJsonString(
+      {required String status}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_String(status);
+        return wire
+            .wire__crate__api__swap_status__swap_status_from_json_string(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_swap_status,
+        decodeErrorData: dco_decode_String,
+      ),
+      constMeta: kCrateApiSwapStatusSwapStatusFromJsonStringConstMeta,
+      argValues: [status],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusSwapStatusFromJsonStringConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_status_from_json_string",
+        argNames: ["status"],
+      );
+
+  @override
+  SwapStatusResponse crateApiSwapStatusSwapStatusResponseFromJson(
+      {required String json}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_String(json);
+        return wire
+            .wire__crate__api__swap_status__swap_status_response_from_json(
+                arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_swap_status_response,
+        decodeErrorData: dco_decode_String,
+      ),
+      constMeta: kCrateApiSwapStatusSwapStatusResponseFromJsonConstMeta,
+      argValues: [json],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusSwapStatusResponseFromJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_status_response_from_json",
+        argNames: ["json"],
+      );
+
+  @override
+  String crateApiSwapStatusSwapStatusToJsonString({required SwapStatus that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_swap_status(that);
+        return wire
+            .wire__crate__api__swap_status__swap_status_to_json_string(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiSwapStatusSwapStatusToJsonStringConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusSwapStatusToJsonStringConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_status_to_json_string",
+        argNames: ["that"],
+      );
+
+  @override
+  SwapStreamStatus crateApiSwapStatusSwapStreamStatusFromJson(
+      {required String json}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_String(json);
+        return wire
+            .wire__crate__api__swap_status__swap_stream_status_from_json(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_swap_stream_status,
+        decodeErrorData: dco_decode_String,
+      ),
+      constMeta: kCrateApiSwapStatusSwapStreamStatusFromJsonConstMeta,
+      argValues: [json],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusSwapStreamStatusFromJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_stream_status_from_json",
+        argNames: ["json"],
+      );
+
   @protected
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -2668,9 +2805,21 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Transaction dco_decode_box_autoadd_transaction(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_transaction(raw);
+  }
+
+  @protected
   TxFee dco_decode_box_autoadd_tx_fee(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_tx_fee(raw);
+  }
+
+  @protected
+  int dco_decode_box_autoadd_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
   }
 
   @protected
@@ -2954,6 +3103,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Transaction? dco_decode_opt_box_autoadd_transaction(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_transaction(raw);
+  }
+
+  @protected
+  int? dco_decode_opt_box_autoadd_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_u_32(raw);
+  }
+
+  @protected
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_u_64(raw);
@@ -3056,6 +3217,40 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  SwapStatus dco_decode_swap_status(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SwapStatus.values[raw as int];
+  }
+
+  @protected
+  SwapStatusResponse dco_decode_swap_status_response(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return SwapStatusResponse(
+      status: dco_decode_swap_status(arr[0]),
+      transaction: dco_decode_opt_box_autoadd_transaction(arr[1]),
+      failureReason: dco_decode_opt_String(arr[2]),
+      error: dco_decode_opt_String(arr[3]),
+    );
+  }
+
+  @protected
+  SwapStreamStatus dco_decode_swap_stream_status(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return SwapStreamStatus(
+      id: dco_decode_String(arr[0]),
+      status: dco_decode_swap_status(arr[1]),
+      error: dco_decode_opt_String(arr[2]),
+      transaction: dco_decode_opt_box_autoadd_transaction(arr[3]),
+    );
+  }
+
+  @protected
   SwapTxKind dco_decode_swap_tx_kind(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SwapTxKind.values[raw as int];
@@ -3065,6 +3260,19 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   SwapType dco_decode_swap_type(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SwapType.values[raw as int];
+  }
+
+  @protected
+  Transaction dco_decode_transaction(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return Transaction(
+      id: dco_decode_String(arr[0]),
+      hex: dco_decode_String(arr[1]),
+      eta: dco_decode_opt_box_autoadd_u_32(arr[2]),
+    );
   }
 
   @protected
@@ -3218,9 +3426,21 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Transaction sse_decode_box_autoadd_transaction(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_transaction(deserializer));
+  }
+
+  @protected
   TxFee sse_decode_box_autoadd_tx_fee(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_tx_fee(deserializer));
+  }
+
+  @protected
+  int sse_decode_box_autoadd_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_u_32(deserializer));
   }
 
   @protected
@@ -3559,6 +3779,29 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  Transaction? sse_decode_opt_box_autoadd_transaction(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_transaction(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  int? sse_decode_opt_box_autoadd_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_u_32(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -3650,6 +3893,42 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  SwapStatus sse_decode_swap_status(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return SwapStatus.values[inner];
+  }
+
+  @protected
+  SwapStatusResponse sse_decode_swap_status_response(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_status = sse_decode_swap_status(deserializer);
+    var var_transaction = sse_decode_opt_box_autoadd_transaction(deserializer);
+    var var_failureReason = sse_decode_opt_String(deserializer);
+    var var_error = sse_decode_opt_String(deserializer);
+    return SwapStatusResponse(
+        status: var_status,
+        transaction: var_transaction,
+        failureReason: var_failureReason,
+        error: var_error);
+  }
+
+  @protected
+  SwapStreamStatus sse_decode_swap_stream_status(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_id = sse_decode_String(deserializer);
+    var var_status = sse_decode_swap_status(deserializer);
+    var var_error = sse_decode_opt_String(deserializer);
+    var var_transaction = sse_decode_opt_box_autoadd_transaction(deserializer);
+    return SwapStreamStatus(
+        id: var_id,
+        status: var_status,
+        error: var_error,
+        transaction: var_transaction);
+  }
+
+  @protected
   SwapTxKind sse_decode_swap_tx_kind(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_i_32(deserializer);
@@ -3661,6 +3940,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_i_32(deserializer);
     return SwapType.values[inner];
+  }
+
+  @protected
+  Transaction sse_decode_transaction(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_id = sse_decode_String(deserializer);
+    var var_hex = sse_decode_String(deserializer);
+    var var_eta = sse_decode_opt_box_autoadd_u_32(deserializer);
+    return Transaction(id: var_id, hex: var_hex, eta: var_eta);
   }
 
   @protected
@@ -3741,6 +4029,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   @protected
   int cst_encode_side(Side raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return cst_encode_i_32(raw.index);
+  }
+
+  @protected
+  int cst_encode_swap_status(SwapStatus raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
     return cst_encode_i_32(raw.index);
   }
@@ -3882,9 +4176,22 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_box_autoadd_transaction(
+      Transaction self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_transaction(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_tx_fee(TxFee self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_tx_fee(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_u_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_32(self, serializer);
   }
 
   @protected
@@ -4127,6 +4434,27 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_transaction(
+      Transaction? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_transaction(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_u_32(int? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_u_32(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -4201,6 +4529,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_swap_status(SwapStatus self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_swap_status_response(
+      SwapStatusResponse self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_swap_status(self.status, serializer);
+    sse_encode_opt_box_autoadd_transaction(self.transaction, serializer);
+    sse_encode_opt_String(self.failureReason, serializer);
+    sse_encode_opt_String(self.error, serializer);
+  }
+
+  @protected
+  void sse_encode_swap_stream_status(
+      SwapStreamStatus self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.id, serializer);
+    sse_encode_swap_status(self.status, serializer);
+    sse_encode_opt_String(self.error, serializer);
+    sse_encode_opt_box_autoadd_transaction(self.transaction, serializer);
+  }
+
+  @protected
   void sse_encode_swap_tx_kind(SwapTxKind self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
@@ -4210,6 +4564,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_swap_type(SwapType self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_transaction(Transaction self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.id, serializer);
+    sse_encode_String(self.hex, serializer);
+    sse_encode_opt_box_autoadd_u_32(self.eta, serializer);
   }
 
   @protected
