@@ -9,7 +9,7 @@ edition = "2021"
 [lib]
 name = "boltz"
 doctest = false
-crate-type = ["staticlib", "cdylib"]
+crate-type = ["lib", "staticlib", "cdylib"]
 
 [dependencies]
 boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust.git", rev = "a5aec30422908026091b1f20f1a3e665722103de", features = ["lnurl", "electrum"] }
@@ -20,6 +20,9 @@ serde_json = "1.0.0"
 openssl = { version = "0.10.64", features = ["vendored"] }
 hex = "0.4"
 reqwest = { version = "0.12", features = ["json"] }
+
+[features]
+bull_sdk = []
 
 [build-dependencies]
 flutter_rust_bridge_codegen = "2.9.0"
