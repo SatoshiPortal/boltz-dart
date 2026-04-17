@@ -77,7 +77,7 @@ class BoltzCore
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -449079008;
+  int get rustContentHash => -1817020763;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -415,10 +415,20 @@ abstract class BoltzCoreApi extends BaseApi {
   SwapStatusResponse crateApiSwapStatusSwapStatusResponseFromJson(
       {required String json});
 
+  String crateApiSwapStatusSwapStatusResponseToJson(
+      {required SwapStatusResponse that});
+
   String crateApiSwapStatusSwapStatusToJsonString({required SwapStatus that});
 
   SwapStreamStatus crateApiSwapStatusSwapStreamStatusFromJson(
       {required String json});
+
+  String crateApiSwapStatusSwapStreamStatusToJson(
+      {required SwapStreamStatus that});
+
+  Transaction crateApiSwapStatusTransactionFromJson({required String json});
+
+  String crateApiSwapStatusTransactionToJson({required Transaction that});
 }
 
 class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
@@ -2654,6 +2664,31 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  String crateApiSwapStatusSwapStatusResponseToJson(
+      {required SwapStatusResponse that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_box_autoadd_swap_status_response(that);
+        return wire
+            .wire__crate__api__swap_status__swap_status_response_to_json(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_String,
+      ),
+      constMeta: kCrateApiSwapStatusSwapStatusResponseToJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusSwapStatusResponseToJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_status_response_to_json",
+        argNames: ["that"],
+      );
+
+  @override
   String crateApiSwapStatusSwapStatusToJsonString({required SwapStatus that}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -2700,6 +2735,77 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       const TaskConstMeta(
         debugName: "swap_stream_status_from_json",
         argNames: ["json"],
+      );
+
+  @override
+  String crateApiSwapStatusSwapStreamStatusToJson(
+      {required SwapStreamStatus that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_box_autoadd_swap_stream_status(that);
+        return wire
+            .wire__crate__api__swap_status__swap_stream_status_to_json(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_String,
+      ),
+      constMeta: kCrateApiSwapStatusSwapStreamStatusToJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusSwapStreamStatusToJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_stream_status_to_json",
+        argNames: ["that"],
+      );
+
+  @override
+  Transaction crateApiSwapStatusTransactionFromJson({required String json}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_String(json);
+        return wire.wire__crate__api__swap_status__transaction_from_json(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_transaction,
+        decodeErrorData: dco_decode_String,
+      ),
+      constMeta: kCrateApiSwapStatusTransactionFromJsonConstMeta,
+      argValues: [json],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusTransactionFromJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "transaction_from_json",
+        argNames: ["json"],
+      );
+
+  @override
+  String crateApiSwapStatusTransactionToJson({required Transaction that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        var arg0 = cst_encode_box_autoadd_transaction(that);
+        return wire.wire__crate__api__swap_status__transaction_to_json(arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_String,
+        decodeErrorData: dco_decode_String,
+      ),
+      constMeta: kCrateApiSwapStatusTransactionToJsonConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSwapStatusTransactionToJsonConstMeta =>
+      const TaskConstMeta(
+        debugName: "transaction_to_json",
+        argNames: ["that"],
       );
 
   @protected
@@ -2802,6 +2908,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Side dco_decode_box_autoadd_side(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_side(raw);
+  }
+
+  @protected
+  SwapStatusResponse dco_decode_box_autoadd_swap_status_response(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_swap_status_response(raw);
+  }
+
+  @protected
+  SwapStreamStatus dco_decode_box_autoadd_swap_stream_status(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_swap_stream_status(raw);
   }
 
   @protected
@@ -3423,6 +3541,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Side sse_decode_box_autoadd_side(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_side(deserializer));
+  }
+
+  @protected
+  SwapStatusResponse sse_decode_box_autoadd_swap_status_response(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_swap_status_response(deserializer));
+  }
+
+  @protected
+  SwapStreamStatus sse_decode_box_autoadd_swap_stream_status(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_swap_stream_status(deserializer));
   }
 
   @protected
@@ -4173,6 +4305,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_box_autoadd_side(Side self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_side(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_swap_status_response(
+      SwapStatusResponse self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_swap_status_response(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_swap_stream_status(
+      SwapStreamStatus self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_swap_stream_status(self, serializer);
   }
 
   @protected

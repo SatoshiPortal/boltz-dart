@@ -75,6 +75,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   Side dco_decode_box_autoadd_side(dynamic raw);
 
   @protected
+  SwapStatusResponse dco_decode_box_autoadd_swap_status_response(dynamic raw);
+
+  @protected
+  SwapStreamStatus dco_decode_box_autoadd_swap_stream_status(dynamic raw);
+
+  @protected
   Transaction dco_decode_box_autoadd_transaction(dynamic raw);
 
   @protected
@@ -273,6 +279,14 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Side sse_decode_box_autoadd_side(SseDeserializer deserializer);
+
+  @protected
+  SwapStatusResponse sse_decode_box_autoadd_swap_status_response(
+      SseDeserializer deserializer);
+
+  @protected
+  SwapStreamStatus sse_decode_box_autoadd_swap_stream_status(
+      SseDeserializer deserializer);
 
   @protected
   Transaction sse_decode_box_autoadd_transaction(SseDeserializer deserializer);
@@ -547,6 +561,24 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  ffi.Pointer<wire_cst_swap_status_response>
+      cst_encode_box_autoadd_swap_status_response(SwapStatusResponse raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_swap_status_response();
+    cst_api_fill_to_wire_swap_status_response(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_swap_stream_status>
+      cst_encode_box_autoadd_swap_stream_status(SwapStreamStatus raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ptr = wire.cst_new_box_autoadd_swap_stream_status();
+    cst_api_fill_to_wire_swap_stream_status(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_cst_transaction> cst_encode_box_autoadd_transaction(
       Transaction raw) {
     // Codec=Cst (C-struct based), see doc to use other codecs
@@ -720,6 +752,20 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void cst_api_fill_to_wire_box_autoadd_pre_image(
       PreImage apiObj, ffi.Pointer<wire_cst_pre_image> wireObj) {
     cst_api_fill_to_wire_pre_image(apiObj, wireObj.ref);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_autoadd_swap_status_response(
+      SwapStatusResponse apiObj,
+      ffi.Pointer<wire_cst_swap_status_response> wireObj) {
+    cst_api_fill_to_wire_swap_status_response(apiObj, wireObj.ref);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_autoadd_swap_stream_status(
+      SwapStreamStatus apiObj,
+      ffi.Pointer<wire_cst_swap_stream_status> wireObj) {
+    cst_api_fill_to_wire_swap_stream_status(apiObj, wireObj.ref);
   }
 
   @protected
@@ -1080,6 +1126,14 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_box_autoadd_side(Side self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_swap_status_response(
+      SwapStatusResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_swap_stream_status(
+      SwapStreamStatus self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_transaction(
@@ -3227,6 +3281,28 @@ class BoltzCoreWire implements BaseWire {
               )>();
 
   WireSyncRust2DartDco
+      wire__crate__api__swap_status__swap_status_response_to_json(
+    ffi.Pointer<wire_cst_swap_status_response> that,
+  ) {
+    return _wire__crate__api__swap_status__swap_status_response_to_json(that);
+  }
+
+  late final _wire__crate__api__swap_status__swap_status_response_to_jsonPtr =
+      _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_swap_status_response>,
+              )>>(
+    'frbgen_boltz_wire__crate__api__swap_status__swap_status_response_to_json',
+  );
+  late final _wire__crate__api__swap_status__swap_status_response_to_json =
+      _wire__crate__api__swap_status__swap_status_response_to_jsonPtr
+          .asFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_swap_status_response>,
+              )>();
+
+  WireSyncRust2DartDco
       wire__crate__api__swap_status__swap_status_to_json_string(int that) {
     return _wire__crate__api__swap_status__swap_status_to_json_string(that);
   }
@@ -3260,6 +3336,60 @@ class BoltzCoreWire implements BaseWire {
               WireSyncRust2DartDco Function(
                 ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               )>();
+
+  WireSyncRust2DartDco
+      wire__crate__api__swap_status__swap_stream_status_to_json(
+    ffi.Pointer<wire_cst_swap_stream_status> that,
+  ) {
+    return _wire__crate__api__swap_status__swap_stream_status_to_json(that);
+  }
+
+  late final _wire__crate__api__swap_status__swap_stream_status_to_jsonPtr =
+      _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_swap_stream_status>,
+              )>>(
+    'frbgen_boltz_wire__crate__api__swap_status__swap_stream_status_to_json',
+  );
+  late final _wire__crate__api__swap_status__swap_stream_status_to_json =
+      _wire__crate__api__swap_status__swap_stream_status_to_jsonPtr.asFunction<
+          WireSyncRust2DartDco Function(
+            ffi.Pointer<wire_cst_swap_stream_status>,
+          )>();
+
+  WireSyncRust2DartDco wire__crate__api__swap_status__transaction_from_json(
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> json,
+  ) {
+    return _wire__crate__api__swap_status__transaction_from_json(json);
+  }
+
+  late final _wire__crate__api__swap_status__transaction_from_jsonPtr = _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              )>>(
+      'frbgen_boltz_wire__crate__api__swap_status__transaction_from_json');
+  late final _wire__crate__api__swap_status__transaction_from_json =
+      _wire__crate__api__swap_status__transaction_from_jsonPtr.asFunction<
+          WireSyncRust2DartDco Function(
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+          )>();
+
+  WireSyncRust2DartDco wire__crate__api__swap_status__transaction_to_json(
+    ffi.Pointer<wire_cst_transaction> that,
+  ) {
+    return _wire__crate__api__swap_status__transaction_to_json(that);
+  }
+
+  late final _wire__crate__api__swap_status__transaction_to_jsonPtr = _lookup<
+          ffi.NativeFunction<
+              WireSyncRust2DartDco Function(
+                  ffi.Pointer<wire_cst_transaction>)>>(
+      'frbgen_boltz_wire__crate__api__swap_status__transaction_to_json');
+  late final _wire__crate__api__swap_status__transaction_to_json =
+      _wire__crate__api__swap_status__transaction_to_jsonPtr.asFunction<
+          WireSyncRust2DartDco Function(ffi.Pointer<wire_cst_transaction>)>();
 
   ffi.Pointer<wire_cst_boltz_error> cst_new_box_autoadd_boltz_error() {
     return _cst_new_box_autoadd_boltz_error();
@@ -3413,6 +3543,32 @@ class BoltzCoreWire implements BaseWire {
   );
   late final _cst_new_box_autoadd_side = _cst_new_box_autoadd_sidePtr
       .asFunction<ffi.Pointer<ffi.Int32> Function(int)>();
+
+  ffi.Pointer<wire_cst_swap_status_response>
+      cst_new_box_autoadd_swap_status_response() {
+    return _cst_new_box_autoadd_swap_status_response();
+  }
+
+  late final _cst_new_box_autoadd_swap_status_responsePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Pointer<wire_cst_swap_status_response> Function()>>(
+      'frbgen_boltz_cst_new_box_autoadd_swap_status_response');
+  late final _cst_new_box_autoadd_swap_status_response =
+      _cst_new_box_autoadd_swap_status_responsePtr
+          .asFunction<ffi.Pointer<wire_cst_swap_status_response> Function()>();
+
+  ffi.Pointer<wire_cst_swap_stream_status>
+      cst_new_box_autoadd_swap_stream_status() {
+    return _cst_new_box_autoadd_swap_stream_status();
+  }
+
+  late final _cst_new_box_autoadd_swap_stream_statusPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Pointer<wire_cst_swap_stream_status> Function()>>(
+      'frbgen_boltz_cst_new_box_autoadd_swap_stream_status');
+  late final _cst_new_box_autoadd_swap_stream_status =
+      _cst_new_box_autoadd_swap_stream_statusPtr
+          .asFunction<ffi.Pointer<wire_cst_swap_stream_status> Function()>();
 
   ffi.Pointer<wire_cst_transaction> cst_new_box_autoadd_transaction() {
     return _cst_new_box_autoadd_transaction();
@@ -3717,6 +3873,28 @@ final class wire_cst_transaction extends ffi.Struct {
   external ffi.Pointer<ffi.Uint32> eta;
 }
 
+final class wire_cst_swap_status_response extends ffi.Struct {
+  @ffi.Int32()
+  external int status;
+
+  external ffi.Pointer<wire_cst_transaction> transaction;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> failure_reason;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> error;
+}
+
+final class wire_cst_swap_stream_status extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> id;
+
+  @ffi.Int32()
+  external int status;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> error;
+
+  external ffi.Pointer<wire_cst_transaction> transaction;
+}
+
 final class wire_cst_swap_limits extends ffi.Struct {
   @ffi.Uint64()
   external int minimal;
@@ -3827,26 +4005,4 @@ final class wire_cst_submarine_fees_and_limits extends ffi.Struct {
   external wire_cst_sub_swap_fees btc_fees;
 
   external wire_cst_sub_swap_fees lbtc_fees;
-}
-
-final class wire_cst_swap_status_response extends ffi.Struct {
-  @ffi.Int32()
-  external int status;
-
-  external ffi.Pointer<wire_cst_transaction> transaction;
-
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> failure_reason;
-
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> error;
-}
-
-final class wire_cst_swap_stream_status extends ffi.Struct {
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> id;
-
-  @ffi.Int32()
-  external int status;
-
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> error;
-
-  external ffi.Pointer<wire_cst_transaction> transaction;
 }

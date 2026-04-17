@@ -167,14 +167,38 @@ pub struct SwapStreamStatus {
     pub transaction: Option<Transaction>,
 }
 
-/// Deserialize a SwapStreamStatus from a JSON string
-#[frb(sync)]
-pub fn swap_stream_status_from_json(json: String) -> Result<SwapStreamStatus, String> {
-    serde_json::from_str(&json).map_err(|e| e.to_string())
+impl SwapStreamStatus {
+    #[frb(sync)]
+    pub fn from_json(json: String) -> Result<SwapStreamStatus, String> {
+        serde_json::from_str(&json).map_err(|e| e.to_string())
+    }
+
+    #[frb(sync)]
+    pub fn to_json(&self) -> Result<String, String> {
+        serde_json::to_string(self).map_err(|e| e.to_string())
+    }
 }
 
-/// Deserialize a SwapStatusResponse from a JSON string
-#[frb(sync)]
-pub fn swap_status_response_from_json(json: String) -> Result<SwapStatusResponse, String> {
-    serde_json::from_str(&json).map_err(|e| e.to_string())
+impl SwapStatusResponse {
+    #[frb(sync)]
+    pub fn from_json(json: String) -> Result<SwapStatusResponse, String> {
+        serde_json::from_str(&json).map_err(|e| e.to_string())
+    }
+
+    #[frb(sync)]
+    pub fn to_json(&self) -> Result<String, String> {
+        serde_json::to_string(self).map_err(|e| e.to_string())
+    }
+}
+
+impl Transaction {
+    #[frb(sync)]
+    pub fn from_json(json: String) -> Result<Transaction, String> {
+        serde_json::from_str(&json).map_err(|e| e.to_string())
+    }
+
+    #[frb(sync)]
+    pub fn to_json(&self) -> Result<String, String> {
+        serde_json::to_string(self).map_err(|e| e.to_string())
+    }
 }

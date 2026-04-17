@@ -8,16 +8,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_receiver_is_total_eq`, `assert_receiver_is_total_eq`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `fmt`, `fmt`
 
-/// Deserialize a SwapStreamStatus from a JSON string
-SwapStreamStatus swapStreamStatusFromJson({required String json}) =>
-    BoltzCore.instance.api
-        .crateApiSwapStatusSwapStreamStatusFromJson(json: json);
-
-/// Deserialize a SwapStatusResponse from a JSON string
-SwapStatusResponse swapStatusResponseFromJson({required String json}) =>
-    BoltzCore.instance.api
-        .crateApiSwapStatusSwapStatusResponseFromJson(json: json);
-
 /// Status of a swap as reported by the Boltz API
 enum SwapStatus {
   swapCreated,
@@ -75,6 +65,15 @@ class SwapStatusResponse {
     this.error,
   });
 
+  static SwapStatusResponse fromJson({required String json}) =>
+      BoltzCore.instance.api
+          .crateApiSwapStatusSwapStatusResponseFromJson(json: json);
+
+  String toJson() =>
+      BoltzCore.instance.api.crateApiSwapStatusSwapStatusResponseToJson(
+        that: this,
+      );
+
   @override
   int get hashCode =>
       status.hashCode ^
@@ -107,6 +106,15 @@ class SwapStreamStatus {
     this.transaction,
   });
 
+  static SwapStreamStatus fromJson({required String json}) =>
+      BoltzCore.instance.api
+          .crateApiSwapStatusSwapStreamStatusFromJson(json: json);
+
+  String toJson() =>
+      BoltzCore.instance.api.crateApiSwapStatusSwapStreamStatusToJson(
+        that: this,
+      );
+
   @override
   int get hashCode =>
       id.hashCode ^ status.hashCode ^ error.hashCode ^ transaction.hashCode;
@@ -133,6 +141,13 @@ class Transaction {
     required this.hex,
     this.eta,
   });
+
+  static Transaction fromJson({required String json}) =>
+      BoltzCore.instance.api.crateApiSwapStatusTransactionFromJson(json: json);
+
+  String toJson() => BoltzCore.instance.api.crateApiSwapStatusTransactionToJson(
+        that: this,
+      );
 
   @override
   int get hashCode => id.hashCode ^ hex.hashCode ^ eta.hashCode;
