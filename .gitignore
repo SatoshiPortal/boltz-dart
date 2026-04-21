@@ -51,7 +51,6 @@ xcuserdata
 ios/libboltz.xcframework
 macos/libboltz.xcframework
 
-**Cargo.lock
 rust/target/
 rust/builds/
 pubspec.lock
