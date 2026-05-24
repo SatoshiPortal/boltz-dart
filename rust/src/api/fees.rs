@@ -50,6 +50,10 @@ impl Fees {
 pub struct SwapLimits {
     pub minimal: u64,
     pub maximal: u64,
+    /// Submarine pairs only (`GET /swap/submarine`).
+    pub maximal_zero_conf: Option<u64>,
+    /// Submarine pairs only; use for batched swap minimum validation.
+    pub minimal_batched: Option<u64>,
 }
 
 impl From<boltz_client::swaps::boltz::PairLimits> for SwapLimits {
@@ -57,6 +61,8 @@ impl From<boltz_client::swaps::boltz::PairLimits> for SwapLimits {
         SwapLimits {
             minimal: limits.minimal as u64,
             maximal: limits.maximal as u64,
+            maximal_zero_conf: None,
+            minimal_batched: None,
         }
     }
 }
@@ -65,14 +71,18 @@ impl From<boltz_client::swaps::boltz::ReverseLimits> for SwapLimits {
         SwapLimits {
             minimal: limits.minimal as u64,
             maximal: limits.maximal as u64,
+            maximal_zero_conf: None,
+            minimal_batched: None,
         }
     }
 }
 impl From<boltz_client::swaps::boltz::SubmarinePairLimits> for SwapLimits {
     fn from(limits: boltz_client::swaps::boltz::SubmarinePairLimits) -> Self {
         SwapLimits {
-            minimal: limits.minimal as u64,
-            maximal: limits.maximal as u64,
+            minimal: limits.minimal,
+            maximal: limits.maximal,
+            maximal_zero_conf: Some(limits.maximal_zero_conf),
+            minimal_batched: limits.minimal_batched,
         }
     }
 }

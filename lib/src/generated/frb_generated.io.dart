@@ -857,6 +857,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       SwapLimits apiObj, wire_cst_swap_limits wireObj) {
     wireObj.minimal = cst_encode_u_64(apiObj.minimal);
     wireObj.maximal = cst_encode_u_64(apiObj.maximal);
+    wireObj.maximal_zero_conf =
+        cst_encode_opt_box_autoadd_u_64(apiObj.maximalZeroConf);
+    wireObj.minimal_batched =
+        cst_encode_opt_box_autoadd_u_64(apiObj.minimalBatched);
   }
 
   @protected
@@ -3455,6 +3459,10 @@ final class wire_cst_swap_limits extends ffi.Struct {
 
   @ffi.Uint64()
   external int maximal;
+
+  external ffi.Pointer<ffi.Uint64> maximal_zero_conf;
+
+  external ffi.Pointer<ffi.Uint64> minimal_batched;
 }
 
 final class wire_cst_chain_swap_fees extends ffi.Struct {

@@ -253,14 +253,22 @@ class SubmarineFeesAndLimits {
 class SwapLimits {
   final BigInt minimal;
   final BigInt maximal;
+  final BigInt? maximalZeroConf;
+  final BigInt? minimalBatched;
 
   const SwapLimits({
     required this.minimal,
     required this.maximal,
+    this.maximalZeroConf,
+    this.minimalBatched,
   });
 
   @override
-  int get hashCode => minimal.hashCode ^ maximal.hashCode;
+  int get hashCode =>
+      minimal.hashCode ^
+      maximal.hashCode ^
+      maximalZeroConf.hashCode ^
+      minimalBatched.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -268,5 +276,7 @@ class SwapLimits {
       other is SwapLimits &&
           runtimeType == other.runtimeType &&
           minimal == other.minimal &&
-          maximal == other.maximal;
+          maximal == other.maximal &&
+          maximalZeroConf == other.maximalZeroConf &&
+          minimalBatched == other.minimalBatched;
 }

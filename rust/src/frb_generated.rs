@@ -2625,9 +2625,13 @@ impl SseDecode for crate::api::fees::SwapLimits {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_minimal = <u64>::sse_decode(deserializer);
         let mut var_maximal = <u64>::sse_decode(deserializer);
+        let mut var_maximalZeroConf = <Option<u64>>::sse_decode(deserializer);
+        let mut var_minimalBatched = <Option<u64>>::sse_decode(deserializer);
         return crate::api::fees::SwapLimits {
             minimal: var_minimal,
             maximal: var_maximal,
+            maximal_zero_conf: var_maximalZeroConf,
+            minimal_batched: var_minimalBatched,
         };
     }
 }
@@ -3246,6 +3250,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::fees::SwapLimits {
         [
             self.minimal.into_into_dart().into_dart(),
             self.maximal.into_into_dart().into_dart(),
+            self.maximal_zero_conf.into_into_dart().into_dart(),
+            self.minimal_batched.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -3688,6 +3694,8 @@ impl SseEncode for crate::api::fees::SwapLimits {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <u64>::sse_encode(self.minimal, serializer);
         <u64>::sse_encode(self.maximal, serializer);
+        <Option<u64>>::sse_encode(self.maximal_zero_conf, serializer);
+        <Option<u64>>::sse_encode(self.minimal_batched, serializer);
     }
 }
 
@@ -4172,6 +4180,8 @@ mod io {
             crate::api::fees::SwapLimits {
                 minimal: self.minimal.cst_decode(),
                 maximal: self.maximal.cst_decode(),
+                maximal_zero_conf: self.maximal_zero_conf.cst_decode(),
+                minimal_batched: self.minimal_batched.cst_decode(),
             }
         }
     }
@@ -4523,6 +4533,8 @@ mod io {
             Self {
                 minimal: Default::default(),
                 maximal: Default::default(),
+                maximal_zero_conf: core::ptr::null_mut(),
+                minimal_batched: core::ptr::null_mut(),
             }
         }
     }
@@ -5711,6 +5723,8 @@ mod io {
     pub struct wire_cst_swap_limits {
         minimal: u64,
         maximal: u64,
+        maximal_zero_conf: *mut u64,
+        minimal_batched: *mut u64,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
