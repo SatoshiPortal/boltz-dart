@@ -3,7 +3,7 @@ name = "boltz"
 authors = [
     "i5hi <ishi@satoshiportal.com>, mocodesmo <morteza@satoshiportal.com>",
 ]
-version = "0.1.6"
+version = "0.4.0"
 edition = "2021"
 
 [lib]
