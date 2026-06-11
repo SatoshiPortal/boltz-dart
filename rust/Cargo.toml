@@ -25,7 +25,7 @@ reqwest = { version = "0.12", features = ["json"] }
 bull_sdk = []
 
 [build-dependencies]
-flutter_rust_bridge_codegen = "2.9.0"
+flutter_rust_bridge_codegen = "=2.12.0"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
