@@ -145,6 +145,8 @@ typedef struct wire_cst_lnurl {
 typedef struct wire_cst_swap_limits {
   uint64_t minimal;
   uint64_t maximal;
+  uint64_t *maximal_zero_conf;
+  uint64_t *minimal_batched;
 } wire_cst_swap_limits;
 
 typedef struct wire_cst_chain_swap_fees {
