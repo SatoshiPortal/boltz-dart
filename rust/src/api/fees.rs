@@ -50,7 +50,7 @@ impl Fees {
 pub struct SwapLimits {
     pub minimal: u64,
     pub maximal: u64,
-    /// Submarine pairs only (`GET /swap/submarine`).
+    /// Submarine and chain pairs. Maximum amount allowed for zero-conf.
     pub maximal_zero_conf: Option<u64>,
     /// Submarine pairs only; use for batched swap minimum validation.
     pub minimal_batched: Option<u64>,
@@ -61,7 +61,7 @@ impl From<boltz_client::swaps::boltz::PairLimits> for SwapLimits {
         SwapLimits {
             minimal: limits.minimal as u64,
             maximal: limits.maximal as u64,
-            maximal_zero_conf: None,
+            maximal_zero_conf: Some(limits.maximal_zero_conf),
             minimal_batched: None,
         }
     }
