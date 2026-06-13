@@ -181,7 +181,7 @@ impl ChainSwap {
                     preimage_hash: preimage.sha256,
                     claim_public_key: Some(claim_public_key),
                     refund_public_key: Some(refund_public_key),
-                    referral_id: None,
+                    referral_id: referral_id.clone(),
                     user_lock_amount: Some(amount),
                     server_lock_amount: None,
                     pair_hash: None,
@@ -243,7 +243,7 @@ impl ChainSwap {
                     preimage_hash: preimage.sha256,
                     claim_public_key: Some(claim_public_key),
                     refund_public_key: Some(refund_public_key),
-                    referral_id: None,
+                    referral_id: referral_id.clone(),
                     user_lock_amount: Some(amount),
                     server_lock_amount: None,
                     pair_hash: None, // Add address signature here.

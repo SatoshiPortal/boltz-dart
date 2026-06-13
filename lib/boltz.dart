@@ -11,6 +11,7 @@ export './src/generated/api/lnurl.dart';
 export './src/generated/api/invoice.dart';
 export './src/generated/api/secrets.dart';
 export './src/generated/api/restore.dart';
+export './src/generated/api/transactions.dart';
+export './src/generated/api/swap_status.dart';
 export './src/utils/loader.dart';
 export './src/utils/stream.dart';
-export './src/types/swap_status.dart';

@@ -3,25 +3,29 @@ name = "boltz"
 authors = [
     "i5hi <ishi@satoshiportal.com>, mocodesmo <morteza@satoshiportal.com>",
 ]
-version = "0.3.1"
+version = "0.4.0"
 edition = "2021"
 
 [lib]
 name = "boltz"
 doctest = false
-crate-type = ["staticlib", "cdylib"]
+crate-type = ["lib", "staticlib", "cdylib"]
 
 [dependencies]
-boltz-client = { version = "0.3.1", features = ["lnurl", "electrum"] }
-flutter_rust_bridge = "=2.11.1"
+boltz-client = { version = "0.4.0", features = ["lnurl", "electrum"] }
+flutter_rust_bridge = "=2.12.0"
 anyhow = "1.0.68"
 serde = { version = "1.0.0", features = ["derive"] }
 serde_json = "1.0.0"
 openssl = { version = "0.10.64", features = ["vendored"] }
 hex = "0.4"
+reqwest = { version = "0.12", features = ["json"] }
+
+[features]
+bull_sdk = []
 
 [build-dependencies]
-flutter_rust_bridge_codegen = "2.9.0"
+flutter_rust_bridge_codegen = "=2.12.0"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

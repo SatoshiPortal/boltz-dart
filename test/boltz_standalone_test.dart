@@ -55,6 +55,22 @@ void main() {
     expect((chain_fees.btcToLbtcFees.percentage > 0.0), true);
   });
 
+  test('CHAIN SWAP LIMITS include maximalZeroConf', () async {
+    const boltzUrl = 'https://api.boltz.exchange/v2';
+    final fees = Fees(boltzUrl: boltzUrl);
+    final chain_fees = await fees.chain();
+
+    expect(chain_fees.btcLimits.maximalZeroConf, isNotNull);
+    expect(chain_fees.lbtcLimits.maximalZeroConf, isNotNull);
+
+    print('BTC chain limits: minimal=${chain_fees.btcLimits.minimal}, '
+        'maximal=${chain_fees.btcLimits.maximal}, '
+        'maximalZeroConf=${chain_fees.btcLimits.maximalZeroConf}');
+    print('LBTC chain limits: minimal=${chain_fees.lbtcLimits.minimal}, '
+        'maximal=${chain_fees.lbtcLimits.maximal}, '
+        'maximalZeroConf=${chain_fees.lbtcLimits.maximalZeroConf}');
+  });
+
   test('DECODE EXPIRED BOLT11', () async {
     final decoded = await DecodedInvoice.fromString(s: expiredBolt11Invoice);
     assert(decoded.isExpired);

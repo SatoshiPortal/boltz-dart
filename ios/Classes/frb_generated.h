@@ -150,6 +150,26 @@ typedef struct wire_cst_lnurl {
   struct wire_cst_list_prim_u_8_strict *value;
 } wire_cst_lnurl;
 
+typedef struct wire_cst_transaction {
+  struct wire_cst_list_prim_u_8_strict *id;
+  struct wire_cst_list_prim_u_8_strict *hex;
+  uint32_t *eta;
+} wire_cst_transaction;
+
+typedef struct wire_cst_swap_status_response {
+  int32_t status;
+  struct wire_cst_transaction *transaction;
+  struct wire_cst_list_prim_u_8_strict *failure_reason;
+  struct wire_cst_list_prim_u_8_strict *error;
+} wire_cst_swap_status_response;
+
+typedef struct wire_cst_swap_stream_status {
+  struct wire_cst_list_prim_u_8_strict *id;
+  int32_t status;
+  struct wire_cst_list_prim_u_8_strict *error;
+  struct wire_cst_transaction *transaction;
+} wire_cst_swap_stream_status;
+
 typedef struct wire_cst_list_btc_ln_swap {
   struct wire_cst_btc_ln_swap *ptr;
   int32_t len;
@@ -168,6 +188,8 @@ typedef struct wire_cst_list_lbtc_ln_swap {
 typedef struct wire_cst_swap_limits {
   uint64_t minimal;
   uint64_t maximal;
+  uint64_t *maximal_zero_conf;
+  uint64_t *minimal_batched;
 } wire_cst_swap_limits;
 
 typedef struct wire_cst_chain_swap_fees {
@@ -201,6 +223,12 @@ typedef struct wire_cst_miner_fees {
   uint64_t lockup;
   uint64_t claim;
 } wire_cst_miner_fees;
+
+typedef struct wire_cst_outspend_status {
+  int32_t kind;
+  struct wire_cst_list_prim_u_8_strict *txid;
+  uint64_t *timestamp;
+} wire_cst_outspend_status;
 
 typedef struct wire_cst_rev_swap_fees {
   double percentage;
@@ -408,6 +436,14 @@ void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_refund_tx_size(int64_
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_to_json(int64_t port_,
                                                                    struct wire_cst_chain_swap *that);
 
+void frbgen_boltz_wire__crate__api__transactions__check_vout_0_outspend(int64_t port_,
+                                                                        struct wire_cst_list_prim_u_8_strict *swap_id,
+                                                                        int32_t swap_type,
+                                                                        int32_t tx_kind,
+                                                                        int32_t network,
+                                                                        struct wire_cst_list_prim_u_8_strict *boltz_url,
+                                                                        int32_t *chain_swap_direction);
+
 void frbgen_boltz_wire__crate__api__invoice__decoded_invoice_from_string(int64_t port_,
                                                                          struct wire_cst_list_prim_u_8_strict *s,
                                                                          struct wire_cst_list_prim_u_8_strict *boltz_url);
@@ -561,6 +597,24 @@ void frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(int64_t port
                                                                     struct wire_cst_list_prim_u_8_strict *wallet_passphrase,
                                                                     int32_t network);
 
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_as_string(int32_t that);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_from_json_string(struct wire_cst_list_prim_u_8_strict *status);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_response_from_json(struct wire_cst_list_prim_u_8_strict *json);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_response_to_json(struct wire_cst_swap_status_response *that);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_to_json_string(int32_t that);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_stream_status_from_json(struct wire_cst_list_prim_u_8_strict *json);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_stream_status_to_json(struct wire_cst_swap_stream_status *that);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__transaction_from_json(struct wire_cst_list_prim_u_8_strict *json);
+
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__transaction_to_json(struct wire_cst_transaction *that);
+
 struct wire_cst_boltz_error *frbgen_boltz_cst_new_box_autoadd_boltz_error(void);
 
 struct wire_cst_btc_ln_swap *frbgen_boltz_cst_new_box_autoadd_btc_ln_swap(void);
@@ -568,6 +622,8 @@ struct wire_cst_btc_ln_swap *frbgen_boltz_cst_new_box_autoadd_btc_ln_swap(void);
 struct wire_cst_btc_swap_script_str *frbgen_boltz_cst_new_box_autoadd_btc_swap_script_str(void);
 
 struct wire_cst_chain_swap *frbgen_boltz_cst_new_box_autoadd_chain_swap(void);
+
+int32_t *frbgen_boltz_cst_new_box_autoadd_chain_swap_direction(int32_t value);
 
 struct wire_cst_electrum_settings *frbgen_boltz_cst_new_box_autoadd_electrum_settings(void);
 
@@ -587,7 +643,17 @@ int32_t *frbgen_boltz_cst_new_box_autoadd_side(int32_t value);
 
 struct wire_cst_swap_master_key *frbgen_boltz_cst_new_box_autoadd_swap_master_key(void);
 
+struct wire_cst_swap_status_response *frbgen_boltz_cst_new_box_autoadd_swap_status_response(void);
+
+struct wire_cst_swap_stream_status *frbgen_boltz_cst_new_box_autoadd_swap_stream_status(void);
+
+struct wire_cst_transaction *frbgen_boltz_cst_new_box_autoadd_transaction(void);
+
 struct wire_cst_tx_fee *frbgen_boltz_cst_new_box_autoadd_tx_fee(void);
+
+uint32_t *frbgen_boltz_cst_new_box_autoadd_u_32(uint32_t value);
+
+uint64_t *frbgen_boltz_cst_new_box_autoadd_u_64(uint64_t value);
 
 struct wire_cst_list_btc_ln_swap *frbgen_boltz_cst_new_list_btc_ln_swap(int32_t len);
 
@@ -602,6 +668,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_btc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_btc_swap_script_str);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_chain_swap);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_chain_swap_direction);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_electrum_settings);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_fees);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_key_pair);
@@ -611,7 +678,12 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_pre_image);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_side);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_swap_master_key);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_swap_status_response);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_swap_stream_status);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_transaction);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_tx_fee);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_u_32);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_u_64);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_btc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_chain_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_lbtc_ln_swap);
@@ -674,6 +746,16 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_from_invoice_str);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_create);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_as_string);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_from_json_string);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_response_from_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_response_to_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_to_json_string);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_stream_status_from_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_stream_status_to_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__transaction_from_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__transaction_to_json);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__transactions__check_vout_0_outspend);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__l_btc_swap_script_str_new);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);

@@ -37,7 +37,7 @@ impl From<BoltzSide> for Side {
     }
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Debug)]
 pub enum SwapTxKind {
     Claim,
     Refund,
@@ -442,4 +442,12 @@ pub struct ElectrumSettings {
     pub validate_domain: bool,
     pub tls: bool,
     pub timeout: u8,
+}
+
+/// Result of checking if a transaction output has been spent
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct OutspendStatus {
+    pub kind: SwapTxKind,
+    pub txid: Option<String>,
+    pub timestamp: Option<u64>,
 }

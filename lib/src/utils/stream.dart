@@ -1,37 +1,61 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:boltz/src/types/swap_status.dart';
+import 'package:boltz/src/generated/api/swap_status.dart';
 import 'package:web_socket_channel/io.dart';
 
 final String mainnetBaseUrl = 'api.boltz.exchange/v2';
 final String testnetBaseUrl = 'api.testnet.boltz.exchange/v2';
 
 class BoltzWebSocket {
-  // final Dio _dio;
   IOWebSocketChannel? channel;
   StreamController<SwapStreamStatus>? _broadcastController;
   StreamSubscription? _channelSubscription;
 
-  BoltzWebSocket._();
+  /// Interval for protocol-level WebSocket pings. When the peer stops
+  /// answering (e.g. half-open connection after a mobile network change), the
+  /// socket closes and [onDone] fires instead of hanging silently.
+  final Duration pingInterval;
+
+  /// Called when the socket closes for any reason other than [dispose] or
+  /// [reconnect]. Consumers should reconnect (with backoff) and re-subscribe
+  /// their swap ids.
+  void Function()? onDone;
+
+  /// Called when the socket reports an error. The error is also forwarded to
+  /// [stream] listeners.
+  void Function(Object error)? onError;
+
+  String? _baseUrl;
+  bool _disposed = false;
+
+  BoltzWebSocket._({required this.pingInterval, this.onDone, this.onError});
 
   Stream<SwapStreamStatus> get stream => _broadcastController!.stream;
 
-  static BoltzWebSocket create(String boltzUrl) {
-    try {
-      BoltzWebSocket stream = BoltzWebSocket._();
-      stream.initialize(boltzUrl);
-      return stream;
-    } catch (e) {
-      rethrow;
-    }
+  static BoltzWebSocket create(
+    String boltzUrl, {
+    Duration pingInterval = const Duration(seconds: 30),
+    void Function()? onDone,
+    void Function(Object error)? onError,
+  }) {
+    BoltzWebSocket stream = BoltzWebSocket._(
+        pingInterval: pingInterval, onDone: onDone, onError: onError);
+    stream.initialize(boltzUrl);
+    return stream;
   }
 
   void initialize(String baseUrl) {
-    channel = IOWebSocketChannel.connect(wssProtocolCheck('$baseUrl/ws'));
-    _broadcastController = StreamController<SwapStreamStatus>.broadcast();
+    _baseUrl = baseUrl;
+    _disposed = false;
+    channel = IOWebSocketChannel.connect(wssProtocolCheck('$baseUrl/ws'),
+        pingInterval: pingInterval);
+    _broadcastController ??= StreamController<SwapStreamStatus>.broadcast();
     _channelSubscription = channel!.stream.listen((msg) {
       final resp = jsonDecode(msg);
+      if (resp['event'] == 'pong') {
+        return;
+      }
       if (resp['error'] != null) {
         _broadcastController!.add(SwapStreamStatus(
             id: '', status: SwapStatus.swapError, error: resp['error']));
@@ -39,8 +63,8 @@ class BoltzWebSocket {
         final swapList = resp['args'];
         for (final swap in swapList) {
           if (swap['error'] == null) {
-            // print(swap);
-            _broadcastController!.add(SwapStreamStatus.fromJson(swap));
+            _broadcastController!
+                .add(SwapStreamStatus.fromJson(json: jsonEncode(swap)));
           } else {
             _broadcastController!.add(SwapStreamStatus(
                 id: swap['id'],
@@ -51,7 +75,31 @@ class BoltzWebSocket {
       }
     }, onError: (error) {
       _broadcastController!.addError(error);
+      onError?.call(error);
+    }, onDone: () {
+      if (!_disposed) {
+        onDone?.call();
+      }
     });
+  }
+
+  /// Closes the current socket and connects again to the same URL, keeping
+  /// [stream] (and its listeners) alive. Swap subscriptions are not restored;
+  /// call [subscribe] again after reconnecting.
+  void reconnect() {
+    final baseUrl = _baseUrl;
+    if (baseUrl == null) {
+      return;
+    }
+    _channelSubscription?.cancel();
+    channel?.sink.close();
+    initialize(baseUrl);
+  }
+
+  /// Application-level ping; Boltz replies with `{"event": "pong"}`, which is
+  /// consumed internally.
+  void ping() {
+    channel?.sink.add(jsonEncode({'op': 'ping'}));
   }
 
   void subscribe(List<String> swapIds) {
@@ -73,13 +121,14 @@ class BoltzWebSocket {
   }
 
   void dispose() {
+    _disposed = true;
     _channelSubscription?.cancel();
     _broadcastController?.close();
-    channel!.sink.close();
+    channel?.sink.close();
   }
 
   bool isSwapStatusChannelOpen() {
-    return channel != null;
+    return channel != null && channel!.closeCode == null;
   }
 }
 
