@@ -63,7 +63,8 @@ class BoltzWebSocket {
         final swapList = resp['args'];
         for (final swap in swapList) {
           if (swap['error'] == null) {
-            _broadcastController!.add(SwapStreamStatus.fromJson(swap));
+            _broadcastController!
+                .add(SwapStreamStatus.fromJson(json: jsonEncode(swap)));
           } else {
             _broadcastController!.add(SwapStreamStatus(
                 id: swap['id'],
