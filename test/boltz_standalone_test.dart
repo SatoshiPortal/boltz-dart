@@ -60,15 +60,15 @@ void main() {
     final fees = Fees(boltzUrl: boltzUrl);
     final chain_fees = await fees.chain();
 
-    expect(chain_fees.btcLimits.maximalZeroConf, isNotNull);
-    expect(chain_fees.lbtcLimits.maximalZeroConf, isNotNull);
+    expect(chain_fees.btcToLbtcLimits.maximalZeroConf, isNotNull);
+    expect(chain_fees.lbtcToBtcLimits.maximalZeroConf, isNotNull);
 
-    print('BTC chain limits: minimal=${chain_fees.btcLimits.minimal}, '
-        'maximal=${chain_fees.btcLimits.maximal}, '
-        'maximalZeroConf=${chain_fees.btcLimits.maximalZeroConf}');
-    print('LBTC chain limits: minimal=${chain_fees.lbtcLimits.minimal}, '
-        'maximal=${chain_fees.lbtcLimits.maximal}, '
-        'maximalZeroConf=${chain_fees.lbtcLimits.maximalZeroConf}');
+    print('BTC chain limits: minimal=${chain_fees.btcToLbtcLimits.minimal}, '
+        'maximal=${chain_fees.btcToLbtcLimits.maximal}, '
+        'maximalZeroConf=${chain_fees.btcToLbtcLimits.maximalZeroConf}');
+    print('LBTC chain limits: minimal=${chain_fees.lbtcToBtcLimits.minimal}, '
+        'maximal=${chain_fees.lbtcToBtcLimits.maximal}, '
+        'maximalZeroConf=${chain_fees.lbtcToBtcLimits.maximalZeroConf}');
   });
 
   test('DECODE EXPIRED BOLT11', () async {
