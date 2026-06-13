@@ -383,7 +383,7 @@ impl ChainSwap {
                 )
                 .await?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
-                let preimage: Preimage = self.preimage.clone().into();
+                let preimage: Preimage = self.preimage.clone().try_into()?;
                 if try_cooperate {
                     let btc_lockup_script: BtcSwapScript =
                         self.btc_script_str.clone().try_into()?;
@@ -437,7 +437,7 @@ impl ChainSwap {
                 )
                 .await?;
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
-                let preimage: Preimage = self.preimage.clone().into();
+                let preimage: Preimage = self.preimage.clone().try_into()?;
 
                 if try_cooperate {
                     let lbtc_lockup_script: LBtcSwapScript =

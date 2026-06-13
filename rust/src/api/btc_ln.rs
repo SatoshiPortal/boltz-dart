@@ -329,7 +329,7 @@ impl BtcLnSwap {
                 Err(e) => return Err(e.into()),
             };
             let ckp: Keypair = self.keys.clone().try_into()?;
-            let preimage: Preimage = self.preimage.clone().into();
+            let preimage: Preimage = self.preimage.clone().try_into()?;
             let signed: Transaction = match tx
                 .sign_claim(
                     &ckp,

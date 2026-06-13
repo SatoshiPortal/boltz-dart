@@ -71,7 +71,7 @@ impl TryInto<BoltzSwapMasterKey> for SwapMasterKey {
 
     fn try_into(self) -> Result<BoltzSwapMasterKey, Self::Error> {
         let boltz_network: BoltzNetwork = self.network.into();
-        BoltzSwapMasterKey::new(&self.mnemonic, None, boltz_network)
+        BoltzSwapMasterKey::from_mnemonic(&self.mnemonic, None, boltz_network)
             .map_err(|e| BoltzError::new("BoltzSwapMasterKey".to_string(), e.to_string()))
     }
 }
@@ -103,9 +103,12 @@ impl PreImage {
     }
 }
 
-impl Into<Preimage> for PreImage {
-    fn into(self) -> Preimage {
-        Preimage::from_str(&self.value).expect("Failed to convert Preimage to BoltzPreimage")
+impl TryInto<Preimage> for PreImage {
+    type Error = BoltzError;
+
+    fn try_into(self) -> Result<Preimage, Self::Error> {
+        Preimage::from_str(&self.value)
+            .map_err(|e| BoltzError::new("Preimage".to_string(), e.to_string()))
     }
 }
 
@@ -116,5 +119,54 @@ impl From<Preimage> for PreImage {
             sha256: boltz_preimage.sha256.to_string(),
             hash160: boltz_preimage.hash160.to_string(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use boltz_client::ToHex;
+
+    const WALLET_MNEMONIC: &str = "bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon";
+
+    #[test]
+    fn derives_index0_preimage_and_key_via_wrapper() {
+        let smk = SwapMasterKey::create(WALLET_MNEMONIC.to_string(), None, Network::Mainnet)
+            .expect("create master key");
+
+        assert_eq!(
+            smk.mnemonic,
+            "velvet engage shaft effort clarify annual protect client only surround sock gain",
+        );
+
+        let inner: BoltzSwapMasterKey = smk.clone().try_into().expect("try_into");
+        let keypair = inner.derive_swapkey(0).expect("derive index 0");
+        let preimage = Preimage::from_swap_key(&keypair);
+
+        assert_eq!(
+            preimage.bytes.unwrap().to_hex(),
+            "f19d42c70bf00267b6c5dcfe6e1094386f8c72389f1ced91e0132d1502bbd244",
+        );
+
+        let wrapped: PreImage = preimage.into();
+        assert_eq!(
+            wrapped.value,
+            "f19d42c70bf00267b6c5dcfe6e1094386f8c72389f1ced91e0132d1502bbd244",
+        );
+    }
+
+    #[test]
+    fn distinct_indices_yield_distinct_keys_and_preimages() {
+        let smk = SwapMasterKey::create(WALLET_MNEMONIC.to_string(), None, Network::Mainnet)
+            .expect("create master key");
+        let inner: BoltzSwapMasterKey = smk.try_into().expect("try_into");
+
+        let k0 = inner.derive_swapkey(0).expect("k0");
+        let k1 = inner.derive_swapkey(1).expect("k1");
+        assert_ne!(k0.secret_key(), k1.secret_key());
+
+        let p0 = Preimage::from_swap_key(&k0).bytes.unwrap();
+        let p1 = Preimage::from_swap_key(&k1).bytes.unwrap();
+        assert_ne!(p0, p1);
     }
 }
