@@ -11,6 +11,6 @@ pub mod lbtc_ln;
 pub mod lnurl;
 pub mod restore;
 pub mod secrets;
-pub mod transactions;
 pub mod swap_status;
+pub mod transactions;
 pub mod types;

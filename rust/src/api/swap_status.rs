@@ -213,7 +213,10 @@ mod tests {
             ("swap.created", SwapStatus::SwapCreated),
             ("transaction.mempool", SwapStatus::TxnMempool),
             ("transaction.claim.pending", SwapStatus::TxnClaimPending),
-            ("transaction.server.confirmed", SwapStatus::TxnServerConfirmed),
+            (
+                "transaction.server.confirmed",
+                SwapStatus::TxnServerConfirmed,
+            ),
             ("transaction.lockupFailed", SwapStatus::TxnLockupFailed),
             ("transaction.direct", SwapStatus::TxnDirect),
             ("invoice.failedToPay", SwapStatus::InvoiceFailedToPay),
