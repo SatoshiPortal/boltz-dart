@@ -75,3 +75,46 @@ impl DecodedInvoice {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const INVOICE_123_SAT: &str = "lntb1230n1pjmwkxwpp5etvpredwjpwvsrmrcs3l854tcwyz8tnfm453uyp3kcsrmnmu26xsdqqcqzzsxqyjw5qsp5jmejjyf0v6lyn3c5z6uxdslxtnu6t72perfp8ps6ldyen5as9juq9qyyssqtc8409xlyar4vmn70sszyzeu3k28jzlx0k2cjpg6pvh8mdglkn3ymxslmq8entcz56hwu3hx0d8mzjsvtkc3vu9da6j88exflp8urkqppw0vkq";
+    const INVOICE_26M_SAT: &str = "lntb260m1pjmwkv7pp5g8hy6pe8md7rz6jwcgvntgsqwr2eck0rcvj8trqkuehuvl9g2w4qdqqcqzzsxqyjw5qsp59fq60rmf6mkx9hhkcdw4akl7ksgzl3rfchgj94f6vfwzq9x7wvps9qyyssq2mkjtc67ktcnxf0cch8d66fkxlx9fyryy2k79cqv8gzjxw7wmh7xm3qdra7lawm6nvjrs2zyu50qf428uzqu25mxmvev6zckzt8ew7gp0xfna2";
+
+    #[tokio::test]
+    async fn decodes_amount_and_network_offline() {
+        let decoded = DecodedInvoice::from_string(INVOICE_123_SAT.to_string(), None)
+            .await
+            .expect("decode 123 sat invoice");
+        assert_eq!(decoded.msats, 123_000);
+        assert_eq!(decoded.network, "testnet");
+        assert!(decoded.bip21.is_none());
+        assert_eq!(decoded.preimage_hash.len(), 64);
+        assert!(decoded.expiry > 0);
+    }
+
+    #[tokio::test]
+    async fn decodes_millibitcoin_amount() {
+        let decoded = DecodedInvoice::from_string(INVOICE_26M_SAT.to_string(), None)
+            .await
+            .expect("decode 26m sat invoice");
+        assert_eq!(decoded.msats, 26_000_000_000);
+        assert_eq!(decoded.network, "testnet");
+    }
+
+    #[tokio::test]
+    async fn old_invoice_is_expired() {
+        let decoded = DecodedInvoice::from_string(INVOICE_123_SAT.to_string(), None)
+            .await
+            .unwrap();
+        assert!(decoded.is_expired);
+    }
+
+    #[tokio::test]
+    async fn invalid_invoice_errors() {
+        let result = DecodedInvoice::from_string("lntbinvalidinvoice".to_string(), None).await;
+        assert!(result.is_err());
+    }
+}
