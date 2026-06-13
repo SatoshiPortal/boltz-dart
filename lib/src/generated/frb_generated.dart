@@ -3327,11 +3327,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   SwapLimits dco_decode_swap_limits(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return SwapLimits(
       minimal: dco_decode_u_64(arr[0]),
       maximal: dco_decode_u_64(arr[1]),
+      maximalZeroConf: dco_decode_opt_box_autoadd_u_64(arr[2]),
+      minimalBatched: dco_decode_opt_box_autoadd_u_64(arr[3]),
     );
   }
 
@@ -4022,7 +4024,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_minimal = sse_decode_u_64(deserializer);
     var var_maximal = sse_decode_u_64(deserializer);
-    return SwapLimits(minimal: var_minimal, maximal: var_maximal);
+    var var_maximalZeroConf = sse_decode_opt_box_autoadd_u_64(deserializer);
+    var var_minimalBatched = sse_decode_opt_box_autoadd_u_64(deserializer);
+    return SwapLimits(
+      minimal: var_minimal,
+      maximal: var_maximal,
+      maximalZeroConf: var_maximalZeroConf,
+      minimalBatched: var_minimalBatched,
+    );
   }
 
   @protected
@@ -4673,6 +4682,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self.minimal, serializer);
     sse_encode_u_64(self.maximal, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.maximalZeroConf, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.minimalBatched, serializer);
   }
 
   @protected
