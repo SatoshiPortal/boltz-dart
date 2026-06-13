@@ -156,6 +156,29 @@ mod tests {
     }
 
     #[test]
+    fn swap_key_pubkey_matches_master_xpub_child() {
+        use boltz_client::bitcoin::bip32::{ChildNumber, Xpub};
+        use boltz_client::bitcoin::secp256k1::Secp256k1;
+
+        let smk = SwapMasterKey::create(WALLET_MNEMONIC.to_string(), None, Network::Mainnet)
+            .expect("create master key");
+        let inner: BoltzSwapMasterKey = smk.clone().try_into().expect("try_into");
+        let xpub = Xpub::from_str(&smk.xpub).expect("parse master xpub");
+        let secp = Secp256k1::new();
+
+        for index in [0u64, 1, 7, 100] {
+            let swap_key = inner.derive_swapkey(index).expect("derive swap key");
+            let child = xpub
+                .derive_pub(
+                    &secp,
+                    &[ChildNumber::from_normal_idx(index as u32).unwrap()],
+                )
+                .expect("derive xpub child");
+            assert_eq!(swap_key.public_key(), child.public_key,);
+        }
+    }
+
+    #[test]
     fn distinct_indices_yield_distinct_keys_and_preimages() {
         let smk = SwapMasterKey::create(WALLET_MNEMONIC.to_string(), None, Network::Mainnet)
             .expect("create master key");
