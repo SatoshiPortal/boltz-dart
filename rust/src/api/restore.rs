@@ -32,12 +32,100 @@ async fn restore_swaps(
 ) -> Result<Vec<SwapRestoreResponse>, BoltzError> {
     let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
     let xpub = swap_master_key.xpub.clone();
+    // xpub is the swap-account key (m/44/0/0/0); tell boltz to derive
+    // `xpub/{index}` directly ("m") instead of re-applying its default path.
     let restore_responses = boltz_client
-        .post_swap_restore(&xpub)
+        .post_swap_restore(&xpub, Some("m".to_string()), Some(100))
         .await
         .map_err(|e| BoltzError::new("Restore".to_string(), e.to_string()))?;
 
     Ok(restore_responses)
+}
+
+/// Lightweight view of a restorable swap, taken straight from the restore
+/// response — enough to list swaps and show status without rebuilding the full
+/// swap object (which is only needed to actually rescue one).
+pub struct RestoredSwapSummary {
+    pub id: String,
+    pub kind: SwapType,
+    /// Raw boltz status string (e.g. "transaction.claimed"); mapped app-side.
+    pub status: String,
+    pub created_at: u64,
+    pub from: String,
+    pub to: String,
+    pub amount: u64,
+    /// True when on-chain funds are locked and not yet claimed/refunded — i.e.
+    /// the swap can still be rescued (claimed or refunded). False for swaps that
+    /// never locked up (e.g. expired-unfunded) or are already resolved.
+    pub recoverable: bool,
+}
+
+/// One restore POST returning a summary per swap (id, kind, status, amount).
+pub async fn restore_swap_summaries(
+    swap_master_key: SwapMasterKey,
+    boltz_url: String,
+) -> Result<Vec<RestoredSwapSummary>, BoltzError> {
+    let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+    let xpub = swap_master_key.xpub.clone();
+    let responses = boltz_client
+        .post_swap_restore(&xpub, Some("m".to_string()), Some(100))
+        .await
+        .map_err(|e| BoltzError::new("Restore".to_string(), e.to_string()))?;
+    Ok(responses
+        .into_iter()
+        .map(|r| {
+            let amount = r
+                .claim_details
+                .as_ref()
+                .and_then(|d| d.amount)
+                .unwrap_or(0);
+            // Funds are on-chain if boltz recorded a lockup transaction for
+            // either side; the swap is resolved once it's been claimed/refunded.
+            let has_lockup = r
+                .claim_details
+                .as_ref()
+                .map(|d| d.transaction.is_some())
+                .unwrap_or(false)
+                || r
+                    .refund_details
+                    .as_ref()
+                    .map(|d| d.transaction.is_some())
+                    .unwrap_or(false);
+            let resolved = matches!(
+                r.status.as_str(),
+                "transaction.claimed"
+                    | "invoice.settled"
+                    | "transaction.refunded"
+                    | "swap.refunded"
+            );
+            RestoredSwapSummary {
+                id: r.id,
+                kind: swap_restore_type_to_swap_type(r.swap_type),
+                status: r.status,
+                created_at: r.created_at,
+                from: r.from,
+                to: r.to,
+                amount,
+                recoverable: has_lockup && !resolved,
+            }
+        })
+        .collect())
+}
+
+/// Highest swap-key derivation index boltz has on record for this wallet's
+/// swap xpub. Returns -1 when boltz knows of no swaps. Use it on seed recovery
+/// to continue the swap index after the last one already used.
+pub async fn restore_swap_index(
+    swap_master_key: SwapMasterKey,
+    boltz_url: String,
+) -> Result<i64, BoltzError> {
+    let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+    let xpub = swap_master_key.xpub.clone();
+    let resp = boltz_client
+        .post_swap_restore_index(&xpub, Some("m".to_string()), Some(100))
+        .await
+        .map_err(|e| BoltzError::new("RestoreIndex".to_string(), e.to_string()))?;
+    Ok(resp.index)
 }
 
 pub async fn restore_ln_btc_swaps(
@@ -54,12 +142,13 @@ pub async fn restore_ln_btc_swaps(
             SwapRestoreType::Submarine | SwapRestoreType::Reverse
         ) {
             if response.from == "BTC" && response.to == "BTC" {
+                let invoice = response.invoice.clone();
                 match restore_to_btc_ln_swap(
                     response,
                     swap_master_key.clone(),
                     electrum_url.clone(),
                     boltz_url.clone(),
-                    None,
+                    invoice,
                 ) {
                     Ok(swap) => swaps.push(swap),
                     Err(e) => return Err(e),
@@ -88,12 +177,13 @@ pub async fn restore_ln_lbtc_swaps(
             if (response.from == "L-BTC" && response.to == "BTC")
                 || (response.from == "BTC" && response.to == "L-BTC")
             {
+                let invoice = response.invoice.clone();
                 match restore_to_lbtc_ln_swap(
                     response,
                     swap_master_key.clone(),
                     electrum_url.clone(),
                     boltz_url.clone(),
-                    None,
+                    invoice,
                 ) {
                     Ok(swap) => swaps.push(swap),
                     Err(e) => return Err(e),
@@ -134,26 +224,23 @@ pub async fn restore_chain_swaps(
 
 fn infer_network(from: &str, to: &str) -> Result<Chain, BoltzError> {
     let is_testnet = from.contains("testnet") || to.contains("testnet");
-    if from == "BTC" || from == "L-BTC" {
-        if from == "BTC" {
-            Ok(if is_testnet {
-                Chain::BitcoinTestnet
-            } else {
-                Chain::Bitcoin
-            })
+    // The Lightning side of an LN swap is always BTC-denominated, so the
+    // on-chain leg is whichever side is L-BTC (reverse: `to`, submarine: `from`).
+    // Keying off `from` alone mis-tags a lightning->L-BTC reverse as Bitcoin.
+    let is_liquid = from == "L-BTC" || to == "L-BTC";
+    Ok(if is_liquid {
+        if is_testnet {
+            Chain::LiquidTestnet
         } else {
-            Ok(if is_testnet {
-                Chain::LiquidTestnet
-            } else {
-                Chain::Liquid
-            })
+            Chain::Liquid
         }
     } else {
-        Err(BoltzError::new(
-            "Network".to_string(),
-            format!("Cannot infer network from from={}, to={}", from, to),
-        ))
-    }
+        if is_testnet {
+            Chain::BitcoinTestnet
+        } else {
+            Chain::Bitcoin
+        }
+    })
 }
 
 fn infer_chain_swap_direction(from: &str, to: &str) -> Result<ChainSwapDirection, BoltzError> {

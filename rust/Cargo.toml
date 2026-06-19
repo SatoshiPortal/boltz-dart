@@ -12,7 +12,7 @@ doctest = false
 crate-type = ["lib", "staticlib", "cdylib"]
 
 [dependencies]
-boltz-client = { version = "0.4.0", features = ["lnurl", "electrum"] }
+boltz-client = { version = "0.4.1", features = ["lnurl", "electrum"] }
 flutter_rust_bridge = "=2.12.0"
 anyhow = "1.0.68"
 serde = { version = "1.0.0", features = ["derive"] }
