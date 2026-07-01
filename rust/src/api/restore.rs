@@ -74,11 +74,7 @@ pub async fn restore_swap_summaries(
     Ok(responses
         .into_iter()
         .map(|r| {
-            let amount = r
-                .claim_details
-                .as_ref()
-                .and_then(|d| d.amount)
-                .unwrap_or(0);
+            let amount = r.claim_details.as_ref().and_then(|d| d.amount).unwrap_or(0);
             // Funds are on-chain if boltz recorded a lockup transaction for
             // either side; the swap is resolved once it's been claimed/refunded.
             let has_lockup = r
@@ -86,8 +82,7 @@ pub async fn restore_swap_summaries(
                 .as_ref()
                 .map(|d| d.transaction.is_some())
                 .unwrap_or(false)
-                || r
-                    .refund_details
+                || r.refund_details
                     .as_ref()
                     .map(|d| d.transaction.is_some())
                     .unwrap_or(false);
