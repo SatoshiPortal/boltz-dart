@@ -4,12 +4,9 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
-import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
-part 'types.freezed.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`, `try_into`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 class BtcSwapScriptStr {
@@ -32,22 +29,23 @@ class BtcSwapScriptStr {
   });
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<BtcSwapScriptStr> newInstance(
-          {required SwapType swapType,
-          String? fundingAddrs,
-          required String hashlock,
-          required String receiverPubkey,
-          required int locktime,
-          required String senderPubkey,
-          Side? side}) =>
-      BoltzCore.instance.api.crateApiTypesBtcSwapScriptStrNew(
-          swapType: swapType,
-          fundingAddrs: fundingAddrs,
-          hashlock: hashlock,
-          receiverPubkey: receiverPubkey,
-          locktime: locktime,
-          senderPubkey: senderPubkey,
-          side: side);
+  static Future<BtcSwapScriptStr> newInstance({
+    required SwapType swapType,
+    String? fundingAddrs,
+    required String hashlock,
+    required String receiverPubkey,
+    required int locktime,
+    required String senderPubkey,
+    Side? side,
+  }) => BoltzCore.instance.api.crateApiTypesBtcSwapScriptStrNew(
+    swapType: swapType,
+    fundingAddrs: fundingAddrs,
+    hashlock: hashlock,
+    receiverPubkey: receiverPubkey,
+    locktime: locktime,
+    senderPubkey: senderPubkey,
+    side: side,
+  );
 
   @override
   int get hashCode =>
@@ -73,81 +71,9 @@ class BtcSwapScriptStr {
           side == other.side;
 }
 
-enum Chain {
-  bitcoin,
-  bitcoinTestnet,
-  liquid,
-  liquidTestnet,
-  ;
-}
+enum Chain { bitcoin, bitcoinTestnet, liquid, liquidTestnet }
 
-enum ChainSwapDirection {
-  btcToLbtc,
-  lbtcToBtc,
-  ;
-}
-
-/// Helper to handle Lightning invoices
-class DecodedInvoice {
-  final BigInt msats;
-  final BigInt expiry;
-  final BigInt expiresIn;
-  final BigInt expiresAt;
-  final bool isExpired;
-  final String network;
-  final BigInt cltvExpDelta;
-  final String? bip21;
-  final String preimageHash;
-  final String description;
-
-  const DecodedInvoice({
-    required this.msats,
-    required this.expiry,
-    required this.expiresIn,
-    required this.expiresAt,
-    required this.isExpired,
-    required this.network,
-    required this.cltvExpDelta,
-    this.bip21,
-    required this.preimageHash,
-    required this.description,
-  });
-
-  /// Add boltz_url & chain for route hint check
-  static Future<DecodedInvoice> fromString(
-          {required String s, String? boltzUrl}) =>
-      BoltzCore.instance.api
-          .crateApiTypesDecodedInvoiceFromString(s: s, boltzUrl: boltzUrl);
-
-  @override
-  int get hashCode =>
-      msats.hashCode ^
-      expiry.hashCode ^
-      expiresIn.hashCode ^
-      expiresAt.hashCode ^
-      isExpired.hashCode ^
-      network.hashCode ^
-      cltvExpDelta.hashCode ^
-      bip21.hashCode ^
-      preimageHash.hashCode ^
-      description.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DecodedInvoice &&
-          runtimeType == other.runtimeType &&
-          msats == other.msats &&
-          expiry == other.expiry &&
-          expiresIn == other.expiresIn &&
-          expiresAt == other.expiresAt &&
-          isExpired == other.isExpired &&
-          network == other.network &&
-          cltvExpDelta == other.cltvExpDelta &&
-          bip21 == other.bip21 &&
-          preimageHash == other.preimageHash &&
-          description == other.description;
-}
+enum ChainSwapDirection { btcToLbtc, lbtcToBtc }
 
 class ElectrumSettings {
   final String url;
@@ -177,48 +103,6 @@ class ElectrumSettings {
           timeout == other.timeout;
 }
 
-class KeyPair {
-  final String secretKey;
-  final String publicKey;
-
-  const KeyPair({
-    required this.secretKey,
-    required this.publicKey,
-  });
-
-  /// Used internally to create a KeyPair for swaps
-  static Future<KeyPair> generate(
-          {required String mnemonic,
-          String? passphrase,
-          required Chain network,
-          required BigInt index,
-          required SwapType swapType}) =>
-      BoltzCore.instance.api.crateApiTypesKeyPairGenerate(
-          mnemonic: mnemonic,
-          passphrase: passphrase,
-          network: network,
-          index: index,
-          swapType: swapType);
-
-  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  /// Used internally to create a KeyPair for swaps
-  static Future<KeyPair> newInstance(
-          {required String secretKey, required String publicKey}) =>
-      BoltzCore.instance.api
-          .crateApiTypesKeyPairNew(secretKey: secretKey, publicKey: publicKey);
-
-  @override
-  int get hashCode => secretKey.hashCode ^ publicKey.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is KeyPair &&
-          runtimeType == other.runtimeType &&
-          secretKey == other.secretKey &&
-          publicKey == other.publicKey;
-}
-
 /// Helper to store a LBtcSwapScript and convert to a LBtcSwapScript
 class LBtcSwapScriptStr {
   final SwapType swapType;
@@ -242,24 +126,25 @@ class LBtcSwapScriptStr {
   });
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<LBtcSwapScriptStr> newInstance(
-          {required SwapType swapType,
-          String? fundingAddrs,
-          required String hashlock,
-          required String receiverPubkey,
-          required int locktime,
-          required String senderPubkey,
-          required String blindingKey,
-          Side? side}) =>
-      BoltzCore.instance.api.crateApiTypesLBtcSwapScriptStrNew(
-          swapType: swapType,
-          fundingAddrs: fundingAddrs,
-          hashlock: hashlock,
-          receiverPubkey: receiverPubkey,
-          locktime: locktime,
-          senderPubkey: senderPubkey,
-          blindingKey: blindingKey,
-          side: side);
+  static Future<LBtcSwapScriptStr> newInstance({
+    required SwapType swapType,
+    String? fundingAddrs,
+    required String hashlock,
+    required String receiverPubkey,
+    required int locktime,
+    required String senderPubkey,
+    required String blindingKey,
+    Side? side,
+  }) => BoltzCore.instance.api.crateApiTypesLBtcSwapScriptStrNew(
+    swapType: swapType,
+    fundingAddrs: fundingAddrs,
+    hashlock: hashlock,
+    receiverPubkey: receiverPubkey,
+    locktime: locktime,
+    senderPubkey: senderPubkey,
+    blindingKey: blindingKey,
+    side: side,
+  );
 
   @override
   int get hashCode =>
@@ -287,17 +172,16 @@ class LBtcSwapScriptStr {
           side == other.side;
 }
 
+/// Wrapper for Network from boltz-rust
+enum Network { mainnet, testnet, regtest }
+
 /// Result of checking if a transaction output has been spent
 class OutspendStatus {
   final SwapTxKind kind;
   final String? txid;
   final BigInt? timestamp;
 
-  const OutspendStatus({
-    required this.kind,
-    this.txid,
-    this.timestamp,
-  });
+  const OutspendStatus({required this.kind, this.txid, this.timestamp});
 
   @override
   int get hashCode => kind.hashCode ^ txid.hashCode ^ timestamp.hashCode;
@@ -312,72 +196,11 @@ class OutspendStatus {
           timestamp == other.timestamp;
 }
 
-/// Used internally to create a secret - PreImage for swaps
-class PreImage {
-  final String value;
-  final String sha256;
-  final String hash160;
-
-  const PreImage({
-    required this.value,
-    required this.sha256,
-    required this.hash160,
-  });
-
-  static Future<PreImage> generate() =>
-      BoltzCore.instance.api.crateApiTypesPreImageGenerate();
-
-  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<PreImage> newInstance(
-          {required String value,
-          required String sha256,
-          required String hash160}) =>
-      BoltzCore.instance.api.crateApiTypesPreImageNew(
-          value: value, sha256: sha256, hash160: hash160);
-
-  @override
-  int get hashCode => value.hashCode ^ sha256.hashCode ^ hash160.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PreImage &&
-          runtimeType == other.runtimeType &&
-          value == other.value &&
-          sha256 == other.sha256 &&
-          hash160 == other.hash160;
-}
-
 /// Used for chain-swaps only. The side is based on which transaction is being made by the user.
 /// When a swap is created the user must first make a Lockup.
 /// Once the swap is completed, the user must make a Claim.
-enum Side {
-  lockup,
-  claim,
-  ;
-}
+enum Side { lockup, claim }
 
-enum SwapTxKind {
-  claim,
-  refund,
-  ;
-}
+enum SwapTxKind { claim, refund }
 
-enum SwapType {
-  submarine,
-  reverse,
-  chain,
-  ;
-}
-
-@freezed
-sealed class TxFee with _$TxFee {
-  const TxFee._();
-
-  const factory TxFee.absolute(
-    BigInt field0,
-  ) = TxFee_Absolute;
-  const factory TxFee.relative(
-    double field0,
-  ) = TxFee_Relative;
-}
+enum SwapType { submarine, reverse, chain }

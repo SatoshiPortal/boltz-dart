@@ -12,20 +12,19 @@ class BoltzError {
   final String kind;
   final String message;
 
-  const BoltzError({
-    required this.kind,
-    required this.message,
-  });
+  const BoltzError({required this.kind, required this.message});
 
-  Future<void> detail() => BoltzCore.instance.api.crateApiErrorBoltzErrorDetail(
-        that: this,
-      );
+  Future<void> detail() =>
+      BoltzCore.instance.api.crateApiErrorBoltzErrorDetail(that: this);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<BoltzError> newInstance(
-          {required String kind, required String message}) =>
-      BoltzCore.instance.api
-          .crateApiErrorBoltzErrorNew(kind: kind, message: message);
+  static Future<BoltzError> newInstance({
+    required String kind,
+    required String message,
+  }) => BoltzCore.instance.api.crateApiErrorBoltzErrorNew(
+    kind: kind,
+    message: message,
+  );
 
   @override
   int get hashCode => kind.hashCode ^ message.hashCode;

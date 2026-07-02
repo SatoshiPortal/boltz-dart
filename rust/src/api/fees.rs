@@ -5,10 +5,27 @@ use boltz_client::{
         PairMinerFees, ReverseFees, SubmarineFees,
     },
     error::Error as LibError,
+    fees::Fee,
     swaps::boltz::BoltzApiClientV2,
 };
+use serde::{Deserialize, Serialize};
 
 use super::error::BoltzError;
+
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub enum TxFee {
+    Absolute(u64),
+    Relative(f64),
+}
+
+impl Into<Fee> for TxFee {
+    fn into(self) -> Fee {
+        match self {
+            TxFee::Absolute(x) => Fee::Absolute(x),
+            TxFee::Relative(x) => Fee::Relative(x),
+        }
+    }
+}
 
 /// A Class that helps fetch both Fees and Limits for the various swap types
 pub struct Fees {
@@ -224,32 +241,32 @@ impl From<ChainFees> for ChainSwapFees {
 /// Complete fees and limits class for Chain swaps
 #[derive(Debug, Clone)]
 pub struct ChainFeesAndLimits {
-    pub btc_limits: SwapLimits,   // use for btc-lbtc chain swaps
-    pub lbtc_limits: SwapLimits,  // use for lbtc-btc chain swaps
-    pub btc_fees: ChainSwapFees,  // use for btc-lbtc chain swaps
-    pub lbtc_fees: ChainSwapFees, // use for lbtc-btc chain swaps
+    pub lbtc_to_btc_limits: SwapLimits,
+    pub btc_to_lbtc_limits: SwapLimits,
+    pub lbtc_to_btc_fees: ChainSwapFees,
+    pub btc_to_lbtc_fees: ChainSwapFees,
 }
 impl TryInto<ChainFeesAndLimits> for GetChainPairsResponse {
     type Error = BoltzError; // Use a more specific error type in a real application
 
     fn try_into(self) -> Result<ChainFeesAndLimits, Self::Error> {
-        let btc_pair = match self.get_lbtc_to_btc_pair() {
+        let lbtc_to_btc_pair = match self.get_lbtc_to_btc_pair() {
             Some(result) => result,
             None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
         };
-        let btc_limits = btc_pair.limits.into();
-        let btc_chain = btc_pair.fees.into();
-        let lbtc_pair = match self.get_btc_to_lbtc_pair() {
+        let lbtc_to_btc_limits = lbtc_to_btc_pair.limits.into();
+        let lbtc_to_btc_fees = lbtc_to_btc_pair.fees.into();
+        let btc_to_lbtc_pair = match self.get_btc_to_lbtc_pair() {
             Some(result) => result,
             None => return Err(LibError::Protocol("Could Not find BTC Pair".to_string()).into()),
         };
-        let lbtc_limits = lbtc_pair.limits.into();
-        let lbtc_chain = lbtc_pair.fees.into();
+        let btc_to_lbtc_limits = btc_to_lbtc_pair.limits.into();
+        let btc_to_lbtc_fees = btc_to_lbtc_pair.fees.into();
         Ok(ChainFeesAndLimits {
-            btc_limits,
-            lbtc_limits,
-            btc_fees: btc_chain,
-            lbtc_fees: lbtc_chain,
+            lbtc_to_btc_limits,
+            btc_to_lbtc_limits,
+            lbtc_to_btc_fees,
+            btc_to_lbtc_fees,
         })
     }
 }

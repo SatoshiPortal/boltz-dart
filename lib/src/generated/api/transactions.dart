@@ -12,17 +12,18 @@ import 'types.dart';
 
 /// This function queries the Boltz API to get the swap transaction ID, then checks
 /// the mempool API to see if the transaction's first output has been spent.
-Future<OutspendStatus> checkVout0Outspend(
-        {required String swapId,
-        required SwapType swapType,
-        required SwapTxKind txKind,
-        required Chain network,
-        required String boltzUrl,
-        ChainSwapDirection? chainSwapDirection}) =>
-    BoltzCore.instance.api.crateApiTransactionsCheckVout0Outspend(
-        swapId: swapId,
-        swapType: swapType,
-        txKind: txKind,
-        network: network,
-        boltzUrl: boltzUrl,
-        chainSwapDirection: chainSwapDirection);
+Future<OutspendStatus> checkVout0Outspend({
+  required String swapId,
+  required SwapType swapType,
+  required SwapTxKind txKind,
+  required Chain network,
+  required String boltzUrl,
+  ChainSwapDirection? chainSwapDirection,
+}) => BoltzCore.instance.api.crateApiTransactionsCheckVout0Outspend(
+  swapId: swapId,
+  swapType: swapType,
+  txKind: txKind,
+  network: network,
+  boltzUrl: boltzUrl,
+  chainSwapDirection: chainSwapDirection,
+);

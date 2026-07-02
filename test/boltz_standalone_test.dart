@@ -5,7 +5,6 @@ import 'package:boltz/boltz.dart';
 // import 'package:boltz/src/generated/api/btc_ln.dart';
 // import 'package:boltz/src/generated/api/error.dart';
 // import 'package:boltz/src/generated/api/lbtc_ln.dart';
-// import 'package:boltz/src/generated/api/types.dart';
 // import 'package:boltz/src/types/swap.dart';
 // import 'package:boltz/src/types/swap_status_response.dart';
 // import 'package:boltz/src/utils/http.dart';
@@ -53,7 +52,7 @@ void main() {
     final chain_fees = await fees.chain();
     expect((sub_fees.btcFees.percentage > 0.0), true);
     expect((rev_fees.btcFees.percentage > 0.0), true);
-    expect((chain_fees.btcFees.percentage > 0.0), true);
+    expect((chain_fees.btcToLbtcFees.percentage > 0.0), true);
   });
 
   test('CHAIN SWAP LIMITS include maximalZeroConf', () async {
@@ -61,15 +60,15 @@ void main() {
     final fees = Fees(boltzUrl: boltzUrl);
     final chain_fees = await fees.chain();
 
-    expect(chain_fees.btcLimits.maximalZeroConf, isNotNull);
-    expect(chain_fees.lbtcLimits.maximalZeroConf, isNotNull);
+    expect(chain_fees.btcToLbtcLimits.maximalZeroConf, isNotNull);
+    expect(chain_fees.lbtcToBtcLimits.maximalZeroConf, isNotNull);
 
-    print('BTC chain limits: minimal=${chain_fees.btcLimits.minimal}, '
-        'maximal=${chain_fees.btcLimits.maximal}, '
-        'maximalZeroConf=${chain_fees.btcLimits.maximalZeroConf}');
-    print('LBTC chain limits: minimal=${chain_fees.lbtcLimits.minimal}, '
-        'maximal=${chain_fees.lbtcLimits.maximal}, '
-        'maximalZeroConf=${chain_fees.lbtcLimits.maximalZeroConf}');
+    print('BTC chain limits: minimal=${chain_fees.btcToLbtcLimits.minimal}, '
+        'maximal=${chain_fees.btcToLbtcLimits.maximal}, '
+        'maximalZeroConf=${chain_fees.btcToLbtcLimits.maximalZeroConf}');
+    print('LBTC chain limits: minimal=${chain_fees.lbtcToBtcLimits.minimal}, '
+        'maximal=${chain_fees.lbtcToBtcLimits.maximal}, '
+        'maximalZeroConf=${chain_fees.lbtcToBtcLimits.maximalZeroConf}');
   });
 
   test('DECODE EXPIRED BOLT11', () async {
@@ -77,6 +76,74 @@ void main() {
     assert(decoded.isExpired);
     print('$decoded');
   });
+
+  test(
+    'TEST RESTORE SWAPS',
+    () async {
+      final swapMasterKey = SwapMasterKey(
+        xprv:
+            'xprv9zRA4NuUPQSBywcrKbEapYaYPuJu2rwcGFceusCYtUM1Yx1z1b59TqnseHSk17eWgmo2mVeUWrHzy5uyXrwypZrJRRM7chrJJH1JyKNoE6L',
+        xpub:
+            'xpub6DQWTtSNDmzVCRhKRcmbBgXGww9PSKfTdUYFiFcASoszRkM8Z8PQ1e7MVYN7zukkhFknC96KYGkTrfSERdojG6coHdGEMoc1g44DGTbCt4D',
+        network: Network.mainnet,
+        mnemonic:
+            'item bar canyon diary fantasy coffee unit program badge drum tent empower',
+        fingerprint: 'd2e2529e',
+      );
+
+      try {
+        final restoredLbtcSwaps = await restoreLnLbtcSwaps(
+          swapMasterKey: swapMasterKey,
+          electrumUrl: 'les.bullbitcoin.com:995',
+          boltzUrl: 'api.boltz.exchange',
+        );
+
+        final reverseSwaps = restoredLbtcSwaps
+            .where((swap) => swap.kind == SwapType.reverse)
+            .toList();
+        final submarineSwaps = restoredLbtcSwaps
+            .where((swap) => swap.kind == SwapType.submarine)
+            .toList();
+
+        expect(reverseSwaps.length, equals(1),
+            reason: 'Expected 1 reverse swap, found ${reverseSwaps.length}');
+        expect(submarineSwaps.length, equals(1),
+            reason:
+                'Expected 1 submarine swap, found ${submarineSwaps.length}');
+      } on BoltzError catch (e) {
+        fail('Error restoring L-BTC-LN swaps: ${e.kind}: ${e.message}');
+      }
+
+      try {
+        final restoredBtcSwaps = await restoreLnBtcSwaps(
+          swapMasterKey: swapMasterKey,
+          electrumUrl: 'wes.bullbitcoin.com:50002',
+          boltzUrl: 'api.boltz.exchange',
+        );
+
+        expect(restoredBtcSwaps.length, equals(0),
+            reason:
+                'Expected 0 BTC-LN swaps, found ${restoredBtcSwaps.length}');
+      } on BoltzError catch (e) {
+        fail('Error restoring BTC-LN swaps: ${e.kind}: ${e.message}');
+      }
+
+      try {
+        final restoredChainSwaps = await restoreChainSwaps(
+          swapMasterKey: swapMasterKey,
+          btcElectrumUrl: 'wes.bullbitcoin.com:50002',
+          lbtcElectrumUrl: 'les.bullbitcoin.com:995',
+          boltzUrl: 'api.boltz.exchange',
+        );
+
+        expect(restoredChainSwaps.length, equals(0),
+            reason:
+                'Expected 0 chain swaps, found ${restoredChainSwaps.length}');
+      } on BoltzError catch (e) {
+        fail('Error restoring chain swaps: ${e.kind}: ${e.message}');
+      }
+    },
+  );
   // group('BTC-LN Submarine', () {
   //   test('Neg: Minimum limit (50k sats)', () async {
   //     // An invoice with <50k sats
@@ -395,24 +462,33 @@ void main() {
 }
 
 Future<BtcLnSwap> setupSubmarine(String invoice) async {
-  // final amount = 100000;
+  final swapMasterKey = await SwapMasterKey.create(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
 
   final btcLnSubmarineSwap = await BtcLnSwap.newSubmarine(
-    mnemonic: mnemonic,
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     invoice: invoice,
     network: network,
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
-    // pairHash: fees.btcPairHash,
   );
 
   return btcLnSubmarineSwap;
 }
 
 Future<BtcLnSwap> setupReverse(int outAmount) async {
+  final swapMasterKey = await SwapMasterKey.create(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
+
   final btcLnReverseSwap = await BtcLnSwap.newReverse(
-    mnemonic: mnemonic,
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     outAmount: BigInt.from(outAmount),
     network: network,
@@ -424,10 +500,14 @@ Future<BtcLnSwap> setupReverse(int outAmount) async {
 }
 
 Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
-  // final amount = 100000;
+  final swapMasterKey = await SwapMasterKey.create(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
 
   final lbtcLnSubmarineSwap = await LbtcLnSwap.newSubmarine(
-    mnemonic: mnemonic,
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     invoice: invoice,
     network: lnetwork,
@@ -439,8 +519,14 @@ Future<LbtcLnSwap> setupLSubmarine(String invoice) async {
 }
 
 Future<LbtcLnSwap> setupLReverse(int amount) async {
-  final lbtcLnSubmarineSwap = await LbtcLnSwap.newReverse(
-    mnemonic: mnemonic,
+  final swapMasterKey = await SwapMasterKey.create(
+    walletMnemonic: mnemonic,
+    walletPassphrase: null,
+    network: Network.testnet,
+  );
+
+  final lbtcLnReverseSwap = await LbtcLnSwap.newReverse(
+    swapMasterKey: swapMasterKey,
     index: BigInt.from(index),
     outAmount: BigInt.from(amount),
     network: lnetwork,
@@ -448,5 +534,5 @@ Future<LbtcLnSwap> setupLReverse(int amount) async {
     boltzUrl: boltzUrl,
   );
 
-  return lbtcLnSubmarineSwap;
+  return lbtcLnReverseSwap;
 }

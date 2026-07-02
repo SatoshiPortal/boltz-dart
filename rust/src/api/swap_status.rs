@@ -202,3 +202,58 @@ impl Transaction {
         serde_json::to_string(self).map_err(|e| e.to_string())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_known_boltz_status_strings() {
+        let cases = [
+            ("swap.created", SwapStatus::SwapCreated),
+            ("transaction.mempool", SwapStatus::TxnMempool),
+            ("transaction.claim.pending", SwapStatus::TxnClaimPending),
+            (
+                "transaction.server.confirmed",
+                SwapStatus::TxnServerConfirmed,
+            ),
+            ("transaction.lockupFailed", SwapStatus::TxnLockupFailed),
+            ("transaction.direct", SwapStatus::TxnDirect),
+            ("invoice.failedToPay", SwapStatus::InvoiceFailedToPay),
+            ("invoice.settled", SwapStatus::InvoiceSettled),
+        ];
+        for (s, expected) in cases {
+            assert_eq!(
+                SwapStatus::from_json_string(s.to_string()).unwrap(),
+                expected
+            );
+        }
+    }
+
+    #[test]
+    fn rejects_unknown_status_string() {
+        assert!(SwapStatus::from_json_string("not.a.status".to_string()).is_err());
+    }
+
+    #[test]
+    fn status_json_string_round_trips() {
+        for s in [
+            SwapStatus::SwapCreated,
+            SwapStatus::TxnMempool,
+            SwapStatus::TxnServerConfirmed,
+            SwapStatus::InvoicePaid,
+            SwapStatus::TxnDirect,
+        ] {
+            let json = s.to_json_string();
+            assert_eq!(SwapStatus::from_json_string(json).unwrap(), s);
+        }
+    }
+
+    #[test]
+    fn parses_websocket_stream_status_payload() {
+        let json = r#"{"id":"abc123","status":"transaction.mempool"}"#;
+        let parsed = SwapStreamStatus::from_json(json.to_string()).unwrap();
+        assert_eq!(parsed.id, "abc123");
+        assert_eq!(parsed.status, SwapStatus::TxnMempool);
+    }
+}

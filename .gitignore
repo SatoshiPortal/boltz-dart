@@ -51,9 +51,13 @@ xcuserdata
 ios/libboltz.xcframework
 macos/libboltz.xcframework
 
+/target/
 rust/target/
 rust/builds/
 *.dylib
 *.so
 *.a
 libboltz*
+
+# FVM Version Cache
+.fvm/

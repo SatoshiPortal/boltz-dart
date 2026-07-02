@@ -5,7 +5,9 @@
 
 import '../frb_generated.dart';
 import 'error.dart';
+import 'fees.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'secrets.dart';
 import 'types.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`
@@ -52,165 +54,169 @@ class ChainSwap {
   });
 
   /// Broadcast a signed transaction using boltz's electrum server
-  Future<String> broadcastBoltz(
-          {required String signedHex, required SwapTxKind kind}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapBroadcastBoltz(
-          that: this, signedHex: signedHex, kind: kind);
+  Future<String> broadcastBoltz({
+    required String signedHex,
+    required SwapTxKind kind,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapBroadcastBoltz(
+    that: this,
+    signedHex: signedHex,
+    kind: kind,
+  );
 
   /// Broadcast a signed transaction via your own electrum server used when the swap was created.
-  Future<String> broadcastLocal(
-          {required String signedHex,
-          required SwapTxKind kind,
-          ElectrumSettings? electrumSettings}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapBroadcastLocal(
-          that: this,
-          signedHex: signedHex,
-          kind: kind,
-          electrumSettings: electrumSettings);
+  Future<String> broadcastLocal({
+    required String signedHex,
+    required SwapTxKind kind,
+    ElectrumSettings? electrumSettings,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapBroadcastLocal(
+    that: this,
+    signedHex: signedHex,
+    kind: kind,
+    electrumSettings: electrumSettings,
+  );
 
   /// Claim a successful swap
-  Future<String> claim(
-          {required String outAddress,
-          required TxFee minerFee,
-          required bool tryCooperate,
-          ElectrumSettings? btcElectrumSettings,
-          ElectrumSettings? lbtcElectrumSettings}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapClaim(
-          that: this,
-          outAddress: outAddress,
-          minerFee: minerFee,
-          tryCooperate: tryCooperate,
-          btcElectrumSettings: btcElectrumSettings,
-          lbtcElectrumSettings: lbtcElectrumSettings);
+  Future<String> claim({
+    required String outAddress,
+    required TxFee minerFee,
+    required bool tryCooperate,
+    ElectrumSettings? btcElectrumSettings,
+    ElectrumSettings? lbtcElectrumSettings,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapClaim(
+    that: this,
+    outAddress: outAddress,
+    minerFee: minerFee,
+    tryCooperate: tryCooperate,
+    btcElectrumSettings: btcElectrumSettings,
+    lbtcElectrumSettings: lbtcElectrumSettings,
+  );
 
   /// Get the size of a claim tx
-  Future<BigInt> claimTxSize(
-          {required String outAddress,
-          required bool tryCooperate,
-          ElectrumSettings? btcElectrumSettings,
-          ElectrumSettings? lbtcElectrumSettings}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapClaimTxSize(
-          that: this,
-          outAddress: outAddress,
-          tryCooperate: tryCooperate,
-          btcElectrumSettings: btcElectrumSettings,
-          lbtcElectrumSettings: lbtcElectrumSettings);
+  Future<BigInt> claimTxSize({
+    required String outAddress,
+    required bool tryCooperate,
+    ElectrumSettings? btcElectrumSettings,
+    ElectrumSettings? lbtcElectrumSettings,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapClaimTxSize(
+    that: this,
+    outAddress: outAddress,
+    tryCooperate: tryCooperate,
+    btcElectrumSettings: btcElectrumSettings,
+    lbtcElectrumSettings: lbtcElectrumSettings,
+  );
 
   /// Parse from a JSON string.
-  static Future<ChainSwap> fromJson({required String jsonStr}) =>
-      BoltzCore.instance.api
-          .crateApiChainSwapChainSwapFromJson(jsonStr: jsonStr);
+  static Future<ChainSwap> fromJson({required String jsonStr}) => BoltzCore
+      .instance
+      .api
+      .crateApiChainSwapChainSwapFromJson(jsonStr: jsonStr);
 
   /// Get the transaction id of the server's lockup transaction
-  Future<String> getServerLockup() =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapGetServerLockup(
-        that: this,
-      );
+  Future<String> getServerLockup() => BoltzCore.instance.api
+      .crateApiChainSwapChainSwapGetServerLockup(that: this);
 
   /// Get the transaction id of the user's lockup transaction
-  Future<String> getUserLockup() =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapGetUserLockup(
-        that: this,
-      );
+  Future<String> getUserLockup() => BoltzCore.instance.api
+      .crateApiChainSwapChainSwapGetUserLockup(that: this);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Manually create the class. Primarily used when recovering a swap.
-  static Future<ChainSwap> newInstance(
-          {required String id,
-          required bool isTestnet,
-          required ChainSwapDirection direction,
-          required KeyPair refundKeys,
-          required BigInt refundIndex,
-          required KeyPair claimKeys,
-          required BigInt claimIndex,
-          required PreImage preimage,
-          required BtcSwapScriptStr btcScriptStr,
-          required LBtcSwapScriptStr lbtcScriptStr,
-          required String scriptAddress,
-          required BigInt outAmount,
-          required String btcElectrumUrl,
-          required String lbtcElectrumUrl,
-          required String boltzUrl,
-          String? referralId,
-          required String blindingKey}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapNew(
-          id: id,
-          isTestnet: isTestnet,
-          direction: direction,
-          refundKeys: refundKeys,
-          refundIndex: refundIndex,
-          claimKeys: claimKeys,
-          claimIndex: claimIndex,
-          preimage: preimage,
-          btcScriptStr: btcScriptStr,
-          lbtcScriptStr: lbtcScriptStr,
-          scriptAddress: scriptAddress,
-          outAmount: outAmount,
-          btcElectrumUrl: btcElectrumUrl,
-          lbtcElectrumUrl: lbtcElectrumUrl,
-          boltzUrl: boltzUrl,
-          referralId: referralId,
-          blindingKey: blindingKey);
+  static Future<ChainSwap> newInstance({
+    required String id,
+    required bool isTestnet,
+    required ChainSwapDirection direction,
+    required KeyPair refundKeys,
+    required BigInt refundIndex,
+    required KeyPair claimKeys,
+    required BigInt claimIndex,
+    required PreImage preimage,
+    required BtcSwapScriptStr btcScriptStr,
+    required LBtcSwapScriptStr lbtcScriptStr,
+    required String scriptAddress,
+    required BigInt outAmount,
+    required String btcElectrumUrl,
+    required String lbtcElectrumUrl,
+    required String boltzUrl,
+    String? referralId,
+    required String blindingKey,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapNew(
+    id: id,
+    isTestnet: isTestnet,
+    direction: direction,
+    refundKeys: refundKeys,
+    refundIndex: refundIndex,
+    claimKeys: claimKeys,
+    claimIndex: claimIndex,
+    preimage: preimage,
+    btcScriptStr: btcScriptStr,
+    lbtcScriptStr: lbtcScriptStr,
+    scriptAddress: scriptAddress,
+    outAmount: outAmount,
+    btcElectrumUrl: btcElectrumUrl,
+    lbtcElectrumUrl: lbtcElectrumUrl,
+    boltzUrl: boltzUrl,
+    referralId: referralId,
+    blindingKey: blindingKey,
+  );
 
   /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
-  /// Note: The mnemonic should be your wallets mnemonic, the library will derive the keys for the swap from the appropriate path.
+  /// Note: The swap_master_key should be a SwapMasterKey. The refund key uses the given index, and the claim key uses index + 1.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
-  static Future<ChainSwap> newSwap(
-          {required ChainSwapDirection direction,
-          required String mnemonic,
-          String? passphrase,
-          required BigInt index,
-          required BigInt amount,
-          required bool isTestnet,
-          required String btcElectrumUrl,
-          required String lbtcElectrumUrl,
-          required String boltzUrl,
-          String? referralId}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapNewSwap(
-          direction: direction,
-          mnemonic: mnemonic,
-          passphrase: passphrase,
-          index: index,
-          amount: amount,
-          isTestnet: isTestnet,
-          btcElectrumUrl: btcElectrumUrl,
-          lbtcElectrumUrl: lbtcElectrumUrl,
-          boltzUrl: boltzUrl,
-          referralId: referralId);
+  static Future<ChainSwap> newSwap({
+    required ChainSwapDirection direction,
+    required SwapMasterKey swapMasterKey,
+    required BigInt index,
+    required BigInt amount,
+    required bool isTestnet,
+    required String btcElectrumUrl,
+    required String lbtcElectrumUrl,
+    required String boltzUrl,
+    String? referralId,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapNewSwap(
+    direction: direction,
+    swapMasterKey: swapMasterKey,
+    index: index,
+    amount: amount,
+    isTestnet: isTestnet,
+    btcElectrumUrl: btcElectrumUrl,
+    lbtcElectrumUrl: lbtcElectrumUrl,
+    boltzUrl: boltzUrl,
+    referralId: referralId,
+  );
 
   /// Refund a failed swap
-  Future<String> refund(
-          {required String refundAddress,
-          required TxFee minerFee,
-          required bool tryCooperate,
-          ElectrumSettings? btcElectrumSettings,
-          ElectrumSettings? lbtcElectrumSettings}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapRefund(
-          that: this,
-          refundAddress: refundAddress,
-          minerFee: minerFee,
-          tryCooperate: tryCooperate,
-          btcElectrumSettings: btcElectrumSettings,
-          lbtcElectrumSettings: lbtcElectrumSettings);
+  Future<String> refund({
+    required String refundAddress,
+    required TxFee minerFee,
+    required bool tryCooperate,
+    ElectrumSettings? btcElectrumSettings,
+    ElectrumSettings? lbtcElectrumSettings,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapRefund(
+    that: this,
+    refundAddress: refundAddress,
+    minerFee: minerFee,
+    tryCooperate: tryCooperate,
+    btcElectrumSettings: btcElectrumSettings,
+    lbtcElectrumSettings: lbtcElectrumSettings,
+  );
 
   /// Get the size of a refund tx
-  Future<BigInt> refundTxSize(
-          {required String refundAddress,
-          required bool tryCooperate,
-          ElectrumSettings? btcElectrumSettings,
-          ElectrumSettings? lbtcElectrumSettings}) =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapRefundTxSize(
-          that: this,
-          refundAddress: refundAddress,
-          tryCooperate: tryCooperate,
-          btcElectrumSettings: btcElectrumSettings,
-          lbtcElectrumSettings: lbtcElectrumSettings);
+  Future<BigInt> refundTxSize({
+    required String refundAddress,
+    required bool tryCooperate,
+    ElectrumSettings? btcElectrumSettings,
+    ElectrumSettings? lbtcElectrumSettings,
+  }) => BoltzCore.instance.api.crateApiChainSwapChainSwapRefundTxSize(
+    that: this,
+    refundAddress: refundAddress,
+    tryCooperate: tryCooperate,
+    btcElectrumSettings: btcElectrumSettings,
+    lbtcElectrumSettings: lbtcElectrumSettings,
+  );
 
   /// Convert instance to a JSON string.
   Future<String> toJson() =>
-      BoltzCore.instance.api.crateApiChainSwapChainSwapToJson(
-        that: this,
-      );
+      BoltzCore.instance.api.crateApiChainSwapChainSwapToJson(that: this);
 
   @override
   int get hashCode =>

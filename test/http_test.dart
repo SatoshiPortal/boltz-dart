@@ -10,7 +10,7 @@ void main() {
   test('SwapStatus to string', () async {
     print(SwapStatus.invoicePaid.toJsonString());
     print(SwapStreamStatus(id: 'abc', status: SwapStatus.invoicePaid));
-    print(swapStatusResponseFromJson(json: '{"status":"invoice.paid"}'));
+    print(SwapStatusResponse.fromJson(json: '{"status":"invoice.paid"}'));
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {

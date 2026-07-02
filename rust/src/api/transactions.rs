@@ -224,6 +224,7 @@ mod tests {
     use super::*;
 
     #[tokio::test]
+    #[ignore = "hits live Boltz + esplora; run with --ignored"]
     async fn test_check_vout_0_outspend_chain_swap_claim() {
         // Using a real completed chain swap from mainnet
         // Swap ID: UVGfSZkRpckk (BTC -> Liquid)
