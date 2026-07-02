@@ -41,7 +41,7 @@ void main() {
   setUp(() async => await LibBoltz.init());
   test('Swap status string', () {
     final status = SwapStatus.invoiceFailedToPay;
-    expect(status.asString, 'Invoice failed to pay');
+    expect(status.asString(), 'Invoice failed to pay');
   });
 
   test('ALL FEES & LIMITS', () async {
@@ -53,7 +53,7 @@ void main() {
     expect((sub_fees.btcFees.percentage > 0.0), true);
     expect((rev_fees.btcFees.percentage > 0.0), true);
     expect((chain_fees.btcToLbtcFees.percentage > 0.0), true);
-  });
+  }, skip: 'live network: hits api.testnet.boltz.exchange');
 
   test('CHAIN SWAP LIMITS include maximalZeroConf', () async {
     const boltzUrl = 'https://api.boltz.exchange/v2';
@@ -143,6 +143,7 @@ void main() {
         fail('Error restoring chain swaps: ${e.kind}: ${e.message}');
       }
     },
+    skip: 'live network: /swap/restore returns 404 (endpoint removed)',
   );
   // group('BTC-LN Submarine', () {
   //   test('Neg: Minimum limit (50k sats)', () async {
