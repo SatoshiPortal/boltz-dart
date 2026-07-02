@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.12.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1352680699;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1728261231;
 
 // Section: executor
 
@@ -2040,6 +2040,66 @@ fn wire__crate__api__restore__restore_ln_lbtc_swaps_impl(
         },
     )
 }
+fn wire__crate__api__restore__restore_swap_index_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    boltz_url: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "restore_swap_index",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap_master_key = swap_master_key.cst_decode();
+            let api_boltz_url = boltz_url.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::restore::restore_swap_index(
+                            api_swap_master_key,
+                            api_boltz_url,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__restore__restore_swap_summaries_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
+    boltz_url: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "restore_swap_summaries",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_swap_master_key = swap_master_key.cst_decode();
+            let api_boltz_url = boltz_url.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>(
+                    (move || async move {
+                        let output_ok = crate::api::restore::restore_swap_summaries(
+                            api_swap_master_key,
+                            api_boltz_url,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__secrets__swap_master_key_create_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     wallet_mnemonic: impl CstDecode<String>,
@@ -2274,6 +2334,12 @@ impl CstDecode<f64> for f64 {
 impl CstDecode<i32> for i32 {
     // Codec=Cst (C-struct based), see doc to use other codecs
     fn cst_decode(self) -> i32 {
+        self
+    }
+}
+impl CstDecode<i64> for i64 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> i64 {
         self
     }
 }
@@ -2624,6 +2690,13 @@ impl SseDecode for i32 {
     }
 }
 
+impl SseDecode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i64::<NativeEndian>().unwrap()
+    }
+}
+
 impl SseDecode for crate::api::secrets::KeyPair {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2741,6 +2814,20 @@ impl SseDecode for Vec<u8> {
         let mut ans_ = Vec::with_capacity(len_ as usize);
         for idx_ in 0..len_ {
             ans_.push(<u8>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::restore::RestoredSwapSummary> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = Vec::with_capacity(len_ as usize);
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::restore::RestoredSwapSummary>::sse_decode(
+                deserializer,
+            ));
         }
         return ans_;
     }
@@ -2886,6 +2973,30 @@ impl SseDecode for crate::api::secrets::PreImage {
             value: var_value,
             sha256: var_sha256,
             hash160: var_hash160,
+        };
+    }
+}
+
+impl SseDecode for crate::api::restore::RestoredSwapSummary {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_id = <String>::sse_decode(deserializer);
+        let mut var_kind = <crate::api::types::SwapType>::sse_decode(deserializer);
+        let mut var_status = <String>::sse_decode(deserializer);
+        let mut var_createdAt = <u64>::sse_decode(deserializer);
+        let mut var_from = <String>::sse_decode(deserializer);
+        let mut var_to = <String>::sse_decode(deserializer);
+        let mut var_amount = <u64>::sse_decode(deserializer);
+        let mut var_recoverable = <bool>::sse_decode(deserializer);
+        return crate::api::restore::RestoredSwapSummary {
+            id: var_id,
+            kind: var_kind,
+            status: var_status,
+            created_at: var_createdAt,
+            from: var_from,
+            to: var_to,
+            amount: var_amount,
+            recoverable: var_recoverable,
         };
     }
 }
@@ -3601,6 +3712,33 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::secrets::PreImage>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::restore::RestoredSwapSummary {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.id.into_into_dart().into_dart(),
+            self.kind.into_into_dart().into_dart(),
+            self.status.into_into_dart().into_dart(),
+            self.created_at.into_into_dart().into_dart(),
+            self.from.into_into_dart().into_dart(),
+            self.to.into_into_dart().into_dart(),
+            self.amount.into_into_dart().into_dart(),
+            self.recoverable.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::restore::RestoredSwapSummary
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::restore::RestoredSwapSummary>
+    for crate::api::restore::RestoredSwapSummary
+{
+    fn into_into_dart(self) -> crate::api::restore::RestoredSwapSummary {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::fees::RevSwapFees {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -4088,6 +4226,13 @@ impl SseEncode for i32 {
     }
 }
 
+impl SseEncode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i64::<NativeEndian>(self).unwrap();
+    }
+}
+
 impl SseEncode for crate::api::secrets::KeyPair {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -4166,6 +4311,16 @@ impl SseEncode for Vec<u8> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <u8>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::restore::RestoredSwapSummary> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::restore::RestoredSwapSummary>::sse_encode(item, serializer);
         }
     }
 }
@@ -4287,6 +4442,20 @@ impl SseEncode for crate::api::secrets::PreImage {
         <String>::sse_encode(self.value, serializer);
         <String>::sse_encode(self.sha256, serializer);
         <String>::sse_encode(self.hash160, serializer);
+    }
+}
+
+impl SseEncode for crate::api::restore::RestoredSwapSummary {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.id, serializer);
+        <crate::api::types::SwapType>::sse_encode(self.kind, serializer);
+        <String>::sse_encode(self.status, serializer);
+        <u64>::sse_encode(self.created_at, serializer);
+        <String>::sse_encode(self.from, serializer);
+        <String>::sse_encode(self.to, serializer);
+        <u64>::sse_encode(self.amount, serializer);
+        <bool>::sse_encode(self.recoverable, serializer);
     }
 }
 
@@ -4889,6 +5058,18 @@ mod io {
             }
         }
     }
+    impl CstDecode<Vec<crate::api::restore::RestoredSwapSummary>>
+        for *mut wire_cst_list_restored_swap_summary
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::restore::RestoredSwapSummary> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
+        }
+    }
     impl CstDecode<crate::api::lnurl::Lnurl> for wire_cst_lnurl {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::lnurl::Lnurl {
@@ -4923,6 +5104,21 @@ mod io {
                 value: self.value.cst_decode(),
                 sha256: self.sha256.cst_decode(),
                 hash160: self.hash160.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::restore::RestoredSwapSummary> for wire_cst_restored_swap_summary {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::restore::RestoredSwapSummary {
+            crate::api::restore::RestoredSwapSummary {
+                id: self.id.cst_decode(),
+                kind: self.kind.cst_decode(),
+                status: self.status.cst_decode(),
+                created_at: self.created_at.cst_decode(),
+                from: self.from.cst_decode(),
+                to: self.to.cst_decode(),
+                amount: self.amount.cst_decode(),
+                recoverable: self.recoverable.cst_decode(),
             }
         }
     }
@@ -5304,6 +5500,25 @@ mod io {
         }
     }
     impl Default for wire_cst_pre_image {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_restored_swap_summary {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                id: core::ptr::null_mut(),
+                kind: Default::default(),
+                status: core::ptr::null_mut(),
+                created_at: Default::default(),
+                from: core::ptr::null_mut(),
+                to: core::ptr::null_mut(),
+                amount: Default::default(),
+                recoverable: Default::default(),
+            }
+        }
+    }
+    impl Default for wire_cst_restored_swap_summary {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -6333,6 +6548,24 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__restore__restore_swap_index(
+        port_: i64,
+        swap_master_key: *mut wire_cst_swap_master_key,
+        boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__restore__restore_swap_index_impl(port_, swap_master_key, boltz_url)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__restore__restore_swap_summaries(
+        port_: i64,
+        swap_master_key: *mut wire_cst_swap_master_key,
+        boltz_url: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__restore__restore_swap_summaries_impl(port_, swap_master_key, boltz_url)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(
         port_: i64,
         wallet_mnemonic: *mut wire_cst_list_prim_u_8_strict,
@@ -6594,6 +6827,20 @@ mod io {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(ans)
     }
 
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_list_restored_swap_summary(
+        len: i32,
+    ) -> *mut wire_cst_list_restored_swap_summary {
+        let wrap = wire_cst_list_restored_swap_summary {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <wire_cst_restored_swap_summary>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
+    }
+
     #[repr(C)]
     #[derive(Clone, Copy)]
     pub struct wire_cst_boltz_error {
@@ -6754,6 +7001,12 @@ mod io {
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
+    pub struct wire_cst_list_restored_swap_summary {
+        ptr: *mut wire_cst_restored_swap_summary,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
     pub struct wire_cst_lnurl {
         value: *mut wire_cst_list_prim_u_8_strict,
     }
@@ -6776,6 +7029,18 @@ mod io {
         value: *mut wire_cst_list_prim_u_8_strict,
         sha256: *mut wire_cst_list_prim_u_8_strict,
         hash160: *mut wire_cst_list_prim_u_8_strict,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_restored_swap_summary {
+        id: *mut wire_cst_list_prim_u_8_strict,
+        kind: i32,
+        status: *mut wire_cst_list_prim_u_8_strict,
+        created_at: u64,
+        from: *mut wire_cst_list_prim_u_8_strict,
+        to: *mut wire_cst_list_prim_u_8_strict,
+        amount: u64,
+        recoverable: bool,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

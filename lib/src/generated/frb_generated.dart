@@ -76,7 +76,7 @@ class BoltzCore
   String get codegenVersion => '2.12.0';
 
   @override
-  int get rustContentHash => 1352680699;
+  int get rustContentHash => -1728261231;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -462,6 +462,16 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<List<LbtcLnSwap>> crateApiRestoreRestoreLnLbtcSwaps({
     required SwapMasterKey swapMasterKey,
     required String electrumUrl,
+    required String boltzUrl,
+  });
+
+  Future<PlatformInt64> crateApiRestoreRestoreSwapIndex({
+    required SwapMasterKey swapMasterKey,
+    required String boltzUrl,
+  });
+
+  Future<List<RestoredSwapSummary>> crateApiRestoreRestoreSwapSummaries({
+    required SwapMasterKey swapMasterKey,
     required String boltzUrl,
   });
 
@@ -3083,6 +3093,72 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<PlatformInt64> crateApiRestoreRestoreSwapIndex({
+    required SwapMasterKey swapMasterKey,
+    required String boltzUrl,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
+          var arg1 = cst_encode_String(boltzUrl);
+          return wire.wire__crate__api__restore__restore_swap_index(
+            port_,
+            arg0,
+            arg1,
+          );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_i_64,
+          decodeErrorData: dco_decode_boltz_error,
+        ),
+        constMeta: kCrateApiRestoreRestoreSwapIndexConstMeta,
+        argValues: [swapMasterKey, boltzUrl],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRestoreRestoreSwapIndexConstMeta =>
+      const TaskConstMeta(
+        debugName: "restore_swap_index",
+        argNames: ["swapMasterKey", "boltzUrl"],
+      );
+
+  @override
+  Future<List<RestoredSwapSummary>> crateApiRestoreRestoreSwapSummaries({
+    required SwapMasterKey swapMasterKey,
+    required String boltzUrl,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
+          var arg1 = cst_encode_String(boltzUrl);
+          return wire.wire__crate__api__restore__restore_swap_summaries(
+            port_,
+            arg0,
+            arg1,
+          );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_restored_swap_summary,
+          decodeErrorData: dco_decode_boltz_error,
+        ),
+        constMeta: kCrateApiRestoreRestoreSwapSummariesConstMeta,
+        argValues: [swapMasterKey, boltzUrl],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRestoreRestoreSwapSummariesConstMeta =>
+      const TaskConstMeta(
+        debugName: "restore_swap_summaries",
+        argNames: ["swapMasterKey", "boltzUrl"],
+      );
+
+  @override
   Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreate({
     required String walletMnemonic,
     String? walletPassphrase,
@@ -3677,6 +3753,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  PlatformInt64 dco_decode_i_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeI64(raw);
+  }
+
+  @protected
   KeyPair dco_decode_key_pair(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -3752,6 +3834,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  List<RestoredSwapSummary> dco_decode_list_restored_swap_summary(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>)
+        .map(dco_decode_restored_swap_summary)
+        .toList();
   }
 
   @protected
@@ -3850,6 +3940,24 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       value: dco_decode_String(arr[0]),
       sha256: dco_decode_String(arr[1]),
       hash160: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  RestoredSwapSummary dco_decode_restored_swap_summary(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    return RestoredSwapSummary(
+      id: dco_decode_String(arr[0]),
+      kind: dco_decode_swap_type(arr[1]),
+      status: dco_decode_String(arr[2]),
+      createdAt: dco_decode_u_64(arr[3]),
+      from: dco_decode_String(arr[4]),
+      to: dco_decode_String(arr[5]),
+      amount: dco_decode_u_64(arr[6]),
+      recoverable: dco_decode_bool(arr[7]),
     );
   }
 
@@ -4404,6 +4512,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  PlatformInt64 sse_decode_i_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getPlatformInt64();
+  }
+
+  @protected
   KeyPair sse_decode_key_pair(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_secretKey = sse_decode_String(deserializer);
@@ -4512,6 +4626,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  List<RestoredSwapSummary> sse_decode_list_restored_swap_summary(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <RestoredSwapSummary>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_restored_swap_summary(deserializer));
+    }
+    return ans_;
   }
 
   @protected
@@ -4639,6 +4767,31 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_sha256 = sse_decode_String(deserializer);
     var var_hash160 = sse_decode_String(deserializer);
     return PreImage(value: var_value, sha256: var_sha256, hash160: var_hash160);
+  }
+
+  @protected
+  RestoredSwapSummary sse_decode_restored_swap_summary(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_id = sse_decode_String(deserializer);
+    var var_kind = sse_decode_swap_type(deserializer);
+    var var_status = sse_decode_String(deserializer);
+    var var_createdAt = sse_decode_u_64(deserializer);
+    var var_from = sse_decode_String(deserializer);
+    var var_to = sse_decode_String(deserializer);
+    var var_amount = sse_decode_u_64(deserializer);
+    var var_recoverable = sse_decode_bool(deserializer);
+    return RestoredSwapSummary(
+      id: var_id,
+      kind: var_kind,
+      status: var_status,
+      createdAt: var_createdAt,
+      from: var_from,
+      to: var_to,
+      amount: var_amount,
+      recoverable: var_recoverable,
+    );
   }
 
   @protected
@@ -5237,6 +5390,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putPlatformInt64(self);
+  }
+
+  @protected
   void sse_encode_key_pair(KeyPair self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.secretKey, serializer);
@@ -5322,6 +5481,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_list_restored_swap_summary(
+    List<RestoredSwapSummary> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_restored_swap_summary(item, serializer);
+    }
   }
 
   @protected
@@ -5439,6 +5610,22 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.value, serializer);
     sse_encode_String(self.sha256, serializer);
     sse_encode_String(self.hash160, serializer);
+  }
+
+  @protected
+  void sse_encode_restored_swap_summary(
+    RestoredSwapSummary self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.id, serializer);
+    sse_encode_swap_type(self.kind, serializer);
+    sse_encode_String(self.status, serializer);
+    sse_encode_u_64(self.createdAt, serializer);
+    sse_encode_String(self.from, serializer);
+    sse_encode_String(self.to, serializer);
+    sse_encode_u_64(self.amount, serializer);
+    sse_encode_bool(self.recoverable, serializer);
   }
 
   @protected

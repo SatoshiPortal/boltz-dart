@@ -185,6 +185,22 @@ typedef struct wire_cst_list_lbtc_ln_swap {
   int32_t len;
 } wire_cst_list_lbtc_ln_swap;
 
+typedef struct wire_cst_restored_swap_summary {
+  struct wire_cst_list_prim_u_8_strict *id;
+  int32_t kind;
+  struct wire_cst_list_prim_u_8_strict *status;
+  uint64_t created_at;
+  struct wire_cst_list_prim_u_8_strict *from;
+  struct wire_cst_list_prim_u_8_strict *to;
+  uint64_t amount;
+  bool recoverable;
+} wire_cst_restored_swap_summary;
+
+typedef struct wire_cst_list_restored_swap_summary {
+  struct wire_cst_restored_swap_summary *ptr;
+  int32_t len;
+} wire_cst_list_restored_swap_summary;
+
 typedef struct wire_cst_swap_limits {
   uint64_t minimal;
   uint64_t maximal;
@@ -592,6 +608,14 @@ void frbgen_boltz_wire__crate__api__restore__restore_ln_lbtc_swaps(int64_t port_
                                                                    struct wire_cst_list_prim_u_8_strict *electrum_url,
                                                                    struct wire_cst_list_prim_u_8_strict *boltz_url);
 
+void frbgen_boltz_wire__crate__api__restore__restore_swap_index(int64_t port_,
+                                                                struct wire_cst_swap_master_key *swap_master_key,
+                                                                struct wire_cst_list_prim_u_8_strict *boltz_url);
+
+void frbgen_boltz_wire__crate__api__restore__restore_swap_summaries(int64_t port_,
+                                                                    struct wire_cst_swap_master_key *swap_master_key,
+                                                                    struct wire_cst_list_prim_u_8_strict *boltz_url);
+
 void frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(int64_t port_,
                                                                     struct wire_cst_list_prim_u_8_strict *wallet_mnemonic,
                                                                     struct wire_cst_list_prim_u_8_strict *wallet_passphrase,
@@ -662,6 +686,8 @@ struct wire_cst_list_chain_swap *frbgen_boltz_cst_new_list_chain_swap(int32_t le
 struct wire_cst_list_lbtc_ln_swap *frbgen_boltz_cst_new_list_lbtc_ln_swap(int32_t len);
 
 struct wire_cst_list_prim_u_8_strict *frbgen_boltz_cst_new_list_prim_u_8_strict(int32_t len);
+
+struct wire_cst_list_restored_swap_summary *frbgen_boltz_cst_new_list_restored_swap_summary(int32_t len);
 static int64_t dummy_method_to_enforce_bundling(void) {
     int64_t dummy_var = 0;
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_box_autoadd_boltz_error);
@@ -688,6 +714,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_chain_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_lbtc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_prim_u_8_strict);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_restored_swap_summary);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_local);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_claim);
@@ -743,6 +770,8 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_chain_swaps);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_ln_btc_swaps);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_ln_lbtc_swaps);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_swap_index);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__restore__restore_swap_summaries);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_from_invoice_str);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_create);

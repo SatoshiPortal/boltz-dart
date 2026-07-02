@@ -14,6 +14,26 @@ import 'types.dart';
 
 // These functions are ignored because they are not marked as `pub`: `claim_details_to_chain_swap_details`, `infer_chain_swap_direction`, `infer_network`, `refund_details_to_chain_swap_details`, `restore_swaps`, `restore_to_btc_ln_swap`, `restore_to_chain_swap`, `restore_to_lbtc_ln_swap`, `swap_restore_type_to_swap_type`
 
+/// One restore POST returning a summary per swap (id, kind, status, amount).
+Future<List<RestoredSwapSummary>> restoreSwapSummaries({
+  required SwapMasterKey swapMasterKey,
+  required String boltzUrl,
+}) => BoltzCore.instance.api.crateApiRestoreRestoreSwapSummaries(
+  swapMasterKey: swapMasterKey,
+  boltzUrl: boltzUrl,
+);
+
+/// Highest swap-key derivation index boltz has on record for this wallet's
+/// swap xpub. Returns -1 when boltz knows of no swaps. Use it on seed recovery
+/// to continue the swap index after the last one already used.
+Future<PlatformInt64> restoreSwapIndex({
+  required SwapMasterKey swapMasterKey,
+  required String boltzUrl,
+}) => BoltzCore.instance.api.crateApiRestoreRestoreSwapIndex(
+  swapMasterKey: swapMasterKey,
+  boltzUrl: boltzUrl,
+);
+
 Future<List<BtcLnSwap>> restoreLnBtcSwaps({
   required SwapMasterKey swapMasterKey,
   required String electrumUrl,
@@ -45,3 +65,59 @@ Future<List<ChainSwap>> restoreChainSwaps({
   lbtcElectrumUrl: lbtcElectrumUrl,
   boltzUrl: boltzUrl,
 );
+
+/// Lightweight view of a restorable swap, taken straight from the restore
+/// response — enough to list swaps and show status without rebuilding the full
+/// swap object (which is only needed to actually rescue one).
+class RestoredSwapSummary {
+  final String id;
+  final SwapType kind;
+
+  /// Raw boltz status string (e.g. "transaction.claimed"); mapped app-side.
+  final String status;
+  final BigInt createdAt;
+  final String from;
+  final String to;
+  final BigInt amount;
+
+  /// True when on-chain funds are locked and not yet claimed/refunded — i.e.
+  /// the swap can still be rescued (claimed or refunded). False for swaps that
+  /// never locked up (e.g. expired-unfunded) or are already resolved.
+  final bool recoverable;
+
+  const RestoredSwapSummary({
+    required this.id,
+    required this.kind,
+    required this.status,
+    required this.createdAt,
+    required this.from,
+    required this.to,
+    required this.amount,
+    required this.recoverable,
+  });
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      kind.hashCode ^
+      status.hashCode ^
+      createdAt.hashCode ^
+      from.hashCode ^
+      to.hashCode ^
+      amount.hashCode ^
+      recoverable.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RestoredSwapSummary &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          kind == other.kind &&
+          status == other.status &&
+          createdAt == other.createdAt &&
+          from == other.from &&
+          to == other.to &&
+          amount == other.amount &&
+          recoverable == other.recoverable;
+}
