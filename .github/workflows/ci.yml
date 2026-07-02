@@ -54,5 +54,14 @@ jobs:
         run: bash compile.native.sh
       - name: Install dependencies
         run: flutter pub get
+      - name: Diagnose native lib
+        run: |
+          echo "pwd: $(pwd)"
+          echo "--- build/unit_test_assets ---"
+          ls -la build/unit_test_assets || true
+          echo "--- file ---"
+          file build/unit_test_assets/libboltz.so || true
+          echo "--- ldd (missing deps show as 'not found') ---"
+          ldd build/unit_test_assets/libboltz.so || true
       - name: Run tests
         run: flutter test
