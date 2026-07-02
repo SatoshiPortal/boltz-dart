@@ -37,3 +37,22 @@ jobs:
         run: flutter pub get
       - name: Analyze
         run: dart analyze
+
+  dart-tests:
+    name: Dart tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.1
+      - name: Build native lib
+        run: sh compile.native.sh
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run tests
+        run: flutter test
