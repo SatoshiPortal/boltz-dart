@@ -51,7 +51,7 @@ jobs:
         with:
           flutter-version: 3.44.1
       - name: Build native lib
-        run: sh compile.native.sh
+        run: bash compile.native.sh
       - name: Install dependencies
         run: flutter pub get
       - name: Run tests

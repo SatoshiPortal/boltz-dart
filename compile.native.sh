@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 mkdir -p build/unit_test_assets
 cd rust || exit 1
 cargo build --release --locked
