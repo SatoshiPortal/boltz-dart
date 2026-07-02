@@ -1,8 +1,6 @@
 // ignore_for_file: unused_local_variable
 
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:boltz/boltz.dart';
 import 'package:test/test.dart';
 
@@ -10,9 +8,9 @@ const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
 
 void main() {
   test('SwapStatus to string', () async {
-    print(SwapStatus.invoicePaid.toJson());
-    print(SwapStreamStatus(id: 'abc', status: SwapStatus.invoicePaid).toJson());
-    print(SwapStatusResponse.fromJson(jsonDecode('{"status":"invoice.paid"}')));
+    print(SwapStatus.invoicePaid.toJsonString());
+    print(SwapStreamStatus(id: 'abc', status: SwapStatus.invoicePaid));
+    print(SwapStatusResponse.fromJson(json: '{"status":"invoice.paid"}'));
   });
 
   test('Get status stream multiple: Creaet, Update, Close', () async {

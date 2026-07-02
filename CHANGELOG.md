@@ -45,3 +45,19 @@
 - fix: building for flutter >3.32.0
 - fix: bad dependency to boltz-rust
 - dep: update flutter_rust_bridge to 2.11.1
+
+# 0.4.0
+- feat: move swap_status types from Dart to Rust (SwapStatus, SwapStatusResponse, SwapStreamStatus, Transaction)
+- feat: add fromJson/toJson methods to SwapStreamStatus, SwapStatusResponse and Transaction
+- feat: add bull_sdk feature to cfg-gate frb_generated
+- upgrade: flutter_rust_bridge to 2.12.0; flutter 3.44.1, dart 3.12.1, frb codegen 2.12.0
+- chore: pin lockfiles and update deps to latest
+
+# 0.5.0
+- feat(breaking): derive all swap keys from a single SwapMasterKey (BIP85-derived swap mnemonic); `new_submarine`/`new_reverse`/`new_swap` now take a `SwapMasterKey` + `index` instead of a keypair, and the caller manages the index
+- feat: add swap restore via the swap xpub — `restore_swap_summaries`, `restore_swap_index`, `restore_ln_btc_swaps`, `restore_ln_lbtc_swaps`, `restore_chain_swaps`
+- feat: expose invoice, secrets and restore modules from `boltz.dart`
+- refactor: reorganize wrapper types (KeyPair, PreImage, SwapMasterKey, fee structs)
+- dep: use published `boltz-client` 0.4.1 crate (was a pinned git rev)
+- test(rust): cover secrets derivation, invoice decode and swap status parsing
+- ci: add GitHub Actions (cargo test + dart analyze); pin Flutter 3.44.1
