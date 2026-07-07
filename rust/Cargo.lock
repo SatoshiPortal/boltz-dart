@@ -344,7 +344,7 @@ dependencies = [
 
 [[package]]
 name = "boltz"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "anyhow",
  "boltz-client",

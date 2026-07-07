@@ -61,3 +61,8 @@
 - dep: use published `boltz-client` 0.4.1 crate (was a pinned git rev)
 - test(rust): cover secrets derivation, invoice decode and swap status parsing
 - ci: add GitHub Actions (cargo test + dart analyze); pin Flutter 3.44.1
+
+# 0.5.1
+- fix(rustls): install the `ring` crypto provider before opening electrum TLS, preventing a process abort (SIGABRT) when both `ring` and `aws-lc-rs` are linked (e.g. in the bull_sdk aggregate) and rustls 0.23 cannot auto-pick a default provider
+- ci: log `ldd` of the built `libboltz.so` in the unit-test job to surface unresolved native deps
+- test: include the dylib path and underlying error in the "unable to open unit test dylib" exception
