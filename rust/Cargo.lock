@@ -353,6 +353,7 @@ dependencies = [
  "hex",
  "openssl",
  "reqwest",
+ "rustls",
  "serde",
  "serde_json",
  "tokio",

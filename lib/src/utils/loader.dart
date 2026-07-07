@@ -73,10 +73,11 @@ class Dylib {
 
   static ExternalLibrary getDylib() {
     if (Platform.environment['FLUTTER_TEST'] == 'true') {
+      final dylibPath = _getUniTestDylibDir(Directory.current);
       try {
-        return ExternalLibrary.open(_getUniTestDylibDir(Directory.current));
+        return ExternalLibrary.open(dylibPath);
       } catch (e) {
-        throw Exception("Unable to open the unit test dylib!");
+        throw Exception("Unable to open the unit test dylib at $dylibPath: $e");
       }
     }
     if (Platform.isIOS || Platform.isMacOS) {

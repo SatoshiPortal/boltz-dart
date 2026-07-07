@@ -63,4 +63,5 @@ jobs:
           cp rust/target/release/libboltz.so build/unit_test_assets/
           echo "staged:"; ls -la build/unit_test_assets/
           echo "find libboltz.so under repo:"; find "$(pwd)" -maxdepth 4 -name libboltz.so
+          echo "ldd (unresolved deps show '=> not found'):"; ldd build/unit_test_assets/libboltz.so || true
           flutter test -r expanded

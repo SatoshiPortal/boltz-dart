@@ -13,6 +13,11 @@ crate-type = ["lib", "staticlib", "cdylib"]
 
 [dependencies]
 boltz-client = { version = "0.4.1", features = ["lnurl", "electrum"] }
+# Pin the rustls crypto provider to ring and install it explicitly before any
+# electrum TLS connection. Both ring + aws-lc-rs can be linked transitively
+# (notably in the bull_sdk aggregate), which makes rustls 0.23 abort when it
+# tries to auto-pick a default provider.
+rustls = { version = "0.23", default-features = false, features = ["ring"] }
 flutter_rust_bridge = "=2.12.0"
 anyhow = "1.0.68"
 serde = { version = "1.0.0", features = ["derive"] }
