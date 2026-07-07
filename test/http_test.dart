@@ -7,6 +7,8 @@ import 'package:test/test.dart';
 const boltzUrl = 'https://api.testnet.boltz.exchange/v2';
 
 void main() {
+  setUp(() async => await LibBoltz.init());
+
   test('SwapStatus to string', () async {
     print(SwapStatus.invoicePaid.toJsonString());
     print(SwapStreamStatus(id: 'abc', status: SwapStatus.invoicePaid));

@@ -1,8 +1,8 @@
 #!/bin/bash
+set -euo pipefail
 mkdir -p build/unit_test_assets
 cd rust || exit 1
-cargo update
-cargo build --release
+cargo build --release --locked
 OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then
     cp target/release/libboltz.so ../build/unit_test_assets

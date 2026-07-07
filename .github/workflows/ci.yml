@@ -37,3 +37,31 @@ jobs:
         run: flutter pub get
       - name: Analyze
         run: dart analyze
+
+  dart-tests:
+    name: Dart tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.1
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build native lib
+        run: bash compile.native.sh
+      - name: Run tests
+        run: |
+          echo "PWD=$(pwd)"
+          echo "cargo output:"; ls -la rust/target/release/libboltz.so || echo "!!! rust/target/release/libboltz.so MISSING"
+          echo "re-staging lib into build/unit_test_assets ..."
+          mkdir -p build/unit_test_assets
+          cp rust/target/release/libboltz.so build/unit_test_assets/
+          echo "staged:"; ls -la build/unit_test_assets/
+          echo "find libboltz.so under repo:"; find "$(pwd)" -maxdepth 4 -name libboltz.so
+          echo "ldd (unresolved deps show '=> not found'):"; ldd build/unit_test_assets/libboltz.so || true
+          flutter test -r expanded
