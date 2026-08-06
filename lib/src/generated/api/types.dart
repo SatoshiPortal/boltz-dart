@@ -6,7 +6,7 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 class BtcSwapScriptStr {
@@ -204,3 +204,48 @@ enum Side { lockup, claim }
 enum SwapTxKind { claim, refund }
 
 enum SwapType { submarine, reverse, chain }
+
+/// Outspend report for one output of a lockup transaction.
+///
+/// A lockup tx is not guaranteed to carry the swap covenant at vout 0 —
+/// Boltz's wallet (and our own on the refund side) can order change first.
+/// Callers therefore get every vout and decide which spend, if any, is
+/// theirs; a spender txid here proves only that the output was spent, never
+/// that the swap participant claiming it was paid.
+class VoutOutspend {
+  final int vout;
+
+  /// Output amount in sats. None for confidential (Liquid) outputs, whose
+  /// value is blinded in the explorer response.
+  final BigInt? valueSat;
+
+  /// Txid of the spending transaction, when the output is spent.
+  final String? spenderTxid;
+
+  /// Block time of the spending transaction, when confirmed.
+  final BigInt? timestamp;
+
+  const VoutOutspend({
+    required this.vout,
+    this.valueSat,
+    this.spenderTxid,
+    this.timestamp,
+  });
+
+  @override
+  int get hashCode =>
+      vout.hashCode ^
+      valueSat.hashCode ^
+      spenderTxid.hashCode ^
+      timestamp.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is VoutOutspend &&
+          runtimeType == other.runtimeType &&
+          vout == other.vout &&
+          valueSat == other.valueSat &&
+          spenderTxid == other.spenderTxid &&
+          timestamp == other.timestamp;
+}

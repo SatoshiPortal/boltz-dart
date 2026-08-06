@@ -162,6 +162,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   List<RestoredSwapSummary> dco_decode_list_restored_swap_summary(dynamic raw);
 
   @protected
+  List<VoutOutspend> dco_decode_list_vout_outspend(dynamic raw);
+
+  @protected
   Lnurl dco_decode_lnurl(dynamic raw);
 
   @protected
@@ -258,6 +261,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   BigInt dco_decode_usize(dynamic raw);
+
+  @protected
+  VoutOutspend dco_decode_vout_outspend(dynamic raw);
 
   @protected
   String sse_decode_String(SseDeserializer deserializer);
@@ -414,6 +420,11 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   );
 
   @protected
+  List<VoutOutspend> sse_decode_list_vout_outspend(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   Lnurl sse_decode_lnurl(SseDeserializer deserializer);
 
   @protected
@@ -522,6 +533,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   BigInt sse_decode_usize(SseDeserializer deserializer);
+
+  @protected
+  VoutOutspend sse_decode_vout_outspend(SseDeserializer deserializer);
 
   @protected
   ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_encode_String(String raw) {
@@ -763,6 +777,18 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     final ans = wire.cst_new_list_restored_swap_summary(raw.length);
     for (var i = 0; i < raw.length; ++i) {
       cst_api_fill_to_wire_restored_swap_summary(raw[i], ans.ref.ptr[i]);
+    }
+    return ans;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_list_vout_outspend> cst_encode_list_vout_outspend(
+    List<VoutOutspend> raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ans = wire.cst_new_list_vout_outspend(raw.length);
+    for (var i = 0; i < raw.length; ++i) {
+      cst_api_fill_to_wire_vout_outspend(raw[i], ans.ref.ptr[i]);
     }
     return ans;
   }
@@ -1320,6 +1346,17 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_vout_outspend(
+    VoutOutspend apiObj,
+    wire_cst_vout_outspend wireObj,
+  ) {
+    wireObj.vout = cst_encode_u_32(apiObj.vout);
+    wireObj.value_sat = cst_encode_opt_box_autoadd_u_64(apiObj.valueSat);
+    wireObj.spender_txid = cst_encode_opt_String(apiObj.spenderTxid);
+    wireObj.timestamp = cst_encode_opt_box_autoadd_u_64(apiObj.timestamp);
+  }
+
+  @protected
   bool cst_encode_bool(bool raw);
 
   @protected
@@ -1563,6 +1600,12 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   );
 
   @protected
+  void sse_encode_list_vout_outspend(
+    List<VoutOutspend> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_lnurl(Lnurl self, SseSerializer serializer);
 
   @protected
@@ -1684,6 +1727,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_usize(BigInt self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_vout_outspend(VoutOutspend self, SseSerializer serializer);
 }
 
 // Section: wire_class
@@ -2834,6 +2880,54 @@ class BoltzCoreWire implements BaseWire {
   late final _wire__crate__api__chain_swap__chain_swap_to_json =
       _wire__crate__api__chain_swap__chain_swap_to_jsonPtr
           .asFunction<void Function(int, ffi.Pointer<wire_cst_chain_swap>)>();
+
+  void wire__crate__api__transactions__check_lockup_outspends(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> swap_id,
+    int swap_type,
+    int tx_kind,
+    int network,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
+    ffi.Pointer<ffi.Int32> chain_swap_direction,
+  ) {
+    return _wire__crate__api__transactions__check_lockup_outspends(
+      port_,
+      swap_id,
+      swap_type,
+      tx_kind,
+      network,
+      boltz_url,
+      chain_swap_direction,
+    );
+  }
+
+  late final _wire__crate__api__transactions__check_lockup_outspendsPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Int64,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Int32,
+            ffi.Int32,
+            ffi.Int32,
+            ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<ffi.Int32>,
+          )
+        >
+      >('frbgen_boltz_wire__crate__api__transactions__check_lockup_outspends');
+  late final _wire__crate__api__transactions__check_lockup_outspends =
+      _wire__crate__api__transactions__check_lockup_outspendsPtr
+          .asFunction<
+            void Function(
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              int,
+              int,
+              int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<ffi.Int32>,
+            )
+          >();
 
   void wire__crate__api__transactions__check_vout_0_outspend(
     int port_,
@@ -4443,6 +4537,19 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_restored_swap_summary> Function(int)
           >();
 
+  ffi.Pointer<wire_cst_list_vout_outspend> cst_new_list_vout_outspend(int len) {
+    return _cst_new_list_vout_outspend(len);
+  }
+
+  late final _cst_new_list_vout_outspendPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Pointer<wire_cst_list_vout_outspend> Function(ffi.Int32)
+        >
+      >('frbgen_boltz_cst_new_list_vout_outspend');
+  late final _cst_new_list_vout_outspend = _cst_new_list_vout_outspendPtr
+      .asFunction<ffi.Pointer<wire_cst_list_vout_outspend> Function(int)>();
+
   int dummy_method_to_enforce_bundling() {
     return _dummy_method_to_enforce_bundling();
   }
@@ -4768,6 +4875,24 @@ final class wire_cst_restored_swap_summary extends ffi.Struct {
 
 final class wire_cst_list_restored_swap_summary extends ffi.Struct {
   external ffi.Pointer<wire_cst_restored_swap_summary> ptr;
+
+  @ffi.Int32()
+  external int len;
+}
+
+final class wire_cst_vout_outspend extends ffi.Struct {
+  @ffi.Uint32()
+  external int vout;
+
+  external ffi.Pointer<ffi.Uint64> value_sat;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> spender_txid;
+
+  external ffi.Pointer<ffi.Uint64> timestamp;
+}
+
+final class wire_cst_list_vout_outspend extends ffi.Struct {
+  external ffi.Pointer<wire_cst_vout_outspend> ptr;
 
   @ffi.Int32()
   external int len;
