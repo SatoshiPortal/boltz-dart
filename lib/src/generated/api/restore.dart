@@ -12,59 +12,51 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `claim_details_to_chain_swap_details`, `infer_chain_swap_direction`, `infer_network`, `refund_details_to_chain_swap_details`, `restore_swaps`, `restore_to_btc_ln_swap`, `restore_to_chain_swap`, `restore_to_lbtc_ln_swap`, `swap_restore_type_to_swap_type`
+// These functions are ignored because they are not marked as `pub`: `claim_details_to_chain_swap_details`, `collect_restored`, `infer_chain_swap_direction`, `infer_network`, `ln_restore_details`, `refund_details_to_chain_swap_details`, `restore_swaps`, `restore_to_btc_ln_swap`, `restore_to_chain_swap`, `restore_to_lbtc_ln_swap`, `submarine_preimage_and_amount`, `swap_restore_type_to_swap_type`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `LnRestoreDetails`
 
 /// One restore POST returning a summary per swap (id, kind, status, amount).
-Future<List<RestoredSwapSummary>> restoreSwapSummaries({
-  required SwapMasterKey swapMasterKey,
-  required String boltzUrl,
-}) => BoltzCore.instance.api.crateApiRestoreRestoreSwapSummaries(
-  swapMasterKey: swapMasterKey,
-  boltzUrl: boltzUrl,
-);
+Future<List<RestoredSwapSummary>> restoreSwapSummaries(
+        {required SwapMasterKey swapMasterKey, required String boltzUrl}) =>
+    BoltzCore.instance.api.crateApiRestoreRestoreSwapSummaries(
+        swapMasterKey: swapMasterKey, boltzUrl: boltzUrl);
 
 /// Highest swap-key derivation index boltz has on record for this wallet's
 /// swap xpub. Returns -1 when boltz knows of no swaps. Use it on seed recovery
 /// to continue the swap index after the last one already used.
-Future<PlatformInt64> restoreSwapIndex({
-  required SwapMasterKey swapMasterKey,
-  required String boltzUrl,
-}) => BoltzCore.instance.api.crateApiRestoreRestoreSwapIndex(
-  swapMasterKey: swapMasterKey,
-  boltzUrl: boltzUrl,
-);
+Future<PlatformInt64> restoreSwapIndex(
+        {required SwapMasterKey swapMasterKey, required String boltzUrl}) =>
+    BoltzCore.instance.api.crateApiRestoreRestoreSwapIndex(
+        swapMasterKey: swapMasterKey, boltzUrl: boltzUrl);
 
-Future<List<BtcLnSwap>> restoreLnBtcSwaps({
-  required SwapMasterKey swapMasterKey,
-  required String electrumUrl,
-  required String boltzUrl,
-}) => BoltzCore.instance.api.crateApiRestoreRestoreLnBtcSwaps(
-  swapMasterKey: swapMasterKey,
-  electrumUrl: electrumUrl,
-  boltzUrl: boltzUrl,
-);
+Future<List<BtcLnSwap>> restoreLnBtcSwaps(
+        {required SwapMasterKey swapMasterKey,
+        required String electrumUrl,
+        required String boltzUrl}) =>
+    BoltzCore.instance.api.crateApiRestoreRestoreLnBtcSwaps(
+        swapMasterKey: swapMasterKey,
+        electrumUrl: electrumUrl,
+        boltzUrl: boltzUrl);
 
-Future<List<LbtcLnSwap>> restoreLnLbtcSwaps({
-  required SwapMasterKey swapMasterKey,
-  required String electrumUrl,
-  required String boltzUrl,
-}) => BoltzCore.instance.api.crateApiRestoreRestoreLnLbtcSwaps(
-  swapMasterKey: swapMasterKey,
-  electrumUrl: electrumUrl,
-  boltzUrl: boltzUrl,
-);
+Future<List<LbtcLnSwap>> restoreLnLbtcSwaps(
+        {required SwapMasterKey swapMasterKey,
+        required String electrumUrl,
+        required String boltzUrl}) =>
+    BoltzCore.instance.api.crateApiRestoreRestoreLnLbtcSwaps(
+        swapMasterKey: swapMasterKey,
+        electrumUrl: electrumUrl,
+        boltzUrl: boltzUrl);
 
-Future<List<ChainSwap>> restoreChainSwaps({
-  required SwapMasterKey swapMasterKey,
-  required String btcElectrumUrl,
-  required String lbtcElectrumUrl,
-  required String boltzUrl,
-}) => BoltzCore.instance.api.crateApiRestoreRestoreChainSwaps(
-  swapMasterKey: swapMasterKey,
-  btcElectrumUrl: btcElectrumUrl,
-  lbtcElectrumUrl: lbtcElectrumUrl,
-  boltzUrl: boltzUrl,
-);
+Future<List<ChainSwap>> restoreChainSwaps(
+        {required SwapMasterKey swapMasterKey,
+        required String btcElectrumUrl,
+        required String lbtcElectrumUrl,
+        required String boltzUrl}) =>
+    BoltzCore.instance.api.crateApiRestoreRestoreChainSwaps(
+        swapMasterKey: swapMasterKey,
+        btcElectrumUrl: btcElectrumUrl,
+        lbtcElectrumUrl: lbtcElectrumUrl,
+        boltzUrl: boltzUrl);
 
 /// Lightweight view of a restorable swap, taken straight from the restore
 /// response — enough to list swaps and show status without rebuilding the full

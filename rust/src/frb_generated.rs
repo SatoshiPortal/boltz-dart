@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.12.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -2086163474;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1513481167;
 
 // Section: executor
 
@@ -2203,6 +2203,26 @@ fn wire__crate__api__swap_status__swap_status_from_json_string_impl(
             let api_status = status.cst_decode();
             transform_result_dco::<_, _, String>((move || {
                 let output_ok = crate::api::swap_status::SwapStatus::from_json_string(api_status)?;
+                Ok(output_ok)
+            })())
+        },
+    )
+}
+fn wire__crate__api__swap_status__swap_status_is_resolved_impl(
+    that: impl CstDecode<crate::api::swap_status::SwapStatus>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_status_is_resolved",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            transform_result_dco::<_, _, ()>((move || {
+                let output_ok = Result::<_, ()>::Ok(
+                    crate::api::swap_status::SwapStatus::is_resolved(&api_that),
+                )?;
                 Ok(output_ok)
             })())
         },
@@ -6762,6 +6782,13 @@ mod io {
         status: *mut wire_cst_list_prim_u_8_strict,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
         wire__crate__api__swap_status__swap_status_from_json_string_impl(status)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__swap_status__swap_status_is_resolved(
+        that: i32,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__swap_status__swap_status_is_resolved_impl(that)
     }
 
     #[unsafe(no_mangle)]

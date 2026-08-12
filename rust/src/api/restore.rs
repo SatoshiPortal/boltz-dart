@@ -6,6 +6,7 @@ use super::{
     error::BoltzError,
     lbtc_ln::LbtcLnSwap,
     secrets::{KeyPair, SwapMasterKey},
+    swap_status::SwapStatus,
     types::{Chain, ChainSwapDirection, PreImage, SwapType},
 };
 use boltz_client::util::secrets::Preimage as BoltzPreimage;
@@ -195,13 +196,12 @@ pub async fn restore_swap_summaries(
                     .as_ref()
                     .map(|d| d.transaction.is_some())
                     .unwrap_or(false);
-            let resolved = matches!(
-                r.status.as_str(),
-                "transaction.claimed"
-                    | "invoice.settled"
-                    | "transaction.refunded"
-                    | "swap.refunded"
-            );
+            // Unknown statuses stay recoverable: erring towards offering a
+            // rescue is safe (the refund/claim just finds the lockup spent),
+            // hiding a rescuable swap is not.
+            let resolved = SwapStatus::from_json_string(r.status.clone())
+                .map(|s| s.is_resolved())
+                .unwrap_or(false);
             RestoredSwapSummary {
                 id: r.id,
                 kind: swap_restore_type_to_swap_type(r.swap_type),
@@ -243,9 +243,13 @@ fn collect_restored<T>(
     let mut swaps = Vec::new();
     let mut first_error: Option<BoltzError> = None;
     for response in responses {
+        let id = response.id.clone();
         match rebuild(response) {
             Some(Ok(swap)) => swaps.push(swap),
-            Some(Err(e)) => first_error = first_error.or(Some(e)),
+            Some(Err(e)) => {
+                eprintln!("RESTORE: skipping unrebuildable swap {}: {:?}", id, e);
+                first_error = first_error.or(Some(e));
+            }
             None => {}
         }
     }

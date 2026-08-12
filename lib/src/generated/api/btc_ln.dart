@@ -46,49 +46,43 @@ class BtcLnSwap {
 
   /// Broadcast using boltz's electrum server
   Future<String> broadcastBoltz({required String signedHex}) => BoltzCore
-      .instance
-      .api
+      .instance.api
       .crateApiBtcLnBtcLnSwapBroadcastBoltz(that: this, signedHex: signedHex);
 
   /// Broadcast using your own electrum server that was used to create the swap
-  Future<String> broadcastLocal({
-    required String signedHex,
-    ElectrumSettings? electrumSettings,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapBroadcastLocal(
-    that: this,
-    signedHex: signedHex,
-    electrumSettings: electrumSettings,
-  );
+  Future<String> broadcastLocal(
+          {required String signedHex, ElectrumSettings? electrumSettings}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapBroadcastLocal(
+          that: this, signedHex: signedHex, electrumSettings: electrumSettings);
 
   /// Used to claim a reverse swap.
-  Future<String> claim({
-    required String outAddress,
-    required TxFee minerFee,
-    required bool tryCooperate,
-    ElectrumSettings? electrumSettings,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaim(
-    that: this,
-    outAddress: outAddress,
-    minerFee: minerFee,
-    tryCooperate: tryCooperate,
-    electrumSettings: electrumSettings,
-  );
+  Future<String> claim(
+          {required String outAddress,
+          required TxFee minerFee,
+          required bool tryCooperate,
+          ElectrumSettings? electrumSettings}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaim(
+          that: this,
+          outAddress: outAddress,
+          minerFee: minerFee,
+          tryCooperate: tryCooperate,
+          electrumSettings: electrumSettings);
 
   /// Get the size of the claim transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-  Future<BigInt> claimTxSize({
-    required bool isCooperative,
-    ElectrumSettings? electrumSettings,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaimTxSize(
-    that: this,
-    isCooperative: isCooperative,
-    electrumSettings: electrumSettings,
-  );
+  Future<BigInt> claimTxSize(
+          {required bool isCooperative, ElectrumSettings? electrumSettings}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapClaimTxSize(
+          that: this,
+          isCooperative: isCooperative,
+          electrumSettings: electrumSettings);
 
   /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
   /// If this function is not called within ~1 hour, the swap will be closed via the script path.
   /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
-  Future<void> coopCloseSubmarine() => BoltzCore.instance.api
-      .crateApiBtcLnBtcLnSwapCoopCloseSubmarine(that: this);
+  Future<void> coopCloseSubmarine() =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapCoopCloseSubmarine(
+        that: this,
+      );
 
   /// Parse from a JSON string.
   static Future<BtcLnSwap> fromJson({required String jsonStr}) =>
@@ -96,117 +90,117 @@ class BtcLnSwap {
 
   /// Retrieves the preimage for a completed submarine swap.
   Future<String> getCompletedSubmarinePreimage() => BoltzCore.instance.api
-      .crateApiBtcLnBtcLnSwapGetCompletedSubmarinePreimage(that: this);
+          .crateApiBtcLnBtcLnSwapGetCompletedSubmarinePreimage(
+        that: this,
+      );
 
   /// Get the preimage of the lightning invoice for a submarine swap
   Future<String> getPreimage() =>
-      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapGetPreimage(that: this);
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapGetPreimage(
+        that: this,
+      );
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Manually create the class. Primarily used when recovering a swap.
-  static Future<BtcLnSwap> newInstance({
-    required String id,
-    required SwapType kind,
-    required Chain network,
-    required KeyPair keys,
-    required BigInt keyIndex,
-    required PreImage preimage,
-    required BtcSwapScriptStr swapScript,
-    required String invoice,
-    required String scriptAddress,
-    required BigInt outAmount,
-    required String electrumUrl,
-    required String boltzUrl,
-    String? referralId,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNew(
-    id: id,
-    kind: kind,
-    network: network,
-    keys: keys,
-    keyIndex: keyIndex,
-    preimage: preimage,
-    swapScript: swapScript,
-    invoice: invoice,
-    scriptAddress: scriptAddress,
-    outAmount: outAmount,
-    electrumUrl: electrumUrl,
-    boltzUrl: boltzUrl,
-    referralId: referralId,
-  );
+  static Future<BtcLnSwap> newInstance(
+          {required String id,
+          required SwapType kind,
+          required Chain network,
+          required KeyPair keys,
+          required BigInt keyIndex,
+          required PreImage preimage,
+          required BtcSwapScriptStr swapScript,
+          required String invoice,
+          required String scriptAddress,
+          required BigInt outAmount,
+          required String electrumUrl,
+          required String boltzUrl,
+          String? referralId}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNew(
+          id: id,
+          kind: kind,
+          network: network,
+          keys: keys,
+          keyIndex: keyIndex,
+          preimage: preimage,
+          swapScript: swapScript,
+          invoice: invoice,
+          scriptAddress: scriptAddress,
+          outAmount: outAmount,
+          electrumUrl: electrumUrl,
+          boltzUrl: boltzUrl,
+          referralId: referralId);
 
   /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
   /// Note: The swap_master_key should be a SwapMasterKey for the swap network.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
-  static Future<BtcLnSwap> newReverse({
-    required SwapMasterKey swapMasterKey,
-    required BigInt index,
-    required BigInt outAmount,
-    String? outAddress,
-    required Chain network,
-    required String electrumUrl,
-    required String boltzUrl,
-    String? description,
-    String? referralId,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewReverse(
-    swapMasterKey: swapMasterKey,
-    index: index,
-    outAmount: outAmount,
-    outAddress: outAddress,
-    network: network,
-    electrumUrl: electrumUrl,
-    boltzUrl: boltzUrl,
-    description: description,
-    referralId: referralId,
-  );
+  static Future<BtcLnSwap> newReverse(
+          {required SwapMasterKey swapMasterKey,
+          required BigInt index,
+          required BigInt outAmount,
+          String? outAddress,
+          required Chain network,
+          required String electrumUrl,
+          required String boltzUrl,
+          String? description,
+          String? referralId}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewReverse(
+          swapMasterKey: swapMasterKey,
+          index: index,
+          outAmount: outAmount,
+          outAddress: outAddress,
+          network: network,
+          electrumUrl: electrumUrl,
+          boltzUrl: boltzUrl,
+          description: description,
+          referralId: referralId);
 
   /// Used to create the class when starting a submarine swap to pay a lightning invoice with Bitcoin.
   /// Note: The swap_master_key should be a SwapMasterKey for the swap network.
   /// The client is expected to manage (increment) the use of index to ensure keys are not reused.
-  static Future<BtcLnSwap> newSubmarine({
-    required SwapMasterKey swapMasterKey,
-    required BigInt index,
-    required String invoice,
-    required Chain network,
-    required String electrumUrl,
-    required String boltzUrl,
-    String? referralId,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewSubmarine(
-    swapMasterKey: swapMasterKey,
-    index: index,
-    invoice: invoice,
-    network: network,
-    electrumUrl: electrumUrl,
-    boltzUrl: boltzUrl,
-    referralId: referralId,
-  );
+  static Future<BtcLnSwap> newSubmarine(
+          {required SwapMasterKey swapMasterKey,
+          required BigInt index,
+          required String invoice,
+          required Chain network,
+          required String electrumUrl,
+          required String boltzUrl,
+          String? referralId}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewSubmarine(
+          swapMasterKey: swapMasterKey,
+          index: index,
+          invoice: invoice,
+          network: network,
+          electrumUrl: electrumUrl,
+          boltzUrl: boltzUrl,
+          referralId: referralId);
 
   /// Used to refund a failed submarine swap.
-  Future<String> refund({
-    required String outAddress,
-    required TxFee minerFee,
-    required bool tryCooperate,
-    ElectrumSettings? electrumSettings,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefund(
-    that: this,
-    outAddress: outAddress,
-    minerFee: minerFee,
-    tryCooperate: tryCooperate,
-    electrumSettings: electrumSettings,
-  );
+  Future<String> refund(
+          {required String outAddress,
+          required TxFee minerFee,
+          required bool tryCooperate,
+          ElectrumSettings? electrumSettings}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefund(
+          that: this,
+          outAddress: outAddress,
+          minerFee: minerFee,
+          tryCooperate: tryCooperate,
+          electrumSettings: electrumSettings);
 
   /// Get the size of the refund transaction. Can be used to estimate the absolute miner fees required, given a fee rate.
-  Future<BigInt> refundTxSize({
-    required bool isCooperative,
-    ElectrumSettings? electrumSettings,
-  }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefundTxSize(
-    that: this,
-    isCooperative: isCooperative,
-    electrumSettings: electrumSettings,
-  );
+  Future<BigInt> refundTxSize(
+          {required bool isCooperative, ElectrumSettings? electrumSettings}) =>
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapRefundTxSize(
+          that: this,
+          isCooperative: isCooperative,
+          electrumSettings: electrumSettings);
 
   /// Convert instance to a JSON string.
   Future<String> toJson() =>
-      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapToJson(that: this);
+      BoltzCore.instance.api.crateApiBtcLnBtcLnSwapToJson(
+        that: this,
+      );
 
   @override
   int get hashCode =>

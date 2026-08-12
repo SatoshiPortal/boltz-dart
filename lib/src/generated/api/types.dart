@@ -29,23 +29,22 @@ class BtcSwapScriptStr {
   });
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<BtcSwapScriptStr> newInstance({
-    required SwapType swapType,
-    String? fundingAddrs,
-    required String hashlock,
-    required String receiverPubkey,
-    required int locktime,
-    required String senderPubkey,
-    Side? side,
-  }) => BoltzCore.instance.api.crateApiTypesBtcSwapScriptStrNew(
-    swapType: swapType,
-    fundingAddrs: fundingAddrs,
-    hashlock: hashlock,
-    receiverPubkey: receiverPubkey,
-    locktime: locktime,
-    senderPubkey: senderPubkey,
-    side: side,
-  );
+  static Future<BtcSwapScriptStr> newInstance(
+          {required SwapType swapType,
+          String? fundingAddrs,
+          required String hashlock,
+          required String receiverPubkey,
+          required int locktime,
+          required String senderPubkey,
+          Side? side}) =>
+      BoltzCore.instance.api.crateApiTypesBtcSwapScriptStrNew(
+          swapType: swapType,
+          fundingAddrs: fundingAddrs,
+          hashlock: hashlock,
+          receiverPubkey: receiverPubkey,
+          locktime: locktime,
+          senderPubkey: senderPubkey,
+          side: side);
 
   @override
   int get hashCode =>
@@ -71,9 +70,19 @@ class BtcSwapScriptStr {
           side == other.side;
 }
 
-enum Chain { bitcoin, bitcoinTestnet, liquid, liquidTestnet }
+enum Chain {
+  bitcoin,
+  bitcoinTestnet,
+  liquid,
+  liquidTestnet,
+  ;
+}
 
-enum ChainSwapDirection { btcToLbtc, lbtcToBtc }
+enum ChainSwapDirection {
+  btcToLbtc,
+  lbtcToBtc,
+  ;
+}
 
 class ElectrumSettings {
   final String url;
@@ -126,25 +135,24 @@ class LBtcSwapScriptStr {
   });
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<LBtcSwapScriptStr> newInstance({
-    required SwapType swapType,
-    String? fundingAddrs,
-    required String hashlock,
-    required String receiverPubkey,
-    required int locktime,
-    required String senderPubkey,
-    required String blindingKey,
-    Side? side,
-  }) => BoltzCore.instance.api.crateApiTypesLBtcSwapScriptStrNew(
-    swapType: swapType,
-    fundingAddrs: fundingAddrs,
-    hashlock: hashlock,
-    receiverPubkey: receiverPubkey,
-    locktime: locktime,
-    senderPubkey: senderPubkey,
-    blindingKey: blindingKey,
-    side: side,
-  );
+  static Future<LBtcSwapScriptStr> newInstance(
+          {required SwapType swapType,
+          String? fundingAddrs,
+          required String hashlock,
+          required String receiverPubkey,
+          required int locktime,
+          required String senderPubkey,
+          required String blindingKey,
+          Side? side}) =>
+      BoltzCore.instance.api.crateApiTypesLBtcSwapScriptStrNew(
+          swapType: swapType,
+          fundingAddrs: fundingAddrs,
+          hashlock: hashlock,
+          receiverPubkey: receiverPubkey,
+          locktime: locktime,
+          senderPubkey: senderPubkey,
+          blindingKey: blindingKey,
+          side: side);
 
   @override
   int get hashCode =>
@@ -173,7 +181,12 @@ class LBtcSwapScriptStr {
 }
 
 /// Wrapper for Network from boltz-rust
-enum Network { mainnet, testnet, regtest }
+enum Network {
+  mainnet,
+  testnet,
+  regtest,
+  ;
+}
 
 /// Result of checking if a transaction output has been spent
 class OutspendStatus {
@@ -181,7 +194,11 @@ class OutspendStatus {
   final String? txid;
   final BigInt? timestamp;
 
-  const OutspendStatus({required this.kind, this.txid, this.timestamp});
+  const OutspendStatus({
+    required this.kind,
+    this.txid,
+    this.timestamp,
+  });
 
   @override
   int get hashCode => kind.hashCode ^ txid.hashCode ^ timestamp.hashCode;
@@ -199,11 +216,24 @@ class OutspendStatus {
 /// Used for chain-swaps only. The side is based on which transaction is being made by the user.
 /// When a swap is created the user must first make a Lockup.
 /// Once the swap is completed, the user must make a Claim.
-enum Side { lockup, claim }
+enum Side {
+  lockup,
+  claim,
+  ;
+}
 
-enum SwapTxKind { claim, refund }
+enum SwapTxKind {
+  claim,
+  refund,
+  ;
+}
 
-enum SwapType { submarine, reverse, chain }
+enum SwapType {
+  submarine,
+  reverse,
+  chain,
+  ;
+}
 
 /// Outspend report for one output of a lockup transaction.
 ///

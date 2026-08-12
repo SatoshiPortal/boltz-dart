@@ -645,6 +645,8 @@ WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_as_
 
 WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_from_json_string(struct wire_cst_list_prim_u_8_strict *status);
 
+WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_is_resolved(int32_t that);
+
 WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_response_from_json(struct wire_cst_list_prim_u_8_strict *json);
 
 WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_response_to_json(struct wire_cst_swap_status_response *that);
@@ -800,6 +802,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_create);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_as_string);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_from_json_string);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_is_resolved);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_response_from_json);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_response_to_json);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_to_json_string);
