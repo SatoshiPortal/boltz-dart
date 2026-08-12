@@ -206,10 +206,7 @@ async fn resolve_lockup_tx(
 /// amounts, in two explorer calls: `/tx/{txid}/outspends` (spender + block
 /// time per vout) and `/tx/{txid}` (amounts; unreadable for confidential
 /// Liquid outputs, which report None).
-async fn fetch_outspends(
-    txid: &str,
-    mempool_url: &str,
-) -> Result<Vec<VoutOutspend>, BoltzError> {
+async fn fetch_outspends(txid: &str, mempool_url: &str) -> Result<Vec<VoutOutspend>, BoltzError> {
     let client = reqwest::Client::new();
 
     let outspends_url = format!("{}/tx/{}/outspends", mempool_url, txid);
