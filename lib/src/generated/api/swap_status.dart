@@ -30,21 +30,32 @@ enum SwapStatus {
   invoiceFailedToPay,
   invoiceSettled,
   invoiceExpired,
-  minerfeePaid;
+  minerfeePaid,
+  ;
 
   /// Human-readable description of the status
   String asString() =>
-      BoltzCore.instance.api.crateApiSwapStatusSwapStatusAsString(that: this);
+      BoltzCore.instance.api.crateApiSwapStatusSwapStatusAsString(
+        that: this,
+      );
 
   /// Parse a status from a Boltz API JSON string
-  static SwapStatus fromJsonString({required String status}) => BoltzCore
-      .instance
-      .api
-      .crateApiSwapStatusSwapStatusFromJsonString(status: status);
+  static SwapStatus fromJsonString({required String status}) =>
+      BoltzCore.instance.api
+          .crateApiSwapStatusSwapStatusFromJsonString(status: status);
+
+  /// Terminal outcomes after which the lockup has been spent (claimed or
+  /// refunded) — nothing is left on-chain to rescue.
+  bool isResolved() =>
+      BoltzCore.instance.api.crateApiSwapStatusSwapStatusIsResolved(
+        that: this,
+      );
 
   /// Convert to the Boltz API JSON string representation
-  String toJsonString() => BoltzCore.instance.api
-      .crateApiSwapStatusSwapStatusToJsonString(that: this);
+  String toJsonString() =>
+      BoltzCore.instance.api.crateApiSwapStatusSwapStatusToJsonString(
+        that: this,
+      );
 }
 
 /// Response from the Boltz API status endpoint
@@ -61,13 +72,14 @@ class SwapStatusResponse {
     this.error,
   });
 
-  static SwapStatusResponse fromJson({required String json}) => BoltzCore
-      .instance
-      .api
-      .crateApiSwapStatusSwapStatusResponseFromJson(json: json);
+  static SwapStatusResponse fromJson({required String json}) =>
+      BoltzCore.instance.api
+          .crateApiSwapStatusSwapStatusResponseFromJson(json: json);
 
-  String toJson() => BoltzCore.instance.api
-      .crateApiSwapStatusSwapStatusResponseToJson(that: this);
+  String toJson() =>
+      BoltzCore.instance.api.crateApiSwapStatusSwapStatusResponseToJson(
+        that: this,
+      );
 
   @override
   int get hashCode =>
@@ -101,13 +113,14 @@ class SwapStreamStatus {
     this.transaction,
   });
 
-  static SwapStreamStatus fromJson({required String json}) => BoltzCore
-      .instance
-      .api
-      .crateApiSwapStatusSwapStreamStatusFromJson(json: json);
+  static SwapStreamStatus fromJson({required String json}) =>
+      BoltzCore.instance.api
+          .crateApiSwapStatusSwapStreamStatusFromJson(json: json);
 
-  String toJson() => BoltzCore.instance.api
-      .crateApiSwapStatusSwapStreamStatusToJson(that: this);
+  String toJson() =>
+      BoltzCore.instance.api.crateApiSwapStatusSwapStreamStatusToJson(
+        that: this,
+      );
 
   @override
   int get hashCode =>
@@ -130,13 +143,18 @@ class Transaction {
   final String hex;
   final int? eta;
 
-  const Transaction({required this.id, required this.hex, this.eta});
+  const Transaction({
+    required this.id,
+    required this.hex,
+    this.eta,
+  });
 
   static Transaction fromJson({required String json}) =>
       BoltzCore.instance.api.crateApiSwapStatusTransactionFromJson(json: json);
 
-  String toJson() =>
-      BoltzCore.instance.api.crateApiSwapStatusTransactionToJson(that: this);
+  String toJson() => BoltzCore.instance.api.crateApiSwapStatusTransactionToJson(
+        that: this,
+      );
 
   @override
   int get hashCode => id.hashCode ^ hex.hashCode ^ eta.hashCode;

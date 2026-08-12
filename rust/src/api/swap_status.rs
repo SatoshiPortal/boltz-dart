@@ -135,6 +135,19 @@ impl SwapStatus {
             _ => Err(format!("Invalid status string: {}", status)),
         }
     }
+
+    /// Terminal outcomes after which the lockup has been spent (claimed or
+    /// refunded) — nothing is left on-chain to rescue.
+    #[flutter_rust_bridge::frb(sync)]
+    pub fn is_resolved(&self) -> bool {
+        matches!(
+            self,
+            SwapStatus::TxnClaimed
+                | SwapStatus::InvoiceSettled
+                | SwapStatus::TxnRefunded
+                | SwapStatus::SwapRefunded
+        )
+    }
 }
 
 /// A transaction object from the Boltz API websocket
@@ -246,6 +259,29 @@ mod tests {
         ] {
             let json = s.to_json_string();
             assert_eq!(SwapStatus::from_json_string(json).unwrap(), s);
+        }
+    }
+
+    #[test]
+    fn resolved_statuses_are_exactly_the_spent_lockup_outcomes() {
+        let resolved = [
+            SwapStatus::TxnClaimed,
+            SwapStatus::InvoiceSettled,
+            SwapStatus::TxnRefunded,
+            SwapStatus::SwapRefunded,
+        ];
+        for s in resolved {
+            assert!(s.is_resolved(), "{:?} should be resolved", s);
+        }
+        for s in [
+            SwapStatus::SwapCreated,
+            SwapStatus::SwapExpired,
+            SwapStatus::TxnLockupFailed,
+            SwapStatus::TxnConfirmed,
+            SwapStatus::InvoiceExpired,
+            SwapStatus::TxnFailed,
+        ] {
+            assert!(!s.is_resolved(), "{:?} should not be resolved", s);
         }
     }
 

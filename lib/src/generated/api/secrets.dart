@@ -14,7 +14,10 @@ class KeyPair {
   final String secretKey;
   final String publicKey;
 
-  const KeyPair({required this.secretKey, required this.publicKey});
+  const KeyPair({
+    required this.secretKey,
+    required this.publicKey,
+  });
 
   @override
   int get hashCode => secretKey.hashCode ^ publicKey.hashCode;
@@ -39,21 +42,17 @@ class PreImage {
     required this.hash160,
   });
 
-  static Future<PreImage> fromInvoiceStr({required String invoice}) => BoltzCore
-      .instance
-      .api
-      .crateApiSecretsPreImageFromInvoiceStr(invoice: invoice);
+  static Future<PreImage> fromInvoiceStr({required String invoice}) =>
+      BoltzCore.instance.api
+          .crateApiSecretsPreImageFromInvoiceStr(invoice: invoice);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<PreImage> newInstance({
-    required String value,
-    required String sha256,
-    required String hash160,
-  }) => BoltzCore.instance.api.crateApiSecretsPreImageNew(
-    value: value,
-    sha256: sha256,
-    hash160: hash160,
-  );
+  static Future<PreImage> newInstance(
+          {required String value,
+          required String sha256,
+          required String hash160}) =>
+      BoltzCore.instance.api.crateApiSecretsPreImageNew(
+          value: value, sha256: sha256, hash160: hash160);
 
   @override
   int get hashCode => value.hashCode ^ sha256.hashCode ^ hash160.hashCode;
@@ -83,15 +82,14 @@ class SwapMasterKey {
     required this.fingerprint,
   });
 
-  static Future<SwapMasterKey> create({
-    required String walletMnemonic,
-    String? walletPassphrase,
-    required Network network,
-  }) => BoltzCore.instance.api.crateApiSecretsSwapMasterKeyCreate(
-    walletMnemonic: walletMnemonic,
-    walletPassphrase: walletPassphrase,
-    network: network,
-  );
+  static Future<SwapMasterKey> create(
+          {required String walletMnemonic,
+          String? walletPassphrase,
+          required Network network}) =>
+      BoltzCore.instance.api.crateApiSecretsSwapMasterKeyCreate(
+          walletMnemonic: walletMnemonic,
+          walletPassphrase: walletPassphrase,
+          network: network);
 
   @override
   int get hashCode =>

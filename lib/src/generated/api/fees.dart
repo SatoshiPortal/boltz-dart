@@ -79,11 +79,15 @@ class ChainSwapFees {
 class Fees {
   final String boltzUrl;
 
-  const Fees({required this.boltzUrl});
+  const Fees({
+    required this.boltzUrl,
+  });
 
   /// Method to get the fees & limits for a chain swap
   Future<ChainFeesAndLimits> chain() =>
-      BoltzCore.instance.api.crateApiFeesFeesChain(that: this);
+      BoltzCore.instance.api.crateApiFeesFeesChain(
+        that: this,
+      );
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Constructor
@@ -92,11 +96,15 @@ class Fees {
 
   /// Method to get the fees & limits for a reverse swap
   Future<ReverseFeesAndLimits> reverse() =>
-      BoltzCore.instance.api.crateApiFeesFeesReverse(that: this);
+      BoltzCore.instance.api.crateApiFeesFeesReverse(
+        that: this,
+      );
 
   /// Method to get the fees & limits for a submarine swap
   Future<SubmarineFeesAndLimits> submarine() =>
-      BoltzCore.instance.api.crateApiFeesFeesSubmarine(that: this);
+      BoltzCore.instance.api.crateApiFeesFeesSubmarine(
+        that: this,
+      );
 
   @override
   int get hashCode => boltzUrl.hashCode;
@@ -114,7 +122,10 @@ class MinerFees {
   final BigInt lockup;
   final BigInt claim;
 
-  const MinerFees({required this.lockup, required this.claim});
+  const MinerFees({
+    required this.lockup,
+    required this.claim,
+  });
 
   @override
   int get hashCode => lockup.hashCode ^ claim.hashCode;
@@ -133,7 +144,10 @@ class RevSwapFees {
   final double percentage;
   final MinerFees minerFees;
 
-  const RevSwapFees({required this.percentage, required this.minerFees});
+  const RevSwapFees({
+    required this.percentage,
+    required this.minerFees,
+  });
 
   @override
   int get hashCode => percentage.hashCode ^ minerFees.hashCode;
@@ -187,7 +201,10 @@ class SubSwapFees {
   /// Fees going to Bitcoin miners/Liquid block validators
   final BigInt minerFees;
 
-  const SubSwapFees({required this.percentage, required this.minerFees});
+  const SubSwapFees({
+    required this.percentage,
+    required this.minerFees,
+  });
 
   @override
   int get hashCode => percentage.hashCode ^ minerFees.hashCode;
@@ -274,6 +291,10 @@ class SwapLimits {
 sealed class TxFee with _$TxFee {
   const TxFee._();
 
-  const factory TxFee.absolute(BigInt field0) = TxFee_Absolute;
-  const factory TxFee.relative(double field0) = TxFee_Relative;
+  const factory TxFee.absolute(
+    BigInt field0,
+  ) = TxFee_Absolute;
+  const factory TxFee.relative(
+    double field0,
+  ) = TxFee_Relative;
 }

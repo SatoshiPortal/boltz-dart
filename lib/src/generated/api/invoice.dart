@@ -34,13 +34,10 @@ class DecodedInvoice {
     required this.description,
   });
 
-  static Future<DecodedInvoice> fromString({
-    required String s,
-    String? boltzUrl,
-  }) => BoltzCore.instance.api.crateApiInvoiceDecodedInvoiceFromString(
-    s: s,
-    boltzUrl: boltzUrl,
-  );
+  static Future<DecodedInvoice> fromString(
+          {required String s, String? boltzUrl}) =>
+      BoltzCore.instance.api
+          .crateApiInvoiceDecodedInvoiceFromString(s: s, boltzUrl: boltzUrl);
 
   @override
   int get hashCode =>

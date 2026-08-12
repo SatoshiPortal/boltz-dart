@@ -13,7 +13,9 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 class Lnurl {
   final String value;
 
-  const Lnurl({required this.value});
+  const Lnurl({
+    required this.value,
+  });
 
   /// LNURL helper to get an invoice from an lnurl string
   Future<String> fetchInvoice({required BigInt msats}) => BoltzCore.instance.api
@@ -21,7 +23,9 @@ class Lnurl {
 
   /// LNURL helper to get an lnurl-w voucher amount
   Future<BigInt> getVoucherMaxAmount() =>
-      BoltzCore.instance.api.crateApiLnurlLnurlGetVoucherMaxAmount(that: this);
+      BoltzCore.instance.api.crateApiLnurlLnurlGetVoucherMaxAmount(
+        that: this,
+      );
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Create a new Lnurl instance
@@ -29,8 +33,9 @@ class Lnurl {
       BoltzCore.instance.api.crateApiLnurlLnurlNew(value: value);
 
   /// LNURL helper to validate an lnurl string
-  Future<bool> validate() =>
-      BoltzCore.instance.api.crateApiLnurlLnurlValidate(that: this);
+  Future<bool> validate() => BoltzCore.instance.api.crateApiLnurlLnurlValidate(
+        that: this,
+      );
 
   /// LNURL helper to claim an lnurl-w
   Future<void> withdraw({required String invoice}) => BoltzCore.instance.api
