@@ -66,3 +66,6 @@
 - fix(rustls): install the `ring` crypto provider before opening electrum TLS, preventing a process abort (SIGABRT) when both `ring` and `aws-lc-rs` are linked (e.g. in the bull_sdk aggregate) and rustls 0.23 cannot auto-pick a default provider
 - ci: log `ldd` of the built `libboltz.so` in the unit-test job to surface unresolved native deps
 - test: include the dylib path and underlying error in the "unable to open unit test dylib" exception
+
+# 0.5.2
+- feat: `check_lockup_outspends` — outspend status of EVERY lockup output (spender txid, block time, amount where visible), replacing the vout-0 assumption of `check_vout_0_outspend`; callers must verify the spender paid them before settling a swap

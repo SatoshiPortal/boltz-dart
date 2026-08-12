@@ -1,6 +1,6 @@
 use super::{
     error::BoltzError,
-    types::{Chain, ChainSwapDirection, OutspendStatus, SwapTxKind, SwapType},
+    types::{Chain, ChainSwapDirection, OutspendStatus, SwapTxKind, SwapType, VoutOutspend},
 };
 use crate::util::{
     ensure_http_prefix, MEMPOOL_BITCOIN_TESTNET_URL, MEMPOOL_BITCOIN_URL,
@@ -18,6 +18,58 @@ pub async fn check_vout_0_outspend(
     boltz_url: &str,
     chain_swap_direction: Option<ChainSwapDirection>,
 ) -> Result<OutspendStatus, BoltzError> {
+    let (txid, mempool_url) = resolve_lockup_tx(
+        swap_id,
+        swap_type,
+        tx_kind,
+        network,
+        boltz_url,
+        chain_swap_direction,
+    )
+    .await?;
+
+    // Check if the output has been spent
+    check_outspend(&txid, mempool_url, tx_kind).await
+}
+
+/// Reports the outspend status of EVERY output of the swap's lockup
+/// transaction (server lockup for claims, user lockup for refunds), with
+/// each output's amount where visible. Unlike [check_vout_0_outspend] this
+/// makes no assumption about which vout carries the swap covenant; callers
+/// must match a spender against their own wallet/destination before
+/// treating it as their claim or refund — an output being spent proves
+/// nothing about who was paid.
+pub async fn check_lockup_outspends(
+    swap_id: &str,
+    swap_type: SwapType,
+    tx_kind: SwapTxKind,
+    network: Chain,
+    boltz_url: &str,
+    chain_swap_direction: Option<ChainSwapDirection>,
+) -> Result<Vec<VoutOutspend>, BoltzError> {
+    let (txid, mempool_url) = resolve_lockup_tx(
+        swap_id,
+        swap_type,
+        tx_kind,
+        network,
+        boltz_url,
+        chain_swap_direction,
+    )
+    .await?;
+
+    fetch_outspends(&txid, mempool_url).await
+}
+
+/// Resolves which lockup transaction a claim/refund of this swap spends,
+/// and the explorer to query it on.
+async fn resolve_lockup_tx(
+    swap_id: &str,
+    swap_type: SwapType,
+    tx_kind: SwapTxKind,
+    network: Chain,
+    boltz_url: &str,
+    chain_swap_direction: Option<ChainSwapDirection>,
+) -> Result<(String, &'static str), BoltzError> {
     // Get the transaction ID to check based on swap type and tx kind
     let (txid, mempool_url) = match (swap_type, tx_kind) {
         // Reverse swap claims - check server lockup transaction
@@ -147,8 +199,92 @@ pub async fn check_vout_0_outspend(
         }
     };
 
-    // Check if the output has been spent
-    check_outspend(&txid, mempool_url, tx_kind).await
+    Ok((txid, mempool_url))
+}
+
+/// Fetches the outspend status of every output of [txid] plus the output
+/// amounts, in two explorer calls: `/tx/{txid}/outspends` (spender + block
+/// time per vout) and `/tx/{txid}` (amounts; unreadable for confidential
+/// Liquid outputs, which report None).
+async fn fetch_outspends(txid: &str, mempool_url: &str) -> Result<Vec<VoutOutspend>, BoltzError> {
+    let client = reqwest::Client::new();
+
+    let outspends_url = format!("{}/tx/{}/outspends", mempool_url, txid);
+    let response = client
+        .get(&outspends_url)
+        .send()
+        .await
+        .map_err(|e| BoltzError::new("HTTP".to_string(), e.to_string()))?;
+    if !response.status().is_success() {
+        return Err(BoltzError::new(
+            "HTTP".to_string(),
+            format!("outspends query for {} failed: {}", txid, response.status()),
+        ));
+    }
+    let outspends: serde_json::Value = response
+        .json()
+        .await
+        .map_err(|e| BoltzError::new("JSON".to_string(), e.to_string()))?;
+    let outspends = outspends.as_array().ok_or_else(|| {
+        BoltzError::new(
+            "JSON".to_string(),
+            format!("outspends response for {} is not an array", txid),
+        )
+    })?;
+
+    // Output amounts are informational (they help callers rank candidate
+    // vouts), so a failed tx lookup degrades to None values rather than
+    // failing the whole check.
+    let tx_url = format!("{}/tx/{}", mempool_url, txid);
+    let values: Vec<Option<u64>> = match client.get(&tx_url).send().await {
+        Ok(tx_response) if tx_response.status().is_success() => {
+            match tx_response.json::<serde_json::Value>().await {
+                Ok(tx_data) => tx_data
+                    .get("vout")
+                    .and_then(|v| v.as_array())
+                    .map(|vouts| {
+                        vouts
+                            .iter()
+                            .map(|o| o.get("value").and_then(|v| v.as_u64()))
+                            .collect()
+                    })
+                    .unwrap_or_default(),
+                Err(_) => Vec::new(),
+            }
+        }
+        _ => Vec::new(),
+    };
+
+    Ok(outspends
+        .iter()
+        .enumerate()
+        .map(|(i, outspend)| {
+            let spent = outspend
+                .get("spent")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false);
+            VoutOutspend {
+                vout: i as u32,
+                value_sat: values.get(i).copied().flatten(),
+                spender_txid: if spent {
+                    outspend
+                        .get("txid")
+                        .and_then(|v| v.as_str())
+                        .map(|s| s.to_string())
+                } else {
+                    None
+                },
+                timestamp: if spent {
+                    outspend
+                        .get("status")
+                        .and_then(|s| s.get("block_time"))
+                        .and_then(|t| t.as_u64())
+                } else {
+                    None
+                },
+            }
+        })
+        .collect())
 }
 
 /// Helper function to check if a transaction output (vout 0) has been spent

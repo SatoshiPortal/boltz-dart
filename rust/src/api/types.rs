@@ -451,3 +451,22 @@ pub struct OutspendStatus {
     pub txid: Option<String>,
     pub timestamp: Option<u64>,
 }
+
+/// Outspend report for one output of a lockup transaction.
+///
+/// A lockup tx is not guaranteed to carry the swap covenant at vout 0 —
+/// Boltz's wallet (and our own on the refund side) can order change first.
+/// Callers therefore get every vout and decide which spend, if any, is
+/// theirs; a spender txid here proves only that the output was spent, never
+/// that the swap participant claiming it was paid.
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct VoutOutspend {
+    pub vout: u32,
+    /// Output amount in sats. None for confidential (Liquid) outputs, whose
+    /// value is blinded in the explorer response.
+    pub value_sat: Option<u64>,
+    /// Txid of the spending transaction, when the output is spent.
+    pub spender_txid: Option<String>,
+    /// Block time of the spending transaction, when confirmed.
+    pub timestamp: Option<u64>,
+}

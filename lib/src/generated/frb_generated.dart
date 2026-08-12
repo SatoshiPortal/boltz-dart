@@ -76,7 +76,7 @@ class BoltzCore
   String get codegenVersion => '2.12.0';
 
   @override
-  int get rustContentHash => -1728261231;
+  int get rustContentHash => -2086163474;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -288,6 +288,15 @@ abstract class BoltzCoreApi extends BaseApi {
   });
 
   Future<String> crateApiChainSwapChainSwapToJson({required ChainSwap that});
+
+  Future<List<VoutOutspend>> crateApiTransactionsCheckLockupOutspends({
+    required String swapId,
+    required SwapType swapType,
+    required SwapTxKind txKind,
+    required Chain network,
+    required String boltzUrl,
+    ChainSwapDirection? chainSwapDirection,
+  });
 
   Future<OutspendStatus> crateApiTransactionsCheckVout0Outspend({
     required String swapId,
@@ -1884,6 +1893,67 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kCrateApiChainSwapChainSwapToJsonConstMeta =>
       const TaskConstMeta(debugName: "chain_swap_to_json", argNames: ["that"]);
+
+  @override
+  Future<List<VoutOutspend>> crateApiTransactionsCheckLockupOutspends({
+    required String swapId,
+    required SwapType swapType,
+    required SwapTxKind txKind,
+    required Chain network,
+    required String boltzUrl,
+    ChainSwapDirection? chainSwapDirection,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(swapId);
+          var arg1 = cst_encode_swap_type(swapType);
+          var arg2 = cst_encode_swap_tx_kind(txKind);
+          var arg3 = cst_encode_chain(network);
+          var arg4 = cst_encode_String(boltzUrl);
+          var arg5 = cst_encode_opt_box_autoadd_chain_swap_direction(
+            chainSwapDirection,
+          );
+          return wire.wire__crate__api__transactions__check_lockup_outspends(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+          );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_list_vout_outspend,
+          decodeErrorData: dco_decode_boltz_error,
+        ),
+        constMeta: kCrateApiTransactionsCheckLockupOutspendsConstMeta,
+        argValues: [
+          swapId,
+          swapType,
+          txKind,
+          network,
+          boltzUrl,
+          chainSwapDirection,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTransactionsCheckLockupOutspendsConstMeta =>
+      const TaskConstMeta(
+        debugName: "check_lockup_outspends",
+        argNames: [
+          "swapId",
+          "swapType",
+          "txKind",
+          "network",
+          "boltzUrl",
+          "chainSwapDirection",
+        ],
+      );
 
   @override
   Future<OutspendStatus> crateApiTransactionsCheckVout0Outspend({
@@ -3845,6 +3915,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  List<VoutOutspend> dco_decode_list_vout_outspend(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_vout_outspend).toList();
+  }
+
+  @protected
   Lnurl dco_decode_lnurl(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -4148,6 +4224,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   BigInt dco_decode_usize(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dcoDecodeU64(raw);
+  }
+
+  @protected
+  VoutOutspend dco_decode_vout_outspend(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return VoutOutspend(
+      vout: dco_decode_u_32(arr[0]),
+      valueSat: dco_decode_opt_box_autoadd_u_64(arr[1]),
+      spenderTxid: dco_decode_opt_String(arr[2]),
+      timestamp: dco_decode_opt_box_autoadd_u_64(arr[3]),
+    );
   }
 
   @protected
@@ -4643,6 +4733,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  List<VoutOutspend> sse_decode_list_vout_outspend(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <VoutOutspend>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_vout_outspend(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Lnurl sse_decode_lnurl(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_value = sse_decode_String(deserializer);
@@ -4989,6 +5093,21 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   BigInt sse_decode_usize(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
+  VoutOutspend sse_decode_vout_outspend(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_vout = sse_decode_u_32(deserializer);
+    var var_valueSat = sse_decode_opt_box_autoadd_u_64(deserializer);
+    var var_spenderTxid = sse_decode_opt_String(deserializer);
+    var var_timestamp = sse_decode_opt_box_autoadd_u_64(deserializer);
+    return VoutOutspend(
+      vout: var_vout,
+      valueSat: var_valueSat,
+      spenderTxid: var_spenderTxid,
+      timestamp: var_timestamp,
+    );
   }
 
   @protected
@@ -5496,6 +5615,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_list_vout_outspend(
+    List<VoutOutspend> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_vout_outspend(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_lnurl(Lnurl self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.value, serializer);
@@ -5784,5 +5915,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_usize(BigInt self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
+  void sse_encode_vout_outspend(VoutOutspend self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_32(self.vout, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.valueSat, serializer);
+    sse_encode_opt_String(self.spenderTxid, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.timestamp, serializer);
   }
 }
