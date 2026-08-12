@@ -59,13 +59,11 @@ class Dylib {
     }
   }
 
-  static String _getUniTestDylibDir(Directory currentDirectory) {
-    final assetsDir = '${currentDirectory.path}/build/unit_test_assets';
-
+  static String get _dylibFileName {
     if (Platform.isMacOS) {
-      return "$assetsDir/$name.dylib";
+      return "$name.dylib";
     } else if (Platform.isLinux) {
-      return "$assetsDir/$name.so";
+      return "$name.so";
     } else {
       throw Exception("not support platform:${Platform.operatingSystem}");
     }
@@ -73,12 +71,22 @@ class Dylib {
 
   static ExternalLibrary getDylib() {
     if (Platform.environment['FLUTTER_TEST'] == 'true') {
-      final dylibPath = _getUniTestDylibDir(Directory.current);
-      try {
-        return ExternalLibrary.open(dylibPath);
-      } catch (e) {
-        throw Exception("Unable to open the unit test dylib at $dylibPath: $e");
+      // `flutter test` regenerates build/unit_test_assets on every fresh
+      // build, wiping anything staged there beforehand — so also accept the
+      // lib straight from cargo's target directory.
+      final root = Directory.current.path;
+      final candidates = [
+        '$root/build/unit_test_assets/$_dylibFileName',
+        '$root/rust/target/release/$_dylibFileName',
+        '$root/rust/target/debug/$_dylibFileName',
+      ];
+      for (final path in candidates) {
+        if (File(path).existsSync()) {
+          return ExternalLibrary.open(path);
+        }
       }
+      throw Exception(
+          "Unable to find the unit test dylib; tried: ${candidates.join(', ')}");
     }
     if (Platform.isIOS || Platform.isMacOS) {
       return ExternalLibrary.open("$iosName.framework/$iosName");
