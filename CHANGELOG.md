@@ -69,3 +69,10 @@
 
 # 0.5.2
 - feat: `check_lockup_outspends` — outspend status of EVERY lockup output (spender txid, block time, amount where visible), replacing the vout-0 assumption of `check_vout_0_outspend`; callers must verify the spender paid them before settling a swap
+- fix(restore): read a submarine swap's client side from `refundDetails` instead of `claimDetails` — every submarine in a restore batch failed to rebuild and aborted the whole batch (#56)
+- fix(restore)!: restore wrappers return restored swaps plus a `skipped {id, error}` list; one unrebuildable swap no longer aborts the batch, and skips are reported to the caller instead of being silent
+- fix(restore): submarine swaps restore without a parseable BOLT11 invoice — the refund (the only client action on a submarine) needs neither preimage nor amount, so both degrade to empty values
+- fix(restore): summaries derive `resolved` from `SwapStatus.is_resolved()` instead of string matching; unknown statuses stay recoverable (#59)
+- fix(outspend): `check_lockup_outspends` reports a not-yet-indexed lockup tx as an empty (nothing-spent) report instead of erroring, and amount lookups error on failure so `value_sat = None` strictly means a confidential output
+- chore: deprecate `check_vout_0_outspend`
+- ci/test: unit-test dylib loads straight from cargo's target dir — `flutter test` wipes anything staged into `build/unit_test_assets` (#58)

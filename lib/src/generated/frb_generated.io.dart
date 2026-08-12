@@ -162,6 +162,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   List<RestoredSwapSummary> dco_decode_list_restored_swap_summary(dynamic raw);
 
   @protected
+  List<SkippedRestoreSwap> dco_decode_list_skipped_restore_swap(dynamic raw);
+
+  @protected
   List<VoutOutspend> dco_decode_list_vout_outspend(dynamic raw);
 
   @protected
@@ -202,6 +205,15 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage dco_decode_pre_image(dynamic raw);
 
   @protected
+  RestoredBtcLnSwaps dco_decode_restored_btc_ln_swaps(dynamic raw);
+
+  @protected
+  RestoredChainSwaps dco_decode_restored_chain_swaps(dynamic raw);
+
+  @protected
+  RestoredLbtcLnSwaps dco_decode_restored_lbtc_ln_swaps(dynamic raw);
+
+  @protected
   RestoredSwapSummary dco_decode_restored_swap_summary(dynamic raw);
 
   @protected
@@ -212,6 +224,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Side dco_decode_side(dynamic raw);
+
+  @protected
+  SkippedRestoreSwap dco_decode_skipped_restore_swap(dynamic raw);
 
   @protected
   SubSwapFees dco_decode_sub_swap_fees(dynamic raw);
@@ -408,6 +423,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<SkippedRestoreSwap> sse_decode_list_skipped_restore_swap(
+      SseDeserializer deserializer);
+
+  @protected
   List<VoutOutspend> sse_decode_list_vout_outspend(
       SseDeserializer deserializer);
 
@@ -451,6 +470,18 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   PreImage sse_decode_pre_image(SseDeserializer deserializer);
 
   @protected
+  RestoredBtcLnSwaps sse_decode_restored_btc_ln_swaps(
+      SseDeserializer deserializer);
+
+  @protected
+  RestoredChainSwaps sse_decode_restored_chain_swaps(
+      SseDeserializer deserializer);
+
+  @protected
+  RestoredLbtcLnSwaps sse_decode_restored_lbtc_ln_swaps(
+      SseDeserializer deserializer);
+
+  @protected
   RestoredSwapSummary sse_decode_restored_swap_summary(
       SseDeserializer deserializer);
 
@@ -463,6 +494,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   Side sse_decode_side(SseDeserializer deserializer);
+
+  @protected
+  SkippedRestoreSwap sse_decode_skipped_restore_swap(
+      SseDeserializer deserializer);
 
   @protected
   SubSwapFees sse_decode_sub_swap_fees(SseDeserializer deserializer);
@@ -744,6 +779,17 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     final ans = wire.cst_new_list_restored_swap_summary(raw.length);
     for (var i = 0; i < raw.length; ++i) {
       cst_api_fill_to_wire_restored_swap_summary(raw[i], ans.ref.ptr[i]);
+    }
+    return ans;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_list_skipped_restore_swap>
+      cst_encode_list_skipped_restore_swap(List<SkippedRestoreSwap> raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ans = wire.cst_new_list_skipped_restore_swap(raw.length);
+    for (var i = 0; i < raw.length; ++i) {
+      cst_api_fill_to_wire_skipped_restore_swap(raw[i], ans.ref.ptr[i]);
     }
     return ans;
   }
@@ -1104,6 +1150,27 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   }
 
   @protected
+  void cst_api_fill_to_wire_restored_btc_ln_swaps(
+      RestoredBtcLnSwaps apiObj, wire_cst_restored_btc_ln_swaps wireObj) {
+    wireObj.swaps = cst_encode_list_btc_ln_swap(apiObj.swaps);
+    wireObj.skipped = cst_encode_list_skipped_restore_swap(apiObj.skipped);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_restored_chain_swaps(
+      RestoredChainSwaps apiObj, wire_cst_restored_chain_swaps wireObj) {
+    wireObj.swaps = cst_encode_list_chain_swap(apiObj.swaps);
+    wireObj.skipped = cst_encode_list_skipped_restore_swap(apiObj.skipped);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_restored_lbtc_ln_swaps(
+      RestoredLbtcLnSwaps apiObj, wire_cst_restored_lbtc_ln_swaps wireObj) {
+    wireObj.swaps = cst_encode_list_lbtc_ln_swap(apiObj.swaps);
+    wireObj.skipped = cst_encode_list_skipped_restore_swap(apiObj.skipped);
+  }
+
+  @protected
   void cst_api_fill_to_wire_restored_swap_summary(
       RestoredSwapSummary apiObj, wire_cst_restored_swap_summary wireObj) {
     wireObj.id = cst_encode_String(apiObj.id);
@@ -1130,6 +1197,13 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     cst_api_fill_to_wire_swap_limits(apiObj.lbtcLimits, wireObj.lbtc_limits);
     cst_api_fill_to_wire_rev_swap_fees(apiObj.btcFees, wireObj.btc_fees);
     cst_api_fill_to_wire_rev_swap_fees(apiObj.lbtcFees, wireObj.lbtc_fees);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_skipped_restore_swap(
+      SkippedRestoreSwap apiObj, wire_cst_skipped_restore_swap wireObj) {
+    wireObj.id = cst_encode_String(apiObj.id);
+    wireObj.error = cst_encode_String(apiObj.error);
   }
 
   @protected
@@ -1419,6 +1493,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       List<RestoredSwapSummary> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_skipped_restore_swap(
+      List<SkippedRestoreSwap> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_vout_outspend(
       List<VoutOutspend> self, SseSerializer serializer);
 
@@ -1463,6 +1541,18 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   void sse_encode_pre_image(PreImage self, SseSerializer serializer);
 
   @protected
+  void sse_encode_restored_btc_ln_swaps(
+      RestoredBtcLnSwaps self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_restored_chain_swaps(
+      RestoredChainSwaps self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_restored_lbtc_ln_swaps(
+      RestoredLbtcLnSwaps self, SseSerializer serializer);
+
+  @protected
   void sse_encode_restored_swap_summary(
       RestoredSwapSummary self, SseSerializer serializer);
 
@@ -1475,6 +1565,10 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   void sse_encode_side(Side self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_skipped_restore_swap(
+      SkippedRestoreSwap self, SseSerializer serializer);
 
   @protected
   void sse_encode_sub_swap_fees(SubSwapFees self, SseSerializer serializer);
@@ -4083,6 +4177,19 @@ class BoltzCoreWire implements BaseWire {
       _cst_new_list_restored_swap_summaryPtr.asFunction<
           ffi.Pointer<wire_cst_list_restored_swap_summary> Function(int)>();
 
+  ffi.Pointer<wire_cst_list_skipped_restore_swap>
+      cst_new_list_skipped_restore_swap(int len) {
+    return _cst_new_list_skipped_restore_swap(len);
+  }
+
+  late final _cst_new_list_skipped_restore_swapPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<wire_cst_list_skipped_restore_swap> Function(
+              ffi.Int32)>>('frbgen_boltz_cst_new_list_skipped_restore_swap');
+  late final _cst_new_list_skipped_restore_swap =
+      _cst_new_list_skipped_restore_swapPtr.asFunction<
+          ffi.Pointer<wire_cst_list_skipped_restore_swap> Function(int)>();
+
   ffi.Pointer<wire_cst_list_vout_outspend> cst_new_list_vout_outspend(int len) {
     return _cst_new_list_vout_outspend(len);
   }
@@ -4424,6 +4531,19 @@ final class wire_cst_list_restored_swap_summary extends ffi.Struct {
   external int len;
 }
 
+final class wire_cst_skipped_restore_swap extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> id;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> error;
+}
+
+final class wire_cst_list_skipped_restore_swap extends ffi.Struct {
+  external ffi.Pointer<wire_cst_skipped_restore_swap> ptr;
+
+  @ffi.Int32()
+  external int len;
+}
+
 final class wire_cst_vout_outspend extends ffi.Struct {
   @ffi.Uint32()
   external int vout;
@@ -4521,6 +4641,24 @@ final class wire_cst_outspend_status extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> txid;
 
   external ffi.Pointer<ffi.Uint64> timestamp;
+}
+
+final class wire_cst_restored_btc_ln_swaps extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_btc_ln_swap> swaps;
+
+  external ffi.Pointer<wire_cst_list_skipped_restore_swap> skipped;
+}
+
+final class wire_cst_restored_chain_swaps extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_chain_swap> swaps;
+
+  external ffi.Pointer<wire_cst_list_skipped_restore_swap> skipped;
+}
+
+final class wire_cst_restored_lbtc_ln_swaps extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_lbtc_ln_swap> swaps;
+
+  external ffi.Pointer<wire_cst_list_skipped_restore_swap> skipped;
 }
 
 final class wire_cst_rev_swap_fees extends ffi.Struct {

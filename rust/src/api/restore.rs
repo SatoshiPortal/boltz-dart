@@ -95,32 +95,50 @@ fn ln_restore_details(
     }
 }
 
-fn submarine_preimage_and_amount(
-    swap_id: &str,
-    invoice: &Option<String>,
-) -> Result<(PreImage, u64), BoltzError> {
-    let invoice_str = invoice.as_ref().ok_or_else(|| {
-        BoltzError::new(
-            "Restore".to_string(),
-            format!("Invoice required to restore submarine swap {}", swap_id),
-        )
-    })?;
-    let parsed = Bolt11Invoice::from_str(invoice_str)
-        .map_err(|e| BoltzError::new("Invoice".to_string(), e.to_string()))?;
-    let boltz_preimage = BoltzPreimage::from_sha256_str(&parsed.payment_hash().to_string())
-        .map_err(|e| BoltzError::new("Preimage".to_string(), e.to_string()))?;
-    let amount = parsed
-        .amount_milli_satoshis()
+fn empty_preimage() -> PreImage {
+    PreImage::new(String::new(), String::new(), String::new())
+}
+
+/// Sat amount of a BOLT11 invoice, when there is one and it parses.
+fn invoice_amount_sats(invoice: &Option<String>) -> Option<u64> {
+    invoice
+        .as_ref()
+        .and_then(|i| Bolt11Invoice::from_str(i).ok())
+        .and_then(|i| i.amount_milli_satoshis())
         .map(|msat| msat / 1000)
-        .unwrap_or(0);
-    Ok((
-        PreImage {
-            value: boltz_preimage.bytes.map(|b| b.to_hex()).unwrap_or_default(),
-            sha256: boltz_preimage.sha256.to_string(),
-            hash160: boltz_preimage.hash160.to_string(),
-        },
-        amount,
-    ))
+}
+
+/// Hash-only preimage and receive amount recovered from a submarine swap's
+/// invoice. Boltz's refund_details carry neither, and the refund — the only
+/// client-side action on a submarine swap — needs neither: both are
+/// display/reconciliation data, so an absent or unparseable invoice (e.g.
+/// BOLT12) degrades to empty values instead of making the swap unrestorable.
+fn submarine_preimage_and_amount(invoice: &Option<String>) -> (PreImage, u64) {
+    let preimage = invoice
+        .as_ref()
+        .and_then(|i| PreImage::from_invoice_str(i).ok())
+        .unwrap_or_else(empty_preimage);
+    (preimage, invoice_amount_sats(invoice).unwrap_or(0))
+}
+
+/// Rebuilds a reverse swap's preimage, which is derived from the claim key
+/// at creation time; a mismatch with the hash boltz stored means this key
+/// cannot claim the (legacy, pre-derived-preimage) swap.
+fn verified_reverse_preimage(
+    boltz_preimage: BoltzPreimage,
+    expected_hash: &str,
+    swap_id: &str,
+) -> Result<PreImage, BoltzError> {
+    if boltz_preimage.sha256.to_string() != expected_hash {
+        return Err(BoltzError::new(
+            "Restore".to_string(),
+            format!(
+                "Preimage hash mismatch for {}: expected {}, got {}",
+                swap_id, expected_hash, boltz_preimage.sha256
+            ),
+        ));
+    }
+    Ok(PreImage::from(boltz_preimage))
 }
 
 async fn restore_swaps(
@@ -177,13 +195,7 @@ pub async fn restore_swap_summaries(
                 .claim_details
                 .as_ref()
                 .and_then(|d| d.amount)
-                .or_else(|| {
-                    r.invoice
-                        .as_ref()
-                        .and_then(|i| Bolt11Invoice::from_str(i).ok())
-                        .and_then(|i| i.amount_milli_satoshis())
-                        .map(|msat| msat / 1000)
-                })
+                .or_else(|| invoice_amount_sats(&r.invoice))
                 .unwrap_or(0);
             // Funds are on-chain if boltz recorded a lockup transaction for
             // either side; the swap is resolved once it's been claimed/refunded.
@@ -232,37 +244,62 @@ pub async fn restore_swap_index(
     Ok(resp.index)
 }
 
+/// A swap the restore scan returned but could not rebuild into a usable
+/// swap object (e.g. a legacy reverse swap whose preimage was not derived
+/// from the swap key). Its funds, if any, are NOT covered by the returned
+/// swaps — callers must surface these to the user rather than treat the
+/// restore as complete.
+pub struct SkippedRestoreSwap {
+    pub id: String,
+    pub error: String,
+}
+
+pub struct RestoredBtcLnSwaps {
+    pub swaps: Vec<BtcLnSwap>,
+    pub skipped: Vec<SkippedRestoreSwap>,
+}
+
+pub struct RestoredLbtcLnSwaps {
+    pub swaps: Vec<LbtcLnSwap>,
+    pub skipped: Vec<SkippedRestoreSwap>,
+}
+
+pub struct RestoredChainSwaps {
+    pub swaps: Vec<ChainSwap>,
+    pub skipped: Vec<SkippedRestoreSwap>,
+}
+
 /// Collects rebuilt swaps from a restore response batch. `rebuild` returns
 /// `None` for swaps that are not this restorer's kind; one unrebuildable swap
-/// does not abort the batch — the first error surfaces only if nothing could
-/// be restored at all.
+/// does not abort the batch — it is reported in the skipped list instead.
 fn collect_restored<T>(
     responses: Vec<SwapRestoreResponse>,
     mut rebuild: impl FnMut(SwapRestoreResponse) -> Option<Result<T, BoltzError>>,
-) -> Result<Vec<T>, BoltzError> {
+) -> (Vec<T>, Vec<SkippedRestoreSwap>) {
     let mut swaps = Vec::new();
-    let mut first_error: Option<BoltzError> = None;
+    let mut skipped = Vec::new();
     for response in responses {
+        let id = response.id.clone();
         match rebuild(response) {
             Some(Ok(swap)) => swaps.push(swap),
-            Some(Err(e)) => first_error = first_error.or(Some(e)),
+            Some(Err(e)) => skipped.push(SkippedRestoreSwap {
+                id,
+                error: format!("{}: {}", e.kind, e.message),
+            }),
             None => {}
         }
     }
-    match first_error {
-        Some(e) if swaps.is_empty() => Err(e),
-        _ => Ok(swaps),
-    }
+    (swaps, skipped)
 }
 
 pub async fn restore_ln_btc_swaps(
     swap_master_key: SwapMasterKey,
     electrum_url: String,
     boltz_url: String,
-) -> Result<Vec<BtcLnSwap>, BoltzError> {
+) -> Result<RestoredBtcLnSwaps, BoltzError> {
     let restore_responses = restore_swaps(swap_master_key.clone(), boltz_url.clone()).await?;
 
-    collect_restored(restore_responses, |response| {
+    let (swaps, skipped) = collect_restored(restore_responses, |response| {
         let is_ln = matches!(
             &response.swap_type,
             SwapRestoreType::Submarine | SwapRestoreType::Reverse
@@ -278,17 +315,18 @@ pub async fn restore_ln_btc_swaps(
             boltz_url.clone(),
             invoice,
         ))
-    })
+    });
+    Ok(RestoredBtcLnSwaps { swaps, skipped })
 }
 
 pub async fn restore_ln_lbtc_swaps(
     swap_master_key: SwapMasterKey,
     electrum_url: String,
     boltz_url: String,
-) -> Result<Vec<LbtcLnSwap>, BoltzError> {
+) -> Result<RestoredLbtcLnSwaps, BoltzError> {
     let restore_responses = restore_swaps(swap_master_key.clone(), boltz_url.clone()).await?;
 
-    collect_restored(restore_responses, |response| {
+    let (swaps, skipped) = collect_restored(restore_responses, |response| {
         let is_ln = matches!(
             &response.swap_type,
             SwapRestoreType::Submarine | SwapRestoreType::Reverse
@@ -308,7 +346,8 @@ pub async fn restore_ln_lbtc_swaps(
             boltz_url.clone(),
             invoice,
         ))
-    })
+    });
+    Ok(RestoredLbtcLnSwaps { swaps, skipped })
 }
 
 pub async fn restore_chain_swaps(
@@ -316,10 +355,10 @@ pub async fn restore_chain_swaps(
     btc_electrum_url: String,
     lbtc_electrum_url: String,
     boltz_url: String,
-) -> Result<Vec<ChainSwap>, BoltzError> {
+) -> Result<RestoredChainSwaps, BoltzError> {
     let restore_responses = restore_swaps(swap_master_key.clone(), boltz_url.clone()).await?;
 
-    collect_restored(restore_responses, |response| {
+    let (swaps, skipped) = collect_restored(restore_responses, |response| {
         if !matches!(&response.swap_type, SwapRestoreType::Chain) {
             return None;
         }
@@ -330,7 +369,8 @@ pub async fn restore_chain_swaps(
             lbtc_electrum_url.clone(),
             boltz_url.clone(),
         ))
-    })
+    });
+    Ok(RestoredChainSwaps { swaps, skipped })
 }
 
 fn infer_network(from: &str, to: &str) -> Result<Chain, BoltzError> {
@@ -429,30 +469,15 @@ fn restore_to_btc_ln_swap(
 
     let swap_type = swap_restore_type_to_swap_type(restore_response.swap_type.clone());
     let (preimage, amount) = match restore_response.swap_type {
-        SwapRestoreType::Submarine => {
-            submarine_preimage_and_amount(&restore_response.id, &invoice)?
-        }
+        SwapRestoreType::Submarine => submarine_preimage_and_amount(&invoice),
         SwapRestoreType::Reverse => {
             let preimage_hash = details.preimage_hash.clone().unwrap_or_default();
-            let boltz_preimage = BoltzPreimage::from_swap_key(&kps);
-            if boltz_preimage.sha256.to_string() != preimage_hash {
-                return Err(BoltzError::new(
-                    "Restore".to_string(),
-                    format!(
-                        "Preimage hash mismatch: expected {}, got {}",
-                        preimage_hash,
-                        boltz_preimage.sha256.to_string()
-                    ),
-                ));
-            }
-            (
-                PreImage {
-                    value: boltz_preimage.bytes.map(|b| b.to_hex()).unwrap_or_default(),
-                    sha256: boltz_preimage.sha256.to_string(),
-                    hash160: boltz_preimage.hash160.to_string(),
-                },
-                details.amount.unwrap_or(0),
-            )
+            let preimage = verified_reverse_preimage(
+                BoltzPreimage::from_swap_key(&kps),
+                &preimage_hash,
+                &restore_response.id,
+            )?;
+            (preimage, details.amount.unwrap_or(0))
         }
         SwapRestoreType::Chain => {
             return Err(BoltzError::new(
@@ -549,30 +574,15 @@ fn restore_to_lbtc_ln_swap(
 
     let swap_type = swap_restore_type_to_swap_type(restore_response.swap_type.clone());
     let (preimage, amount) = match restore_response.swap_type {
-        SwapRestoreType::Submarine => {
-            submarine_preimage_and_amount(&restore_response.id, &invoice)?
-        }
+        SwapRestoreType::Submarine => submarine_preimage_and_amount(&invoice),
         SwapRestoreType::Reverse => {
             let preimage_hash = details.preimage_hash.clone().unwrap_or_default();
-            let boltz_preimage = BoltzPreimage::from_swap_key(&kps);
-            if boltz_preimage.sha256.to_string() != preimage_hash {
-                return Err(BoltzError::new(
-                    "Restore".to_string(),
-                    format!(
-                        "Preimage hash mismatch: expected {}, got {}",
-                        preimage_hash,
-                        boltz_preimage.sha256.to_string()
-                    ),
-                ));
-            }
-            (
-                PreImage {
-                    value: boltz_preimage.bytes.map(|b| b.to_hex()).unwrap_or_default(),
-                    sha256: boltz_preimage.sha256.to_string(),
-                    hash160: boltz_preimage.hash160.to_string(),
-                },
-                details.amount.unwrap_or(0),
-            )
+            let preimage = verified_reverse_preimage(
+                BoltzPreimage::from_swap_key(&kps),
+                &preimage_hash,
+                &restore_response.id,
+            )?;
+            (preimage, details.amount.unwrap_or(0))
         }
         SwapRestoreType::Chain => {
             return Err(BoltzError::new(
@@ -875,7 +885,6 @@ mod tests {
             "createdAt": 1785575496u64,
             "from": "L-BTC",
             "to": "BTC",
-            "preimageHash": TEST_INVOICE_PAYMENT_HASH,
             "invoice": TEST_INVOICE,
             "refundDetails": {
                 "type": "utxo",
@@ -900,7 +909,6 @@ mod tests {
             "createdAt": 1785575496u64,
             "from": "BTC",
             "to": "L-BTC",
-            "preimageHash": preimage_hash,
             "invoice": TEST_INVOICE,
             "claimDetails": {
                 "type": "utxo",
@@ -940,7 +948,7 @@ mod tests {
         addr
     }
 
-    async fn restore_over_http(swaps_json: Vec<serde_json::Value>) -> Vec<LbtcLnSwap> {
+    async fn restore_over_http(swaps_json: Vec<serde_json::Value>) -> RestoredLbtcLnSwaps {
         let addr = serve_once(serde_json::Value::Array(swaps_json).to_string());
         restore_ln_lbtc_swaps(
             test_master_key(),
@@ -958,12 +966,14 @@ mod tests {
         // BoltzError("Restore", "Claim details required for LbtcLnSwap")
         // because boltz returns a submarine's client side under refundDetails.
         let f = fixture();
-        let swaps = restore_over_http(vec![
+        let restored = restore_over_http(vec![
             reverse_restore_json(&f, &f.reverse_preimage_hash),
             submarine_restore_json(&f),
         ])
         .await;
 
+        assert!(restored.skipped.is_empty());
+        let swaps = &restored.swaps;
         assert_eq!(swaps.len(), 2);
         let reverse = &swaps[0];
         assert_eq!(reverse.id, "revSwapTest1");
@@ -981,18 +991,41 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn one_unrebuildable_swap_does_not_abort_the_batch() {
+    async fn unrebuildable_swap_is_skipped_and_reported() {
         // A legacy reverse swap whose preimage hash cannot match its
-        // key-derived preimage is skipped, not fatal.
+        // key-derived preimage doesn't abort the batch, and the skip is
+        // reported with the swap's id so the caller can surface it.
         let f = fixture();
         let legacy_hash = "deadbeef00000000000000000000000000000000000000000000000000000000";
-        let swaps = restore_over_http(vec![
+        let restored = restore_over_http(vec![
             reverse_restore_json(&f, legacy_hash),
             submarine_restore_json(&f),
         ])
         .await;
 
-        assert_eq!(swaps.len(), 1);
-        assert_eq!(swaps[0].id, SUBMARINE_SWAP_ID);
+        assert_eq!(restored.swaps.len(), 1);
+        assert_eq!(restored.swaps[0].id, SUBMARINE_SWAP_ID);
+        assert_eq!(restored.skipped.len(), 1);
+        assert_eq!(restored.skipped[0].id, "revSwapTest1");
+        assert!(restored.skipped[0].error.contains("Preimage hash mismatch"));
+    }
+
+    #[tokio::test]
+    async fn submarine_without_invoice_still_restores() {
+        // The refund — the only client action on a submarine swap — needs
+        // neither preimage nor amount, so a missing (or unparseable, e.g.
+        // BOLT12) invoice must not make the swap unrestorable.
+        let f = fixture();
+        let mut sub = submarine_restore_json(&f);
+        sub.as_object_mut().unwrap().remove("invoice");
+        let restored = restore_over_http(vec![sub]).await;
+
+        assert!(restored.skipped.is_empty());
+        assert_eq!(restored.swaps.len(), 1);
+        let submarine = &restored.swaps[0];
+        assert_eq!(submarine.id, SUBMARINE_SWAP_ID);
+        assert_eq!(submarine.script_address, f.lockup_address);
+        assert_eq!(submarine.out_amount, 0);
+        assert!(submarine.preimage.sha256.is_empty());
     }
 }

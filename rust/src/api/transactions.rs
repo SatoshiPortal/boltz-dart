@@ -10,6 +10,7 @@ use boltz_client::swaps::boltz::BoltzApiClientV2;
 
 /// This function queries the Boltz API to get the swap transaction ID, then checks
 /// the mempool API to see if the transaction's first output has been spent.
+#[deprecated = "vout 0 is not guaranteed to be the swap output; use check_lockup_outspends and verify the spender"]
 pub async fn check_vout_0_outspend(
     swap_id: &str,
     swap_type: SwapType,
@@ -34,11 +35,14 @@ pub async fn check_vout_0_outspend(
 
 /// Reports the outspend status of EVERY output of the swap's lockup
 /// transaction (server lockup for claims, user lockup for refunds), with
-/// each output's amount where visible. Unlike [check_vout_0_outspend] this
+/// each output's amount where visible. Unlike the vout-0 check this
 /// makes no assumption about which vout carries the swap covenant; callers
 /// must match a spender against their own wallet/destination before
 /// treating it as their claim or refund — an output being spent proves
 /// nothing about who was paid.
+///
+/// An empty report means the explorer has not indexed the lockup tx yet
+/// (e.g. polled right after broadcast): nothing is spent, retry later.
 pub async fn check_lockup_outspends(
     swap_id: &str,
     swap_type: SwapType,
@@ -215,11 +219,11 @@ async fn fetch_outspends(txid: &str, mempool_url: &str) -> Result<Vec<VoutOutspe
         .send()
         .await
         .map_err(|e| BoltzError::new("HTTP".to_string(), e.to_string()))?;
+    // The explorer 404s a tx it has not indexed yet (e.g. polled right after
+    // broadcast). Mirror check_outspend's nothing-spent-yet semantics with an
+    // empty report instead of hard-failing every early poll.
     if !response.status().is_success() {
-        return Err(BoltzError::new(
-            "HTTP".to_string(),
-            format!("outspends query for {} failed: {}", txid, response.status()),
-        ));
+        return Ok(Vec::new());
     }
     let outspends: serde_json::Value = response
         .json()
@@ -232,28 +236,35 @@ async fn fetch_outspends(txid: &str, mempool_url: &str) -> Result<Vec<VoutOutspe
         )
     })?;
 
-    // Output amounts are informational (they help callers rank candidate
-    // vouts), so a failed tx lookup degrades to None values rather than
-    // failing the whole check.
+    // Amounts come from the tx itself. This lookup must not silently degrade:
+    // a None value_sat is documented to mean a confidential (blinded) output,
+    // so a failed fetch has to surface as an error, not masquerade as one.
     let tx_url = format!("{}/tx/{}", mempool_url, txid);
-    let values: Vec<Option<u64>> = match client.get(&tx_url).send().await {
-        Ok(tx_response) if tx_response.status().is_success() => {
-            match tx_response.json::<serde_json::Value>().await {
-                Ok(tx_data) => tx_data
-                    .get("vout")
-                    .and_then(|v| v.as_array())
-                    .map(|vouts| {
-                        vouts
-                            .iter()
-                            .map(|o| o.get("value").and_then(|v| v.as_u64()))
-                            .collect()
-                    })
-                    .unwrap_or_default(),
-                Err(_) => Vec::new(),
-            }
-        }
-        _ => Vec::new(),
-    };
+    let tx_response = client
+        .get(&tx_url)
+        .send()
+        .await
+        .map_err(|e| BoltzError::new("HTTP".to_string(), e.to_string()))?;
+    if !tx_response.status().is_success() {
+        return Err(BoltzError::new(
+            "HTTP".to_string(),
+            format!("tx lookup for {} failed: {}", txid, tx_response.status()),
+        ));
+    }
+    let tx_data: serde_json::Value = tx_response
+        .json()
+        .await
+        .map_err(|e| BoltzError::new("JSON".to_string(), e.to_string()))?;
+    let values: Vec<Option<u64>> = tx_data
+        .get("vout")
+        .and_then(|v| v.as_array())
+        .map(|vouts| {
+            vouts
+                .iter()
+                .map(|o| o.get("value").and_then(|v| v.as_u64()))
+                .collect()
+        })
+        .unwrap_or_default();
 
     Ok(outspends
         .iter()
@@ -361,6 +372,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore = "hits live Boltz + esplora; run with --ignored"]
+    #[allow(deprecated)]
     async fn test_check_vout_0_outspend_chain_swap_claim() {
         // Using a real completed chain swap from mainnet
         // Swap ID: UVGfSZkRpckk (BTC -> Liquid)
@@ -391,5 +403,80 @@ mod tests {
             "Outspend status: kind={:?}, txid={:?}, timestamp={:?}",
             status.kind, status.txid, status.timestamp
         );
+    }
+
+    /// Serves canned HTTP responses, one connection per response, so the
+    /// explorer-facing helpers can be tested through their real HTTP path.
+    fn serve(responses: Vec<(u16, String)>) -> std::net::SocketAddr {
+        use std::io::{Read, Write};
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let addr = listener.local_addr().unwrap();
+        std::thread::spawn(move || {
+            for (status, body) in responses {
+                if let Ok((mut stream, _)) = listener.accept() {
+                    let mut buf = [0u8; 8192];
+                    let _ = stream.read(&mut buf);
+                    let resp = format!(
+                        "HTTP/1.1 {} R\r\ncontent-type: application/json\r\ncontent-length: {}\r\nconnection: close\r\n\r\n{}",
+                        status,
+                        body.len(),
+                        body
+                    );
+                    let _ = stream.write_all(resp.as_bytes());
+                }
+            }
+        });
+        addr
+    }
+
+    const TXID: &str = "f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16";
+
+    #[tokio::test]
+    async fn unindexed_tx_reports_nothing_spent() {
+        // The explorer 404s a tx it hasn't indexed yet (polled right after
+        // broadcast); that must read as "nothing spent, retry", not an error.
+        let addr = serve(vec![(404, "Transaction not found".to_string())]);
+        let outspends = fetch_outspends(TXID, &format!("http://{addr}"))
+            .await
+            .expect("404 must degrade to an empty report");
+        assert!(outspends.is_empty());
+    }
+
+    #[tokio::test]
+    async fn amounts_lookup_failure_is_an_error_not_confidential() {
+        // value_sat: None means "confidential output"; a failed amounts fetch
+        // must surface as an error instead of masquerading as that.
+        let addr = serve(vec![
+            (200, r#"[{"spent":false}]"#.to_string()),
+            (500, "boom".to_string()),
+        ]);
+        let err = fetch_outspends(TXID, &format!("http://{addr}"))
+            .await
+            .expect_err("failed amounts lookup must not degrade to None");
+        assert_eq!(err.kind, "HTTP");
+    }
+
+    #[tokio::test]
+    async fn reports_every_vout_with_amounts_and_spenders() {
+        let outspends_body = format!(
+            r#"[{{"spent":true,"txid":"{TXID}","status":{{"confirmed":true,"block_time":1700000000}}}},{{"spent":false}}]"#
+        );
+        // Second output has no readable value, like a confidential output.
+        let tx_body = r#"{"vout":[{"value":1000},{}]}"#.to_string();
+        let addr = serve(vec![(200, outspends_body), (200, tx_body)]);
+
+        let outspends = fetch_outspends(TXID, &format!("http://{addr}"))
+            .await
+            .expect("both explorer calls succeed");
+
+        assert_eq!(outspends.len(), 2);
+        assert_eq!(outspends[0].vout, 0);
+        assert_eq!(outspends[0].value_sat, Some(1000));
+        assert_eq!(outspends[0].spender_txid.as_deref(), Some(TXID));
+        assert_eq!(outspends[0].timestamp, Some(1700000000));
+        assert_eq!(outspends[1].vout, 1);
+        assert_eq!(outspends[1].value_sat, None);
+        assert_eq!(outspends[1].spender_txid, None);
+        assert_eq!(outspends[1].timestamp, None);
     }
 }

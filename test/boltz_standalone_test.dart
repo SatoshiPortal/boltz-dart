@@ -98,10 +98,10 @@ void main() {
           boltzUrl: 'api.boltz.exchange',
         );
 
-        final reverseSwaps = restoredLbtcSwaps
+        final reverseSwaps = restoredLbtcSwaps.swaps
             .where((swap) => swap.kind == SwapType.reverse)
             .toList();
-        final submarineSwaps = restoredLbtcSwaps
+        final submarineSwaps = restoredLbtcSwaps.swaps
             .where((swap) => swap.kind == SwapType.submarine)
             .toList();
 
@@ -121,9 +121,9 @@ void main() {
           boltzUrl: 'api.boltz.exchange',
         );
 
-        expect(restoredBtcSwaps.length, equals(0),
+        expect(restoredBtcSwaps.swaps.length, equals(0),
             reason:
-                'Expected 0 BTC-LN swaps, found ${restoredBtcSwaps.length}');
+                'Expected 0 BTC-LN swaps, found ${restoredBtcSwaps.swaps.length}');
       } on BoltzError catch (e) {
         fail('Error restoring BTC-LN swaps: ${e.kind}: ${e.message}');
       }
@@ -136,9 +136,9 @@ void main() {
           boltzUrl: 'api.boltz.exchange',
         );
 
-        expect(restoredChainSwaps.length, equals(0),
+        expect(restoredChainSwaps.swaps.length, equals(0),
             reason:
-                'Expected 0 chain swaps, found ${restoredChainSwaps.length}');
+                'Expected 0 chain swaps, found ${restoredChainSwaps.swaps.length}');
       } on BoltzError catch (e) {
         fail('Error restoring chain swaps: ${e.kind}: ${e.message}');
       }

@@ -201,6 +201,16 @@ typedef struct wire_cst_list_restored_swap_summary {
   int32_t len;
 } wire_cst_list_restored_swap_summary;
 
+typedef struct wire_cst_skipped_restore_swap {
+  struct wire_cst_list_prim_u_8_strict *id;
+  struct wire_cst_list_prim_u_8_strict *error;
+} wire_cst_skipped_restore_swap;
+
+typedef struct wire_cst_list_skipped_restore_swap {
+  struct wire_cst_skipped_restore_swap *ptr;
+  int32_t len;
+} wire_cst_list_skipped_restore_swap;
+
 typedef struct wire_cst_vout_outspend {
   uint32_t vout;
   uint64_t *value_sat;
@@ -257,6 +267,21 @@ typedef struct wire_cst_outspend_status {
   struct wire_cst_list_prim_u_8_strict *txid;
   uint64_t *timestamp;
 } wire_cst_outspend_status;
+
+typedef struct wire_cst_restored_btc_ln_swaps {
+  struct wire_cst_list_btc_ln_swap *swaps;
+  struct wire_cst_list_skipped_restore_swap *skipped;
+} wire_cst_restored_btc_ln_swaps;
+
+typedef struct wire_cst_restored_chain_swaps {
+  struct wire_cst_list_chain_swap *swaps;
+  struct wire_cst_list_skipped_restore_swap *skipped;
+} wire_cst_restored_chain_swaps;
+
+typedef struct wire_cst_restored_lbtc_ln_swaps {
+  struct wire_cst_list_lbtc_ln_swap *swaps;
+  struct wire_cst_list_skipped_restore_swap *skipped;
+} wire_cst_restored_lbtc_ln_swaps;
 
 typedef struct wire_cst_rev_swap_fees {
   double percentage;
@@ -711,6 +736,8 @@ struct wire_cst_list_prim_u_8_strict *frbgen_boltz_cst_new_list_prim_u_8_strict(
 
 struct wire_cst_list_restored_swap_summary *frbgen_boltz_cst_new_list_restored_swap_summary(int32_t len);
 
+struct wire_cst_list_skipped_restore_swap *frbgen_boltz_cst_new_list_skipped_restore_swap(int32_t len);
+
 struct wire_cst_list_vout_outspend *frbgen_boltz_cst_new_list_vout_outspend(int32_t len);
 static int64_t dummy_method_to_enforce_bundling(void) {
     int64_t dummy_var = 0;
@@ -739,6 +766,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_lbtc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_prim_u_8_strict);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_restored_swap_summary);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_skipped_restore_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_vout_outspend);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_boltz);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_broadcast_local);

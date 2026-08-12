@@ -71,22 +71,31 @@ class Dylib {
 
   static ExternalLibrary getDylib() {
     if (Platform.environment['FLUTTER_TEST'] == 'true') {
-      // `flutter test` regenerates build/unit_test_assets on every fresh
-      // build, wiping anything staged there beforehand — so also accept the
-      // lib straight from cargo's target directory.
+      // Cargo's target dirs come first: they hold the freshest build, while
+      // a copy staged into build/unit_test_assets (compile.native.sh) goes
+      // stale as soon as the rust code is rebuilt without re-staging.
+      // `flutter test` also wipes unit_test_assets whenever it regenerates
+      // the test asset bundle, so that path is only a last resort.
       final root = Directory.current.path;
       final candidates = [
-        '$root/build/unit_test_assets/$_dylibFileName',
         '$root/rust/target/release/$_dylibFileName',
         '$root/rust/target/debug/$_dylibFileName',
+        '$root/build/unit_test_assets/$_dylibFileName',
       ];
+      final failures = <String>[];
       for (final path in candidates) {
-        if (File(path).existsSync()) {
+        if (!File(path).existsSync()) {
+          failures.add('$path: not found');
+          continue;
+        }
+        try {
           return ExternalLibrary.open(path);
+        } catch (e) {
+          failures.add('$path: $e');
         }
       }
       throw Exception(
-          "Unable to find the unit test dylib; tried: ${candidates.join(', ')}");
+          "Unable to open the unit test dylib:\n${failures.join('\n')}");
     }
     if (Platform.isIOS || Platform.isMacOS) {
       return ExternalLibrary.open("$iosName.framework/$iosName");

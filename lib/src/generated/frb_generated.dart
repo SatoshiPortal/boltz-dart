@@ -405,18 +405,18 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<PreImage> crateApiSecretsPreImageNew(
       {required String value, required String sha256, required String hash160});
 
-  Future<List<ChainSwap>> crateApiRestoreRestoreChainSwaps(
+  Future<RestoredChainSwaps> crateApiRestoreRestoreChainSwaps(
       {required SwapMasterKey swapMasterKey,
       required String btcElectrumUrl,
       required String lbtcElectrumUrl,
       required String boltzUrl});
 
-  Future<List<BtcLnSwap>> crateApiRestoreRestoreLnBtcSwaps(
+  Future<RestoredBtcLnSwaps> crateApiRestoreRestoreLnBtcSwaps(
       {required SwapMasterKey swapMasterKey,
       required String electrumUrl,
       required String boltzUrl});
 
-  Future<List<LbtcLnSwap>> crateApiRestoreRestoreLnLbtcSwaps(
+  Future<RestoredLbtcLnSwaps> crateApiRestoreRestoreLnLbtcSwaps(
       {required SwapMasterKey swapMasterKey,
       required String electrumUrl,
       required String boltzUrl});
@@ -2593,7 +2593,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<List<ChainSwap>> crateApiRestoreRestoreChainSwaps(
+  Future<RestoredChainSwaps> crateApiRestoreRestoreChainSwaps(
       {required SwapMasterKey swapMasterKey,
       required String btcElectrumUrl,
       required String lbtcElectrumUrl,
@@ -2608,7 +2608,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_list_chain_swap,
+        decodeSuccessData: dco_decode_restored_chain_swaps,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiRestoreRestoreChainSwapsConstMeta,
@@ -2629,7 +2629,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<List<BtcLnSwap>> crateApiRestoreRestoreLnBtcSwaps(
+  Future<RestoredBtcLnSwaps> crateApiRestoreRestoreLnBtcSwaps(
       {required SwapMasterKey swapMasterKey,
       required String electrumUrl,
       required String boltzUrl}) {
@@ -2642,7 +2642,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_list_btc_ln_swap,
+        decodeSuccessData: dco_decode_restored_btc_ln_swaps,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiRestoreRestoreLnBtcSwapsConstMeta,
@@ -2658,7 +2658,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
-  Future<List<LbtcLnSwap>> crateApiRestoreRestoreLnLbtcSwaps(
+  Future<RestoredLbtcLnSwaps> crateApiRestoreRestoreLnLbtcSwaps(
       {required SwapMasterKey swapMasterKey,
       required String electrumUrl,
       required String boltzUrl}) {
@@ -2671,7 +2671,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_list_lbtc_ln_swap,
+        decodeSuccessData: dco_decode_restored_lbtc_ln_swaps,
         decodeErrorData: dco_decode_boltz_error,
       ),
       constMeta: kCrateApiRestoreRestoreLnLbtcSwapsConstMeta,
@@ -3411,6 +3411,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  List<SkippedRestoreSwap> dco_decode_list_skipped_restore_swap(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_skipped_restore_swap).toList();
+  }
+
+  @protected
   List<VoutOutspend> dco_decode_list_vout_outspend(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_vout_outspend).toList();
@@ -3517,6 +3523,42 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  RestoredBtcLnSwaps dco_decode_restored_btc_ln_swaps(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return RestoredBtcLnSwaps(
+      swaps: dco_decode_list_btc_ln_swap(arr[0]),
+      skipped: dco_decode_list_skipped_restore_swap(arr[1]),
+    );
+  }
+
+  @protected
+  RestoredChainSwaps dco_decode_restored_chain_swaps(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return RestoredChainSwaps(
+      swaps: dco_decode_list_chain_swap(arr[0]),
+      skipped: dco_decode_list_skipped_restore_swap(arr[1]),
+    );
+  }
+
+  @protected
+  RestoredLbtcLnSwaps dco_decode_restored_lbtc_ln_swaps(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return RestoredLbtcLnSwaps(
+      swaps: dco_decode_list_lbtc_ln_swap(arr[0]),
+      skipped: dco_decode_list_skipped_restore_swap(arr[1]),
+    );
+  }
+
+  @protected
   RestoredSwapSummary dco_decode_restored_swap_summary(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -3564,6 +3606,18 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Side dco_decode_side(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return Side.values[raw as int];
+  }
+
+  @protected
+  SkippedRestoreSwap dco_decode_skipped_restore_swap(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return SkippedRestoreSwap(
+      id: dco_decode_String(arr[0]),
+      error: dco_decode_String(arr[1]),
+    );
   }
 
   @protected
@@ -4213,6 +4267,19 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  List<SkippedRestoreSwap> sse_decode_list_skipped_restore_swap(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <SkippedRestoreSwap>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_skipped_restore_swap(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   List<VoutOutspend> sse_decode_list_vout_outspend(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -4347,6 +4414,33 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  RestoredBtcLnSwaps sse_decode_restored_btc_ln_swaps(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_swaps = sse_decode_list_btc_ln_swap(deserializer);
+    var var_skipped = sse_decode_list_skipped_restore_swap(deserializer);
+    return RestoredBtcLnSwaps(swaps: var_swaps, skipped: var_skipped);
+  }
+
+  @protected
+  RestoredChainSwaps sse_decode_restored_chain_swaps(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_swaps = sse_decode_list_chain_swap(deserializer);
+    var var_skipped = sse_decode_list_skipped_restore_swap(deserializer);
+    return RestoredChainSwaps(swaps: var_swaps, skipped: var_skipped);
+  }
+
+  @protected
+  RestoredLbtcLnSwaps sse_decode_restored_lbtc_ln_swaps(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_swaps = sse_decode_list_lbtc_ln_swap(deserializer);
+    var var_skipped = sse_decode_list_skipped_restore_swap(deserializer);
+    return RestoredLbtcLnSwaps(swaps: var_swaps, skipped: var_skipped);
+  }
+
+  @protected
   RestoredSwapSummary sse_decode_restored_swap_summary(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -4397,6 +4491,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_i_32(deserializer);
     return Side.values[inner];
+  }
+
+  @protected
+  SkippedRestoreSwap sse_decode_skipped_restore_swap(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_id = sse_decode_String(deserializer);
+    var var_error = sse_decode_String(deserializer);
+    return SkippedRestoreSwap(id: var_id, error: var_error);
   }
 
   @protected
@@ -5026,6 +5129,16 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_list_skipped_restore_swap(
+      List<SkippedRestoreSwap> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_skipped_restore_swap(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_vout_outspend(
       List<VoutOutspend> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -5145,6 +5258,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_restored_btc_ln_swaps(
+      RestoredBtcLnSwaps self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_btc_ln_swap(self.swaps, serializer);
+    sse_encode_list_skipped_restore_swap(self.skipped, serializer);
+  }
+
+  @protected
+  void sse_encode_restored_chain_swaps(
+      RestoredChainSwaps self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_chain_swap(self.swaps, serializer);
+    sse_encode_list_skipped_restore_swap(self.skipped, serializer);
+  }
+
+  @protected
+  void sse_encode_restored_lbtc_ln_swaps(
+      RestoredLbtcLnSwaps self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_lbtc_ln_swap(self.swaps, serializer);
+    sse_encode_list_skipped_restore_swap(self.skipped, serializer);
+  }
+
+  @protected
   void sse_encode_restored_swap_summary(
       RestoredSwapSummary self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -5179,6 +5316,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_side(Side self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void sse_encode_skipped_restore_swap(
+      SkippedRestoreSwap self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.id, serializer);
+    sse_encode_String(self.error, serializer);
   }
 
   @protected

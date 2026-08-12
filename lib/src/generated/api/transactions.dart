@@ -29,11 +29,14 @@ Future<OutspendStatus> checkVout0Outspend(
 
 /// Reports the outspend status of EVERY output of the swap's lockup
 /// transaction (server lockup for claims, user lockup for refunds), with
-/// each output's amount where visible. Unlike [check_vout_0_outspend] this
+/// each output's amount where visible. Unlike the vout-0 check this
 /// makes no assumption about which vout carries the swap covenant; callers
 /// must match a spender against their own wallet/destination before
 /// treating it as their claim or refund — an output being spent proves
 /// nothing about who was paid.
+///
+/// An empty report means the explorer has not indexed the lockup tx yet
+/// (e.g. polled right after broadcast): nothing is spent, retry later.
 Future<List<VoutOutspend>> checkLockupOutspends(
         {required String swapId,
         required SwapType swapType,
