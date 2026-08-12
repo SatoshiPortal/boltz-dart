@@ -243,13 +243,9 @@ fn collect_restored<T>(
     let mut swaps = Vec::new();
     let mut first_error: Option<BoltzError> = None;
     for response in responses {
-        let id = response.id.clone();
         match rebuild(response) {
             Some(Ok(swap)) => swaps.push(swap),
-            Some(Err(e)) => {
-                eprintln!("RESTORE: skipping unrebuildable swap {}: {:?}", id, e);
-                first_error = first_error.or(Some(e));
-            }
+            Some(Err(e)) => first_error = first_error.or(Some(e)),
             None => {}
         }
     }
