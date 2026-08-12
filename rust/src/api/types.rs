@@ -459,7 +459,7 @@ pub struct OutspendStatus {
 /// Callers therefore get every vout and decide which spend, if any, is
 /// theirs; a spender txid here proves only that the output was spent, never
 /// that the swap participant claiming it was paid.
-#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct VoutOutspend {
     pub vout: u32,
     /// Output amount in sats. None for confidential (Liquid) outputs, whose

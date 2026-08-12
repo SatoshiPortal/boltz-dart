@@ -2895,6 +2895,20 @@ impl SseDecode for Vec<crate::api::restore::RestoredSwapSummary> {
     }
 }
 
+impl SseDecode for Vec<crate::api::restore::SkippedRestoreSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = Vec::with_capacity(len_ as usize);
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::restore::SkippedRestoreSwap>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<crate::api::types::VoutOutspend> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -3051,6 +3065,45 @@ impl SseDecode for crate::api::secrets::PreImage {
     }
 }
 
+impl SseDecode for crate::api::restore::RestoredBtcLnSwaps {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_swaps = <Vec<crate::api::btc_ln::BtcLnSwap>>::sse_decode(deserializer);
+        let mut var_skipped =
+            <Vec<crate::api::restore::SkippedRestoreSwap>>::sse_decode(deserializer);
+        return crate::api::restore::RestoredBtcLnSwaps {
+            swaps: var_swaps,
+            skipped: var_skipped,
+        };
+    }
+}
+
+impl SseDecode for crate::api::restore::RestoredChainSwaps {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_swaps = <Vec<crate::api::chain_swap::ChainSwap>>::sse_decode(deserializer);
+        let mut var_skipped =
+            <Vec<crate::api::restore::SkippedRestoreSwap>>::sse_decode(deserializer);
+        return crate::api::restore::RestoredChainSwaps {
+            swaps: var_swaps,
+            skipped: var_skipped,
+        };
+    }
+}
+
+impl SseDecode for crate::api::restore::RestoredLbtcLnSwaps {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_swaps = <Vec<crate::api::lbtc_ln::LbtcLnSwap>>::sse_decode(deserializer);
+        let mut var_skipped =
+            <Vec<crate::api::restore::SkippedRestoreSwap>>::sse_decode(deserializer);
+        return crate::api::restore::RestoredLbtcLnSwaps {
+            swaps: var_swaps,
+            skipped: var_skipped,
+        };
+    }
+}
+
 impl SseDecode for crate::api::restore::RestoredSwapSummary {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -3111,6 +3164,18 @@ impl SseDecode for crate::api::types::Side {
             0 => crate::api::types::Side::Lockup,
             1 => crate::api::types::Side::Claim,
             _ => unreachable!("Invalid variant for Side: {}", inner),
+        };
+    }
+}
+
+impl SseDecode for crate::api::restore::SkippedRestoreSwap {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_id = <String>::sse_decode(deserializer);
+        let mut var_error = <String>::sse_decode(deserializer);
+        return crate::api::restore::SkippedRestoreSwap {
+            id: var_id,
+            error: var_error,
         };
     }
 }
@@ -3802,6 +3867,69 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::secrets::PreImage>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::restore::RestoredBtcLnSwaps {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.swaps.into_into_dart().into_dart(),
+            self.skipped.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::restore::RestoredBtcLnSwaps
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::restore::RestoredBtcLnSwaps>
+    for crate::api::restore::RestoredBtcLnSwaps
+{
+    fn into_into_dart(self) -> crate::api::restore::RestoredBtcLnSwaps {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::restore::RestoredChainSwaps {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.swaps.into_into_dart().into_dart(),
+            self.skipped.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::restore::RestoredChainSwaps
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::restore::RestoredChainSwaps>
+    for crate::api::restore::RestoredChainSwaps
+{
+    fn into_into_dart(self) -> crate::api::restore::RestoredChainSwaps {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::restore::RestoredLbtcLnSwaps {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.swaps.into_into_dart().into_dart(),
+            self.skipped.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::restore::RestoredLbtcLnSwaps
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::restore::RestoredLbtcLnSwaps>
+    for crate::api::restore::RestoredLbtcLnSwaps
+{
+    fn into_into_dart(self) -> crate::api::restore::RestoredLbtcLnSwaps {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::restore::RestoredSwapSummary {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -3882,6 +4010,27 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::Side {
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::types::Side {}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::types::Side> for crate::api::types::Side {
     fn into_into_dart(self) -> crate::api::types::Side {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::restore::SkippedRestoreSwap {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.id.into_into_dart().into_dart(),
+            self.error.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::restore::SkippedRestoreSwap
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::restore::SkippedRestoreSwap>
+    for crate::api::restore::SkippedRestoreSwap
+{
+    fn into_into_dart(self) -> crate::api::restore::SkippedRestoreSwap {
         self
     }
 }
@@ -4438,6 +4587,16 @@ impl SseEncode for Vec<crate::api::restore::RestoredSwapSummary> {
     }
 }
 
+impl SseEncode for Vec<crate::api::restore::SkippedRestoreSwap> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::restore::SkippedRestoreSwap>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<crate::api::types::VoutOutspend> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -4568,6 +4727,30 @@ impl SseEncode for crate::api::secrets::PreImage {
     }
 }
 
+impl SseEncode for crate::api::restore::RestoredBtcLnSwaps {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<crate::api::btc_ln::BtcLnSwap>>::sse_encode(self.swaps, serializer);
+        <Vec<crate::api::restore::SkippedRestoreSwap>>::sse_encode(self.skipped, serializer);
+    }
+}
+
+impl SseEncode for crate::api::restore::RestoredChainSwaps {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<crate::api::chain_swap::ChainSwap>>::sse_encode(self.swaps, serializer);
+        <Vec<crate::api::restore::SkippedRestoreSwap>>::sse_encode(self.skipped, serializer);
+    }
+}
+
+impl SseEncode for crate::api::restore::RestoredLbtcLnSwaps {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <Vec<crate::api::lbtc_ln::LbtcLnSwap>>::sse_encode(self.swaps, serializer);
+        <Vec<crate::api::restore::SkippedRestoreSwap>>::sse_encode(self.skipped, serializer);
+    }
+}
+
 impl SseEncode for crate::api::restore::RestoredSwapSummary {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -4613,6 +4796,14 @@ impl SseEncode for crate::api::types::Side {
             },
             serializer,
         );
+    }
+}
+
+impl SseEncode for crate::api::restore::SkippedRestoreSwap {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.id, serializer);
+        <String>::sse_encode(self.error, serializer);
     }
 }
 
@@ -5203,6 +5394,18 @@ mod io {
             vec.into_iter().map(CstDecode::cst_decode).collect()
         }
     }
+    impl CstDecode<Vec<crate::api::restore::SkippedRestoreSwap>>
+        for *mut wire_cst_list_skipped_restore_swap
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<crate::api::restore::SkippedRestoreSwap> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
+        }
+    }
     impl CstDecode<Vec<crate::api::types::VoutOutspend>> for *mut wire_cst_list_vout_outspend {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> Vec<crate::api::types::VoutOutspend> {
@@ -5250,6 +5453,33 @@ mod io {
             }
         }
     }
+    impl CstDecode<crate::api::restore::RestoredBtcLnSwaps> for wire_cst_restored_btc_ln_swaps {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::restore::RestoredBtcLnSwaps {
+            crate::api::restore::RestoredBtcLnSwaps {
+                swaps: self.swaps.cst_decode(),
+                skipped: self.skipped.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::restore::RestoredChainSwaps> for wire_cst_restored_chain_swaps {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::restore::RestoredChainSwaps {
+            crate::api::restore::RestoredChainSwaps {
+                swaps: self.swaps.cst_decode(),
+                skipped: self.skipped.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::restore::RestoredLbtcLnSwaps> for wire_cst_restored_lbtc_ln_swaps {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::restore::RestoredLbtcLnSwaps {
+            crate::api::restore::RestoredLbtcLnSwaps {
+                swaps: self.swaps.cst_decode(),
+                skipped: self.skipped.cst_decode(),
+            }
+        }
+    }
     impl CstDecode<crate::api::restore::RestoredSwapSummary> for wire_cst_restored_swap_summary {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::restore::RestoredSwapSummary {
@@ -5282,6 +5512,15 @@ mod io {
                 lbtc_limits: self.lbtc_limits.cst_decode(),
                 btc_fees: self.btc_fees.cst_decode(),
                 lbtc_fees: self.lbtc_fees.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::restore::SkippedRestoreSwap> for wire_cst_skipped_restore_swap {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::restore::SkippedRestoreSwap {
+            crate::api::restore::SkippedRestoreSwap {
+                id: self.id.cst_decode(),
+                error: self.error.cst_decode(),
             }
         }
     }
@@ -5658,6 +5897,45 @@ mod io {
             Self::new_with_null_ptr()
         }
     }
+    impl NewWithNullPtr for wire_cst_restored_btc_ln_swaps {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                swaps: core::ptr::null_mut(),
+                skipped: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_restored_btc_ln_swaps {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_restored_chain_swaps {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                swaps: core::ptr::null_mut(),
+                skipped: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_restored_chain_swaps {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_restored_lbtc_ln_swaps {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                swaps: core::ptr::null_mut(),
+                skipped: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_restored_lbtc_ln_swaps {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
     impl NewWithNullPtr for wire_cst_restored_swap_summary {
         fn new_with_null_ptr() -> Self {
             Self {
@@ -5701,6 +5979,19 @@ mod io {
         }
     }
     impl Default for wire_cst_reverse_fees_and_limits {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_skipped_restore_swap {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                id: core::ptr::null_mut(),
+                error: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_skipped_restore_swap {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -7039,6 +7330,20 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_list_skipped_restore_swap(
+        len: i32,
+    ) -> *mut wire_cst_list_skipped_restore_swap {
+        let wrap = wire_cst_list_skipped_restore_swap {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <wire_cst_skipped_restore_swap>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_list_vout_outspend(
         len: i32,
     ) -> *mut wire_cst_list_vout_outspend {
@@ -7218,6 +7523,12 @@ mod io {
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
+    pub struct wire_cst_list_skipped_restore_swap {
+        ptr: *mut wire_cst_skipped_restore_swap,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
     pub struct wire_cst_list_vout_outspend {
         ptr: *mut wire_cst_vout_outspend,
         len: i32,
@@ -7249,6 +7560,24 @@ mod io {
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
+    pub struct wire_cst_restored_btc_ln_swaps {
+        swaps: *mut wire_cst_list_btc_ln_swap,
+        skipped: *mut wire_cst_list_skipped_restore_swap,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_restored_chain_swaps {
+        swaps: *mut wire_cst_list_chain_swap,
+        skipped: *mut wire_cst_list_skipped_restore_swap,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_restored_lbtc_ln_swaps {
+        swaps: *mut wire_cst_list_lbtc_ln_swap,
+        skipped: *mut wire_cst_list_skipped_restore_swap,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
     pub struct wire_cst_restored_swap_summary {
         id: *mut wire_cst_list_prim_u_8_strict,
         kind: i32,
@@ -7272,6 +7601,12 @@ mod io {
         lbtc_limits: wire_cst_swap_limits,
         btc_fees: wire_cst_rev_swap_fees,
         lbtc_fees: wire_cst_rev_swap_fees,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_skipped_restore_swap {
+        id: *mut wire_cst_list_prim_u_8_strict,
+        error: *mut wire_cst_list_prim_u_8_strict,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
