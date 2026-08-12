@@ -989,6 +989,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     wireObj.invoice = cst_encode_String(apiObj.invoice);
     wireObj.script_address = cst_encode_String(apiObj.scriptAddress);
     wireObj.out_amount = cst_encode_u_64(apiObj.outAmount);
+    wireObj.expected_onchain_amount =
+        cst_encode_opt_box_autoadd_u_64(apiObj.expectedOnchainAmount);
     wireObj.electrum_url = cst_encode_String(apiObj.electrumUrl);
     wireObj.boltz_url = cst_encode_String(apiObj.boltzUrl);
     wireObj.referral_id = cst_encode_opt_String(apiObj.referralId);
@@ -1036,6 +1038,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
         apiObj.lbtcScriptStr, wireObj.lbtc_script_str);
     wireObj.script_address = cst_encode_String(apiObj.scriptAddress);
     wireObj.out_amount = cst_encode_u_64(apiObj.outAmount);
+    wireObj.expected_onchain_amount =
+        cst_encode_opt_box_autoadd_u_64(apiObj.expectedOnchainAmount);
     wireObj.btc_electrum_url = cst_encode_String(apiObj.btcElectrumUrl);
     wireObj.lbtc_electrum_url = cst_encode_String(apiObj.lbtcElectrumUrl);
     wireObj.boltz_url = cst_encode_String(apiObj.boltzUrl);
@@ -1114,6 +1118,8 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
         apiObj.swapScript, wireObj.swap_script);
     wireObj.invoice = cst_encode_String(apiObj.invoice);
     wireObj.out_amount = cst_encode_u_64(apiObj.outAmount);
+    wireObj.expected_onchain_amount =
+        cst_encode_opt_box_autoadd_u_64(apiObj.expectedOnchainAmount);
     wireObj.script_address = cst_encode_String(apiObj.scriptAddress);
     wireObj.blinding_key = cst_encode_String(apiObj.blindingKey);
     wireObj.electrum_url = cst_encode_String(apiObj.electrumUrl);
@@ -4292,6 +4298,8 @@ final class wire_cst_btc_ln_swap extends ffi.Struct {
   @ffi.Uint64()
   external int out_amount;
 
+  external ffi.Pointer<ffi.Uint64> expected_onchain_amount;
+
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url;
@@ -4398,6 +4406,8 @@ final class wire_cst_chain_swap extends ffi.Struct {
   @ffi.Uint64()
   external int out_amount;
 
+  external ffi.Pointer<ffi.Uint64> expected_onchain_amount;
+
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> btc_electrum_url;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> lbtc_electrum_url;
@@ -4435,6 +4445,8 @@ final class wire_cst_lbtc_ln_swap extends ffi.Struct {
 
   @ffi.Uint64()
   external int out_amount;
+
+  external ffi.Pointer<ffi.Uint64> expected_onchain_amount;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> script_address;
 

@@ -10,7 +10,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`
+// These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`, `new_with_expected_onchain_amount`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `clone`, `eq`
 
 /// Bitcoin-Liquid Swap Class
@@ -27,6 +27,7 @@ class ChainSwap {
   final LBtcSwapScriptStr lbtcScriptStr;
   final String scriptAddress;
   final BigInt outAmount;
+  final BigInt? expectedOnchainAmount;
   final String btcElectrumUrl;
   final String lbtcElectrumUrl;
   final String boltzUrl;
@@ -46,6 +47,7 @@ class ChainSwap {
     required this.lbtcScriptStr,
     required this.scriptAddress,
     required this.outAmount,
+    this.expectedOnchainAmount,
     required this.btcElectrumUrl,
     required this.lbtcElectrumUrl,
     required this.boltzUrl,
@@ -226,6 +228,7 @@ class ChainSwap {
       lbtcScriptStr.hashCode ^
       scriptAddress.hashCode ^
       outAmount.hashCode ^
+      expectedOnchainAmount.hashCode ^
       btcElectrumUrl.hashCode ^
       lbtcElectrumUrl.hashCode ^
       boltzUrl.hashCode ^
@@ -249,6 +252,7 @@ class ChainSwap {
           lbtcScriptStr == other.lbtcScriptStr &&
           scriptAddress == other.scriptAddress &&
           outAmount == other.outAmount &&
+          expectedOnchainAmount == other.expectedOnchainAmount &&
           btcElectrumUrl == other.btcElectrumUrl &&
           lbtcElectrumUrl == other.lbtcElectrumUrl &&
           boltzUrl == other.boltzUrl &&

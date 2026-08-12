@@ -56,6 +56,7 @@ typedef struct wire_cst_btc_ln_swap {
   struct wire_cst_list_prim_u_8_strict *invoice;
   struct wire_cst_list_prim_u_8_strict *script_address;
   uint64_t out_amount;
+  uint64_t *expected_onchain_amount;
   struct wire_cst_list_prim_u_8_strict *electrum_url;
   struct wire_cst_list_prim_u_8_strict *boltz_url;
   struct wire_cst_list_prim_u_8_strict *referral_id;
@@ -118,6 +119,7 @@ typedef struct wire_cst_chain_swap {
   struct wire_cst_l_btc_swap_script_str lbtc_script_str;
   struct wire_cst_list_prim_u_8_strict *script_address;
   uint64_t out_amount;
+  uint64_t *expected_onchain_amount;
   struct wire_cst_list_prim_u_8_strict *btc_electrum_url;
   struct wire_cst_list_prim_u_8_strict *lbtc_electrum_url;
   struct wire_cst_list_prim_u_8_strict *boltz_url;
@@ -139,6 +141,7 @@ typedef struct wire_cst_lbtc_ln_swap {
   struct wire_cst_l_btc_swap_script_str swap_script;
   struct wire_cst_list_prim_u_8_strict *invoice;
   uint64_t out_amount;
+  uint64_t *expected_onchain_amount;
   struct wire_cst_list_prim_u_8_strict *script_address;
   struct wire_cst_list_prim_u_8_strict *blinding_key;
   struct wire_cst_list_prim_u_8_strict *electrum_url;

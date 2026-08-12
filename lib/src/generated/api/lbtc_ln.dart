@@ -10,7 +10,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `extract_id`
+// These functions are ignored because they are not marked as `pub`: `extract_id`, `new_with_expected_onchain_amount`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `clone`, `eq`
 
 /// Liquid-Lightning Swap Class
@@ -24,6 +24,7 @@ class LbtcLnSwap {
   final LBtcSwapScriptStr swapScript;
   final String invoice;
   final BigInt outAmount;
+  final BigInt? expectedOnchainAmount;
   final String scriptAddress;
   final String blindingKey;
   final String electrumUrl;
@@ -40,6 +41,7 @@ class LbtcLnSwap {
     required this.swapScript,
     required this.invoice,
     required this.outAmount,
+    this.expectedOnchainAmount,
     required this.scriptAddress,
     required this.blindingKey,
     required this.electrumUrl,
@@ -218,6 +220,7 @@ class LbtcLnSwap {
       swapScript.hashCode ^
       invoice.hashCode ^
       outAmount.hashCode ^
+      expectedOnchainAmount.hashCode ^
       scriptAddress.hashCode ^
       blindingKey.hashCode ^
       electrumUrl.hashCode ^
@@ -238,6 +241,7 @@ class LbtcLnSwap {
           swapScript == other.swapScript &&
           invoice == other.invoice &&
           outAmount == other.outAmount &&
+          expectedOnchainAmount == other.expectedOnchainAmount &&
           scriptAddress == other.scriptAddress &&
           blindingKey == other.blindingKey &&
           electrumUrl == other.electrumUrl &&

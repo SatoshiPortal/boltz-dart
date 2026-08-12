@@ -44,6 +44,8 @@ pub struct ChainSwap {
     pub lbtc_script_str: LBtcSwapScriptStr,
     pub script_address: String,
     pub out_amount: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expected_onchain_amount: Option<u64>,
     pub btc_electrum_url: String,
     pub lbtc_electrum_url: String,
     pub boltz_url: String,
@@ -85,6 +87,49 @@ impl ChainSwap {
         referral_id: Option<String>,
         blinding_key: String,
     ) -> ChainSwap {
+        Self::new_with_expected_onchain_amount(
+            id,
+            is_testnet,
+            direction,
+            refund_keys,
+            refund_index,
+            claim_keys,
+            claim_index,
+            preimage,
+            btc_script_str,
+            lbtc_script_str,
+            script_address,
+            out_amount,
+            btc_electrum_url,
+            lbtc_electrum_url,
+            boltz_url,
+            referral_id,
+            blinding_key,
+            None,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn new_with_expected_onchain_amount(
+        id: String,
+        is_testnet: bool,
+        direction: ChainSwapDirection,
+        refund_keys: KeyPair,
+        refund_index: u64,
+        claim_keys: KeyPair,
+        claim_index: u64,
+        preimage: PreImage,
+        btc_script_str: BtcSwapScriptStr,
+        lbtc_script_str: LBtcSwapScriptStr,
+        script_address: String,
+        out_amount: u64,
+        btc_electrum_url: String,
+        lbtc_electrum_url: String,
+        boltz_url: String,
+        referral_id: Option<String>,
+        blinding_key: String,
+        expected_onchain_amount: Option<u64>,
+    ) -> ChainSwap {
         ChainSwap {
             id,
             direction,
@@ -101,6 +146,7 @@ impl ChainSwap {
             boltz_url: ensure_http_prefix(&boltz_url.clone()),
             script_address,
             out_amount,
+            expected_onchain_amount,
             referral_id: Some(referral_id.unwrap_or_default()),
             blinding_key,
         }
@@ -119,7 +165,7 @@ impl ChainSwap {
         boltz_url: String,
         referral_id: Option<String>,
     ) -> Result<ChainSwap, BoltzError> {
-        let (refund_network, _) = if is_testnet {
+        let (refund_network, claim_network) = if is_testnet {
             if direction == ChainSwapDirection::BtcToLbtc {
                 (
                     AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
@@ -188,6 +234,13 @@ impl ChainSwap {
                     webhook: None, // Add address signature here.
                 };
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req).await?;
+                create_chain_response.validate(
+                    &claim_public_key,
+                    &refund_public_key,
+                    refund_network,
+                    claim_network,
+                    &preimage.sha256,
+                )?;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = BtcSwapScript::chain_from_swap_resp(
                     Side::Lockup,
@@ -211,12 +264,14 @@ impl ChainSwap {
                     return Err(Error::Address("Lockup Address Mismatch".to_owned()).into());
                 }
                 let claim_details: ChainSwapDetails = create_chain_response.claim_details;
+                let expected_onchain_amount =
+                    (claim_details.amount > 0).then_some(claim_details.amount);
                 let claim_script = LBtcSwapScript::chain_from_swap_resp(
                     Side::Claim,
                     claim_details.clone(),
                     claim_public_key,
                 )?;
-                Ok(ChainSwap::new(
+                Ok(ChainSwap::new_with_expected_onchain_amount(
                     create_chain_response.id,
                     is_testnet,
                     direction,
@@ -234,6 +289,7 @@ impl ChainSwap {
                     ensure_http_prefix(&boltz_url),
                     referral_id,
                     claim_script.blinding_key.display_secret().to_string(),
+                    expected_onchain_amount,
                 ))
             }
             ChainSwapDirection::LbtcToBtc => {
@@ -250,6 +306,13 @@ impl ChainSwap {
                     webhook: None,
                 };
                 let create_chain_response = boltz_client.post_chain_req(create_swap_req).await?;
+                create_chain_response.validate(
+                    &claim_public_key,
+                    &refund_public_key,
+                    refund_network,
+                    claim_network,
+                    &preimage.sha256,
+                )?;
                 let lockup_details: ChainSwapDetails = create_chain_response.clone().lockup_details;
                 let lockup_script = LBtcSwapScript::chain_from_swap_resp(
                     Side::Lockup,
@@ -274,12 +337,14 @@ impl ChainSwap {
                     return Err(Error::Address("Lockup Address Mismatch".to_owned()).into());
                 }
                 let claim_details: ChainSwapDetails = create_chain_response.claim_details;
+                let expected_onchain_amount =
+                    (claim_details.amount > 0).then_some(claim_details.amount);
                 let claim_script = BtcSwapScript::chain_from_swap_resp(
                     Side::Claim,
                     claim_details.clone(),
                     claim_public_key,
                 )?;
-                Ok(ChainSwap::new(
+                Ok(ChainSwap::new_with_expected_onchain_amount(
                     create_chain_response.id,
                     is_testnet,
                     direction,
@@ -297,6 +362,7 @@ impl ChainSwap {
                     ensure_http_prefix(&boltz_url),
                     referral_id,
                     lockup_script.blinding_key.display_secret().to_string(),
+                    expected_onchain_amount,
                 ))
             }
         }
@@ -382,6 +448,9 @@ impl ChainSwap {
                     id.clone(),
                 )
                 .await?;
+                if let Some(expected_amount) = self.expected_onchain_amount {
+                    claim_tx.validate_lockup_amount(lbtc_chain, expected_amount)?;
+                }
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
                 let preimage: Preimage = self.preimage.clone().try_into()?;
                 if try_cooperate {
@@ -393,6 +462,12 @@ impl ChainSwap {
                         "Not Found".to_string(),
                         "No Claim Tx Details Detected.".to_string(),
                     ))?;
+                    if claim_tx_response_opt.public_key != btc_lockup_script.receiver_pubkey {
+                        return Err(BoltzError::new(
+                            "Protocol".to_string(),
+                            "Cooperative counterparty public key mismatch".to_string(),
+                        ));
+                    }
                     let pub_nonce = claim_tx_response_opt.pub_nonce;
                     let transaction_hash = claim_tx_response_opt.transaction_hash;
                     let (partial_sig, pub_nonce) =
@@ -436,6 +511,9 @@ impl ChainSwap {
                     self.id.clone(),
                 )
                 .await?;
+                if let Some(expected_amount) = self.expected_onchain_amount {
+                    claim_tx.validate_lockup_amount(expected_amount)?;
+                }
                 let ckp: Keypair = self.claim_keys.clone().try_into()?;
                 let preimage: Preimage = self.preimage.clone().try_into()?;
 
@@ -449,6 +527,12 @@ impl ChainSwap {
                         "Not Found".to_string(),
                         "No Claim Tx Details Detected.".to_string(),
                     ))?;
+                    if claim_tx_response_opt.public_key != lbtc_lockup_script.receiver_pubkey {
+                        return Err(BoltzError::new(
+                            "Protocol".to_string(),
+                            "Cooperative counterparty public key mismatch".to_string(),
+                        ));
+                    }
                     let transaction_hash = claim_tx_response_opt.transaction_hash;
                     let pub_nonce = claim_tx_response_opt.pub_nonce;
                     let (partial_sig, pub_nonce) =

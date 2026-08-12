@@ -7,7 +7,7 @@ use super::{
     lbtc_ln::LbtcLnSwap,
     secrets::{KeyPair, SwapMasterKey},
     swap_status::SwapStatus,
-    types::{Chain, ChainSwapDirection, PreImage, SwapType},
+    types::{Chain, ChainSwapDirection, Network, PreImage, SwapType},
 };
 use boltz_client::util::secrets::Preimage as BoltzPreimage;
 use boltz_client::{
@@ -139,6 +139,23 @@ fn verified_reverse_preimage(
         ));
     }
     Ok(PreImage::from(boltz_preimage))
+}
+
+fn validate_restored_hashlock(
+    actual_hash: &str,
+    preimage: &PreImage,
+    swap_id: &str,
+) -> Result<(), BoltzError> {
+    if !preimage.hash160.is_empty() && actual_hash != preimage.hash160 {
+        return Err(BoltzError::new(
+            "Restore".to_string(),
+            format!(
+                "Hashlock mismatch for {}: expected {}, got {}",
+                swap_id, preimage.hash160, actual_hash
+            ),
+        ));
+    }
+    Ok(())
 }
 
 async fn restore_swaps(
@@ -373,8 +390,17 @@ pub async fn restore_chain_swaps(
     Ok(RestoredChainSwaps { swaps, skipped })
 }
 
-fn infer_network(from: &str, to: &str) -> Result<Chain, BoltzError> {
-    let is_testnet = from.contains("testnet") || to.contains("testnet");
+fn infer_network(from: &str, to: &str, network: Network) -> Result<Chain, BoltzError> {
+    let is_testnet = match network {
+        Network::Mainnet => false,
+        Network::Testnet => true,
+        Network::Regtest => {
+            return Err(BoltzError::new(
+                "Network".to_string(),
+                "Remote swap restore does not support regtest".to_string(),
+            ));
+        }
+    };
     // The Lightning side of an LN swap is always BTC-denominated, so the
     // on-chain leg is whichever side is L-BTC (reverse: `to`, submarine: `from`).
     // Keying off `from` alone mis-tags a lightning->L-BTC reverse as Bitcoin.
@@ -450,7 +476,11 @@ fn restore_to_btc_ln_swap(
     boltz_url: String,
     invoice: Option<String>,
 ) -> Result<BtcLnSwap, BoltzError> {
-    let network = infer_network(&restore_response.from, &restore_response.to)?;
+    let network = infer_network(
+        &restore_response.from,
+        &restore_response.to,
+        swap_master_key.network,
+    )?;
     let swap_master_key_inner: boltz_client::util::secrets::SwapMasterKey =
         swap_master_key.try_into()?;
 
@@ -530,8 +560,13 @@ fn restore_to_btc_ln_swap(
         }
     }
     .map_err(|e| BoltzError::new("SwapScript".to_string(), e.to_string()))?;
+    validate_restored_hashlock(
+        &swap_script.hashlock.to_string(),
+        &preimage,
+        &restore_response.id,
+    )?;
 
-    Ok(BtcLnSwap::new(
+    Ok(BtcLnSwap::new_with_expected_onchain_amount(
         restore_response.id,
         swap_type,
         network,
@@ -545,6 +580,8 @@ fn restore_to_btc_ln_swap(
         electrum_url,
         boltz_url,
         None,
+        (matches!(&restore_response.swap_type, SwapRestoreType::Reverse) && amount > 0)
+            .then_some(amount),
     ))
 }
 
@@ -555,7 +592,11 @@ fn restore_to_lbtc_ln_swap(
     boltz_url: String,
     invoice: Option<String>,
 ) -> Result<LbtcLnSwap, BoltzError> {
-    let network = infer_network(&restore_response.from, &restore_response.to)?;
+    let network = infer_network(
+        &restore_response.from,
+        &restore_response.to,
+        swap_master_key.network,
+    )?;
     let swap_master_key_inner: boltz_client::util::secrets::SwapMasterKey =
         swap_master_key.try_into()?;
 
@@ -635,10 +676,15 @@ fn restore_to_lbtc_ln_swap(
         }
     }
     .map_err(|e| BoltzError::new("SwapScript".to_string(), e.to_string()))?;
+    validate_restored_hashlock(
+        &swap_script.hashlock.to_string(),
+        &preimage,
+        &restore_response.id,
+    )?;
 
     let blinding_key = details.blinding_key.clone().unwrap_or_default();
 
-    Ok(LbtcLnSwap::new(
+    Ok(LbtcLnSwap::new_with_expected_onchain_amount(
         restore_response.id,
         swap_type,
         network,
@@ -653,6 +699,8 @@ fn restore_to_lbtc_ln_swap(
         electrum_url,
         boltz_url,
         None,
+        (matches!(&restore_response.swap_type, SwapRestoreType::Reverse) && amount > 0)
+            .then_some(amount),
     ))
 }
 
@@ -664,8 +712,16 @@ fn restore_to_chain_swap(
     boltz_url: String,
 ) -> Result<ChainSwap, BoltzError> {
     let direction = infer_chain_swap_direction(&restore_response.from, &restore_response.to)?;
-    let is_testnet =
-        restore_response.from.contains("testnet") || restore_response.to.contains("testnet");
+    let is_testnet = match swap_master_key.network {
+        Network::Mainnet => false,
+        Network::Testnet => true,
+        Network::Regtest => {
+            return Err(BoltzError::new(
+                "Network".to_string(),
+                "Remote swap restore does not support regtest".to_string(),
+            ));
+        }
+    };
     let swap_master_key_inner: boltz_client::util::secrets::SwapMasterKey =
         swap_master_key.try_into()?;
 
@@ -747,6 +803,16 @@ fn restore_to_chain_swap(
                 claim_public_key,
             )
             .map_err(|e| BoltzError::new("SwapScript".to_string(), e.to_string()))?;
+            validate_restored_hashlock(
+                &btc_script.hashlock.to_string(),
+                &preimage,
+                &restore_response.id,
+            )?;
+            validate_restored_hashlock(
+                &lbtc_script.hashlock.to_string(),
+                &preimage,
+                &restore_response.id,
+            )?;
 
             (btc_script.into(), lbtc_script.into())
         }
@@ -764,6 +830,16 @@ fn restore_to_chain_swap(
                 claim_public_key,
             )
             .map_err(|e| BoltzError::new("SwapScript".to_string(), e.to_string()))?;
+            validate_restored_hashlock(
+                &lbtc_script.hashlock.to_string(),
+                &preimage,
+                &restore_response.id,
+            )?;
+            validate_restored_hashlock(
+                &btc_script.hashlock.to_string(),
+                &preimage,
+                &restore_response.id,
+            )?;
 
             (btc_script.into(), lbtc_script.into())
         }
@@ -771,7 +847,7 @@ fn restore_to_chain_swap(
 
     let blinding_key = claim_details.blinding_key.clone().unwrap_or_default();
 
-    Ok(ChainSwap::new(
+    Ok(ChainSwap::new_with_expected_onchain_amount(
         restore_response.id,
         is_testnet,
         direction,
@@ -789,6 +865,7 @@ fn restore_to_chain_swap(
         boltz_url,
         None,
         blinding_key,
+        claim_details.amount.filter(|amount| *amount > 0),
     ))
 }
 
@@ -809,6 +886,19 @@ mod tests {
     const REVERSE_KEY_INDEX: u64 = 7;
     const TIMEOUT_BLOCK_HEIGHT: u32 = 1_500_000;
 
+    #[test]
+    fn restore_network_comes_from_master_key() {
+        assert!(matches!(
+            infer_network("BTC", "L-BTC", Network::Testnet),
+            Ok(Chain::LiquidTestnet)
+        ));
+        assert!(matches!(
+            infer_network("BTC", "BTC", Network::Testnet),
+            Ok(Chain::BitcoinTestnet)
+        ));
+        assert!(infer_network("BTC", "BTC", Network::Regtest).is_err());
+    }
+
     fn test_master_key() -> SwapMasterKey {
         SwapMasterKey {
             xprv: "xprv9zRA4NuUPQSBywcrKbEapYaYPuJu2rwcGFceusCYtUM1Yx1z1b59TqnseHSk17eWgmo2mVeUWrHzy5uyXrwypZrJRRM7chrJJH1JyKNoE6L".to_string(),
@@ -828,6 +918,7 @@ mod tests {
         /// Preimage hash a restorable reverse swap must carry: derived from
         /// the claim key, like the wallet derives it at creation.
         reverse_preimage_hash: String,
+        reverse_hash160: String,
     }
 
     fn fixture() -> Fixture {
@@ -851,15 +942,15 @@ mod tests {
             &boltz_client::elements::AddressParams::LIQUID,
         )
         .to_string();
+        let reverse_preimage = BoltzPreimage::from_swap_key(&reverse_keys);
         Fixture {
             our_xonly: our.x_only_public_key().0.serialize().to_hex(),
             server_pubkey: server.public_key().to_string(),
             server_xonly: server.x_only_public_key().0.serialize().to_hex(),
             hash160: preimage.hash160.to_string(),
             lockup_address,
-            reverse_preimage_hash: BoltzPreimage::from_swap_key(&reverse_keys)
-                .sha256
-                .to_string(),
+            reverse_preimage_hash: reverse_preimage.sha256.to_string(),
+            reverse_hash160: reverse_preimage.hash160.to_string(),
         }
     }
 
@@ -913,7 +1004,10 @@ mod tests {
             "claimDetails": {
                 "type": "utxo",
                 "tree": {
-                    "claimLeaf": {"version": 196, "output": claim_leaf(f)},
+                    "claimLeaf": {
+                        "version": 196,
+                        "output": format!("a914{}8820{}ac", f.reverse_hash160, f.server_xonly),
+                    },
                     "refundLeaf": {"version": 196, "output": refund_leaf(f)},
                 },
                 "keyIndex": REVERSE_KEY_INDEX,
@@ -979,6 +1073,7 @@ mod tests {
         assert_eq!(reverse.id, "revSwapTest1");
         assert_eq!(reverse.key_index, REVERSE_KEY_INDEX);
         assert_eq!(reverse.out_amount, 12345);
+        assert_eq!(reverse.expected_onchain_amount, Some(12345));
 
         let submarine = &swaps[1];
         assert_eq!(submarine.id, SUBMARINE_SWAP_ID);
@@ -988,6 +1083,7 @@ mod tests {
         // (refundDetails carries neither).
         assert_eq!(submarine.preimage.sha256, TEST_INVOICE_PAYMENT_HASH);
         assert_eq!(submarine.out_amount, TEST_INVOICE_SATS);
+        assert_eq!(submarine.expected_onchain_amount, None);
     }
 
     #[tokio::test]
@@ -1011,6 +1107,19 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn restored_swap_with_mismatched_script_hashlock_is_skipped() {
+        let f = fixture();
+        let mut reverse = reverse_restore_json(&f, &f.reverse_preimage_hash);
+        reverse["claimDetails"]["tree"]["claimLeaf"]["output"] =
+            serde_json::Value::String(claim_leaf(&f));
+        let restored = restore_over_http(vec![reverse]).await;
+
+        assert!(restored.swaps.is_empty());
+        assert_eq!(restored.skipped.len(), 1);
+        assert!(restored.skipped[0].error.contains("Hashlock mismatch"));
+    }
+
+    #[tokio::test]
     async fn submarine_without_invoice_still_restores() {
         // The refund — the only client action on a submarine swap — needs
         // neither preimage nor amount, so a missing (or unparseable, e.g.
@@ -1026,6 +1135,7 @@ mod tests {
         assert_eq!(submarine.id, SUBMARINE_SWAP_ID);
         assert_eq!(submarine.script_address, f.lockup_address);
         assert_eq!(submarine.out_amount, 0);
+        assert_eq!(submarine.expected_onchain_amount, None);
         assert!(submarine.preimage.sha256.is_empty());
     }
 }

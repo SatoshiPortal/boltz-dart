@@ -3158,8 +3158,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   BtcLnSwap dco_decode_btc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 13)
-      throw Exception('unexpected arr length: expect 13 but see ${arr.length}');
+    if (arr.length != 14)
+      throw Exception('unexpected arr length: expect 14 but see ${arr.length}');
     return BtcLnSwap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
@@ -3171,9 +3171,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       invoice: dco_decode_String(arr[7]),
       scriptAddress: dco_decode_String(arr[8]),
       outAmount: dco_decode_u_64(arr[9]),
-      electrumUrl: dco_decode_String(arr[10]),
-      boltzUrl: dco_decode_String(arr[11]),
-      referralId: dco_decode_opt_String(arr[12]),
+      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[10]),
+      electrumUrl: dco_decode_String(arr[11]),
+      boltzUrl: dco_decode_String(arr[12]),
+      referralId: dco_decode_opt_String(arr[13]),
     );
   }
 
@@ -3218,8 +3219,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   ChainSwap dco_decode_chain_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 17)
-      throw Exception('unexpected arr length: expect 17 but see ${arr.length}');
+    if (arr.length != 18)
+      throw Exception('unexpected arr length: expect 18 but see ${arr.length}');
     return ChainSwap(
       id: dco_decode_String(arr[0]),
       isTestnet: dco_decode_bool(arr[1]),
@@ -3233,11 +3234,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       lbtcScriptStr: dco_decode_l_btc_swap_script_str(arr[9]),
       scriptAddress: dco_decode_String(arr[10]),
       outAmount: dco_decode_u_64(arr[11]),
-      btcElectrumUrl: dco_decode_String(arr[12]),
-      lbtcElectrumUrl: dco_decode_String(arr[13]),
-      boltzUrl: dco_decode_String(arr[14]),
-      referralId: dco_decode_opt_String(arr[15]),
-      blindingKey: dco_decode_String(arr[16]),
+      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[12]),
+      btcElectrumUrl: dco_decode_String(arr[13]),
+      lbtcElectrumUrl: dco_decode_String(arr[14]),
+      boltzUrl: dco_decode_String(arr[15]),
+      referralId: dco_decode_opt_String(arr[16]),
+      blindingKey: dco_decode_String(arr[17]),
     );
   }
 
@@ -3358,8 +3360,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 14)
-      throw Exception('unexpected arr length: expect 14 but see ${arr.length}');
+    if (arr.length != 15)
+      throw Exception('unexpected arr length: expect 15 but see ${arr.length}');
     return LbtcLnSwap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
@@ -3370,11 +3372,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       swapScript: dco_decode_l_btc_swap_script_str(arr[6]),
       invoice: dco_decode_String(arr[7]),
       outAmount: dco_decode_u_64(arr[8]),
-      scriptAddress: dco_decode_String(arr[9]),
-      blindingKey: dco_decode_String(arr[10]),
-      electrumUrl: dco_decode_String(arr[11]),
-      boltzUrl: dco_decode_String(arr[12]),
-      referralId: dco_decode_opt_String(arr[13]),
+      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[9]),
+      scriptAddress: dco_decode_String(arr[10]),
+      blindingKey: dco_decode_String(arr[11]),
+      electrumUrl: dco_decode_String(arr[12]),
+      boltzUrl: dco_decode_String(arr[13]),
+      referralId: dco_decode_opt_String(arr[14]),
     );
   }
 
@@ -3956,6 +3959,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_invoice = sse_decode_String(deserializer);
     var var_scriptAddress = sse_decode_String(deserializer);
     var var_outAmount = sse_decode_u_64(deserializer);
+    var var_expectedOnchainAmount =
+        sse_decode_opt_box_autoadd_u_64(deserializer);
     var var_electrumUrl = sse_decode_String(deserializer);
     var var_boltzUrl = sse_decode_String(deserializer);
     var var_referralId = sse_decode_opt_String(deserializer);
@@ -3970,6 +3975,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         invoice: var_invoice,
         scriptAddress: var_scriptAddress,
         outAmount: var_outAmount,
+        expectedOnchainAmount: var_expectedOnchainAmount,
         electrumUrl: var_electrumUrl,
         boltzUrl: var_boltzUrl,
         referralId: var_referralId);
@@ -4033,6 +4039,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_lbtcScriptStr = sse_decode_l_btc_swap_script_str(deserializer);
     var var_scriptAddress = sse_decode_String(deserializer);
     var var_outAmount = sse_decode_u_64(deserializer);
+    var var_expectedOnchainAmount =
+        sse_decode_opt_box_autoadd_u_64(deserializer);
     var var_btcElectrumUrl = sse_decode_String(deserializer);
     var var_lbtcElectrumUrl = sse_decode_String(deserializer);
     var var_boltzUrl = sse_decode_String(deserializer);
@@ -4051,6 +4059,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         lbtcScriptStr: var_lbtcScriptStr,
         scriptAddress: var_scriptAddress,
         outAmount: var_outAmount,
+        expectedOnchainAmount: var_expectedOnchainAmount,
         btcElectrumUrl: var_btcElectrumUrl,
         lbtcElectrumUrl: var_lbtcElectrumUrl,
         boltzUrl: var_boltzUrl,
@@ -4188,6 +4197,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_swapScript = sse_decode_l_btc_swap_script_str(deserializer);
     var var_invoice = sse_decode_String(deserializer);
     var var_outAmount = sse_decode_u_64(deserializer);
+    var var_expectedOnchainAmount =
+        sse_decode_opt_box_autoadd_u_64(deserializer);
     var var_scriptAddress = sse_decode_String(deserializer);
     var var_blindingKey = sse_decode_String(deserializer);
     var var_electrumUrl = sse_decode_String(deserializer);
@@ -4203,6 +4214,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         swapScript: var_swapScript,
         invoice: var_invoice,
         outAmount: var_outAmount,
+        expectedOnchainAmount: var_expectedOnchainAmount,
         scriptAddress: var_scriptAddress,
         blindingKey: var_blindingKey,
         electrumUrl: var_electrumUrl,
@@ -4917,6 +4929,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.invoice, serializer);
     sse_encode_String(self.scriptAddress, serializer);
     sse_encode_u_64(self.outAmount, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.expectedOnchainAmount, serializer);
     sse_encode_String(self.electrumUrl, serializer);
     sse_encode_String(self.boltzUrl, serializer);
     sse_encode_opt_String(self.referralId, serializer);
@@ -4966,6 +4979,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_l_btc_swap_script_str(self.lbtcScriptStr, serializer);
     sse_encode_String(self.scriptAddress, serializer);
     sse_encode_u_64(self.outAmount, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.expectedOnchainAmount, serializer);
     sse_encode_String(self.btcElectrumUrl, serializer);
     sse_encode_String(self.lbtcElectrumUrl, serializer);
     sse_encode_String(self.boltzUrl, serializer);
@@ -5073,6 +5087,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_l_btc_swap_script_str(self.swapScript, serializer);
     sse_encode_String(self.invoice, serializer);
     sse_encode_u_64(self.outAmount, serializer);
+    sse_encode_opt_box_autoadd_u_64(self.expectedOnchainAmount, serializer);
     sse_encode_String(self.scriptAddress, serializer);
     sse_encode_String(self.blindingKey, serializer);
     sse_encode_String(self.electrumUrl, serializer);
