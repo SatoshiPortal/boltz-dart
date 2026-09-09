@@ -13,7 +13,7 @@ use boltz_client::{
     boltz::Cooperative,
     elements::{encode::Decodable, hashes::hex::DisplayHex, Transaction},
     network::{electrum::ElectrumLiquidClient, Chain as AllChains, LiquidClient},
-    swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScriptCommon},
+    swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScript},
     Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
 use serde_json::Value;
@@ -161,20 +161,15 @@ impl LbtcLnSwap {
     /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
     /// If this function is not called within ~1 hour, the swap will be closed via the script path.
     /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
+    /// Delegates to boltz-rust's validated flow, which verifies the server's
+    /// preimage against the invoice payment hash before partial-signing —
+    /// never sign a spend of the lockup without proof the invoice was paid.
     pub async fn coop_close_submarine(&self) -> Result<(), BoltzError> {
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let ckp: Keypair = self.keys.clone().try_into()?;
-        let claim_tx_response = boltz_client
-            .get_submarine_claim_tx_details(&self.id)
-            .await?;
-        let (partial_sig, pub_nonce) = swap_script.partial_sign(
-            &ckp,
-            &claim_tx_response.pub_nonce,
-            &claim_tx_response.transaction_hash,
-        )?;
-        boltz_client
-            .post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)
+        SwapScript::from_liquid(swap_script)
+            .submarine_cooperative_claim(&self.id, &ckp, &self.invoice, &boltz_client)
             .await?;
 
         Ok(())
