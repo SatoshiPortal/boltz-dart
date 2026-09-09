@@ -362,8 +362,7 @@ dependencies = [
 [[package]]
 name = "boltz-client"
 version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "889efede8a28a19c3f6088ab5406bf1b8379a21a3470f24a5cef4cc6c7122346"
+source = "git+https://github.com/SatoshiPortal/boltz-rust?rev=623d93b3c2ead4f287fc7d39e58b7a40770465da#623d93b3c2ead4f287fc7d39e58b7a40770465da"
 dependencies = [
  "async-trait",
  "bip39",
