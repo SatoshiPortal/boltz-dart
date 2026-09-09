@@ -12,7 +12,7 @@ doctest = false
 crate-type = ["lib", "staticlib", "cdylib"]
 
 [dependencies]
-boltz-client = { version = "0.4.1", features = ["lnurl", "electrum"] }
+boltz-client = { git = "https://github.com/SatoshiPortal/boltz-rust", rev = "7542d2eeaf8c8198b448e6cd70a1f1f09471ef11", features = ["lnurl", "electrum"] }
 # Pin the rustls crypto provider to ring and install it explicitly before any
 # electrum TLS connection. Both ring + aws-lc-rs can be linked transitively
 # (notably in the bull_sdk aggregate), which makes rustls 0.23 abort when it

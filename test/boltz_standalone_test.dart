@@ -69,7 +69,7 @@ void main() {
     print('LBTC chain limits: minimal=${chain_fees.lbtcToBtcLimits.minimal}, '
         'maximal=${chain_fees.lbtcToBtcLimits.maximal}, '
         'maximalZeroConf=${chain_fees.lbtcToBtcLimits.maximalZeroConf}');
-  });
+  }, skip: 'live network: hits api.boltz.exchange');
 
   test('DECODE EXPIRED BOLT11', () async {
     final decoded = await DecodedInvoice.fromString(s: expiredBolt11Invoice);
