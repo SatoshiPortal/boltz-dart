@@ -1,6 +1,7 @@
 use crate::util::{
     ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
 };
+use std::str::FromStr;
 
 use super::{
     error::BoltzError,
@@ -30,6 +31,8 @@ pub struct LbtcLnSwap {
     pub swap_script: LBtcSwapScriptStr,
     pub invoice: String,
     pub out_amount: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expected_onchain_amount: Option<u64>,
     pub script_address: String,
     pub blinding_key: String,
     pub electrum_url: String,
@@ -69,6 +72,43 @@ impl LbtcLnSwap {
         boltz_url: String,
         referral_id: Option<String>,
     ) -> LbtcLnSwap {
+        Self::new_with_expected_onchain_amount(
+            id,
+            kind,
+            network,
+            keys,
+            key_index,
+            preimage,
+            swap_script,
+            invoice,
+            out_amount,
+            out_address,
+            blinding_key,
+            electrum_url,
+            boltz_url,
+            referral_id,
+            None,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn new_with_expected_onchain_amount(
+        id: String,
+        kind: SwapType,
+        network: Chain,
+        keys: KeyPair,
+        key_index: u64,
+        preimage: PreImage,
+        swap_script: LBtcSwapScriptStr,
+        invoice: String,
+        out_amount: u64,
+        out_address: String,
+        blinding_key: String,
+        electrum_url: String,
+        boltz_url: String,
+        referral_id: Option<String>,
+        expected_onchain_amount: Option<u64>,
+    ) -> LbtcLnSwap {
         LbtcLnSwap {
             id,
             kind,
@@ -84,6 +124,7 @@ impl LbtcLnSwap {
                 Err(_) => force_https(&boltz_url),
             },
             out_amount,
+            expected_onchain_amount,
             blinding_key,
             script_address: out_address,
             referral_id: Some(referral_id.unwrap_or_default()),
@@ -141,7 +182,7 @@ impl LbtcLnSwap {
             }
         };
         let script_address = swap_script.to_address(liquid_chain)?.to_string();
-        Ok(LbtcLnSwap::new(
+        Ok(LbtcLnSwap::new_with_expected_onchain_amount(
             response.id,
             swap_type,
             network,
@@ -156,6 +197,7 @@ impl LbtcLnSwap {
             strip_protocol_prefix(&electrum_url),
             boltz_url.clone(),
             referral_id,
+            None,
         ))
     }
     /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
@@ -181,8 +223,17 @@ impl LbtcLnSwap {
         let response = boltz_client
             .get_submarine_claim_tx_details(&self.id)
             .await?;
-        let preimage = response.preimage.clone();
-        Ok(preimage)
+        let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
+        let preimage = Preimage::from_str(&response.preimage)?;
+        if preimage.sha256.to_string() != self.preimage.sha256
+            || preimage.hash160 != swap_script.hashlock
+        {
+            return Err(BoltzError::new(
+                "Protocol".to_string(),
+                "Completed submarine preimage mismatch".to_string(),
+            ));
+        }
+        Ok(response.preimage)
     }
 
     /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.
@@ -262,7 +313,7 @@ impl LbtcLnSwap {
         response.validate(&preimage_boltz, &claim_public_key, network.into())?;
         let swap_script = LBtcSwapScript::reverse_from_swap_resp(&response, claim_public_key)?;
         let script_address = swap_script.to_address(liquid_chain)?.to_string();
-        Ok(LbtcLnSwap::new(
+        Ok(LbtcLnSwap::new_with_expected_onchain_amount(
             response.id,
             swap_type,
             network,
@@ -277,6 +328,7 @@ impl LbtcLnSwap {
             strip_protocol_prefix(&electrum_url),
             boltz_url.clone(),
             referral_id,
+            (response.onchain_amount > 0).then_some(response.onchain_amount),
         ))
     }
     /// Used to claim a reverse swap.
@@ -324,6 +376,9 @@ impl LbtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
+        if let Some(expected_amount) = self.expected_onchain_amount {
+            tx.validate_lockup_amount(liquid_chain, expected_amount)?;
+        }
         let ckp: Keypair = self.keys.clone().try_into()?;
         let preimage: Preimage = self.preimage.clone().try_into()?;
         let signed = match tx
@@ -605,5 +660,16 @@ mod tests {
         let json_str: &str = r#"{"id":"U36attpPqMUo","kind":"Submarine","network":"Liquid","keys":{"secret_key":"5207026dc10ed9e698a210fa33eda0593cc33e02ef9179627c87717b11db70ed","public_key":"037f4e416e89dbe06dbdd73e9e7046f38c5ed807e5dc6d6659fa97bc42bca0d542"},"key_index":12,"preimage":{"value":"","sha256":"b2e3a7b04d8da12d66d7675e8b49cd9eb0aacb678906ae6041c841afdad18afa","hash160":"afb3f5c2b0a81fa6b5fddaa59f860aee631673f9"},"swap_script":{"swap_type":"Submarine","funding_addrs":"lq1pqv6t4czgftrm2tf8u5z977ysdxjucpepfjhfkj0gr74cex03fn6umma9lf64zdk6vv2jnznjztq68uf48wv3fmuheee665j3a3t5f0d75mfvuuypmtjy","hashlock":"afb3f5c2b0a81fa6b5fddaa59f860aee631673f9","receiver_pubkey":"02b4a11c513f485248cd0f631c582a17cc368b971d6fffa697702b8142a5b7975b","locktime":3343910,"sender_pubkey":"037f4e416e89dbe06dbdd73e9e7046f38c5ed807e5dc6d6659fa97bc42bca0d542","blinding_key":"091ed0fb1420d4e92535b3e627fae4ed14ce164ccab0efe17a5938a816dcb58c","side":null},"invoice":"lnbc10u1pnle5gcpp5kt360vzd3ksj6ekhva0gkjwdn6c24jm83yr2uczpepq6lkk33taqhp5pk24lyjep93uz92uxpc7c3d8s58q5g0xr66fpja5xg7zrq47sf2qcqzzsxqyz5vqsp5wc4yxlh83cnm0zc4w64lren8hmn59jq7jmc9m2m6wcsveumpxvvq9qxpqysgqw58qkad47xdmnca3c4elk9eex9smhk36x768u7zrld5kmwzmaf29ad45503fhkdacc8dnnf00ph6qzwuprwsf7uud83safs5adux8scpv9kkjf","out_amount":1020,"script_address":"lq1pqv6t4czgftrm2tf8u5z977ysdxjucpepfjhfkj0gr74cex03fn6umma9lf64zdk6vv2jnznjztq68uf48wv3fmuheee665j3a3t5f0d75mfvuuypmtjy","blinding_key":"091ed0fb1420d4e92535b3e627fae4ed14ce164ccab0efe17a5938a816dcb58c","electrum_url":"les.bullbitcoin.com:995","boltz_url":"https://api.boltz.exchange/v2","referral_id":""}"#;
         let swap = LbtcLnSwap::from_json(json_str).unwrap();
         assert_eq!(swap.id, "U36attpPqMUo");
+        assert_eq!(swap.expected_onchain_amount, None);
+
+        let mut swap_with_amount = swap;
+        swap_with_amount.expected_onchain_amount = Some(1_000);
+        let serialized = swap_with_amount.to_json().unwrap();
+        assert_eq!(
+            LbtcLnSwap::from_json(&serialized)
+                .unwrap()
+                .expected_onchain_amount,
+            Some(1_000)
+        );
     }
 }

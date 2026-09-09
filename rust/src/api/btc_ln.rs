@@ -8,6 +8,7 @@ use crate::util::{
     ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
 };
 use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
+use std::str::FromStr;
 
 use boltz_client::{
     bitcoin::{
@@ -36,6 +37,8 @@ pub struct BtcLnSwap {
     pub script_address: String,
     // pub out_address: Option<String>,
     pub out_amount: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expected_onchain_amount: Option<u64>,
     pub electrum_url: String,
     pub boltz_url: String,
     pub referral_id: Option<String>,
@@ -71,6 +74,41 @@ impl BtcLnSwap {
         boltz_url: String,
         referral_id: Option<String>,
     ) -> BtcLnSwap {
+        Self::new_with_expected_onchain_amount(
+            id,
+            kind,
+            network,
+            keys,
+            key_index,
+            preimage,
+            swap_script,
+            invoice,
+            script_address,
+            out_amount,
+            electrum_url,
+            boltz_url,
+            referral_id,
+            None,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn new_with_expected_onchain_amount(
+        id: String,
+        kind: SwapType,
+        network: Chain,
+        keys: KeyPair,
+        key_index: u64,
+        preimage: PreImage,
+        swap_script: BtcSwapScriptStr,
+        invoice: String,
+        script_address: String,
+        out_amount: u64,
+        electrum_url: String,
+        boltz_url: String,
+        referral_id: Option<String>,
+        expected_onchain_amount: Option<u64>,
+    ) -> BtcLnSwap {
         BtcLnSwap {
             id,
             kind,
@@ -87,6 +125,7 @@ impl BtcLnSwap {
             },
             script_address,
             out_amount,
+            expected_onchain_amount,
             referral_id: Some(referral_id.unwrap_or_default()),
         }
     }
@@ -146,7 +185,7 @@ impl BtcLnSwap {
 
         let script_address = swap_script.to_address(bitcoin_chain.into())?.to_string();
 
-        Ok(BtcLnSwap::new(
+        Ok(BtcLnSwap::new_with_expected_onchain_amount(
             create_swap_response.id,
             swap_type,
             network,
@@ -160,6 +199,7 @@ impl BtcLnSwap {
             strip_protocol_prefix(&electrum_url),
             boltz_url.clone(),
             referral_id,
+            None,
         ))
     }
     /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
@@ -183,8 +223,17 @@ impl BtcLnSwap {
         let response = boltz_client
             .get_submarine_claim_tx_details(&self.id)
             .await?;
-        let preimage = response.preimage.clone();
-        Ok(preimage)
+        let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
+        let preimage = Preimage::from_str(&response.preimage)?;
+        if preimage.sha256.to_string() != self.preimage.sha256
+            || preimage.hash160 != swap_script.hashlock
+        {
+            return Err(BoltzError::new(
+                "Protocol".to_string(),
+                "Completed submarine preimage mismatch".to_string(),
+            ));
+        }
+        Ok(response.preimage)
     }
     /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
     /// Note: The swap_master_key should be a SwapMasterKey for the swap network.
@@ -261,7 +310,7 @@ impl BtcLnSwap {
         let swap_script =
             BtcSwapScript::reverse_from_swap_resp(&create_swap_response, claim_public_key)?;
         let script_address = swap_script.to_address(bitcoin_chain)?.to_string();
-        Ok(BtcLnSwap::new(
+        Ok(BtcLnSwap::new_with_expected_onchain_amount(
             create_swap_response.id,
             swap_type,
             network.into(),
@@ -275,6 +324,8 @@ impl BtcLnSwap {
             strip_protocol_prefix(&electrum_url),
             boltz_url.clone(),
             referral_id,
+            (create_swap_response.onchain_amount > 0)
+                .then_some(create_swap_response.onchain_amount),
         ))
     }
     /// Used to claim a reverse swap.
@@ -332,6 +383,9 @@ impl BtcLnSwap {
                 Ok(result) => result,
                 Err(e) => return Err(e.into()),
             };
+            if let Some(expected_amount) = self.expected_onchain_amount {
+                tx.validate_lockup_amount(expected_amount)?;
+            }
             let ckp: Keypair = self.keys.clone().try_into()?;
             let preimage: Preimage = self.preimage.clone().try_into()?;
             let signed: Transaction = match tx
