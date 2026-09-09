@@ -1,4 +1,4 @@
-use crate::util::ensure_http_prefix;
+use crate::util::ensure_boltz_url;
 
 use super::{
     btc_ln::BtcLnSwap,
@@ -162,7 +162,12 @@ async fn restore_swaps(
     swap_master_key: SwapMasterKey,
     boltz_url: String,
 ) -> Result<Vec<SwapRestoreResponse>, BoltzError> {
-    let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+    let boltz_url = ensure_boltz_url(
+        &boltz_url,
+        swap_master_key.network != super::types::Network::Mainnet,
+    )
+    .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+    let boltz_client = BoltzApiClientV2::new(boltz_url, None);
     let xpub = swap_master_key.xpub.clone();
     // xpub is the swap-account key (m/44/0/0/0); tell boltz to derive
     // `xpub/{index}` directly ("m") instead of re-applying its default path.
@@ -197,7 +202,12 @@ pub async fn restore_swap_summaries(
     swap_master_key: SwapMasterKey,
     boltz_url: String,
 ) -> Result<Vec<RestoredSwapSummary>, BoltzError> {
-    let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+    let boltz_url = ensure_boltz_url(
+        &boltz_url,
+        swap_master_key.network != super::types::Network::Mainnet,
+    )
+    .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+    let boltz_client = BoltzApiClientV2::new(boltz_url, None);
     let xpub = swap_master_key.xpub.clone();
     let responses = boltz_client
         .post_swap_restore(&xpub, Some("m".to_string()), Some(100))
@@ -252,7 +262,12 @@ pub async fn restore_swap_index(
     swap_master_key: SwapMasterKey,
     boltz_url: String,
 ) -> Result<i64, BoltzError> {
-    let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+    let boltz_url = ensure_boltz_url(
+        &boltz_url,
+        swap_master_key.network != super::types::Network::Mainnet,
+    )
+    .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+    let boltz_client = BoltzApiClientV2::new(boltz_url, None);
     let xpub = swap_master_key.xpub.clone();
     let resp = boltz_client
         .post_swap_restore_index(&xpub, Some("m".to_string()), Some(100))
@@ -905,7 +920,7 @@ mod tests {
             xpub: "xpub6DQWTtSNDmzVCRhKRcmbBgXGww9PSKfTdUYFiFcASoszRkM8Z8PQ1e7MVYN7zukkhFknC96KYGkTrfSERdojG6coHdGEMoc1g44DGTbCt4D".to_string(),
             mnemonic: "item bar canyon diary fantasy coffee unit program badge drum tent empower".to_string(),
             fingerprint: "d2e2529e".to_string(),
-            network: super::super::types::Network::Mainnet,
+            network: super::super::types::Network::Testnet,
         }
     }
 

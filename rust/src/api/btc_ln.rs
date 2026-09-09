@@ -4,7 +4,9 @@ use super::{
     secrets::{KeyPair, SwapMasterKey},
     types::{BtcSwapScriptStr, Chain, ElectrumSettings, PreImage, SwapType},
 };
-use crate::util::{ensure_http_prefix, get_electrum_configs, strip_protocol_prefix};
+use crate::util::{
+    ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
+};
 use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
 use std::str::FromStr;
 
@@ -15,7 +17,7 @@ use boltz_client::{
     },
     boltz::Cooperative,
     network::{electrum::ElectrumBitcoinClient, BitcoinClient, Chain as AllChains},
-    swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScriptCommon},
+    swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScript},
     BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
 };
 use serde::{Deserialize, Serialize};
@@ -117,7 +119,10 @@ impl BtcLnSwap {
             swap_script,
             invoice,
             electrum_url: strip_protocol_prefix(&electrum_url),
-            boltz_url: ensure_http_prefix(&boltz_url),
+            boltz_url: match ensure_boltz_url(&boltz_url, network.is_testnet()) {
+                Ok(url) => url,
+                Err(_) => force_https(&boltz_url),
+            },
             script_address,
             out_amount,
             expected_onchain_amount,
@@ -145,7 +150,9 @@ impl BtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+            .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
             from: "BTC".to_string(),
             to: "BTC".to_string(),
@@ -190,7 +197,7 @@ impl BtcLnSwap {
             script_address,
             create_swap_response.expected_amount,
             strip_protocol_prefix(&electrum_url),
-            ensure_http_prefix(&boltz_url),
+            boltz_url.clone(),
             referral_id,
             None,
         ))
@@ -198,35 +205,15 @@ impl BtcLnSwap {
     /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
     /// If this function is not called within ~1 hour, the swap will be closed via the script path.
     /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
+    /// Delegates to boltz-rust's validated flow, which verifies the server's
+    /// preimage against the invoice payment hash before partial-signing —
+    /// never sign a spend of the lockup without proof the invoice was paid.
     pub async fn coop_close_submarine(&self) -> Result<(), BoltzError> {
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let ckp: Keypair = self.keys.clone().try_into()?;
-        let claim_tx_response = boltz_client
-            .get_submarine_claim_tx_details(&self.id)
-            .await?;
-        if claim_tx_response.public_key != swap_script.receiver_pubkey {
-            return Err(BoltzError::new(
-                "Protocol".to_string(),
-                "Cooperative counterparty public key mismatch".to_string(),
-            ));
-        }
-        let returned_preimage = Preimage::from_str(&claim_tx_response.preimage)?;
-        if returned_preimage.sha256.to_string() != self.preimage.sha256
-            || returned_preimage.hash160 != swap_script.hashlock
-        {
-            return Err(BoltzError::new(
-                "Protocol".to_string(),
-                "Cooperative claim preimage mismatch".to_string(),
-            ));
-        }
-        let (partial_sig, pub_nonce) = swap_script.partial_sign(
-            &ckp,
-            &claim_tx_response.pub_nonce,
-            &claim_tx_response.transaction_hash,
-        )?;
-        boltz_client
-            .post_submarine_claim_tx_details(&self.id, pub_nonce, partial_sig)
+        SwapScript::from_bitcoin(swap_script)
+            .submarine_cooperative_claim(&self.id, &ckp, &self.invoice, &boltz_client)
             .await?;
         Ok(())
     }
@@ -272,7 +259,9 @@ impl BtcLnSwap {
             compressed: true,
             inner: claim_kps.public_key(),
         };
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+            .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -333,7 +322,7 @@ impl BtcLnSwap {
             script_address,
             out_amount,
             strip_protocol_prefix(&electrum_url),
-            ensure_http_prefix(&boltz_url),
+            boltz_url.clone(),
             referral_id,
             (create_swap_response.onchain_amount > 0)
                 .then_some(create_swap_response.onchain_amount),
