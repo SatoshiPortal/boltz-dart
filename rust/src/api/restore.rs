@@ -830,7 +830,7 @@ mod tests {
             xpub: "xpub6DQWTtSNDmzVCRhKRcmbBgXGww9PSKfTdUYFiFcASoszRkM8Z8PQ1e7MVYN7zukkhFknC96KYGkTrfSERdojG6coHdGEMoc1g44DGTbCt4D".to_string(),
             mnemonic: "item bar canyon diary fantasy coffee unit program badge drum tent empower".to_string(),
             fingerprint: "d2e2529e".to_string(),
-            network: super::super::types::Network::Mainnet,
+            network: super::super::types::Network::Testnet,
         }
     }
 
