@@ -4,7 +4,9 @@ use super::{
     secrets::{KeyPair, SwapMasterKey},
     types::{BtcSwapScriptStr, Chain, ElectrumSettings, PreImage, SwapType},
 };
-use crate::util::{ensure_http_prefix, get_electrum_configs, strip_protocol_prefix};
+use crate::util::{
+    ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
+};
 use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
 
 use boltz_client::{
@@ -79,7 +81,10 @@ impl BtcLnSwap {
             swap_script,
             invoice,
             electrum_url: strip_protocol_prefix(&electrum_url),
-            boltz_url: ensure_http_prefix(&boltz_url),
+            boltz_url: match ensure_boltz_url(&boltz_url, network.is_testnet()) {
+                Ok(url) => url,
+                Err(_) => force_https(&boltz_url),
+            },
             script_address,
             out_amount,
             referral_id: Some(referral_id.unwrap_or_default()),
@@ -106,7 +111,9 @@ impl BtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+            .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
             from: "BTC".to_string(),
             to: "BTC".to_string(),
@@ -151,7 +158,7 @@ impl BtcLnSwap {
             script_address,
             create_swap_response.expected_amount,
             strip_protocol_prefix(&electrum_url),
-            ensure_http_prefix(&boltz_url),
+            boltz_url.clone(),
             referral_id,
         ))
     }
@@ -203,7 +210,9 @@ impl BtcLnSwap {
             compressed: true,
             inner: claim_kps.public_key(),
         };
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+            .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -264,7 +273,7 @@ impl BtcLnSwap {
             script_address,
             out_amount,
             strip_protocol_prefix(&electrum_url),
-            ensure_http_prefix(&boltz_url),
+            boltz_url.clone(),
             referral_id,
         ))
     }

@@ -94,6 +94,12 @@ pub enum Chain {
     LiquidTestnet,
 }
 
+impl Chain {
+    pub fn is_testnet(&self) -> bool {
+        matches!(self, Chain::BitcoinTestnet | Chain::LiquidTestnet)
+    }
+}
+
 impl Into<AllChains> for Chain {
     fn into(self) -> AllChains {
         match self {

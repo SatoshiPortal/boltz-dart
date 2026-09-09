@@ -1,4 +1,6 @@
-use crate::util::{ensure_http_prefix, get_electrum_configs, strip_protocol_prefix};
+use crate::util::{
+    ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
+};
 
 use super::{
     error::BoltzError,
@@ -98,7 +100,10 @@ impl ChainSwap {
             lbtc_script_str,
             btc_electrum_url: strip_protocol_prefix(&btc_electrum_url),
             lbtc_electrum_url: strip_protocol_prefix(&lbtc_electrum_url),
-            boltz_url: ensure_http_prefix(&boltz_url.clone()),
+            boltz_url: match ensure_boltz_url(&boltz_url, is_testnet) {
+                Ok(url) => url,
+                Err(_) => force_https(&boltz_url),
+            },
             script_address,
             out_amount,
             referral_id: Some(referral_id.unwrap_or_default()),
@@ -172,7 +177,9 @@ impl ChainSwap {
             inner: claim_kps.public_key(),
         };
         let preimage: Preimage = Preimage::from_swap_key(&claim_kps);
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&boltz_url), None);
+        let boltz_url = ensure_boltz_url(&boltz_url, is_testnet)
+            .map_err(|e| BoltzError::new("Network".to_string(), e))?;
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         match direction {
             ChainSwapDirection::BtcToLbtc => {
                 let create_swap_req = boltz_client::swaps::boltz::CreateChainRequest {
@@ -231,7 +238,7 @@ impl ChainSwap {
                     create_chain_response.lockup_details.amount as u64,
                     strip_protocol_prefix(&btc_electrum_url),
                     strip_protocol_prefix(&lbtc_electrum_url),
-                    ensure_http_prefix(&boltz_url),
+                    boltz_url.clone(),
                     referral_id,
                     claim_script.blinding_key.display_secret().to_string(),
                 ))
@@ -294,7 +301,7 @@ impl ChainSwap {
                     create_chain_response.lockup_details.amount as u64,
                     strip_protocol_prefix(&btc_electrum_url),
                     strip_protocol_prefix(&lbtc_electrum_url),
-                    ensure_http_prefix(&boltz_url),
+                    boltz_url.clone(),
                     referral_id,
                     lockup_script.blinding_key.display_secret().to_string(),
                 ))
