@@ -12,7 +12,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `claim_details_to_chain_swap_details`, `collect_restored`, `empty_preimage`, `infer_chain_swap_direction`, `infer_network`, `invoice_amount_sats`, `ln_restore_details`, `refund_details_to_chain_swap_details`, `restore_swaps`, `restore_to_btc_ln_swap`, `restore_to_chain_swap`, `restore_to_lbtc_ln_swap`, `submarine_preimage_and_amount`, `swap_restore_type_to_swap_type`, `verified_reverse_preimage`
+// These functions are ignored because they are not marked as `pub`: `claim_details_to_chain_swap_details`, `collect_restored`, `empty_preimage`, `infer_chain_swap_direction`, `infer_network`, `invoice_amount_sats`, `ln_restore_details`, `refund_details_to_chain_swap_details`, `restore_swaps`, `restore_to_btc_ln_swap`, `restore_to_chain_swap`, `restore_to_lbtc_ln_swap`, `submarine_preimage_and_amount`, `swap_restore_type_to_swap_type`, `validate_restored_hashlock`, `verified_reverse_preimage`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `LnRestoreDetails`
 
 /// One restore POST returning a summary per swap (id, kind, status, amount).

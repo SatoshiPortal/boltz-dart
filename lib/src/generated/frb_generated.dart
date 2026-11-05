@@ -80,7 +80,7 @@ class BoltzCore
   String get codegenVersion => '2.12.0';
 
   @override
-  int get rustContentHash => -1513481167;
+  int get rustContentHash => 1445641144;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -184,6 +184,8 @@ abstract class BoltzCoreApi extends BaseApi {
       required int locktime,
       required String senderPubkey,
       Side? side});
+
+  Future<bool> crateApiTypesChainIsTestnet({required Chain that});
 
   Future<String> crateApiChainSwapChainSwapBroadcastBoltz(
       {required ChainSwap that,
@@ -431,6 +433,9 @@ abstract class BoltzCoreApi extends BaseApi {
       {required String walletMnemonic,
       String? walletPassphrase,
       required Network network});
+
+  Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreateFromSeed(
+      {required List<int> walletSeed, required Network network});
 
   String crateApiSwapStatusSwapStatusAsString({required SwapStatus that});
 
@@ -1087,6 +1092,29 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "senderPubkey",
           "side"
         ],
+      );
+
+  @override
+  Future<bool> crateApiTypesChainIsTestnet({required Chain that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_chain(that);
+        return wire.wire__crate__api__types__chain_is_testnet(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_bool,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiTypesChainIsTestnetConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiTypesChainIsTestnetConstMeta =>
+      const TaskConstMeta(
+        debugName: "chain_is_testnet",
+        argNames: ["that"],
       );
 
   @override
@@ -2768,6 +2796,32 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       );
 
   @override
+  Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreateFromSeed(
+      {required List<int> walletSeed, required Network network}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 = cst_encode_list_prim_u_8_loose(walletSeed);
+        var arg1 = cst_encode_network(network);
+        return wire.wire__crate__api__secrets__swap_master_key_create_from_seed(
+            port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_swap_master_key,
+        decodeErrorData: dco_decode_boltz_error,
+      ),
+      constMeta: kCrateApiSecretsSwapMasterKeyCreateFromSeedConstMeta,
+      argValues: [walletSeed, network],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSecretsSwapMasterKeyCreateFromSeedConstMeta =>
+      const TaskConstMeta(
+        debugName: "swap_master_key_create_from_seed",
+        argNames: ["walletSeed", "network"],
+      );
+
+  @override
   String crateApiSwapStatusSwapStatusAsString({required SwapStatus that}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -3397,6 +3451,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   List<LbtcLnSwap> dco_decode_list_lbtc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_lbtc_ln_swap).toList();
+  }
+
+  @protected
+  List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as List<int>;
   }
 
   @protected
@@ -4256,6 +4316,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       ans_.add(sse_decode_lbtc_ln_swap(deserializer));
     }
     return ans_;
+  }
+
+  @protected
+  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var len_ = sse_decode_i_32(deserializer);
+    return deserializer.buffer.getUint8List(len_);
   }
 
   @protected
@@ -5123,6 +5190,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     for (final item in self) {
       sse_encode_lbtc_ln_swap(item, serializer);
     }
+  }
+
+  @protected
+  void sse_encode_list_prim_u_8_loose(
+      List<int> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    serializer.buffer
+        .putUint8List(self is Uint8List ? self : Uint8List.fromList(self));
   }
 
   @protected

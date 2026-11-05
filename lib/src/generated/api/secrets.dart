@@ -8,6 +8,7 @@ import 'error.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'types.dart';
 
+// These functions are ignored because they are not marked as `pub`: `from_boltz`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `from`, `from`, `try_into`, `try_into`, `try_into`
 
 class KeyPair {
@@ -90,6 +91,15 @@ class SwapMasterKey {
           walletMnemonic: walletMnemonic,
           walletPassphrase: walletPassphrase,
           network: network);
+
+  /// Same swap master key as `create`, from the wallet's BIP39 seed
+  /// (`mnemonic.to_seed(passphrase)`) instead of its words, so mnemonics in
+  /// any BIP39 language work. The passphrase is already part of the seed.
+  /// The seed is zeroized once used; the returned swap mnemonic stays English.
+  static Future<SwapMasterKey> createFromSeed(
+          {required List<int> walletSeed, required Network network}) =>
+      BoltzCore.instance.api.crateApiSecretsSwapMasterKeyCreateFromSeed(
+          walletSeed: walletSeed, network: network);
 
   @override
   int get hashCode =>

@@ -153,6 +153,11 @@ typedef struct wire_cst_lnurl {
   struct wire_cst_list_prim_u_8_strict *value;
 } wire_cst_lnurl;
 
+typedef struct wire_cst_list_prim_u_8_loose {
+  uint8_t *ptr;
+  int32_t len;
+} wire_cst_list_prim_u_8_loose;
+
 typedef struct wire_cst_transaction {
   struct wire_cst_list_prim_u_8_strict *id;
   struct wire_cst_list_prim_u_8_strict *hex;
@@ -408,6 +413,8 @@ void frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new(int64_t port_
                                                                    uint32_t locktime,
                                                                    struct wire_cst_list_prim_u_8_strict *sender_pubkey,
                                                                    int32_t *side);
+
+void frbgen_boltz_wire__crate__api__types__chain_is_testnet(int64_t port_, int32_t that);
 
 void frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_boltz(int64_t port_,
                                                                            struct wire_cst_chain_swap *that,
@@ -669,6 +676,10 @@ void frbgen_boltz_wire__crate__api__secrets__swap_master_key_create(int64_t port
                                                                     struct wire_cst_list_prim_u_8_strict *wallet_passphrase,
                                                                     int32_t network);
 
+void frbgen_boltz_wire__crate__api__secrets__swap_master_key_create_from_seed(int64_t port_,
+                                                                              struct wire_cst_list_prim_u_8_loose *wallet_seed,
+                                                                              int32_t network);
+
 WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_as_string(int32_t that);
 
 WireSyncRust2DartDco frbgen_boltz_wire__crate__api__swap_status__swap_status_from_json_string(struct wire_cst_list_prim_u_8_strict *status);
@@ -735,6 +746,8 @@ struct wire_cst_list_chain_swap *frbgen_boltz_cst_new_list_chain_swap(int32_t le
 
 struct wire_cst_list_lbtc_ln_swap *frbgen_boltz_cst_new_list_lbtc_ln_swap(int32_t len);
 
+struct wire_cst_list_prim_u_8_loose *frbgen_boltz_cst_new_list_prim_u_8_loose(int32_t len);
+
 struct wire_cst_list_prim_u_8_strict *frbgen_boltz_cst_new_list_prim_u_8_strict(int32_t len);
 
 struct wire_cst_list_restored_swap_summary *frbgen_boltz_cst_new_list_restored_swap_summary(int32_t len);
@@ -767,6 +780,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_btc_ln_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_chain_swap);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_lbtc_ln_swap);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_prim_u_8_loose);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_prim_u_8_strict);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_restored_swap_summary);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_cst_new_list_skipped_restore_swap);
@@ -831,6 +845,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_from_invoice_str);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__pre_image_new);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_create);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__secrets__swap_master_key_create_from_seed);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_as_string);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_from_json_string);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__swap_status__swap_status_is_resolved);
@@ -844,6 +859,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__transactions__check_lockup_outspends);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__transactions__check_vout_0_outspend);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__btc_swap_script_str_new);
+    dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__chain_is_testnet);
     dummy_var ^= ((int64_t) (void*) frbgen_boltz_wire__crate__api__types__l_btc_swap_script_str_new);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);
     return dummy_var;
