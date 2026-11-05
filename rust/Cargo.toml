@@ -25,6 +25,10 @@ serde_json = "1.0.0"
 openssl = { version = "0.10.64", features = ["vendored"] }
 hex = "0.4"
 reqwest = { version = "0.12", features = ["json"] }
+# Same BIP85 implementation boltz-client uses for `SwapMasterKey::new`, so the
+# seed entry point derives the identical swap mnemonic.
+bip85_extended = "1.1.0"
+zeroize = "1.8"
 
 [features]
 bull_sdk = []
@@ -33,6 +37,7 @@ bull_sdk = []
 flutter_rust_bridge_codegen = "=2.12.0"
 
 [dev-dependencies]
+bip39 = "2.2"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [build]

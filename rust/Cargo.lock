@@ -347,6 +347,8 @@ name = "boltz"
 version = "0.5.2"
 dependencies = [
  "anyhow",
+ "bip39",
+ "bip85_extended",
  "boltz-client",
  "flutter_rust_bridge",
  "flutter_rust_bridge_codegen",
@@ -357,6 +359,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "zeroize",
 ]
 
 [[package]]
