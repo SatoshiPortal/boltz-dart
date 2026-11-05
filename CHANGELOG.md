@@ -76,3 +76,7 @@
 - fix(outspend): `check_lockup_outspends` reports a not-yet-indexed lockup tx as an empty (nothing-spent) report instead of erroring, and amount lookups error on failure so `value_sat = None` strictly means a confidential output
 - chore: deprecate `check_vout_0_outspend`
 - ci/test: unit-test dylib loads straight from cargo's target dir — `flutter test` wipes anything staged into `build/unit_test_assets` (#58)
+
+# Unreleased
+- feat: `SwapMasterKey.create_from_seed` — create the swap master key from the wallet's BIP39 seed (`mnemonic.to_seed(passphrase)`, 16 to 64 bytes, zeroized after use) instead of English words, so wallets with a mnemonic in any BIP39 language can derive their swap keys; same BIP85 derivation and output as `create`
+- chore: regenerate bindings, exposing `Chain.is_testnet`
