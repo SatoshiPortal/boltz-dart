@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:boltz/boltz.dart';
 import 'package:test/test.dart';
 
@@ -99,6 +101,45 @@ void main() {
     });
   });
 
+  group('SwapMasterKey.createFromSeed', () {
+    // BIP39 seed of the bacon mnemonic with an empty passphrase.
+    final baconSeed = Uint8List.fromList(hex(
+      '241e86356db60a686bb8c30b1054eac70701493b6702ed5f4a0e54cd3d13f0cc'
+      'fd6d8b37506dc5c65af5575e720196d6d81aca24f0f083a5c65597541ada0e32',
+    ));
+
+    test('matches create for the same wallet', () async {
+      final fromWords = await SwapMasterKey.create(
+        walletMnemonic: walletMnemonic,
+        walletPassphrase: null,
+        network: Network.mainnet,
+      );
+      final fromSeed = await SwapMasterKey.createFromSeed(
+        walletSeed: baconSeed,
+        network: Network.mainnet,
+      );
+      expect(fromSeed, fromWords);
+      expect(fromSeed.mnemonic, expectedSwapMnemonic);
+    });
+
+    test('rejects a seed outside 16..64 bytes', () async {
+      await expectLater(
+        SwapMasterKey.createFromSeed(
+          walletSeed: Uint8List(15),
+          network: Network.mainnet,
+        ),
+        throwsA(anything),
+      );
+      await expectLater(
+        SwapMasterKey.createFromSeed(
+          walletSeed: Uint8List(65),
+          network: Network.mainnet,
+        ),
+        throwsA(anything),
+      );
+    });
+  });
+
   group('PreImage.fromInvoiceStr', () {
     test('extracts a hash-only preimage (no secret bytes)', () async {
       final preimage = await PreImage.fromInvoiceStr(invoice: invoice123);
@@ -124,3 +165,8 @@ void main() {
     });
   });
 }
+
+List<int> hex(String value) => [
+      for (var i = 0; i < value.length; i += 2)
+        int.parse(value.substring(i, i + 2), radix: 16),
+    ];
