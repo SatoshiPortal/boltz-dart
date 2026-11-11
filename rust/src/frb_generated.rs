@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.12.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1513481167;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1445641144;
 
 // Section: executor
 
@@ -612,6 +612,28 @@ fn wire__crate__api__types__btc_swap_script_str_new_impl(
                         api_sender_pubkey,
                         api_side,
                     ))?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__types__chain_is_testnet_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::types::Chain>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "chain_is_testnet",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::types::Chain::is_testnet(&api_that))?;
                     Ok(output_ok)
                 })())
             }
@@ -2163,6 +2185,32 @@ fn wire__crate__api__secrets__swap_master_key_create_impl(
                     let output_ok = crate::api::secrets::SwapMasterKey::create(
                         api_wallet_mnemonic,
                         api_wallet_passphrase,
+                        api_network,
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__secrets__swap_master_key_create_from_seed_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    seed: impl CstDecode<Vec<u8>>,
+    network: impl CstDecode<crate::api::types::Network>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "swap_master_key_create_from_seed",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_seed = seed.cst_decode();
+            let api_network = network.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
+                    let output_ok = crate::api::secrets::SwapMasterKey::create_from_seed(
+                        api_seed,
                         api_network,
                     )?;
                     Ok(output_ok)
@@ -5388,6 +5436,15 @@ mod io {
             vec.into_iter().map(CstDecode::cst_decode).collect()
         }
     }
+    impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_loose {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<u8> {
+            unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            }
+        }
+    }
     impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_strict {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> Vec<u8> {
@@ -6404,6 +6461,14 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__types__chain_is_testnet(
+        port_: i64,
+        that: i32,
+    ) {
+        wire__crate__api__types__chain_is_testnet_impl(port_, that)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_broadcast_boltz(
         port_: i64,
         that: *mut wire_cst_chain_swap,
@@ -7080,6 +7145,15 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__secrets__swap_master_key_create_from_seed(
+        port_: i64,
+        seed: *mut wire_cst_list_prim_u_8_loose,
+        network: i32,
+    ) {
+        wire__crate__api__secrets__swap_master_key_create_from_seed_impl(port_, seed, network)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__swap_status__swap_status_as_string(
         that: i32,
     ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
@@ -7323,6 +7397,17 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_list_prim_u_8_loose(
+        len: i32,
+    ) -> *mut wire_cst_list_prim_u_8_loose {
+        let ans = wire_cst_list_prim_u_8_loose {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(Default::default(), len),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(ans)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_list_prim_u_8_strict(
         len: i32,
     ) -> *mut wire_cst_list_prim_u_8_strict {
@@ -7528,6 +7613,12 @@ mod io {
     #[derive(Clone, Copy)]
     pub struct wire_cst_list_lbtc_ln_swap {
         ptr: *mut wire_cst_lbtc_ln_swap,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_list_prim_u_8_loose {
+        ptr: *mut u8,
         len: i32,
     }
     #[repr(C)]
