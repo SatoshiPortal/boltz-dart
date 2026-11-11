@@ -24,6 +24,9 @@ serde = { version = "1.0.0", features = ["derive"] }
 serde_json = "1.0.0"
 openssl = { version = "0.10.64", features = ["vendored"] }
 hex = "0.4"
+# BIP85 swap-mnemonic derivation from a seed (`SwapMasterKey::create_from_seed`); same version boltz-client uses.
+bip85_extended = "1.1.0"
+zeroize = "1"
 reqwest = { version = "0.12", features = ["json"] }
 
 [features]

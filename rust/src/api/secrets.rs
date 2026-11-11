@@ -1,13 +1,18 @@
 use boltz_client::{
+    bitcoin::{bip32::Xpriv, Network as BitcoinNetwork},
     network::Network as BoltzNetwork,
     util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey},
     Keypair, Secp256k1, ToHex,
 };
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
+use zeroize::Zeroizing;
 
 use super::error::BoltzError;
 use super::types::Network;
+
+/// boltz-client's `MNEMONIC_BIP85_INDEX`, private there: the BIP85 index of the swap mnemonic derived from a wallet root. Pinned by `seed_and_english_mnemonic_give_the_same_swap_key`.
+const SWAP_MNEMONIC_BIP85_INDEX: u32 = 26589;
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct KeyPair {
@@ -56,6 +61,40 @@ impl SwapMasterKey {
             boltz_network,
         )
         .map_err(|e| BoltzError::new("SwapMasterKey".to_string(), e.to_string()))?;
+        Ok(SwapMasterKey {
+            xprv: boltz_swap_master_key.xprv.to_string(),
+            xpub: boltz_swap_master_key.get_master_xpub().to_string(),
+            network,
+            mnemonic: boltz_swap_master_key.mnemonic.to_string(),
+            fingerprint: boltz_swap_master_key.fingerprint.to_string(),
+        })
+    }
+}
+
+impl SwapMasterKey {
+    /// Creates the swap master key from a 64-byte BIP39 seed instead of English mnemonic words.
+    ///
+    /// The seed already encodes the wallet mnemonic's language and passphrase, which [SwapMasterKey::create] cannot express: it parses English words only. The derivation is the one `create` performs after its PBKDF2: BIP32 root from the seed, then the BIP85 12-word swap mnemonic at index 26589, so an English mnemonic gives the same key through either constructor.
+    pub fn create_from_seed(seed: Vec<u8>, network: Network) -> Result<SwapMasterKey, BoltzError> {
+        let seed = Zeroizing::new(seed);
+        if seed.len() != 64 {
+            return Err(BoltzError::new(
+                "SwapMasterKey".to_string(),
+                format!("seed is {} bytes, a BIP39 seed is 64 bytes", seed.len()),
+            ));
+        }
+        let boltz_network: BoltzNetwork = network.into();
+        let secp = Secp256k1::new();
+        let root = Xpriv::new_master(BitcoinNetwork::from(boltz_network), seed.as_slice())
+            .map_err(|e| BoltzError::new("SwapMasterKey".to_string(), e.to_string()))?;
+        let swap_mnemonic = Zeroizing::new(
+            bip85_extended::mnemonic::to_mnemonic(&secp, &root, 12, SWAP_MNEMONIC_BIP85_INDEX)
+                .map_err(|e| BoltzError::new("SwapMasterKey".to_string(), e.to_string()))?
+                .to_string(),
+        );
+        let boltz_swap_master_key =
+            BoltzSwapMasterKey::from_mnemonic(&swap_mnemonic, None, boltz_network)
+                .map_err(|e| BoltzError::new("SwapMasterKey".to_string(), e.to_string()))?;
         Ok(SwapMasterKey {
             xprv: boltz_swap_master_key.xprv.to_string(),
             xpub: boltz_swap_master_key.get_master_xpub().to_string(),
