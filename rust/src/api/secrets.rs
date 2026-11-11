@@ -217,6 +217,57 @@ mod tests {
         }
     }
 
+    fn bip39_seed(mnemonic: &str, passphrase: &str) -> Vec<u8> {
+        bip39::Mnemonic::parse_normalized(mnemonic)
+            .expect("english mnemonic")
+            .to_seed_normalized(passphrase)
+            .to_vec()
+    }
+
+    #[test]
+    fn seed_and_english_mnemonic_give_the_same_swap_key() {
+        for (passphrase, network) in [
+            (None, Network::Mainnet),
+            (Some("TREZOR"), Network::Testnet),
+            (None, Network::Regtest),
+        ] {
+            let from_words = SwapMasterKey::create(
+                WALLET_MNEMONIC.to_string(),
+                passphrase.map(str::to_string),
+                network,
+            )
+            .expect("create from words");
+            let from_seed = SwapMasterKey::create_from_seed(
+                bip39_seed(WALLET_MNEMONIC, passphrase.unwrap_or("")),
+                network,
+            )
+            .expect("create from seed");
+            assert!(from_seed == from_words);
+        }
+    }
+
+    #[test]
+    fn seed_gives_the_pinned_swap_mnemonic() {
+        let smk =
+            SwapMasterKey::create_from_seed(bip39_seed(WALLET_MNEMONIC, ""), Network::Mainnet)
+                .expect("create from seed");
+        assert_eq!(
+            smk.mnemonic,
+            "velvet engage shaft effort clarify annual protect client only surround sock gain",
+        );
+    }
+
+    #[test]
+    fn rejects_a_seed_of_invalid_length() {
+        for len in [0, 16, 32, 63, 65] {
+            let err = match SwapMasterKey::create_from_seed(vec![0u8; len], Network::Mainnet) {
+                Err(e) => e,
+                Ok(_) => panic!("accepted a {len}-byte seed"),
+            };
+            assert!(err.message.contains("a BIP39 seed is 64 bytes"), "{}", err.message);
+        }
+    }
+
     #[test]
     fn distinct_indices_yield_distinct_keys_and_preimages() {
         let smk = SwapMasterKey::create(WALLET_MNEMONIC.to_string(), None, Network::Mainnet)

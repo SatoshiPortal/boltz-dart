@@ -347,6 +347,7 @@ name = "boltz"
 version = "0.5.2"
 dependencies = [
  "anyhow",
+ "bip39",
  "bip85_extended",
  "boltz-client",
  "flutter_rust_bridge",
