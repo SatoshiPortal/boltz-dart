@@ -156,6 +156,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
   List<LbtcLnSwap> dco_decode_list_lbtc_ln_swap(dynamic raw);
 
   @protected
+  List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
@@ -414,6 +417,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
 
   @protected
   List<LbtcLnSwap> sse_decode_list_lbtc_ln_swap(SseDeserializer deserializer);
+
+  @protected
+  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
@@ -760,6 +766,15 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
     for (var i = 0; i < raw.length; ++i) {
       cst_api_fill_to_wire_lbtc_ln_swap(raw[i], ans.ref.ptr[i]);
     }
+    return ans;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_list_prim_u_8_loose> cst_encode_list_prim_u_8_loose(
+      List<int> raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    final ans = wire.cst_new_list_prim_u_8_loose(raw.length);
+    ans.ref.ptr.asTypedList(raw.length).setAll(0, raw);
     return ans;
   }
 
@@ -1491,6 +1506,9 @@ abstract class BoltzCoreApiImplPlatform extends BaseApiImpl<BoltzCoreWire> {
       List<LbtcLnSwap> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer);
 
@@ -2217,6 +2235,18 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<ffi.Int32>,
           )>();
+
+  void wire__crate__api__types__chain_is_testnet(int port_, int that) {
+    return _wire__crate__api__types__chain_is_testnet(port_, that);
+  }
+
+  late final _wire__crate__api__types__chain_is_testnetPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64, ffi.Int32)>>(
+    'frbgen_boltz_wire__crate__api__types__chain_is_testnet',
+  );
+  late final _wire__crate__api__types__chain_is_testnet =
+      _wire__crate__api__types__chain_is_testnetPtr
+          .asFunction<void Function(int, int)>();
 
   void wire__crate__api__chain_swap__chain_swap_broadcast_boltz(
     int port_,
@@ -3706,6 +3736,34 @@ class BoltzCoreWire implements BaseWire {
             int,
           )>();
 
+  void wire__crate__api__secrets__swap_master_key_create_from_seed(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_loose> seed,
+    int network,
+  ) {
+    return _wire__crate__api__secrets__swap_master_key_create_from_seed(
+      port_,
+      seed,
+      network,
+    );
+  }
+
+  late final _wire__crate__api__secrets__swap_master_key_create_from_seedPtr =
+      _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                ffi.Int64,
+                ffi.Pointer<wire_cst_list_prim_u_8_loose>,
+                ffi.Int32,
+              )>>(
+    'frbgen_boltz_wire__crate__api__secrets__swap_master_key_create_from_seed',
+  );
+  late final _wire__crate__api__secrets__swap_master_key_create_from_seed =
+      _wire__crate__api__secrets__swap_master_key_create_from_seedPtr
+          .asFunction<
+              void Function(
+                  int, ffi.Pointer<wire_cst_list_prim_u_8_loose>, int)>();
+
   WireSyncRust2DartDco wire__crate__api__swap_status__swap_status_as_string(
     int that,
   ) {
@@ -4157,6 +4215,19 @@ class BoltzCoreWire implements BaseWire {
   late final _cst_new_list_lbtc_ln_swap = _cst_new_list_lbtc_ln_swapPtr
       .asFunction<ffi.Pointer<wire_cst_list_lbtc_ln_swap> Function(int)>();
 
+  ffi.Pointer<wire_cst_list_prim_u_8_loose> cst_new_list_prim_u_8_loose(
+    int len,
+  ) {
+    return _cst_new_list_prim_u_8_loose(len);
+  }
+
+  late final _cst_new_list_prim_u_8_loosePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<wire_cst_list_prim_u_8_loose> Function(
+              ffi.Int32)>>('frbgen_boltz_cst_new_list_prim_u_8_loose');
+  late final _cst_new_list_prim_u_8_loose = _cst_new_list_prim_u_8_loosePtr
+      .asFunction<ffi.Pointer<wire_cst_list_prim_u_8_loose> Function(int)>();
+
   ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_new_list_prim_u_8_strict(
     int len,
   ) {
@@ -4461,6 +4532,13 @@ final class wire_cst_lbtc_ln_swap extends ffi.Struct {
 
 final class wire_cst_lnurl extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> value;
+}
+
+final class wire_cst_list_prim_u_8_loose extends ffi.Struct {
+  external ffi.Pointer<ffi.Uint8> ptr;
+
+  @ffi.Int32()
+  external int len;
 }
 
 final class wire_cst_transaction extends ffi.Struct {

@@ -81,6 +81,9 @@ class BtcLnSwap {
   /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
   /// If this function is not called within ~1 hour, the swap will be closed via the script path.
   /// The benefit of a cooperative close is that the onchain footprint is smaller and makes the transaction look like a single sig tx, while the script path spend is clearly a swap tx.
+  /// Delegates to boltz-rust's validated flow, which verifies the server's
+  /// preimage against the invoice payment hash before partial-signing —
+  /// never sign a spend of the lockup without proof the invoice was paid.
   Future<void> coopCloseSubmarine() =>
       BoltzCore.instance.api.crateApiBtcLnBtcLnSwapCoopCloseSubmarine(
         that: this,
