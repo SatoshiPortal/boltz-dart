@@ -1,3 +1,4 @@
+import 'dart:ffi' as ffi;
 import 'dart:io';
 
 import 'package:archive/archive.dart';
@@ -110,14 +111,26 @@ class Dylib {
 }
 
 class LibBoltz {
-  static Future<void> init() async {
+  static Future<void> init({ExternalLibrary? externalLibrary}) async {
     try {
       if (!BoltzCore.instance.initialized) {
-        await BoltzCore.init(externalLibrary: Dylib.getDylib());
+        await BoltzCore.init(
+          externalLibrary: externalLibrary ?? _NativeAssetLibrary(),
+        );
       }
     } catch (e) {
       // print(e);
       throw Exception("Failed to initialize boltz-client: $e");
     }
   }
+}
+
+class _NativeAssetLibrary implements ExternalLibrary {
+  @override
+  final ffi.DynamicLibrary ffiDynamicLibrary = ffi.DynamicLibrary.codeAsset(
+    'package:boltz/src/generated/frb_generated.io.dart',
+  );
+
+  @override
+  final String debugInfo = 'Native Assets: boltz';
 }
