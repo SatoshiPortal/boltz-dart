@@ -887,6 +887,7 @@ fn restore_to_chain_swap(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use boltz_client::bitcoin::hex::DisplayHex;
 
     // Fully synthetic fixture: the repo's public test invoice and keys derived
     // from the test-suite master key. Mirrors the shape of a real restore
@@ -959,9 +960,13 @@ mod tests {
         .to_string();
         let reverse_preimage = BoltzPreimage::from_swap_key(&reverse_keys);
         Fixture {
-            our_xonly: our.x_only_public_key().0.serialize().to_hex(),
+            our_xonly: our.x_only_public_key().0.serialize().to_lower_hex_string(),
             server_pubkey: server.public_key().to_string(),
-            server_xonly: server.x_only_public_key().0.serialize().to_hex(),
+            server_xonly: server
+                .x_only_public_key()
+                .0
+                .serialize()
+                .to_lower_hex_string(),
             hash160: preimage.hash160.to_string(),
             lockup_address,
             reverse_preimage_hash: reverse_preimage.sha256.to_string(),
