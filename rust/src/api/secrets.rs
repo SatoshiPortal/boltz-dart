@@ -164,7 +164,7 @@ impl From<Preimage> for PreImage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use boltz_client::ToHex;
+    use boltz_client::bitcoin::hex::DisplayHex;
 
     const WALLET_MNEMONIC: &str = "bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon";
 
@@ -183,7 +183,7 @@ mod tests {
         let preimage = Preimage::from_swap_key(&keypair);
 
         assert_eq!(
-            preimage.bytes.unwrap().to_hex(),
+            preimage.bytes.unwrap().to_lower_hex_string(),
             "f19d42c70bf00267b6c5dcfe6e1094386f8c72389f1ced91e0132d1502bbd244",
         );
 
