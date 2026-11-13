@@ -34,13 +34,13 @@ Future main({bool fromTest = false}) async {
 
 ## Dependencies
 
-Currently we do not use precompiled binaries with cargokit. So as the end user, you will require cargo and platform specific toolchains to compile the binaries locally.
+The Flutter build hook compiles the pinned Rust crate as a Native Asset. Consumers need the matching Rust toolchain and platform targets installed.
 
 ```bash
 # install rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # install tools
-cargo install flutter_rust_bridge_codegen --version 2.9.0
+cargo install flutter_rust_bridge_codegen --version 2.13.0
 cargo install cargo-ndk
 cargo install cargo-lipo
 ```
