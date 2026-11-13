@@ -18,7 +18,7 @@ use boltz_client::{
     boltz::Cooperative,
     network::{electrum::ElectrumBitcoinClient, BitcoinClient, Chain as AllChains},
     swaps::{boltz::BoltzApiClientV2, magic_routing, SwapScript},
-    BtcSwapScript, BtcSwapTx, Keypair, PublicKey, ToHex,
+    BtcSwapScript, BtcSwapTx, DisplayHex, Keypair, PublicKey,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -409,7 +409,7 @@ impl BtcLnSwap {
                 Err(e) => return Err(e.into()),
             };
             let serialized_tx: Vec<u8> = serialize(&signed);
-            Ok(serialized_tx.to_hex())
+            Ok(serialized_tx.to_lower_hex_string())
         } else {
             return Err(BoltzError {
                 kind: "Script".to_string(),
@@ -493,7 +493,7 @@ impl BtcLnSwap {
                 Err(e) => return Err(e.into()),
             };
             let serialized_tx: Vec<u8> = serialize(&signed);
-            Ok(serialized_tx.to_hex())
+            Ok(serialized_tx.to_lower_hex_string())
         } else {
             return Err(BoltzError {
                 kind: "Script".to_string(),

@@ -2,7 +2,7 @@ use boltz_client::{
     bitcoin::{bip32::Xpriv, Network as BitcoinNetwork},
     network::Network as BoltzNetwork,
     util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey},
-    Keypair, Secp256k1, ToHex,
+    DisplayHex, Keypair, Secp256k1,
 };
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
@@ -135,7 +135,10 @@ impl PreImage {
         let boltz_preimage = Preimage::from_invoice_str(invoice)
             .map_err(|e| BoltzError::new("Preimage".to_string(), e.to_string()))?;
         Ok(PreImage {
-            value: boltz_preimage.bytes.map(|b| b.to_hex()).unwrap_or_default(),
+            value: boltz_preimage
+                .bytes
+                .map(|b| b.to_lower_hex_string())
+                .unwrap_or_default(),
             sha256: boltz_preimage.sha256.to_string(),
             hash160: boltz_preimage.hash160.to_string(),
         })
@@ -154,7 +157,10 @@ impl TryInto<Preimage> for PreImage {
 impl From<Preimage> for PreImage {
     fn from(boltz_preimage: Preimage) -> Self {
         PreImage {
-            value: boltz_preimage.bytes.map(|b| b.to_hex()).unwrap_or_default(),
+            value: boltz_preimage
+                .bytes
+                .map(|b| b.to_lower_hex_string())
+                .unwrap_or_default(),
             sha256: boltz_preimage.sha256.to_string(),
             hash160: boltz_preimage.hash160.to_string(),
         }
@@ -164,7 +170,7 @@ impl From<Preimage> for PreImage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use boltz_client::ToHex;
+    use boltz_client::bitcoin::hex::DisplayHex;
 
     const WALLET_MNEMONIC: &str = "bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon bacon";
 
@@ -183,7 +189,7 @@ mod tests {
         let preimage = Preimage::from_swap_key(&keypair);
 
         assert_eq!(
-            preimage.bytes.unwrap().to_hex(),
+            preimage.bytes.unwrap().to_lower_hex_string(),
             "f19d42c70bf00267b6c5dcfe6e1094386f8c72389f1ced91e0132d1502bbd244",
         );
 

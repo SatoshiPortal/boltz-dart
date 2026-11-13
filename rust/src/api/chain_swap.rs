@@ -27,7 +27,7 @@ use boltz_client::{
         BitcoinChain, BitcoinClient, Chain as AllChains, LiquidChain, LiquidClient,
     },
     swaps::{boltz::BoltzApiClientV2, SwapScriptCommon},
-    BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize, ToHex,
+    BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
 use serde_json::Value;
 
@@ -561,7 +561,7 @@ impl ChainSwap {
                         Err(e) => return Err(e.into()),
                     };
                     let serialized_tx: Vec<u8> = serialize(&signed);
-                    Ok(serialized_tx.to_hex())
+                    Ok(serialized_tx.to_lower_hex_string())
                 } else {
                     let signed = match claim_tx
                         .sign_claim(&ckp, &preimage, miner_fee.into(), None)
@@ -571,7 +571,7 @@ impl ChainSwap {
                         Err(e) => return Err(e.into()),
                     };
                     let serialized_tx: Vec<u8> = serialize(&signed);
-                    Ok(serialized_tx.to_hex())
+                    Ok(serialized_tx.to_lower_hex_string())
                 }
             }
         }
@@ -736,7 +736,7 @@ impl ChainSwap {
                     Err(e) => return Err(e.into()),
                 };
                 let serialized_tx: Vec<u8> = serialize(&signed);
-                Ok(serialized_tx.to_hex())
+                Ok(serialized_tx.to_lower_hex_string())
             }
             ChainSwapDirection::LbtcToBtc => {
                 let lbtc_lockup_script: LBtcSwapScript = self.lbtc_script_str.clone().try_into()?;

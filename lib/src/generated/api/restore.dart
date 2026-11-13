@@ -8,7 +8,9 @@ import 'btc_ln.dart';
 import 'chain_swap.dart';
 import 'error.dart';
 import 'lbtc_ln.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+
 import 'secrets.dart';
 import 'types.dart';
 
@@ -16,56 +18,62 @@ import 'types.dart';
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `LnRestoreDetails`
 
 /// One restore POST returning a summary per swap (id, kind, status, amount).
-Future<List<RestoredSwapSummary>> restoreSwapSummaries(
-        {required SwapMasterKey swapMasterKey, required String boltzUrl}) =>
-    BoltzCore.instance.api.crateApiRestoreRestoreSwapSummaries(
-        swapMasterKey: swapMasterKey, boltzUrl: boltzUrl);
+Future<List<RestoredSwapSummary>> restoreSwapSummaries({
+  required SwapMasterKey swapMasterKey,
+  required String boltzUrl,
+}) => BoltzCore.instance.api.crateApiRestoreRestoreSwapSummaries(
+  swapMasterKey: swapMasterKey,
+  boltzUrl: boltzUrl,
+);
 
 /// Highest swap-key derivation index boltz has on record for this wallet's
 /// swap xpub. Returns -1 when boltz knows of no swaps. Use it on seed recovery
 /// to continue the swap index after the last one already used.
-Future<PlatformInt64> restoreSwapIndex(
-        {required SwapMasterKey swapMasterKey, required String boltzUrl}) =>
-    BoltzCore.instance.api.crateApiRestoreRestoreSwapIndex(
-        swapMasterKey: swapMasterKey, boltzUrl: boltzUrl);
+Future<PlatformInt64> restoreSwapIndex({
+  required SwapMasterKey swapMasterKey,
+  required String boltzUrl,
+}) => BoltzCore.instance.api.crateApiRestoreRestoreSwapIndex(
+  swapMasterKey: swapMasterKey,
+  boltzUrl: boltzUrl,
+);
 
-Future<RestoredBtcLnSwaps> restoreLnBtcSwaps(
-        {required SwapMasterKey swapMasterKey,
-        required String electrumUrl,
-        required String boltzUrl}) =>
-    BoltzCore.instance.api.crateApiRestoreRestoreLnBtcSwaps(
-        swapMasterKey: swapMasterKey,
-        electrumUrl: electrumUrl,
-        boltzUrl: boltzUrl);
+Future<RestoredBtcLnSwaps> restoreLnBtcSwaps({
+  required SwapMasterKey swapMasterKey,
+  required String electrumUrl,
+  required String boltzUrl,
+}) => BoltzCore.instance.api.crateApiRestoreRestoreLnBtcSwaps(
+  swapMasterKey: swapMasterKey,
+  electrumUrl: electrumUrl,
+  boltzUrl: boltzUrl,
+);
 
-Future<RestoredLbtcLnSwaps> restoreLnLbtcSwaps(
-        {required SwapMasterKey swapMasterKey,
-        required String electrumUrl,
-        required String boltzUrl}) =>
-    BoltzCore.instance.api.crateApiRestoreRestoreLnLbtcSwaps(
-        swapMasterKey: swapMasterKey,
-        electrumUrl: electrumUrl,
-        boltzUrl: boltzUrl);
+Future<RestoredLbtcLnSwaps> restoreLnLbtcSwaps({
+  required SwapMasterKey swapMasterKey,
+  required String electrumUrl,
+  required String boltzUrl,
+}) => BoltzCore.instance.api.crateApiRestoreRestoreLnLbtcSwaps(
+  swapMasterKey: swapMasterKey,
+  electrumUrl: electrumUrl,
+  boltzUrl: boltzUrl,
+);
 
-Future<RestoredChainSwaps> restoreChainSwaps(
-        {required SwapMasterKey swapMasterKey,
-        required String btcElectrumUrl,
-        required String lbtcElectrumUrl,
-        required String boltzUrl}) =>
-    BoltzCore.instance.api.crateApiRestoreRestoreChainSwaps(
-        swapMasterKey: swapMasterKey,
-        btcElectrumUrl: btcElectrumUrl,
-        lbtcElectrumUrl: lbtcElectrumUrl,
-        boltzUrl: boltzUrl);
+Future<RestoredChainSwaps> restoreChainSwaps({
+  required SwapMasterKey swapMasterKey,
+  required String btcElectrumUrl,
+  required String lbtcElectrumUrl,
+  required String boltzUrl,
+}) => BoltzCore.instance.api.crateApiRestoreRestoreChainSwaps(
+  swapMasterKey: swapMasterKey,
+  btcElectrumUrl: btcElectrumUrl,
+  lbtcElectrumUrl: lbtcElectrumUrl,
+  boltzUrl: boltzUrl,
+);
 
 class RestoredBtcLnSwaps {
   final List<BtcLnSwap> swaps;
   final List<SkippedRestoreSwap> skipped;
 
-  const RestoredBtcLnSwaps({
-    required this.swaps,
-    required this.skipped,
-  });
+  const RestoredBtcLnSwaps({required this.swaps, required this.skipped});
 
   @override
   int get hashCode => swaps.hashCode ^ skipped.hashCode;
@@ -83,10 +91,7 @@ class RestoredChainSwaps {
   final List<ChainSwap> swaps;
   final List<SkippedRestoreSwap> skipped;
 
-  const RestoredChainSwaps({
-    required this.swaps,
-    required this.skipped,
-  });
+  const RestoredChainSwaps({required this.swaps, required this.skipped});
 
   @override
   int get hashCode => swaps.hashCode ^ skipped.hashCode;
@@ -104,10 +109,7 @@ class RestoredLbtcLnSwaps {
   final List<LbtcLnSwap> swaps;
   final List<SkippedRestoreSwap> skipped;
 
-  const RestoredLbtcLnSwaps({
-    required this.swaps,
-    required this.skipped,
-  });
+  const RestoredLbtcLnSwaps({required this.swaps, required this.skipped});
 
   @override
   int get hashCode => swaps.hashCode ^ skipped.hashCode;
@@ -186,10 +188,7 @@ class SkippedRestoreSwap {
   final String id;
   final String error;
 
-  const SkippedRestoreSwap({
-    required this.id,
-    required this.error,
-  });
+  const SkippedRestoreSwap({required this.id, required this.error});
 
   @override
   int get hashCode => id.hashCode ^ error.hashCode;
