@@ -264,7 +264,11 @@ mod tests {
                 Err(e) => e,
                 Ok(_) => panic!("accepted a {len}-byte seed"),
             };
-            assert!(err.message.contains("a BIP39 seed is 64 bytes"), "{}", err.message);
+            assert!(
+                err.message.contains("a BIP39 seed is 64 bytes"),
+                "{}",
+                err.message
+            );
         }
     }
 
