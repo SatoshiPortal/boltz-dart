@@ -5,7 +5,9 @@
 
 import '../frb_generated.dart';
 import 'error.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+
 import 'types.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `from`, `from`, `try_into`, `try_into`, `try_into`
@@ -14,10 +16,7 @@ class KeyPair {
   final String secretKey;
   final String publicKey;
 
-  const KeyPair({
-    required this.secretKey,
-    required this.publicKey,
-  });
+  const KeyPair({required this.secretKey, required this.publicKey});
 
   @override
   int get hashCode => secretKey.hashCode ^ publicKey.hashCode;
@@ -42,17 +41,21 @@ class PreImage {
     required this.hash160,
   });
 
-  static Future<PreImage> fromInvoiceStr({required String invoice}) =>
-      BoltzCore.instance.api
-          .crateApiSecretsPreImageFromInvoiceStr(invoice: invoice);
+  static Future<PreImage> fromInvoiceStr({required String invoice}) => BoltzCore
+      .instance
+      .api
+      .crateApiSecretsPreImageFromInvoiceStr(invoice: invoice);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
-  static Future<PreImage> newInstance(
-          {required String value,
-          required String sha256,
-          required String hash160}) =>
-      BoltzCore.instance.api.crateApiSecretsPreImageNew(
-          value: value, sha256: sha256, hash160: hash160);
+  static Future<PreImage> newInstance({
+    required String value,
+    required String sha256,
+    required String hash160,
+  }) => BoltzCore.instance.api.crateApiSecretsPreImageNew(
+    value: value,
+    sha256: sha256,
+    hash160: hash160,
+  );
 
   @override
   int get hashCode => value.hashCode ^ sha256.hashCode ^ hash160.hashCode;
@@ -82,22 +85,26 @@ class SwapMasterKey {
     required this.fingerprint,
   });
 
-  static Future<SwapMasterKey> create(
-          {required String walletMnemonic,
-          String? walletPassphrase,
-          required Network network}) =>
-      BoltzCore.instance.api.crateApiSecretsSwapMasterKeyCreate(
-          walletMnemonic: walletMnemonic,
-          walletPassphrase: walletPassphrase,
-          network: network);
+  static Future<SwapMasterKey> create({
+    required String walletMnemonic,
+    String? walletPassphrase,
+    required Network network,
+  }) => BoltzCore.instance.api.crateApiSecretsSwapMasterKeyCreate(
+    walletMnemonic: walletMnemonic,
+    walletPassphrase: walletPassphrase,
+    network: network,
+  );
 
   /// Creates the swap master key from a 64-byte BIP39 seed instead of English mnemonic words.
   ///
   /// The seed already encodes the wallet mnemonic's language and passphrase, which [SwapMasterKey::create] cannot express: it parses English words only. The derivation is the one `create` performs after its PBKDF2: BIP32 root from the seed, then the BIP85 12-word swap mnemonic at index 26589, so an English mnemonic gives the same key through either constructor.
-  static Future<SwapMasterKey> createFromSeed(
-          {required List<int> seed, required Network network}) =>
-      BoltzCore.instance.api.crateApiSecretsSwapMasterKeyCreateFromSeed(
-          seed: seed, network: network);
+  static Future<SwapMasterKey> createFromSeed({
+    required List<int> seed,
+    required Network network,
+  }) => BoltzCore.instance.api.crateApiSecretsSwapMasterKeyCreateFromSeed(
+    seed: seed,
+    network: network,
+  );
 
   @override
   int get hashCode =>

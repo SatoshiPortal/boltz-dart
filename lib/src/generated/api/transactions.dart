@@ -5,27 +5,30 @@
 
 import '../frb_generated.dart';
 import 'error.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+
 import 'types.dart';
 
 // These functions are ignored because they are not marked as `pub`: `check_outspend`, `fetch_outspends`, `resolve_lockup_tx`
 
 /// This function queries the Boltz API to get the swap transaction ID, then checks
 /// the mempool API to see if the transaction's first output has been spent.
-Future<OutspendStatus> checkVout0Outspend(
-        {required String swapId,
-        required SwapType swapType,
-        required SwapTxKind txKind,
-        required Chain network,
-        required String boltzUrl,
-        ChainSwapDirection? chainSwapDirection}) =>
-    BoltzCore.instance.api.crateApiTransactionsCheckVout0Outspend(
-        swapId: swapId,
-        swapType: swapType,
-        txKind: txKind,
-        network: network,
-        boltzUrl: boltzUrl,
-        chainSwapDirection: chainSwapDirection);
+Future<OutspendStatus> checkVout0Outspend({
+  required String swapId,
+  required SwapType swapType,
+  required SwapTxKind txKind,
+  required Chain network,
+  required String boltzUrl,
+  ChainSwapDirection? chainSwapDirection,
+}) => BoltzCore.instance.api.crateApiTransactionsCheckVout0Outspend(
+  swapId: swapId,
+  swapType: swapType,
+  txKind: txKind,
+  network: network,
+  boltzUrl: boltzUrl,
+  chainSwapDirection: chainSwapDirection,
+);
 
 /// Reports the outspend status of EVERY output of the swap's lockup
 /// transaction (server lockup for claims, user lockup for refunds), with
@@ -37,17 +40,18 @@ Future<OutspendStatus> checkVout0Outspend(
 ///
 /// An empty report means the explorer has not indexed the lockup tx yet
 /// (e.g. polled right after broadcast): nothing is spent, retry later.
-Future<List<VoutOutspend>> checkLockupOutspends(
-        {required String swapId,
-        required SwapType swapType,
-        required SwapTxKind txKind,
-        required Chain network,
-        required String boltzUrl,
-        ChainSwapDirection? chainSwapDirection}) =>
-    BoltzCore.instance.api.crateApiTransactionsCheckLockupOutspends(
-        swapId: swapId,
-        swapType: swapType,
-        txKind: txKind,
-        network: network,
-        boltzUrl: boltzUrl,
-        chainSwapDirection: chainSwapDirection);
+Future<List<VoutOutspend>> checkLockupOutspends({
+  required String swapId,
+  required SwapType swapType,
+  required SwapTxKind txKind,
+  required Chain network,
+  required String boltzUrl,
+  ChainSwapDirection? chainSwapDirection,
+}) => BoltzCore.instance.api.crateApiTransactionsCheckLockupOutspends(
+  swapId: swapId,
+  swapType: swapType,
+  txKind: txKind,
+  network: network,
+  boltzUrl: boltzUrl,
+  chainSwapDirection: chainSwapDirection,
+);
