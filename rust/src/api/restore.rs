@@ -15,7 +15,7 @@ use boltz_client::{
         BoltzApiClientV2, ChainSwapDetails, ClaimDetails, CreateReverseResponse,
         CreateSubmarineResponse, RefundDetails, SwapRestoreResponse, SwapRestoreType, SwapTree,
     },
-    Bolt11Invoice, PublicKey, ToHex,
+    Bolt11Invoice, DisplayHex, PublicKey,
 };
 use std::str::FromStr;
 
@@ -786,7 +786,10 @@ fn restore_to_chain_swap(
         ));
     }
     let preimage = PreImage {
-        value: boltz_preimage.bytes.map(|b| b.to_hex()).unwrap_or_default(),
+        value: boltz_preimage
+            .bytes
+            .map(|b| b.to_lower_hex_string())
+            .unwrap_or_default(),
         sha256: boltz_preimage.sha256.to_string(),
         hash160: boltz_preimage.hash160.to_string(),
     };
