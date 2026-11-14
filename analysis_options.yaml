@@ -15,6 +15,5 @@ linter:
 
 analyzer:
   exclude:
-    - cargokit/
     - lib/src/generated/
     - README.md
