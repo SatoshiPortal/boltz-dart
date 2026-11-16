@@ -74,6 +74,41 @@ void main() {
     },
   );
 
+  test(
+    'explicit explorer crosses FFI before an invalid operation is rejected',
+    () async {
+      Future<List<VoutOutspend>> check(String? explorerUrl) =>
+          checkLockupOutspends(
+            swapId: 'synthetic',
+            swapType: SwapType.submarine,
+            txKind: SwapTxKind.claim,
+            network: Chain.bitcoinRegtest,
+            boltzUrl: 'http://127.0.0.1:1',
+            explorerUrl: explorerUrl,
+          );
+      await expectLater(
+        check(null),
+        throwsA(
+          isA<BoltzError>().having(
+            (error) => error.message,
+            'message',
+            'Regtest requires an explicit explorer URL',
+          ),
+        ),
+      );
+      await expectLater(
+        check('http://explorer.example:18205/custom'),
+        throwsA(
+          isA<BoltzError>().having(
+            (error) => error.message,
+            'message',
+            'Submarine swaps cannot be checked for claim',
+          ),
+        ),
+      );
+    },
+  );
+
   test('native rejects a mismatched key before parsing or IO', () async {
     final key = SwapMasterKey(
       xprv: '',
