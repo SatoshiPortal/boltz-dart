@@ -121,3 +121,5 @@ Use `Chain.bitcoinRegtest` or `Chain.liquidRegtest` with caller-supplied Boltz a
 `ChainSwap` takes `Network` instead of `isTestnet`. Mainnet/testnet JSON retains the legacy `is_testnet` format; regtest JSON uses an explicit discriminator that older readers reject. Swap creation rejects a master key whose network does not match the requested chain, on every network.
 
 `checkLockupOutspends` requires an explicit `explorerUrl` on regtest, with no public-explorer fallback. Select the explorer for the actual lockup chain (the server's chain for a claim, the user's chain for a refund). Existing mainnet/testnet explorer defaults remain available.
+
+Native ABI change: rebuild the native library and regenerate consumers together. The FRB dispatch-name content hash can remain unchanged when parameter types change; do not combine these bindings with an older native binary.
