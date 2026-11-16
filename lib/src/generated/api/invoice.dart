@@ -8,6 +8,8 @@ import 'error.dart';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
+import 'types.dart';
+
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
 
 class DecodedInvoice {
@@ -38,9 +40,11 @@ class DecodedInvoice {
   static Future<DecodedInvoice> fromString({
     required String s,
     String? boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiInvoiceDecodedInvoiceFromString(
     s: s,
     boltzUrl: boltzUrl,
+    regtestProfile: regtestProfile,
   );
 
   @override

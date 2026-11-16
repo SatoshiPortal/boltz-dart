@@ -12,7 +12,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `extract_id`, `new_with_expected_onchain_amount`
+// These functions are ignored because they are not marked as `pub`: `extract_id`, `new_with_expected_onchain_amount`, `validate_context`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `clone`, `eq`
 
 /// Liquid-Lightning Swap Class
@@ -20,6 +20,7 @@ class LbtcLnSwap {
   final String id;
   final SwapType kind;
   final Chain network;
+  final RegtestNetworkProfile? regtestProfile;
   final KeyPair keys;
   final BigInt keyIndex;
   final PreImage preimage;
@@ -37,6 +38,7 @@ class LbtcLnSwap {
     required this.id,
     required this.kind,
     required this.network,
+    this.regtestProfile,
     required this.keys,
     required this.keyIndex,
     required this.preimage,
@@ -129,6 +131,7 @@ class LbtcLnSwap {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNew(
     id: id,
     kind: kind,
@@ -144,6 +147,7 @@ class LbtcLnSwap {
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
     referralId: referralId,
+    regtestProfile: regtestProfile,
   );
 
   /// Used to create the class when starting a reverse swap to receive Liquid via Lightning.
@@ -159,6 +163,7 @@ class LbtcLnSwap {
     required String boltzUrl,
     String? description,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewReverse(
     swapMasterKey: swapMasterKey,
     index: index,
@@ -169,6 +174,7 @@ class LbtcLnSwap {
     boltzUrl: boltzUrl,
     description: description,
     referralId: referralId,
+    regtestProfile: regtestProfile,
   );
 
   /// Used to create the class when starting a submarine swap to pay a lightning invoice with Liquid.
@@ -182,6 +188,7 @@ class LbtcLnSwap {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewSubmarine(
     swapMasterKey: swapMasterKey,
     index: index,
@@ -190,6 +197,7 @@ class LbtcLnSwap {
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
     referralId: referralId,
+    regtestProfile: regtestProfile,
   );
 
   /// Used to refund a failed submarine swap.
@@ -225,6 +233,7 @@ class LbtcLnSwap {
       id.hashCode ^
       kind.hashCode ^
       network.hashCode ^
+      regtestProfile.hashCode ^
       keys.hashCode ^
       keyIndex.hashCode ^
       preimage.hashCode ^
@@ -246,6 +255,7 @@ class LbtcLnSwap {
           id == other.id &&
           kind == other.kind &&
           network == other.network &&
+          regtestProfile == other.regtestProfile &&
           keys == other.keys &&
           keyIndex == other.keyIndex &&
           preimage == other.preimage &&

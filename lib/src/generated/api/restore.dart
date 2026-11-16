@@ -21,9 +21,11 @@ import 'types.dart';
 Future<List<RestoredSwapSummary>> restoreSwapSummaries({
   required SwapMasterKey swapMasterKey,
   required String boltzUrl,
+  RegtestNetworkProfile? regtestProfile,
 }) => BoltzCore.instance.api.crateApiRestoreRestoreSwapSummaries(
   swapMasterKey: swapMasterKey,
   boltzUrl: boltzUrl,
+  regtestProfile: regtestProfile,
 );
 
 /// Highest swap-key derivation index boltz has on record for this wallet's
@@ -32,29 +34,35 @@ Future<List<RestoredSwapSummary>> restoreSwapSummaries({
 Future<PlatformInt64> restoreSwapIndex({
   required SwapMasterKey swapMasterKey,
   required String boltzUrl,
+  RegtestNetworkProfile? regtestProfile,
 }) => BoltzCore.instance.api.crateApiRestoreRestoreSwapIndex(
   swapMasterKey: swapMasterKey,
   boltzUrl: boltzUrl,
+  regtestProfile: regtestProfile,
 );
 
 Future<RestoredBtcLnSwaps> restoreLnBtcSwaps({
   required SwapMasterKey swapMasterKey,
   required String electrumUrl,
   required String boltzUrl,
+  RegtestNetworkProfile? regtestProfile,
 }) => BoltzCore.instance.api.crateApiRestoreRestoreLnBtcSwaps(
   swapMasterKey: swapMasterKey,
   electrumUrl: electrumUrl,
   boltzUrl: boltzUrl,
+  regtestProfile: regtestProfile,
 );
 
 Future<RestoredLbtcLnSwaps> restoreLnLbtcSwaps({
   required SwapMasterKey swapMasterKey,
   required String electrumUrl,
   required String boltzUrl,
+  RegtestNetworkProfile? regtestProfile,
 }) => BoltzCore.instance.api.crateApiRestoreRestoreLnLbtcSwaps(
   swapMasterKey: swapMasterKey,
   electrumUrl: electrumUrl,
   boltzUrl: boltzUrl,
+  regtestProfile: regtestProfile,
 );
 
 Future<RestoredChainSwaps> restoreChainSwaps({
@@ -62,11 +70,13 @@ Future<RestoredChainSwaps> restoreChainSwaps({
   required String btcElectrumUrl,
   required String lbtcElectrumUrl,
   required String boltzUrl,
+  RegtestNetworkProfile? regtestProfile,
 }) => BoltzCore.instance.api.crateApiRestoreRestoreChainSwaps(
   swapMasterKey: swapMasterKey,
   btcElectrumUrl: btcElectrumUrl,
   lbtcElectrumUrl: lbtcElectrumUrl,
   boltzUrl: boltzUrl,
+  regtestProfile: regtestProfile,
 );
 
 class RestoredBtcLnSwaps {

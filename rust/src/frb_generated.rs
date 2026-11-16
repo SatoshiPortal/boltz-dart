@@ -39,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.13.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1445641144;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 615615094;
 
 // Section: executor
 
@@ -343,6 +343,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -364,6 +365,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Ok::<_, ()>(crate::api::btc_ln::BtcLnSwap::new(
@@ -380,6 +382,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_impl(
                         api_electrum_url,
                         api_boltz_url,
                         api_referral_id,
+                        api_regtest_profile,
                     ))?;
                     std::result::Result::Ok(output_ok)
                 })())
@@ -398,6 +401,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
     boltz_url: impl CstDecode<String>,
     description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -415,6 +419,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             let api_boltz_url = boltz_url.cst_decode();
             let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -428,6 +433,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
                             api_boltz_url,
                             api_description,
                             api_referral_id,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -447,6 +453,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -462,6 +469,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -473,6 +481,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
                             api_electrum_url,
                             api_boltz_url,
                             api_referral_id,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -866,7 +875,7 @@ fn wire__crate__api__chain_swap__chain_swap_get_user_lockup_impl(
 fn wire__crate__api__chain_swap__chain_swap_new_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     id: impl CstDecode<String>,
-    is_testnet: impl CstDecode<bool>,
+    network: impl CstDecode<crate::api::types::Network>,
     direction: impl CstDecode<crate::api::types::ChainSwapDirection>,
     refund_keys: impl CstDecode<crate::api::secrets::KeyPair>,
     refund_index: impl CstDecode<u64>,
@@ -882,6 +891,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_impl(
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
     blinding_key: impl CstDecode<String>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -891,7 +901,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_impl(
         },
         move || {
             let api_id = id.cst_decode();
-            let api_is_testnet = is_testnet.cst_decode();
+            let api_network = network.cst_decode();
             let api_direction = direction.cst_decode();
             let api_refund_keys = refund_keys.cst_decode();
             let api_refund_index = refund_index.cst_decode();
@@ -907,11 +917,12 @@ fn wire__crate__api__chain_swap__chain_swap_new_impl(
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
             let api_blinding_key = blinding_key.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Ok::<_, ()>(crate::api::chain_swap::ChainSwap::new(
                         api_id,
-                        api_is_testnet,
+                        api_network,
                         api_direction,
                         api_refund_keys,
                         api_refund_index,
@@ -927,6 +938,7 @@ fn wire__crate__api__chain_swap__chain_swap_new_impl(
                         api_boltz_url,
                         api_referral_id,
                         api_blinding_key,
+                        api_regtest_profile,
                     ))?;
                     std::result::Result::Ok(output_ok)
                 })())
@@ -940,11 +952,12 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     index: impl CstDecode<u64>,
     amount: impl CstDecode<u64>,
-    is_testnet: impl CstDecode<bool>,
+    network: impl CstDecode<crate::api::types::Network>,
     btc_electrum_url: impl CstDecode<String>,
     lbtc_electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -957,11 +970,12 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
             let api_swap_master_key = swap_master_key.cst_decode();
             let api_index = index.cst_decode();
             let api_amount = amount.cst_decode();
-            let api_is_testnet = is_testnet.cst_decode();
+            let api_network = network.cst_decode();
             let api_btc_electrum_url = btc_electrum_url.cst_decode();
             let api_lbtc_electrum_url = lbtc_electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -970,11 +984,12 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
                             api_swap_master_key,
                             api_index,
                             api_amount,
-                            api_is_testnet,
+                            api_network,
                             api_btc_electrum_url,
                             api_lbtc_electrum_url,
                             api_boltz_url,
                             api_referral_id,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -1099,6 +1114,8 @@ fn wire__crate__api__transactions__check_lockup_outspends_impl(
     network: impl CstDecode<crate::api::types::Chain>,
     boltz_url: impl CstDecode<String>,
     chain_swap_direction: impl CstDecode<Option<crate::api::types::ChainSwapDirection>>,
+    explorer_url: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1113,6 +1130,8 @@ fn wire__crate__api__transactions__check_lockup_outspends_impl(
             let api_network = network.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_chain_swap_direction = chain_swap_direction.cst_decode();
+            let api_explorer_url = explorer_url.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1123,6 +1142,8 @@ fn wire__crate__api__transactions__check_lockup_outspends_impl(
                             api_network,
                             &api_boltz_url,
                             api_chain_swap_direction,
+                            api_explorer_url,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -1179,6 +1200,7 @@ fn wire__crate__api__invoice__decoded_invoice_from_string_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     s: impl CstDecode<String>,
     boltz_url: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1189,12 +1211,16 @@ fn wire__crate__api__invoice__decoded_invoice_from_string_impl(
         move || {
             let api_s = s.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
-                        let output_ok =
-                            crate::api::invoice::DecodedInvoice::from_string(api_s, api_boltz_url)
-                                .await?;
+                        let output_ok = crate::api::invoice::DecodedInvoice::from_string(
+                            api_s,
+                            api_boltz_url,
+                            api_regtest_profile,
+                        )
+                        .await?;
                         std::result::Result::Ok(output_ok)
                     })()
                     .await,
@@ -1223,6 +1249,27 @@ fn wire__crate__api__fees__fees_chain_impl(
                     })()
                     .await,
                 )
+            }
+        },
+    )
+}
+fn wire__crate__api__fees__fees_for_regtest_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    profile: impl CstDecode<crate::api::types::RegtestNetworkProfile>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "fees_for_regtest",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_profile = profile.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
+                    let output_ok = crate::api::fees::Fees::for_regtest(api_profile)?;
+                    std::result::Result::Ok(output_ok)
+                })())
             }
         },
     )
@@ -1591,6 +1638,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1613,6 +1661,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| {
                 transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Ok::<_, ()>(crate::api::lbtc_ln::LbtcLnSwap::new(
@@ -1630,6 +1679,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
                         api_electrum_url,
                         api_boltz_url,
                         api_referral_id,
+                        api_regtest_profile,
                     ))?;
                     std::result::Result::Ok(output_ok)
                 })())
@@ -1648,6 +1698,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
     boltz_url: impl CstDecode<String>,
     description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1665,6 +1716,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             let api_boltz_url = boltz_url.cst_decode();
             let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1678,6 +1730,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
                             api_boltz_url,
                             api_description,
                             api_referral_id,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -1697,6 +1750,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1712,6 +1766,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1723,6 +1778,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
                             api_electrum_url,
                             api_boltz_url,
                             api_referral_id,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -1997,12 +2053,79 @@ fn wire__crate__api__secrets__pre_image_new_impl(
         },
     )
 }
+fn wire__crate__api__types__regtest_network_profile_electrum_settings_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<crate::api::types::RegtestNetworkProfile>,
+    chain: impl CstDecode<crate::api::types::Chain>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "regtest_network_profile_electrum_settings",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_chain = chain.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
+                    let output_ok = crate::api::types::RegtestNetworkProfile::electrum_settings(
+                        &api_that, api_chain,
+                    )?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__types__regtest_network_profile_for_host_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    host: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "regtest_network_profile_for_host",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_host = host.cst_decode();
+            move |context| {
+                transform_result_dco::<_, _, crate::api::error::BoltzError>((move || {
+                    let output_ok = crate::api::types::RegtestNetworkProfile::for_host(api_host)?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__types__regtest_network_profile_localhost_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "regtest_network_profile_localhost",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            move |context| {
+                transform_result_dco::<_, _, ()>((move || {
+                    let output_ok =
+                        Ok::<_, ()>(crate::api::types::RegtestNetworkProfile::localhost())?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__restore__restore_chain_swaps_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     btc_electrum_url: impl CstDecode<String>,
     lbtc_electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -2015,6 +2138,7 @@ fn wire__crate__api__restore__restore_chain_swaps_impl(
             let api_btc_electrum_url = btc_electrum_url.cst_decode();
             let api_lbtc_electrum_url = lbtc_electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -2023,6 +2147,7 @@ fn wire__crate__api__restore__restore_chain_swaps_impl(
                             api_btc_electrum_url,
                             api_lbtc_electrum_url,
                             api_boltz_url,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -2038,6 +2163,7 @@ fn wire__crate__api__restore__restore_ln_btc_swaps_impl(
     swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -2049,6 +2175,7 @@ fn wire__crate__api__restore__restore_ln_btc_swaps_impl(
             let api_swap_master_key = swap_master_key.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -2056,6 +2183,7 @@ fn wire__crate__api__restore__restore_ln_btc_swaps_impl(
                             api_swap_master_key,
                             api_electrum_url,
                             api_boltz_url,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -2071,6 +2199,7 @@ fn wire__crate__api__restore__restore_ln_lbtc_swaps_impl(
     swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -2082,6 +2211,7 @@ fn wire__crate__api__restore__restore_ln_lbtc_swaps_impl(
             let api_swap_master_key = swap_master_key.cst_decode();
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -2089,6 +2219,7 @@ fn wire__crate__api__restore__restore_ln_lbtc_swaps_impl(
                             api_swap_master_key,
                             api_electrum_url,
                             api_boltz_url,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -2103,6 +2234,7 @@ fn wire__crate__api__restore__restore_swap_index_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     boltz_url: impl CstDecode<String>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -2113,12 +2245,14 @@ fn wire__crate__api__restore__restore_swap_index_impl(
         move || {
             let api_swap_master_key = swap_master_key.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::restore::restore_swap_index(
                             api_swap_master_key,
                             api_boltz_url,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -2133,6 +2267,7 @@ fn wire__crate__api__restore__restore_swap_summaries_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     swap_master_key: impl CstDecode<crate::api::secrets::SwapMasterKey>,
     boltz_url: impl CstDecode<String>,
+    regtest_profile: impl CstDecode<Option<crate::api::types::RegtestNetworkProfile>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -2143,12 +2278,14 @@ fn wire__crate__api__restore__restore_swap_summaries_impl(
         move || {
             let api_swap_master_key = swap_master_key.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
+            let api_regtest_profile = regtest_profile.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
                         let output_ok = crate::api::restore::restore_swap_summaries(
                             api_swap_master_key,
                             api_boltz_url,
+                            api_regtest_profile,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -2415,6 +2552,8 @@ impl CstDecode<crate::api::types::Chain> for i32 {
             1 => crate::api::types::Chain::BitcoinTestnet,
             2 => crate::api::types::Chain::Liquid,
             3 => crate::api::types::Chain::LiquidTestnet,
+            4 => crate::api::types::Chain::BitcoinRegtest,
+            5 => crate::api::types::Chain::LiquidRegtest,
             _ => unreachable!("Invalid variant for Chain: {}", self),
         }
     }
@@ -2575,6 +2714,8 @@ impl SseDecode for crate::api::btc_ln::BtcLnSwap {
         let mut var_id = <String>::sse_decode(deserializer);
         let mut var_kind = <crate::api::types::SwapType>::sse_decode(deserializer);
         let mut var_network = <crate::api::types::Chain>::sse_decode(deserializer);
+        let mut var_regtestProfile =
+            <Option<crate::api::types::RegtestNetworkProfile>>::sse_decode(deserializer);
         let mut var_keys = <crate::api::secrets::KeyPair>::sse_decode(deserializer);
         let mut var_keyIndex = <u64>::sse_decode(deserializer);
         let mut var_preimage = <crate::api::secrets::PreImage>::sse_decode(deserializer);
@@ -2590,6 +2731,7 @@ impl SseDecode for crate::api::btc_ln::BtcLnSwap {
             id: var_id,
             kind: var_kind,
             network: var_network,
+            regtest_profile: var_regtestProfile,
             keys: var_keys,
             key_index: var_keyIndex,
             preimage: var_preimage,
@@ -2636,6 +2778,8 @@ impl SseDecode for crate::api::types::Chain {
             1 => crate::api::types::Chain::BitcoinTestnet,
             2 => crate::api::types::Chain::Liquid,
             3 => crate::api::types::Chain::LiquidTestnet,
+            4 => crate::api::types::Chain::BitcoinRegtest,
+            5 => crate::api::types::Chain::LiquidRegtest,
             _ => unreachable!("Invalid variant for Chain: {}", inner),
         };
     }
@@ -2661,7 +2805,9 @@ impl SseDecode for crate::api::chain_swap::ChainSwap {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_id = <String>::sse_decode(deserializer);
-        let mut var_isTestnet = <bool>::sse_decode(deserializer);
+        let mut var_network = <crate::api::types::Network>::sse_decode(deserializer);
+        let mut var_regtestProfile =
+            <Option<crate::api::types::RegtestNetworkProfile>>::sse_decode(deserializer);
         let mut var_direction = <crate::api::types::ChainSwapDirection>::sse_decode(deserializer);
         let mut var_refundKeys = <crate::api::secrets::KeyPair>::sse_decode(deserializer);
         let mut var_refundIndex = <u64>::sse_decode(deserializer);
@@ -2681,7 +2827,8 @@ impl SseDecode for crate::api::chain_swap::ChainSwap {
         let mut var_blindingKey = <String>::sse_decode(deserializer);
         return crate::api::chain_swap::ChainSwap {
             id: var_id,
-            is_testnet: var_isTestnet,
+            network: var_network,
+            regtest_profile: var_regtestProfile,
             direction: var_direction,
             refund_keys: var_refundKeys,
             refund_index: var_refundIndex,
@@ -2785,8 +2932,11 @@ impl SseDecode for crate::api::fees::Fees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_boltzUrl = <String>::sse_decode(deserializer);
+        let mut var_regtestProfile =
+            <Option<crate::api::types::RegtestNetworkProfile>>::sse_decode(deserializer);
         return crate::api::fees::Fees {
             boltz_url: var_boltzUrl,
+            regtest_profile: var_regtestProfile,
         };
     }
 }
@@ -2847,6 +2997,8 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnSwap {
         let mut var_id = <String>::sse_decode(deserializer);
         let mut var_kind = <crate::api::types::SwapType>::sse_decode(deserializer);
         let mut var_network = <crate::api::types::Chain>::sse_decode(deserializer);
+        let mut var_regtestProfile =
+            <Option<crate::api::types::RegtestNetworkProfile>>::sse_decode(deserializer);
         let mut var_keys = <crate::api::secrets::KeyPair>::sse_decode(deserializer);
         let mut var_keyIndex = <u64>::sse_decode(deserializer);
         let mut var_preimage = <crate::api::secrets::PreImage>::sse_decode(deserializer);
@@ -2863,6 +3015,7 @@ impl SseDecode for crate::api::lbtc_ln::LbtcLnSwap {
             id: var_id,
             kind: var_kind,
             network: var_network,
+            regtest_profile: var_regtestProfile,
             keys: var_keys,
             key_index: var_keyIndex,
             preimage: var_preimage,
@@ -3039,6 +3192,19 @@ impl SseDecode for Option<crate::api::types::ElectrumSettings> {
     }
 }
 
+impl SseDecode for Option<crate::api::types::RegtestNetworkProfile> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::types::RegtestNetworkProfile>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<crate::api::types::Side> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -3109,6 +3275,26 @@ impl SseDecode for crate::api::secrets::PreImage {
             value: var_value,
             sha256: var_sha256,
             hash160: var_hash160,
+        };
+    }
+}
+
+impl SseDecode for crate::api::types::RegtestNetworkProfile {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_host = <String>::sse_decode(deserializer);
+        let mut var_boltzUrl = <String>::sse_decode(deserializer);
+        let mut var_btcElectrumUrl = <String>::sse_decode(deserializer);
+        let mut var_lbtcElectrumUrl = <String>::sse_decode(deserializer);
+        let mut var_btcExplorerUrl = <String>::sse_decode(deserializer);
+        let mut var_lbtcExplorerUrl = <String>::sse_decode(deserializer);
+        return crate::api::types::RegtestNetworkProfile {
+            host: var_host,
+            boltz_url: var_boltzUrl,
+            btc_electrum_url: var_btcElectrumUrl,
+            lbtc_electrum_url: var_lbtcElectrumUrl,
+            btc_explorer_url: var_btcExplorerUrl,
+            lbtc_explorer_url: var_lbtcExplorerUrl,
         };
     }
 }
@@ -3515,6 +3701,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::btc_ln::BtcLnSwap {
             self.id.into_into_dart().into_dart(),
             self.kind.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
+            self.regtest_profile.into_into_dart().into_dart(),
             self.keys.into_into_dart().into_dart(),
             self.key_index.into_into_dart().into_dart(),
             self.preimage.into_into_dart().into_dart(),
@@ -3572,6 +3759,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::types::Chain {
             Self::BitcoinTestnet => 1.into_dart(),
             Self::Liquid => 2.into_dart(),
             Self::LiquidTestnet => 3.into_dart(),
+            Self::BitcoinRegtest => 4.into_dart(),
+            Self::LiquidRegtest => 5.into_dart(),
             _ => unreachable!(),
         }
     }
@@ -3610,7 +3799,8 @@ impl flutter_rust_bridge::IntoDart for crate::api::chain_swap::ChainSwap {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.id.into_into_dart().into_dart(),
-            self.is_testnet.into_into_dart().into_dart(),
+            self.network.into_into_dart().into_dart(),
+            self.regtest_profile.into_into_dart().into_dart(),
             self.direction.into_into_dart().into_dart(),
             self.refund_keys.into_into_dart().into_dart(),
             self.refund_index.into_into_dart().into_dart(),
@@ -3741,7 +3931,11 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::types::ElectrumSettings>
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::fees::Fees {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.boltz_url.into_into_dart().into_dart()].into_dart()
+        [
+            self.boltz_url.into_into_dart().into_dart(),
+            self.regtest_profile.into_into_dart().into_dart(),
+        ]
+        .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::fees::Fees {}
@@ -3802,6 +3996,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::lbtc_ln::LbtcLnSwap {
             self.id.into_into_dart().into_dart(),
             self.kind.into_into_dart().into_dart(),
             self.network.into_into_dart().into_dart(),
+            self.regtest_profile.into_into_dart().into_dart(),
             self.keys.into_into_dart().into_dart(),
             self.key_index.into_into_dart().into_dart(),
             self.preimage.into_into_dart().into_dart(),
@@ -3914,6 +4109,31 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::secrets::PreImage>
     for crate::api::secrets::PreImage
 {
     fn into_into_dart(self) -> crate::api::secrets::PreImage {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::types::RegtestNetworkProfile {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.host.into_into_dart().into_dart(),
+            self.boltz_url.into_into_dart().into_dart(),
+            self.btc_electrum_url.into_into_dart().into_dart(),
+            self.lbtc_electrum_url.into_into_dart().into_dart(),
+            self.btc_explorer_url.into_into_dart().into_dart(),
+            self.lbtc_explorer_url.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::types::RegtestNetworkProfile
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::types::RegtestNetworkProfile>
+    for crate::api::types::RegtestNetworkProfile
+{
+    fn into_into_dart(self) -> crate::api::types::RegtestNetworkProfile {
         self
     }
 }
@@ -4389,6 +4609,10 @@ impl SseEncode for crate::api::btc_ln::BtcLnSwap {
         <String>::sse_encode(self.id, serializer);
         <crate::api::types::SwapType>::sse_encode(self.kind, serializer);
         <crate::api::types::Chain>::sse_encode(self.network, serializer);
+        <Option<crate::api::types::RegtestNetworkProfile>>::sse_encode(
+            self.regtest_profile,
+            serializer,
+        );
         <crate::api::secrets::KeyPair>::sse_encode(self.keys, serializer);
         <u64>::sse_encode(self.key_index, serializer);
         <crate::api::secrets::PreImage>::sse_encode(self.preimage, serializer);
@@ -4425,6 +4649,8 @@ impl SseEncode for crate::api::types::Chain {
                 crate::api::types::Chain::BitcoinTestnet => 1,
                 crate::api::types::Chain::Liquid => 2,
                 crate::api::types::Chain::LiquidTestnet => 3,
+                crate::api::types::Chain::BitcoinRegtest => 4,
+                crate::api::types::Chain::LiquidRegtest => 5,
                 _ => {
                     unimplemented!("");
                 }
@@ -4448,7 +4674,11 @@ impl SseEncode for crate::api::chain_swap::ChainSwap {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.id, serializer);
-        <bool>::sse_encode(self.is_testnet, serializer);
+        <crate::api::types::Network>::sse_encode(self.network, serializer);
+        <Option<crate::api::types::RegtestNetworkProfile>>::sse_encode(
+            self.regtest_profile,
+            serializer,
+        );
         <crate::api::types::ChainSwapDirection>::sse_encode(self.direction, serializer);
         <crate::api::secrets::KeyPair>::sse_encode(self.refund_keys, serializer);
         <u64>::sse_encode(self.refund_index, serializer);
@@ -4531,6 +4761,10 @@ impl SseEncode for crate::api::fees::Fees {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.boltz_url, serializer);
+        <Option<crate::api::types::RegtestNetworkProfile>>::sse_encode(
+            self.regtest_profile,
+            serializer,
+        );
     }
 }
 
@@ -4576,6 +4810,10 @@ impl SseEncode for crate::api::lbtc_ln::LbtcLnSwap {
         <String>::sse_encode(self.id, serializer);
         <crate::api::types::SwapType>::sse_encode(self.kind, serializer);
         <crate::api::types::Chain>::sse_encode(self.network, serializer);
+        <Option<crate::api::types::RegtestNetworkProfile>>::sse_encode(
+            self.regtest_profile,
+            serializer,
+        );
         <crate::api::secrets::KeyPair>::sse_encode(self.keys, serializer);
         <u64>::sse_encode(self.key_index, serializer);
         <crate::api::secrets::PreImage>::sse_encode(self.preimage, serializer);
@@ -4723,6 +4961,16 @@ impl SseEncode for Option<crate::api::types::ElectrumSettings> {
     }
 }
 
+impl SseEncode for Option<crate::api::types::RegtestNetworkProfile> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::types::RegtestNetworkProfile>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<crate::api::types::Side> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -4778,6 +5026,18 @@ impl SseEncode for crate::api::secrets::PreImage {
         <String>::sse_encode(self.value, serializer);
         <String>::sse_encode(self.sha256, serializer);
         <String>::sse_encode(self.hash160, serializer);
+    }
+}
+
+impl SseEncode for crate::api::types::RegtestNetworkProfile {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.host, serializer);
+        <String>::sse_encode(self.boltz_url, serializer);
+        <String>::sse_encode(self.btc_electrum_url, serializer);
+        <String>::sse_encode(self.lbtc_electrum_url, serializer);
+        <String>::sse_encode(self.btc_explorer_url, serializer);
+        <String>::sse_encode(self.lbtc_explorer_url, serializer);
     }
 }
 
@@ -5182,6 +5442,13 @@ mod io {
             CstDecode::<crate::api::secrets::PreImage>::cst_decode(*wrap).into()
         }
     }
+    impl CstDecode<crate::api::types::RegtestNetworkProfile> for *mut wire_cst_regtest_network_profile {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::types::RegtestNetworkProfile {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<crate::api::types::RegtestNetworkProfile>::cst_decode(*wrap).into()
+        }
+    }
     impl CstDecode<crate::api::types::Side> for *mut i32 {
         // Codec=Cst (C-struct based), see doc to use other codecs
         fn cst_decode(self) -> crate::api::types::Side {
@@ -5243,6 +5510,7 @@ mod io {
                 id: self.id.cst_decode(),
                 kind: self.kind.cst_decode(),
                 network: self.network.cst_decode(),
+                regtest_profile: self.regtest_profile.cst_decode(),
                 keys: self.keys.cst_decode(),
                 key_index: self.key_index.cst_decode(),
                 preimage: self.preimage.cst_decode(),
@@ -5287,7 +5555,8 @@ mod io {
         fn cst_decode(self) -> crate::api::chain_swap::ChainSwap {
             crate::api::chain_swap::ChainSwap {
                 id: self.id.cst_decode(),
-                is_testnet: self.is_testnet.cst_decode(),
+                network: self.network.cst_decode(),
+                regtest_profile: self.regtest_profile.cst_decode(),
                 direction: self.direction.cst_decode(),
                 refund_keys: self.refund_keys.cst_decode(),
                 refund_index: self.refund_index.cst_decode(),
@@ -5351,6 +5620,7 @@ mod io {
         fn cst_decode(self) -> crate::api::fees::Fees {
             crate::api::fees::Fees {
                 boltz_url: self.boltz_url.cst_decode(),
+                regtest_profile: self.regtest_profile.cst_decode(),
             }
         }
     }
@@ -5385,6 +5655,7 @@ mod io {
                 id: self.id.cst_decode(),
                 kind: self.kind.cst_decode(),
                 network: self.network.cst_decode(),
+                regtest_profile: self.regtest_profile.cst_decode(),
                 keys: self.keys.cst_decode(),
                 key_index: self.key_index.cst_decode(),
                 preimage: self.preimage.cst_decode(),
@@ -5516,6 +5787,19 @@ mod io {
                 value: self.value.cst_decode(),
                 sha256: self.sha256.cst_decode(),
                 hash160: self.hash160.cst_decode(),
+            }
+        }
+    }
+    impl CstDecode<crate::api::types::RegtestNetworkProfile> for wire_cst_regtest_network_profile {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> crate::api::types::RegtestNetworkProfile {
+            crate::api::types::RegtestNetworkProfile {
+                host: self.host.cst_decode(),
+                boltz_url: self.boltz_url.cst_decode(),
+                btc_electrum_url: self.btc_electrum_url.cst_decode(),
+                lbtc_electrum_url: self.lbtc_electrum_url.cst_decode(),
+                btc_explorer_url: self.btc_explorer_url.cst_decode(),
+                lbtc_explorer_url: self.lbtc_explorer_url.cst_decode(),
             }
         }
     }
@@ -5711,6 +5995,7 @@ mod io {
                 id: core::ptr::null_mut(),
                 kind: Default::default(),
                 network: Default::default(),
+                regtest_profile: core::ptr::null_mut(),
                 keys: Default::default(),
                 key_index: Default::default(),
                 preimage: Default::default(),
@@ -5767,7 +6052,8 @@ mod io {
         fn new_with_null_ptr() -> Self {
             Self {
                 id: core::ptr::null_mut(),
-                is_testnet: Default::default(),
+                network: Default::default(),
+                regtest_profile: core::ptr::null_mut(),
                 direction: Default::default(),
                 refund_keys: Default::default(),
                 refund_index: Default::default(),
@@ -5847,6 +6133,7 @@ mod io {
         fn new_with_null_ptr() -> Self {
             Self {
                 boltz_url: core::ptr::null_mut(),
+                regtest_profile: core::ptr::null_mut(),
             }
         }
     }
@@ -5893,6 +6180,7 @@ mod io {
                 id: core::ptr::null_mut(),
                 kind: Default::default(),
                 network: Default::default(),
+                regtest_profile: core::ptr::null_mut(),
                 keys: Default::default(),
                 key_index: Default::default(),
                 preimage: Default::default(),
@@ -5962,6 +6250,23 @@ mod io {
         }
     }
     impl Default for wire_cst_pre_image {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+    impl NewWithNullPtr for wire_cst_regtest_network_profile {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                host: core::ptr::null_mut(),
+                boltz_url: core::ptr::null_mut(),
+                btc_electrum_url: core::ptr::null_mut(),
+                lbtc_electrum_url: core::ptr::null_mut(),
+                btc_explorer_url: core::ptr::null_mut(),
+                lbtc_explorer_url: core::ptr::null_mut(),
+            }
+        }
+    }
+    impl Default for wire_cst_regtest_network_profile {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
@@ -6320,6 +6625,7 @@ mod io {
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_impl(
             port_,
@@ -6336,6 +6642,7 @@ mod io {
             electrum_url,
             boltz_url,
             referral_id,
+            regtest_profile,
         )
     }
 
@@ -6351,6 +6658,7 @@ mod io {
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         description: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             port_,
@@ -6363,6 +6671,7 @@ mod io {
             boltz_url,
             description,
             referral_id,
+            regtest_profile,
         )
     }
 
@@ -6376,6 +6685,7 @@ mod io {
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             port_,
@@ -6386,6 +6696,7 @@ mod io {
             electrum_url,
             boltz_url,
             referral_id,
+            regtest_profile,
         )
     }
 
@@ -6557,7 +6868,7 @@ mod io {
     pub extern "C" fn frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new(
         port_: i64,
         id: *mut wire_cst_list_prim_u_8_strict,
-        is_testnet: bool,
+        network: i32,
         direction: i32,
         refund_keys: *mut wire_cst_key_pair,
         refund_index: u64,
@@ -6573,11 +6884,12 @@ mod io {
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
         blinding_key: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__chain_swap__chain_swap_new_impl(
             port_,
             id,
-            is_testnet,
+            network,
             direction,
             refund_keys,
             refund_index,
@@ -6593,6 +6905,7 @@ mod io {
             boltz_url,
             referral_id,
             blinding_key,
+            regtest_profile,
         )
     }
 
@@ -6603,11 +6916,12 @@ mod io {
         swap_master_key: *mut wire_cst_swap_master_key,
         index: u64,
         amount: u64,
-        is_testnet: bool,
+        network: i32,
         btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
         lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__chain_swap__chain_swap_new_swap_impl(
             port_,
@@ -6615,11 +6929,12 @@ mod io {
             swap_master_key,
             index,
             amount,
-            is_testnet,
+            network,
             btc_electrum_url,
             lbtc_electrum_url,
             boltz_url,
             referral_id,
+            regtest_profile,
         )
     }
 
@@ -6680,6 +6995,8 @@ mod io {
         network: i32,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         chain_swap_direction: *mut i32,
+        explorer_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__transactions__check_lockup_outspends_impl(
             port_,
@@ -6689,6 +7006,8 @@ mod io {
             network,
             boltz_url,
             chain_swap_direction,
+            explorer_url,
+            regtest_profile,
         )
     }
 
@@ -6718,8 +7037,14 @@ mod io {
         port_: i64,
         s: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
-        wire__crate__api__invoice__decoded_invoice_from_string_impl(port_, s, boltz_url)
+        wire__crate__api__invoice__decoded_invoice_from_string_impl(
+            port_,
+            s,
+            boltz_url,
+            regtest_profile,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -6728,6 +7053,14 @@ mod io {
         that: *mut wire_cst_fees,
     ) {
         wire__crate__api__fees__fees_chain_impl(port_, that)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__fees__fees_for_regtest(
+        port_: i64,
+        profile: *mut wire_cst_regtest_network_profile,
+    ) {
+        wire__crate__api__fees__fees_for_regtest_impl(port_, profile)
     }
 
     #[unsafe(no_mangle)]
@@ -6886,6 +7219,7 @@ mod io {
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_impl(
             port_,
@@ -6903,6 +7237,7 @@ mod io {
             electrum_url,
             boltz_url,
             referral_id,
+            regtest_profile,
         )
     }
 
@@ -6918,6 +7253,7 @@ mod io {
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         description: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             port_,
@@ -6930,6 +7266,7 @@ mod io {
             boltz_url,
             description,
             referral_id,
+            regtest_profile,
         )
     }
 
@@ -6943,6 +7280,7 @@ mod io {
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             port_,
@@ -6953,6 +7291,7 @@ mod io {
             electrum_url,
             boltz_url,
             referral_id,
+            regtest_profile,
         )
     }
 
@@ -7059,12 +7398,37 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__types__regtest_network_profile_electrum_settings(
+        port_: i64,
+        that: *mut wire_cst_regtest_network_profile,
+        chain: i32,
+    ) {
+        wire__crate__api__types__regtest_network_profile_electrum_settings_impl(port_, that, chain)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__types__regtest_network_profile_for_host(
+        port_: i64,
+        host: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__types__regtest_network_profile_for_host_impl(port_, host)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_wire__crate__api__types__regtest_network_profile_localhost(
+        port_: i64,
+    ) {
+        wire__crate__api__types__regtest_network_profile_localhost_impl(port_)
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_wire__crate__api__restore__restore_chain_swaps(
         port_: i64,
         swap_master_key: *mut wire_cst_swap_master_key,
         btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
         lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__restore__restore_chain_swaps_impl(
             port_,
@@ -7072,6 +7436,7 @@ mod io {
             btc_electrum_url,
             lbtc_electrum_url,
             boltz_url,
+            regtest_profile,
         )
     }
 
@@ -7081,12 +7446,14 @@ mod io {
         swap_master_key: *mut wire_cst_swap_master_key,
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__restore__restore_ln_btc_swaps_impl(
             port_,
             swap_master_key,
             electrum_url,
             boltz_url,
+            regtest_profile,
         )
     }
 
@@ -7096,12 +7463,14 @@ mod io {
         swap_master_key: *mut wire_cst_swap_master_key,
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
         wire__crate__api__restore__restore_ln_lbtc_swaps_impl(
             port_,
             swap_master_key,
             electrum_url,
             boltz_url,
+            regtest_profile,
         )
     }
 
@@ -7110,8 +7479,14 @@ mod io {
         port_: i64,
         swap_master_key: *mut wire_cst_swap_master_key,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
-        wire__crate__api__restore__restore_swap_index_impl(port_, swap_master_key, boltz_url)
+        wire__crate__api__restore__restore_swap_index_impl(
+            port_,
+            swap_master_key,
+            boltz_url,
+            regtest_profile,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -7119,8 +7494,14 @@ mod io {
         port_: i64,
         swap_master_key: *mut wire_cst_swap_master_key,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     ) {
-        wire__crate__api__restore__restore_swap_summaries_impl(port_, swap_master_key, boltz_url)
+        wire__crate__api__restore__restore_swap_summaries_impl(
+            port_,
+            swap_master_key,
+            boltz_url,
+            regtest_profile,
+        )
     }
 
     #[unsafe(no_mangle)]
@@ -7298,6 +7679,14 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_regtest_network_profile(
+    ) -> *mut wire_cst_regtest_network_profile {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(
+            wire_cst_regtest_network_profile::new_with_null_ptr(),
+        )
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_boltz_cst_new_box_autoadd_side(value: i32) -> *mut i32 {
         flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
     }
@@ -7466,6 +7855,7 @@ mod io {
         id: *mut wire_cst_list_prim_u_8_strict,
         kind: i32,
         network: i32,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
         keys: wire_cst_key_pair,
         key_index: u64,
         preimage: wire_cst_pre_image,
@@ -7501,7 +7891,8 @@ mod io {
     #[derive(Clone, Copy)]
     pub struct wire_cst_chain_swap {
         id: *mut wire_cst_list_prim_u_8_strict,
-        is_testnet: bool,
+        network: i32,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
         direction: i32,
         refund_keys: wire_cst_key_pair,
         refund_index: u64,
@@ -7553,6 +7944,7 @@ mod io {
     #[derive(Clone, Copy)]
     pub struct wire_cst_fees {
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]
@@ -7578,6 +7970,7 @@ mod io {
         id: *mut wire_cst_list_prim_u_8_strict,
         kind: i32,
         network: i32,
+        regtest_profile: *mut wire_cst_regtest_network_profile,
         keys: wire_cst_key_pair,
         key_index: u64,
         preimage: wire_cst_pre_image,
@@ -7663,6 +8056,16 @@ mod io {
         value: *mut wire_cst_list_prim_u_8_strict,
         sha256: *mut wire_cst_list_prim_u_8_strict,
         hash160: *mut wire_cst_list_prim_u_8_strict,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_regtest_network_profile {
+        host: *mut wire_cst_list_prim_u_8_strict,
+        boltz_url: *mut wire_cst_list_prim_u_8_strict,
+        btc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+        lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
+        btc_explorer_url: *mut wire_cst_list_prim_u_8_strict,
+        lbtc_explorer_url: *mut wire_cst_list_prim_u_8_strict,
     }
     #[repr(C)]
     #[derive(Clone, Copy)]

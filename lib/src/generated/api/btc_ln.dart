@@ -12,13 +12,14 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `extract_id`, `new_with_expected_onchain_amount`
+// These functions are ignored because they are not marked as `pub`: `extract_id`, `new_with_expected_onchain_amount`, `validate_context`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `clone`, `eq`
 
 class BtcLnSwap {
   final String id;
   final SwapType kind;
   final Chain network;
+  final RegtestNetworkProfile? regtestProfile;
   final KeyPair keys;
   final BigInt keyIndex;
   final PreImage preimage;
@@ -35,6 +36,7 @@ class BtcLnSwap {
     required this.id,
     required this.kind,
     required this.network,
+    this.regtestProfile,
     required this.keys,
     required this.keyIndex,
     required this.preimage,
@@ -125,6 +127,7 @@ class BtcLnSwap {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNew(
     id: id,
     kind: kind,
@@ -139,6 +142,7 @@ class BtcLnSwap {
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
     referralId: referralId,
+    regtestProfile: regtestProfile,
   );
 
   /// Used to create the class when starting a reverse swap to receive Bitcoin via Lightning.
@@ -154,6 +158,7 @@ class BtcLnSwap {
     required String boltzUrl,
     String? description,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewReverse(
     swapMasterKey: swapMasterKey,
     index: index,
@@ -164,6 +169,7 @@ class BtcLnSwap {
     boltzUrl: boltzUrl,
     description: description,
     referralId: referralId,
+    regtestProfile: regtestProfile,
   );
 
   /// Used to create the class when starting a submarine swap to pay a lightning invoice with Bitcoin.
@@ -177,6 +183,7 @@ class BtcLnSwap {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiBtcLnBtcLnSwapNewSubmarine(
     swapMasterKey: swapMasterKey,
     index: index,
@@ -185,6 +192,7 @@ class BtcLnSwap {
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
     referralId: referralId,
+    regtestProfile: regtestProfile,
   );
 
   /// Used to refund a failed submarine swap.
@@ -220,6 +228,7 @@ class BtcLnSwap {
       id.hashCode ^
       kind.hashCode ^
       network.hashCode ^
+      regtestProfile.hashCode ^
       keys.hashCode ^
       keyIndex.hashCode ^
       preimage.hashCode ^
@@ -240,6 +249,7 @@ class BtcLnSwap {
           id == other.id &&
           kind == other.kind &&
           network == other.network &&
+          regtestProfile == other.regtestProfile &&
           keys == other.keys &&
           keyIndex == other.keyIndex &&
           preimage == other.preimage &&

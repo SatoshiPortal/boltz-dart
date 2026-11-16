@@ -4,10 +4,12 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
+import 'error.dart';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`
+// These functions are ignored because they are not marked as `pub`: `bitcoin`, `liquid`, `validate`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `assert_fields_are_eq`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `eq`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `into`, `into`, `into`, `try_into`, `try_into`
 
 /// Helper to store a BtcSwapScript and convert to a BtcSwapScript
 class BtcSwapScriptStr {
@@ -76,7 +78,9 @@ enum Chain {
   bitcoin,
   bitcoinTestnet,
   liquid,
-  liquidTestnet;
+  liquidTestnet,
+  bitcoinRegtest,
+  liquidRegtest;
 
   Future<bool> isTestnet() =>
       BoltzCore.instance.api.crateApiTypesChainIsTestnet(that: this);
@@ -203,6 +207,61 @@ class OutspendStatus {
           kind == other.kind &&
           txid == other.txid &&
           timestamp == other.timestamp;
+}
+
+/// Endpoints captured for an explicitly selected regtest host.
+class RegtestNetworkProfile {
+  final String host;
+  final String boltzUrl;
+  final String btcElectrumUrl;
+  final String lbtcElectrumUrl;
+  final String btcExplorerUrl;
+  final String lbtcExplorerUrl;
+
+  const RegtestNetworkProfile({
+    required this.host,
+    required this.boltzUrl,
+    required this.btcElectrumUrl,
+    required this.lbtcElectrumUrl,
+    required this.btcExplorerUrl,
+    required this.lbtcExplorerUrl,
+  });
+
+  Future<ElectrumSettings> electrumSettings({required Chain chain}) =>
+      BoltzCore.instance.api.crateApiTypesRegtestNetworkProfileElectrumSettings(
+        that: this,
+        chain: chain,
+      );
+
+  /// A host is a DNS name or IP address, without scheme, port or path.
+  static Future<RegtestNetworkProfile> forHost({required String host}) =>
+      BoltzCore.instance.api.crateApiTypesRegtestNetworkProfileForHost(
+        host: host,
+      );
+
+  static Future<RegtestNetworkProfile> localhost() =>
+      BoltzCore.instance.api.crateApiTypesRegtestNetworkProfileLocalhost();
+
+  @override
+  int get hashCode =>
+      host.hashCode ^
+      boltzUrl.hashCode ^
+      btcElectrumUrl.hashCode ^
+      lbtcElectrumUrl.hashCode ^
+      btcExplorerUrl.hashCode ^
+      lbtcExplorerUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RegtestNetworkProfile &&
+          runtimeType == other.runtimeType &&
+          host == other.host &&
+          boltzUrl == other.boltzUrl &&
+          btcElectrumUrl == other.btcElectrumUrl &&
+          lbtcElectrumUrl == other.lbtcElectrumUrl &&
+          btcExplorerUrl == other.btcExplorerUrl &&
+          lbtcExplorerUrl == other.lbtcExplorerUrl;
 }
 
 /// Used for chain-swaps only. The side is based on which transaction is being made by the user.

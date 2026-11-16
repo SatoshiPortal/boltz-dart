@@ -8,8 +8,11 @@ import 'error.dart';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+
+import 'types.dart';
 part 'fees.freezed.dart';
 
+// These functions are ignored because they are not marked as `pub`: `client`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `eq`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `from`, `from`, `from`, `into`, `into`, `into`, `into`, `try_into`, `try_into`, `try_into`
 
 /// Complete fees and limits class for Chain swaps
@@ -79,12 +82,17 @@ class ChainSwapFees {
 /// A Class that helps fetch both Fees and Limits for the various swap types
 class Fees {
   final String boltzUrl;
+  final RegtestNetworkProfile? regtestProfile;
 
-  const Fees({required this.boltzUrl});
+  const Fees({required this.boltzUrl, this.regtestProfile});
 
   /// Method to get the fees & limits for a chain swap
   Future<ChainFeesAndLimits> chain() =>
       BoltzCore.instance.api.crateApiFeesFeesChain(that: this);
+
+  /// Quotes for an explicitly selected local regtest profile.
+  static Future<Fees> forRegtest({required RegtestNetworkProfile profile}) =>
+      BoltzCore.instance.api.crateApiFeesFeesForRegtest(profile: profile);
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Constructor
@@ -100,14 +108,15 @@ class Fees {
       BoltzCore.instance.api.crateApiFeesFeesSubmarine(that: this);
 
   @override
-  int get hashCode => boltzUrl.hashCode;
+  int get hashCode => boltzUrl.hashCode ^ regtestProfile.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Fees &&
           runtimeType == other.runtimeType &&
-          boltzUrl == other.boltzUrl;
+          boltzUrl == other.boltzUrl &&
+          regtestProfile == other.regtestProfile;
 }
 
 /// Breakdown of Miner Fees

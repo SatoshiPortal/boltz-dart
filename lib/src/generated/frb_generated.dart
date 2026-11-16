@@ -79,7 +79,7 @@ class BoltzCore
   String get codegenVersion => '2.13.0';
 
   @override
-  int get rustContentHash => 1445641144;
+  int get rustContentHash => 615615094;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -149,6 +149,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewReverse({
@@ -161,6 +162,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String boltzUrl,
     String? description,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine({
@@ -171,6 +173,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<String> crateApiBtcLnBtcLnSwapRefund({
@@ -245,7 +248,7 @@ abstract class BoltzCoreApi extends BaseApi {
 
   Future<ChainSwap> crateApiChainSwapChainSwapNew({
     required String id,
-    required bool isTestnet,
+    required Network network,
     required ChainSwapDirection direction,
     required KeyPair refundKeys,
     required BigInt refundIndex,
@@ -261,6 +264,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String boltzUrl,
     String? referralId,
     required String blindingKey,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<ChainSwap> crateApiChainSwapChainSwapNewSwap({
@@ -268,11 +272,12 @@ abstract class BoltzCoreApi extends BaseApi {
     required SwapMasterKey swapMasterKey,
     required BigInt index,
     required BigInt amount,
-    required bool isTestnet,
+    required Network network,
     required String btcElectrumUrl,
     required String lbtcElectrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<String> crateApiChainSwapChainSwapRefund({
@@ -301,6 +306,8 @@ abstract class BoltzCoreApi extends BaseApi {
     required Chain network,
     required String boltzUrl,
     ChainSwapDirection? chainSwapDirection,
+    String? explorerUrl,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<OutspendStatus> crateApiTransactionsCheckVout0Outspend({
@@ -315,9 +322,14 @@ abstract class BoltzCoreApi extends BaseApi {
   Future<DecodedInvoice> crateApiInvoiceDecodedInvoiceFromString({
     required String s,
     String? boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<ChainFeesAndLimits> crateApiFeesFeesChain({required Fees that});
+
+  Future<Fees> crateApiFeesFeesForRegtest({
+    required RegtestNetworkProfile profile,
+  });
 
   Future<Fees> crateApiFeesFeesNew({required String boltzUrl});
 
@@ -394,6 +406,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewReverse({
@@ -406,6 +419,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String boltzUrl,
     String? description,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine({
@@ -416,6 +430,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<String> crateApiLbtcLnLbtcLnSwapRefund({
@@ -460,33 +475,49 @@ abstract class BoltzCoreApi extends BaseApi {
     required String hash160,
   });
 
+  Future<ElectrumSettings> crateApiTypesRegtestNetworkProfileElectrumSettings({
+    required RegtestNetworkProfile that,
+    required Chain chain,
+  });
+
+  Future<RegtestNetworkProfile> crateApiTypesRegtestNetworkProfileForHost({
+    required String host,
+  });
+
+  Future<RegtestNetworkProfile> crateApiTypesRegtestNetworkProfileLocalhost();
+
   Future<RestoredChainSwaps> crateApiRestoreRestoreChainSwaps({
     required SwapMasterKey swapMasterKey,
     required String btcElectrumUrl,
     required String lbtcElectrumUrl,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<RestoredBtcLnSwaps> crateApiRestoreRestoreLnBtcSwaps({
     required SwapMasterKey swapMasterKey,
     required String electrumUrl,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<RestoredLbtcLnSwaps> crateApiRestoreRestoreLnLbtcSwaps({
     required SwapMasterKey swapMasterKey,
     required String electrumUrl,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<PlatformInt64> crateApiRestoreRestoreSwapIndex({
     required SwapMasterKey swapMasterKey,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<List<RestoredSwapSummary>> crateApiRestoreRestoreSwapSummaries({
     required SwapMasterKey swapMasterKey,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   });
 
   Future<SwapMasterKey> crateApiSecretsSwapMasterKeyCreate({
@@ -888,6 +919,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -905,6 +937,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg10 = cst_encode_String(electrumUrl);
           var arg11 = cst_encode_String(boltzUrl);
           var arg12 = cst_encode_opt_String(referralId);
+          var arg13 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__btc_ln__btc_ln_swap_new(
             port_,
             arg0,
@@ -920,6 +955,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg10,
             arg11,
             arg12,
+            arg13,
           );
         },
         codec: DcoCodec(
@@ -941,6 +977,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           electrumUrl,
           boltzUrl,
           referralId,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -963,6 +1000,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       "electrumUrl",
       "boltzUrl",
       "referralId",
+      "regtestProfile",
     ],
   );
 
@@ -977,6 +1015,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String boltzUrl,
     String? description,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -990,6 +1029,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg6 = cst_encode_String(boltzUrl);
           var arg7 = cst_encode_opt_String(description);
           var arg8 = cst_encode_opt_String(referralId);
+          var arg9 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
             port_,
             arg0,
@@ -1001,6 +1043,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg6,
             arg7,
             arg8,
+            arg9,
           );
         },
         codec: DcoCodec(
@@ -1018,6 +1061,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           boltzUrl,
           description,
           referralId,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -1037,6 +1081,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "boltzUrl",
           "description",
           "referralId",
+          "regtestProfile",
         ],
       );
 
@@ -1049,6 +1094,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -1060,6 +1106,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg4 = cst_encode_String(electrumUrl);
           var arg5 = cst_encode_String(boltzUrl);
           var arg6 = cst_encode_opt_String(referralId);
+          var arg7 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
             port_,
             arg0,
@@ -1069,6 +1118,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg4,
             arg5,
             arg6,
+            arg7,
           );
         },
         codec: DcoCodec(
@@ -1084,6 +1134,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           electrumUrl,
           boltzUrl,
           referralId,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -1101,6 +1152,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "electrumUrl",
           "boltzUrl",
           "referralId",
+          "regtestProfile",
         ],
       );
 
@@ -1595,7 +1647,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   @override
   Future<ChainSwap> crateApiChainSwapChainSwapNew({
     required String id,
-    required bool isTestnet,
+    required Network network,
     required ChainSwapDirection direction,
     required KeyPair refundKeys,
     required BigInt refundIndex,
@@ -1611,12 +1663,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String boltzUrl,
     String? referralId,
     required String blindingKey,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           var arg0 = cst_encode_String(id);
-          var arg1 = cst_encode_bool(isTestnet);
+          var arg1 = cst_encode_network(network);
           var arg2 = cst_encode_chain_swap_direction(direction);
           var arg3 = cst_encode_box_autoadd_key_pair(refundKeys);
           var arg4 = cst_encode_u_64(refundIndex);
@@ -1634,6 +1687,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg14 = cst_encode_String(boltzUrl);
           var arg15 = cst_encode_opt_String(referralId);
           var arg16 = cst_encode_String(blindingKey);
+          var arg17 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__chain_swap__chain_swap_new(
             port_,
             arg0,
@@ -1653,6 +1709,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg14,
             arg15,
             arg16,
+            arg17,
           );
         },
         codec: DcoCodec(
@@ -1662,7 +1719,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         constMeta: kCrateApiChainSwapChainSwapNewConstMeta,
         argValues: [
           id,
-          isTestnet,
+          network,
           direction,
           refundKeys,
           refundIndex,
@@ -1678,6 +1735,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           boltzUrl,
           referralId,
           blindingKey,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -1689,7 +1747,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
         debugName: "chain_swap_new",
         argNames: [
           "id",
-          "isTestnet",
+          "network",
           "direction",
           "refundKeys",
           "refundIndex",
@@ -1705,6 +1763,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "boltzUrl",
           "referralId",
           "blindingKey",
+          "regtestProfile",
         ],
       );
 
@@ -1714,11 +1773,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required SwapMasterKey swapMasterKey,
     required BigInt index,
     required BigInt amount,
-    required bool isTestnet,
+    required Network network,
     required String btcElectrumUrl,
     required String lbtcElectrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -1727,11 +1787,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg1 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
           var arg2 = cst_encode_u_64(index);
           var arg3 = cst_encode_u_64(amount);
-          var arg4 = cst_encode_bool(isTestnet);
+          var arg4 = cst_encode_network(network);
           var arg5 = cst_encode_String(btcElectrumUrl);
           var arg6 = cst_encode_String(lbtcElectrumUrl);
           var arg7 = cst_encode_String(boltzUrl);
           var arg8 = cst_encode_opt_String(referralId);
+          var arg9 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__chain_swap__chain_swap_new_swap(
             port_,
             arg0,
@@ -1743,6 +1806,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg6,
             arg7,
             arg8,
+            arg9,
           );
         },
         codec: DcoCodec(
@@ -1755,11 +1819,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           swapMasterKey,
           index,
           amount,
-          isTestnet,
+          network,
           btcElectrumUrl,
           lbtcElectrumUrl,
           boltzUrl,
           referralId,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -1774,11 +1839,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "swapMasterKey",
           "index",
           "amount",
-          "isTestnet",
+          "network",
           "btcElectrumUrl",
           "lbtcElectrumUrl",
           "boltzUrl",
           "referralId",
+          "regtestProfile",
         ],
       );
 
@@ -1936,6 +2002,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required Chain network,
     required String boltzUrl,
     ChainSwapDirection? chainSwapDirection,
+    String? explorerUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -1948,6 +2016,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg5 = cst_encode_opt_box_autoadd_chain_swap_direction(
             chainSwapDirection,
           );
+          var arg6 = cst_encode_opt_String(explorerUrl);
+          var arg7 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__transactions__check_lockup_outspends(
             port_,
             arg0,
@@ -1956,6 +2028,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg3,
             arg4,
             arg5,
+            arg6,
+            arg7,
           );
         },
         codec: DcoCodec(
@@ -1970,6 +2044,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           network,
           boltzUrl,
           chainSwapDirection,
+          explorerUrl,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -1986,6 +2062,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "network",
           "boltzUrl",
           "chainSwapDirection",
+          "explorerUrl",
+          "regtestProfile",
         ],
       );
 
@@ -2054,16 +2132,21 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Future<DecodedInvoice> crateApiInvoiceDecodedInvoiceFromString({
     required String s,
     String? boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           var arg0 = cst_encode_String(s);
           var arg1 = cst_encode_opt_String(boltzUrl);
+          var arg2 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__invoice__decoded_invoice_from_string(
             port_,
             arg0,
             arg1,
+            arg2,
           );
         },
         codec: DcoCodec(
@@ -2071,7 +2154,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           decodeErrorData: dco_decode_boltz_error,
         ),
         constMeta: kCrateApiInvoiceDecodedInvoiceFromStringConstMeta,
-        argValues: [s, boltzUrl],
+        argValues: [s, boltzUrl, regtestProfile],
         apiImpl: this,
       ),
     );
@@ -2080,7 +2163,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiInvoiceDecodedInvoiceFromStringConstMeta =>
       const TaskConstMeta(
         debugName: "decoded_invoice_from_string",
-        argNames: ["s", "boltzUrl"],
+        argNames: ["s", "boltzUrl", "regtestProfile"],
       );
 
   @override
@@ -2104,6 +2187,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
 
   TaskConstMeta get kCrateApiFeesFeesChainConstMeta =>
       const TaskConstMeta(debugName: "fees_chain", argNames: ["that"]);
+
+  @override
+  Future<Fees> crateApiFeesFeesForRegtest({
+    required RegtestNetworkProfile profile,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_box_autoadd_regtest_network_profile(profile);
+          return wire.wire__crate__api__fees__fees_for_regtest(port_, arg0);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_fees,
+          decodeErrorData: dco_decode_boltz_error,
+        ),
+        constMeta: kCrateApiFeesFeesForRegtestConstMeta,
+        argValues: [profile],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFeesFeesForRegtestConstMeta =>
+      const TaskConstMeta(debugName: "fees_for_regtest", argNames: ["profile"]);
 
   @override
   Future<Fees> crateApiFeesFeesNew({required String boltzUrl}) {
@@ -2541,6 +2648,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -2559,6 +2667,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg11 = cst_encode_String(electrumUrl);
           var arg12 = cst_encode_String(boltzUrl);
           var arg13 = cst_encode_opt_String(referralId);
+          var arg14 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_new(
             port_,
             arg0,
@@ -2575,6 +2686,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg11,
             arg12,
             arg13,
+            arg14,
           );
         },
         codec: DcoCodec(
@@ -2597,6 +2709,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           electrumUrl,
           boltzUrl,
           referralId,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -2621,6 +2734,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "electrumUrl",
           "boltzUrl",
           "referralId",
+          "regtestProfile",
         ],
       );
 
@@ -2635,6 +2749,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String boltzUrl,
     String? description,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -2648,6 +2763,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg6 = cst_encode_String(boltzUrl);
           var arg7 = cst_encode_opt_String(description);
           var arg8 = cst_encode_opt_String(referralId);
+          var arg9 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
             port_,
             arg0,
@@ -2659,6 +2777,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg6,
             arg7,
             arg8,
+            arg9,
           );
         },
         codec: DcoCodec(
@@ -2676,6 +2795,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           boltzUrl,
           description,
           referralId,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -2695,6 +2815,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "boltzUrl",
           "description",
           "referralId",
+          "regtestProfile",
         ],
       );
 
@@ -2707,6 +2828,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -2718,6 +2840,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg4 = cst_encode_String(electrumUrl);
           var arg5 = cst_encode_String(boltzUrl);
           var arg6 = cst_encode_opt_String(referralId);
+          var arg7 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
             port_,
             arg0,
@@ -2727,6 +2852,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg4,
             arg5,
             arg6,
+            arg7,
           );
         },
         codec: DcoCodec(
@@ -2742,6 +2868,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           electrumUrl,
           boltzUrl,
           referralId,
+          regtestProfile,
         ],
         apiImpl: this,
       ),
@@ -2759,6 +2886,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "electrumUrl",
           "boltzUrl",
           "referralId",
+          "regtestProfile",
         ],
       );
 
@@ -3081,11 +3209,104 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   );
 
   @override
+  Future<ElectrumSettings> crateApiTypesRegtestNetworkProfileElectrumSettings({
+    required RegtestNetworkProfile that,
+    required Chain chain,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_box_autoadd_regtest_network_profile(that);
+          var arg1 = cst_encode_chain(chain);
+          return wire
+              .wire__crate__api__types__regtest_network_profile_electrum_settings(
+                port_,
+                arg0,
+                arg1,
+              );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_electrum_settings,
+          decodeErrorData: dco_decode_boltz_error,
+        ),
+        constMeta: kCrateApiTypesRegtestNetworkProfileElectrumSettingsConstMeta,
+        argValues: [that, chain],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiTypesRegtestNetworkProfileElectrumSettingsConstMeta =>
+      const TaskConstMeta(
+        debugName: "regtest_network_profile_electrum_settings",
+        argNames: ["that", "chain"],
+      );
+
+  @override
+  Future<RegtestNetworkProfile> crateApiTypesRegtestNetworkProfileForHost({
+    required String host,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(host);
+          return wire.wire__crate__api__types__regtest_network_profile_for_host(
+            port_,
+            arg0,
+          );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_regtest_network_profile,
+          decodeErrorData: dco_decode_boltz_error,
+        ),
+        constMeta: kCrateApiTypesRegtestNetworkProfileForHostConstMeta,
+        argValues: [host],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTypesRegtestNetworkProfileForHostConstMeta =>
+      const TaskConstMeta(
+        debugName: "regtest_network_profile_for_host",
+        argNames: ["host"],
+      );
+
+  @override
+  Future<RegtestNetworkProfile> crateApiTypesRegtestNetworkProfileLocalhost() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          return wire
+              .wire__crate__api__types__regtest_network_profile_localhost(
+                port_,
+              );
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_regtest_network_profile,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiTypesRegtestNetworkProfileLocalhostConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTypesRegtestNetworkProfileLocalhostConstMeta =>
+      const TaskConstMeta(
+        debugName: "regtest_network_profile_localhost",
+        argNames: [],
+      );
+
+  @override
   Future<RestoredChainSwaps> crateApiRestoreRestoreChainSwaps({
     required SwapMasterKey swapMasterKey,
     required String btcElectrumUrl,
     required String lbtcElectrumUrl,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -3094,12 +3315,16 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg1 = cst_encode_String(btcElectrumUrl);
           var arg2 = cst_encode_String(lbtcElectrumUrl);
           var arg3 = cst_encode_String(boltzUrl);
+          var arg4 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__restore__restore_chain_swaps(
             port_,
             arg0,
             arg1,
             arg2,
             arg3,
+            arg4,
           );
         },
         codec: DcoCodec(
@@ -3107,7 +3332,13 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           decodeErrorData: dco_decode_boltz_error,
         ),
         constMeta: kCrateApiRestoreRestoreChainSwapsConstMeta,
-        argValues: [swapMasterKey, btcElectrumUrl, lbtcElectrumUrl, boltzUrl],
+        argValues: [
+          swapMasterKey,
+          btcElectrumUrl,
+          lbtcElectrumUrl,
+          boltzUrl,
+          regtestProfile,
+        ],
         apiImpl: this,
       ),
     );
@@ -3121,6 +3352,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "btcElectrumUrl",
           "lbtcElectrumUrl",
           "boltzUrl",
+          "regtestProfile",
         ],
       );
 
@@ -3129,6 +3361,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required SwapMasterKey swapMasterKey,
     required String electrumUrl,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -3136,11 +3369,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
           var arg1 = cst_encode_String(electrumUrl);
           var arg2 = cst_encode_String(boltzUrl);
+          var arg3 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__restore__restore_ln_btc_swaps(
             port_,
             arg0,
             arg1,
             arg2,
+            arg3,
           );
         },
         codec: DcoCodec(
@@ -3148,7 +3385,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           decodeErrorData: dco_decode_boltz_error,
         ),
         constMeta: kCrateApiRestoreRestoreLnBtcSwapsConstMeta,
-        argValues: [swapMasterKey, electrumUrl, boltzUrl],
+        argValues: [swapMasterKey, electrumUrl, boltzUrl, regtestProfile],
         apiImpl: this,
       ),
     );
@@ -3157,7 +3394,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiRestoreRestoreLnBtcSwapsConstMeta =>
       const TaskConstMeta(
         debugName: "restore_ln_btc_swaps",
-        argNames: ["swapMasterKey", "electrumUrl", "boltzUrl"],
+        argNames: [
+          "swapMasterKey",
+          "electrumUrl",
+          "boltzUrl",
+          "regtestProfile",
+        ],
       );
 
   @override
@@ -3165,6 +3407,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required SwapMasterKey swapMasterKey,
     required String electrumUrl,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -3172,11 +3415,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
           var arg1 = cst_encode_String(electrumUrl);
           var arg2 = cst_encode_String(boltzUrl);
+          var arg3 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__restore__restore_ln_lbtc_swaps(
             port_,
             arg0,
             arg1,
             arg2,
+            arg3,
           );
         },
         codec: DcoCodec(
@@ -3184,7 +3431,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           decodeErrorData: dco_decode_boltz_error,
         ),
         constMeta: kCrateApiRestoreRestoreLnLbtcSwapsConstMeta,
-        argValues: [swapMasterKey, electrumUrl, boltzUrl],
+        argValues: [swapMasterKey, electrumUrl, boltzUrl, regtestProfile],
         apiImpl: this,
       ),
     );
@@ -3193,23 +3440,33 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiRestoreRestoreLnLbtcSwapsConstMeta =>
       const TaskConstMeta(
         debugName: "restore_ln_lbtc_swaps",
-        argNames: ["swapMasterKey", "electrumUrl", "boltzUrl"],
+        argNames: [
+          "swapMasterKey",
+          "electrumUrl",
+          "boltzUrl",
+          "regtestProfile",
+        ],
       );
 
   @override
   Future<PlatformInt64> crateApiRestoreRestoreSwapIndex({
     required SwapMasterKey swapMasterKey,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
           var arg1 = cst_encode_String(boltzUrl);
+          var arg2 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__restore__restore_swap_index(
             port_,
             arg0,
             arg1,
+            arg2,
           );
         },
         codec: DcoCodec(
@@ -3217,7 +3474,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           decodeErrorData: dco_decode_boltz_error,
         ),
         constMeta: kCrateApiRestoreRestoreSwapIndexConstMeta,
-        argValues: [swapMasterKey, boltzUrl],
+        argValues: [swapMasterKey, boltzUrl, regtestProfile],
         apiImpl: this,
       ),
     );
@@ -3226,23 +3483,28 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiRestoreRestoreSwapIndexConstMeta =>
       const TaskConstMeta(
         debugName: "restore_swap_index",
-        argNames: ["swapMasterKey", "boltzUrl"],
+        argNames: ["swapMasterKey", "boltzUrl", "regtestProfile"],
       );
 
   @override
   Future<List<RestoredSwapSummary>> crateApiRestoreRestoreSwapSummaries({
     required SwapMasterKey swapMasterKey,
     required String boltzUrl,
+    RegtestNetworkProfile? regtestProfile,
   }) {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           var arg0 = cst_encode_box_autoadd_swap_master_key(swapMasterKey);
           var arg1 = cst_encode_String(boltzUrl);
+          var arg2 = cst_encode_opt_box_autoadd_regtest_network_profile(
+            regtestProfile,
+          );
           return wire.wire__crate__api__restore__restore_swap_summaries(
             port_,
             arg0,
             arg1,
+            arg2,
           );
         },
         codec: DcoCodec(
@@ -3250,7 +3512,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           decodeErrorData: dco_decode_boltz_error,
         ),
         constMeta: kCrateApiRestoreRestoreSwapSummariesConstMeta,
-        argValues: [swapMasterKey, boltzUrl],
+        argValues: [swapMasterKey, boltzUrl, regtestProfile],
         apiImpl: this,
       ),
     );
@@ -3259,7 +3521,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   TaskConstMeta get kCrateApiRestoreRestoreSwapSummariesConstMeta =>
       const TaskConstMeta(
         debugName: "restore_swap_summaries",
-        argNames: ["swapMasterKey", "boltzUrl"],
+        argNames: ["swapMasterKey", "boltzUrl", "regtestProfile"],
       );
 
   @override
@@ -3708,6 +3970,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  RegtestNetworkProfile dco_decode_box_autoadd_regtest_network_profile(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_regtest_network_profile(raw);
+  }
+
+  @protected
   Side dco_decode_box_autoadd_side(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_side(raw);
@@ -3759,23 +4029,26 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   BtcLnSwap dco_decode_btc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 14)
-      throw Exception('unexpected arr length: expect 14 but see ${arr.length}');
+    if (arr.length != 15)
+      throw Exception('unexpected arr length: expect 15 but see ${arr.length}');
     return BtcLnSwap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
       network: dco_decode_chain(arr[2]),
-      keys: dco_decode_key_pair(arr[3]),
-      keyIndex: dco_decode_u_64(arr[4]),
-      preimage: dco_decode_pre_image(arr[5]),
-      swapScript: dco_decode_btc_swap_script_str(arr[6]),
-      invoice: dco_decode_String(arr[7]),
-      scriptAddress: dco_decode_String(arr[8]),
-      outAmount: dco_decode_u_64(arr[9]),
-      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[10]),
-      electrumUrl: dco_decode_String(arr[11]),
-      boltzUrl: dco_decode_String(arr[12]),
-      referralId: dco_decode_opt_String(arr[13]),
+      regtestProfile: dco_decode_opt_box_autoadd_regtest_network_profile(
+        arr[3],
+      ),
+      keys: dco_decode_key_pair(arr[4]),
+      keyIndex: dco_decode_u_64(arr[5]),
+      preimage: dco_decode_pre_image(arr[6]),
+      swapScript: dco_decode_btc_swap_script_str(arr[7]),
+      invoice: dco_decode_String(arr[8]),
+      scriptAddress: dco_decode_String(arr[9]),
+      outAmount: dco_decode_u_64(arr[10]),
+      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[11]),
+      electrumUrl: dco_decode_String(arr[12]),
+      boltzUrl: dco_decode_String(arr[13]),
+      referralId: dco_decode_opt_String(arr[14]),
     );
   }
 
@@ -3820,27 +4093,30 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   ChainSwap dco_decode_chain_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 18)
-      throw Exception('unexpected arr length: expect 18 but see ${arr.length}');
+    if (arr.length != 19)
+      throw Exception('unexpected arr length: expect 19 but see ${arr.length}');
     return ChainSwap(
       id: dco_decode_String(arr[0]),
-      isTestnet: dco_decode_bool(arr[1]),
-      direction: dco_decode_chain_swap_direction(arr[2]),
-      refundKeys: dco_decode_key_pair(arr[3]),
-      refundIndex: dco_decode_u_64(arr[4]),
-      claimKeys: dco_decode_key_pair(arr[5]),
-      claimIndex: dco_decode_u_64(arr[6]),
-      preimage: dco_decode_pre_image(arr[7]),
-      btcScriptStr: dco_decode_btc_swap_script_str(arr[8]),
-      lbtcScriptStr: dco_decode_l_btc_swap_script_str(arr[9]),
-      scriptAddress: dco_decode_String(arr[10]),
-      outAmount: dco_decode_u_64(arr[11]),
-      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[12]),
-      btcElectrumUrl: dco_decode_String(arr[13]),
-      lbtcElectrumUrl: dco_decode_String(arr[14]),
-      boltzUrl: dco_decode_String(arr[15]),
-      referralId: dco_decode_opt_String(arr[16]),
-      blindingKey: dco_decode_String(arr[17]),
+      network: dco_decode_network(arr[1]),
+      regtestProfile: dco_decode_opt_box_autoadd_regtest_network_profile(
+        arr[2],
+      ),
+      direction: dco_decode_chain_swap_direction(arr[3]),
+      refundKeys: dco_decode_key_pair(arr[4]),
+      refundIndex: dco_decode_u_64(arr[5]),
+      claimKeys: dco_decode_key_pair(arr[6]),
+      claimIndex: dco_decode_u_64(arr[7]),
+      preimage: dco_decode_pre_image(arr[8]),
+      btcScriptStr: dco_decode_btc_swap_script_str(arr[9]),
+      lbtcScriptStr: dco_decode_l_btc_swap_script_str(arr[10]),
+      scriptAddress: dco_decode_String(arr[11]),
+      outAmount: dco_decode_u_64(arr[12]),
+      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[13]),
+      btcElectrumUrl: dco_decode_String(arr[14]),
+      lbtcElectrumUrl: dco_decode_String(arr[15]),
+      boltzUrl: dco_decode_String(arr[16]),
+      referralId: dco_decode_opt_String(arr[17]),
+      blindingKey: dco_decode_String(arr[18]),
     );
   }
 
@@ -3908,9 +4184,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Fees dco_decode_fees(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return Fees(boltzUrl: dco_decode_String(arr[0]));
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return Fees(
+      boltzUrl: dco_decode_String(arr[0]),
+      regtestProfile: dco_decode_opt_box_autoadd_regtest_network_profile(
+        arr[1],
+      ),
+    );
   }
 
   @protected
@@ -3959,24 +4240,27 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   LbtcLnSwap dco_decode_lbtc_ln_swap(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 15)
-      throw Exception('unexpected arr length: expect 15 but see ${arr.length}');
+    if (arr.length != 16)
+      throw Exception('unexpected arr length: expect 16 but see ${arr.length}');
     return LbtcLnSwap(
       id: dco_decode_String(arr[0]),
       kind: dco_decode_swap_type(arr[1]),
       network: dco_decode_chain(arr[2]),
-      keys: dco_decode_key_pair(arr[3]),
-      keyIndex: dco_decode_u_64(arr[4]),
-      preimage: dco_decode_pre_image(arr[5]),
-      swapScript: dco_decode_l_btc_swap_script_str(arr[6]),
-      invoice: dco_decode_String(arr[7]),
-      outAmount: dco_decode_u_64(arr[8]),
-      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[9]),
-      scriptAddress: dco_decode_String(arr[10]),
-      blindingKey: dco_decode_String(arr[11]),
-      electrumUrl: dco_decode_String(arr[12]),
-      boltzUrl: dco_decode_String(arr[13]),
-      referralId: dco_decode_opt_String(arr[14]),
+      regtestProfile: dco_decode_opt_box_autoadd_regtest_network_profile(
+        arr[3],
+      ),
+      keys: dco_decode_key_pair(arr[4]),
+      keyIndex: dco_decode_u_64(arr[5]),
+      preimage: dco_decode_pre_image(arr[6]),
+      swapScript: dco_decode_l_btc_swap_script_str(arr[7]),
+      invoice: dco_decode_String(arr[8]),
+      outAmount: dco_decode_u_64(arr[9]),
+      expectedOnchainAmount: dco_decode_opt_box_autoadd_u_64(arr[10]),
+      scriptAddress: dco_decode_String(arr[11]),
+      blindingKey: dco_decode_String(arr[12]),
+      electrumUrl: dco_decode_String(arr[13]),
+      boltzUrl: dco_decode_String(arr[14]),
+      referralId: dco_decode_opt_String(arr[15]),
     );
   }
 
@@ -4080,6 +4364,16 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  RegtestNetworkProfile? dco_decode_opt_box_autoadd_regtest_network_profile(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_regtest_network_profile(raw);
+  }
+
+  @protected
   Side? dco_decode_opt_box_autoadd_side(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_side(raw);
@@ -4126,6 +4420,22 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       value: dco_decode_String(arr[0]),
       sha256: dco_decode_String(arr[1]),
       hash160: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  RegtestNetworkProfile dco_decode_regtest_network_profile(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    return RegtestNetworkProfile(
+      host: dco_decode_String(arr[0]),
+      boltzUrl: dco_decode_String(arr[1]),
+      btcElectrumUrl: dco_decode_String(arr[2]),
+      lbtcElectrumUrl: dco_decode_String(arr[3]),
+      btcExplorerUrl: dco_decode_String(arr[4]),
+      lbtcExplorerUrl: dco_decode_String(arr[5]),
     );
   }
 
@@ -4500,6 +4810,14 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  RegtestNetworkProfile sse_decode_box_autoadd_regtest_network_profile(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_regtest_network_profile(deserializer));
+  }
+
+  @protected
   Side sse_decode_box_autoadd_side(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_side(deserializer));
@@ -4559,6 +4877,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_id = sse_decode_String(deserializer);
     var var_kind = sse_decode_swap_type(deserializer);
     var var_network = sse_decode_chain(deserializer);
+    var var_regtestProfile = sse_decode_opt_box_autoadd_regtest_network_profile(
+      deserializer,
+    );
     var var_keys = sse_decode_key_pair(deserializer);
     var var_keyIndex = sse_decode_u_64(deserializer);
     var var_preimage = sse_decode_pre_image(deserializer);
@@ -4576,6 +4897,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       id: var_id,
       kind: var_kind,
       network: var_network,
+      regtestProfile: var_regtestProfile,
       keys: var_keys,
       keyIndex: var_keyIndex,
       preimage: var_preimage,
@@ -4641,7 +4963,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   ChainSwap sse_decode_chain_swap(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_id = sse_decode_String(deserializer);
-    var var_isTestnet = sse_decode_bool(deserializer);
+    var var_network = sse_decode_network(deserializer);
+    var var_regtestProfile = sse_decode_opt_box_autoadd_regtest_network_profile(
+      deserializer,
+    );
     var var_direction = sse_decode_chain_swap_direction(deserializer);
     var var_refundKeys = sse_decode_key_pair(deserializer);
     var var_refundIndex = sse_decode_u_64(deserializer);
@@ -4662,7 +4987,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_blindingKey = sse_decode_String(deserializer);
     return ChainSwap(
       id: var_id,
-      isTestnet: var_isTestnet,
+      network: var_network,
+      regtestProfile: var_regtestProfile,
       direction: var_direction,
       refundKeys: var_refundKeys,
       refundIndex: var_refundIndex,
@@ -4758,7 +5084,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   Fees sse_decode_fees(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_boltzUrl = sse_decode_String(deserializer);
-    return Fees(boltzUrl: var_boltzUrl);
+    var var_regtestProfile = sse_decode_opt_box_autoadd_regtest_network_profile(
+      deserializer,
+    );
+    return Fees(boltzUrl: var_boltzUrl, regtestProfile: var_regtestProfile);
   }
 
   @protected
@@ -4812,6 +5141,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_id = sse_decode_String(deserializer);
     var var_kind = sse_decode_swap_type(deserializer);
     var var_network = sse_decode_chain(deserializer);
+    var var_regtestProfile = sse_decode_opt_box_autoadd_regtest_network_profile(
+      deserializer,
+    );
     var var_keys = sse_decode_key_pair(deserializer);
     var var_keyIndex = sse_decode_u_64(deserializer);
     var var_preimage = sse_decode_pre_image(deserializer);
@@ -4830,6 +5162,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
       id: var_id,
       kind: var_kind,
       network: var_network,
+      regtestProfile: var_regtestProfile,
       keys: var_keys,
       keyIndex: var_keyIndex,
       preimage: var_preimage,
@@ -4997,6 +5330,19 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  RegtestNetworkProfile? sse_decode_opt_box_autoadd_regtest_network_profile(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_regtest_network_profile(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   Side? sse_decode_opt_box_autoadd_side(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -5062,6 +5408,27 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     var var_sha256 = sse_decode_String(deserializer);
     var var_hash160 = sse_decode_String(deserializer);
     return PreImage(value: var_value, sha256: var_sha256, hash160: var_hash160);
+  }
+
+  @protected
+  RegtestNetworkProfile sse_decode_regtest_network_profile(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_host = sse_decode_String(deserializer);
+    var var_boltzUrl = sse_decode_String(deserializer);
+    var var_btcElectrumUrl = sse_decode_String(deserializer);
+    var var_lbtcElectrumUrl = sse_decode_String(deserializer);
+    var var_btcExplorerUrl = sse_decode_String(deserializer);
+    var var_lbtcExplorerUrl = sse_decode_String(deserializer);
+    return RegtestNetworkProfile(
+      host: var_host,
+      boltzUrl: var_boltzUrl,
+      btcElectrumUrl: var_btcElectrumUrl,
+      lbtcElectrumUrl: var_lbtcElectrumUrl,
+      btcExplorerUrl: var_btcExplorerUrl,
+      lbtcExplorerUrl: var_lbtcExplorerUrl,
+    );
   }
 
   @protected
@@ -5538,6 +5905,15 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_box_autoadd_regtest_network_profile(
+    RegtestNetworkProfile self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_regtest_network_profile(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_side(Side self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_side(self, serializer);
@@ -5603,6 +5979,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.id, serializer);
     sse_encode_swap_type(self.kind, serializer);
     sse_encode_chain(self.network, serializer);
+    sse_encode_opt_box_autoadd_regtest_network_profile(
+      self.regtestProfile,
+      serializer,
+    );
     sse_encode_key_pair(self.keys, serializer);
     sse_encode_u_64(self.keyIndex, serializer);
     sse_encode_pre_image(self.preimage, serializer);
@@ -5653,7 +6033,11 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_chain_swap(ChainSwap self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.id, serializer);
-    sse_encode_bool(self.isTestnet, serializer);
+    sse_encode_network(self.network, serializer);
+    sse_encode_opt_box_autoadd_regtest_network_profile(
+      self.regtestProfile,
+      serializer,
+    );
     sse_encode_chain_swap_direction(self.direction, serializer);
     sse_encode_key_pair(self.refundKeys, serializer);
     sse_encode_u_64(self.refundIndex, serializer);
@@ -5733,6 +6117,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   void sse_encode_fees(Fees self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.boltzUrl, serializer);
+    sse_encode_opt_box_autoadd_regtest_network_profile(
+      self.regtestProfile,
+      serializer,
+    );
   }
 
   @protected
@@ -5776,6 +6164,10 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.id, serializer);
     sse_encode_swap_type(self.kind, serializer);
     sse_encode_chain(self.network, serializer);
+    sse_encode_opt_box_autoadd_regtest_network_profile(
+      self.regtestProfile,
+      serializer,
+    );
     sse_encode_key_pair(self.keys, serializer);
     sse_encode_u_64(self.keyIndex, serializer);
     sse_encode_pre_image(self.preimage, serializer);
@@ -5940,6 +6332,19 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_regtest_network_profile(
+    RegtestNetworkProfile? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_regtest_network_profile(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_side(Side? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -5999,6 +6404,20 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     sse_encode_String(self.value, serializer);
     sse_encode_String(self.sha256, serializer);
     sse_encode_String(self.hash160, serializer);
+  }
+
+  @protected
+  void sse_encode_regtest_network_profile(
+    RegtestNetworkProfile self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.host, serializer);
+    sse_encode_String(self.boltzUrl, serializer);
+    sse_encode_String(self.btcElectrumUrl, serializer);
+    sse_encode_String(self.lbtcElectrumUrl, serializer);
+    sse_encode_String(self.btcExplorerUrl, serializer);
+    sse_encode_String(self.lbtcExplorerUrl, serializer);
   }
 
   @protected

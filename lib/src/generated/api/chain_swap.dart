@@ -12,13 +12,14 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`, `new_with_expected_onchain_amount`
+// These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`, `new_with_expected_onchain_amount`, `validate_context`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `clone`, `eq`
 
 /// Bitcoin-Liquid Swap Class
 class ChainSwap {
   final String id;
-  final bool isTestnet;
+  final Network network;
+  final RegtestNetworkProfile? regtestProfile;
   final ChainSwapDirection direction;
   final KeyPair refundKeys;
   final BigInt refundIndex;
@@ -38,7 +39,8 @@ class ChainSwap {
 
   const ChainSwap({
     required this.id,
-    required this.isTestnet,
+    required this.network,
+    this.regtestProfile,
     required this.direction,
     required this.refundKeys,
     required this.refundIndex,
@@ -127,7 +129,7 @@ class ChainSwap {
   /// Manually create the class. Primarily used when recovering a swap.
   static Future<ChainSwap> newInstance({
     required String id,
-    required bool isTestnet,
+    required Network network,
     required ChainSwapDirection direction,
     required KeyPair refundKeys,
     required BigInt refundIndex,
@@ -143,9 +145,10 @@ class ChainSwap {
     required String boltzUrl,
     String? referralId,
     required String blindingKey,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiChainSwapChainSwapNew(
     id: id,
-    isTestnet: isTestnet,
+    network: network,
     direction: direction,
     refundKeys: refundKeys,
     refundIndex: refundIndex,
@@ -161,6 +164,7 @@ class ChainSwap {
     boltzUrl: boltzUrl,
     referralId: referralId,
     blindingKey: blindingKey,
+    regtestProfile: regtestProfile,
   );
 
   /// Used to create the class when starting a chain swap between Bitcoin and Liquid.
@@ -171,21 +175,23 @@ class ChainSwap {
     required SwapMasterKey swapMasterKey,
     required BigInt index,
     required BigInt amount,
-    required bool isTestnet,
+    required Network network,
     required String btcElectrumUrl,
     required String lbtcElectrumUrl,
     required String boltzUrl,
     String? referralId,
+    RegtestNetworkProfile? regtestProfile,
   }) => BoltzCore.instance.api.crateApiChainSwapChainSwapNewSwap(
     direction: direction,
     swapMasterKey: swapMasterKey,
     index: index,
     amount: amount,
-    isTestnet: isTestnet,
+    network: network,
     btcElectrumUrl: btcElectrumUrl,
     lbtcElectrumUrl: lbtcElectrumUrl,
     boltzUrl: boltzUrl,
     referralId: referralId,
+    regtestProfile: regtestProfile,
   );
 
   /// Refund a failed swap
@@ -225,7 +231,8 @@ class ChainSwap {
   @override
   int get hashCode =>
       id.hashCode ^
-      isTestnet.hashCode ^
+      network.hashCode ^
+      regtestProfile.hashCode ^
       direction.hashCode ^
       refundKeys.hashCode ^
       refundIndex.hashCode ^
@@ -249,7 +256,8 @@ class ChainSwap {
       other is ChainSwap &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          isTestnet == other.isTestnet &&
+          network == other.network &&
+          regtestProfile == other.regtestProfile &&
           direction == other.direction &&
           refundKeys == other.refundKeys &&
           refundIndex == other.refundIndex &&
