@@ -3,13 +3,15 @@ use super::{
     types::{Chain, ChainSwapDirection, OutspendStatus, SwapTxKind, SwapType, VoutOutspend},
 };
 use crate::util::{
-    ensure_http_prefix, MEMPOOL_BITCOIN_TESTNET_URL, MEMPOOL_BITCOIN_URL,
+    ensure_boltz_url, ensure_http_prefix, MEMPOOL_BITCOIN_TESTNET_URL, MEMPOOL_BITCOIN_URL,
     MEMPOOL_LIQUID_TESTNET_URL, MEMPOOL_LIQUID_URL,
 };
 use boltz_client::swaps::boltz::BoltzApiClientV2;
 
 /// This function queries the Boltz API to get the swap transaction ID, then checks
 /// the mempool API to see if the transaction's first output has been spent.
+/// Regtest is unsupported: this deprecated function cannot accept the explicit
+/// explorer URL it requires. Use `check_lockup_outspends` instead.
 #[deprecated = "vout 0 is not guaranteed to be the swap output; use check_lockup_outspends and verify the spender"]
 pub async fn check_vout_0_outspend(
     swap_id: &str,
@@ -43,6 +45,8 @@ pub async fn check_vout_0_outspend(
 /// nothing about who was paid.
 ///
 /// `explorer_url` overrides the explorer for the resolved lockup chain and is required on regtest.
+/// Surrounding whitespace is ignored. Plaintext overrides are refused for a
+/// mainnet lockup chain, following the same URL policy as the Boltz endpoint.
 ///
 /// An empty report means the explorer has not indexed the lockup tx yet
 /// (e.g. polled right after broadcast): nothing is spent, retry later.
@@ -110,13 +114,19 @@ fn lockup_chain(
 
 fn explorer_for(chain: Chain, supplied: Option<String>) -> Result<String, BoltzError> {
     if let Some(url) = supplied {
-        if url.trim().is_empty() {
+        let url = url.trim();
+        if url.is_empty() {
             return Err(BoltzError::new(
                 "Input".into(),
                 "Explorer URL must not be empty".into(),
             ));
         }
-        return Ok(ensure_http_prefix(&url).trim_end_matches('/').to_owned());
+        return ensure_boltz_url(
+            url,
+            super::types::Network::from(chain) != super::types::Network::Mainnet,
+        )
+        .map(|url| url.trim_end_matches('/').to_owned())
+        .map_err(|error| BoltzError::new("Network".into(), error));
     }
     Ok(match chain {
         Chain::Bitcoin => MEMPOOL_BITCOIN_URL,
