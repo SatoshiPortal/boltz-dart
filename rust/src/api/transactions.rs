@@ -413,9 +413,10 @@ mod tests {
         // The explorer 404s a tx it hasn't indexed yet (polled right after
         // broadcast); that must read as "nothing spent, retry", not an error.
         let addr = serve(vec![(404, "Transaction not found".to_string())]);
-        let outspends = fetch_outspends(TXID, &format!("http://{addr}"))
-            .await
-            .expect("404 must degrade to an empty report");
+        let outspends =
+            fetch_outspends(TXID, &format!("http://{addr}"), Chain::BitcoinTestnet, None)
+                .await
+                .expect("404 must degrade to an empty report");
         assert!(outspends.is_empty());
     }
 
@@ -427,7 +428,7 @@ mod tests {
             (200, r#"[{"spent":false}]"#.to_string()),
             (500, "boom".to_string()),
         ]);
-        let err = fetch_outspends(TXID, &format!("http://{addr}"))
+        let err = fetch_outspends(TXID, &format!("http://{addr}"), Chain::BitcoinTestnet, None)
             .await
             .expect_err("failed amounts lookup must not degrade to None");
         assert_eq!(err.kind, "HTTP");
@@ -442,9 +443,10 @@ mod tests {
         let tx_body = r#"{"vout":[{"value":1000},{}]}"#.to_string();
         let addr = serve(vec![(200, outspends_body), (200, tx_body)]);
 
-        let outspends = fetch_outspends(TXID, &format!("http://{addr}"))
-            .await
-            .expect("both explorer calls succeed");
+        let outspends =
+            fetch_outspends(TXID, &format!("http://{addr}"), Chain::BitcoinTestnet, None)
+                .await
+                .expect("both explorer calls succeed");
 
         assert_eq!(outspends.len(), 2);
         assert_eq!(outspends[0].vout, 0);
@@ -455,5 +457,85 @@ mod tests {
         assert_eq!(outspends[1].value_sat, None);
         assert_eq!(outspends[1].spender_txid, None);
         assert_eq!(outspends[1].timestamp, None);
+    }
+}
+
+#[cfg(test)]
+mod regtest_profile_tests {
+    use super::*;
+    use crate::api::types::{Network, RegtestNetworkProfile};
+
+    #[test]
+    fn lockup_explorer_follows_chain_direction_and_transaction_kind() {
+        let profile = RegtestNetworkProfile::for_host("regtest.example".into()).unwrap();
+        for source in [Chain::BitcoinRegtest, Chain::LiquidRegtest] {
+            for (direction, kind, expected) in [
+                (
+                    ChainSwapDirection::BtcToLbtc,
+                    SwapTxKind::Claim,
+                    Chain::LiquidRegtest,
+                ),
+                (
+                    ChainSwapDirection::BtcToLbtc,
+                    SwapTxKind::Refund,
+                    Chain::BitcoinRegtest,
+                ),
+                (
+                    ChainSwapDirection::LbtcToBtc,
+                    SwapTxKind::Claim,
+                    Chain::BitcoinRegtest,
+                ),
+                (
+                    ChainSwapDirection::LbtcToBtc,
+                    SwapTxKind::Refund,
+                    Chain::LiquidRegtest,
+                ),
+            ] {
+                let chain = lockup_chain(source, SwapType::Chain, kind, Some(direction)).unwrap();
+                assert!(chain == expected && Network::from(chain) == Network::Regtest);
+                let (correct, wrong) = if chain == Chain::BitcoinRegtest {
+                    (&profile.btc_explorer_url, &profile.lbtc_explorer_url)
+                } else {
+                    (&profile.lbtc_explorer_url, &profile.btc_explorer_url)
+                };
+                assert!(explorer_for(chain, Some(correct.clone()), Some(&profile)).is_ok());
+                assert!(explorer_for(chain, Some(wrong.clone()), Some(&profile)).is_err());
+                assert!(explorer_for(chain, None, Some(&profile)).is_err());
+            }
+        }
+    }
+    fn explorer_responses(responses: Vec<&'static str>) -> (String, std::thread::JoinHandle<()>) {
+        use std::io::{Read, Write};
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let url = format!("http://{}", listener.local_addr().unwrap());
+        let thread = std::thread::spawn(move || {
+            for response in responses {
+                let (mut stream, _) = listener.accept().unwrap();
+                stream
+                    .set_read_timeout(Some(std::time::Duration::from_secs(2)))
+                    .unwrap();
+                let mut request = [0u8; 2048];
+                let _ = stream.read(&mut request).unwrap();
+                stream.write_all(response.as_bytes()).unwrap();
+            }
+        });
+        (url, thread)
+    }
+
+    #[tokio::test]
+    async fn regtest_explorer_does_not_follow_redirects_on_either_request() {
+        const REDIRECT: &str = "HTTP/1.1 302 Found\r\nLocation: /forbidden\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+        const OUTSPENDS: &str =
+            "HTTP/1.1 200 OK\r\nContent-Length: 17\r\nConnection: close\r\n\r\n[{\"spent\":false}]";
+        for responses in [vec![REDIRECT], vec![OUTSPENDS, REDIRECT]] {
+            let (url, server) = explorer_responses(responses);
+            let client = crate::util::regtest_http_client().unwrap();
+            let error = fetch_outspends_with_client("synthetic", &url, &client, Network::Regtest)
+                .await
+                .err()
+                .unwrap();
+            server.join().unwrap();
+            assert!(error.kind == "HTTP" && error.message.contains("302"));
+        }
     }
 }

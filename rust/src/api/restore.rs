@@ -994,7 +994,14 @@ mod tests {
             infer_network("BTC", "BTC", Network::Testnet),
             Ok(Chain::BitcoinTestnet)
         ));
-        assert!(infer_network("BTC", "BTC", Network::Regtest).is_err());
+        assert!(matches!(
+            infer_network("BTC", "BTC", Network::Regtest),
+            Ok(Chain::BitcoinRegtest)
+        ));
+        assert!(matches!(
+            infer_network("BTC", "L-BTC", Network::Regtest),
+            Ok(Chain::LiquidRegtest)
+        ));
     }
 
     fn test_master_key() -> SwapMasterKey {
@@ -1150,6 +1157,7 @@ mod tests {
             test_master_key(),
             "les.bullbitcoin.com:995".to_string(),
             format!("http://{addr}/v2"),
+            None,
         )
         .await
         .expect("restore must rebuild the batch")
@@ -1239,5 +1247,54 @@ mod tests {
         assert_eq!(submarine.out_amount, 0);
         assert_eq!(submarine.expected_onchain_amount, None);
         assert!(submarine.preimage.sha256.is_empty());
+    }
+    #[test]
+    fn liquid_regtest_rescue_preserves_network_and_local_http() {
+        let mut key = test_master_key();
+        key.network = Network::Regtest;
+        let mut f = fixture();
+        let mut address = boltz_client::ElementsAddress::from_str(&f.lockup_address).unwrap();
+        address.params = &boltz_client::elements::AddressParams::ELEMENTS;
+        f.lockup_address = address.to_string();
+        for response in [
+            submarine_restore_json(&f),
+            reverse_restore_json(&f, &f.reverse_preimage_hash),
+        ] {
+            let response: SwapRestoreResponse = serde_json::from_value(response).unwrap();
+            let swap = restore_to_lbtc_ln_swap(
+                response,
+                key.clone(),
+                "127.0.0.1:50001".into(),
+                "http://127.0.0.1:9001/v2".into(),
+                None,
+                None,
+            )
+            .unwrap();
+            assert!(swap.network == Chain::LiquidRegtest);
+            assert!(swap.boltz_url == "http://127.0.0.1:9001/v2");
+            let encoded = swap.to_json().unwrap();
+            assert!(LbtcLnSwap::from_json(&encoded).unwrap().network == Chain::LiquidRegtest);
+        }
+    }
+
+    #[test]
+    fn regtest_rescue_rejects_production_lockup_before_derivation() {
+        let f = fixture();
+        let mut key = test_master_key();
+        key.network = Network::Regtest;
+        key.xprv.clear();
+        let response: SwapRestoreResponse =
+            serde_json::from_value(submarine_restore_json(&f)).unwrap();
+        let error = restore_to_lbtc_ln_swap(
+            response,
+            key,
+            "127.0.0.1:50001".into(),
+            "http://127.0.0.1:9001/v2".into(),
+            None,
+            None,
+        )
+        .err()
+        .unwrap();
+        assert!(error.kind == "Network");
     }
 }

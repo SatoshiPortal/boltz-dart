@@ -114,7 +114,7 @@ mod tests {
 
     #[tokio::test]
     async fn decodes_amount_and_network_offline() {
-        let decoded = DecodedInvoice::from_string(INVOICE_123_SAT.to_string(), None)
+        let decoded = DecodedInvoice::from_string(INVOICE_123_SAT.to_string(), None, None)
             .await
             .expect("decode 123 sat invoice");
         assert_eq!(decoded.msats, 123_000);
@@ -126,7 +126,7 @@ mod tests {
 
     #[tokio::test]
     async fn decodes_millibitcoin_amount() {
-        let decoded = DecodedInvoice::from_string(INVOICE_26M_SAT.to_string(), None)
+        let decoded = DecodedInvoice::from_string(INVOICE_26M_SAT.to_string(), None, None)
             .await
             .expect("decode 26m sat invoice");
         assert_eq!(decoded.msats, 26_000_000_000);
@@ -135,7 +135,7 @@ mod tests {
 
     #[tokio::test]
     async fn old_invoice_is_expired() {
-        let decoded = DecodedInvoice::from_string(INVOICE_123_SAT.to_string(), None)
+        let decoded = DecodedInvoice::from_string(INVOICE_123_SAT.to_string(), None, None)
             .await
             .unwrap();
         assert!(decoded.is_expired);
@@ -143,7 +143,8 @@ mod tests {
 
     #[tokio::test]
     async fn invalid_invoice_errors() {
-        let result = DecodedInvoice::from_string("lntbinvalidinvoice".to_string(), None).await;
+        let result =
+            DecodedInvoice::from_string("lntbinvalidinvoice".to_string(), None, None).await;
         assert!(result.is_err());
     }
 }

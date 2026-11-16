@@ -341,3 +341,196 @@ pub(crate) fn regtest_http_client() -> Result<reqwest::Client, crate::api::error
             )
         })
 }
+
+#[cfg(test)]
+mod regtest_tests {
+    use super::*;
+    use crate::api::types::Chain;
+
+    #[test]
+    fn regtest_default_electrum_is_local_tcp_and_production_defaults_unchanged() {
+        let (_, domain, tls, timeout) =
+            get_network_electrum_configs(None, "127.0.0.1:50000", Chain::BitcoinRegtest, None)
+                .unwrap();
+        assert!(!domain && !tls && timeout == 10);
+        let (_, domain, tls, _) = get_network_electrum_configs(
+            None,
+            "electrum.example:50002",
+            Chain::BitcoinTestnet,
+            None,
+        )
+        .unwrap();
+        assert!(domain && tls);
+        assert!(get_network_electrum_configs(
+            None,
+            "remote.example:50000",
+            Chain::BitcoinRegtest,
+            None
+        )
+        .is_err());
+        assert!(get_network_electrum_configs(
+            None,
+            "127.0.0.1:50000/path",
+            Chain::BitcoinRegtest,
+            None
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn regtest_electrum_flags_follow_core_order_without_changing_production() {
+        use crate::api::types::{ElectrumSettings, RegtestNetworkProfile};
+        let p = RegtestNetworkProfile::for_host("regtest.example".into()).unwrap();
+        let settings = ElectrumSettings {
+            url: p.btc_electrum_url.clone(),
+            tls: true,
+            validate_domain: false,
+            timeout: 7,
+        };
+        let (_, tls, domain, timeout) = get_network_electrum_configs(
+            Some(settings),
+            &p.btc_electrum_url,
+            Chain::BitcoinRegtest,
+            Some(&p),
+        )
+        .unwrap();
+        assert!(tls && !domain && timeout == 7);
+        let settings = ElectrumSettings {
+            url: "electrum.example:50002".into(),
+            tls: true,
+            validate_domain: false,
+            timeout: 7,
+        };
+        let original = get_electrum_configs(Some(settings.clone()), "ignored");
+        let current =
+            get_network_electrum_configs(Some(settings), "ignored", Chain::BitcoinTestnet, None)
+                .unwrap();
+        assert!(current == original);
+        assert!(get_network_electrum_configs(
+            None,
+            &p.btc_electrum_url,
+            Chain::LiquidRegtest,
+            Some(&p)
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn liquid_regtest_uses_elements_address_parameters_and_policy_asset() {
+        use boltz_client::{
+            elements::{Address, AddressParams},
+            network::LiquidChain,
+        };
+        let key =
+            boltz_client::Keypair::from_seckey_slice(&boltz_client::Secp256k1::new(), &[1u8; 32])
+                .unwrap();
+        let public_key =
+            boltz_client::elements::bitcoin::PublicKey::from_slice(&key.public_key().serialize())
+                .unwrap();
+        for params in [
+            &AddressParams::LIQUID,
+            &AddressParams::LIQUID_TESTNET,
+            &AddressParams::ELEMENTS,
+        ] {
+            let address = Address::p2wpkh(&public_key, Some(key.public_key()), params);
+            assert!(
+                validate_regtest_address(Chain::LiquidRegtest, &address.to_string()).is_ok()
+                    == (params == &AddressParams::ELEMENTS)
+            );
+        }
+        assert!(LiquidChain::LiquidRegtest.bitcoin() != LiquidChain::LiquidTestnet.bitcoin());
+        assert!(LiquidChain::LiquidRegtest.bitcoin() != LiquidChain::Liquid.bitcoin());
+    }
+    #[tokio::test]
+    async fn regtest_http_ignores_inherited_proxy() {
+        const CHILD: &str = "BOLTZ_REGTEST_PROXY_CHILD";
+        const URL: &str = "BOLTZ_REGTEST_PROXY_TARGET";
+        if std::env::var_os(CHILD).is_some() {
+            let response = regtest_http_client()
+                .unwrap()
+                .get(std::env::var(URL).unwrap())
+                .send()
+                .await;
+            assert!(response.is_ok_and(|response| response.status().is_success()));
+            return;
+        }
+        use std::io::{Read, Write};
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        listener.set_nonblocking(true).unwrap();
+        let target = format!("http://{}", listener.local_addr().unwrap());
+        let server = std::thread::spawn(move || {
+            let deadline = std::time::Instant::now() + std::time::Duration::from_secs(5);
+            while std::time::Instant::now() < deadline {
+                match listener.accept() {
+                    Ok((mut stream, _)) => {
+                        stream
+                            .set_read_timeout(Some(std::time::Duration::from_secs(2)))
+                            .unwrap();
+                        let mut request = [0u8; 2048];
+                        let _ = stream.read(&mut request).unwrap();
+                        stream.write_all(b"HTTP/1.1 200 OK\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").unwrap();
+                        return true;
+                    }
+                    Err(error) if error.kind() == std::io::ErrorKind::WouldBlock => {
+                        std::thread::sleep(std::time::Duration::from_millis(5))
+                    }
+                    Err(_) => return false,
+                }
+            }
+            false
+        });
+        let output = std::process::Command::new(std::env::current_exe().unwrap())
+            .args([
+                "--exact",
+                "util::regtest_tests::regtest_http_ignores_inherited_proxy",
+            ])
+            .env(CHILD, "1")
+            .env(URL, target)
+            .env("HTTP_PROXY", "http://127.0.0.1:1")
+            .env("http_proxy", "http://127.0.0.1:1")
+            .env("HTTPS_PROXY", "http://127.0.0.1:1")
+            .env("https_proxy", "http://127.0.0.1:1")
+            .env("ALL_PROXY", "http://127.0.0.1:1")
+            .env("all_proxy", "http://127.0.0.1:1")
+            .env("NO_PROXY", "")
+            .env("no_proxy", "")
+            .output()
+            .unwrap();
+        assert!(server.join().unwrap());
+        assert!(output.status.success());
+    }
+    #[test]
+    fn reverse_response_rejects_wrong_currency_even_with_the_same_payment_hash() {
+        use boltz_client::{
+            bitcoin::{
+                hashes::{sha256, Hash},
+                secp256k1::{Secp256k1, SecretKey},
+            },
+            lightning_invoice::{Currency, InvoiceBuilder, PaymentSecret},
+        };
+        let payment_hash = sha256::Hash::hash(&[1u8; 32]);
+        let key = SecretKey::from_slice(&[7u8; 32]).unwrap();
+        for chain in [Chain::BitcoinRegtest, Chain::LiquidRegtest] {
+            for currency in [
+                Currency::Bitcoin,
+                Currency::BitcoinTestnet,
+                Currency::Regtest,
+            ] {
+                let invoice = InvoiceBuilder::new(currency.clone())
+                    .description("Synthetic reverse response".into())
+                    .payment_hash(payment_hash)
+                    .payment_secret(PaymentSecret([2u8; 32]))
+                    .duration_since_epoch(std::time::Duration::from_secs(1))
+                    .min_final_cltv_expiry_delta(18)
+                    .build_signed(|hash| Secp256k1::new().sign_ecdsa_recoverable(hash, &key))
+                    .unwrap();
+                assert!(*invoice.payment_hash() == payment_hash);
+                assert!(
+                    reverse_invoice(Some(&invoice.to_string()), chain).is_ok()
+                        == (currency == Currency::Regtest)
+                );
+            }
+            assert!(reverse_invoice(None, chain).is_err());
+        }
+    }
+}
