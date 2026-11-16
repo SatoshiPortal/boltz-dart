@@ -10,7 +10,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `check_outspend`, `fetch_outspends`, `resolve_lockup_tx`
+// These functions are ignored because they are not marked as `pub`: `check_outspend`, `explorer_for`, `fetch_outspends`, `lockup_chain`, `resolve_lockup_tx`
 
 /// This function queries the Boltz API to get the swap transaction ID, then checks
 /// the mempool API to see if the transaction's first output has been spent.
@@ -38,6 +38,8 @@ Future<OutspendStatus> checkVout0Outspend({
 /// treating it as their claim or refund — an output being spent proves
 /// nothing about who was paid.
 ///
+/// `explorer_url` overrides the explorer for the resolved lockup chain and is required on regtest.
+///
 /// An empty report means the explorer has not indexed the lockup tx yet
 /// (e.g. polled right after broadcast): nothing is spent, retry later.
 Future<List<VoutOutspend>> checkLockupOutspends({
@@ -47,6 +49,7 @@ Future<List<VoutOutspend>> checkLockupOutspends({
   required Chain network,
   required String boltzUrl,
   ChainSwapDirection? chainSwapDirection,
+  String? explorerUrl,
 }) => BoltzCore.instance.api.crateApiTransactionsCheckLockupOutspends(
   swapId: swapId,
   swapType: swapType,
@@ -54,4 +57,5 @@ Future<List<VoutOutspend>> checkLockupOutspends({
   network: network,
   boltzUrl: boltzUrl,
   chainSwapDirection: chainSwapDirection,
+  explorerUrl: explorerUrl,
 );

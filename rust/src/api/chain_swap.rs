@@ -7,8 +7,8 @@ use super::{
     fees::TxFee,
     secrets::{KeyPair, SwapMasterKey},
     types::{
-        BtcSwapScriptStr, Chain, ChainSwapDirection, ElectrumSettings, LBtcSwapScriptStr, PreImage,
-        SwapTxKind,
+        BtcSwapScriptStr, Chain, ChainSwapDirection, ElectrumSettings, LBtcSwapScriptStr, Network,
+        PreImage, SwapTxKind,
     },
 };
 use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
@@ -35,7 +35,8 @@ use serde_json::Value;
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct ChainSwap {
     pub id: String,
-    pub is_testnet: bool,
+    #[serde(flatten, with = "stored_network")]
+    pub network: Network,
     pub direction: ChainSwapDirection,
     pub refund_keys: KeyPair,
     pub refund_index: u64,
@@ -72,7 +73,7 @@ impl ChainSwap {
     /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
-        is_testnet: bool,
+        network: Network,
         direction: ChainSwapDirection,
         refund_keys: KeyPair,
         refund_index: u64,
@@ -91,7 +92,7 @@ impl ChainSwap {
     ) -> ChainSwap {
         Self::new_with_expected_onchain_amount(
             id,
-            is_testnet,
+            network,
             direction,
             refund_keys,
             refund_index,
@@ -114,7 +115,7 @@ impl ChainSwap {
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn new_with_expected_onchain_amount(
         id: String,
-        is_testnet: bool,
+        network: Network,
         direction: ChainSwapDirection,
         refund_keys: KeyPair,
         refund_index: u64,
@@ -135,7 +136,7 @@ impl ChainSwap {
         ChainSwap {
             id,
             direction,
-            is_testnet,
+            network,
             refund_keys,
             refund_index,
             claim_keys,
@@ -145,7 +146,7 @@ impl ChainSwap {
             lbtc_script_str,
             btc_electrum_url: strip_protocol_prefix(&btc_electrum_url),
             lbtc_electrum_url: strip_protocol_prefix(&lbtc_electrum_url),
-            boltz_url: match ensure_boltz_url(&boltz_url, is_testnet) {
+            boltz_url: match ensure_boltz_url(&boltz_url, network != Network::Mainnet) {
                 Ok(url) => url,
                 Err(_) => force_https(&boltz_url),
             },
@@ -164,36 +165,21 @@ impl ChainSwap {
         swap_master_key: SwapMasterKey,
         index: u64,
         amount: u64,
-        is_testnet: bool,
+        network: Network,
         btc_electrum_url: String,
         lbtc_electrum_url: String,
         boltz_url: String,
         referral_id: Option<String>,
     ) -> Result<ChainSwap, BoltzError> {
-        let (refund_network, claim_network) = if is_testnet {
-            if direction == ChainSwapDirection::BtcToLbtc {
-                (
-                    AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
-                    AllChains::Liquid(LiquidChain::LiquidTestnet),
-                )
-            } else {
-                (
-                    AllChains::Liquid(LiquidChain::LiquidTestnet),
-                    AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
-                )
-            }
-        } else {
-            if direction == ChainSwapDirection::BtcToLbtc {
-                (
-                    AllChains::Bitcoin(BitcoinChain::Bitcoin),
-                    AllChains::Liquid(LiquidChain::Liquid),
-                )
-            } else {
-                (
-                    AllChains::Liquid(LiquidChain::Liquid),
-                    AllChains::Bitcoin(BitcoinChain::Bitcoin),
-                )
-            }
+        if network != swap_master_key.network {
+            return Err(BoltzError::new(
+                "Network".to_string(),
+                "Swap master key network does not match the swap network".to_string(),
+            ));
+        }
+        let (refund_network, claim_network): (AllChains, AllChains) = match direction {
+            ChainSwapDirection::BtcToLbtc => (network.bitcoin().into(), network.liquid().into()),
+            ChainSwapDirection::LbtcToBtc => (network.liquid().into(), network.bitcoin().into()),
         };
 
         let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
@@ -223,7 +209,7 @@ impl ChainSwap {
             inner: claim_kps.public_key(),
         };
         let preimage: Preimage = Preimage::from_swap_key(&claim_kps);
-        let boltz_url = ensure_boltz_url(&boltz_url, is_testnet)
+        let boltz_url = ensure_boltz_url(&boltz_url, network != Network::Mainnet)
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
         let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         match direction {
@@ -280,7 +266,7 @@ impl ChainSwap {
                 )?;
                 Ok(ChainSwap::new_with_expected_onchain_amount(
                     create_chain_response.id,
-                    is_testnet,
+                    network,
                     direction,
                     refund_keypair,
                     index,
@@ -353,7 +339,7 @@ impl ChainSwap {
                 )?;
                 Ok(ChainSwap::new_with_expected_onchain_amount(
                     create_chain_response.id,
-                    is_testnet,
+                    network,
                     direction,
                     refund_keypair,
                     index,
@@ -409,16 +395,8 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
         let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
@@ -585,16 +563,8 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
         let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
@@ -669,16 +639,8 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
         let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
@@ -781,16 +743,8 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
         let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
@@ -858,39 +812,12 @@ impl ChainSwap {
 
     /// Get the network of the swap given a SwapTxKind
     fn get_network(&self, kind: SwapTxKind) -> (Chain, String) {
-        match self.direction {
-            ChainSwapDirection::BtcToLbtc => match kind {
-                SwapTxKind::Claim => {
-                    if self.is_testnet {
-                        (Chain::LiquidTestnet, self.lbtc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Liquid, self.lbtc_electrum_url.to_owned())
-                    }
-                }
-                SwapTxKind::Refund => {
-                    if self.is_testnet {
-                        (Chain::BitcoinTestnet, self.btc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Bitcoin, self.btc_electrum_url.to_owned())
-                    }
-                }
-            },
-            ChainSwapDirection::LbtcToBtc => match kind {
-                SwapTxKind::Claim => {
-                    if self.is_testnet {
-                        (Chain::BitcoinTestnet, self.btc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Bitcoin, self.btc_electrum_url.to_owned())
-                    }
-                }
-                SwapTxKind::Refund => {
-                    if self.is_testnet {
-                        (Chain::LiquidTestnet, self.lbtc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Liquid, self.lbtc_electrum_url.to_owned())
-                    }
-                }
-            },
+        match (self.direction, kind) {
+            (ChainSwapDirection::BtcToLbtc, SwapTxKind::Refund)
+            | (ChainSwapDirection::LbtcToBtc, SwapTxKind::Claim) => {
+                (self.network.bitcoin(), self.btc_electrum_url.clone())
+            }
+            _ => (self.network.liquid(), self.lbtc_electrum_url.clone()),
         }
     }
     /// Broadcast a signed transaction via your own electrum server used when the swap was created.
@@ -908,7 +835,7 @@ impl ChainSwap {
             get_electrum_configs(electrum_settings, &default_electrum_url);
 
         match network {
-            Chain::Bitcoin | Chain::BitcoinTestnet => {
+            Chain::Bitcoin | Chain::BitcoinTestnet | Chain::BitcoinRegtest => {
                 let network_config = ElectrumBitcoinClient::new(
                     network.into(),
                     &electrum_url,
@@ -928,7 +855,7 @@ impl ChainSwap {
                 };
                 Ok(txid.to_string())
             }
-            Chain::Liquid | Chain::LiquidTestnet => {
+            Chain::Liquid | Chain::LiquidTestnet | Chain::LiquidRegtest => {
                 let network_config = ElectrumLiquidClient::new(
                     network.into(),
                     &electrum_url,
@@ -972,5 +899,52 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
             "BoltzApi".to_string(),
             "TxId not found in boltz response".to_string(),
         )),
+    }
+}
+
+// ChainSwap's production JSON is consumed by older application versions.
+// Keep its boolean wire format, and make regtest unreadable by those readers.
+mod stored_network {
+    use super::Network;
+    use serde::{ser::SerializeMap, Deserialize, Deserializer, Serializer};
+
+    pub(super) fn serialize<S: Serializer>(
+        network: &Network,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error> {
+        let mut map = serializer.serialize_map(Some(1))?;
+        match network {
+            Network::Mainnet => map.serialize_entry("is_testnet", &false)?,
+            Network::Testnet => map.serialize_entry("is_testnet", &true)?,
+            Network::Regtest => map.serialize_entry("network", network)?,
+        }
+        map.end()
+    }
+
+    fn present<'de, T: Deserialize<'de>, D: Deserializer<'de>>(
+        deserializer: D,
+    ) -> Result<Option<T>, D::Error> {
+        T::deserialize(deserializer).map(Some)
+    }
+
+    pub(super) fn deserialize<'de, D: Deserializer<'de>>(
+        deserializer: D,
+    ) -> Result<Network, D::Error> {
+        #[derive(Deserialize)]
+        struct Stored {
+            #[serde(default, deserialize_with = "present")]
+            is_testnet: Option<bool>,
+            #[serde(default, deserialize_with = "present")]
+            network: Option<Network>,
+        }
+        let stored = Stored::deserialize(deserializer)?;
+        match (stored.is_testnet, stored.network) {
+            (Some(false), None) => Ok(Network::Mainnet),
+            (Some(true), None) => Ok(Network::Testnet),
+            (None, Some(Network::Regtest)) => Ok(Network::Regtest),
+            _ => Err(serde::de::Error::custom(
+                "Missing or conflicting swap network",
+            )),
+        }
     }
 }

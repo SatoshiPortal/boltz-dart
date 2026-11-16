@@ -92,6 +92,8 @@ pub enum Chain {
     BitcoinTestnet,
     Liquid,
     LiquidTestnet,
+    BitcoinRegtest,
+    LiquidRegtest,
 }
 
 impl Chain {
@@ -105,8 +107,10 @@ impl Into<AllChains> for Chain {
         match self {
             Chain::Bitcoin => AllChains::Bitcoin(BitcoinChain::Bitcoin),
             Chain::BitcoinTestnet => AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
+            Chain::BitcoinRegtest => AllChains::Bitcoin(BitcoinChain::BitcoinRegtest),
             Chain::Liquid => AllChains::Liquid(LiquidChain::Liquid),
             Chain::LiquidTestnet => AllChains::Liquid(LiquidChain::LiquidTestnet),
+            Chain::LiquidRegtest => AllChains::Liquid(LiquidChain::LiquidRegtest),
         }
     }
 }
@@ -116,9 +120,10 @@ impl From<AllChains> for Chain {
         match chain {
             AllChains::Bitcoin(BitcoinChain::Bitcoin) => Chain::Bitcoin,
             AllChains::Bitcoin(BitcoinChain::BitcoinTestnet) => Chain::BitcoinTestnet,
+            AllChains::Bitcoin(BitcoinChain::BitcoinRegtest) => Chain::BitcoinRegtest,
             AllChains::Liquid(LiquidChain::Liquid) => Chain::Liquid,
             AllChains::Liquid(LiquidChain::LiquidTestnet) => Chain::LiquidTestnet,
-            _ => panic!("Invalid chain"),
+            AllChains::Liquid(LiquidChain::LiquidRegtest) => Chain::LiquidRegtest,
         }
     }
 }
@@ -128,6 +133,7 @@ impl Into<BitcoinChain> for Chain {
         match self {
             Chain::Bitcoin => BitcoinChain::Bitcoin,
             Chain::BitcoinTestnet => BitcoinChain::BitcoinTestnet,
+            Chain::BitcoinRegtest => BitcoinChain::BitcoinRegtest,
             _ => panic!("Invalid chain"),
         }
     }
@@ -137,6 +143,7 @@ impl Into<LiquidChain> for Chain {
         match self {
             Chain::Liquid => LiquidChain::Liquid,
             Chain::LiquidTestnet => LiquidChain::LiquidTestnet,
+            Chain::LiquidRegtest => LiquidChain::LiquidRegtest,
             _ => panic!("Invalid chain"),
         }
     }
@@ -154,6 +161,24 @@ pub enum Network {
     Mainnet,
     Testnet,
     Regtest,
+}
+
+impl Network {
+    pub(crate) fn bitcoin(self) -> Chain {
+        match self {
+            Self::Mainnet => Chain::Bitcoin,
+            Self::Testnet => Chain::BitcoinTestnet,
+            Self::Regtest => Chain::BitcoinRegtest,
+        }
+    }
+
+    pub(crate) fn liquid(self) -> Chain {
+        match self {
+            Self::Mainnet => Chain::Liquid,
+            Self::Testnet => Chain::LiquidTestnet,
+            Self::Regtest => Chain::LiquidRegtest,
+        }
+    }
 }
 
 impl Into<BoltzNetwork> for Network {
@@ -181,6 +206,7 @@ impl From<Chain> for Network {
         match chain {
             Chain::Bitcoin | Chain::Liquid => Network::Mainnet,
             Chain::BitcoinTestnet | Chain::LiquidTestnet => Network::Testnet,
+            Chain::BitcoinRegtest | Chain::LiquidRegtest => Network::Regtest,
         }
     }
 }

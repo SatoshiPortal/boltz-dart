@@ -7,7 +7,7 @@ use super::{
     error::BoltzError,
     fees::TxFee,
     secrets::{KeyPair, SwapMasterKey},
-    types::{Chain, ElectrumSettings, LBtcSwapScriptStr, PreImage, SwapType},
+    types::{Chain, ElectrumSettings, LBtcSwapScriptStr, Network, PreImage, SwapType},
 };
 use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
 use boltz_client::{
@@ -119,7 +119,10 @@ impl LbtcLnSwap {
             swap_script,
             invoice,
             electrum_url: strip_protocol_prefix(&electrum_url),
-            boltz_url: match ensure_boltz_url(&boltz_url, network.is_testnet()) {
+            boltz_url: match ensure_boltz_url(
+                &boltz_url,
+                Network::from(network) != Network::Mainnet,
+            ) {
                 Ok(url) => url,
                 Err(_) => force_https(&boltz_url),
             },
@@ -144,6 +147,12 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Submarine;
+        if network != swap_master_key.network.liquid() {
+            return Err(BoltzError::new(
+                "Network".to_string(),
+                "Swap master key network does not match the swap chain".to_string(),
+            ));
+        }
         let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
         let refund_kps = swap_xkey_inner.derive_liquid_swapkey(index)?;
         let refund_keypair = KeyPair::from(refund_kps);
@@ -151,7 +160,7 @@ impl LbtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+        let boltz_url = ensure_boltz_url(&boltz_url, Network::from(network) != Network::Mainnet)
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
         let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
@@ -252,6 +261,12 @@ impl LbtcLnSwap {
         // pair_hash: String,
     ) -> Result<LbtcLnSwap, BoltzError> {
         let swap_type = SwapType::Reverse;
+        if network != swap_master_key.network.liquid() {
+            return Err(BoltzError::new(
+                "Network".to_string(),
+                "Swap master key network does not match the swap chain".to_string(),
+            ));
+        }
         let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
         let claim_kps = swap_xkey_inner.derive_liquid_swapkey(index)?;
         let claim_keypair = KeyPair::from(claim_kps);
@@ -262,7 +277,7 @@ impl LbtcLnSwap {
             inner: claim_kps.public_key(),
         };
 
-        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+        let boltz_url = ensure_boltz_url(&boltz_url, Network::from(network) != Network::Mainnet)
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
         let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
         let create_reverse_req = if out_address.is_some() {

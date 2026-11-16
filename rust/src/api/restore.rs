@@ -406,32 +406,11 @@ pub async fn restore_chain_swaps(
 }
 
 fn infer_network(from: &str, to: &str, network: Network) -> Result<Chain, BoltzError> {
-    let is_testnet = match network {
-        Network::Mainnet => false,
-        Network::Testnet => true,
-        Network::Regtest => {
-            return Err(BoltzError::new(
-                "Network".to_string(),
-                "Remote swap restore does not support regtest".to_string(),
-            ));
-        }
-    };
-    // The Lightning side of an LN swap is always BTC-denominated, so the
-    // on-chain leg is whichever side is L-BTC (reverse: `to`, submarine: `from`).
-    // Keying off `from` alone mis-tags a lightning->L-BTC reverse as Bitcoin.
-    let is_liquid = from == "L-BTC" || to == "L-BTC";
-    Ok(if is_liquid {
-        if is_testnet {
-            Chain::LiquidTestnet
-        } else {
-            Chain::Liquid
-        }
+    // The on-chain side of an LN swap is whichever leg is L-BTC.
+    Ok(if from == "L-BTC" || to == "L-BTC" {
+        network.liquid()
     } else {
-        if is_testnet {
-            Chain::BitcoinTestnet
-        } else {
-            Chain::Bitcoin
-        }
+        network.bitcoin()
     })
 }
 
@@ -727,16 +706,7 @@ fn restore_to_chain_swap(
     boltz_url: String,
 ) -> Result<ChainSwap, BoltzError> {
     let direction = infer_chain_swap_direction(&restore_response.from, &restore_response.to)?;
-    let is_testnet = match swap_master_key.network {
-        Network::Mainnet => false,
-        Network::Testnet => true,
-        Network::Regtest => {
-            return Err(BoltzError::new(
-                "Network".to_string(),
-                "Remote swap restore does not support regtest".to_string(),
-            ));
-        }
-    };
+    let network = swap_master_key.network;
     let swap_master_key_inner: boltz_client::util::secrets::SwapMasterKey =
         swap_master_key.try_into()?;
 
@@ -867,7 +837,7 @@ fn restore_to_chain_swap(
 
     Ok(ChainSwap::new_with_expected_onchain_amount(
         restore_response.id,
-        is_testnet,
+        network,
         direction,
         refund_keys,
         refund_index,
@@ -915,7 +885,9 @@ mod tests {
             infer_network("BTC", "BTC", Network::Testnet),
             Ok(Chain::BitcoinTestnet)
         ));
-        assert!(infer_network("BTC", "BTC", Network::Regtest).is_err());
+        assert!(infer_network("BTC", "BTC", Network::Regtest).unwrap() == Chain::BitcoinRegtest);
+        assert!(infer_network("L-BTC", "BTC", Network::Regtest).unwrap() == Chain::LiquidRegtest);
+        assert!(infer_network("BTC", "L-BTC", Network::Regtest).unwrap() == Chain::LiquidRegtest);
     }
 
     fn test_master_key() -> SwapMasterKey {
@@ -1160,5 +1132,32 @@ mod tests {
         assert_eq!(submarine.out_amount, 0);
         assert_eq!(submarine.expected_onchain_amount, None);
         assert!(submarine.preimage.sha256.is_empty());
+    }
+    #[test]
+    fn liquid_regtest_rescue_preserves_network_and_local_http() {
+        let mut key = test_master_key();
+        key.network = Network::Regtest;
+        let mut f = fixture();
+        let mut address = boltz_client::ElementsAddress::from_str(&f.lockup_address).unwrap();
+        address.params = &boltz_client::elements::AddressParams::ELEMENTS;
+        f.lockup_address = address.to_string();
+        for response in [
+            submarine_restore_json(&f),
+            reverse_restore_json(&f, &f.reverse_preimage_hash),
+        ] {
+            let response: SwapRestoreResponse = serde_json::from_value(response).unwrap();
+            let swap = restore_to_lbtc_ln_swap(
+                response,
+                key.clone(),
+                "liquid.example:18202".into(),
+                "http://boltz.example:18200/custom/v2".into(),
+                None,
+            )
+            .unwrap();
+            assert!(swap.network == Chain::LiquidRegtest);
+            assert!(swap.boltz_url == "http://boltz.example:18200/custom/v2");
+            let encoded = swap.to_json().unwrap();
+            assert!(LbtcLnSwap::from_json(&encoded).unwrap().network == Chain::LiquidRegtest);
+        }
     }
 }
