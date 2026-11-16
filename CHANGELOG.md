@@ -76,3 +76,12 @@
 - fix(outspend): `check_lockup_outspends` reports a not-yet-indexed lockup tx as an empty (nothing-spent) report instead of erroring, and amount lookups error on failure so `value_sat = None` strictly means a confidential output
 - chore: deprecate `check_vout_0_outspend`
 - ci/test: unit-test dylib loads straight from cargo's target dir — `flutter test` wipes anything staged into `build/unit_test_assets` (#58)
+
+# 0.6.0
+- feat(breaking): `ChainSwap.network` replaces `isTestnet`; `ChainSwap.newInstance` and `ChainSwap.newSwap` take `network: Network` instead of `isTestnet: bool`
+- feat: concrete Bitcoin/Liquid regtest chains and restores accept caller-supplied Boltz and Electrum URLs; `checkLockupOutspends` adds the optional `explorerUrl` argument, required on regtest with no public fallback
+- fix: explorer overrides trim surrounding whitespace and reject plaintext HTTP for a mainnet lockup chain, matching the Boltz URL policy
+- feat(breaking): swap creation rejects mismatched master-key and chain network tags on mainnet, testnet and regtest; existing stored keys are not rederived
+- compatibility: mainnet/testnet swap JSON retains the legacy format; regtest uses explicit discriminators that older readers reject
+- compatibility(breaking): ship matching Dart bindings and rebuilt native libraries together; an unchanged FRB dispatch-name hash does not establish ABI compatibility
+- docs: Liquid regtest uses the pinned boltz-rust policy asset and Elements address parameters; deprecated `checkVout0Outspend` does not support regtest

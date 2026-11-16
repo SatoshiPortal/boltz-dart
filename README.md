@@ -118,8 +118,12 @@ Also try `flutter run` in the `example` directory.
 
 Use `Chain.bitcoinRegtest` or `Chain.liquidRegtest` with caller-supplied Boltz and Electrum URLs. Plaintext Boltz URLs are accepted for testnet and regtest. For a TCP Electrum service, pass `ElectrumSettings` with `tls: false` and `validateDomain: false`. The library does not impose hosts, ports or paths.
 
+Liquid regtest assumes the pinned boltz-rust library's fixed `ASSET_ID_REGTEST` policy asset and `AddressParams::ELEMENTS` address parameters, corresponding to its default `elementsregtest` configuration. Custom policy assets or address parameters are not configurable through this API.
+
 `ChainSwap` takes `Network` instead of `isTestnet`. Mainnet/testnet JSON retains the legacy `is_testnet` format; regtest JSON uses an explicit discriminator that older readers reject. Swap creation rejects a master key whose network does not match the requested chain, on every network.
 
 `checkLockupOutspends` requires an explicit `explorerUrl` on regtest, with no public-explorer fallback. Select the explorer for the actual lockup chain (the server's chain for a claim, the user's chain for a refund). Existing mainnet/testnet explorer defaults remain available.
+
+Explorer overrides ignore surrounding whitespace and refuse plaintext HTTP for a mainnet lockup chain, matching the Boltz URL policy. The deprecated `checkVout0Outspend` cannot accept an explorer override and does not support regtest.
 
 Native ABI change: rebuild the native library and regenerate consumers together. The FRB dispatch-name content hash can remain unchanged when parameter types change; do not combine these bindings with an older native binary.

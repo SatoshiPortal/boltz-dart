@@ -131,4 +131,36 @@ void main() {
       ),
     );
   });
+
+  test(
+    'mainnet plaintext explorer is refused across FFI before Boltz IO',
+    () async {
+      for (final chain in [Chain.bitcoin, Chain.liquid]) {
+        await expectLater(
+          checkLockupOutspends(
+            swapId: 'synthetic',
+            swapType: SwapType.reverse,
+            txKind: SwapTxKind.claim,
+            network: chain,
+            boltzUrl: 'http://127.0.0.1:1',
+            explorerUrl: ' \thttp://explorer.example/custom/\n ',
+          ),
+          throwsA(
+            isA<BoltzError>()
+                .having((error) => error.kind, 'kind', 'Network')
+                .having(
+                  (error) => error.message,
+                  'plaintext policy',
+                  contains('plaintext'),
+                )
+                .having(
+                  (error) => error.message,
+                  'trimmed explorer URL',
+                  contains('http://explorer.example/custom/'),
+                ),
+          ),
+        );
+      }
+    },
+  );
 }
