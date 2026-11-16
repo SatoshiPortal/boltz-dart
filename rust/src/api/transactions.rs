@@ -508,11 +508,25 @@ mod regtest_profile_tests {
         use std::io::{Read, Write};
         let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
         let url = format!("http://{}", listener.local_addr().unwrap());
+        listener.set_nonblocking(true).unwrap();
         let thread = std::thread::spawn(move || {
             for response in responses {
-                let (mut stream, _) = listener.accept().unwrap();
+                let deadline = std::time::Instant::now() + std::time::Duration::from_secs(5);
+                let (mut stream, _) = loop {
+                    match listener.accept() {
+                        Ok(connection) => break connection,
+                        Err(error) if error.kind() == std::io::ErrorKind::WouldBlock => {
+                            assert!(std::time::Instant::now() < deadline, "Explorer fixture did not receive its next request within five seconds");
+                            std::thread::sleep(std::time::Duration::from_millis(5));
+                        }
+                        Err(error) => panic!("Explorer fixture accept failed: {error}"),
+                    }
+                };
                 stream
                     .set_read_timeout(Some(std::time::Duration::from_secs(2)))
+                    .unwrap();
+                stream
+                    .set_write_timeout(Some(std::time::Duration::from_secs(2)))
                     .unwrap();
                 let mut request = [0u8; 2048];
                 let _ = stream.read(&mut request).unwrap();
