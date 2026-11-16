@@ -113,3 +113,11 @@ Also try `flutter run` in the `example` directory.
 - [FRB-Docs](https://cjycode.com/flutter_rust_bridge/v1/index.html)
 - [FRB-Codebase](https://github.com/fzyzcjy/flutter_rust_bridge/)
 - [Article](https://blog.logrocket.com/using-flutter-rust-bridge-cross-platform-development/)
+
+### Regtest
+
+Use `Chain.bitcoinRegtest` or `Chain.liquidRegtest` with caller-supplied Boltz and Electrum URLs. Plaintext Boltz URLs are accepted for testnet and regtest. For a TCP Electrum service, pass `ElectrumSettings` with `tls: false` and `validateDomain: false`. The library does not impose hosts, ports or paths.
+
+`ChainSwap` takes `Network` instead of `isTestnet`. Mainnet/testnet JSON retains the legacy `is_testnet` format; regtest JSON uses an explicit discriminator that older readers reject. Swap creation rejects a master key whose network does not match the requested chain, on every network.
+
+`checkLockupOutspends` requires an explicit `explorerUrl` on regtest, with no public-explorer fallback. Select the explorer for the actual lockup chain (the server's chain for a claim, the user's chain for a refund). Existing mainnet/testnet explorer defaults remain available.

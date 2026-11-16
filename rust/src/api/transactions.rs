@@ -26,11 +26,12 @@ pub async fn check_vout_0_outspend(
         network,
         boltz_url,
         chain_swap_direction,
+        None,
     )
     .await?;
 
     // Check if the output has been spent
-    check_outspend(&txid, mempool_url, tx_kind).await
+    check_outspend(&txid, &mempool_url, tx_kind).await
 }
 
 /// Reports the outspend status of EVERY output of the swap's lockup
@@ -41,6 +42,8 @@ pub async fn check_vout_0_outspend(
 /// treating it as their claim or refund — an output being spent proves
 /// nothing about who was paid.
 ///
+/// `explorer_url` overrides the explorer for the resolved lockup chain and is required on regtest.
+///
 /// An empty report means the explorer has not indexed the lockup tx yet
 /// (e.g. polled right after broadcast): nothing is spent, retry later.
 pub async fn check_lockup_outspends(
@@ -50,6 +53,7 @@ pub async fn check_lockup_outspends(
     network: Chain,
     boltz_url: &str,
     chain_swap_direction: Option<ChainSwapDirection>,
+    explorer_url: Option<String>,
 ) -> Result<Vec<VoutOutspend>, BoltzError> {
     let (txid, mempool_url) = resolve_lockup_tx(
         swap_id,
@@ -58,14 +62,78 @@ pub async fn check_lockup_outspends(
         network,
         boltz_url,
         chain_swap_direction,
+        explorer_url,
     )
     .await?;
 
-    fetch_outspends(&txid, mempool_url).await
+    fetch_outspends(&txid, &mempool_url).await
 }
 
-/// Resolves which lockup transaction a claim/refund of this swap spends,
-/// and the explorer to query it on.
+/// Select the lockup chain without contacting a service.
+fn lockup_chain(
+    network: Chain,
+    swap_type: SwapType,
+    tx_kind: SwapTxKind,
+    direction: Option<ChainSwapDirection>,
+) -> Result<Chain, BoltzError> {
+    if swap_type != SwapType::Chain {
+        return Ok(network);
+    }
+    let direction = direction.ok_or_else(|| {
+        BoltzError::new(
+            "Input".into(),
+            "Chain swap direction is required for chain swaps".into(),
+        )
+    })?;
+    let exact_network = super::types::Network::from(network);
+    // Preserve the historical main/test explorer selection for refunds.
+    let network =
+        if exact_network != super::types::Network::Regtest && tx_kind == SwapTxKind::Refund {
+            match direction {
+                ChainSwapDirection::BtcToLbtc if network == Chain::BitcoinTestnet => {
+                    super::types::Network::Testnet
+                }
+                ChainSwapDirection::LbtcToBtc if network == Chain::LiquidTestnet => {
+                    super::types::Network::Testnet
+                }
+                _ => super::types::Network::Mainnet,
+            }
+        } else {
+            exact_network
+        };
+    Ok(match (direction, tx_kind) {
+        (ChainSwapDirection::BtcToLbtc, SwapTxKind::Claim)
+        | (ChainSwapDirection::LbtcToBtc, SwapTxKind::Refund) => network.liquid(),
+        _ => network.bitcoin(),
+    })
+}
+
+fn explorer_for(chain: Chain, supplied: Option<String>) -> Result<String, BoltzError> {
+    if let Some(url) = supplied {
+        if url.trim().is_empty() {
+            return Err(BoltzError::new(
+                "Input".into(),
+                "Explorer URL must not be empty".into(),
+            ));
+        }
+        return Ok(ensure_http_prefix(&url).trim_end_matches('/').to_owned());
+    }
+    Ok(match chain {
+        Chain::Bitcoin => MEMPOOL_BITCOIN_URL,
+        Chain::BitcoinTestnet => MEMPOOL_BITCOIN_TESTNET_URL,
+        Chain::Liquid => MEMPOOL_LIQUID_URL,
+        Chain::LiquidTestnet => MEMPOOL_LIQUID_TESTNET_URL,
+        Chain::BitcoinRegtest | Chain::LiquidRegtest => {
+            return Err(BoltzError::new(
+                "Input".into(),
+                "Regtest requires an explicit explorer URL".into(),
+            ))
+        }
+    }
+    .to_owned())
+}
+
+/// Resolve the transaction only after choosing an explicit local explorer for regtest.
 async fn resolve_lockup_tx(
     swap_id: &str,
     swap_type: SwapType,
@@ -73,137 +141,45 @@ async fn resolve_lockup_tx(
     network: Chain,
     boltz_url: &str,
     chain_swap_direction: Option<ChainSwapDirection>,
-) -> Result<(String, &'static str), BoltzError> {
-    // Get the transaction ID to check based on swap type and tx kind
-    let (txid, mempool_url) = match (swap_type, tx_kind) {
-        // Reverse swap claims - check server lockup transaction
-        (SwapType::Reverse, SwapTxKind::Claim) => {
-            let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(boltz_url), None);
-            let tx_response = boltz_client.get_reverse_tx(swap_id).await?;
-            let txid = tx_response.id;
-
-            let mempool_url = match network {
-                Chain::Bitcoin => MEMPOOL_BITCOIN_URL,
-                Chain::BitcoinTestnet => MEMPOOL_BITCOIN_TESTNET_URL,
-                Chain::Liquid => MEMPOOL_LIQUID_URL,
-                Chain::LiquidTestnet => MEMPOOL_LIQUID_TESTNET_URL,
-            };
-
-            (txid, mempool_url)
-        }
-
-        // Submarine swap refunds - check user lockup transaction
-        (SwapType::Submarine, SwapTxKind::Refund) => {
-            let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(boltz_url), None);
-            let tx_response = boltz_client.get_submarine_tx(swap_id).await?;
-            let txid = tx_response.id;
-
-            let mempool_url = match network {
-                Chain::Bitcoin => MEMPOOL_BITCOIN_URL,
-                Chain::BitcoinTestnet => MEMPOOL_BITCOIN_TESTNET_URL,
-                Chain::Liquid => MEMPOOL_LIQUID_URL,
-                Chain::LiquidTestnet => MEMPOOL_LIQUID_TESTNET_URL,
-            };
-
-            (txid, mempool_url)
-        }
-
-        // Chain swap claims - check server lockup transaction
-        (SwapType::Chain, SwapTxKind::Claim) => {
-            let direction = chain_swap_direction.ok_or_else(|| BoltzError {
-                kind: "Input".to_string(),
-                message: "Chain swap direction is required for chain swaps".to_string(),
+    explorer_url: Option<String>,
+) -> Result<(String, String), BoltzError> {
+    let chain = lockup_chain(network, swap_type, tx_kind, chain_swap_direction)?;
+    let explorer = explorer_for(chain, explorer_url)?;
+    let client = BoltzApiClientV2::new(ensure_http_prefix(boltz_url), None);
+    let txid = match (swap_type, tx_kind) {
+        (SwapType::Reverse, SwapTxKind::Claim) => client.get_reverse_tx(swap_id).await?.id,
+        (SwapType::Submarine, SwapTxKind::Refund) => client.get_submarine_tx(swap_id).await?.id,
+        (SwapType::Chain, kind) => {
+            let txs = client.get_chain_txs(swap_id).await?;
+            let lockup = match kind {
+                SwapTxKind::Claim => txs.server_lock,
+                SwapTxKind::Refund => txs.user_lock,
+            }
+            .ok_or_else(|| {
+                BoltzError::new(
+                    "NotFound".into(),
+                    match kind {
+                        SwapTxKind::Claim => "Server lockup transaction not found".into(),
+                        SwapTxKind::Refund => "User lockup transaction not found".into(),
+                    },
+                )
             })?;
-
-            let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(boltz_url), None);
-            let txs = boltz_client.get_chain_txs(swap_id).await?;
-
-            let server_lock = txs.server_lock.ok_or_else(|| BoltzError {
-                kind: "NotFound".to_string(),
-                message: "Server lockup transaction not found".to_string(),
-            })?;
-
-            let txid = server_lock.transaction.id;
-
-            // Determine which network the server locked on (opposite of user lockup)
-            let mempool_url = match direction {
-                ChainSwapDirection::BtcToLbtc => {
-                    // User locked BTC, server locked Liquid
-                    if network == Chain::BitcoinTestnet || network == Chain::LiquidTestnet {
-                        MEMPOOL_LIQUID_TESTNET_URL
-                    } else {
-                        MEMPOOL_LIQUID_URL
-                    }
-                }
-                ChainSwapDirection::LbtcToBtc => {
-                    // User locked Liquid, server locked BTC
-                    if network == Chain::BitcoinTestnet || network == Chain::LiquidTestnet {
-                        MEMPOOL_BITCOIN_TESTNET_URL
-                    } else {
-                        MEMPOOL_BITCOIN_URL
-                    }
-                }
-            };
-
-            (txid, mempool_url)
+            lockup.transaction.id
         }
-
-        // Chain swap refunds - check user lockup transaction
-        (SwapType::Chain, SwapTxKind::Refund) => {
-            let direction = chain_swap_direction.ok_or_else(|| BoltzError {
-                kind: "Input".to_string(),
-                message: "Chain swap direction is required for chain swaps".to_string(),
-            })?;
-
-            let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(boltz_url), None);
-            let txs = boltz_client.get_chain_txs(swap_id).await?;
-
-            let user_lock = txs.user_lock.ok_or_else(|| BoltzError {
-                kind: "NotFound".to_string(),
-                message: "User lockup transaction not found".to_string(),
-            })?;
-
-            let txid = user_lock.transaction.id;
-
-            // Determine which network the user locked on
-            let mempool_url = match direction {
-                ChainSwapDirection::BtcToLbtc => {
-                    // User locked BTC
-                    if network == Chain::BitcoinTestnet {
-                        MEMPOOL_BITCOIN_TESTNET_URL
-                    } else {
-                        MEMPOOL_BITCOIN_URL
-                    }
-                }
-                ChainSwapDirection::LbtcToBtc => {
-                    // User locked Liquid
-                    if network == Chain::LiquidTestnet {
-                        MEMPOOL_LIQUID_TESTNET_URL
-                    } else {
-                        MEMPOOL_LIQUID_URL
-                    }
-                }
-            };
-
-            (txid, mempool_url)
-        }
-
-        // Invalid combinations
         (SwapType::Submarine, SwapTxKind::Claim) => {
-            return Err(BoltzError {
-                kind: "Input".to_string(),
-                message: "Submarine swaps cannot be checked for claim".to_string(),
-            });
+            return Err(BoltzError::new(
+                "Input".into(),
+                "Submarine swaps cannot be checked for claim".into(),
+            ));
         }
         (SwapType::Reverse, SwapTxKind::Refund) => {
-            return Err(BoltzError {
-                kind: "Input".to_string(),
-                message: "Reverse swaps cannot be checked for refund".to_string(),
-            });
+            return Err(BoltzError::new(
+                "Input".into(),
+                "Reverse swaps cannot be checked for refund".into(),
+            ));
         }
     };
-
-    Ok((txid, mempool_url))
+    Ok((txid, explorer))
 }
 
 /// Fetches the outspend status of every output of [txid] plus the output
