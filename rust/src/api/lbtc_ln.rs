@@ -1,5 +1,5 @@
 use crate::util::{
-    ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
+    ensure_network_url, force_https, get_network_electrum_configs, strip_protocol_prefix,
 };
 use std::str::FromStr;
 
@@ -25,6 +25,8 @@ pub struct LbtcLnSwap {
     pub id: String,
     pub kind: SwapType,
     pub network: Chain,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub regtest_profile: Option<super::types::RegtestNetworkProfile>,
     pub keys: KeyPair,
     pub key_index: u64,
     pub preimage: PreImage,
@@ -41,6 +43,25 @@ pub struct LbtcLnSwap {
 }
 
 impl LbtcLnSwap {
+    fn validate_context(&self) -> Result<(), BoltzError> {
+        if self.network != super::types::Network::from(self.network).liquid() {
+            return Err(BoltzError::new(
+                "Network".into(),
+                "Wrong swap chain family".into(),
+            ));
+        }
+        crate::util::swap_url(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
+        crate::util::validate_regtest_address(self.network, &self.script_address)?;
+        if let Some(address) = &self.swap_script.funding_addrs {
+            crate::util::validate_regtest_address(self.network, address)?;
+        }
+        Ok(())
+    }
+
     /// Convert instance to a JSON string.
     pub fn to_json(&self) -> Result<String, BoltzError> {
         match serde_json::to_string(self) {
@@ -71,6 +92,7 @@ impl LbtcLnSwap {
         electrum_url: String,
         boltz_url: String,
         referral_id: Option<String>,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
     ) -> LbtcLnSwap {
         Self::new_with_expected_onchain_amount(
             id,
@@ -88,6 +110,7 @@ impl LbtcLnSwap {
             boltz_url,
             referral_id,
             None,
+            regtest_profile,
         )
     }
 
@@ -108,20 +131,31 @@ impl LbtcLnSwap {
         boltz_url: String,
         referral_id: Option<String>,
         expected_onchain_amount: Option<u64>,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
     ) -> LbtcLnSwap {
         LbtcLnSwap {
             id,
             kind,
             network,
+            regtest_profile: regtest_profile.clone(),
             keys,
             key_index,
             preimage,
             swap_script,
             invoice,
             electrum_url: strip_protocol_prefix(&electrum_url),
-            boltz_url: match ensure_boltz_url(&boltz_url, network.is_testnet()) {
+            boltz_url: match ensure_network_url(
+                &boltz_url,
+                network.into(),
+                regtest_profile.as_ref(),
+            ) {
                 Ok(url) => url,
-                Err(_) => force_https(&boltz_url),
+                Err(_)
+                    if super::types::Network::from(network) != super::types::Network::Regtest =>
+                {
+                    force_https(&boltz_url)
+                }
+                Err(_) => boltz_url,
             },
             out_amount,
             expected_onchain_amount,
@@ -141,8 +175,22 @@ impl LbtcLnSwap {
         electrum_url: String,
         boltz_url: String,
         referral_id: Option<String>,
-        // pair_hash: String,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
     ) -> Result<LbtcLnSwap, BoltzError> {
+        if network != swap_master_key.network.liquid() {
+            return Err(BoltzError::new(
+                "Network".into(),
+                "Swap chain or key network mismatch".into(),
+            ));
+        }
+        let regtest_profile =
+            crate::util::capture_regtest_profile(network.into(), regtest_profile)?;
+        ensure_network_url(&boltz_url, network.into(), regtest_profile.as_ref())
+            .map_err(|e| BoltzError::new("Network".into(), e))?;
+        if super::types::Network::from(network) == super::types::Network::Regtest {
+            get_network_electrum_configs(None, &electrum_url, network, regtest_profile.as_ref())?;
+        }
+        crate::util::validate_regtest_invoice(&invoice, network.into())?;
         let swap_type = SwapType::Submarine;
         let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
         let refund_kps = swap_xkey_inner.derive_liquid_swapkey(index)?;
@@ -151,9 +199,10 @@ impl LbtcLnSwap {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
         };
-        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+        let boltz_url = ensure_network_url(&boltz_url, network.into(), regtest_profile.as_ref())
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
+        let boltz_client =
+            crate::util::boltz_api_client(&boltz_url, network.into(), regtest_profile.as_ref())?;
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
             from: "L-BTC".to_string(),
             to: "BTC".to_string(),
@@ -198,6 +247,7 @@ impl LbtcLnSwap {
             boltz_url.clone(),
             referral_id,
             None,
+            regtest_profile.clone(),
         ))
     }
     /// After boltz completes a submarine swap, call this function to close the swap cooperatively using Musig.
@@ -207,7 +257,12 @@ impl LbtcLnSwap {
     /// preimage against the invoice payment hash before partial-signing —
     /// never sign a spend of the lockup without proof the invoice was paid.
     pub async fn coop_close_submarine(&self) -> Result<(), BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        self.validate_context()?;
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let ckp: Keypair = self.keys.clone().try_into()?;
         SwapScript::from_liquid(swap_script)
@@ -219,7 +274,12 @@ impl LbtcLnSwap {
 
     /// Retrieves the preimage for a completed submarine swap.
     pub async fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        self.validate_context()?;
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
         let response = boltz_client
             .get_submarine_claim_tx_details(&self.id)
             .await?;
@@ -249,8 +309,24 @@ impl LbtcLnSwap {
         boltz_url: String,
         description: Option<String>,
         referral_id: Option<String>,
-        // pair_hash: String,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
     ) -> Result<LbtcLnSwap, BoltzError> {
+        if network != swap_master_key.network.liquid() {
+            return Err(BoltzError::new(
+                "Network".into(),
+                "Swap chain or key network mismatch".into(),
+            ));
+        }
+        let regtest_profile =
+            crate::util::capture_regtest_profile(network.into(), regtest_profile)?;
+        ensure_network_url(&boltz_url, network.into(), regtest_profile.as_ref())
+            .map_err(|e| BoltzError::new("Network".into(), e))?;
+        if super::types::Network::from(network) == super::types::Network::Regtest {
+            get_network_electrum_configs(None, &electrum_url, network, regtest_profile.as_ref())?;
+        }
+        if let Some(address) = &out_address {
+            crate::util::validate_regtest_address(network, address)?;
+        }
         let swap_type = SwapType::Reverse;
         let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
         let claim_kps = swap_xkey_inner.derive_liquid_swapkey(index)?;
@@ -262,9 +338,10 @@ impl LbtcLnSwap {
             inner: claim_kps.public_key(),
         };
 
-        let boltz_url = ensure_boltz_url(&boltz_url, network.is_testnet())
+        let boltz_url = ensure_network_url(&boltz_url, network.into(), regtest_profile.as_ref())
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
+        let boltz_client =
+            crate::util::boltz_api_client(&boltz_url, network.into(), regtest_profile.as_ref())?;
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -308,7 +385,7 @@ impl LbtcLnSwap {
             }
         };
         let response = boltz_client.post_reverse_req(create_reverse_req).await?;
-        let invoice = response.invoice.clone().unwrap_or_default();
+        let invoice = crate::util::reverse_invoice(response.invoice.as_deref(), network)?;
         let preimage_boltz: Preimage = preimage.clone().into();
         response.validate(&preimage_boltz, &claim_public_key, network.into())?;
         let swap_script = LBtcSwapScript::reverse_from_swap_resp(&response, claim_public_key)?;
@@ -329,6 +406,7 @@ impl LbtcLnSwap {
             boltz_url.clone(),
             referral_id,
             (response.onchain_amount > 0).then_some(response.onchain_amount),
+            regtest_profile.clone(),
         ))
     }
     /// Used to claim a reverse swap.
@@ -339,6 +417,8 @@ impl LbtcLnSwap {
         try_cooperate: bool,
         electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
+        self.validate_context()?;
+        crate::util::validate_regtest_address(self.network, &out_address)?;
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -357,12 +437,20 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
-            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let (electrum_url, tls, validate_domain, timeout) = get_network_electrum_configs(
+            electrum_settings,
+            &self.electrum_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let id: String = self.id.clone();
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let tx = match LBtcSwapTx::new_claim(
             swap_script,
@@ -413,6 +501,8 @@ impl LbtcLnSwap {
         try_cooperate: bool,
         electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
+        self.validate_context()?;
+        crate::util::validate_regtest_address(self.network, &out_address)?;
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -431,12 +521,20 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
-            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let (electrum_url, tls, validate_domain, timeout) = get_network_electrum_configs(
+            electrum_settings,
+            &self.electrum_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
         let id = self.id.clone();
         let tx = match LBtcSwapTx::new_refund(
             swap_script.clone(),
@@ -479,6 +577,7 @@ impl LbtcLnSwap {
         signed_hex: String,
         electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
+        self.validate_context()?;
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
         let all_chains: AllChains = self.network.into();
@@ -491,10 +590,14 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
-            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let (electrum_url, tls, validate_domain, timeout) = get_network_electrum_configs(
+            electrum_settings,
+            &self.electrum_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let transaction = Transaction::consensus_decode(&mut &signed_bytes[..])
             .map_err(|e| BoltzError::new("Bitcoin".to_string(), e.to_string()))?;
         let txid = match network_config.broadcast_tx(&transaction).await {
@@ -505,8 +608,12 @@ impl LbtcLnSwap {
     }
     /// Broadcast using boltz's electrum server
     pub async fn broadcast_boltz(&self, signed_hex: String) -> Result<String, BoltzError> {
-        let boltz_client: BoltzApiClientV2 =
-            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        self.validate_context()?;
+        let boltz_client: BoltzApiClientV2 = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
         let txid = match boltz_client
             .broadcast_tx(self.network.into(), &signed_hex)
             .await
@@ -522,6 +629,7 @@ impl LbtcLnSwap {
         is_cooperative: bool,
         electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
+        self.validate_context()?;
         if self.kind == SwapType::Submarine {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -540,13 +648,20 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
-            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let (electrum_url, tls, validate_domain, timeout) = get_network_electrum_configs(
+            electrum_settings,
+            &self.electrum_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client: BoltzApiClientV2 =
-            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client: BoltzApiClientV2 = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
 
         let tx = match LBtcSwapTx::new_claim(
             swap_script.clone(),
@@ -574,6 +689,7 @@ impl LbtcLnSwap {
         is_cooperative: bool,
         electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
+        self.validate_context()?;
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
@@ -592,13 +708,20 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
-            get_electrum_configs(electrum_settings, &self.electrum_url);
+        let (electrum_url, tls, validate_domain, timeout) = get_network_electrum_configs(
+            electrum_settings,
+            &self.electrum_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client: BoltzApiClientV2 =
-            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client: BoltzApiClientV2 = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
 
         let tx = match LBtcSwapTx::new_refund(
             swap_script.clone(),
@@ -622,13 +745,18 @@ impl LbtcLnSwap {
     }
     /// Get the preimage of the lightning invoice for a submarine swap
     pub async fn get_preimage(&self) -> Result<String, BoltzError> {
+        self.validate_context()?;
         if self.kind == SwapType::Reverse {
             return Err(BoltzError {
                 kind: "Input".to_string(),
                 message: "Cannot get preimage of reverse swap".to_string(),
             });
         }
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network.into(),
+            self.regtest_profile.as_ref(),
+        )?;
         let response = boltz_client.get_submarine_preimage(&self.id).await?;
         let preimage = response.preimage.clone();
         Ok(preimage)

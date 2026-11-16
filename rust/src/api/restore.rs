@@ -1,4 +1,4 @@
-use crate::util::ensure_boltz_url;
+use crate::util::ensure_network_url;
 
 use super::{
     btc_ln::BtcLnSwap,
@@ -12,8 +12,8 @@ use super::{
 use boltz_client::util::secrets::Preimage as BoltzPreimage;
 use boltz_client::{
     swaps::boltz::{
-        BoltzApiClientV2, ChainSwapDetails, ClaimDetails, CreateReverseResponse,
-        CreateSubmarineResponse, RefundDetails, SwapRestoreResponse, SwapRestoreType, SwapTree,
+        ChainSwapDetails, ClaimDetails, CreateReverseResponse, CreateSubmarineResponse,
+        RefundDetails, SwapRestoreResponse, SwapRestoreType, SwapTree,
     },
     Bolt11Invoice, DisplayHex, PublicKey,
 };
@@ -161,13 +161,19 @@ fn validate_restored_hashlock(
 async fn restore_swaps(
     swap_master_key: SwapMasterKey,
     boltz_url: String,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<Vec<SwapRestoreResponse>, BoltzError> {
-    let boltz_url = ensure_boltz_url(
+    let boltz_url = ensure_network_url(
         &boltz_url,
-        swap_master_key.network != super::types::Network::Mainnet,
+        swap_master_key.network,
+        regtest_profile.as_ref(),
     )
     .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-    let boltz_client = BoltzApiClientV2::new(boltz_url, None);
+    let boltz_client = crate::util::boltz_api_client(
+        &boltz_url,
+        swap_master_key.network,
+        regtest_profile.as_ref(),
+    )?;
     let xpub = swap_master_key.xpub.clone();
     // xpub is the swap-account key (m/44/0/0/0); tell boltz to derive
     // `xpub/{index}` directly ("m") instead of re-applying its default path.
@@ -201,13 +207,21 @@ pub struct RestoredSwapSummary {
 pub async fn restore_swap_summaries(
     swap_master_key: SwapMasterKey,
     boltz_url: String,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<Vec<RestoredSwapSummary>, BoltzError> {
-    let boltz_url = ensure_boltz_url(
+    let regtest_profile =
+        crate::util::capture_regtest_profile(swap_master_key.network, regtest_profile)?;
+    let boltz_url = ensure_network_url(
         &boltz_url,
-        swap_master_key.network != super::types::Network::Mainnet,
+        swap_master_key.network,
+        regtest_profile.as_ref(),
     )
     .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-    let boltz_client = BoltzApiClientV2::new(boltz_url, None);
+    let boltz_client = crate::util::boltz_api_client(
+        &boltz_url,
+        swap_master_key.network,
+        regtest_profile.as_ref(),
+    )?;
     let xpub = swap_master_key.xpub.clone();
     let responses = boltz_client
         .post_swap_restore(&xpub, Some("m".to_string()), Some(100))
@@ -261,13 +275,21 @@ pub async fn restore_swap_summaries(
 pub async fn restore_swap_index(
     swap_master_key: SwapMasterKey,
     boltz_url: String,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<i64, BoltzError> {
-    let boltz_url = ensure_boltz_url(
+    let regtest_profile =
+        crate::util::capture_regtest_profile(swap_master_key.network, regtest_profile)?;
+    let boltz_url = ensure_network_url(
         &boltz_url,
-        swap_master_key.network != super::types::Network::Mainnet,
+        swap_master_key.network,
+        regtest_profile.as_ref(),
     )
     .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-    let boltz_client = BoltzApiClientV2::new(boltz_url, None);
+    let boltz_client = crate::util::boltz_api_client(
+        &boltz_url,
+        swap_master_key.network,
+        regtest_profile.as_ref(),
+    )?;
     let xpub = swap_master_key.xpub.clone();
     let resp = boltz_client
         .post_swap_restore_index(&xpub, Some("m".to_string()), Some(100))
@@ -328,8 +350,24 @@ pub async fn restore_ln_btc_swaps(
     swap_master_key: SwapMasterKey,
     electrum_url: String,
     boltz_url: String,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<RestoredBtcLnSwaps, BoltzError> {
-    let restore_responses = restore_swaps(swap_master_key.clone(), boltz_url.clone()).await?;
+    let regtest_profile =
+        crate::util::capture_regtest_profile(swap_master_key.network, regtest_profile)?;
+    if swap_master_key.network == Network::Regtest {
+        crate::util::get_network_electrum_configs(
+            None,
+            &electrum_url,
+            swap_master_key.network.bitcoin(),
+            regtest_profile.as_ref(),
+        )?;
+    }
+    let restore_responses = restore_swaps(
+        swap_master_key.clone(),
+        boltz_url.clone(),
+        regtest_profile.clone(),
+    )
+    .await?;
 
     let (swaps, skipped) = collect_restored(restore_responses, |response| {
         let is_ln = matches!(
@@ -346,6 +384,7 @@ pub async fn restore_ln_btc_swaps(
             electrum_url.clone(),
             boltz_url.clone(),
             invoice,
+            regtest_profile.clone(),
         ))
     });
     Ok(RestoredBtcLnSwaps { swaps, skipped })
@@ -355,8 +394,24 @@ pub async fn restore_ln_lbtc_swaps(
     swap_master_key: SwapMasterKey,
     electrum_url: String,
     boltz_url: String,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<RestoredLbtcLnSwaps, BoltzError> {
-    let restore_responses = restore_swaps(swap_master_key.clone(), boltz_url.clone()).await?;
+    let regtest_profile =
+        crate::util::capture_regtest_profile(swap_master_key.network, regtest_profile)?;
+    if swap_master_key.network == Network::Regtest {
+        crate::util::get_network_electrum_configs(
+            None,
+            &electrum_url,
+            swap_master_key.network.liquid(),
+            regtest_profile.as_ref(),
+        )?;
+    }
+    let restore_responses = restore_swaps(
+        swap_master_key.clone(),
+        boltz_url.clone(),
+        regtest_profile.clone(),
+    )
+    .await?;
 
     let (swaps, skipped) = collect_restored(restore_responses, |response| {
         let is_ln = matches!(
@@ -377,6 +432,7 @@ pub async fn restore_ln_lbtc_swaps(
             electrum_url.clone(),
             boltz_url.clone(),
             invoice,
+            regtest_profile.clone(),
         ))
     });
     Ok(RestoredLbtcLnSwaps { swaps, skipped })
@@ -387,8 +443,30 @@ pub async fn restore_chain_swaps(
     btc_electrum_url: String,
     lbtc_electrum_url: String,
     boltz_url: String,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<RestoredChainSwaps, BoltzError> {
-    let restore_responses = restore_swaps(swap_master_key.clone(), boltz_url.clone()).await?;
+    let regtest_profile =
+        crate::util::capture_regtest_profile(swap_master_key.network, regtest_profile)?;
+    if swap_master_key.network == Network::Regtest {
+        crate::util::get_network_electrum_configs(
+            None,
+            &btc_electrum_url,
+            swap_master_key.network.bitcoin(),
+            regtest_profile.as_ref(),
+        )?;
+        crate::util::get_network_electrum_configs(
+            None,
+            &lbtc_electrum_url,
+            swap_master_key.network.liquid(),
+            regtest_profile.as_ref(),
+        )?;
+    }
+    let restore_responses = restore_swaps(
+        swap_master_key.clone(),
+        boltz_url.clone(),
+        regtest_profile.clone(),
+    )
+    .await?;
 
     let (swaps, skipped) = collect_restored(restore_responses, |response| {
         if !matches!(&response.swap_type, SwapRestoreType::Chain) {
@@ -400,38 +478,18 @@ pub async fn restore_chain_swaps(
             btc_electrum_url.clone(),
             lbtc_electrum_url.clone(),
             boltz_url.clone(),
+            regtest_profile.clone(),
         ))
     });
     Ok(RestoredChainSwaps { swaps, skipped })
 }
 
 fn infer_network(from: &str, to: &str, network: Network) -> Result<Chain, BoltzError> {
-    let is_testnet = match network {
-        Network::Mainnet => false,
-        Network::Testnet => true,
-        Network::Regtest => {
-            return Err(BoltzError::new(
-                "Network".to_string(),
-                "Remote swap restore does not support regtest".to_string(),
-            ));
-        }
-    };
-    // The Lightning side of an LN swap is always BTC-denominated, so the
-    // on-chain leg is whichever side is L-BTC (reverse: `to`, submarine: `from`).
-    // Keying off `from` alone mis-tags a lightning->L-BTC reverse as Bitcoin.
-    let is_liquid = from == "L-BTC" || to == "L-BTC";
-    Ok(if is_liquid {
-        if is_testnet {
-            Chain::LiquidTestnet
-        } else {
-            Chain::Liquid
-        }
+    // Lightning is BTC-denominated; the Liquid leg determines its chain family.
+    Ok(if from == "L-BTC" || to == "L-BTC" {
+        network.liquid()
     } else {
-        if is_testnet {
-            Chain::BitcoinTestnet
-        } else {
-            Chain::Bitcoin
-        }
+        network.bitcoin()
     })
 }
 
@@ -490,16 +548,26 @@ fn restore_to_btc_ln_swap(
     electrum_url: String,
     boltz_url: String,
     invoice: Option<String>,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<BtcLnSwap, BoltzError> {
     let network = infer_network(
         &restore_response.from,
         &restore_response.to,
         swap_master_key.network,
     )?;
+    if network != swap_master_key.network.bitcoin() {
+        return Err(BoltzError::new(
+            "Network".into(),
+            "Wrong restored swap chain family".into(),
+        ));
+    }
+    let details = ln_restore_details(&restore_response, "BtcLnSwap")?;
+    crate::util::validate_regtest_address(network, &details.lockup_address)?;
+    if let Some(invoice) = &invoice {
+        crate::util::validate_regtest_invoice(invoice, swap_master_key.network)?;
+    }
     let swap_master_key_inner: boltz_client::util::secrets::SwapMasterKey =
         swap_master_key.try_into()?;
-
-    let details = ln_restore_details(&restore_response, "BtcLnSwap")?;
 
     let key_index = details.key_index;
     let kps = swap_master_key_inner.derive_swapkey(key_index)?;
@@ -597,6 +665,7 @@ fn restore_to_btc_ln_swap(
         None,
         (matches!(&restore_response.swap_type, SwapRestoreType::Reverse) && amount > 0)
             .then_some(amount),
+        regtest_profile.clone(),
     ))
 }
 
@@ -606,16 +675,26 @@ fn restore_to_lbtc_ln_swap(
     electrum_url: String,
     boltz_url: String,
     invoice: Option<String>,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<LbtcLnSwap, BoltzError> {
     let network = infer_network(
         &restore_response.from,
         &restore_response.to,
         swap_master_key.network,
     )?;
+    if network != swap_master_key.network.liquid() {
+        return Err(BoltzError::new(
+            "Network".into(),
+            "Wrong restored swap chain family".into(),
+        ));
+    }
+    let details = ln_restore_details(&restore_response, "LbtcLnSwap")?;
+    crate::util::validate_regtest_address(network, &details.lockup_address)?;
+    if let Some(invoice) = &invoice {
+        crate::util::validate_regtest_invoice(invoice, swap_master_key.network)?;
+    }
     let swap_master_key_inner: boltz_client::util::secrets::SwapMasterKey =
         swap_master_key.try_into()?;
-
-    let details = ln_restore_details(&restore_response, "LbtcLnSwap")?;
 
     let key_index = details.key_index;
     let kps = swap_master_key_inner.derive_liquid_swapkey(key_index)?;
@@ -716,6 +795,7 @@ fn restore_to_lbtc_ln_swap(
         None,
         (matches!(&restore_response.swap_type, SwapRestoreType::Reverse) && amount > 0)
             .then_some(amount),
+        regtest_profile.clone(),
     ))
 }
 
@@ -725,18 +805,10 @@ fn restore_to_chain_swap(
     btc_electrum_url: String,
     lbtc_electrum_url: String,
     boltz_url: String,
+    regtest_profile: Option<super::types::RegtestNetworkProfile>,
 ) -> Result<ChainSwap, BoltzError> {
     let direction = infer_chain_swap_direction(&restore_response.from, &restore_response.to)?;
-    let is_testnet = match swap_master_key.network {
-        Network::Mainnet => false,
-        Network::Testnet => true,
-        Network::Regtest => {
-            return Err(BoltzError::new(
-                "Network".to_string(),
-                "Remote swap restore does not support regtest".to_string(),
-            ));
-        }
-    };
+    let network = swap_master_key.network;
     let swap_master_key_inner: boltz_client::util::secrets::SwapMasterKey =
         swap_master_key.try_into()?;
 
@@ -754,6 +826,12 @@ fn restore_to_chain_swap(
         )
     })?;
 
+    let (refund_chain, claim_chain) = match direction {
+        ChainSwapDirection::BtcToLbtc => (network.bitcoin(), network.liquid()),
+        ChainSwapDirection::LbtcToBtc => (network.liquid(), network.bitcoin()),
+    };
+    crate::util::validate_regtest_address(refund_chain, &refund_details.lockup_address)?;
+    crate::util::validate_regtest_address(claim_chain, &claim_details.lockup_address)?;
     let refund_index = refund_details.key_index as u64;
     let claim_index = claim_details.key_index as u64;
 
@@ -867,7 +945,7 @@ fn restore_to_chain_swap(
 
     Ok(ChainSwap::new_with_expected_onchain_amount(
         restore_response.id,
-        is_testnet,
+        network,
         direction,
         refund_keys,
         refund_index,
@@ -884,6 +962,7 @@ fn restore_to_chain_swap(
         None,
         blinding_key,
         claim_details.amount.filter(|amount| *amount > 0),
+        regtest_profile.clone(),
     ))
 }
 

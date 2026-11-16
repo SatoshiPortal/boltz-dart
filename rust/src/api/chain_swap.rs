@@ -1,5 +1,5 @@
 use crate::util::{
-    ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
+    ensure_network_url, force_https, get_network_electrum_configs, strip_protocol_prefix,
 };
 
 use super::{
@@ -7,8 +7,8 @@ use super::{
     fees::TxFee,
     secrets::{KeyPair, SwapMasterKey},
     types::{
-        BtcSwapScriptStr, Chain, ChainSwapDirection, ElectrumSettings, LBtcSwapScriptStr, PreImage,
-        SwapTxKind,
+        BtcSwapScriptStr, Chain, ChainSwapDirection, ElectrumSettings, LBtcSwapScriptStr, Network,
+        PreImage, SwapTxKind,
     },
 };
 use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
@@ -26,7 +26,7 @@ use boltz_client::{
         electrum::{ElectrumBitcoinClient, ElectrumLiquidClient},
         BitcoinChain, BitcoinClient, Chain as AllChains, LiquidChain, LiquidClient,
     },
-    swaps::{boltz::BoltzApiClientV2, SwapScriptCommon},
+    swaps::SwapScriptCommon,
     BtcSwapScript, BtcSwapTx, Keypair, LBtcSwapScript, LBtcSwapTx, PublicKey, Serialize,
 };
 use serde_json::Value;
@@ -35,7 +35,10 @@ use serde_json::Value;
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct ChainSwap {
     pub id: String,
-    pub is_testnet: bool,
+    #[serde(flatten, with = "stored_network")]
+    pub network: Network,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub regtest_profile: Option<super::types::RegtestNetworkProfile>,
     pub direction: ChainSwapDirection,
     pub refund_keys: KeyPair,
     pub refund_index: u64,
@@ -55,6 +58,22 @@ pub struct ChainSwap {
     pub blinding_key: String,
 }
 impl ChainSwap {
+    fn validate_context(&self) -> Result<(), BoltzError> {
+        crate::util::swap_url(&self.boltz_url, self.network, self.regtest_profile.as_ref())?;
+        let lockup_chain = match self.direction {
+            ChainSwapDirection::BtcToLbtc => self.network.bitcoin(),
+            ChainSwapDirection::LbtcToBtc => self.network.liquid(),
+        };
+        crate::util::validate_regtest_address(lockup_chain, &self.script_address)?;
+        if let Some(address) = &self.btc_script_str.funding_addrs {
+            crate::util::validate_regtest_address(self.network.bitcoin(), address)?;
+        }
+        if let Some(address) = &self.lbtc_script_str.funding_addrs {
+            crate::util::validate_regtest_address(self.network.liquid(), address)?;
+        }
+        Ok(())
+    }
+
     /// Convert instance to a JSON string.
     pub async fn to_json(&self) -> Result<String, BoltzError> {
         match serde_json::to_string(self) {
@@ -72,7 +91,7 @@ impl ChainSwap {
     /// Manually create the class. Primarily used when recovering a swap.
     pub fn new(
         id: String,
-        is_testnet: bool,
+        network: Network,
         direction: ChainSwapDirection,
         refund_keys: KeyPair,
         refund_index: u64,
@@ -88,10 +107,11 @@ impl ChainSwap {
         boltz_url: String,
         referral_id: Option<String>,
         blinding_key: String,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
     ) -> ChainSwap {
         Self::new_with_expected_onchain_amount(
             id,
-            is_testnet,
+            network,
             direction,
             refund_keys,
             refund_index,
@@ -108,13 +128,14 @@ impl ChainSwap {
             referral_id,
             blinding_key,
             None,
+            regtest_profile,
         )
     }
 
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn new_with_expected_onchain_amount(
         id: String,
-        is_testnet: bool,
+        network: Network,
         direction: ChainSwapDirection,
         refund_keys: KeyPair,
         refund_index: u64,
@@ -131,11 +152,13 @@ impl ChainSwap {
         referral_id: Option<String>,
         blinding_key: String,
         expected_onchain_amount: Option<u64>,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
     ) -> ChainSwap {
         ChainSwap {
             id,
             direction,
-            is_testnet,
+            network,
+            regtest_profile: regtest_profile.clone(),
             refund_keys,
             refund_index,
             claim_keys,
@@ -145,9 +168,10 @@ impl ChainSwap {
             lbtc_script_str,
             btc_electrum_url: strip_protocol_prefix(&btc_electrum_url),
             lbtc_electrum_url: strip_protocol_prefix(&lbtc_electrum_url),
-            boltz_url: match ensure_boltz_url(&boltz_url, is_testnet) {
+            boltz_url: match ensure_network_url(&boltz_url, network, regtest_profile.as_ref()) {
                 Ok(url) => url,
-                Err(_) => force_https(&boltz_url),
+                Err(_) if network != super::types::Network::Regtest => force_https(&boltz_url),
+                Err(_) => boltz_url,
             },
             script_address,
             out_amount,
@@ -164,36 +188,39 @@ impl ChainSwap {
         swap_master_key: SwapMasterKey,
         index: u64,
         amount: u64,
-        is_testnet: bool,
+        network: Network,
         btc_electrum_url: String,
         lbtc_electrum_url: String,
         boltz_url: String,
         referral_id: Option<String>,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
     ) -> Result<ChainSwap, BoltzError> {
-        let (refund_network, claim_network) = if is_testnet {
-            if direction == ChainSwapDirection::BtcToLbtc {
-                (
-                    AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
-                    AllChains::Liquid(LiquidChain::LiquidTestnet),
-                )
-            } else {
-                (
-                    AllChains::Liquid(LiquidChain::LiquidTestnet),
-                    AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
-                )
-            }
-        } else {
-            if direction == ChainSwapDirection::BtcToLbtc {
-                (
-                    AllChains::Bitcoin(BitcoinChain::Bitcoin),
-                    AllChains::Liquid(LiquidChain::Liquid),
-                )
-            } else {
-                (
-                    AllChains::Liquid(LiquidChain::Liquid),
-                    AllChains::Bitcoin(BitcoinChain::Bitcoin),
-                )
-            }
+        if swap_master_key.network != network {
+            return Err(BoltzError::new(
+                "Network".into(),
+                "Swap key network mismatch".into(),
+            ));
+        }
+        let regtest_profile = crate::util::capture_regtest_profile(network, regtest_profile)?;
+        ensure_network_url(&boltz_url, network, regtest_profile.as_ref())
+            .map_err(|e| BoltzError::new("Network".into(), e))?;
+        if network == Network::Regtest {
+            get_network_electrum_configs(
+                None,
+                &btc_electrum_url,
+                network.bitcoin(),
+                regtest_profile.as_ref(),
+            )?;
+            get_network_electrum_configs(
+                None,
+                &lbtc_electrum_url,
+                network.liquid(),
+                regtest_profile.as_ref(),
+            )?;
+        }
+        let (refund_network, claim_network) = match direction {
+            ChainSwapDirection::BtcToLbtc => (network.bitcoin().into(), network.liquid().into()),
+            ChainSwapDirection::LbtcToBtc => (network.liquid().into(), network.bitcoin().into()),
         };
 
         let swap_xkey_inner: BoltzSwapMasterKey = swap_master_key.try_into()?;
@@ -223,9 +250,10 @@ impl ChainSwap {
             inner: claim_kps.public_key(),
         };
         let preimage: Preimage = Preimage::from_swap_key(&claim_kps);
-        let boltz_url = ensure_boltz_url(&boltz_url, is_testnet)
+        let boltz_url = ensure_network_url(&boltz_url, network, regtest_profile.as_ref())
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
+        let boltz_client =
+            crate::util::boltz_api_client(&boltz_url, network, regtest_profile.as_ref())?;
         match direction {
             ChainSwapDirection::BtcToLbtc => {
                 let create_swap_req = boltz_client::swaps::boltz::CreateChainRequest {
@@ -280,7 +308,7 @@ impl ChainSwap {
                 )?;
                 Ok(ChainSwap::new_with_expected_onchain_amount(
                     create_chain_response.id,
-                    is_testnet,
+                    network,
                     direction,
                     refund_keypair,
                     index,
@@ -297,6 +325,7 @@ impl ChainSwap {
                     referral_id,
                     claim_script.blinding_key.display_secret().to_string(),
                     expected_onchain_amount,
+                    regtest_profile.clone(),
                 ))
             }
             ChainSwapDirection::LbtcToBtc => {
@@ -353,7 +382,7 @@ impl ChainSwap {
                 )?;
                 Ok(ChainSwap::new_with_expected_onchain_amount(
                     create_chain_response.id,
-                    is_testnet,
+                    network,
                     direction,
                     refund_keypair,
                     index,
@@ -370,13 +399,19 @@ impl ChainSwap {
                     referral_id,
                     lockup_script.blinding_key.display_secret().to_string(),
                     expected_onchain_amount,
+                    regtest_profile.clone(),
                 ))
             }
         }
     }
     /// Get the transaction id of the server's lockup transaction
     pub async fn get_server_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        self.validate_context()?;
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let txs = boltz_client.get_chain_txs(&self.id.clone()).await?;
         if txs.server_lock.is_none() {
             Err(BoltzError::new(
@@ -389,7 +424,12 @@ impl ChainSwap {
     }
     /// Get the transaction id of the user's lockup transaction
     pub async fn get_user_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        self.validate_context()?;
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let txs = boltz_client.get_chain_txs(&self.id.clone()).await?;
         if txs.user_lock.is_none() {
             Err(BoltzError::new(
@@ -409,40 +449,47 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        self.validate_context()?;
+        crate::util::validate_regtest_address(self.get_network(SwapTxKind::Claim).0, &out_address)?;
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
-            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) = get_network_electrum_configs(
+            btc_electrum_settings,
+            &self.btc_electrum_url,
+            self.network.bitcoin(),
+            self.regtest_profile.as_ref(),
+        )?;
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
-            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
+            get_network_electrum_configs(
+                lbtc_electrum_settings,
+                &self.lbtc_electrum_url,
+                self.network.liquid(),
+                self.regtest_profile.as_ref(),
+            )?;
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -585,40 +632,47 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        self.validate_context()?;
+        crate::util::validate_regtest_address(self.get_network(SwapTxKind::Claim).0, &out_address)?;
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
-            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) = get_network_electrum_configs(
+            btc_electrum_settings,
+            &self.btc_electrum_url,
+            self.network.bitcoin(),
+            self.regtest_profile.as_ref(),
+        )?;
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
-            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
+            get_network_electrum_configs(
+                lbtc_electrum_settings,
+                &self.lbtc_electrum_url,
+                self.network.liquid(),
+                self.regtest_profile.as_ref(),
+            )?;
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -669,41 +723,51 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        self.validate_context()?;
+        crate::util::validate_regtest_address(
+            self.get_network(SwapTxKind::Refund).0,
+            &refund_address,
+        )?;
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
-            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) = get_network_electrum_configs(
+            btc_electrum_settings,
+            &self.btc_electrum_url,
+            self.network.bitcoin(),
+            self.regtest_profile.as_ref(),
+        )?;
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
-            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
+            get_network_electrum_configs(
+                lbtc_electrum_settings,
+                &self.lbtc_electrum_url,
+                self.network.liquid(),
+                self.regtest_profile.as_ref(),
+            )?;
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
 
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
                 let btc_lockup_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
@@ -781,40 +845,50 @@ impl ChainSwap {
         btc_electrum_settings: Option<ElectrumSettings>,
         lbtc_electrum_settings: Option<ElectrumSettings>,
     ) -> Result<usize, BoltzError> {
-        let btc_chain = if self.is_testnet {
-            BitcoinChain::BitcoinTestnet
-        } else {
-            BitcoinChain::Bitcoin
-        };
-        let lbtc_chain = if self.is_testnet {
-            LiquidChain::LiquidTestnet
-        } else {
-            LiquidChain::Liquid
-        };
+        self.validate_context()?;
+        crate::util::validate_regtest_address(
+            self.get_network(SwapTxKind::Refund).0,
+            &refund_address,
+        )?;
+        let btc_chain: BitcoinChain = self.network.bitcoin().into();
+        let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
-            get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) = get_network_electrum_configs(
+            btc_electrum_settings,
+            &self.btc_electrum_url,
+            self.network.bitcoin(),
+            self.regtest_profile.as_ref(),
+        )?;
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
-            get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
+            get_network_electrum_configs(
+                lbtc_electrum_settings,
+                &self.lbtc_electrum_url,
+                self.network.liquid(),
+                self.regtest_profile.as_ref(),
+            )?;
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -858,41 +932,18 @@ impl ChainSwap {
 
     /// Get the network of the swap given a SwapTxKind
     fn get_network(&self, kind: SwapTxKind) -> (Chain, String) {
-        match self.direction {
-            ChainSwapDirection::BtcToLbtc => match kind {
-                SwapTxKind::Claim => {
-                    if self.is_testnet {
-                        (Chain::LiquidTestnet, self.lbtc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Liquid, self.lbtc_electrum_url.to_owned())
-                    }
-                }
-                SwapTxKind::Refund => {
-                    if self.is_testnet {
-                        (Chain::BitcoinTestnet, self.btc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Bitcoin, self.btc_electrum_url.to_owned())
-                    }
-                }
-            },
-            ChainSwapDirection::LbtcToBtc => match kind {
-                SwapTxKind::Claim => {
-                    if self.is_testnet {
-                        (Chain::BitcoinTestnet, self.btc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Bitcoin, self.btc_electrum_url.to_owned())
-                    }
-                }
-                SwapTxKind::Refund => {
-                    if self.is_testnet {
-                        (Chain::LiquidTestnet, self.lbtc_electrum_url.to_owned())
-                    } else {
-                        (Chain::Liquid, self.lbtc_electrum_url.to_owned())
-                    }
-                }
-            },
+        let liquid = matches!(
+            (self.direction, kind),
+            (ChainSwapDirection::BtcToLbtc, SwapTxKind::Claim)
+                | (ChainSwapDirection::LbtcToBtc, SwapTxKind::Refund)
+        );
+        if liquid {
+            (self.network.liquid(), self.lbtc_electrum_url.clone())
+        } else {
+            (self.network.bitcoin(), self.btc_electrum_url.clone())
         }
     }
+
     /// Broadcast a signed transaction via your own electrum server used when the swap was created.
     pub async fn broadcast_local(
         &self,
@@ -900,20 +951,25 @@ impl ChainSwap {
         kind: SwapTxKind,
         electrum_settings: Option<ElectrumSettings>,
     ) -> Result<String, BoltzError> {
+        self.validate_context()?;
         let signed_bytes = hex::decode(&signed_hex)
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
         let (network, default_electrum_url) = self.get_network(kind);
 
-        let (electrum_url, validate_domain, tls, timeout) =
-            get_electrum_configs(electrum_settings, &default_electrum_url);
+        let (electrum_url, tls, validate_domain, timeout) = get_network_electrum_configs(
+            electrum_settings,
+            &default_electrum_url,
+            network,
+            self.regtest_profile.as_ref(),
+        )?;
 
         match network {
-            Chain::Bitcoin | Chain::BitcoinTestnet => {
+            Chain::Bitcoin | Chain::BitcoinTestnet | Chain::BitcoinRegtest => {
                 let network_config = ElectrumBitcoinClient::new(
                     network.into(),
                     &electrum_url,
-                    validate_domain,
                     tls,
+                    validate_domain,
                     timeout,
                 )?;
 
@@ -928,12 +984,12 @@ impl ChainSwap {
                 };
                 Ok(txid.to_string())
             }
-            Chain::Liquid | Chain::LiquidTestnet => {
+            Chain::Liquid | Chain::LiquidTestnet | Chain::LiquidRegtest => {
                 let network_config = ElectrumLiquidClient::new(
                     network.into(),
                     &electrum_url,
-                    validate_domain,
                     tls,
+                    validate_domain,
                     timeout,
                 )?;
                 let transaction = <LiquidTransaction as boltz_client::elements::encode::Decodable>::consensus_decode(&mut &signed_bytes[..])
@@ -954,8 +1010,13 @@ impl ChainSwap {
         signed_hex: String,
         kind: SwapTxKind,
     ) -> Result<String, BoltzError> {
+        self.validate_context()?;
         let (network, _) = self.get_network(kind);
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client = crate::util::boltz_api_client(
+            &self.boltz_url,
+            self.network,
+            self.regtest_profile.as_ref(),
+        )?;
         let txid = match boltz_client.broadcast_tx(network.into(), &signed_hex).await {
             Ok(result) => result,
             Err(e) => return Err(e.into()),
@@ -972,5 +1033,52 @@ fn extract_id(response: Value) -> Result<String, BoltzError> {
             "BoltzApi".to_string(),
             "TxId not found in boltz response".to_string(),
         )),
+    }
+}
+
+// ChainSwap's production JSON is consumed by older application versions.
+// Keep its boolean wire format, and make regtest unreadable by those readers.
+mod stored_network {
+    use super::Network;
+    use serde::{ser::SerializeMap, Deserialize, Deserializer, Serializer};
+
+    pub(super) fn serialize<S: Serializer>(
+        network: &Network,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error> {
+        let mut map = serializer.serialize_map(Some(1))?;
+        match network {
+            Network::Mainnet => map.serialize_entry("is_testnet", &false)?,
+            Network::Testnet => map.serialize_entry("is_testnet", &true)?,
+            Network::Regtest => map.serialize_entry("network", network)?,
+        }
+        map.end()
+    }
+
+    fn present<'de, T: Deserialize<'de>, D: Deserializer<'de>>(
+        deserializer: D,
+    ) -> Result<Option<T>, D::Error> {
+        T::deserialize(deserializer).map(Some)
+    }
+
+    pub(super) fn deserialize<'de, D: Deserializer<'de>>(
+        deserializer: D,
+    ) -> Result<Network, D::Error> {
+        #[derive(Deserialize)]
+        struct Stored {
+            #[serde(default, deserialize_with = "present")]
+            is_testnet: Option<bool>,
+            #[serde(default, deserialize_with = "present")]
+            network: Option<Network>,
+        }
+        let stored = Stored::deserialize(deserializer)?;
+        match (stored.is_testnet, stored.network) {
+            (Some(false), None) => Ok(Network::Mainnet),
+            (Some(true), None) => Ok(Network::Testnet),
+            (None, Some(Network::Regtest)) => Ok(Network::Regtest),
+            _ => Err(serde::de::Error::custom(
+                "Missing or conflicting swap network",
+            )),
+        }
     }
 }

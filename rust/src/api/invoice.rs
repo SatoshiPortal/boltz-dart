@@ -24,11 +24,32 @@ pub struct DecodedInvoice {
 }
 
 impl DecodedInvoice {
-    pub async fn from_string(s: String, boltz_url: Option<String>) -> Result<Self, BoltzError> {
+    pub async fn from_string(
+        s: String,
+        boltz_url: Option<String>,
+        regtest_profile: Option<super::types::RegtestNetworkProfile>,
+    ) -> Result<Self, BoltzError> {
         let invoice = match Bolt11Invoice::from_str(&s) {
             Ok(result) => result,
             Err(e) => return Err(BoltzError::new("Input".to_string(), e.to_string())),
         };
+        let is_regtest = invoice.network() == boltz_client::bitcoin::Network::Regtest;
+        if regtest_profile.is_some() && !is_regtest {
+            return Err(BoltzError::new(
+                "Network".into(),
+                "Invoice does not match the regtest profile".into(),
+            ));
+        }
+        if is_regtest {
+            if let Some(url) = &boltz_url {
+                crate::util::ensure_network_url(
+                    url,
+                    super::types::Network::Regtest,
+                    regtest_profile.as_ref(),
+                )
+                .map_err(|e| BoltzError::new("Network".into(), e))?;
+            }
+        }
         let bip21 = if boltz_url.is_some() {
             let mrh = match boltz_client::swaps::magic_routing::find_magic_routing_hint(&s) {
                 Ok(s) => s,
@@ -37,8 +58,16 @@ impl DecodedInvoice {
             if mrh.is_none() {
                 None
             } else {
-                let boltz_client =
-                    BoltzApiClientV2::new(ensure_http_prefix(&boltz_url.unwrap()), None);
+                let url = boltz_url.unwrap();
+                let boltz_client = if is_regtest {
+                    crate::util::boltz_api_client(
+                        &url,
+                        super::types::Network::Regtest,
+                        regtest_profile.as_ref(),
+                    )?
+                } else {
+                    BoltzApiClientV2::new(ensure_http_prefix(&url), None)
+                };
                 match boltz_client.get_mrh_bip21(&s).await {
                     Ok(r) => Some(r.bip21),
                     Err(_) => None,

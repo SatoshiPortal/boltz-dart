@@ -30,32 +30,61 @@ impl Into<Fee> for TxFee {
 /// A Class that helps fetch both Fees and Limits for the various swap types
 pub struct Fees {
     pub boltz_url: String,
+    pub regtest_profile: Option<super::types::RegtestNetworkProfile>,
 }
 
 impl Fees {
     /// Constructor
     pub fn new(boltz_url: String) -> Fees {
         let url = ensure_http_prefix(&boltz_url);
-        Fees { boltz_url: url }
+        Fees {
+            boltz_url: url,
+            regtest_profile: None,
+        }
+    }
+
+    /// Quotes for an explicitly selected local regtest profile.
+    pub fn for_regtest(profile: super::types::RegtestNetworkProfile) -> Result<Fees, BoltzError> {
+        let boltz_url = crate::util::ensure_network_url(
+            &profile.boltz_url,
+            super::types::Network::Regtest,
+            Some(&profile),
+        )
+        .map_err(|e| BoltzError::new("Network".into(), e))?;
+        Ok(Fees {
+            boltz_url,
+            regtest_profile: Some(profile.clone()),
+        })
+    }
+
+    fn client(&self) -> Result<BoltzApiClientV2, BoltzError> {
+        match &self.regtest_profile {
+            Some(profile) => crate::util::boltz_api_client(
+                &self.boltz_url,
+                super::types::Network::Regtest,
+                Some(profile),
+            ),
+            None => Ok(BoltzApiClientV2::new(self.boltz_url.clone(), None)),
+        }
     }
 
     /// Method to get the fees & limits for a submarine swap
     pub async fn submarine(&self) -> Result<SubmarineFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
+        let boltz_client = self.client()?;
         let sub_fees: SubmarineFeesAndLimits =
             boltz_client.get_submarine_pairs().await?.try_into()?;
         Ok(sub_fees)
     }
     /// Method to get the fees & limits for a reverse swap
     pub async fn reverse(&self) -> Result<ReverseFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
+        let boltz_client = self.client()?;
         let reverse_fees: ReverseFeesAndLimits =
             boltz_client.get_reverse_pairs().await?.try_into()?;
         Ok(reverse_fees)
     }
     /// Method to get the fees & limits for a chain swap
     pub async fn chain(&self) -> Result<ChainFeesAndLimits, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(self.boltz_url.clone(), None);
+        let boltz_client = self.client()?;
         let chain_fees: ChainFeesAndLimits = boltz_client.get_chain_pairs().await?.try_into()?;
         Ok(chain_fees)
     }

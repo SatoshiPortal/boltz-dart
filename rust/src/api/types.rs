@@ -92,6 +92,8 @@ pub enum Chain {
     BitcoinTestnet,
     Liquid,
     LiquidTestnet,
+    BitcoinRegtest,
+    LiquidRegtest,
 }
 
 impl Chain {
@@ -105,8 +107,10 @@ impl Into<AllChains> for Chain {
         match self {
             Chain::Bitcoin => AllChains::Bitcoin(BitcoinChain::Bitcoin),
             Chain::BitcoinTestnet => AllChains::Bitcoin(BitcoinChain::BitcoinTestnet),
+            Chain::BitcoinRegtest => AllChains::Bitcoin(BitcoinChain::BitcoinRegtest),
             Chain::Liquid => AllChains::Liquid(LiquidChain::Liquid),
             Chain::LiquidTestnet => AllChains::Liquid(LiquidChain::LiquidTestnet),
+            Chain::LiquidRegtest => AllChains::Liquid(LiquidChain::LiquidRegtest),
         }
     }
 }
@@ -116,9 +120,10 @@ impl From<AllChains> for Chain {
         match chain {
             AllChains::Bitcoin(BitcoinChain::Bitcoin) => Chain::Bitcoin,
             AllChains::Bitcoin(BitcoinChain::BitcoinTestnet) => Chain::BitcoinTestnet,
+            AllChains::Bitcoin(BitcoinChain::BitcoinRegtest) => Chain::BitcoinRegtest,
             AllChains::Liquid(LiquidChain::Liquid) => Chain::Liquid,
             AllChains::Liquid(LiquidChain::LiquidTestnet) => Chain::LiquidTestnet,
-            _ => panic!("Invalid chain"),
+            AllChains::Liquid(LiquidChain::LiquidRegtest) => Chain::LiquidRegtest,
         }
     }
 }
@@ -128,6 +133,7 @@ impl Into<BitcoinChain> for Chain {
         match self {
             Chain::Bitcoin => BitcoinChain::Bitcoin,
             Chain::BitcoinTestnet => BitcoinChain::BitcoinTestnet,
+            Chain::BitcoinRegtest => BitcoinChain::BitcoinRegtest,
             _ => panic!("Invalid chain"),
         }
     }
@@ -137,6 +143,7 @@ impl Into<LiquidChain> for Chain {
         match self {
             Chain::Liquid => LiquidChain::Liquid,
             Chain::LiquidTestnet => LiquidChain::LiquidTestnet,
+            Chain::LiquidRegtest => LiquidChain::LiquidRegtest,
             _ => panic!("Invalid chain"),
         }
     }
@@ -154,6 +161,119 @@ pub enum Network {
     Mainnet,
     Testnet,
     Regtest,
+}
+
+/// Endpoints captured for an explicitly selected regtest host.
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RegtestNetworkProfile {
+    pub host: String,
+    pub boltz_url: String,
+    pub btc_electrum_url: String,
+    pub lbtc_electrum_url: String,
+    pub btc_explorer_url: String,
+    pub lbtc_explorer_url: String,
+}
+
+impl RegtestNetworkProfile {
+    pub fn localhost() -> Self {
+        Self::for_host("127.0.0.1".into()).expect("Static localhost profile")
+    }
+
+    /// A host is a DNS name or IP address, without scheme, port or path.
+    pub fn for_host(host: String) -> Result<Self, BoltzError> {
+        let bare = host.trim_start_matches('[').trim_end_matches(']');
+        if (host.starts_with('[') || host.ends_with(']'))
+            && (!(host.starts_with('[') && host.ends_with(']'))
+                || bare.parse::<std::net::Ipv6Addr>().is_err())
+        {
+            return Err(BoltzError::new(
+                "Network".into(),
+                "Invalid regtest host".into(),
+            ));
+        }
+        let authority = match bare.parse::<std::net::IpAddr>() {
+            Ok(std::net::IpAddr::V6(ip)) => format!("[{ip}]"),
+            Ok(std::net::IpAddr::V4(ip)) => ip.to_string(),
+            Err(_)
+                if !bare.is_empty()
+                    && bare.len() <= 253
+                    && bare.split('.').all(|label| {
+                        !label.is_empty()
+                            && label.len() <= 63
+                            && !label.starts_with('-')
+                            && !label.ends_with('-')
+                            && label
+                                .bytes()
+                                .all(|c| c.is_ascii_alphanumeric() || c == b'-')
+                    }) =>
+            {
+                bare.to_ascii_lowercase()
+            }
+            _ => {
+                return Err(BoltzError::new(
+                    "Network".into(),
+                    "Invalid regtest host".into(),
+                ))
+            }
+        };
+        Ok(Self {
+            host: authority.clone(),
+            boltz_url: format!("http://{authority}:9001/v2"),
+            btc_electrum_url: format!("{authority}:50000"),
+            lbtc_electrum_url: format!("{authority}:50001"),
+            btc_explorer_url: format!("http://{authority}:3000"),
+            lbtc_explorer_url: format!("http://{authority}:3001"),
+        })
+    }
+
+    pub(crate) fn validate(&self) -> Result<(), BoltzError> {
+        if Self::for_host(self.host.clone())? == *self {
+            Ok(())
+        } else {
+            Err(BoltzError::new(
+                "Network".into(),
+                "Regtest profile endpoints do not match its host".into(),
+            ))
+        }
+    }
+
+    pub fn electrum_settings(&self, chain: Chain) -> Result<ElectrumSettings, BoltzError> {
+        self.validate()?;
+        let url = match chain {
+            Chain::BitcoinRegtest => self.btc_electrum_url.clone(),
+            Chain::LiquidRegtest => self.lbtc_electrum_url.clone(),
+            _ => {
+                return Err(BoltzError::new(
+                    "Network".into(),
+                    "Regtest profile requires a regtest chain".into(),
+                ))
+            }
+        };
+        Ok(ElectrumSettings {
+            url,
+            tls: false,
+            validate_domain: false,
+            timeout: 10,
+        })
+    }
+}
+
+impl Network {
+    pub(crate) fn bitcoin(self) -> Chain {
+        match self {
+            Self::Mainnet => Chain::Bitcoin,
+            Self::Testnet => Chain::BitcoinTestnet,
+            Self::Regtest => Chain::BitcoinRegtest,
+        }
+    }
+
+    pub(crate) fn liquid(self) -> Chain {
+        match self {
+            Self::Mainnet => Chain::Liquid,
+            Self::Testnet => Chain::LiquidTestnet,
+            Self::Regtest => Chain::LiquidRegtest,
+        }
+    }
 }
 
 impl Into<BoltzNetwork> for Network {
@@ -181,6 +301,7 @@ impl From<Chain> for Network {
         match chain {
             Chain::Bitcoin | Chain::Liquid => Network::Mainnet,
             Chain::BitcoinTestnet | Chain::LiquidTestnet => Network::Testnet,
+            Chain::BitcoinRegtest | Chain::LiquidRegtest => Network::Regtest,
         }
     }
 }
