@@ -456,3 +456,68 @@ mod tests {
         assert_eq!(outspends[1].timestamp, None);
     }
 }
+
+#[cfg(test)]
+mod regtest_tests {
+    use super::*;
+    use crate::api::types::Network;
+
+    #[test]
+    fn explorer_follows_lockup_chain_and_requires_caller_url_on_regtest() {
+        for (btc, liquid) in [
+            (Chain::Bitcoin, Chain::Liquid),
+            (Chain::BitcoinTestnet, Chain::LiquidTestnet),
+            (Chain::BitcoinRegtest, Chain::LiquidRegtest),
+        ] {
+            for (direction, claim, refund) in [
+                (ChainSwapDirection::BtcToLbtc, liquid, btc),
+                (ChainSwapDirection::LbtcToBtc, btc, liquid),
+            ] {
+                for (kind, expected) in [(SwapTxKind::Claim, claim), (SwapTxKind::Refund, refund)] {
+                    let source = match direction {
+                        ChainSwapDirection::BtcToLbtc => btc,
+                        ChainSwapDirection::LbtcToBtc => liquid,
+                    };
+                    let actual =
+                        lockup_chain(source, SwapType::Chain, kind, Some(direction)).unwrap();
+                    assert!(actual == expected);
+                    if Network::from(actual) == Network::Regtest {
+                        assert!(explorer_for(actual, None).is_err());
+                        assert_eq!(
+                            explorer_for(
+                                actual,
+                                Some("http://explorer.example:18203/custom/".into())
+                            )
+                            .unwrap(),
+                            "http://explorer.example:18203/custom"
+                        );
+                    } else {
+                        assert!(explorer_for(actual, None).unwrap().starts_with("https://"));
+                    }
+                }
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn missing_regtest_explorer_is_rejected_before_boltz_io() {
+        for chain in [Chain::BitcoinRegtest, Chain::LiquidRegtest] {
+            for explorer in [None, Some(String::new())] {
+                let error = check_lockup_outspends(
+                    "unused",
+                    SwapType::Reverse,
+                    SwapTxKind::Claim,
+                    chain,
+                    "http://127.0.0.1:1",
+                    None,
+                    explorer,
+                )
+                .await
+                .err()
+                .unwrap();
+                assert_eq!(error.kind, "Input");
+                assert!(error.message.contains("explorer") || error.message.contains("Explorer"));
+            }
+        }
+    }
+}
