@@ -473,6 +473,79 @@ mod regtest_tests {
     use crate::api::types::Network;
 
     #[test]
+    fn legacy_refund_explorer_keeps_cross_chain_testnet_quirks() {
+        for (source, direction, expected) in [
+            (
+                Chain::LiquidTestnet,
+                ChainSwapDirection::BtcToLbtc,
+                Chain::Bitcoin,
+            ),
+            (
+                Chain::BitcoinTestnet,
+                ChainSwapDirection::LbtcToBtc,
+                Chain::Liquid,
+            ),
+        ] {
+            let actual = lockup_chain(source, SwapType::Chain, SwapTxKind::Refund, Some(direction))
+                .expect("legacy refund selection");
+            assert!(actual == expected);
+        }
+    }
+
+    #[test]
+    fn explorer_override_is_trimmed_once_before_url_normalization() {
+        for chain in [
+            Chain::Bitcoin,
+            Chain::Liquid,
+            Chain::BitcoinTestnet,
+            Chain::LiquidTestnet,
+            Chain::BitcoinRegtest,
+            Chain::LiquidRegtest,
+        ] {
+            for (supplied, expected) in [
+                (
+                    " \thttps://explorer.example/custom///\n ",
+                    "https://explorer.example/custom",
+                ),
+                (
+                    " \texplorer.example/custom/\n ",
+                    "https://explorer.example/custom",
+                ),
+            ] {
+                assert_eq!(
+                    explorer_for(chain, Some(supplied.into())).unwrap(),
+                    expected
+                );
+            }
+            assert_eq!(
+                explorer_for(chain, Some(" \t\n ".into())).unwrap_err().kind,
+                "Input"
+            );
+        }
+    }
+
+    #[test]
+    fn plaintext_explorer_override_follows_the_resolved_lockup_network() {
+        for chain in [Chain::Bitcoin, Chain::Liquid] {
+            let error = explorer_for(chain, Some("http://explorer.example/custom".into()))
+                .expect_err("mainnet must refuse plaintext");
+            assert_eq!(error.kind, "Network");
+            assert!(error.message.contains("plaintext"));
+        }
+        for chain in [
+            Chain::BitcoinTestnet,
+            Chain::LiquidTestnet,
+            Chain::BitcoinRegtest,
+            Chain::LiquidRegtest,
+        ] {
+            assert_eq!(
+                explorer_for(chain, Some(" \thttp://explorer.example/custom/\n ".into())).unwrap(),
+                "http://explorer.example/custom"
+            );
+        }
+    }
+
+    #[test]
     fn explorer_follows_lockup_chain_and_requires_caller_url_on_regtest() {
         for (btc, liquid) in [
             (Chain::Bitcoin, Chain::Liquid),
