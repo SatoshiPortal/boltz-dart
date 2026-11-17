@@ -372,10 +372,10 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let id: String = self.id.clone();
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
@@ -446,10 +446,10 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
         let id = self.id.clone();
@@ -506,10 +506,10 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let transaction = Transaction::consensus_decode(&mut &signed_bytes[..])
             .map_err(|e| BoltzError::new("Bitcoin".to_string(), e.to_string()))?;
         let txid = match network_config.broadcast_tx(&transaction).await {
@@ -555,10 +555,10 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client: BoltzApiClientV2 =
             BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
@@ -607,10 +607,10 @@ impl LbtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config =
-            ElectrumLiquidClient::new(liquid_chain, &electrum_url, validate_domain, tls, timeout)?;
+            ElectrumLiquidClient::new(liquid_chain, &electrum_url, tls, validate_domain, timeout)?;
         let swap_script: LBtcSwapScript = self.swap_script.clone().try_into()?;
         let boltz_client: BoltzApiClientV2 =
             BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
