@@ -370,13 +370,13 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config = ElectrumBitcoinClient::new(
             bitcoin_chain,
             &electrum_url,
-            validate_domain,
             tls,
+            validate_domain,
             timeout,
         )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
@@ -458,13 +458,13 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config = ElectrumBitcoinClient::new(
             bitcoin_chain,
             &electrum_url,
-            validate_domain,
             tls,
+            validate_domain,
             timeout,
         )?;
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
@@ -534,13 +534,13 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config = ElectrumBitcoinClient::new(
             bitcoin_chain,
             &electrum_url,
-            validate_domain,
             tls,
+            validate_domain,
             timeout,
         )?;
         let transaction = Transaction::consensus_decode(&mut &signed_bytes[..])
@@ -588,13 +588,13 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config = ElectrumBitcoinClient::new(
             bitcoin_chain,
             &electrum_url,
-            validate_domain,
             tls,
+            validate_domain,
             timeout,
         )?;
         // okay to use script address, we are just chekcing size
@@ -644,13 +644,13 @@ impl BtcLnSwap {
                 ))
             }
         };
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &self.electrum_url);
         let network_config = ElectrumBitcoinClient::new(
             bitcoin_chain,
             &electrum_url,
-            validate_domain,
             tls,
+            validate_domain,
             timeout,
         )?;
         // okay to use script address, we are just chekcing size

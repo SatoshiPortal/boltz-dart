@@ -72,8 +72,8 @@ pub fn get_electrum_configs(
     if let Some(settings) = electrum_settings {
         (
             strip_protocol_prefix(&settings.url),
-            settings.validate_domain,
             settings.tls,
+            settings.validate_domain,
             settings.timeout,
         )
     } else {
@@ -83,7 +83,79 @@ pub fn get_electrum_configs(
 
 #[cfg(test)]
 mod tests {
-    use super::{ensure_boltz_url, force_https};
+    use super::{ensure_boltz_url, force_https, get_electrum_configs};
+    use crate::api::types::ElectrumSettings;
+    use boltz_client::network::{electrum::ElectrumBitcoinClient, BitcoinChain};
+    use std::io::Read;
+    use std::net::TcpListener;
+    use std::time::Duration;
+
+    const TLS_HANDSHAKE_RECORD: u8 = 0x16;
+
+    fn first_byte_sent_by_client(tls: bool, validate_domain: bool) -> Option<u8> {
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let url = listener.local_addr().unwrap().to_string();
+        let server = std::thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            stream
+                .set_read_timeout(Some(Duration::from_secs(3)))
+                .unwrap();
+            let mut byte = [0u8; 1];
+            match stream.read(&mut byte) {
+                Ok(1) => Some(byte[0]),
+                _ => None,
+            }
+        });
+
+        let (url, tls, validate_domain, timeout) = get_electrum_configs(
+            Some(ElectrumSettings {
+                url,
+                validate_domain,
+                tls,
+                timeout: 1,
+            }),
+            "unused",
+        );
+        drop(ElectrumBitcoinClient::new(
+            BitcoinChain::BitcoinRegtest,
+            &url,
+            tls,
+            validate_domain,
+            timeout,
+        ));
+
+        server.join().unwrap()
+    }
+
+    #[test]
+    fn electrum_configs_keep_tls_and_validate_domain_apart() {
+        let settings = ElectrumSettings {
+            url: "ssl://example.com:50002".to_string(),
+            validate_domain: true,
+            tls: false,
+            timeout: 7,
+        };
+        assert_eq!(
+            get_electrum_configs(Some(settings), "unused"),
+            ("example.com:50002".to_string(), false, true, 7)
+        );
+    }
+
+    #[test]
+    fn plaintext_setting_opens_a_plaintext_connection() {
+        assert_ne!(
+            first_byte_sent_by_client(false, true),
+            Some(TLS_HANDSHAKE_RECORD)
+        );
+    }
+
+    #[test]
+    fn tls_setting_without_domain_validation_opens_a_tls_connection() {
+        assert_eq!(
+            first_byte_sent_by_client(true, false),
+            Some(TLS_HANDSHAKE_RECORD)
+        );
+    }
 
     #[test]
     fn plaintext_url_is_testnet_only() {

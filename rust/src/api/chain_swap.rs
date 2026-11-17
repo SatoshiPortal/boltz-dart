@@ -399,25 +399,25 @@ impl ChainSwap {
         let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) =
             get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
             get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
@@ -567,25 +567,25 @@ impl ChainSwap {
         let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) =
             get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
             get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
@@ -643,25 +643,25 @@ impl ChainSwap {
         let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) =
             get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
             get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
 
@@ -747,25 +747,25 @@ impl ChainSwap {
         let lbtc_chain: LiquidChain = self.network.liquid().into();
         let id: String = self.id.clone();
 
-        let (btc_url, btc_validate_domain, btc_tls, btc_timeout) =
+        let (btc_url, btc_tls, btc_validate_domain, btc_timeout) =
             get_electrum_configs(btc_electrum_settings, &self.btc_electrum_url);
 
-        let (lbtc_url, lbtc_validate_domain, lbtc_tls, lbtc_timeout) =
+        let (lbtc_url, lbtc_tls, lbtc_validate_domain, lbtc_timeout) =
             get_electrum_configs(lbtc_electrum_settings, &self.lbtc_electrum_url);
 
         let btc_network_config = ElectrumBitcoinClient::new(
             btc_chain,
             &btc_url,
-            btc_validate_domain,
             btc_tls,
+            btc_validate_domain,
             btc_timeout,
         )?;
 
         let lbtc_network_config = ElectrumLiquidClient::new(
             lbtc_chain,
             &lbtc_url,
-            lbtc_validate_domain,
             lbtc_tls,
+            lbtc_validate_domain,
             lbtc_timeout,
         )?;
         let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
@@ -831,7 +831,7 @@ impl ChainSwap {
             .map_err(|e| BoltzError::new("HexDecode".to_string(), e.to_string()))?;
         let (network, default_electrum_url) = self.get_network(kind);
 
-        let (electrum_url, validate_domain, tls, timeout) =
+        let (electrum_url, tls, validate_domain, timeout) =
             get_electrum_configs(electrum_settings, &default_electrum_url);
 
         match network {
@@ -839,8 +839,8 @@ impl ChainSwap {
                 let network_config = ElectrumBitcoinClient::new(
                     network.into(),
                     &electrum_url,
-                    validate_domain,
                     tls,
+                    validate_domain,
                     timeout,
                 )?;
 
@@ -859,8 +859,8 @@ impl ChainSwap {
                 let network_config = ElectrumLiquidClient::new(
                     network.into(),
                     &electrum_url,
-                    validate_domain,
                     tls,
+                    validate_domain,
                     timeout,
                 )?;
                 let transaction = <LiquidTransaction as boltz_client::elements::encode::Decodable>::consensus_decode(&mut &signed_bytes[..])
