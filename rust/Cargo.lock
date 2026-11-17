@@ -412,7 +412,7 @@ dependencies = [
 [[package]]
 name = "boltz-client"
 version = "0.5.0"
-source = "git+https://github.com/SatoshiPortal/boltz-rust?rev=546a96ec90a0b184659b3657ee45da97011da429#546a96ec90a0b184659b3657ee45da97011da429"
+source = "git+https://github.com/SatoshiPortal/boltz-rust?rev=c6bca8338cb13053701da4b404d7219fb24b0be4#c6bca8338cb13053701da4b404d7219fb24b0be4"
 dependencies = [
  "async-trait",
  "bip39",
