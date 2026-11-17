@@ -1,4 +1,5 @@
 use std::sync::Once;
+use std::time::Duration;
 
 static CRYPTO_PROVIDER_INIT: Once = Once::new();
 
@@ -12,6 +13,8 @@ pub(crate) fn ensure_crypto_provider() {
         let _ = rustls::crypto::ring::default_provider().install_default();
     });
 }
+
+pub(crate) const HTTP_TIMEOUT: Duration = Duration::from_secs(30);
 
 // Mempool API URLs for checking transaction outspends
 pub const MEMPOOL_BITCOIN_URL: &str = "https://mempool.space/api";
