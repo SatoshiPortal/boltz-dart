@@ -3,8 +3,8 @@ use super::{
     types::{Chain, ChainSwapDirection, OutspendStatus, SwapTxKind, SwapType, VoutOutspend},
 };
 use crate::util::{
-    ensure_boltz_url, ensure_http_prefix, MEMPOOL_BITCOIN_TESTNET_URL, MEMPOOL_BITCOIN_URL,
-    MEMPOOL_LIQUID_TESTNET_URL, MEMPOOL_LIQUID_URL,
+    ensure_boltz_url, ensure_http_prefix, HTTP_TIMEOUT, MEMPOOL_BITCOIN_TESTNET_URL,
+    MEMPOOL_BITCOIN_URL, MEMPOOL_LIQUID_TESTNET_URL, MEMPOOL_LIQUID_URL,
 };
 use boltz_client::swaps::boltz::BoltzApiClientV2;
 
@@ -155,7 +155,7 @@ async fn resolve_lockup_tx(
 ) -> Result<(String, String), BoltzError> {
     let chain = lockup_chain(network, swap_type, tx_kind, chain_swap_direction)?;
     let explorer = explorer_for(chain, explorer_url)?;
-    let client = BoltzApiClientV2::new(ensure_http_prefix(boltz_url), None);
+    let client = BoltzApiClientV2::new(ensure_http_prefix(boltz_url), Some(HTTP_TIMEOUT));
     let txid = match (swap_type, tx_kind) {
         (SwapType::Reverse, SwapTxKind::Claim) => client.get_reverse_tx(swap_id).await?.id,
         (SwapType::Submarine, SwapTxKind::Refund) => client.get_submarine_tx(swap_id).await?.id,
@@ -197,7 +197,10 @@ async fn resolve_lockup_tx(
 /// time per vout) and `/tx/{txid}` (amounts; unreadable for confidential
 /// Liquid outputs, which report None).
 async fn fetch_outspends(txid: &str, mempool_url: &str) -> Result<Vec<VoutOutspend>, BoltzError> {
-    let client = reqwest::Client::new();
+    let client = reqwest::Client::builder()
+        .timeout(HTTP_TIMEOUT)
+        .build()
+        .map_err(|e| BoltzError::new("HTTP".to_string(), e.to_string()))?;
 
     let outspends_url = format!("{}/tx/{}/outspends", mempool_url, txid);
     let response = client
@@ -291,7 +294,10 @@ async fn check_outspend(
     tx_kind: SwapTxKind,
 ) -> Result<OutspendStatus, BoltzError> {
     let outspend_url = format!("{}/tx/{}/outspend/0", mempool_url, txid);
-    let client = reqwest::Client::new();
+    let client = reqwest::Client::builder()
+        .timeout(HTTP_TIMEOUT)
+        .build()
+        .map_err(|e| BoltzError::new("HTTP".to_string(), e.to_string()))?;
     let response = client
         .get(&outspend_url)
         .send()

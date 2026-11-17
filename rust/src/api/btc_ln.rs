@@ -6,6 +6,7 @@ use super::{
 };
 use crate::util::{
     ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
+    HTTP_TIMEOUT,
 };
 use boltz_client::util::secrets::{Preimage, SwapMasterKey as BoltzSwapMasterKey};
 use std::str::FromStr;
@@ -161,7 +162,7 @@ impl BtcLnSwap {
         };
         let boltz_url = ensure_boltz_url(&boltz_url, Network::from(network) != Network::Mainnet)
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), Some(HTTP_TIMEOUT));
         let create_swap_req = boltz_client::swaps::boltz::CreateSubmarineRequest {
             from: "BTC".to_string(),
             to: "BTC".to_string(),
@@ -218,7 +219,8 @@ impl BtcLnSwap {
     /// preimage against the invoice payment hash before partial-signing —
     /// never sign a spend of the lockup without proof the invoice was paid.
     pub async fn coop_close_submarine(&self) -> Result<(), BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let ckp: Keypair = self.keys.clone().try_into()?;
         SwapScript::from_bitcoin(swap_script)
@@ -228,7 +230,8 @@ impl BtcLnSwap {
     }
     /// Retrieves the preimage for a completed submarine swap.
     pub async fn get_completed_submarine_preimage(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let response = boltz_client
             .get_submarine_claim_tx_details(&self.id)
             .await?;
@@ -276,7 +279,7 @@ impl BtcLnSwap {
         };
         let boltz_url = ensure_boltz_url(&boltz_url, Network::from(network) != Network::Mainnet)
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), Some(HTTP_TIMEOUT));
         let create_reverse_req = if out_address.is_some() {
             let address = out_address.unwrap();
             boltz_client::swaps::boltz::CreateReverseRequest {
@@ -379,7 +382,8 @@ impl BtcLnSwap {
             validate_domain,
             timeout,
         )?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
         let script_balance = match swap_script.get_balance(&network_config).await {
             Ok(result) => result,
@@ -468,7 +472,8 @@ impl BtcLnSwap {
             timeout,
         )?;
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let id: String = self.id.clone();
         let script_balance = match swap_script.get_balance(&network_config).await {
             Ok(result) => result,
@@ -554,7 +559,8 @@ impl BtcLnSwap {
     }
     /// Broadcast using boltz's electrum server
     pub async fn broadcast_boltz(&self, signed_hex: String) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let txid = match boltz_client
             .broadcast_tx(self.network.into(), &signed_hex)
             .await
@@ -599,7 +605,8 @@ impl BtcLnSwap {
         )?;
         // okay to use script address, we are just chekcing size
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
 
         let tx = match BtcSwapTx::new_claim(
             swap_script.clone(),
@@ -655,7 +662,8 @@ impl BtcLnSwap {
         )?;
         // okay to use script address, we are just chekcing size
         let swap_script: BtcSwapScript = self.swap_script.clone().try_into()?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
 
         let tx = match BtcSwapTx::new_refund(
             swap_script.clone(),
@@ -684,7 +692,8 @@ impl BtcLnSwap {
                 message: "Cannot get preimage of reverse swap".to_string(),
             });
         }
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let response = boltz_client.get_submarine_preimage(&self.id).await?;
         let preimage = response.preimage.clone();
         Ok(preimage)

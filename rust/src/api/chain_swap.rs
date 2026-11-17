@@ -1,5 +1,6 @@
 use crate::util::{
     ensure_boltz_url, ensure_http_prefix, force_https, get_electrum_configs, strip_protocol_prefix,
+    HTTP_TIMEOUT,
 };
 
 use super::{
@@ -211,7 +212,7 @@ impl ChainSwap {
         let preimage: Preimage = Preimage::from_swap_key(&claim_kps);
         let boltz_url = ensure_boltz_url(&boltz_url, network != Network::Mainnet)
             .map_err(|e| BoltzError::new("Network".to_string(), e))?;
-        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), None);
+        let boltz_client = BoltzApiClientV2::new(boltz_url.clone(), Some(HTTP_TIMEOUT));
         match direction {
             ChainSwapDirection::BtcToLbtc => {
                 let create_swap_req = boltz_client::swaps::boltz::CreateChainRequest {
@@ -362,7 +363,8 @@ impl ChainSwap {
     }
     /// Get the transaction id of the server's lockup transaction
     pub async fn get_server_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let txs = boltz_client.get_chain_txs(&self.id.clone()).await?;
         if txs.server_lock.is_none() {
             Err(BoltzError::new(
@@ -375,7 +377,8 @@ impl ChainSwap {
     }
     /// Get the transaction id of the user's lockup transaction
     pub async fn get_user_lockup(&self) -> Result<String, BoltzError> {
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let txs = boltz_client.get_chain_txs(&self.id.clone()).await?;
         if txs.user_lock.is_none() {
             Err(BoltzError::new(
@@ -420,7 +423,8 @@ impl ChainSwap {
             lbtc_validate_domain,
             lbtc_timeout,
         )?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -588,7 +592,8 @@ impl ChainSwap {
             lbtc_validate_domain,
             lbtc_timeout,
         )?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -665,7 +670,8 @@ impl ChainSwap {
             lbtc_timeout,
         )?;
 
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
                 let btc_lockup_script: BtcSwapScript = self.btc_script_str.clone().try_into()?;
@@ -768,7 +774,8 @@ impl ChainSwap {
             lbtc_validate_domain,
             lbtc_timeout,
         )?;
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
 
         match self.direction {
             ChainSwapDirection::BtcToLbtc => {
@@ -882,7 +889,8 @@ impl ChainSwap {
         kind: SwapTxKind,
     ) -> Result<String, BoltzError> {
         let (network, _) = self.get_network(kind);
-        let boltz_client = BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), None);
+        let boltz_client =
+            BoltzApiClientV2::new(ensure_http_prefix(&self.boltz_url), Some(HTTP_TIMEOUT));
         let txid = match boltz_client.broadcast_tx(network.into(), &signed_hex).await {
             Ok(result) => result,
             Err(e) => return Err(e.into()),

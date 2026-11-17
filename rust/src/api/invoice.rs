@@ -5,7 +5,7 @@ use std::{
 
 use boltz_client::{swaps::boltz::BoltzApiClientV2, Bolt11Invoice};
 
-use crate::util::ensure_http_prefix;
+use crate::util::{ensure_http_prefix, HTTP_TIMEOUT};
 
 use super::error::BoltzError;
 
@@ -37,8 +37,10 @@ impl DecodedInvoice {
             if mrh.is_none() {
                 None
             } else {
-                let boltz_client =
-                    BoltzApiClientV2::new(ensure_http_prefix(&boltz_url.unwrap()), None);
+                let boltz_client = BoltzApiClientV2::new(
+                    ensure_http_prefix(&boltz_url.unwrap()),
+                    Some(HTTP_TIMEOUT),
+                );
                 match boltz_client.get_mrh_bip21(&s).await {
                     Ok(r) => Some(r.bip21),
                     Err(_) => None,
