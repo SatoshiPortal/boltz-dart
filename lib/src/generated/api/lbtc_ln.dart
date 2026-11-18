@@ -159,6 +159,7 @@ class LbtcLnSwap {
     required String boltzUrl,
     String? description,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   }) => BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewReverse(
     swapMasterKey: swapMasterKey,
     index: index,
@@ -169,6 +170,7 @@ class LbtcLnSwap {
     boltzUrl: boltzUrl,
     description: description,
     referralId: referralId,
+    electrumSettings: electrumSettings,
   );
 
   /// Used to create the class when starting a submarine swap to pay a lightning invoice with Liquid.
@@ -182,6 +184,7 @@ class LbtcLnSwap {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   }) => BoltzCore.instance.api.crateApiLbtcLnLbtcLnSwapNewSubmarine(
     swapMasterKey: swapMasterKey,
     index: index,
@@ -190,6 +193,7 @@ class LbtcLnSwap {
     electrumUrl: electrumUrl,
     boltzUrl: boltzUrl,
     referralId: referralId,
+    electrumSettings: electrumSettings,
   );
 
   /// Used to refund a failed submarine swap.

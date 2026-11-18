@@ -85,3 +85,11 @@
 - compatibility: mainnet/testnet swap JSON retains the legacy format; regtest uses explicit discriminators that older readers reject
 - compatibility(breaking): ship matching Dart bindings and rebuilt native libraries together; an unchanged FRB dispatch-name hash does not establish ABI compatibility
 - docs: Liquid regtest uses the pinned boltz-rust policy asset and Elements address parameters; deprecated `checkVout0Outspend` does not support regtest
+
+# Unreleased
+- fix(claim): Bitcoin claims (reverse and chain swaps) take only a confirmed lockup, via boltz-rust `BtcSwapTx::new_claim_confirmed`; a claim fails with "Bitcoin lockup not yet confirmed for this script" until the chain client sees it confirmed, so Boltz cannot double-spend its lockup after the preimage is out. Liquid claims are unchanged
+- fix(create): a reverse swap requested with an address signature must carry the magic routing hint with our claim key
+- fix(create): swap timeouts are checked against the tip of the user's own Electrum server; a lockup Boltz funds must leave at least six hours to claim, and a lockup the user funds must be refundable within fourteen days
+- feat(breaking): `BtcLnSwap`/`LbtcLnSwap` `newSubmarine`/`newReverse` take optional `electrumSettings`, and `ChainSwap.newSwap` takes optional `btcElectrumSettings`/`lbtcElectrumSettings`, so the tip comes from the same server, TLS and domain-validation settings the swap's claims and refunds use; without them the default TLS settings apply
+- build(deps): boltz-rust with confirmed claims, magic routing hint and timeout checks
+- compatibility(breaking): regenerated FRB bindings; ship with a rebuilt native library
