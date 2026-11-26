@@ -80,7 +80,7 @@ pub fn get_electrum_configs(
             settings.timeout,
         )
     } else {
-        (default_electrum_url.to_string(), true, true, 10)
+        (strip_protocol_prefix(default_electrum_url), true, true, 10)
     }
 }
 
@@ -179,6 +179,14 @@ mod tests {
         assert_eq!(
             get_electrum_configs(Some(settings), "unused"),
             ("example.com:50002".to_string(), false, true, 7)
+        );
+    }
+
+    #[test]
+    fn default_electrum_url_loses_its_scheme() {
+        assert_eq!(
+            get_electrum_configs(None, "ssl://example.com:50002"),
+            ("example.com:50002".to_string(), true, true, 10)
         );
     }
 
