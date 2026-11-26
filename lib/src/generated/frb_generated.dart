@@ -161,6 +161,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String boltzUrl,
     String? description,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   });
 
   Future<BtcLnSwap> crateApiBtcLnBtcLnSwapNewSubmarine({
@@ -171,6 +172,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   });
 
   Future<String> crateApiBtcLnBtcLnSwapRefund({
@@ -273,6 +275,8 @@ abstract class BoltzCoreApi extends BaseApi {
     required String lbtcElectrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? btcElectrumSettings,
+    ElectrumSettings? lbtcElectrumSettings,
   });
 
   Future<String> crateApiChainSwapChainSwapRefund({
@@ -407,6 +411,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String boltzUrl,
     String? description,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   });
 
   Future<LbtcLnSwap> crateApiLbtcLnLbtcLnSwapNewSubmarine({
@@ -417,6 +422,7 @@ abstract class BoltzCoreApi extends BaseApi {
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   });
 
   Future<String> crateApiLbtcLnLbtcLnSwapRefund({
@@ -978,6 +984,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String boltzUrl,
     String? description,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -991,6 +998,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg6 = cst_encode_String(boltzUrl);
           var arg7 = cst_encode_opt_String(description);
           var arg8 = cst_encode_opt_String(referralId);
+          var arg9 = cst_encode_opt_box_autoadd_electrum_settings(
+            electrumSettings,
+          );
           return wire.wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
             port_,
             arg0,
@@ -1002,6 +1012,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg6,
             arg7,
             arg8,
+            arg9,
           );
         },
         codec: DcoCodec(
@@ -1019,6 +1030,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           boltzUrl,
           description,
           referralId,
+          electrumSettings,
         ],
         apiImpl: this,
       ),
@@ -1038,6 +1050,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "boltzUrl",
           "description",
           "referralId",
+          "electrumSettings",
         ],
       );
 
@@ -1050,6 +1063,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -1061,6 +1075,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg4 = cst_encode_String(electrumUrl);
           var arg5 = cst_encode_String(boltzUrl);
           var arg6 = cst_encode_opt_String(referralId);
+          var arg7 = cst_encode_opt_box_autoadd_electrum_settings(
+            electrumSettings,
+          );
           return wire.wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
             port_,
             arg0,
@@ -1070,6 +1087,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg4,
             arg5,
             arg6,
+            arg7,
           );
         },
         codec: DcoCodec(
@@ -1085,6 +1103,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           electrumUrl,
           boltzUrl,
           referralId,
+          electrumSettings,
         ],
         apiImpl: this,
       ),
@@ -1102,6 +1121,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "electrumUrl",
           "boltzUrl",
           "referralId",
+          "electrumSettings",
         ],
       );
 
@@ -1720,6 +1740,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String lbtcElectrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? btcElectrumSettings,
+    ElectrumSettings? lbtcElectrumSettings,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -1733,6 +1755,12 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg6 = cst_encode_String(lbtcElectrumUrl);
           var arg7 = cst_encode_String(boltzUrl);
           var arg8 = cst_encode_opt_String(referralId);
+          var arg9 = cst_encode_opt_box_autoadd_electrum_settings(
+            btcElectrumSettings,
+          );
+          var arg10 = cst_encode_opt_box_autoadd_electrum_settings(
+            lbtcElectrumSettings,
+          );
           return wire.wire__crate__api__chain_swap__chain_swap_new_swap(
             port_,
             arg0,
@@ -1744,6 +1772,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg6,
             arg7,
             arg8,
+            arg9,
+            arg10,
           );
         },
         codec: DcoCodec(
@@ -1761,6 +1791,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           lbtcElectrumUrl,
           boltzUrl,
           referralId,
+          btcElectrumSettings,
+          lbtcElectrumSettings,
         ],
         apiImpl: this,
       ),
@@ -1780,6 +1812,8 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "lbtcElectrumUrl",
           "boltzUrl",
           "referralId",
+          "btcElectrumSettings",
+          "lbtcElectrumSettings",
         ],
       );
 
@@ -2641,6 +2675,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String boltzUrl,
     String? description,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -2654,6 +2689,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg6 = cst_encode_String(boltzUrl);
           var arg7 = cst_encode_opt_String(description);
           var arg8 = cst_encode_opt_String(referralId);
+          var arg9 = cst_encode_opt_box_autoadd_electrum_settings(
+            electrumSettings,
+          );
           return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
             port_,
             arg0,
@@ -2665,6 +2703,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg6,
             arg7,
             arg8,
+            arg9,
           );
         },
         codec: DcoCodec(
@@ -2682,6 +2721,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           boltzUrl,
           description,
           referralId,
+          electrumSettings,
         ],
         apiImpl: this,
       ),
@@ -2701,6 +2741,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "boltzUrl",
           "description",
           "referralId",
+          "electrumSettings",
         ],
       );
 
@@ -2713,6 +2754,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
     required String electrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? electrumSettings,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -2724,6 +2766,9 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           var arg4 = cst_encode_String(electrumUrl);
           var arg5 = cst_encode_String(boltzUrl);
           var arg6 = cst_encode_opt_String(referralId);
+          var arg7 = cst_encode_opt_box_autoadd_electrum_settings(
+            electrumSettings,
+          );
           return wire.wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
             port_,
             arg0,
@@ -2733,6 +2778,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
             arg4,
             arg5,
             arg6,
+            arg7,
           );
         },
         codec: DcoCodec(
@@ -2748,6 +2794,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           electrumUrl,
           boltzUrl,
           referralId,
+          electrumSettings,
         ],
         apiImpl: this,
       ),
@@ -2765,6 +2812,7 @@ class BoltzCoreApiImpl extends BoltzCoreApiImplPlatform
           "electrumUrl",
           "boltzUrl",
           "referralId",
+          "electrumSettings",
         ],
       );
 

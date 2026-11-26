@@ -14,6 +14,8 @@ import 'types.dart';
 
 /// This function queries the Boltz API to get the swap transaction ID, then checks
 /// the mempool API to see if the transaction's first output has been spent.
+/// Regtest is unsupported: this deprecated function cannot accept the explicit
+/// explorer URL it requires. Use `check_lockup_outspends` instead.
 Future<OutspendStatus> checkVout0Outspend({
   required String swapId,
   required SwapType swapType,
@@ -39,6 +41,8 @@ Future<OutspendStatus> checkVout0Outspend({
 /// nothing about who was paid.
 ///
 /// `explorer_url` overrides the explorer for the resolved lockup chain and is required on regtest.
+/// Surrounding whitespace is ignored. Plaintext overrides are refused for a
+/// mainnet lockup chain, following the same URL policy as the Boltz endpoint.
 ///
 /// An empty report means the explorer has not indexed the lockup tx yet
 /// (e.g. polled right after broadcast): nothing is spent, retry later.

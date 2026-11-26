@@ -398,6 +398,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
     boltz_url: impl CstDecode<String>,
     description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -415,6 +416,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             let api_boltz_url = boltz_url.cst_decode();
             let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -428,6 +430,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
                             api_boltz_url,
                             api_description,
                             api_referral_id,
+                            api_electrum_settings,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -447,6 +450,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -462,6 +466,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -473,6 +478,7 @@ fn wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
                             api_electrum_url,
                             api_boltz_url,
                             api_referral_id,
+                            api_electrum_settings,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -945,6 +951,8 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
     lbtc_electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    btc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
+    lbtc_electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -962,6 +970,8 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
             let api_lbtc_electrum_url = lbtc_electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_btc_electrum_settings = btc_electrum_settings.cst_decode();
+            let api_lbtc_electrum_settings = lbtc_electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -975,6 +985,8 @@ fn wire__crate__api__chain_swap__chain_swap_new_swap_impl(
                             api_lbtc_electrum_url,
                             api_boltz_url,
                             api_referral_id,
+                            api_btc_electrum_settings,
+                            api_lbtc_electrum_settings,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -1651,6 +1663,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
     boltz_url: impl CstDecode<String>,
     description: impl CstDecode<Option<String>>,
     referral_id: impl CstDecode<Option<String>>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1668,6 +1681,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             let api_boltz_url = boltz_url.cst_decode();
             let api_description = description.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1681,6 +1695,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
                             api_boltz_url,
                             api_description,
                             api_referral_id,
+                            api_electrum_settings,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -1700,6 +1715,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
     electrum_url: impl CstDecode<String>,
     boltz_url: impl CstDecode<String>,
     referral_id: impl CstDecode<Option<String>>,
+    electrum_settings: impl CstDecode<Option<crate::api::types::ElectrumSettings>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -1715,6 +1731,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             let api_electrum_url = electrum_url.cst_decode();
             let api_boltz_url = boltz_url.cst_decode();
             let api_referral_id = referral_id.cst_decode();
+            let api_electrum_settings = electrum_settings.cst_decode();
             move |context| async move {
                 transform_result_dco::<_, _, crate::api::error::BoltzError>(
                     (move || async move {
@@ -1726,6 +1743,7 @@ fn wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
                             api_electrum_url,
                             api_boltz_url,
                             api_referral_id,
+                            api_electrum_settings,
                         )
                         .await?;
                         std::result::Result::Ok(output_ok)
@@ -6362,6 +6380,7 @@ mod io {
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         description: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_reverse_impl(
             port_,
@@ -6374,6 +6393,7 @@ mod io {
             boltz_url,
             description,
             referral_id,
+            electrum_settings,
         )
     }
 
@@ -6387,6 +6407,7 @@ mod io {
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__btc_ln__btc_ln_swap_new_submarine_impl(
             port_,
@@ -6397,6 +6418,7 @@ mod io {
             electrum_url,
             boltz_url,
             referral_id,
+            electrum_settings,
         )
     }
 
@@ -6619,6 +6641,8 @@ mod io {
         lbtc_electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        btc_electrum_settings: *mut wire_cst_electrum_settings,
+        lbtc_electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__chain_swap__chain_swap_new_swap_impl(
             port_,
@@ -6631,6 +6655,8 @@ mod io {
             lbtc_electrum_url,
             boltz_url,
             referral_id,
+            btc_electrum_settings,
+            lbtc_electrum_settings,
         )
     }
 
@@ -6931,6 +6957,7 @@ mod io {
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         description: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse_impl(
             port_,
@@ -6943,6 +6970,7 @@ mod io {
             boltz_url,
             description,
             referral_id,
+            electrum_settings,
         )
     }
 
@@ -6956,6 +6984,7 @@ mod io {
         electrum_url: *mut wire_cst_list_prim_u_8_strict,
         boltz_url: *mut wire_cst_list_prim_u_8_strict,
         referral_id: *mut wire_cst_list_prim_u_8_strict,
+        electrum_settings: *mut wire_cst_electrum_settings,
     ) {
         wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine_impl(
             port_,
@@ -6966,6 +6995,7 @@ mod io {
             electrum_url,
             boltz_url,
             referral_id,
+            electrum_settings,
         )
     }
 

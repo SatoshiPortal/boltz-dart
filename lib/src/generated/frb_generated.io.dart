@@ -2280,6 +2280,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> description,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
+    ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_new_reverse(
       port_,
@@ -2292,6 +2293,7 @@ class BoltzCoreWire implements BaseWire {
       boltz_url,
       description,
       referral_id,
+      electrum_settings,
     );
   }
 
@@ -2309,6 +2311,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_electrum_settings>,
           )
         >
       >('frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_reverse');
@@ -2326,6 +2329,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_electrum_settings>,
             )
           >();
 
@@ -2338,6 +2342,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
+    ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__btc_ln__btc_ln_swap_new_submarine(
       port_,
@@ -2348,6 +2353,7 @@ class BoltzCoreWire implements BaseWire {
       electrum_url,
       boltz_url,
       referral_id,
+      electrum_settings,
     );
   }
 
@@ -2363,6 +2369,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_electrum_settings>,
           )
         >
       >('frbgen_boltz_wire__crate__api__btc_ln__btc_ln_swap_new_submarine');
@@ -2378,6 +2385,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_electrum_settings>,
             )
           >();
 
@@ -2883,6 +2891,8 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> lbtc_electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
+    ffi.Pointer<wire_cst_electrum_settings> btc_electrum_settings,
+    ffi.Pointer<wire_cst_electrum_settings> lbtc_electrum_settings,
   ) {
     return _wire__crate__api__chain_swap__chain_swap_new_swap(
       port_,
@@ -2895,6 +2905,8 @@ class BoltzCoreWire implements BaseWire {
       lbtc_electrum_url,
       boltz_url,
       referral_id,
+      btc_electrum_settings,
+      lbtc_electrum_settings,
     );
   }
 
@@ -2912,6 +2924,8 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_electrum_settings>,
+            ffi.Pointer<wire_cst_electrum_settings>,
           )
         >
       >('frbgen_boltz_wire__crate__api__chain_swap__chain_swap_new_swap');
@@ -2929,6 +2943,8 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_electrum_settings>,
+              ffi.Pointer<wire_cst_electrum_settings>,
             )
           >();
 
@@ -3624,6 +3640,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> description,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
+    ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse(
       port_,
@@ -3636,6 +3653,7 @@ class BoltzCoreWire implements BaseWire {
       boltz_url,
       description,
       referral_id,
+      electrum_settings,
     );
   }
 
@@ -3653,6 +3671,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_electrum_settings>,
           )
         >
       >('frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_reverse');
@@ -3670,6 +3689,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_electrum_settings>,
             )
           >();
 
@@ -3682,6 +3702,7 @@ class BoltzCoreWire implements BaseWire {
     ffi.Pointer<wire_cst_list_prim_u_8_strict> electrum_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> boltz_url,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> referral_id,
+    ffi.Pointer<wire_cst_electrum_settings> electrum_settings,
   ) {
     return _wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine(
       port_,
@@ -3692,6 +3713,7 @@ class BoltzCoreWire implements BaseWire {
       electrum_url,
       boltz_url,
       referral_id,
+      electrum_settings,
     );
   }
 
@@ -3707,6 +3729,7 @@ class BoltzCoreWire implements BaseWire {
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
             ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+            ffi.Pointer<wire_cst_electrum_settings>,
           )
         >
       >('frbgen_boltz_wire__crate__api__lbtc_ln__lbtc_ln_swap_new_submarine');
@@ -3722,6 +3745,7 @@ class BoltzCoreWire implements BaseWire {
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
               ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+              ffi.Pointer<wire_cst_electrum_settings>,
             )
           >();
 

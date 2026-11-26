@@ -12,7 +12,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'secrets.dart';
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `extract_id`, `get_network`, `new_with_expected_onchain_amount`
+// These functions are ignored because they are not marked as `pub`: `chain_tip_height`, `extract_id`, `get_network`, `new_with_expected_onchain_amount`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `assert_fields_are_eq`, `clone`, `eq`
 
 /// Bitcoin-Liquid Swap Class
@@ -176,6 +176,8 @@ class ChainSwap {
     required String lbtcElectrumUrl,
     required String boltzUrl,
     String? referralId,
+    ElectrumSettings? btcElectrumSettings,
+    ElectrumSettings? lbtcElectrumSettings,
   }) => BoltzCore.instance.api.crateApiChainSwapChainSwapNewSwap(
     direction: direction,
     swapMasterKey: swapMasterKey,
@@ -186,6 +188,8 @@ class ChainSwap {
     lbtcElectrumUrl: lbtcElectrumUrl,
     boltzUrl: boltzUrl,
     referralId: referralId,
+    btcElectrumSettings: btcElectrumSettings,
+    lbtcElectrumSettings: lbtcElectrumSettings,
   );
 
   /// Refund a failed swap
